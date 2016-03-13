@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redmine
+  labels:
+    app: redmine
+    provider: redmine-server
+    heritage: bitnami
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: redmine-http
+  selector:
+    app: redmine
+    provider: redmine-server
