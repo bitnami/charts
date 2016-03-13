@@ -1,3 +1,4 @@
+#helm:generate helm tpl -d tpl/values.toml -o manifests/mariadb-controller.yaml $HELM_GENERATE_FILE
 apiVersion: v1
 kind: ReplicationController
 metadata:
@@ -25,7 +26,7 @@ spec:
         image: bitnami/mariadb:5.5.48-0-r01
         env:
         - name: MARIADB_PASSWORD
-          value: bitnami
+          value: {{default "bitnami" .dbPassword}}
         ports:
         - containerPort: 3306
         livenessProbe:

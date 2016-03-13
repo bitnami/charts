@@ -1,3 +1,4 @@
+#helm:generate helm tpl -d tpl/values.toml -o manifests/redmine-controller.yaml $HELM_GENERATE_FILE
 apiVersion: v1
 kind: ReplicationController
 metadata:
@@ -29,15 +30,15 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_USER
-          value: root
+          value: {{default "root" .databaseUser}}
         - name: MARIADB_PASSWORD
-          value: bitnami
+          value: {{default "bitnami" .databasePassword}}
         - name: REDMINE_USERNAME
-          value: user
+          value: {{default "user" .redmineUser}}
         - name: REDMINE_PASSWORD
-          value: bitnami
+          value: {{default "bitnami" .redminePassword}}
         - name: REDMINE_EMAIL
-          value: user@example.com
+          value: {{default "user@example.com" .redmineEmail}}
         ports:
         - name: redmine-http
           containerPort: 3000
