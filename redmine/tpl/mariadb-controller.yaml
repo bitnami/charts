@@ -26,7 +26,7 @@ spec:
         image: bitnami/mariadb:5.5.48-0-r01
         env:
         - name: MARIADB_PASSWORD
-          value: {{default "bitnami" .dbPassword}}
+          value: {{default "bitnami" .databasePassword}}
         ports:
         - containerPort: 3306
         livenessProbe:
