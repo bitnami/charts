@@ -4,5 +4,8 @@ version: 0.1.0
 description: A flexible project management web application.
 maintainers:
 - Bitnami <containers@bitnami.com>
+dependencies:
+- name: mariadb
+  version: 0.1.0
 details: |-
   Redmine is a flexible project management web application written using Ruby on Rails framework.

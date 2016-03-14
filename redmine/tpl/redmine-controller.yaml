@@ -5,19 +5,16 @@ metadata:
   name: redmine
   labels:
     app: redmine
-    provider: redmine-server
     heritage: bitnami
 spec:
   replicas: 1
   selector:
     app: redmine
-    provider: redmine-server
     version: 3.2.0-0
   template:
     metadata:
       labels:
         app: redmine
-        provider: redmine-server
         version: 3.2.0-0
         heritage: bitnami
     spec:
