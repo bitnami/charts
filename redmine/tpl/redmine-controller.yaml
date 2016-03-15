@@ -39,6 +39,16 @@ spec:
           value: {{.redmineEmail}}
         - name: REDMINE_LANG
           value: {{.redmineLanguage}}
+        - name: SMTP_HOST
+          value: {{.smtpHost}}
+        - name: SMTP_PORT
+          value: "{{.smtpPort}}"
+        - name: SMTP_USER
+          value: {{.smtpUser}}
+        - name: SMTP_PASSWORD
+          value: {{.smtpPassword}}
+        - name: SMTP_TLS
+          value: "{{.smtpTls}}"
         ports:
         - name: redmine-http
           containerPort: 3000

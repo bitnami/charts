@@ -73,7 +73,7 @@ The Redmine Chart will be copied into your workspace, located at `~/.helm/worksp
 $ helm edit redmine
 ```
 
-Here you can update the MariaDB root password, Redmine admin username, password, email address and language in `tpl/values.toml`. When not specified, the default values are used.
+Here you can update the MariaDB root password, Redmine admin username, password, email address, language and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
 
 Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-redmine/#environment-variables) section of the [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image for the default values.
 
