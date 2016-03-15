@@ -4,6 +4,31 @@
 
 Based on the [Bitnami Redmine](https://github.com/bitnami/redmine) image for docker, this chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
 
+## TL;DR;
+
+1. Deploy MariaDB chart
+
+```bash
+$ helm fetch bitnami/mariadb
+$ helm generate mariadb
+$ helm install mariadb
+```
+
+2. Deploy Redmine Chart
+
+```bash
+$ helm fetch bitnami/redmine
+$ helm generate redmine
+$ helm install redmine
+```
+
+The above commands will deploy the MariaDB and Redmine charts to the `default` kubernetes namespace.
+
+Get the external IP address of your Redmine instance and login using the default credentials:
+
+ - Username: `user`
+ - Password: `bitnami`
+
 ## Dependencies
 
 The Redmine chart depends on the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
