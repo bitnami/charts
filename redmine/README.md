@@ -8,7 +8,7 @@ This chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kuberne
 
 ### Kubernetes Cluster
 
-Setup up a Kubernetes cluster on [Google Container Engine](https://cloud.google.com/container-engine/)(GCE) using [these instructions](https://cloud.google.com/container-engine/docs/before-you-begin).
+Setup up a Kubernetes cluster on [Google Container Engine](https://cloud.google.com/container-engine/) (GKE) using [these instructions](https://cloud.google.com/container-engine/docs/before-you-begin).
 
 Create a new cluster using:
 
@@ -16,7 +16,7 @@ Create a new cluster using:
 $ gcloud container clusters create my-cluster
 ```
 
-The above command creates a cluster named `my-cluster`. You can name the cluster as per your preference. You may also use an existing cluster.
+The above command creates a new cluster named `my-cluster`. You can name the cluster according to your preferences. You could also use an existing cluster, in which case you should consider creating a different namespace for the Redmine deployment.
 
 > For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](http://kubernetes.io/docs/getting-started-guides/).
 
@@ -52,15 +52,15 @@ $ helm fetch bitnami/mariadb
 
 The MariaDB chart will be copied into your workspace, located at `~/.helm/workspace/charts/mariadb/`.
 
-**Step 2 (Optional)**: Change the MariaDB root password
+**Step 2 (Optional)**: Update the MariaDB root password
 
 ```bash
 $ helm edit mariadb
 ```
 
-The default value of the MariaDB root password is `bitnami`. To change it to your choosing, edit the value of `databasePassword` in `tpl/values.toml`.
+The default value of the MariaDB root password is `bitnami`. Edit the value of `databasePassword` in `tpl/values.toml` to change it to your choosing.
 
-> Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or edit the `~/.helm/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
+> Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helm/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
 
 **Step 3**: Generate the chart
 
@@ -86,7 +86,7 @@ mariadb-3fu51   1/1       Running   0          1m
 
 ### Deploying the Redmine Chart
 
-Now that we have the MariaDB chart deployed, we can deploy the Redmine chart.
+Now that we have MariaDB deployed, we can deploy the Redmine chart.
 
 **Step 1**: Fetch the `bitnami/redmine` chart to your workspace
 
@@ -131,7 +131,7 @@ In the above command, Helm will deploy the Redmine chart in the cluster.
 
 > Note:
 >
-> On GCE, the above command will automatically configure a firewall rule so that the Redmine instance is accessible from the internet, for which you will be charged additionally.
+> On GKE, the above command will automatically configure a firewall rule so that the Redmine instance is accessible from the internet, for which you will be charged additionally.
 >
 > On other cloud platforms you may have to setup a firewall rule manually. Please refer your cloud providers documentation.
 
@@ -145,9 +145,9 @@ redmine-b3jld   1/1       Running   0          1m
 
 ### Access your Redmine application
 
-You should now be able to access the application using the external ip configured for the Redmine service.
+You should now be able to access the application using the external IP configured for the Redmine service.
 
-In case of GCE, get the external IP address of your Redmine instance using:
+In the case of GKE, get the external IP address of your Redmine instance using:
 
 ```bash
 $ kubectl get services redmine
