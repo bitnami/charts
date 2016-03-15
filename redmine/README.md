@@ -202,3 +202,30 @@ redmine   10.99.240.185   104.197.156.125   80/TCP    app=redmine   3m
 
 Access your Redmine deployment using the IP address listed under the `EXTERNAL_IP` column.
 
+## Cleanup
+
+To delete the Redmine deployment completely:
+
+1. Uninstall the Redmine Chart:
+
+```bash
+$ helm uninstall -n default redmine
+```
+
+2. Uninstall the MariaDB Chart:
+
+```bash
+$ helm uninstall -n default mariadb
+```
+
+3. Delete the disks:
+
+```bash
+$ gcloud compute disks delete redmine-data-disk
+```
+
+4. Delete your cluster:
+
+```bash
+$ gcloud container clusters delete my-cluster
+```
