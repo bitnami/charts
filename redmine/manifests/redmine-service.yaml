@@ -13,3 +13,4 @@ spec:
     targetPort: redmine-http
   selector:
     app: redmine
+    provider: redmine-server
