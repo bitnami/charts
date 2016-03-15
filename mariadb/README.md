@@ -2,7 +2,7 @@
 
 > MariaDB is a fast, reliable, scalable, and easy to use open-source relational database system. MariaDB Server is intended for mission-critical, heavy-load production systems as well as for embedding into mass-deployed software.
 
-Based on the [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image for docker, this chart bootstraps a [MariaDB](https://mariadb.com/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+Based on the [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image for docker, this Chart bootstraps a [MariaDB](https://mariadb.com/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
 
 ## TL;DR;
 
@@ -12,13 +12,13 @@ $ helm generate mariadb
 $ helm install mariadb
 ```
 
-The above commands will deploy the MariaDB chart to the `default` kubernetes namespace.
+The above commands will deploy the MariaDB Chart to the `default` kubernetes namespace.
 
 ## Persistence
 
 For persistence of the MariaDB data, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/mariadb/data` path of the MariaDB pod.
 
-By default the MariaDB chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+By default the MariaDB Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
 
 From the `emptyDir` documentation: *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node... When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
 
@@ -32,17 +32,17 @@ $ gcloud compute disks create --size=500GB --zone=us-central1-a mariadb-data-dis
 
 > Note: You will be charged additionally for this volume.
 
-## Deploying the chart
+## Deploying the Chart
 
-**Step 1**: Fetch the `bitnami/mariadb` chart to your workspace
+### Step 1. Fetch the MariaDB Chart to your workspace
 
 ```bash
 $ helm fetch bitnami/mariadb
 ```
 
-The MariaDB chart will be copied into your workspace, located at `~/.helm/workspace/charts/mariadb/`
+The MariaDB Chart will be copied into your workspace, located at `~/.helm/workspace/charts/mariadb/`
 
-**Step 2**: Edit the default MariaDB configuration
+### Step 2. Edit the default MariaDB configuration
 
 ```bash
 $ helm edit mariadb
@@ -72,21 +72,21 @@ with
           fsType: ext4
 ```
 
-**Step 3**: Generate the chart
+### Step 3. Generate the Chart
 
 ```bash
 $ helm generate mariadb
 ```
 
-The above command will generate the MariaDB chart with your changes from the last step.
+The above command will generate the MariaDB Chart with your changes from the last step.
 
-**Step 4**: Deploy MariaDB
+### Step 4. Deploy MariaDB
 
 ```bash
 $ helm install mariadb
 ```
 
-In the above command, Helm will deploy the MariaDB chart in the cluster in the `default` namespace.
+In the above command, Helm will deploy the MariaDB Chart in the cluster in the `default` namespace.
 
 The deployment status of the MariaDB pods can be checked with `kubectl` using:
 
@@ -102,13 +102,13 @@ Your MariaDB deployment is now ready to be used.
 
 To delete the MariaDB deployment completely:
 
-1. Uninstall the MariaDB Chart:
+### Step 1. Uninstall the MariaDB Chart:
 
 ```bash
 $ helm uninstall -n default mariadb
 ```
 
-2. Delete the peristent disk:
+### Step 2. Delete the persistent disk:
 
 ```bash
 $ gcloud compute disks delete mariadb-data-disk

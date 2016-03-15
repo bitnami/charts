@@ -2,11 +2,11 @@
 
 > Redmine is a free and open source, web-based project management and issue tracking tool.
 
-Based on the [Bitnami Redmine](https://github.com/bitnami/redmine) image for docker, this chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+Based on the [Bitnami Redmine](https://github.com/bitnami/redmine) image for docker, this Chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
 
 ## TL;DR;
 
-1. Deploy MariaDB chart
+### Step 1. Deploy MariaDB Chart
 
 ```bash
 $ helm fetch bitnami/mariadb
@@ -14,7 +14,7 @@ $ helm generate mariadb
 $ helm install mariadb
 ```
 
-2. Deploy Redmine Chart
+### Step 2. Deploy Redmine Chart
 
 ```bash
 $ helm fetch bitnami/redmine
@@ -22,7 +22,7 @@ $ helm generate redmine
 $ helm install redmine
 ```
 
-The above commands will deploy the MariaDB and Redmine charts to the `default` kubernetes namespace.
+The above commands will deploy the MariaDB and Redmine Charts to the `default` kubernetes namespace.
 
 Get the external IP address of your Redmine instance and login using the default credentials:
 
@@ -31,17 +31,17 @@ Get the external IP address of your Redmine instance and login using the default
 
 ## Dependencies
 
-The Redmine chart depends on the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
+The Redmine Chart requires the [Bitnami MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
 
-Please refer to the [README](https://github.com/bitnami/charts/tree/master/mariadb) of the Bitnami MariaDB chart for deployment instructions.
+Please refer to the [README](https://github.com/bitnami/charts/tree/master/mariadb) of the Bitnami MariaDB Chart for deployment instructions.
 
 ## Persistence
 
-> *You may skip this section if your only interested in testing the Redmine chart and have not yet made the decision to use it for your production workloads.*
+> *You may skip this section if your only interested in testing the Redmine Chart and have not yet made the decision to use it for your production workloads.*
 
 For persistence of the Redmine configuration and user file uploads, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/redmine` path of the Redmine pod.
 
-By default the Redmine chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+By default the Redmine Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
 
 From the `emptyDir` documentation: *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node... When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
 
@@ -57,17 +57,17 @@ $ gcloud compute disks create --size=500GB --zone=us-central1-a redmine-data-dis
 
 ## Deploying the Chart
 
-Once you have MariaDB deployed and optionally created a persistent storage disk for Redmine, we are ready to deploy the Bitnami Redmine chart.
+Once you have MariaDB deployed and optionally created a persistent storage disk for Redmine, we are ready to deploy the Bitnami Redmine Chart.
 
-**Step 1**: Fetch the `bitnami/redmine` chart to your workspace
+### Step 1. Fetch the Redmine Chart to your workspace
 
 ```bash
 $ helm fetch bitnami/redmine
 ```
 
-The Redmine chart will be copied into your workspace, located at `~/.helm/workspace/charts/redmine/`
+The Redmine Chart will be copied into your workspace, located at `~/.helm/workspace/charts/redmine/`
 
-**Step 2**: Edit the default Redmine configuration
+### Step 2. Edit the default Redmine configuration
 
 ```bash
 $ helm edit redmine
@@ -85,7 +85,7 @@ The values of `redmineUser` and `redminePassword` are the login credentials when
 
 > Note:
 >
-> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbPassword` field in the Redmine chart.
+> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbPassword` field in the Redmine Chart.
 
 If you had [setup a GCE PD](#Persistence), you will need to update the `tpl/mariadb-controller.yaml` as well.
 
@@ -107,21 +107,21 @@ with
           fsType: ext4
 ```
 
-**Step 3**: Generate the chart
+### Step 3. Generate the Chart
 
 ```bash
 $ helm generate redmine
 ```
 
-The above command will generate the Redmine chart with your changes from the last step.
+The above command will generate the Redmine Chart with your changes from the last step.
 
-**Step 4**: Deploy Redmine
+### Step 4. Deploy Redmine
 
 ```bash
 $ helm install redmine
 ```
 
-In the above command, Helm will deploy the Redmine chart in the cluster in the `default` namespace.
+In the above command, Helm will deploy the Redmine Chart in the cluster in the `default` namespace.
 
 > Note:
 >
@@ -155,13 +155,13 @@ Access your Redmine deployment using the IP address listed under the `EXTERNAL_I
 
 To delete the Redmine deployment completely:
 
-1. Uninstall the Redmine Chart:
+### Step 1. Uninstall the Redmine Chart:
 
 ```bash
 $ helm uninstall -n default redmine
 ```
 
-2. Delete the persistent disk:
+### Step 2. Delete the persistent disk:
 
 ```bash
 $ gcloud compute disks delete redmine-data-disk
