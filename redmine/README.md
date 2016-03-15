@@ -8,9 +8,7 @@ Based on the [Bitnami Redmine](https://github.com/bitnami/redmine) image for doc
 
 ### Kubernetes Cluster
 
-Setup up a Kubernetes cluster on [Google Container Engine](https://cloud.google.com/container-engine/) (GKE) using [these instructions](https://cloud.google.com/container-engine/docs/before-you-begin).
-
-Create a new cluster using:
+Setup up Kubernetes on [Google Container Engine](https://cloud.google.com/container-engine/) (GKE) using [these instructions](https://cloud.google.com/container-engine/docs/before-you-begin) and create a cluster.
 
 ```bash
 $ gcloud container clusters create my-cluster
@@ -42,7 +40,11 @@ $ helm update
 
 #### MariaDB
 
-The Redmine chart depends on the MariaDB chart for setting up a database server. As such we'll first deploy the Bitnami MariaDB chart.
+The Redmine chart depends on the MariaDB chart for setting up a database backend. As such we'll first deploy the Bitnami MariaDB chart.
+
+> Note:
+>
+> Refer to the [persistence](https://github.com/bitnami/charts/tree/master/mariadb#persistence) section of the MariaDB chart for persistence of the data in the MariaDB database.
 
 **Step 1**: Fetch the `bitnami/mariadb` chart to your workspace
 
@@ -84,9 +86,29 @@ NAME            READY     STATUS    RESTARTS   AGE
 mariadb-3fu51   1/1       Running   0          1m
 ```
 
+### Persistence
+
+> *You may skip this section if your only interested in testing the Redmine chart and have not yet made the decision to use it for your production workloads.*
+
+For persistence of the Redmine configuration and user file uploads, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/redmine` path of the Redmine pod.
+
+By default the Redmine chart mounts a [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+
+From the `emptyDir` documentation: *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node... When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
+
+To persist your Redmine data across Pod shutdown and startup we need to mount a persistent storage volume at `/bitnami/redmine`. For the purpose of demonstration we'll use a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk).
+
+Create a GCE PD using:
+
+```bash
+$ gcloud compute disks create --size=500GB --zone=us-central1-a redmine-data-disk
+```
+
+> Note: You will be charged additionally for this volume.
+
 ### Deploying the Redmine Chart
 
-Now that we have MariaDB deployed, we can deploy the Bitnami Redmine chart.
+Now that we have MariaDB deployed and optionally created a persistent storage disk for Redmine, we are ready to deploy the Bitnami Redmine chart.
 
 **Step 1**: Fetch the `bitnami/redmine` chart to your workspace
 
@@ -110,9 +132,31 @@ Here you can update the MariaDB root password, Redmine admin username, password,
  - `redmineEmail`: `user@example.com`
  - `redmineLanguage`: `en`
 
+The values of `redmineUser` and `redminePassword` are the login credentials when you [access the Redmine instance](#access-your-redmine-application).
+
 > Note:
 >
 > If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbPassword` field in the Redmine chart.
+
+If you had [setup a GCE PD](#Persistence), you will need to update the `tpl/mariadb-controller.yaml` as well.
+
+Replace:
+
+```yaml
+      volumes:
+      - name: data
+        emptyDir: {}
+```
+
+with
+
+```yaml
+      volumes:
+      - name: data
+        gcePersistentDisk:
+          pdName: redmine-data-disk
+          fsType: ext4
+```
 
 **Step 3**: Generate the chart
 
