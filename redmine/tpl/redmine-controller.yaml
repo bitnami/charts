@@ -27,7 +27,7 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: {{default "bitnami" .databasePassword}}
+          value: {{default "bitnami" .mariadbPassword}}
         - name: REDMINE_USERNAME
           value: {{default "user" .redmineUser}}
         - name: REDMINE_PASSWORD

@@ -1,4 +1,4 @@
-databasePassword = ""
+mariadbPassword = ""
 redmineUser = ""
 redminePassword = ""
 redmineEmail = ""

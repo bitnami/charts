@@ -58,7 +58,7 @@ The MariaDB chart will be copied into your workspace, located at `~/.helm/worksp
 $ helm edit mariadb
 ```
 
-The default value of the MariaDB root password is `bitnami`. Edit the value of `databasePassword` in `tpl/values.toml` to change it to your choosing.
+The default value of the MariaDB root password is `bitnami`. Edit the value of `mariadbPassword` in `tpl/values.toml` to change it to your choosing.
 
 > Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helm/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
 
@@ -104,14 +104,14 @@ $ helm edit redmine
 
 Here you can update the MariaDB root password, Redmine admin username, password and email address in `tpl/values.toml`, the default values of which are:
 
- - `databasePassword`: `bitnami`
+ - `mariadbPassword`: `bitnami`
  - `redmineUser`: `user`
  - `redminePassword`: `bitnami`
  - `redmineEmail`: `user@example.com`
 
 > Note:
 >
-> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `databasePassword` field in the Redmine chart.
+> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbPassword` field in the Redmine chart.
 
 **Step 3**: Generate the chart
 
