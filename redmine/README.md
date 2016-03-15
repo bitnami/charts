@@ -8,53 +8,7 @@ Based on the [Bitnami Redmine](https://github.com/bitnami/redmine) image for doc
 
 The Redmine chart depends on the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
 
-### MariaDB
-
-The Redmine chart depends on the MariaDB chart for setting up a database backend. As such we'll first deploy the Bitnami MariaDB chart.
-
-> Note:
->
-> Refer to the [persistence](https://github.com/bitnami/charts/tree/master/mariadb#persistence) section of the MariaDB chart for persistence of the data in the MariaDB database.
-
-**Step 1**: Fetch the `bitnami/mariadb` chart to your workspace
-
-```bash
-$ helm fetch bitnami/mariadb
-```
-
-The MariaDB chart will be copied into your workspace, located at `~/.helm/workspace/charts/mariadb/`.
-
-**Step 2 (Optional)**: Update the MariaDB root password
-
-```bash
-$ helm edit mariadb
-```
-
-The default value of the MariaDB root password is `bitnami`. Edit the value of `mariadbPassword` in `tpl/values.toml` to change it to your choosing.
-
-> Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helm/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
-
-**Step 3**: Generate the chart
-
-```bash
-$ helm generate mariadb
-```
-
-The above command will generate the MariaDB chart with your changes from the last step.
-
-**Step 4**: Deploy MariaDB
-
-```bash
-$ helm install mariadb
-```
-
-In the above command, Helm will deploy the MariaDB chart in the cluster. The deployment status of the MariaDB pods can be checked with `kubectl` using:
-
-```bash
-$ kubectl get pods -l provider=mariadb
-NAME            READY     STATUS    RESTARTS   AGE
-mariadb-3fu51   1/1       Running   0          1m
-```
+Please refer to the [README](https://github.com/bitnami/charts/tree/master/mariadb) of the Bitnami MariaDB chart for deployment instructions.
 
 ## Persistence
 
@@ -78,7 +32,7 @@ $ gcloud compute disks create --size=500GB --zone=us-central1-a redmine-data-dis
 
 ## Deploying the Chart
 
-Now that we have MariaDB deployed and optionally created a persistent storage disk for Redmine, we are ready to deploy the Bitnami Redmine chart.
+Once you have MariaDB deployed and optionally created a persistent storage disk for Redmine, we are ready to deploy the Bitnami Redmine chart.
 
 **Step 1**: Fetch the `bitnami/redmine` chart to your workspace
 
@@ -182,15 +136,10 @@ To delete the Redmine deployment completely:
 $ helm uninstall -n default redmine
 ```
 
-2. Uninstall the MariaDB Chart:
-
-```bash
-$ helm uninstall -n default mariadb
-```
-
-3. Delete the disks:
+2. Delete the persistent disk:
 
 ```bash
 $ gcloud compute disks delete redmine-data-disk
 ```
 
+Additionally you may want to [Cleanup the MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb#cleanup)
