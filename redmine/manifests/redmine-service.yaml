@@ -5,6 +5,7 @@ metadata:
   labels:
     app: redmine
     heritage: bitnami
+    provider: redmine-server
 spec:
   type: LoadBalancer
   ports:
@@ -12,3 +13,4 @@ spec:
     targetPort: redmine-http
   selector:
     app: redmine
+    provider: redmine-server
