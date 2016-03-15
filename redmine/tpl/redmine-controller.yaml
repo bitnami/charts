@@ -34,6 +34,8 @@ spec:
           value: {{default "bitnami" .redminePassword}}
         - name: REDMINE_EMAIL
           value: {{default "user@example.com" .redmineEmail}}
+        - name: REDMINE_LANG
+          value: {{default "en" .redmineLanguage}}
         ports:
         - name: redmine-http
           containerPort: 3000
