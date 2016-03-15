@@ -41,7 +41,7 @@ Please refer to the [README](https://github.com/bitnami/charts/tree/master/maria
 
 For persistence of the Redmine configuration and user file uploads, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/redmine` path of the Redmine pod.
 
-By default the Redmine chart mounts a [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+By default the Redmine chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
 
 From the `emptyDir` documentation: *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node... When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
 
@@ -121,7 +121,7 @@ The above command will generate the Redmine chart with your changes from the las
 $ helm install redmine
 ```
 
-In the above command, Helm will deploy the Redmine chart in the cluster.
+In the above command, Helm will deploy the Redmine chart in the cluster in the `default` namespace.
 
 > Note:
 >
