@@ -48,7 +48,7 @@ The MariaDB Chart will be copied into your workspace, located at `~/.helm/worksp
 $ helm edit mariadb
 ```
 
-The default value of the MariaDB root password is `bitnami`. Edit the value of `mariadbPassword` in `mariadb/tpl/values.toml` to change it to your choosing.
+By default the MariaDB root password is not assigned a value. Edit the value of `mariadbPassword` in `mariadb/tpl/values.toml` to set it to your choosing.
 
 > Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helm/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
 

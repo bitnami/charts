@@ -2,7 +2,7 @@
 
 > Redmine is a free and open source, web-based project management and issue tracking tool.
 
-Based on the [Bitnami Redmine](https://github.com/bitnami/redmine) image for docker, this Chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+Based on the [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image for docker, this Chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
 
 ## TL;DR;
 
@@ -73,13 +73,9 @@ The Redmine Chart will be copied into your workspace, located at `~/.helm/worksp
 $ helm edit redmine
 ```
 
-Here you can update the MariaDB root password, Redmine admin username, password, email address and language in `tpl/values.toml`. When not specified, the default values are:
+Here you can update the MariaDB root password, Redmine admin username, password, email address and language in `tpl/values.toml`. When not specified, the default values are used.
 
- - `mariadbPassword`: `bitnami`
- - `redmineUser`: `user`
- - `redminePassword`: `bitnami`
- - `redmineEmail`: `user@example.com`
- - `redmineLanguage`: `en`
+Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-redmine/#environment-variables) section of the [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image for the default values.
 
 The values of `redmineUser` and `redminePassword` are the login credentials when you [access the Redmine instance](#access-your-redmine-application).
 
