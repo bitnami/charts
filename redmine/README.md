@@ -2,7 +2,7 @@
 
 > Redmine is a free and open source, web-based project management and issue tracking tool.
 
-This chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+Based on the [Bitnami Redmine](https://github.com/bitnami/redmine) image for docker, this chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
 
 ## Prerequisites
 
@@ -42,7 +42,7 @@ $ helm update
 
 #### MariaDB
 
-The Redmine chart depends on the MariaDB chart for setting up a database server. As such we'll first deploy the MariaDB chart.
+The Redmine chart depends on the MariaDB chart for setting up a database server. As such we'll first deploy the Bitnami MariaDB chart.
 
 **Step 1**: Fetch the `bitnami/mariadb` chart to your workspace
 
@@ -86,7 +86,7 @@ mariadb-3fu51   1/1       Running   0          1m
 
 ### Deploying the Redmine Chart
 
-Now that we have MariaDB deployed, we can deploy the Redmine chart.
+Now that we have MariaDB deployed, we can deploy the Bitnami Redmine chart.
 
 **Step 1**: Fetch the `bitnami/redmine` chart to your workspace
 
