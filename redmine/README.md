@@ -128,7 +128,7 @@ In the above command, Helm will deploy the Redmine Chart in the cluster in the `
 The deployment status of the Redmine pods can be checked with `kubectl` using:
 
 ```bash
-$ kubectl get pods -l app=redmine
+$ kubectl get pods -l app=redmine,provider=redmine-server
 NAME            READY     STATUS    RESTARTS   AGE
 redmine-b3jld   1/1       Running   0          1m
 ```
