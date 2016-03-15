@@ -5,8 +5,8 @@ metadata:
   name: redmine
   labels:
     app: redmine
-    heritage: bitnami
     provider: redmine-server
+    heritage: bitnami
 spec:
   replicas: 1
   selector:
@@ -17,9 +17,9 @@ spec:
     metadata:
       labels:
         app: redmine
+        provider: redmine-server
         version: 3.2.1-0
         heritage: bitnami
-        provider: redmine-server
     spec:
       containers:
       - name: redmine
