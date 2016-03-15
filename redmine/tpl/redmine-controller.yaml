@@ -11,6 +11,7 @@ spec:
   replicas: 1
   selector:
     app: redmine
+    provider: redmine-server
     version: 3.2.1-0
   template:
     metadata:
