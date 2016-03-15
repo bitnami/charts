@@ -10,17 +10,17 @@ spec:
   replicas: 1
   selector:
     app: redmine
-    version: 3.2.0-0
+    version: 3.2.1-0
   template:
     metadata:
       labels:
         app: redmine
-        version: 3.2.0-0
+        version: 3.2.1-0
         heritage: bitnami
     spec:
       containers:
       - name: redmine
-        image: gcr.io/bitnami-workspace/redmine:3.2.0-0
+        image: gcr.io/bitnami-workspace/redmine:3.2.1-0
         env:
         - name: MARIADB_HOST
           value: mariadb
