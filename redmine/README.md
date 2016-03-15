@@ -4,41 +4,11 @@
 
 Based on the [Bitnami Redmine](https://github.com/bitnami/redmine) image for docker, this chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
 
-## Prerequisites
+## Dependencies
 
-### Kubernetes Cluster
+The Redmine chart depends on the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
 
-Setup up Kubernetes on [Google Container Engine](https://cloud.google.com/container-engine/) (GKE) using [these instructions](https://cloud.google.com/container-engine/docs/before-you-begin) and create a cluster.
-
-```bash
-$ gcloud container clusters create my-cluster
-```
-
-The above command creates a new cluster named `my-cluster`. You can name the cluster according to your preferences. You could also use an existing cluster, in which case you should consider creating a different namespace for the Redmine deployment.
-
-> For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](http://kubernetes.io/docs/getting-started-guides/).
-
-### Helm
-
-Dubbed as the Kubernetes Package Manager, Helm bootstraps your Kubernetes cluster with Charts that provide ready-to-use workloads.
-
-To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#installing-helm) and ensure that the `helm` binary is in the `PATH` of your shell.
-
-After installing Helm add the [Bitnami Charts](https://github.com/bitnami/charts) repo to Helm.
-
-```bash
-$ helm repo add bitnami https://github.com/bitnami/charts.git
-```
-
-If you are an existing user of the Bitnami charts repo, now is a good time to update your charts.
-
-```bash
-$ helm update
-```
-
-### Dependencies
-
-#### MariaDB
+### MariaDB
 
 The Redmine chart depends on the MariaDB chart for setting up a database backend. As such we'll first deploy the Bitnami MariaDB chart.
 
@@ -86,7 +56,7 @@ NAME            READY     STATUS    RESTARTS   AGE
 mariadb-3fu51   1/1       Running   0          1m
 ```
 
-### Persistence
+## Persistence
 
 > *You may skip this section if your only interested in testing the Redmine chart and have not yet made the decision to use it for your production workloads.*
 
@@ -106,7 +76,7 @@ $ gcloud compute disks create --size=500GB --zone=us-central1-a redmine-data-dis
 
 > Note: You will be charged additionally for this volume.
 
-### Deploying the Redmine Chart
+## Deploying the Chart
 
 Now that we have MariaDB deployed and optionally created a persistent storage disk for Redmine, we are ready to deploy the Bitnami Redmine chart.
 
@@ -188,7 +158,7 @@ NAME            READY     STATUS    RESTARTS   AGE
 redmine-b3jld   1/1       Running   0          1m
 ```
 
-### Access your Redmine application
+## Access your Redmine application
 
 You should now be able to access the application using the external IP configured for the Redmine service.
 
@@ -224,8 +194,3 @@ $ helm uninstall -n default mariadb
 $ gcloud compute disks delete redmine-data-disk
 ```
 
-4. Delete your cluster:
-
-```bash
-$ gcloud container clusters delete my-cluster
-```
