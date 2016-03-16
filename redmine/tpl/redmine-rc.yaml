@@ -1,4 +1,4 @@
-#helm:generate helm tpl -d tpl/values.toml -o manifests/redmine-controller.yaml $HELM_GENERATE_FILE
+#helm:generate helm tpl -d tpl/values.toml -o manifests/redmine-rc.yaml $HELM_GENERATE_FILE
 apiVersion: v1
 kind: ReplicationController
 metadata:
