@@ -31,7 +31,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#
 To use the awesome Charts from this repo, you should add the repo to Helm using:
 
 ```bash
-$ helm repo add bitnami https://github.com/bitnami/charts.git
+$ helm repo add bitnami https://github.com/bitnami/charts
 ```
 
 Remember to periodically update your Charts to get the latest and greatest Helm Charts from Bitnami.
