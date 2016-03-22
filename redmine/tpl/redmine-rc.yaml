@@ -55,13 +55,13 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: 3000
+            port: redmine-http
           initialDelaySeconds: 120
           timeoutSeconds: 1
         readinessProbe:
           httpGet:
             path: /
-            port: 3000
+            port: redmine-http
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
