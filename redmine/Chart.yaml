@@ -2,7 +2,7 @@ name: redmine
 home: http://www.redmine.org/
 source:
 - https://github.com/bitnami/bitnami-docker-redmine
-version: 0.1.0
+version: 0.1.1
 description: A flexible project management web application.
 maintainers:
 - Bitnami <containers@bitnami.com>
