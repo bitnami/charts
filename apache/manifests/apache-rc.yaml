@@ -30,7 +30,7 @@ spec:
             path: /
             port: apache-http
           initialDelaySeconds: 15
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /
