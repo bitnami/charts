@@ -21,20 +21,20 @@ spec:
       - name: apache
         image: bitnami/apache:2.4.18-0
         ports:
-        - name: apache-http
+        - name: http
           containerPort: 80
-        - name: apache-https
+        - name: https
           containerPort: 443
         livenessProbe:
           httpGet:
             path: /
-            port: apache-http
+            port: http
           initialDelaySeconds: 15
           timeoutSeconds: 1
         readinessProbe:
           httpGet:
             path: /
-            port: apache-http
+            port: http
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
