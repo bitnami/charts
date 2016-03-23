@@ -12,13 +12,13 @@ By default the MariaDB Chart mounts an [emptyDir](http://kubernetes.io/docs/user
 
 ## Configuration
 
-To edit the default Redmine configuration, run
+To edit the default MariaDB configuration, run
 
 ```bash
 $ helm edit mariadb
 ```
 
-By default the MariaDB root password is not assigned a value. Edit the value of `mariadbPassword` in `mariadb/tpl/values.toml` to set it to your choosing.
+Configurable parameters can be specified in `tpl/values.toml`. If not specified default values as defined by the [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image are used.
 
 > Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helm/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
 
