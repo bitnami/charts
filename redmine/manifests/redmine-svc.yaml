@@ -9,8 +9,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: redmine-http
+  - name: http
+    port: 80
+    targetPort: http
   selector:
     app: redmine
     provider: redmine-server

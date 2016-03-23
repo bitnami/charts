@@ -50,18 +50,18 @@ spec:
         - name: SMTP_TLS
           value: "{{.smtpTls}}"
         ports:
-        - name: redmine-http
+        - name: http
           containerPort: 3000
         livenessProbe:
           httpGet:
             path: /
-            port: redmine-http
+            port: http
           initialDelaySeconds: 120
           timeoutSeconds: 1
         readinessProbe:
           httpGet:
             path: /
-            port: redmine-http
+            port: http
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
