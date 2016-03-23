@@ -31,8 +31,8 @@ spec:
             command:
             - mysqladmin
             - ping
-          initialDelaySeconds: 15
-          timeoutSeconds: 1
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
         readinessProbe:
           exec:
             command:
