@@ -25,7 +25,8 @@ spec:
         - name: MARIADB_PASSWORD
           value: {{.mariadbPassword}}
         ports:
-        - containerPort: 3306
+        - name: mysql
+          containerPort: 3306
         livenessProbe:
           exec:
             command:
