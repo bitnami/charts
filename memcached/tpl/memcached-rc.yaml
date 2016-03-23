@@ -1,0 +1,39 @@
+#helm:generate helm tpl -d tpl/values.toml -o manifests/memcached-rc.yaml $HELM_GENERATE_FILE
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: memcached
+  labels:
+    provider: memcached
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    provider: memcached
+    version: 1.4.25-1
+  template:
+    metadata:
+      labels:
+        provider: memcached
+        version: 1.4.25-1
+        heritage: bitnami
+    spec:
+      containers:
+      - name: memcached
+        image: bitnami/memcached:1.4.25-1
+        env:
+        - name: MEMCACHED_PASSWORD
+          value: "{{.memcachedPassword}}"
+        ports:
+        - name: memcache
+          containerPort: 11211
+        livenessProbe:
+          tcpSocket:
+            port: memcache
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: memcache
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
