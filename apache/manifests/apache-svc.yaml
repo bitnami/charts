@@ -9,10 +9,10 @@ spec:
   type: LoadBalancer
   ports:
   - name: http
-    targetPort: apache-http
+    targetPort: http
     port: 80
   - name: https
-    targetPort: apache-https
+    targetPort: https
     port: 443
   selector:
     provider: apache
