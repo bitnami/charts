@@ -1,0 +1,10 @@
+name: nginx
+home: http://www.nginx.org
+source:
+- https://github.com/bitnami/bitnami-docker-nginx
+version: 0.1.0
+description: Chart for the nginx server
+maintainers:
+- Bitnami <containers@bitnami.com>
+details: |-
+  nginx is an open source reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP protocols, as well as a load balancer, HTTP cache, and a web server (origin server).
