@@ -50,12 +50,8 @@ spec:
           mountPath: /bitnami/mongodb/data
         - name: conf
           mountPath: /bitnami/mongodb/conf
-        - name: logs
-          mountPath: /bitnami/mongodb/logs
       volumes:
       - name: data
         emptyDir: {}
       - name: conf
-        emptyDir: {}
-      - name: logs
         emptyDir: {}

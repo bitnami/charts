@@ -50,12 +50,8 @@ spec:
           mountPath: /bitnami/mariadb/data
         - name: conf
           mountPath: /bitnami/mariadb/conf
-        - name: logs
-          mountPath: /bitnami/mariadb/logs
       volumes:
       - name: data
         emptyDir: {}
       - name: conf
-        emptyDir: {}
-      - name: logs
         emptyDir: {}
