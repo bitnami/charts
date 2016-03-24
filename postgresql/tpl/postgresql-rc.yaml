@@ -1,0 +1,59 @@
+#helm:generate helm tpl -d tpl/values.toml -o manifests/postgresql-rc.yaml $HELM_GENERATE_FILE
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: postgresql
+  labels:
+    provider: postgresql
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    provider: postgresql
+    version: 9.5.1-0
+  template:
+    metadata:
+      labels:
+        provider: postgresql
+        version: 9.5.1-0
+        heritage: bitnami
+    spec:
+      containers:
+      - name: postgresql
+        image: bitnami/postgresql:9.5.1-0
+        env:
+        - name: POSTGRES_USER
+          value: "{{.postgresUser}}"
+        - name: POSTGRES_PASSWORD
+          value: "{{.postgresPassword}}"
+        - name: POSTGRES_DB
+          value: "{{.postgresDb}}"
+        ports:
+        - name: postgresql
+          containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - postgres
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - postgres
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/postgresql/data
+        - name: conf
+          mountPath: /bitnami/postgresql/conf
+      volumes:
+      - name: data
+        emptyDir: {}
+      - name: conf
+        emptyDir: {}
