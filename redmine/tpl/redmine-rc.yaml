@@ -30,23 +30,23 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: {{.mariadbPassword}}
+          value: "{{.mariadbPassword}}"
         - name: REDMINE_USERNAME
-          value: {{.redmineUser}}
+          value: "{{.redmineUser}}"
         - name: REDMINE_PASSWORD
-          value: {{.redminePassword}}
+          value: "{{.redminePassword}}"
         - name: REDMINE_EMAIL
-          value: {{.redmineEmail}}
+          value: "{{.redmineEmail}}"
         - name: REDMINE_LANG
-          value: {{.redmineLanguage}}
+          value: "{{.redmineLanguage}}"
         - name: SMTP_HOST
-          value: {{.smtpHost}}
+          value: "{{.smtpHost}}"
         - name: SMTP_PORT
           value: "{{.smtpPort}}"
         - name: SMTP_USER
-          value: {{.smtpUser}}
+          value: "{{.smtpUser}}"
         - name: SMTP_PASSWORD
-          value: {{.smtpPassword}}
+          value: "{{.smtpPassword}}"
         - name: SMTP_TLS
           value: "{{.smtpTls}}"
         ports:
