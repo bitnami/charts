@@ -1,0 +1,10 @@
+name: postgresql
+home: http://www.postgresql.org
+source:
+- https://github.com/bitnami/bitnami-docker-postgresql
+version: 0.1.0
+description: Chart for PostgreSQL
+maintainers:
+- Bitnami <containers@bitnami.com>
+details: |-
+  PostgreSQL is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
