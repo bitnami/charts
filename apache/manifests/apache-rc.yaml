@@ -42,12 +42,8 @@ spec:
           mountPath: /app
         - name: conf
           mountPath: /bitnami/apache/conf
-        - name: logs
-          mountPath: /bitnami/apache/logs
       volumes:
       - name: htdocs
         emptyDir: {}
       - name: conf
-        emptyDir: {}
-      - name: logs
         emptyDir: {}
