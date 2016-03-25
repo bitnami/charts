@@ -1,0 +1,5 @@
+mariadbUser = "my-user"
+mariadbPassword = "my-password"
+mariadbDatabase = "my-database"
+mariadbReplicationUser = "replication-user"
+mariadbReplicationPassword = "replication-password"
