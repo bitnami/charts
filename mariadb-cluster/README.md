@@ -1,8 +1,8 @@
-# MariaDB
+# MariaDB Cluster
 
 > MariaDB is a fast, reliable, scalable, and easy to use open-source relational database system. MariaDB Server is intended for mission-critical, heavy-load production systems as well as for embedding into mass-deployed software.
 
-Based on the [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image for docker, this Chart bootstraps a [MariaDB](https://mariadb.com/) deployment on a [Kubernetes](http://kubernetes.io) cluster using [Helm](https://helm.sh).
+Based on the [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image for docker, this Chart bootstraps a [MariaDB](https://mariadb.com/) cluster deployment on [Kubernetes](http://kubernetes.io) using [Helm](https://helm.sh). The MariaDB cluster consists of one master and three slaves and the slaves can be scaled up or down as required.
 
 ## Persistence
 
