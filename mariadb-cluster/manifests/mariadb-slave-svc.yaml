@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-slave
+  labels:
+    provider: mariadb
+    mode: slave
+    heritage: bitnami
+spec:
+  ports:
+  - name: mysql
+    port: 3306
+    targetPort: mysql
+  selector:
+    provider: mariadb
+    mode: slave
