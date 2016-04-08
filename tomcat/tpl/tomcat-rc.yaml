@@ -23,7 +23,7 @@ spec:
         image: bitnami/tomcat:7.0.68-0
         env:
         - name: TOMCAT_PASSWORD
-          value: "{{.tomcatPassword}}"
+          value: {{ .tomcatPassword | quote }}
         ports:
         - name: http
           containerPort: 8080

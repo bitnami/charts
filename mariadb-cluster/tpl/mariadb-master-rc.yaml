@@ -28,17 +28,17 @@ spec:
         - --max_connect_errors=1000
         env:
         - name: MARIADB_USER
-          value: "{{.mariadbUser}}"
+          value: {{ .mariadbUser | quote }}
         - name: MARIADB_PASSWORD
-          value: "{{.mariadbPassword}}"
+          value: {{ .mariadbPassword | quote }}
         - name: MARIADB_DATABASE
-          value: "{{.mariadbDatabase}}"
+          value: {{ .mariadbDatabase | quote }}
         - name: MARIADB_REPLICATION_MODE
           value: master
         - name: MARIADB_REPLICATION_USER
-          value: "{{.mariadbReplicationUser}}"
+          value: {{ .mariadbReplicationUser | quote }}
         - name: MARIADB_REPLICATION_PASSWORD
-          value: "{{.mariadbReplicationPassword}}"
+          value: {{ .mariadbReplicationPassword | quote }}
         ports:
         - name: mysql
           containerPort: 3306

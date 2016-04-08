@@ -23,7 +23,7 @@ spec:
         image: bitnami/wildfly:10.0.0-0
         env:
         - name: WILDFLY_PASSWORD
-          value: "{{.wildflyPassword}}"
+          value: {{ .wildflyPassword | quote }}
         ports:
         - name: http
           containerPort: 8080
