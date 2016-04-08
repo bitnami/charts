@@ -23,11 +23,11 @@ spec:
         image: bitnami/mongodb:3.0.7-1-r02
         env:
         - name: MONGODB_USER
-          value: "{{.mongodbUser}}"
+          value: {{ .mongodbUser | quote }}
         - name: MONGODB_PASSWORD
-          value: "{{.mongodbPassword}}"
+          value: {{ .mongodbPassword | quote }}
         - name: MONGODB_DATABASE
-          value: "{{.mongodbDatabase}}"
+          value: {{ .mongodbDatabase | quote }}
         ports:
         - name: mongodb
           containerPort: 27017

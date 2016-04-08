@@ -23,11 +23,11 @@ spec:
         image: bitnami/postgresql:9.5.1-0
         env:
         - name: POSTGRES_USER
-          value: "{{.postgresUser}}"
+          value: {{ .postgresUser | quote }}
         - name: POSTGRES_PASSWORD
-          value: "{{.postgresPassword}}"
+          value: {{ .postgresPassword | quote }}
         - name: POSTGRES_DB
-          value: "{{.postgresDb}}"
+          value: {{ .postgresDb | quote }}
         ports:
         - name: postgresql
           containerPort: 5432

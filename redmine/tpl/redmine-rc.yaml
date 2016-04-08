@@ -26,29 +26,29 @@ spec:
         image: bitnami/redmine:3.2.1-2
         env:
         - name: MARIADB_HOST
-          value: mariadb
+          value: "mariadb"
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: "{{.mariadbPassword}}"
+          value: {{ .mariadbPassword | quote }}
         - name: REDMINE_USERNAME
-          value: "{{.redmineUser}}"
+          value: {{ .redmineUser | quote }}
         - name: REDMINE_PASSWORD
-          value: "{{.redminePassword}}"
+          value: {{ .redminePassword | quote }}
         - name: REDMINE_EMAIL
-          value: "{{.redmineEmail}}"
+          value: {{ .redmineEmail | quote }}
         - name: REDMINE_LANG
-          value: "{{.redmineLanguage}}"
+          value: {{ .redmineLanguage | quote }}
         - name: SMTP_HOST
-          value: "{{.smtpHost}}"
+          value: {{ .smtpHost | quote }}
         - name: SMTP_PORT
-          value: "{{.smtpPort}}"
+          value: {{ .smtpPort | quote }}
         - name: SMTP_USER
-          value: "{{.smtpUser}}"
+          value: {{ .smtpUser | quote }}
         - name: SMTP_PASSWORD
-          value: "{{.smtpPassword}}"
+          value: {{ .smtpPassword | quote }}
         - name: SMTP_TLS
-          value: "{{.smtpTls}}"
+          value: {{ .smtpTls | quote }}
         ports:
         - name: http
           containerPort: 3000
