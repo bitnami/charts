@@ -1,0 +1,63 @@
+#helm:generate helm tpl -d tpl/values.toml -o manifests/mariadb-slave-rc.yaml $HELM_GENERATE_FILE
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: mariadb-slave
+  labels:
+    provider: mariadb
+    mode: slave
+    heritage: bitnami
+spec:
+  replicas: 3
+  selector:
+    provider: mariadb
+    mode: slave
+    version: 5.5.48-0-r01
+  template:
+    metadata:
+      labels:
+        provider: mariadb
+        mode: slave
+        version: 5.5.48-0-r01
+    spec:
+      containers:
+      - name: mariadb
+        image: bitnami/mariadb:5.5.48-0-r01
+        args:
+        - --max_connect_errors=1000
+        env:
+        - name: MARIADB_USER
+          value: "my-user"
+        - name: MARIADB_PASSWORD
+          value: "my-password"
+        - name: MARIADB_DATABASE
+          value: "my-database"
+        - name: MARIADB_REPLICATION_MODE
+          value: slave
+        - name: MARIADB_MASTER_HOST
+          value: mariadb-master
+        - name: MARIADB_MASTER_USER
+          value: "my-user"
+        - name: MARIADB_MASTER_PASSWORD
+          value: "my-password"
+        - name: MARIADB_REPLICATION_USER
+          value: "replication-user"
+        - name: MARIADB_REPLICATION_PASSWORD
+          value: "replication-password"
+        ports:
+        - name: mysql
+          containerPort: 3306
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
