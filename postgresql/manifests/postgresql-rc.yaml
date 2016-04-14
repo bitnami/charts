@@ -23,7 +23,7 @@ spec:
         image: bitnami/postgresql:9.5.1-0
         env:
         - name: POSTGRES_USER
-          value: ""
+          value: "postgres"
         - name: POSTGRES_PASSWORD
           value: ""
         - name: POSTGRES_DB
