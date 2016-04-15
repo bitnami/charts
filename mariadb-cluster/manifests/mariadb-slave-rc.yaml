@@ -27,7 +27,7 @@ spec:
         - --max_connect_errors=1000
         env:
         - name: MARIADB_USER
-          value: "my-user"
+          value: "root"
         - name: MARIADB_PASSWORD
           value: "my-password"
         - name: MARIADB_DATABASE
@@ -37,7 +37,7 @@ spec:
         - name: MARIADB_MASTER_HOST
           value: mariadb-master
         - name: MARIADB_MASTER_USER
-          value: "my-user"
+          value: "root"
         - name: MARIADB_MASTER_PASSWORD
           value: "my-password"
         - name: MARIADB_REPLICATION_USER

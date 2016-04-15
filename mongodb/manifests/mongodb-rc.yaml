@@ -23,7 +23,7 @@ spec:
         image: bitnami/mongodb:3.0.7-1-r02
         env:
         - name: MONGODB_USER
-          value: ""
+          value: "root"
         - name: MONGODB_PASSWORD
           value: ""
         - name: MONGODB_DATABASE
