@@ -68,6 +68,10 @@ Refer to the [dependency resolution](https://github.com/helm/helm/blob/master/do
 
 ## Manifest Files
 
+The [Authoring Kubernetes Manifests Guide](authoring-kubernetes-manifests.md) provides guidelines to write Kubernetes manifests files. The topics covered include Replication Controllers, Services, Secrets, Labels, Health Checks, Environment variables and so on. The same guidelines apply while authoring Charts.
+
+In this section we only look at Labels and Generators.
+
 ### Labels
 
 A cluster can be used to deploy multiple applications and services. To be able to correctly filter components in services and replication controllers we should define labels.
@@ -106,9 +110,7 @@ To make rolling updates possible the `version` label should be defined and set t
 
 Custom labels can be be defined to provide fine-grained filtering of pods in services and replication controllers. For example, a MariaDB pod can have a `mode:` label to indicate if it’s a `master` or `slave` allowing the Services to correctly filter Pods.
 
-The [Authoring Kubernetes Manifests Guide](authoring-kubernetes-manifests.md) provides guidelines to write Kubernetes manifests files. The topics covered include Replication Controllers, Services, Secrets, Labels, Health Checks, Environment variables and so on. The same guidelines apply while authoring Charts.
-
-## Generators
+### Generators
 
 Helm includes a templating solution to based on Go templates and supports most of the [Sprig](https://github.com/Masterminds/sprig) functions.
 
