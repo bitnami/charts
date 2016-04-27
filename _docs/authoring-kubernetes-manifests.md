@@ -10,7 +10,7 @@ Provide the following minimal set of files.
 
 ## Readme
 
-The README is intended to help users get started with using the bitnami images on their kubernetes clusters. It's function is to:
+The readme is intended to help users get started with using the bitnami images on their kubernetes clusters. It's function is to:
 
 - Provide brief usage example
 - Overview of the architecture (diagrams, screenshots, etc.)
@@ -140,20 +140,23 @@ The README should appropriately document or link to the image documentation for 
 
 For better lifecycle management the replication controller manifests should define liveness and readiness probes using the `livenessProbe` and `readinessProbe` fields respectively.
 
-There primitives are available for setting up these probes:
+Three primitives are available for setting up these probes:
 
 - HTTP check (`httpGet`)
-A webhook is used to determine the healthiness of the container. The check is deemed successful if the hook returns with `200` or `399` status code.
+
+  A webhook is used to determine the healthiness of the container. The check is deemed successful if the hook returns with `200` or `399` status code.
 
 - Container Execution Check (`exec`)
-A command is executed inside the container. Exiting the check with status `0` is considered a success.
+
+  A command is executed inside the container. Exiting the check with status `0` is considered a success.
 
 - TCP Socket Check (`tcpSocket`)
-A connection to a TCP socket is attempted. The container is considered healthy if the connection can be established.
+
+  A connection to a TCP socket is attempted. The container is considered healthy if the connection can be established.
 
 #### Liveness Probe
 
-A liveness probe checks if the container is running and responding normally. If the liveness probe fails the container is terminated and restarted subject to the restart policy. For replication controllers the default restart policy is `Always` which means that the Pod will be restarted on failure.
+A liveness probe checks if the container is running and responding normally. If the liveness probe fails, the container is terminated and subject to the restart policy it will be restarted. In replication controllers the default restart policy is to always restart a terminated container.
 
 The following example adds a `livenessProbe` to our sample RC manifest.
 
@@ -199,15 +202,15 @@ spec:
 
 Here an `exec` probe is setup to check the status of the MariaDB server at 5 second intervals using the `mysqladmin ping` command. The Pod will be restarted if the command returns an error for any reason.
 
-To allow the container to boot up before the liveness probe kicks in the `initialDelaySeconds`. It's value should be high enough to allow the container to start or the container will be prematurely terminated by the probe.
+To allow the container to boot up before the liveness probe kicks in the `initialDelaySeconds` should be configured. It's value should be high enough to allow the container to start or the container will be prematurely terminated by the probe.
 
 #### Readiness Probe
 
 When a Pod is started, regardless of its initialization state, it is configured to receive traffic. Ideally the Pod should receive traffic only when it's ready to avoid downtime, especially in horizontally scalable deployments.
 
-A readiness probe checks if a container is ready to service requests and is used to signal to the endpoints controller that even though a container is running, it should not receive any traffic from a proxy. Additionally it helps containers to recover from temporary service disruptions.
+A readiness probe checks if a container is ready to service requests and is used to signal to the endpoints controller that even though a container is running it should not receive any traffic from a proxy. Additionally it helps containers to recover from temporary service disruptions.
 
-The setup of a readiness probe is similar to a readiness probe. Building on our sample replication controller manifest, the following snippet adds a `readinessProbe`.
+The setup of a readiness probe is similar to a liveness probe. Building on our sample replication controller manifest the following snippet adds a `readinessProbe`.
 
 ```yaml
 apiVersion: v1
@@ -256,19 +259,19 @@ spec:
           timeoutSeconds: 1
 ```
 
-Because we want the Pod to start receiving traffic as soon as it's ready a lower `initialDelaySeconds` value is used in the `readinessProbe`.
+Because we want the Pod to start receiving traffic as soon as it's ready a lower `initialDelaySeconds` value is specified.
 
-A lower `timeoutSeconds` ensures that the Pod does not receive any traffic as soon as it becomes unresponsive. If the failure was temporary, the Pod resumes normal functioning after it has recovered for the error.
+A lower `timeoutSeconds` ensures that the Pod does not receive any traffic as soon as it becomes unresponsive. If the failure was temporary, the Pod would resume normal functioning after it has recovered.
 
 ### Lifecycle hooks
 
-To terminate a container Kubernetes sends the `TERM` signal to `PID 1` of the container and if container was not terminated within a 10 second grace period a `KILL` signal sent to forcefully terminate the container. In most cases this default behaviour is sufficient for the graceful termination of the daemons and processes running inside the container.
+To terminate a container Kubernetes sends the `TERM` signal to `PID 1` of the container and if container is not terminated within a 10 second grace period a `KILL` signal is sent to forcefully terminate the container. In most cases this default behaviour is sufficient for the graceful termination of the daemons and processes running inside the container.
 
-In some cases the containerized application may expect some custom termination sequence for its clean and graceful termination. For such cases the lifecycle field can be setup to define a command that should be executed before the default container termination behaviour is executed.
+However, in some containerized applications may expect a custom termination sequence for its clean and graceful termination. For such cases a `preStop` hook can be setup to define a command that should be executed before the default container termination behaviour is executed.
 
-One such example is the NGINX daemon which expects the `QUIT` signal to initiate a clean shutdown of the daemon and can be achieved by setting up a `preStop` hook to initiate the shutdown with the command `nginx -s quit`.
+For example, the NGINX daemon expects the `QUIT` signal to initiate a clean shutdown of the daemon. This can be achieved by setting up a `preStop` hook to initiate the shutdown with the command `nginx -s quit`.
 
-The following snippet demonstrates the use of a lifecycle hook.
+The following snippet demonstrates the use of a `preStop` lifecycle hook.
 
 ```yaml
 apiVersion: v1
@@ -285,7 +288,7 @@ kind: ReplicationController
               command: ["nginx", "-s", "quit"]
 ```
 
-Similarly a `postStart` hook can used to execute a command after a container has been started.
+Similarly a `postStart` hook can be specified to execute a command after a container has been started.
 
 ### Volumes
 
@@ -368,7 +371,7 @@ spec:
 
 We’ve specified the label selectors `provider` and `heritage`. This will ensure that only the desired Pods will receive traffic from this Service. Notice that the `version` label is not used in the label selectors as its inclusion will not allow for rolling updates. If your Pods use additional labels, such as `mode`, you may want to add them to the selector field of the Service manifest.
 
-Lastly, named ports are used to specify the `targetPort` field. This allows enables us to change the port numbers in the replication controller manifests without the need to change the Service manifests.
+Lastly, named ports are used to specify the `targetPort` field. This enables us to change the port numbers in the replication controller manifests without the need to change the Service manifests.
 
 #### Load Balancer
 
