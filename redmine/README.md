@@ -2,7 +2,7 @@
 
 > Redmine is a free and open source, web-based project management and issue tracking tool.
 
-Based on the [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image for docker, this Chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+Based on the [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image for docker, this Chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm Classic](https://helm.sh).
 
 ## Dependencies
 
@@ -23,7 +23,7 @@ By default the Redmine Chart mounts an [emptyDir](http://kubernetes.io/docs/user
 To edit the default Redmine configuration, run
 
 ```bash
-$ helm edit redmine
+$ helmc edit redmine
 ```
 
 Here you can update the MariaDB root password, Redmine admin username, password, email address, language and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
@@ -39,7 +39,7 @@ The values of `redmineUser` and `redminePassword` are the login credentials when
 Finally, generate the chart to apply your changes to the configuration.
 
 ```bash
-$ helm generate redmine
+$ helmc generate redmine
 ```
 
 ## Access your Redmine application
@@ -72,7 +72,7 @@ The default credentials are:
 To delete the Redmine deployment completely:
 
 ```bash
-$ helm uninstall -n default redmine
+$ helmc uninstall -n default redmine
 ```
 
 Additionally you may want to [Cleanup the MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb#cleanup)

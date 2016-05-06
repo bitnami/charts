@@ -15,17 +15,17 @@ By default the MariaDB Chart mounts an [emptyDir](http://kubernetes.io/docs/user
 To edit the default MariaDB configuration, run
 
 ```bash
-$ helm edit mariadb
+$ helmc edit mariadb
 ```
 
 Configurable parameters can be specified in `tpl/values.toml`. If not specified default values as defined by the [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image are used.
 
-> Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helm/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
+> Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helmc/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
 
 Finally, generate the chart to apply your changes to the configuration.
 
 ```bash
-$ helm generate mariadb
+$ helmc generate mariadb
 ```
 
 ## Cleanup
@@ -33,5 +33,5 @@ $ helm generate mariadb
 To delete the MariaDB deployment completely:
 
 ```bash
-$ helm uninstall -n default mariadb
+$ helmc uninstall -n default mariadb
 ```
