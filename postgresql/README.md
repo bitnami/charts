@@ -2,7 +2,7 @@
 
 > PostgreSQL is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
-Based on the [Bitnami PostgreSQL](https://github.com/bitnami/bitnami-docker-postgresql) image for docker, this Chart bootstraps a [PostgreSQL](http://www.postgresql.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using [Helm](https://helm.sh).
+Based on the [Bitnami PostgreSQL](https://github.com/bitnami/bitnami-docker-postgresql) image for docker, this Chart bootstraps a [PostgreSQL](http://www.postgresql.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using [Helm Classic](https://helm.sh).
 
 ## Persistence
 
@@ -15,17 +15,17 @@ By default the PostgreSQL Chart mounts an [emptyDir](http://kubernetes.io/docs/u
 To edit the default PostgreSQL configuration, run
 
 ```bash
-$ helm edit postgresql
+$ helmc edit postgresql
 ```
 
 Configurable parameters can be specified in `tpl/values.toml`. If not specified default values as defined by the [Bitnami PostgreSQL](https://github.com/bitnami/bitnami-docker-postgresql) image are used.
 
-> Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helm/workspace/charts/postgresql/tpl/values.toml` in your favourite editor.
+> Tip: If you have issues running the above command, add `se autochdir` to your `~/.vimrc` profile or simply edit `~/.helmc/workspace/charts/postgresql/tpl/values.toml` in your favourite editor.
 
 Finally, generate the chart to apply your changes to the configuration.
 
 ```bash
-$ helm generate postgresql
+$ helmc generate postgresql
 ```
 
 ## Cleanup
@@ -33,5 +33,5 @@ $ helm generate postgresql
 To delete the PostgreSQL deployment completely:
 
 ```bash
-$ helm uninstall -n default postgresql
+$ helmc uninstall -n default postgresql
 ```

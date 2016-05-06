@@ -1,8 +1,8 @@
-# Guidelines for writing Helm Charts
+# Guidelines for writing Helm Classic Charts
 
 A Chart is a unit of Kubernetes manifests describing one or more kubernetes objects (i.e. RC, Pod, Service, etc) that provides a recipe for installing and running a containerized application inside of Kubernetes.
 
-This document describes guidelines for writing Helm Charts and builds on the guidelines laid out by the [Authoring Kubernetes Manifests Guide](authoring-kubernetes-manifests.md).
+This document describes guidelines for writing Helm Classic Charts and builds on the guidelines laid out by the [Authoring Kubernetes Manifests Guide](authoring-kubernetes-manifests.md).
 
 ## Chart Directory
 
@@ -22,7 +22,7 @@ foo
 
 - The chart name is the top-level directory name.
 - `manifests/` directory contains the kubernetes manifests.
-- `tpl/` directory contains helm generator templates and `values.toml`.
+- `tpl/` directory contains helmc generator templates and `values.toml`.
 - Manifests are prefixed with the chart name.
 - Replication controller manifests bear the `-rc` suffix.
 - Service manifests bear the `-svc` suffix.
@@ -33,7 +33,7 @@ foo
 
 ## Chart.yaml
 
-The [Chart.yaml](https://github.com/helm/helm/blob/master/docs/awesome.md#the-chartyaml-file) format is defined by the [Helm](https://github.com/helm/helm) project and looks like this:
+The [Chart.yaml](https://github.com/helm/helm-classic/blob/master/docs/awesome.md#the-chartyaml-file) format is defined by the [Helm Classic](https://github.com/helm/helm-classic) project and looks like this:
 
 ```yaml
 name: <chart-name>
@@ -64,7 +64,7 @@ details: |-
   + `version`: Semver version filter
 - `details`: One paragraph description of the chart
 
-Refer to the [dependency resolution](https://github.com/helm/helm/blob/master/docs/awesome.md#dependency-resolution) section of the Helm docs to learn about how Helm handles dependencies.
+Refer to the [dependency resolution](https://github.com/helm/helm-classic/blob/master/docs/awesome.md#dependency-resolution) section of the Helm Classic docs to learn about how Helm Classic handles dependencies.
 
 ## Manifest Files
 
@@ -112,9 +112,9 @@ Custom labels can be be defined to provide fine-grained filtering of pods in ser
 
 ### Generators
 
-Helm includes a templating solution to based on Go templates and supports most of the [Sprig](https://github.com/Masterminds/sprig) functions.
+Helm Classic includes a templating solution to based on Go templates and supports most of the [Sprig](https://github.com/Masterminds/sprig) functions.
 
-Running `helm generate <chart-name>` compiles manifest files from the templates. The `tpl/` directory should be used for the templates and a `values.toml` file for customizing env variables and secrets.
+Running `helmc generate <chart-name>` compiles manifest files from the templates. The `tpl/` directory should be used for the templates and a `values.toml` file for customizing env variables and secrets.
 
 `tpl/values.toml` provides a clean way for users configure environment variables, secrets, etc. The `values.toml` should define place holders for the configurable parameters with default values, which can be `nil`.
 
@@ -129,10 +129,10 @@ postgresDb = ""
 Templates are manifests files with sprig functions that are evaluated during the compilation. The first line of a template should specify the command that should be executed to compile the template.
 
 ```
-#helm:generate helm tpl -d tpl/values.toml -o manifests/foo-rc.yaml $HELM_GENERATE_FILE
+#helm:generate helmc tpl -d tpl/values.toml -o manifests/foo-rc.yaml $HELM_GENERATE_FILE
 ```
 
-This instructs `helm generate` to execute the listed command where the compiled output will be generated in the `manifests/` directory. `-d` specifies the file containing values to substitute into the template.
+This instructs `helmc generate` to execute the listed command where the compiled output will be generated in the `manifests/` directory. `-d` specifies the file containing values to substitute into the template.
 
 The following snippet demostrates the substitution of a value specified in `tpl/values.toml`.
 
@@ -146,7 +146,7 @@ When compiled, `.postgresUser` will be replaced with the value of `postgresUser`
 
 All environment variables should be quoted as the kubernetes linter will error out if the value begins with a number or is a truth value. The sprig `quote` function ensures that the final evaluated output is quoted with double quotes.
 
-Learn more about [Helm Generate and Templates](https://github.com/helm/helm/blob/master/docs/generate-and-template.md)
+Learn more about [Helm Classic Generate and Templates](https://github.com/helm/helm-classic/blob/master/docs/generate-and-template.md)
 
 ## Readme
 
@@ -154,14 +154,14 @@ The readme file should provide brief instructions on how to deploy the chart and
 
 ## Examples
 
-Examples manifests following these guidelines can be found in the Official [Bitnami Helm Charts Repo](https://github.com/bitnami/charts)
+Examples manifests following these guidelines can be found in the Official [Bitnami Helm Classic Charts Repo](https://github.com/bitnami/charts)
 
 ## References
 
-- [Helm](https://github.com/helm/helm)
-- [Helm Charts](https://github.com/helm/charts)
-- [Authoring Helm Charts](https://github.com/helm/helm/blob/master/docs/authoring_charts.md)
-- [The Helm Guide to Writing Awesome Charts](https://github.com/helm/helm/blob/master/docs/awesome.md)
-- [Helm Generate and Template](https://github.com/helm/helm/blob/master/docs/generate-and-template.md)
+- [Helm Classic](https://github.com/helm/helm-classic)
+- [Helm Classic Charts](https://github.com/helm/charts)
+- [Authoring Helm Classic Charts](https://github.com/helm/helm-classic/blob/master/docs/authoring_charts.md)
+- [The Helm Classic Guide to Writing Awesome Charts](https://github.com/helm/helm-classic/blob/master/docs/awesome.md)
+- [Helm Classic Generate and Template](https://github.com/helm/helm-classic/blob/master/docs/generate-and-template.md)
 - [Authoring Kubernetes Manifests Guide](authoring-kubernetes-manifests.md)
 

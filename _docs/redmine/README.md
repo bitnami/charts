@@ -1,10 +1,10 @@
-# Deploying Redmine on GKE using Bitnami Helm Charts
+# Deploying Redmine on GKE using Bitnami Helm Classic Charts
 
 - [TL;DR;](#tldr)
 - [Introduction](#introduction)
 - [Before you begin](#before-you-begin)
   - [Kubernetes environment](#kubernetes-environment)
-  - [Helm](#helm)
+  - [Helm Classic](#helm-classic)
   - [Bitnami Charts](#bitnami-charts)
 - [Create the cluster](#create-the-cluster)
 - [Deploy MariaDB](#deploy-mariadb)
@@ -26,25 +26,25 @@
 $ gcloud container clusters create my-cluster
 ```
 
-**Step 2: Add the Bitnami Charts repo to Helm**
+**Step 2: Add the Bitnami Charts repo to Helm Classic**
 
 ```bash
-$ helm repo add bitnami https://github.com/bitnami/charts
-$ helm update
+$ helmc repo add bitnami https://github.com/bitnami/charts
+$ helmc update
 ```
 
 **Step 3: Deploy MariaDB**
 
 ```bash
-$ helm fetch bitnami/mariadb
-$ helm install mariadb
+$ helmc fetch bitnami/mariadb
+$ helmc install mariadb
 ```
 
 **Step 4: Deploy Redmine**
 
 ```bash
-$ helm fetch bitnami/redmine
-$ helm install redmine
+$ helmc fetch bitnami/redmine
+$ helmc install redmine
 ```
 
 To learn how you can access the Redmine application please refer to the [Accessing the Redmine Instance](#accessing-the-redmine-application) section.
@@ -53,7 +53,7 @@ To learn how you can access the Redmine application please refer to the [Accessi
 
 [Redmine](http://redmine.org) is a [feature-rich](http://www.redmine.org/projects/redmine/wiki/Features) open source project management web application written using the Ruby on Rails framwork and released under the terms of the [GNU General Public License v2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) (GPL).
 
-In this tutorial we walk through deploying Redmine on [Google Container Engine](https://cloud.google.com/container-engine/) (GKE) using [Helm](http://helm.sh/) and the [Official Bitnami Helm Charts](https://github.com/bitnami/charts). The following illustration provides an overview of the deployment.
+In this tutorial we walk through deploying Redmine on [Google Container Engine](https://cloud.google.com/container-engine/) (GKE) using [Helm Classic](http://helm.sh/) and the [Official Bitnami Helm Classic Charts](https://github.com/bitnami/charts). The following illustration provides an overview of the deployment.
 
 ![Architecture](images/architecture.png)
 
@@ -67,34 +67,34 @@ Before you create a Kubernetes cluster follow [these instructions](https://cloud
 
 ### Helm
 
-Dubbed as the Kubernetes Package Manager, Helm bootstraps a Kubernetes cluster with Charts that provide ready-to-use workloads.
+Dubbed as the Kubernetes Package Manager, Helm Classic bootstraps a Kubernetes cluster with Charts that provide ready-to-use workloads.
 
-[Install Helm](https://github.com/helm/helm#installing-helm) with the following commands.
+[Install Helm Classic](https://github.com/helm/helm-classic#installing-helm) with the following commands.
 
 ```bash
 $ curl -s https://get.helm.sh | bash
-$ sudo mv helm /usr/local/bin
-$ sudo chmod +x /usr/local/bin/helm
+$ sudo mv helmc /usr/local/bin
+$ sudo chmod +x /usr/local/bin/helmc
 ```
 
 ### Bitnami Charts
 
-The [Bitnami Helm Charts](https://github.com/bitnami/charts) repo is the easiest way to deploy [Bitnami Docker Containers](https://bitnami.com/docker) on a Kubernetes cluster.
+The [Bitnami Helm Classic Charts](https://github.com/bitnami/charts) repo is the easiest way to deploy [Bitnami Docker Containers](https://bitnami.com/docker) on a Kubernetes cluster.
 
 In addition to deploying containers on the cluster, the Bitnami Charts also set up [Container Probes](http://kubernetes.io/docs/user-guide/pod-states/#container-probes) to perform diagnostic checks on the containers to maximize the responsiveness and uptime of applications and services deployed on the cluster.
 
 The Charts in this repo are actively developed and maintained by [Bitnami](https://bitnami.com/) so that you have a pleasant experience deploying applications on Kubernetes. So lets get started...
 
-Add the Bitnami Charts repo to Helm.
+Add the Bitnami Charts repo to Helm Classic.
 
 ```bash
-$ helm repo add bitnami https://github.com/bitnami/charts
+$ helmc repo add bitnami https://github.com/bitnami/charts
 ```
 
 (Periodically) Update the Charts to get the latest and greatest Charts from Bitnami.
 
 ```bash
-$ helm update
+$ helmc update
 ```
 
 ## Create the cluster
@@ -115,20 +115,20 @@ The above command creates a cluster named `my-cluster` on GKE. You can name the 
 
 The [Bitnami Redmine Chart](https://github.com/bitnami/charts/tree/master/redmine) depends on the [Bitnami MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb) for the database needs of the Redmine application. As such we'll first deploy the MariaDB Chart.
 
-Begin by fetching the MariaDB Chart from the Bitnami Helm Charts repo.
+Begin by fetching the MariaDB Chart from the Bitnami Helm Classic Charts repo.
 
 ```bash
-$ helm fetch bitnami/mariadb
+$ helmc fetch bitnami/mariadb
 ```
 
-Bitnami Charts use [Helm templates and generators](https://github.com/helm/helm/blob/master/docs/generate-and-template.md) allowing users to easily update the deployment parameters. The configurable parameters are stored in the `~/.helm/workspace/charts/mariadb/tpl/values.toml` file of the Chart and in the default configuration the administrative user `root` is created without a password. To change the defaults, update the relevant parameters.
+Bitnami Charts use [Helm Classic templates and generators](https://github.com/helm/helm-classic/blob/master/docs/generate-and-template.md) allowing users to easily update the deployment parameters. The configurable parameters are stored in the `~/.helmc/workspace/charts/mariadb/tpl/values.toml` file of the Chart and in the default configuration the administrative user `root` is created without a password. To change the defaults, update the relevant parameters.
 
 > **Hint**:
 >
-> If your default editor is set to `vim` and you have issues running the following command, add `se autochdir` to your `~/.vimrc` profile and retry or directly edit `~/.helm/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
+> If your default editor is set to `vim` and you have issues running the following command, add `se autochdir` to your `~/.vimrc` profile and retry or directly edit `~/.helmc/workspace/charts/mariadb/tpl/values.toml` in your favourite editor.
 
 ```bash
-$ helm edit mariadb
+$ helmc edit mariadb
 ```
 
 > **Tip:**
@@ -140,13 +140,13 @@ Refer to the [MariaDB persistence](#mariadb-persistence) section for setting up 
 Apply the changes.
 
 ```bash
-$ helm generate mariadb
+$ helmc generate mariadb
 ```
 
 It's time to deploy the MariaDB Chart.
 
 ```bash
-$ helm install mariadb
+$ helmc install mariadb
 ```
 
 The above command deploys the MariaDB Chart on the cluster in the `default` namespace and will be accessible by any container running in the same namespace.
@@ -166,18 +166,18 @@ With the MariaDB Chart deployed on the cluster, thus satisfying the dependencies
 Fetch the Chart from the repo.
 
 ```bash
-$ helm fetch bitnami/redmine
+$ helmc fetch bitnami/redmine
 ```
 
-Just like the MariaDB Chart, the Redmine Chart uses Helm templates and generators with the configurable parameters stored in the `~/.helm/workspace/charts/redmine/tpl/values.toml` file of the Chart.
+Just like the MariaDB Chart, the Redmine Chart uses Helm Classic templates and generators with the configurable parameters stored in the `~/.helmc/workspace/charts/redmine/tpl/values.toml` file of the Chart.
 
 Edit the deployment parameters.
 
 ```bash
-$ helm edit redmine
+$ helmc edit redmine
 ```
 
-*or directly edit `~/.helm/workspace/charts/redmine/tpl/values.toml` in your favourite text editor*
+*or directly edit `~/.helmc/workspace/charts/redmine/tpl/values.toml` in your favourite text editor*
 
 In the default configuration the database user is set to `root` without a password and the Redmine administrator username and password credentials are `user` and `bitnami` respectively.
 
@@ -196,13 +196,13 @@ For information on setting up email notifications please read the [Email Deliver
 Once your done updating the deployment parameters, apply the changes with.
 
 ```bash
-$ helm generate redmine
+$ helmc generate redmine
 ```
 
 And finally we're ready to deploy the Redmine Chart.
 
 ```bash
-$ helm install redmine
+$ helmc install redmine
 ```
 
 The above command deploys the Redmine Chart under the `default` namespace and the deployment status of the Redmine Replication Controller, Pods and Services can be queried.
@@ -239,10 +239,10 @@ Point your web browser to the IP address listed in the `EXTERNAL-IP` column of t
 
 ## Uninstalling Redmine
 
-The Redmine deployment can easily be uninstalled with Helm.
+The Redmine deployment can easily be uninstalled with Helm Classic.
 
 ```bash
-$ helm uninstall --namespace default redmine
+$ helmc uninstall --namespace default redmine
 ```
 
 The command uninstalls the Kubernetes components set up by the Redmine Chart in the `default` namespace.
@@ -250,7 +250,7 @@ The command uninstalls the Kubernetes components set up by the Redmine Chart in 
 Similarly, if the MariaDB deployment is not being used for any other application, you can uninstall the MariaDB Chart as well:
 
 ```bash
-$ helm uninstall --namespace default mariadb
+$ helmc uninstall --namespace default mariadb
 ```
 
 To destroy the cluster in it's entirety use the following command. Note that any applications and services running on the cluster will also be removed.
@@ -283,7 +283,7 @@ Begin by creating a GCE persistent disk.
 $ gcloud compute disks create mariadb-data-disk
 ```
 
-Next you'll need to update the `data` volume specification in  `~/.helm/workspace/charts/mariadb/tpl/mariadb-rc.yaml` to:
+Next you'll need to update the `data` volume specification in  `~/.helmc/workspace/charts/mariadb/tpl/mariadb-rc.yaml` to:
 
 ```yaml
       volumes:
@@ -307,7 +307,7 @@ Create the GCE persistent disk.
 $ gcloud compute disks create redmine-data-disk
 ```
 
-Update the `data` volume specification in `~/.helm/workspace/charts/redmine/tpl/redmine-rc.yaml` to:
+Update the `data` volume specification in `~/.helmc/workspace/charts/redmine/tpl/redmine-rc.yaml` to:
 
 ```yaml
       volumes:
@@ -325,7 +325,7 @@ The Redmine application language defaults to English and can be configured using
 
 Please refer to the [IANA Language Subtag Registry](http://www.iana.org/assignments/language-subtag-registry) for your language code. The accepted values for the `redmineLanguage` parameter are `bg`, `cs`, `de`, `en`, `es`, `fr`, `he`, `it`, `ja`, `ko`, `nl`, `pl`, `pt`, `pt_br`, `ro`, `ru`, `sr`, `sv`, `zh` and `zh_tw`.
 
-For example, to configure the Redmine language to Español, edit the `~/.helm/workspace/charts/redmine/tpl/values.toml` file of the Redmine Chart and specify the following configuration.
+For example, to configure the Redmine language to Español, edit the `~/.helmc/workspace/charts/redmine/tpl/values.toml` file of the Redmine Chart and specify the following configuration.
 
 ```toml
 redmineLanguage = "es"
@@ -335,7 +335,7 @@ Apply the changes before [deploying the Redmine Chart](#deploy-redmine).
 
 ### Redmine Admin
 
-The default Redmine admin username and password credentials are `user` and `bitnami` respectively and the email address is set up as `user@example.com`. These parmeters can be configured using the `redmineUser`, `redminePassword` and `redmineEmail` parameters in the `~/.helm/workspace/charts/redmine/tpl/values.toml` file of the Redmine Chart.
+The default Redmine admin username and password credentials are `user` and `bitnami` respectively and the email address is set up as `user@example.com`. These parmeters can be configured using the `redmineUser`, `redminePassword` and `redmineEmail` parameters in the `~/.helmc/workspace/charts/redmine/tpl/values.toml` file of the Redmine Chart.
 
 For example, if you want to create the admin user `jon.snow` with password `winteriscoming` and email address `jon.snow@thenightswatch.com`.
 
@@ -351,7 +351,7 @@ Apply the changes before [deploying the Redmine Chart](#deploy-redmine).
 
 The Redmine Chart exposes deployment parameters to easily and effortlessly enable email notifications in Redmine. By default email delivery is disabled and can be enabled by simply providing the SMTP details of the mail delivery service.
 
-For example, to configure email delivery via Gmail, edit the `~/.helm/workspace/charts/redmine/tpl/values.toml` file of the Redmine Chart and specify the following configuration.
+For example, to configure email delivery via Gmail, edit the `~/.helmc/workspace/charts/redmine/tpl/values.toml` file of the Redmine Chart and specify the following configuration.
 
 ```toml
 smtpHost = "smtp.gmail.com"

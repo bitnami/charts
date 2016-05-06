@@ -1,4 +1,4 @@
-#helm:generate helm tpl -d tpl/values.toml -o manifests/tomcat-rc.yaml $HELM_GENERATE_FILE
+#helm:generate helmc tpl -d tpl/values.toml -o manifests/tomcat-rc.yaml $HELM_GENERATE_FILE
 apiVersion: v1
 kind: ReplicationController
 metadata:

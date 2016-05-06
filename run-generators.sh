@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Runs the helm generator on all chart templates to create manifests with the
+## Runs the helmc generator on all chart templates to create manifests with the
 ## default configuration. The command used to generate the manifests is the same
 ## as the one specified in the template.
 
