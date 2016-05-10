@@ -19,7 +19,7 @@ By default authentication is not enabled on the Memcached server. Edit the value
 Finally, generate the chart to apply your changes to the configuration.
 
 ```bash
-$ helmc generate memcached
+$ helmc generate --force memcached
 ```
 
 ## Cleanup

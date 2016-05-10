@@ -39,7 +39,7 @@ The values of `redmineUser` and `redminePassword` are the login credentials when
 Finally, generate the chart to apply your changes to the configuration.
 
 ```bash
-$ helmc generate redmine
+$ helmc generate --force redmine
 ```
 
 ## Access your Redmine application
