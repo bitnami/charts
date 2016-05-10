@@ -25,7 +25,7 @@ Configurable parameters can be specified in `tpl/values.toml`. If not specified 
 Finally, generate the chart to apply your changes to the configuration.
 
 ```bash
-$ helmc generate tomcat
+$ helmc generate --force tomcat
 ```
 
 ## Cleanup

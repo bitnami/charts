@@ -140,7 +140,7 @@ Refer to the [MariaDB persistence](#mariadb-persistence) section for setting up 
 Apply the changes.
 
 ```bash
-$ helmc generate mariadb
+$ helmc generate --force mariadb
 ```
 
 It's time to deploy the MariaDB Chart.
@@ -196,7 +196,7 @@ For information on setting up email notifications please read the [Email Deliver
 Once your done updating the deployment parameters, apply the changes with.
 
 ```bash
-$ helmc generate redmine
+$ helmc generate --force redmine
 ```
 
 And finally we're ready to deploy the Redmine Chart.
