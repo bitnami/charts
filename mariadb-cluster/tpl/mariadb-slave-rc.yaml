@@ -12,19 +12,17 @@ spec:
   selector:
     provider: mariadb
     mode: slave
-    version: 5.5.48-0-r01
+    version: 10.1.14-r0
   template:
     metadata:
       labels:
         provider: mariadb
         mode: slave
-        version: 5.5.48-0-r01
+        version: 10.1.14-r0
     spec:
       containers:
       - name: mariadb
-        image: bitnami/mariadb:5.5.48-0-r01
-        args:
-        - --max_connect_errors=1000
+        image: bitnami/mariadb:10.1.14-r0
         env:
         - name: MARIADB_USER
           value: {{ .mariadbUser | quote }}

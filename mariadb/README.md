@@ -6,7 +6,7 @@ Based on the [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb
 
 ## Persistence
 
-For persistence of the MariaDB data, mount a [storage volume](http://kubernetes.io/docs/user-guide/volumes/) at the `/bitnami/mariadb/data` path of the MariaDB pod.
+For persistence of the MariaDB data, mount a [storage volume](http://kubernetes.io/docs/user-guide/volumes/) at the `/bitnami/mariadb` path of the MariaDB pod.
 
 By default the MariaDB Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
 
