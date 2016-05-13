@@ -23,7 +23,7 @@ By default the Drupal Chart mounts an [emptyDir](http://kubernetes.io/docs/user-
 To edit the default Drupal configuration, run
 
 ```bash
-$ helm edit drupal
+$ helmc edit drupal
 ```
 
 Here you can update the MariaDB root password, Drupal admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
@@ -39,7 +39,7 @@ The values of `drupalUser` and `drupalPassword` are the login credentials when y
 Finally, generate the chart to apply your changes to the configuration.
 
 ```bash
-$ helm generate drupal
+$ helmc generate --force drupal
 ```
 
 ## Access your Drupal application
@@ -72,7 +72,7 @@ The default credentials are:
 To delete the Drupal deployment completely:
 
 ```bash
-$ helm uninstall -n default drupal
+$ helmc uninstall -n default drupal
 ```
 
 Additionally you may want to [Cleanup the MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb#cleanup)

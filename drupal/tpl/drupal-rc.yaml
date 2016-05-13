@@ -1,4 +1,4 @@
-#helm:generate helm tpl -d tpl/values.toml -o manifests/drupal-rc.yaml $HELM_GENERATE_FILE
+#helm:generate helmc tpl -d tpl/values.toml -o manifests/drupal-rc.yaml $HELM_GENERATE_FILE
 apiVersion: v1
 kind: ReplicationController
 metadata:
@@ -12,7 +12,7 @@ spec:
   selector:
     app: drupal
     provider: drupal-server
-    version: 8.1.1-r0 
+    version: 8.1.1-r0
   template:
     metadata:
       labels:
@@ -26,17 +26,17 @@ spec:
         image: bitnami/drupal:8.1.1-r0
         env:
         - name: MARIADB_HOST
-          value: mariadb
+          value: "mariadb"
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: "{{.mariadbPassword}}"
+          value: "{{ .mariadbPassword | quote }}"
         - name: DRUPAL_USERNAME
-          value: "{{.drupalUser}}"
+          value: "{{ .drupalUser | quote }}"
         - name: DRUPAL_PASSWORD
-          value: "{{.drupalPassword}}"
+          value: "{{ .drupalPassword | quote }}"
         - name: DRUPAL_EMAIL
-          value: "{{.drupalEmail}}"
+          value: "{{ .drupalEmail | quote }}"
         ports:
         - name: http
           containerPort: 80
