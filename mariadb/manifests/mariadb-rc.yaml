@@ -22,8 +22,10 @@ spec:
       - name: mariadb
         image: bitnami/mariadb:10.1.14-r0
         env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: ""
         - name: MARIADB_USER
-          value: "root"
+          value: ""
         - name: MARIADB_PASSWORD
           value: ""
         - name: MARIADB_DATABASE
