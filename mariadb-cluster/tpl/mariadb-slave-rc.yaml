@@ -36,6 +36,8 @@ spec:
           value: slave
         - name: MARIADB_MASTER_HOST
           value: mariadb-master
+        - name: MARIADB_MASTER_PORT
+          value: "3306"
         - name: MARIADB_MASTER_USER
           value: {{ .mariadbUser | quote }}
         - name: MARIADB_MASTER_PASSWORD
