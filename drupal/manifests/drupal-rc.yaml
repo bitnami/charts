@@ -30,13 +30,13 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: {{ .mariadbPassword | quote }}
+          value: ""
         - name: DRUPAL_USERNAME
-          value: {{ .drupalUser | quote }}
+          value: ""
         - name: DRUPAL_PASSWORD
-          value: {{ .drupalPassword | quote }}
+          value: ""
         - name: DRUPAL_EMAIL
-          value: {{ .drupalEmail | quote }}
+          value: ""
         ports:
         - name: http
           containerPort: 80
