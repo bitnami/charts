@@ -1,0 +1,66 @@
+#helm:generate helmc tpl -d tpl/values.toml -o manifests/drupal-rc.yaml $HELM_GENERATE_FILE
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: drupal
+  labels:
+    app: drupal
+    provider: drupal-server
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    app: drupal
+    provider: drupal-server
+    version: 8.1.1-r0
+  template:
+    metadata:
+      labels:
+        app: drupal
+        provider: drupal-server
+        version: 8.1.1-r0
+        heritage: bitnami
+    spec:
+      containers:
+      - name: drupal
+        image: bitnami/drupal:8.1.1-r0
+        env:
+        - name: MARIADB_HOST
+          value: "mariadb"
+        - name: MARIADB_PORT
+          value: "3306"
+        - name: MARIADB_PASSWORD
+          value: ""
+        - name: DRUPAL_USERNAME
+          value: "user"
+        - name: DRUPAL_PASSWORD
+          value: "bitnami"
+        - name: DRUPAL_EMAIL
+          value: "user@example.com"
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: drupal-data
+          mountPath: /bitnami/drupal
+        - name: apache-data
+          mountPath: /bitnami/apache
+      volumes:
+      - name: drupal-data
+        emptyDir: {}
+      - name: apache-data
+        emptyDir: {}
