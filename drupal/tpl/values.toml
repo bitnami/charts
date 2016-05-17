@@ -1,4 +1,4 @@
 mariadbPassword = ""
-drupalUser = ""
-drupalPassword = ""
-drupalEmail = ""
+drupalUser = "user"
+drupalPassword = "bitnami"
+drupalEmail = "user@example.com"

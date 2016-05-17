@@ -32,11 +32,11 @@ spec:
         - name: MARIADB_PASSWORD
           value: ""
         - name: DRUPAL_USERNAME
-          value: ""
+          value: "user"
         - name: DRUPAL_PASSWORD
-          value: ""
+          value: "bitnami"
         - name: DRUPAL_EMAIL
-          value: ""
+          value: "user@example.com"
         ports:
         - name: http
           containerPort: 80
