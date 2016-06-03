@@ -9,17 +9,17 @@ spec:
   replicas: 1
   selector:
     provider: nginx
-    version: 1.9.9-0
+    version: 1.10.1-r0
   template:
     metadata:
       labels:
         provider: nginx
-        version: 1.9.9-0
+        version: 1.10.1-r0
         heritage: bitnami
     spec:
       containers:
       - name: nginx
-        image: bitnami/nginx:1.9.9-0
+        image: bitnami/nginx:1.10.1-r0
         ports:
         - name: http
           containerPort: 80
@@ -38,12 +38,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: htdocs
-          mountPath: /app
-        - name: conf
-          mountPath: /bitnami/nginx/conf
+        - name: data
+          mountPath: /bitnami/nginx
       volumes:
-      - name: htdocs
-        emptyDir: {}
-      - name: conf
+      - name: data
         emptyDir: {}
