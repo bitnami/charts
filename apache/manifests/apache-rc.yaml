@@ -9,17 +9,17 @@ spec:
   replicas: 1
   selector:
     provider: apache
-    version: 2.4.18-0
+    version: 2.4.20-r0
   template:
     metadata:
       labels:
         provider: apache
-        version: 2.4.18-0
+        version: 2.4.20-r0
         heritage: bitnami
     spec:
       containers:
       - name: apache
-        image: bitnami/apache:2.4.18-0
+        image: bitnami/apache:2.4.20-r0
         ports:
         - name: http
           containerPort: 80
@@ -38,12 +38,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: htdocs
-          mountPath: /app
-        - name: conf
-          mountPath: /bitnami/apache/conf
+        - name: data
+          mountPath: /bitnami/apache
       volumes:
-      - name: htdocs
-        emptyDir: {}
-      - name: conf
+      - name: data
         emptyDir: {}
