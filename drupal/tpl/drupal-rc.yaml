@@ -30,7 +30,7 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: {{ .mariadbPassword | quote }}
+          value: {{ .mariadbRootPassword | quote }}
         - name: DRUPAL_USERNAME
           value: {{ .drupalUser | quote }}
         - name: DRUPAL_PASSWORD
