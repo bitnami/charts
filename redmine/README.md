@@ -34,7 +34,7 @@ The values of `redmineUser` and `redminePassword` are the login credentials when
 
 > Note:
 >
-> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbPassword` field in the Redmine Chart.
+> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbRootPassword` field in the Redmine Chart.
 
 Finally, generate the chart to apply your changes to the configuration.
 
