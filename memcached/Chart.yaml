@@ -2,7 +2,7 @@ name: memcached
 home: http://memcached.org/
 source:
 - https://github.com/bitnami/bitnami-docker-memcached
-version: 0.1.0
+version: 0.2.0
 description: Chart for Memcached
 maintainers:
 - Bitnami <containers@bitnami.com>
