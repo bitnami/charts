@@ -1,1 +1,2 @@
-wildflyPassword = "wildfly"
+wildflyUser = "user"
+wildflyPassword = "password"
