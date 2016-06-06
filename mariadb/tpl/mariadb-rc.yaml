@@ -10,18 +10,20 @@ spec:
   replicas: 1
   selector:
     provider: mariadb
-    version: 5.5.48-0-r01
+    version: 10.1.14-r0
   template:
     metadata:
       labels:
         provider: mariadb
-        version: 5.5.48-0-r01
+        version: 10.1.14-r0
         heritage: bitnami
     spec:
       containers:
       - name: mariadb
-        image: bitnami/mariadb:5.5.48-0-r01
+        image: bitnami/mariadb:10.1.14-r0
         env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: {{ .mariadbRootPassword | quote }}
         - name: MARIADB_USER
           value: {{ .mariadbUser | quote }}
         - name: MARIADB_PASSWORD
@@ -47,11 +49,7 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - name: data
-          mountPath: /bitnami/mariadb/data
-        - name: conf
-          mountPath: /bitnami/mariadb/conf
+          mountPath: /bitnami/mariadb
       volumes:
       - name: data
-        emptyDir: {}
-      - name: conf
         emptyDir: {}

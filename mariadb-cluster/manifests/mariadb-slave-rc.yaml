@@ -12,22 +12,22 @@ spec:
   selector:
     provider: mariadb
     mode: slave
-    version: 5.5.48-0-r01
+    version: 10.1.14-r0
   template:
     metadata:
       labels:
         provider: mariadb
         mode: slave
-        version: 5.5.48-0-r01
+        version: 10.1.14-r0
     spec:
       containers:
       - name: mariadb
-        image: bitnami/mariadb:5.5.48-0-r01
-        args:
-        - --max_connect_errors=1000
+        image: bitnami/mariadb:10.1.14-r0
         env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: "my-root-password"
         - name: MARIADB_USER
-          value: "root"
+          value: "my-user"
         - name: MARIADB_PASSWORD
           value: "my-password"
         - name: MARIADB_DATABASE
@@ -36,8 +36,10 @@ spec:
           value: slave
         - name: MARIADB_MASTER_HOST
           value: mariadb-master
+        - name: MARIADB_MASTER_PORT
+          value: "3306"
         - name: MARIADB_MASTER_USER
-          value: "root"
+          value: "my-user"
         - name: MARIADB_MASTER_PASSWORD
           value: "my-password"
         - name: MARIADB_REPLICATION_USER

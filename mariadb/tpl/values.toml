@@ -1,3 +1,4 @@
-mariadbUser = "root"
+mariadbRootPassword = ""
+mariadbUser = ""
 mariadbPassword = ""
 mariadbDatabase = ""

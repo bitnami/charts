@@ -1,4 +1,5 @@
-mariadbUser = "root"
+mariadbRootPassword = "my-root-password"
+mariadbUser = "my-user"
 mariadbPassword = "my-password"
 mariadbDatabase = "my-database"
 mariadbReplicationUser = "replication-user"
