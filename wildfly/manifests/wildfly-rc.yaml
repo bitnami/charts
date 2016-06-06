@@ -10,20 +10,22 @@ spec:
   replicas: 1
   selector:
     provider: wildfly
-    version: 10.0.0-0
+    version: 10.0.0-r0
   template:
     metadata:
       labels:
         provider: wildfly
-        version: 10.0.0-0
+        version: 10.0.0-r0
         heritage: bitnami
     spec:
       containers:
       - name: wildfly
-        image: bitnami/wildfly:10.0.0-0
+        image: bitnami/wildfly:10.0.0-r0
         env:
+        - name: WILDFLY_USER
+          value: "user"
         - name: WILDFLY_PASSWORD
-          value: "wildfly"
+          value: "password"
         ports:
         - name: http
           containerPort: 8080
@@ -43,11 +45,7 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - name: data
-          mountPath: /bitnami/wildfly/data
-        - name: conf
-          mountPath: /bitnami/wildfly/conf
+          mountPath: /bitnami/wildfly
       volumes:
       - name: data
-        emptyDir: {}
-      - name: conf
         emptyDir: {}
