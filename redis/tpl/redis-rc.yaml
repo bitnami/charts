@@ -10,17 +10,17 @@ spec:
   replicas: 1
   selector:
     provider: redis
-    version: 3.0.7-1
+    version: 3.2.0-r0
   template:
     metadata:
       labels:
         provider: redis
-        version: 3.0.7-1
+        version: 3.2.0-r0
         heritage: bitnami
     spec:
       containers:
       - name: redis
-        image: bitnami/redis:3.0.7-1
+        image: bitnami/redis:3.2.0-r0
         env:
         - name: REDIS_PASSWORD
           value: {{ .redisPassword | quote }}
@@ -43,11 +43,7 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - name: data
-          mountPath: /bitnami/redis/data
-        - name: conf
-          mountPath: /bitnami/redis/conf
+          mountPath: /bitnami/redis
       volumes:
       - name: data
-        emptyDir: {}
-      - name: conf
         emptyDir: {}

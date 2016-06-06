@@ -2,7 +2,7 @@ name: redis
 home: http://redis.io/
 source:
 - https://github.com/bitnami/bitnami-docker-redis
-version: 0.1.0
+version: 0.2.0
 description: Chart for Redis
 maintainers:
 - Bitnami <containers@bitnami.com>
