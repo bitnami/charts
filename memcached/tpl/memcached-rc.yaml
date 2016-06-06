@@ -10,18 +10,20 @@ spec:
   replicas: 1
   selector:
     provider: memcached
-    version: 1.4.25-1
+    version: 1.4.25-r0
   template:
     metadata:
       labels:
         provider: memcached
-        version: 1.4.25-1
+        version: 1.4.25-r0
         heritage: bitnami
     spec:
       containers:
       - name: memcached
-        image: bitnami/memcached:1.4.25-1
+        image: bitnami/memcached:1.4.25-r0
         env:
+        - name: MEMCACHED_USER
+          value: {{ .memcachedUser | quote }}
         - name: MEMCACHED_PASSWORD
           value: {{ .memcachedPassword | quote }}
         ports:
