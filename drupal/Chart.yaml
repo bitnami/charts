@@ -2,12 +2,12 @@ name: drupal
 home: http://www.drupal.org/
 source:
 - https://github.com/bitnami/bitnami-docker-drupal
-version: 0.1.0
+version: 0.2.0
 description: One of the most versatile open source content management systems.
 maintainers:
 - Bitnami <containers@bitnami.com>
 dependencies:
 - name: mariadb
-  version: 0.1.0
+  version: 0.2.0
 details: |-
   Drupal is one of the most versatile open source content management systems on the market.
