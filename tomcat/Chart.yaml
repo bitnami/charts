@@ -2,7 +2,7 @@ name: tomcat
 home: http://tomcat.apache.org
 source:
 - https://github.com/bitnami/bitnami-docker-tomcat
-version: 0.1.0
+version: 0.2.0
 description: Chart for Apache Tomcat
 maintainers:
 - Bitnami <containers@bitnami.com>
