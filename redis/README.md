@@ -6,7 +6,7 @@ Based on the [Bitnami Redis](https://github.com/bitnami/bitnami-docker-redis) im
 
 ## Persistence
 
-For persistence of the Redis data, mount a [storage volume](http://kubernetes.io/docs/user-guide/volumes/) at the `/bitnami/redis/data` path of the Redis pod.
+For persistence of the Redis data, mount a [storage volume](http://kubernetes.io/docs/user-guide/volumes/) at the `/bitnami/redis` path of the Redis pod.
 
 By default the Redis Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
 

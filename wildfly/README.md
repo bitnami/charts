@@ -6,7 +6,7 @@ Based on the [Bitnami Wildfly](https://github.com/bitnami/bitnami-docker-wildfly
 
 ## Persistence
 
-For persistence of the Wildfly data, mount a [storage volume](http://kubernetes.io/docs/user-guide/volumes/) at the `/bitnami/wildfly/data` path of the Wildfly pod.
+For persistence of the Wildfly data, mount a [storage volume](http://kubernetes.io/docs/user-guide/volumes/) at the `/bitnami/wildfly` path of the Wildfly pod.
 
 By default the Wildfly Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
 
