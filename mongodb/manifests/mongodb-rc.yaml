@@ -10,20 +10,22 @@ spec:
   replicas: 1
   selector:
     provider: mongodb
-    version: 3.0.7-1-r02
+    version: 3.2.6-r0
   template:
     metadata:
       labels:
         provider: mongodb
-        version: 3.0.7-1-r02
+        version: 3.2.6-r0
         heritage: bitnami
     spec:
       containers:
       - name: mongodb
-        image: bitnami/mongodb:3.0.7-1-r02
+        image: bitnami/mongodb:3.2.6-r0
         env:
+        - name: MONGODB_ROOT_PASSWORD
+          value: ""
         - name: MONGODB_USER
-          value: "root"
+          value: ""
         - name: MONGODB_PASSWORD
           value: ""
         - name: MONGODB_DATABASE
@@ -47,11 +49,7 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - name: data
-          mountPath: /bitnami/mongodb/data
-        - name: conf
-          mountPath: /bitnami/mongodb/conf
+          mountPath: /bitnami/mongodb
       volumes:
       - name: data
-        emptyDir: {}
-      - name: conf
         emptyDir: {}
