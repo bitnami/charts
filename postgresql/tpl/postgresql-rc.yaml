@@ -10,17 +10,17 @@ spec:
   replicas: 1
   selector:
     provider: postgresql
-    version: 9.5.1-0
+    version: 9.5.3-r0
   template:
     metadata:
       labels:
         provider: postgresql
-        version: 9.5.1-0
+        version: 9.5.3-r0
         heritage: bitnami
     spec:
       containers:
       - name: postgresql
-        image: bitnami/postgresql:9.5.1-0
+        image: bitnami/postgresql:9.5.3-r0
         env:
         - name: POSTGRES_USER
           value: {{ .postgresUser | quote }}
@@ -49,11 +49,7 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - name: data
-          mountPath: /bitnami/postgresql/data
-        - name: conf
-          mountPath: /bitnami/postgresql/conf
+          mountPath: /bitnami/postgresql
       volumes:
       - name: data
-        emptyDir: {}
-      - name: conf
         emptyDir: {}
