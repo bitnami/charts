@@ -1,3 +1,4 @@
-mongodbUser = "root"
+mongodbRootPassword = ""
+mongodbUser = ""
 mongodbPassword = ""
 mongodbDatabase = ""
