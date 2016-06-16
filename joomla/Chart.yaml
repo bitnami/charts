@@ -1,0 +1,13 @@
+name: joomla
+home: http://www.joomla.org/
+source:
+- https://github.com/bitnami/bitnami-docker-joomla
+version: 0.2.0
+description: PHP content management system (CMS) for publishing web content
+maintainers:
+- Bitnami <containers@bitnami.com>
+dependencies:
+- name: mariadb
+  version: 0.2.0
+details: |-
+  Joomla is a PHP content management system (CMS) for publishing web content.
