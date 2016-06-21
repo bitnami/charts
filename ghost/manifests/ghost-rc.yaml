@@ -1,0 +1,66 @@
+#helm:generate helmc tpl -d tpl/values.toml -o manifests/ghost-rc.yaml $HELM_GENERATE_FILE
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: ghost
+  labels:
+    app: ghost
+    provider: ghost-server
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    app: ghost
+    provider: ghost-server
+    version: 0.7.9-r0
+  template:
+    metadata:
+      labels:
+        app: ghost
+        provider: ghost-server
+        version: 0.7.9-r0
+        heritage: bitnami
+    spec:
+      containers:
+      - name: ghost
+        image: bitnami/ghost:0.7.9-r0
+        env:
+        - name: GHOST_USERNAME
+          value: "user"
+        - name: GHOST_PASSWORD
+          value: "bitnami1"
+        - name: GHOST_EMAIL
+          value: "user@example.com"
+        - name: BLOG_TITLE
+          value: "User's Blog"
+        - name: SMTP_HOST
+          value: ""
+        - name: SMTP_PORT
+          value: ""
+        - name: SMTP_USER
+          value: ""
+        - name: SMTP_PASSWORD
+          value: ""
+        - name: SMTP_SERVICE
+          value: ""
+        ports:
+        - name: http
+          containerPort: 2368
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/ghost
+      volumes:
+      - name: data
+        emptyDir: {}
