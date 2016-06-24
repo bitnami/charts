@@ -1,0 +1,13 @@
+name: phpbb
+home: https://www.phpbb.com/
+source:
+- https://github.com/bitnami/bitnami-docker-phpbb
+version: 0.2.0
+description: Community forum that supports the notion of users and groups, file attachments, full-text search, notifications and more.
+maintainers:
+- Bitnami <containers@bitnami.com>
+dependencies:
+- name: mariadb
+  version: 0.2.0
+details: |-
+  phpBB is a community forum that supports the notion of users and groups, file attachments, full-text search, notifications and more.
