@@ -12,18 +12,18 @@ spec:
   selector:
     provider: mariadb
     mode: master
-    version: 10.1.14-r0
+    version: 10.1.14-r1
   template:
     metadata:
       labels:
         provider: mariadb
         mode: master
-        version: 10.1.14-r0
+        version: 10.1.14-r1
         heritage: bitnami
     spec:
       containers:
       - name: mariadb
-        image: bitnami/mariadb:10.1.14-r0
+        image: bitnami/mariadb:10.1.14-r1
         env:
         - name: MARIADB_ROOT_PASSWORD
           value: "my-root-password"
