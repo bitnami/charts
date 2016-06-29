@@ -26,11 +26,17 @@ spec:
         image: bitnami/mariadb:10.1.14-r1
         env:
         - name: MARIADB_ROOT_PASSWORD
-          value: {{ .mariadbRootPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-root-password
         - name: MARIADB_USER
           value: {{ .mariadbUser | quote }}
         - name: MARIADB_PASSWORD
-          value: {{ .mariadbPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-password
         - name: MARIADB_DATABASE
           value: {{ .mariadbDatabase | quote }}
         - name: MARIADB_REPLICATION_MODE
@@ -38,7 +44,10 @@ spec:
         - name: MARIADB_REPLICATION_USER
           value: {{ .mariadbReplicationUser | quote }}
         - name: MARIADB_REPLICATION_PASSWORD
-          value: {{ .mariadbReplicationPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-replication-password
         ports:
         - name: mysql
           containerPort: 3306

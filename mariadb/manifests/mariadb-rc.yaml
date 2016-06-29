@@ -23,11 +23,17 @@ spec:
         image: bitnami/mariadb:10.1.14-r1
         env:
         - name: MARIADB_ROOT_PASSWORD
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-root-password
         - name: MARIADB_USER
           value: ""
         - name: MARIADB_PASSWORD
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-password
         - name: MARIADB_DATABASE
           value: ""
         ports:
