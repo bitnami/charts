@@ -25,7 +25,10 @@ spec:
         - name: MEMCACHED_USER
           value: ""
         - name: MEMCACHED_PASSWORD
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: memcached
+              key: memcached-password
         ports:
         - name: memcache
           containerPort: 11211
