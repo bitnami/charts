@@ -37,6 +37,16 @@ spec:
           value: "bitnami"
         - name: PHPBB_EMAIL
           value: "user@example.com"
+        - name: SMTP_HOST
+          value: ""
+        - name: SMTP_PORT
+          value: ""
+        - name: SMTP_USER
+          value: ""
+        - name: SMTP_PASSWORD
+          value: ""
+        - name: SMTP_PROTOCOL
+          value: ""
         ports:
         - name: http
           containerPort: 80
