@@ -30,11 +30,17 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-root-password
         - name: MEDIAWIKI_USERNAME
           value: "user"
         - name: MEDIAWIKI_PASSWORD
-          value: "bitnami1"
+          valueFrom:
+            secretKeyRef:
+              name: mediawiki
+              key: mediawiki-password
         - name: MEDIAWIKI_EMAIL
           value: "user@example.com"
         - name: MEDIAWIKI_WIKI_NAME
@@ -48,7 +54,10 @@ spec:
         - name: SMTP_USER
           value: ""
         - name: SMTP_Password
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: mediawiki
+              key: smtp-password
         ports:
         - name: http
           containerPort: 80

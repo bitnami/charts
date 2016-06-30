@@ -26,15 +26,11 @@ To edit the default MediaWiki configuration, run
 $ helmc edit mediawiki
 ```
 
-Here you can update the MariaDB root password, MediaWiki admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
+Here you can update the MediaWiki admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
 
 Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-mediawiki/#environment-variables) section of the [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image for the default values.
 
 The values of `mediawikiUser` and `mediawikiPassword` are the login credentials when you [access the MediaWiki instance](#access-your-mediawiki-application).
-
-> Note:
->
-> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbRootPassword` field in the MediaWiki Chart.
 
 Finally, generate the chart to apply your changes to the configuration.
 
