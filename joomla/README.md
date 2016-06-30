@@ -26,15 +26,11 @@ To edit the default Joomla configuration, run
 $ helmc edit joomla
 ```
 
-Here you can update the MariaDB root password, Joomla admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
+Here you can update the Joomla admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
 
 Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-joomla/#environment-variables) section of the [Bitnami Joomla](https://github.com/bitnami/bitnami-docker-joomla) image for the default values.
 
 The values of `joomlaUser` and `joomlaPassword` are the login credentials when you [access the Joomla instance](#access-your-joomla-application).
-
-> Note:
->
-> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbRootPassword` field in the Joomla Chart.
 
 Finally, generate the chart to apply your changes to the configuration.
 
