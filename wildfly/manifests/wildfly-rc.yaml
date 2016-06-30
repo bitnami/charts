@@ -25,7 +25,10 @@ spec:
         - name: WILDFLY_USER
           value: "user"
         - name: WILDFLY_PASSWORD
-          value: "password"
+          valueFrom:
+            secretKeyRef:
+              name: wildfly
+              key: wildfly-password
         ports:
         - name: http
           containerPort: 8080

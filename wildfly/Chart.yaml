@@ -2,7 +2,7 @@ name: wildfly
 home: http://wildfly.org
 source:
 - https://github.com/bitnami/bitnami-docker-wildfly
-version: 0.2.0
+version: 0.2.1
 description: Chart for Wildfly
 maintainers:
 - Bitnami <containers@bitnami.com>
