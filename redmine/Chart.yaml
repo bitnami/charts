@@ -2,12 +2,12 @@ name: redmine
 home: http://www.redmine.org/
 source:
 - https://github.com/bitnami/bitnami-docker-redmine
-version: 0.1.2
+version: 0.2.1
 description: A flexible project management web application.
 maintainers:
 - Bitnami <containers@bitnami.com>
 dependencies:
 - name: mariadb
-  version: 0.2.0
+  version: 0.2.1
 details: |-
   Redmine is a flexible project management web application written using Ruby on Rails framework.

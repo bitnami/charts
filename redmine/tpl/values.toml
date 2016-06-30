@@ -1,4 +1,3 @@
-mariadbRootPassword = ""
 redmineUser = "user"
 redminePassword = "bitnami"
 redmineEmail = "user@example.com"

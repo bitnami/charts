@@ -179,11 +179,7 @@ $ helmc edit redmine
 
 *or directly edit `~/.helmc/workspace/charts/redmine/tpl/values.toml` in your favourite text editor*
 
-In the default configuration the database user is set to `root` without a password and the Redmine administrator username and password credentials are `user` and `bitnami` respectively.
-
-> **Important:**
->
-> If the database credentials were changed in the MariaDB Chart, please update the database credentials in the Redmine Chart accordingly or the deployment will fail for obvious reasons.
+In the default configuration the Redmine administrator username and password credentials are `user` and `bitnami` respectively.
 
 To configure Redmine data persistence refer to the [Redmine persistence](#redmine-persistence) section.
 
