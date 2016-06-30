@@ -23,7 +23,10 @@ spec:
         image: bitnami/redis:3.2.0-r0
         env:
         - name: REDIS_PASSWORD
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: redis
+              key: redis-password
         ports:
         - name: redis
           containerPort: 6379
