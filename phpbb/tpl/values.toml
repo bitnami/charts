@@ -1,4 +1,3 @@
-mariadbRootPassword = ""
 phpbbUser = "user"
 phpbbPassword = "bitnami"
 phpbbEmail = "user@example.com"

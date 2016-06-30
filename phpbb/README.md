@@ -26,15 +26,11 @@ To edit the default phpBB configuration, run
 $ helmc edit phpbb
 ```
 
-Here you can update the MariaDB root password, phpBB admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
+Here you can update the phpBB admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
 
 Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-phpbb/#environment-variables) section of the [Bitnami phpBB](https://github.com/bitnami/bitnami-docker-phpbb) image for the default values.
 
 The values of `phpbbUser` and `phpbbPassword` are the login credentials when you [access the phpBB instance](#access-your-phpbb-application).
-
-> Note:
->
-> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbRootPassword` field in the phpBB Chart.
 
 Finally, generate the chart to apply your changes to the configuration.
 

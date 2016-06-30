@@ -30,11 +30,17 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: {{ .mariadbRootPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-root-password
         - name: PHPBB_USERNAME
           value: {{ .phpbbUser | quote }}
         - name: PHPBB_PASSWORD
-          value: {{ .phpbbPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: phpbb
+              key: phpbb-password
         - name: PHPBB_EMAIL
           value: {{ .phpbbEmail | quote }}
         - name: SMTP_HOST
@@ -44,7 +50,10 @@ spec:
         - name: SMTP_USER
           value: {{ .smtpUser | quote }}
         - name: SMTP_PASSWORD
-          value: {{ .smtpPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: phpbb
+              key: smtp-password
         - name: SMTP_PROTOCOL
           value: {{ .smtpProtocol | quote }}
         ports:
