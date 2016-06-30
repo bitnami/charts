@@ -2,7 +2,7 @@ name: ghost
 home: http://www.ghost.org/
 source:
 - https://github.com/bitnami/bitnami-docker-ghost
-version: 0.2.0
+version: 0.2.1
 description: A simple, powerful publishing platform that allows you to share your stories with the world
 maintainers:
 - Bitnami <containers@bitnami.com>
