@@ -32,7 +32,7 @@ spec:
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: drupal
+              name: mariadb
               key: mariadb-root-password
         - name: DRUPAL_USERNAME
           value: {{ .drupalUser | quote }}

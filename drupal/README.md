@@ -26,15 +26,11 @@ To edit the default Drupal configuration, run
 $ helmc edit drupal
 ```
 
-Here you can update the MariaDB root password, Drupal admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
+Here you can update the Drupal admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
 
 Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-drupal/#environment-variables) section of the [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image for the default values.
 
 The values of `drupalUser` and `drupalPassword` are the login credentials when you [access the Drupal instance](#access-your-drupal-application).
-
-> Note:
->
-> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbRootPassword` field in the Drupal Chart.
 
 Finally, generate the chart to apply your changes to the configuration.
 
