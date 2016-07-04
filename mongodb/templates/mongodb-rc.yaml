@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "mongodb" | trunc 24 }}
+  labels:
+    provider: mongodb
+    release: {{ .Release.Name }}
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    provider: mongodb
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
+  template:
+    metadata:
+      labels:
+        provider: mongodb
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
+        heritage: bitnami
+    spec:
+      containers:
+      - name: mongodb
+        image: bitnami/mongodb:{{ .Values.imageTag }}
+        env:
+        - name: MONGODB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "mongodb" | trunc 24 }}
+              key: mongodb-root-password
+        - name: MONGODB_USER
+          value: {{ .Values.mongodbUser | quote }}
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "mongodb" | trunc 24 }}
+              key: mongodb-password
+        - name: MONGODB_DATABASE
+          value: {{ .Values.mongodbDatabase | quote }}
+        ports:
+        - name: mongodb
+          containerPort: 27017
+        livenessProbe:
+          exec:
+            command:
+            - mongo
+            - ping
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - mongo
+            - ping
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/mongodb
+      volumes:
+      - name: data
+        emptyDir: {}

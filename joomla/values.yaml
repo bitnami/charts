@@ -1,0 +1,9 @@
+imageTag: 3.5.1-r0
+joomlaUser: user
+joomlaPassword: bitnami
+joomlaEmail: user@example.com
+smtpHost:
+smtpUser:
+smtpPassword:
+smtpPort:
+smtpProtocol:

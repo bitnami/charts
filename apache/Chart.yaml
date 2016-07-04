@@ -1,10 +1,16 @@
 name: apache
-home: https://httpd.apache.org
-source:
-- https://github.com/bitnami/bitnami-docker-apache
-version: 0.2.0
+version: 0.3.0
 description: Chart for Apache HTTP Server
+keywords:
+- apache
+- http
+- www
+- web
+- reverse proxy
+home: https://httpd.apache.org
+sources:
+- https://github.com/bitnami/bitnami-docker-apache
 maintainers:
-- Bitnami <containers@bitnami.com>
-details: |-
-  The Apache HTTP Server Project is an effort to develop and maintain an open-source HTTP server for modern operating systems including UNIX and Windows NT. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

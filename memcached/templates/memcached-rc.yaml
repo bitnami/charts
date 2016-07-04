@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "memcached" | trunc 24 }}
+  labels:
+    provider: memcached
+    release: {{ .Release.Name }}
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    provider: memcached
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
+  template:
+    metadata:
+      labels:
+        provider: memcached
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
+        heritage: bitnami
+    spec:
+      containers:
+      - name: memcached
+        image: bitnami/memcached:{{ .Values.imageTag }}
+        env:
+        - name: MEMCACHED_USER
+          value: {{ .Values.memcachedUser | quote }}
+        - name: MEMCACHED_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "memcached" | trunc 24 }}
+              key: memcached-password
+        ports:
+        - name: memcache
+          containerPort: 11211
+        livenessProbe:
+          tcpSocket:
+            port: memcache
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: memcache
+          initialDelaySeconds: 5
+          timeoutSeconds: 1

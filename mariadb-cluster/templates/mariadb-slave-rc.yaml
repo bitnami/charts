@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "slave" | trunc 24 }}
+  labels:
+    provider: mariadb
+    mode: slave
+    release: {{ .Release.Name }}
+    heritage: bitnami
+spec:
+  replicas: 3
+  selector:
+    provider: mariadb
+    mode: slave
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
+  template:
+    metadata:
+      labels:
+        provider: mariadb
+        mode: slave
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
+    spec:
+      containers:
+      - name: mariadb
+        image: bitnami/mariadb:{{ .Values.imageTag }}
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              key: mariadb-root-password
+        - name: MARIADB_USER
+          value: {{ .Values.mariadbUser | quote }}
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              key: mariadb-password
+        - name: MARIADB_DATABASE
+          value: {{ .Values.mariadbDatabase | quote }}
+        - name: MARIADB_REPLICATION_MODE
+          value: "slave"
+        - name: MARIADB_MASTER_HOST
+          value: {{ printf "%s-%s" .Release.Name "master" | trunc 24 | quote }}
+        - name: MARIADB_MASTER_PORT
+          value: "3306"
+        - name: MARIADB_MASTER_USER
+          value: {{ .Values.mariadbUser | quote }}
+        - name: MARIADB_MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              key: mariadb-password
+        - name: MARIADB_REPLICATION_USER
+          value: {{ .Values.mariadbReplicationUser | quote }}
+        - name: MARIADB_REPLICATION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              key: mariadb-replication-password
+        ports:
+        - name: mysql
+          containerPort: 3306
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+          initialDelaySeconds: 5
+          timeoutSeconds: 1

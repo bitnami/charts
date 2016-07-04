@@ -1,0 +1,10 @@
+imageTag: 3.2.3-r0
+redmineUser: user
+redminePassword: bitnami
+redmineEmail: user@example.com
+redmineLanguage: en
+smtpHost:
+smtpPort:
+smtpUser:
+smtpPassword:
+smtpTls:

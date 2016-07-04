@@ -1,10 +1,17 @@
 name: tomcat
-home: http://tomcat.apache.org
-source:
-- https://github.com/bitnami/bitnami-docker-tomcat
-version: 0.2.1
+version: 0.3.0
 description: Chart for Apache Tomcat
+keywords:
+- tomcat
+- java
+- http
+- web
+- application server
+- jsp
+home: http://tomcat.apache.org
+sources:
+- https://github.com/bitnami/bitnami-docker-tomcat
 maintainers:
-- Bitnami <containers@bitnami.com>
-details: |-
-  Apache Tomcat, often referred to as Tomcat, is an open-source web server and servlet container developed by the Apache Software Foundation. Tomcat implements several Java EE specifications including Java Servlet, JavaServer Pages, Java EL, and WebSocket, and provides a "pure Java" HTTP web server environment for Java code to run in.
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

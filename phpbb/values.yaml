@@ -1,0 +1,11 @@
+imageTag: 3.1.9-r0
+
+phpbbUser: user
+phpbbPassword: bitnami
+phpbbEmail: user@example.com
+
+smtpHost:
+smtpUser:
+smtpPassword:
+smtpPort:
+smtpProtocol:

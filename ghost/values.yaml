@@ -1,0 +1,10 @@
+imageTag: 0.7.9-r0
+ghostUser: user
+ghostPassword: bitnami1
+ghostEmail: user@example.com
+blogTitle: User's Blog
+smtpHost:
+smtpPort:
+smtpUser:
+smtpPassword:
+smtpService:

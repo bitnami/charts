@@ -1,0 +1,11 @@
+imageTag: 1.26.3-r0
+
+mediawikiUser: user
+mediawikiPassword: bitnami1
+mediawikiEmail: user@example.com
+mediawikiName: Bitnami MediaWiki
+smtpHost:
+smtpHostID:
+smtpPort:
+smtpUser:
+smtpPassword:

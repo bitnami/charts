@@ -1,0 +1,4 @@
+imageTag: 9.5.3-r1
+postgresUser: postgres
+postgresPassword:
+postgresDb:

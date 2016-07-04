@@ -1,10 +1,13 @@
 name: memcached
-home: http://memcached.org/
-source:
-- https://github.com/bitnami/bitnami-docker-memcached
-version: 0.2.1
+version: 0.3.0
 description: Chart for Memcached
+keywords:
+- memcached
+- cache
+home: http://memcached.org/
+sources:
+- https://github.com/bitnami/bitnami-docker-memcached
 maintainers:
-- Bitnami <containers@bitnami.com>
-details: |-
-  Memcached is an in-memory key-value store for small chunks of arbitrary data (strings, objects) from results of database calls, API calls, or page rendering.
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

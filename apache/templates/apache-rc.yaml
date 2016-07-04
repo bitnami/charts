@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: {{ printf "%s-%s" .Release.Name .Chart.Name | trunc 24 }}
+  labels:
+    provider: apache
+    release: {{ .Release.Name }}
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    provider: apache
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
+  template:
+    metadata:
+      labels:
+        provider: apache
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
+        heritage: bitnami
+    spec:
+      containers:
+      - name: apache
+        image: bitnami/apache:{{ .Values.imageTag }}
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/apache
+      volumes:
+      - name: data
+        emptyDir: {}

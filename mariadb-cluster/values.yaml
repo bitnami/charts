@@ -1,0 +1,7 @@
+imageTag: 10.1.14-r1
+mariadbRootPassword: my-root-password
+mariadbUser: my-user
+mariadbPassword: my-password
+mariadbDatabase: my-database
+mariadbReplicationUser: replication-user
+mariadbReplicationPassword: replication-password

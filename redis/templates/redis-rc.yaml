@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "redis" | trunc 24 }}
+  labels:
+    provider: redis
+    release: {{ .Release.Name }}
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    provider: redis
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
+  template:
+    metadata:
+      labels:
+        provider: redis
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
+        heritage: bitnami
+    spec:
+      containers:
+      - name: redis
+        image: bitnami/redis:{{ .Values.imageTag }}
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "redis" | trunc 24 }}
+              key: redis-password
+        ports:
+        - name: redis
+          containerPort: 6379
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/redis
+      volumes:
+      - name: data
+        emptyDir: {}

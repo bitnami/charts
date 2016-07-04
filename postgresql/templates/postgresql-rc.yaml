@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "postgresql" | trunc 24 }}
+  labels:
+    provider: postgresql
+    release: {{ .Release.Name }}
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    provider: postgresql
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
+  template:
+    metadata:
+      labels:
+        provider: postgresql
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
+        heritage: bitnami
+    spec:
+      containers:
+      - name: postgresql
+        image: bitnami/postgresql:{{ .Values.imageTag }}
+        env:
+        - name: POSTGRES_USER
+          value: {{ .Values.postgresUser | quote }}
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "postgresql" | trunc 24 }}
+              key: postgres-password
+        - name: POSTGRES_DB
+          value: {{ .Values.postgresDb | quote }}
+        ports:
+        - name: postgresql
+          containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - postgres
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - postgres
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/postgresql
+      volumes:
+      - name: data
+        emptyDir: {}

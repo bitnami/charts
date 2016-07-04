@@ -1,0 +1,6 @@
+imageTag: 3.2.7-r0
+
+mongodbRootPassword:
+mongodbUser:
+mongodbPassword:
+mongodbDatabase:
