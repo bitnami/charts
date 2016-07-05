@@ -4,20 +4,17 @@ kind: ReplicationController
 metadata:
   name: rabbitmq
   labels:
-    app: rabbitmq
-    provider: rabbitmq-server
+    provider: rabbitmq
     heritage: bitnami
 spec:
   replicas: 1
   selector:
-    app: rabbitmq
-    provider: rabbitmq-server
+    provider: rabbitmq
     version: 3.6.2-r0
   template:
     metadata:
       labels:
-        app: rabbitmq
-        provider: rabbitmq-server
+        provider: rabbitmq
         version: 3.6.2-r0
         heritage: bitnami
     spec:
@@ -47,15 +44,17 @@ spec:
         - name: rabbitmq
           containerPort: 15672
         livenessProbe:
-          httpGet:
-            path: /
-            port: rabbitmq
-          initialDelaySeconds: 120
+          exec:
+            command:
+            - rabbitmqctl
+            - status
+          initialDelaySeconds: 30
           timeoutSeconds: 5
         readinessProbe:
-          httpGet:
-            path: /
-            port: rabbitmq
+          exec:
+            command:
+            - rabbitmqctl
+            - status
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:

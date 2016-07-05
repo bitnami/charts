@@ -3,8 +3,7 @@ kind: Service
 metadata:
   name: rabbitmq
   labels:
-    app: rabbitmq
-    provider: rabbitmq-server
+    provider: rabbitmq
     heritage: bitnami
 spec:
   type: LoadBalancer
@@ -13,5 +12,4 @@ spec:
     port: 15672
     targetPort: rabbitmq
   selector:
-    app: rabbitmq
-    provider: rabbitmq-server
+    provider: rabbitmq
