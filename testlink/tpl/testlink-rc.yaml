@@ -30,29 +30,29 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: ""
+          value: {{ .mariadbRootPassword | quote }}
         - name: TESTLINK_USERNAME
-          value: "user"
+          value: {{ .testlinkUsername | quote }}
         - name: TESTLINK_PASSWORD
-          value: "bitnami"
+          value: {{ .testlinkPassword | quote }}
         - name: TESTLINK_EMAIL
-          value: "user@example.com"
+          value: {{ .testlinkEmail | quote }}
         - name: TESTLINK_LANGUAGE
-          value: "en_US"
+          value: {{ .testlinkLanguage | quote }}
         - name: TESTLINK_SMTP_ENABLE
-          value: ""
+          value: {{ .testlinkSmtpEnable | quote }}
         - name: TESTINK_SMTP_CONNECTION_MODE
-          value: ""
+          value: {{ .testlinkSmtpConnectionMode | quote }}
         - name: SMTP_HOST
-          value: ""
+          value: {{ .smtpHost | quote }}
         - name: SMTP_PORT
-          value: ""
+          value: {{ .smtpUser | quote }}
         - name: SMTP_USER
-          value: ""
+          value: {{ .smtpPassword | quote }}
         - name: SMTP_PASSWORD
-          value: ""
+          value: {{ .smtpPort | quote }}
         - name: SMTP_PROTOCOL
-          value: ""
+          value: {{ .smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80
