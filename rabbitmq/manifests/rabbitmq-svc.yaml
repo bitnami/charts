@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    provider: rabbitmq
+    heritage: bitnami
+spec:
+  type: LoadBalancer
+  ports:
+  - name: rabbitmq
+    port: 15672
+    targetPort: rabbitmq
+  selector:
+    provider: rabbitmq
