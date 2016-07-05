@@ -1,0 +1,66 @@
+#helm:generate helmc tpl -d tpl/values.toml -o manifests/rabbitmq-rc.yaml $HELM_GENERATE_FILE
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    provider: rabbitmq-server
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    app: rabbitmq
+    provider: rabbitmq-server
+    version: 3.6.2-r0
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+        provider: rabbitmq-server
+        version: 3.6.2-r0
+        heritage: bitnami
+    spec:
+      containers:
+      - name: rabbitmq
+        image: bitnami/rabbitmq:3.6.2-r0
+        env:
+        - name: RABBITMQ_USERNAME
+          value: "user"
+        - name: RABBITMQ_PASSWORD
+          value: "bitnami"
+        - name: RABBITMQ_ERLANGCOOKIE
+          value: ""
+        - name: RABBITMQ_NODEPORT
+          value: "5672"
+        - name: RABBITMQ_NODETYPE
+          value: "stats"
+        - name: RABBITMQ_NODENAME
+          value: "rabbit"
+        - name: RABBITMQ_CLUSTERNODENAME
+          value: ""
+        - name: RABBITMQ_VHOST
+          value: "/"
+        - name: RABBITMQ_MANAGERBINDIP
+          value: "0.0.0.0"
+        ports:
+        - name: rabbitmq
+          containerPort: 15672
+        livenessProbe:
+          httpGet:
+            path: /
+            port: rabbitmq
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: rabbitmq
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /bitnami/rabbitmq
+      volumes:
+      - name: rabbitmq-data
+        emptyDir: {}
