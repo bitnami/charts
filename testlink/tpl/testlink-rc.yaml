@@ -30,11 +30,17 @@ spec:
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
-          value: {{ .mariadbRootPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-root-password
         - name: TESTLINK_USERNAME
           value: {{ .testlinkUsername | quote }}
         - name: TESTLINK_PASSWORD
-          value: {{ .testlinkPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: testlink
+              key: testlink-password
         - name: TESTLINK_EMAIL
           value: {{ .testlinkEmail | quote }}
         - name: TESTLINK_LANGUAGE
@@ -46,11 +52,14 @@ spec:
         - name: SMTP_HOST
           value: {{ .smtpHost | quote }}
         - name: SMTP_PORT
-          value: {{ .smtpUser | quote }}
-        - name: SMTP_USER
-          value: {{ .smtpPassword | quote }}
-        - name: SMTP_PASSWORD
           value: {{ .smtpPort | quote }}
+        - name: SMTP_USER
+          value: {{ .smtpUser | quote }}
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: testlink
+              key: smtp-password
         - name: SMTP_PROTOCOL
           value: {{ .smtpProtocol | quote }}
         ports:

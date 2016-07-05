@@ -2,12 +2,12 @@ name: testlink
 home: http://www.testlink.org/
 source:
 - https://github.com/bitnami/bitnami-docker-testlink
-version: 0.2.0
+version: 0.2.1
 description: Web-based test management system that facilitates software quality assurance. 
 maintainers:
 - Bitnami <containers@bitnami.com>
 dependencies:
 - name: mariadb
-  version: 0.2.0
+  version: 0.2.1
 details: |-
   TestLink is a web-based test management system that facilitates software quality assurance. 
