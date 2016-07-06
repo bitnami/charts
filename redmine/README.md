@@ -26,15 +26,11 @@ To edit the default Redmine configuration, run
 $ helmc edit redmine
 ```
 
-Here you can update the MariaDB root password, Redmine admin username, password, email address, language and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
+Here you can update the Redmine admin username, password, email address, language and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
 
 Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-redmine/#environment-variables) section of the [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image for the default values.
 
 The values of `redmineUser` and `redminePassword` are the login credentials when you [access the Redmine instance](#access-your-redmine-application).
-
-> Note:
->
-> If you had updated the MariaDB root password for the MariaDB deployment, then ensure you set the same password for the `mariadbRootPassword` field in the Redmine Chart.
 
 Finally, generate the chart to apply your changes to the configuration.
 

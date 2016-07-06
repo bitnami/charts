@@ -2,7 +2,7 @@ name: postgresql
 home: http://www.postgresql.org
 source:
 - https://github.com/bitnami/bitnami-docker-postgresql
-version: 0.2.0
+version: 0.2.1
 description: Chart for PostgreSQL
 maintainers:
 - Bitnami <containers@bitnami.com>

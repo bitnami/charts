@@ -1,4 +1,3 @@
-mariadbRootPassword = ""
 mediawikiUser = "user"
 mediawikiPassword = "bitnami1"
 mediawikiEmail = "user@example.com"

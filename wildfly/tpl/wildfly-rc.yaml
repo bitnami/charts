@@ -25,7 +25,10 @@ spec:
         - name: WILDFLY_USER
           value: {{ .wildflyUser | quote }}
         - name: WILDFLY_PASSWORD
-          value: {{ .wildflyPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: wildfly
+              key: wildfly-password
         ports:
         - name: http
           containerPort: 8080

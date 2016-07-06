@@ -28,7 +28,10 @@ spec:
         - name: GHOST_USERNAME
           value: "user"
         - name: GHOST_PASSWORD
-          value: "bitnami1"
+          valueFrom:
+            secretKeyRef:
+              name: ghost
+              key: ghost-password
         - name: GHOST_EMAIL
           value: "user@example.com"
         - name: BLOG_TITLE
@@ -40,7 +43,10 @@ spec:
         - name: SMTP_USER
           value: ""
         - name: SMTP_PASSWORD
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: ghost
+              key: smtp-password
         - name: SMTP_SERVICE
           value: ""
         ports:

@@ -2,7 +2,7 @@ name: mongodb
 home: https://mongodb.org
 source:
 - https://github.com/bitnami/bitnami-docker-mongodb
-version: 0.2.0
+version: 0.2.1
 description: Chart for MongoDB
 maintainers:
 - Bitnami <containers@bitnami.com>

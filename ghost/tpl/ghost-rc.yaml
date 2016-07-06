@@ -28,7 +28,10 @@ spec:
         - name: GHOST_USERNAME
           value: {{ .ghostUser | quote }}
         - name: GHOST_PASSWORD
-          value: {{ .ghostPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: ghost
+              key: ghost-password
         - name: GHOST_EMAIL
           value: {{ .ghostEmail | quote }}
         - name: BLOG_TITLE
@@ -40,7 +43,10 @@ spec:
         - name: SMTP_USER
           value: {{ .smtpUser | quote }}
         - name: SMTP_PASSWORD
-          value: {{ .smtpPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: ghost
+              key: smtp-password
         - name: SMTP_SERVICE
           value: {{ .smtpService | quote }}
         ports:

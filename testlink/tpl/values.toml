@@ -1,4 +1,3 @@
-mariadbRootPassword = ""
 testlinkUsername = "user"
 testlinkPassword = "bitnami"
 testlinkEmail = "user@example.com"

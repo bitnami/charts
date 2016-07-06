@@ -1,4 +1,3 @@
-mariadbRootPassword = ""
 joomlaUser = "user"
 joomlaPassword = "bitnami"
 joomlaEmail = "user@example.com"

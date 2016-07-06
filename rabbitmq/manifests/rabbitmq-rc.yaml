@@ -25,9 +25,15 @@ spec:
         - name: RABBITMQ_USERNAME
           value: "user"
         - name: RABBITMQ_PASSWORD
-          value: "bitnami"
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: rabbitmq-password
         - name: RABBITMQ_ERLANGCOOKIE
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: rabbitmq-erlangcookie
         - name: RABBITMQ_NODEPORT
           value: "5672"
         - name: RABBITMQ_NODETYPE

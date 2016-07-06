@@ -2,7 +2,7 @@ name: mariadb-cluster
 home: https://mariadb.org
 source:
 - https://github.com/bitnami/bitnami-docker-mariadb
-version: 0.2.0
+version: 0.2.1
 description: Chart to create a Highly available MariaDB cluster
 maintainers:
 - Bitnami <containers@bitnami.com>

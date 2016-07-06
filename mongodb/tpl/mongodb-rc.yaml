@@ -10,24 +10,30 @@ spec:
   replicas: 1
   selector:
     provider: mongodb
-    version: 3.2.6-r0
+    version: 3.2.7-r0
   template:
     metadata:
       labels:
         provider: mongodb
-        version: 3.2.6-r0
+        version: 3.2.7-r0
         heritage: bitnami
     spec:
       containers:
       - name: mongodb
-        image: bitnami/mongodb:3.2.6-r0
+        image: bitnami/mongodb:3.2.7-r0
         env:
         - name: MONGODB_ROOT_PASSWORD
-          value: {{ .mongodbRootPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: mongodb-root-password
         - name: MONGODB_USER
           value: {{ .mongodbUser | quote }}
         - name: MONGODB_PASSWORD
-          value: {{ .mongodbPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: mongodb-password
         - name: MONGODB_DATABASE
           value: {{ .mongodbDatabase | quote }}
         ports:

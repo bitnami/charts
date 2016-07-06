@@ -25,7 +25,10 @@ spec:
         - name: TOMCAT_USER
           value: {{ .tomcatUser | quote }}
         - name: TOMCAT_PASSWORD
-          value: {{ .tomcatPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: tomcat
+              key: tomcat-password
         ports:
         - name: http
           containerPort: 8080

@@ -25,9 +25,15 @@ spec:
         - name: RABBITMQ_USERNAME
           value: {{ .rabbitmqUsername | quote }}
         - name: RABBITMQ_PASSWORD
-          value: {{ .rabbitmqPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: rabbitmq-password
         - name: RABBITMQ_ERLANGCOOKIE
-          value: {{ .rabbitmqErlangcookie | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: rabbitmq-erlangcookie
         - name: RABBITMQ_NODEPORT
           value: {{ .rabbitmqNodeport | quote }}
         - name: RABBITMQ_NODETYPE
