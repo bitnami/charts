@@ -30,9 +30,15 @@ spec:
         - name: POSTGRESQL_PORT
           value: "5432"
         - name: POSTGRESQL_PASSWORD
-          value: {{ .postgresqlPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: postgres-password
         - name: ODOO_PASSWORD
-          value: {{ .odooPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: odoo
+              key: odoo-password
         - name: ODOO_EMAIL
           value: {{ .odooEmail | quote }}
         - name: SMTP_HOST
@@ -42,7 +48,10 @@ spec:
         - name: SMTP_USER
           value: {{ .smtpUser | quote }}
         - name: SMTP_PASSWORD
-          value: {{ .smtpPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: odoo
+              key: smtp-password
         - name: SMTP_PROTOCOL
           value: {{ .smtpProtocol | quote }}
         ports:

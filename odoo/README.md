@@ -28,15 +28,11 @@ To edit the default Odoo configuration, run
 $ helmc edit odoo
 ```
 
-Here you can update the PostgreSQL root password, Odoo admin email address, password and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
+Here you can update the Odoo admin email address, password and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
 
 Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-odoo/#environment-variables) section of the [Bitnami Odoo](https://github.com/bitnami/bitnami-docker-odoo) image for the default values.
 
 The values of `odooEmail` and `odooPassword` are the login credentials when you [access the Odoo instance](#access-your-odoo-application).
-
-> Note:
->
-> If you had updated the PostgreSQL root password for the PostgreSQL deployment, then ensure you set the same password for the `postgresqlRootPassword` field in the Odoo Chart.
 
 Finally, generate the chart to apply your changes to the configuration.
 

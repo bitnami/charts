@@ -30,9 +30,15 @@ spec:
         - name: POSTGRESQL_PORT
           value: "5432"
         - name: POSTGRESQL_PASSWORD
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: postgres-password
         - name: ODOO_PASSWORD
-          value: "bitnami"
+          valueFrom:
+            secretKeyRef:
+              name: odoo
+              key: odoo-password
         - name: ODOO_EMAIL
           value: "user@example.com"
         - name: SMTP_HOST
@@ -42,7 +48,10 @@ spec:
         - name: SMTP_USER
           value: ""
         - name: SMTP_PASSWORD
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: odoo
+              key: smtp-password
         - name: SMTP_PROTOCOL
           value: ""
         ports:
