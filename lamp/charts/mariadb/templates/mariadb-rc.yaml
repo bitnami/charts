@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: {{template "mariadb.fullname" .}}
+  labels:
+    app: {{template "mariadb.fullname" .}}
+    provider: mariadb
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    app: {{template "mariadb.fullname" .}}
+    provider: mariadb
+    version: 10.1.14-r0
+  template:
+    metadata:
+      name: {{template "mariadb.fullname" .}}
+      labels:
+        app: {{template "mariadb.fullname" .}}
+        provider: mariadb
+        version: 10.1.14-r0
+    spec:
+      containers:
+      - name: {{template "mariadb.fullname" .}}
+        image: bitnami/mariadb:10.1.14-r0
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: {{ .Values.mariadbRootPassword | quote }}
+        - name: MARIADB_USER
+          value: {{ .Values.mariadbUser | quote }}
+        - name: MARIADB_PASSWORD
+          value: {{ .Values.mariadbPassword | quote }}
+        - name: MARIADB_DATABASE
+          value: {{ .Values.mariadbDatabase | quote }}
+        ports:
+        - name: mysql
+          containerPort: 3306
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/mariadb
+      volumes:
+      - name: data
+        emptyDir: {}

@@ -1,0 +1,71 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This uses a "fullname" template (see _helpers)
+  # Basing names on .Release.Name means that the same chart can be installed
+  # multiple times into the same namespace.
+  name: {{template "lamp.fullname" .}}
+  labels:
+    app: {{template "lamp.fullname" .}}
+    # The "heritage" label is used to track which tool deployed a given chart.
+    # It is useful for admins who want to see what releases a particular tool
+    # is responsible for.
+    heritage: {{ .Release.Service | quote }}
+    # This makes it easy to search for all components of a release using kubectl.
+    release: {{ .Release.Name | quote }}
+    # This makes it easy to audit chart usage.
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+spec:
+  replicas: {{default 1 .Values.replicaCount | quote}}
+  template:
+    metadata:
+      labels:
+        app: {{template "lamp.fullname" .}}
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      containers:
+      - name: {{template "lamp.fullname" .}}
+        # We use the Bitnami PHP-FPM Container to run the PHP application
+        # https://hub.docker.com/r/bitnami/php-fpm
+        image: prydonius/php-fpm:7.0.6-r1
+        args: {{template "lamp.args" .}}
+        env:
+        - name: DB_HOST
+          value: {{.Release.Name}}-{{default "mariadb" .Values.mariadb.nameOverride}}
+        - name: DB_PORT
+          value: {{default 3306 .Values.mariadb.mariadbPort | quote}}
+        - name: DB_DATABASE
+          value: {{.Values.mariadb.mariadbDatabase | quote}}
+        - name: DB_USERNAME
+          value: {{.Values.mariadb.mariadbUser | quote}}
+        - name: DB_PASSWORD
+          value: {{.Values.mariadb.mariadbPassword | quote}}
+        {{template "lamp.envs" .}}
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: http
+        #   initialDelaySeconds: 120
+        #   timeoutSeconds: 5
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: http
+        #   initialDelaySeconds: 5
+        #   timeoutSeconds: 1
+        volumeMounts:
+        - name: app-code
+          mountPath: /app
+      volumes:
+        # We use a gitRepo volume for pointing to the code you want deployed with this chart
+      - name: app-code
+        gitRepo:
+          repository: {{.Values.gitRepo | quote}}
+          directory: .
