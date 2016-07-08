@@ -10,17 +10,17 @@ spec:
   replicas: 1
   selector:
     provider: postgresql
-    version: 9.5.3-r0
+    version: 9.5.3-r1
   template:
     metadata:
       labels:
         provider: postgresql
-        version: 9.5.3-r0
+        version: 9.5.3-r1
         heritage: bitnami
     spec:
       containers:
       - name: postgresql
-        image: bitnami/postgresql:9.5.3-r0
+        image: bitnami/postgresql:9.5.3-r1
         env:
         - name: POSTGRES_USER
           value: {{ .postgresUser | quote }}
