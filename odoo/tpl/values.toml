@@ -1,0 +1,8 @@
+postgresqlPassword = ""
+odooPassword = "bitnami"
+odooEmail = "user@example.com"
+smtpHost = ""
+smtpPort = ""
+smtpUser = ""
+smtpPassword = ""
+smtpProtocol = ""
