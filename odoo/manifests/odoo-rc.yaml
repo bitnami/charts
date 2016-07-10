@@ -1,0 +1,77 @@
+#helm:generate helmc tpl -d tpl/values.toml -o manifests/odoo-rc.yaml $HELM_GENERATE_FILE
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+    provider: odoo-server
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    app: odoo
+    provider: odoo-server
+    version: 9.0.20160620-r0
+  template:
+    metadata:
+      labels:
+        app: odoo
+        provider: odoo-server
+        version: 9.0.20160620-r0
+        heritage: bitnami
+    spec:
+      containers:
+      - name: odoo
+        image: bitnami/odoo:9.0.20160620-r0
+        env:
+        - name: POSTGRESQL_HOST
+          value: "postgresql"
+        - name: POSTGRESQL_PORT
+          value: "5432"
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: postgres-password
+        - name: ODOO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: odoo
+              key: odoo-password
+        - name: ODOO_EMAIL
+          value: "user@example.com"
+        - name: SMTP_HOST
+          value: ""
+        - name: SMTP_PORT
+          value: ""
+        - name: SMTP_USER
+          value: ""
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: odoo
+              key: smtp-password
+        - name: SMTP_PROTOCOL
+          value: ""
+        ports:
+        - name: http
+          containerPort: 8069
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/odoo
+      volumes:
+      - name: data
+        emptyDir: {}

@@ -1,0 +1,13 @@
+name: odoo
+home: https://www.odoo.com/
+source:
+- https://github.com/bitnami/bitnami-docker-odoo
+version: 0.2.1
+description: A suite of web based open source business apps.
+maintainers:
+- Bitnami <containers@bitnami.com>
+dependencies:
+- name: postgresql
+  version: 0.2.1
+details: |-
+  Odoo is a suite of web based open source business apps.
