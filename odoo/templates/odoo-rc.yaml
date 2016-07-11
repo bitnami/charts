@@ -1,59 +1,61 @@
-#helm:generate helmc tpl -d tpl/values.toml -o manifests/odoo-rc.yaml $HELM_GENERATE_FILE
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: odoo
+  name: {{ printf "%s-%s" .Release.Name "odoo" | trunc 24 }}
   labels:
     app: odoo
     provider: odoo-server
+    release: {{ .Release.Name }}
     heritage: bitnami
 spec:
   replicas: 1
   selector:
     app: odoo
     provider: odoo-server
-    version: 9.0.20160620-r0
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
         app: odoo
         provider: odoo-server
-        version: 9.0.20160620-r0
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
         heritage: bitnami
     spec:
       containers:
       - name: odoo
-        image: bitnami/odoo:9.0.20160620-r0
+        image: bitnami/odoo:{{ .Values.imageTag }}
         env:
         - name: POSTGRESQL_HOST
-          value: "postgresql"
+          value: {{ printf "%s-%s" .Release.Name "postgresql" | trunc 24 | quote }}
         - name: POSTGRESQL_PORT
           value: "5432"
         - name: POSTGRESQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgresql
+              name: {{ printf "%s-%s" .Release.Name "postgresql" | trunc 24 }}
               key: postgres-password
         - name: ODOO_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: odoo
+              name: {{ printf "%s-%s" .Release.Name "odoo" | trunc 24 }}
               key: odoo-password
         - name: ODOO_EMAIL
-          value: {{ .odooEmail | quote }}
+          value: {{ default "" .Values.odooEmail | quote }}
         - name: SMTP_HOST
-          value: {{ .smtpHost | quote }}
+          value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
-          value: {{ .smtpPort | quote }}
+          value: {{ default "" .Values.smtpPort | quote }}
         - name: SMTP_USER
-          value: {{ .smtpUser | quote }}
+          value: {{ default "" .Values.smtpUser | quote }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: odoo
+              name: {{ printf "%s-%s" .Release.Name "odoo" | trunc 24 }}
               key: smtp-password
         - name: SMTP_PROTOCOL
-          value: {{ .smtpProtocol | quote }}
+          value: {{ default "" .Values.smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 8069

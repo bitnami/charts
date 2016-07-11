@@ -1,0 +1,8 @@
+imageTag: 9.0.20160620-r0
+odooPassword: bitnami
+odooEmail: user@example.com
+smtpHost:
+smtpPort:
+smtpUser:
+smtpPassword:
+smtpProtocol:

@@ -1,0 +1,14 @@
+name: postgresql
+version: 0.3.0
+description: Chart for PostgreSQL
+keywords:
+- postgresql
+- database
+- sql
+home: http://www.postgresql.org
+sources:
+- https://github.com/bitnami/bitnami-docker-postgresql
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
