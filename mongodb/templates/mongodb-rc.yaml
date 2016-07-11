@@ -30,14 +30,14 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "mongodb" | trunc 24 }}
               key: mongodb-root-password
         - name: MONGODB_USER
-          value: {{ .Values.mongodbUser | quote }}
+          value: {{ default "" .Values.mongodbUser | quote }}
         - name: MONGODB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "mongodb" | trunc 24 }}
               key: mongodb-password
         - name: MONGODB_DATABASE
-          value: {{ .Values.mongodbDatabase | quote }}
+          value: {{ default "" .Values.mongodbDatabase | quote }}
         ports:
         - name: mongodb
           containerPort: 27017

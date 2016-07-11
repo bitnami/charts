@@ -37,14 +37,14 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
               key: mariadb-root-password
         - name: DRUPAL_USERNAME
-          value: {{ .Values.drupalUser | quote }}
+          value: {{ default "" .Values.drupalUser | quote }}
         - name: DRUPAL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "drupal" | trunc 24 }}
               key: drupal-password
         - name: DRUPAL_EMAIL
-          value: {{ .Values.drupalEmail | quote }}
+          value: {{ default "" .Values.drupalEmail | quote }}
         ports:
         - name: http
           containerPort: 80

@@ -37,24 +37,24 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
               key: mariadb-root-password
         - name: MEDIAWIKI_USERNAME
-          value: {{ .Values.mediawikiUser | quote }}
+          value: {{ default "" .Values.mediawikiUser | quote }}
         - name: MEDIAWIKI_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "mediawiki" | trunc 24 }}
               key: mediawiki-password
         - name: MEDIAWIKI_EMAIL
-          value: {{ .Values.mediawikiEmail | quote }}
+          value: {{ default "" .Values.mediawikiEmail | quote }}
         - name: MEDIAWIKI_WIKI_NAME
-          value: {{ .Values.mediawikiName | quote }}
+          value: {{ default "" .Values.mediawikiName | quote }}
         - name: SMTP_HOST_ID
-          value: {{ .Values.smtpHostID | quote }}
+          value: {{ default "" .Values.smtpHostID | quote }}
         - name: SMTP_HOST
-          value: {{ .Values.smtpHost | quote }}
+          value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
-          value: {{ .Values.smtpPort | quote }}
+          value: {{ default "" .Values.smtpPort | quote }}
         - name: SMTP_USER
-          value: {{ .Values.smtpUser | quote }}
+          value: {{ default "" .Values.smtpUser | quote }}
         - name: SMTP_Password
           valueFrom:
             secretKeyRef:

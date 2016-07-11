@@ -25,7 +25,7 @@ spec:
         image: bitnami/rabbitmq:{{ .Values.imageTag }}
         env:
         - name: RABBITMQ_USERNAME
-          value: {{ .Values.rabbitmqUsername | quote }}
+          value: {{ default "" .Values.rabbitmqUsername | quote }}
         - name: RABBITMQ_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -37,17 +37,17 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
               key: rabbitmq-erlangcookie
         - name: RABBITMQ_NODEPORT
-          value: {{ .Values.rabbitmqNodeport | quote }}
+          value: {{ default "" .Values.rabbitmqNodeport | quote }}
         - name: RABBITMQ_NODETYPE
-          value: {{ .Values.rabbitmqNodetype | quote }}
+          value: {{ default "" .Values.rabbitmqNodetype | quote }}
         - name: RABBITMQ_NODENAME
-          value: {{ .Values.rabbitmqNodename | quote }}
+          value: {{ default "" .Values.rabbitmqNodename | quote }}
         - name: RABBITMQ_CLUSTERNODENAME
-          value: {{ .Values.rabbitmqClusternodename | quote }}
+          value: {{ default "" .Values.rabbitmqClusternodename | quote }}
         - name: RABBITMQ_VHOST
-          value: {{ .Values.rabbitmqVhost | quote }}
+          value: {{ default "" .Values.rabbitmqVhost | quote }}
         - name: RABBITMQ_MANAGERBINDIP
-          value: {{ .Values.rabbitmqManagerbindip | quote }}
+          value: {{ default "" .Values.rabbitmqManagerbindip | quote }}
         ports:
         - name: rabbitmq
           containerPort: 15672

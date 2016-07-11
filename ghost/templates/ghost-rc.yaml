@@ -28,29 +28,29 @@ spec:
         image: bitnami/ghost:{{ .Values.imageTag }}
         env:
         - name: GHOST_USERNAME
-          value: {{ .Values.ghostUser | quote }}
+          value: {{ default "" .Values.ghostUser | quote }}
         - name: GHOST_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "ghost" | trunc 24 }}
               key: ghost-password
         - name: GHOST_EMAIL
-          value: {{ .Values.ghostEmail | quote }}
+          value: {{ default "" .Values.ghostEmail | quote }}
         - name: BLOG_TITLE
-          value: {{ .Values.blogTitle | quote }}
+          value: {{ default "" .Values.blogTitle | quote }}
         - name: SMTP_HOST
-          value: {{ .Values.smtpHost | quote }}
+          value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
-          value: {{ .Values.smtpPort | quote }}
+          value: {{ default "" .Values.smtpPort | quote }}
         - name: SMTP_USER
-          value: {{ .Values.smtpUser | quote }}
+          value: {{ default "" .Values.smtpUser | quote }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "ghost" | trunc 24 }}
               key: smtp-password
         - name: SMTP_SERVICE
-          value: {{ .Values.smtpService | quote }}
+          value: {{ default "" .Values.smtpService | quote }}
         ports:
         - name: http
           containerPort: 2368

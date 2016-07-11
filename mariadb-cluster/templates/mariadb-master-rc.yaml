@@ -33,18 +33,18 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
               key: mariadb-root-password
         - name: MARIADB_USER
-          value: {{ .Values.mariadbUser | quote }}
+          value: {{ default "" .Values.mariadbUser | quote }}
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
               key: mariadb-password
         - name: MARIADB_DATABASE
-          value: {{ .Values.mariadbDatabase | quote }}
+          value: {{ default "" .Values.mariadbDatabase | quote }}
         - name: MARIADB_REPLICATION_MODE
           value: "master"
         - name: MARIADB_REPLICATION_USER
-          value: {{ .Values.mariadbReplicationUser | quote }}
+          value: {{ default "" .Values.mariadbReplicationUser | quote }}
         - name: MARIADB_REPLICATION_PASSWORD
           valueFrom:
             secretKeyRef:

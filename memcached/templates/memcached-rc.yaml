@@ -25,7 +25,7 @@ spec:
         image: bitnami/memcached:{{ .Values.imageTag }}
         env:
         - name: MEMCACHED_USER
-          value: {{ .Values.memcachedUser | quote }}
+          value: {{ default "" .Values.memcachedUser | quote }}
         - name: MEMCACHED_PASSWORD
           valueFrom:
             secretKeyRef:

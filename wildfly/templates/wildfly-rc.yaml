@@ -25,7 +25,7 @@ spec:
         image: bitnami/wildfly:{{ .Values.imageTag }}
         env:
         - name: WILDFLY_USER
-          value: {{ .Values.wildflyUser | quote }}
+          value: {{ default "" .Values.wildflyUser | quote }}
         - name: WILDFLY_PASSWORD
           valueFrom:
             secretKeyRef:

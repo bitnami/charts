@@ -37,27 +37,27 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
               key: mariadb-root-password
         - name: PHPBB_USERNAME
-          value: {{ .Values.phpbbUser | quote }}
+          value: {{ default "" .Values.phpbbUser | quote }}
         - name: PHPBB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "phpbb" | trunc 24 }}
               key: phpbb-password
         - name: PHPBB_EMAIL
-          value: {{ .Values.phpbbEmail | quote }}
+          value: {{ default "" .Values.phpbbEmail | quote }}
         - name: SMTP_HOST
-          value: {{ .Values.smtpHost | quote }}
+          value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
-          value: {{ .Values.smtpPort | quote }}
+          value: {{ default "" .Values.smtpPort | quote }}
         - name: SMTP_USER
-          value: {{ .Values.smtpUser | quote }}
+          value: {{ default "" .Values.smtpUser | quote }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "phpbb" | trunc 24 }}
               key: smtp-password
         - name: SMTP_PROTOCOL
-          value: {{ .Values.smtpProtocol | quote }}
+          value: {{ default "" .Values.smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80

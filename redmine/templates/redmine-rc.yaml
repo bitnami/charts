@@ -37,29 +37,29 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
               key: mariadb-root-password
         - name: REDMINE_USERNAME
-          value: {{ .Values.redmineUser | quote }}
+          value: {{ default "" .Values.redmineUser | quote }}
         - name: REDMINE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "redmine" | trunc 24 }}
               key: redmine-password
         - name: REDMINE_EMAIL
-          value: {{ .Values.redmineEmail | quote }}
+          value: {{ default "" .Values.redmineEmail | quote }}
         - name: REDMINE_LANG
-          value: {{ .Values.redmineLanguage | quote }}
+          value: {{ default "" .Values.redmineLanguage | quote }}
         - name: SMTP_HOST
-          value: {{ .Values.smtpHost | quote }}
+          value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
-          value: {{ .Values.smtpPort | quote }}
+          value: {{ default "" .Values.smtpPort | quote }}
         - name: SMTP_USER
-          value: {{ .Values.smtpUser | quote }}
+          value: {{ default "" .Values.smtpUser | quote }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ printf "%s-%s" .Release.Name "redmine" | trunc 24 }}
               key: smtp-password
         - name: SMTP_TLS
-          value: {{ .Values.smtpTls | quote }}
+          value: {{ default "" .Values.smtpTls | quote }}
         ports:
         - name: http
           containerPort: 3000
