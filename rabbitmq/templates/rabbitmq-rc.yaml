@@ -1,51 +1,53 @@
-#helm:generate helmc tpl -d tpl/values.toml -o manifests/rabbitmq-rc.yaml $HELM_GENERATE_FILE
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: rabbitmq
+  name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
   labels:
     provider: rabbitmq
+    release: {{ .Release.Name }}
     heritage: bitnami
 spec:
   replicas: 1
   selector:
     provider: rabbitmq
-    version: 3.6.2-r0
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
         provider: rabbitmq
-        version: 3.6.2-r0
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
         heritage: bitnami
     spec:
       containers:
       - name: rabbitmq
-        image: bitnami/rabbitmq:3.6.2-r0
+        image: bitnami/rabbitmq:{{ .Values.imageTag }}
         env:
         - name: RABBITMQ_USERNAME
-          value: "user"
+          value: {{ .Values.rabbitmqUsername | quote }}
         - name: RABBITMQ_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: rabbitmq
+              name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
               key: rabbitmq-password
         - name: RABBITMQ_ERLANGCOOKIE
           valueFrom:
             secretKeyRef:
-              name: rabbitmq
+              name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
               key: rabbitmq-erlangcookie
         - name: RABBITMQ_NODEPORT
-          value: "5672"
+          value: {{ .Values.rabbitmqNodeport | quote }}
         - name: RABBITMQ_NODETYPE
-          value: "stats"
+          value: {{ .Values.rabbitmqNodetype | quote }}
         - name: RABBITMQ_NODENAME
-          value: "rabbit"
+          value: {{ .Values.rabbitmqNodename | quote }}
         - name: RABBITMQ_CLUSTERNODENAME
-          value: ""
+          value: {{ .Values.rabbitmqClusternodename | quote }}
         - name: RABBITMQ_VHOST
-          value: "/"
+          value: {{ .Values.rabbitmqVhost | quote }}
         - name: RABBITMQ_MANAGERBINDIP
-          value: "0.0.0.0"
+          value: {{ .Values.rabbitmqManagerbindip | quote }}
         ports:
         - name: rabbitmq
           containerPort: 15672

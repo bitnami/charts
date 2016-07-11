@@ -1,0 +1,10 @@
+imageTag: 3.6.2-r0
+rabbitmqUsername: user
+rabbitmqPassword: bitnami
+rabbitmqErlangcookie:
+rabbitmqNodeport: 5672
+rabbitmqNodetype: stats
+rabbitmqNodename: rabbit
+rabbitmqClusternodename:
+rabbitmqVhost: /
+rabbitmqManagerbindip: 0.0.0.0
