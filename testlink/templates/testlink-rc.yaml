@@ -1,67 +1,69 @@
-#helm:generate helmc tpl -d tpl/values.toml -o manifests/testlink-rc.yaml $HELM_GENERATE_FILE
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: testlink
+  name: {{ printf "%s-%s" .Release.Name "testlink" | trunc 24 }}
   labels:
     app: testlink
     provider: testlink-server
+    release: {{ .Release.Name }}
     heritage: bitnami
 spec:
   replicas: 1
   selector:
     app: testlink
     provider: testlink-server
-    version: 1.9.14-r0
+    release: {{ .Release.Name }}
+    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
         app: testlink
         provider: testlink-server
-        version: 1.9.14-r0
+        release: {{ .Release.Name }}
+        version: {{ .Values.imageTag }}
         heritage: bitnami
     spec:
       containers:
       - name: testlink
-        image: bitnami/testlink:1.9.14-r0
+        image: bitnami/testlink:{{ .Values.imageTag }}
         env:
         - name: MARIADB_HOST
-          value: "mariadb"
+          value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mariadb
+              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
               key: mariadb-root-password
         - name: TESTLINK_USERNAME
-          value: {{ .testlinkUsername | quote }}
+          value: {{ default "" .Values.testlinkUsername | quote }}
         - name: TESTLINK_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: testlink
+              name: {{ printf "%s-%s" .Release.Name "testlink" | trunc 24 }}
               key: testlink-password
         - name: TESTLINK_EMAIL
-          value: {{ .testlinkEmail | quote }}
+          value: {{ default "" .Values.testlinkEmail | quote }}
         - name: TESTLINK_LANGUAGE
-          value: {{ .testlinkLanguage | quote }}
+          value: {{ default "" .Values.testlinkLanguage | quote }}
         - name: TESTLINK_SMTP_ENABLE
-          value: {{ .testlinkSmtpEnable | quote }}
+          value: {{ default "" .Values.testlinkSmtpEnable | quote }}
         - name: TESTINK_SMTP_CONNECTION_MODE
-          value: {{ .testlinkSmtpConnectionMode | quote }}
+          value: {{ default "" .Values.testlinkSmtpConnectionMode | quote }}
         - name: SMTP_HOST
-          value: {{ .smtpHost | quote }}
+          value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
-          value: {{ .smtpPort | quote }}
+          value: {{ default "" .Values.smtpPort | quote }}
         - name: SMTP_USER
-          value: {{ .smtpUser | quote }}
+          value: {{ default "" .Values.smtpUser | quote }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: testlink
+              name: {{ printf "%s-%s" .Release.Name "testlink" | trunc 24 }}
               key: smtp-password
         - name: SMTP_PROTOCOL
-          value: {{ .smtpProtocol | quote }}
+          value: {{ default "" .Values.smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80

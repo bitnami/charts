@@ -1,10 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: testlink
+  name: {{ printf "%s-%s" .Release.Name "testlink" | trunc 24 }}
   labels:
     app: testlink
     provider: testlink-server
+    release: {{ .Release.Name }}
     heritage: bitnami
 spec:
   type: LoadBalancer
@@ -18,3 +19,4 @@ spec:
   selector:
     app: testlink
     provider: testlink-server
+    release: {{ .Release.Name }}

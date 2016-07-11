@@ -1,13 +1,16 @@
 name: testlink
+version: 0.3.0
+description: Web-based test management system that facilitates software quality assurance.
+keywords:
+- testlink
+- testing
+- www
+- http
+- web
 home: http://www.testlink.org/
-source:
+sources:
 - https://github.com/bitnami/bitnami-docker-testlink
-version: 0.2.1
-description: Web-based test management system that facilitates software quality assurance. 
 maintainers:
-- Bitnami <containers@bitnami.com>
-dependencies:
-- name: mariadb
-  version: 0.2.1
-details: |-
-  TestLink is a web-based test management system that facilitates software quality assurance. 
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
