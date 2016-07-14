@@ -12,18 +12,18 @@ spec:
   selector:
     app: drupal
     provider: drupal-server
-    version: 8.1.5-r0
+    version: 8.1.6-r0
   template:
     metadata:
       labels:
         app: drupal
         provider: drupal-server
-        version: 8.1.5-r0
+        version: 8.1.6-r0
         heritage: bitnami
     spec:
       containers:
       - name: drupal
-        image: bitnami/drupal:8.1.5-r0
+        image: bitnami/drupal:8.1.6-r0
         env:
         - name: MARIADB_HOST
           value: "mariadb"
