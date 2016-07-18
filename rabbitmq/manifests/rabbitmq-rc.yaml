@@ -10,17 +10,17 @@ spec:
   replicas: 1
   selector:
     provider: rabbitmq
-    version: 3.6.2-r0
+    version: 3.6.3-r0
   template:
     metadata:
       labels:
         provider: rabbitmq
-        version: 3.6.2-r0
+        version: 3.6.3-r0
         heritage: bitnami
     spec:
       containers:
       - name: rabbitmq
-        image: bitnami/rabbitmq:3.6.2-r0
+        image: bitnami/rabbitmq:3.6.3-r0
         env:
         - name: RABBITMQ_USERNAME
           value: "user"
