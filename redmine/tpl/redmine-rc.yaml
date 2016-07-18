@@ -12,18 +12,18 @@ spec:
   selector:
     app: redmine
     provider: redmine-server
-    version: 3.2.3-r0
+    version: 3.3.0-r0
   template:
     metadata:
       labels:
         app: redmine
         provider: redmine-server
-        version: 3.2.3-r0
+        version: 3.3.0-r0
         heritage: bitnami
     spec:
       containers:
       - name: redmine
-        image: bitnami/redmine:3.2.3-r0
+        image: bitnami/redmine:3.3.0-r0
         env:
         - name: MARIADB_HOST
           value: "mariadb"
