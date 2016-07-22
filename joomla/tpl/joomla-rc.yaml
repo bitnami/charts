@@ -12,18 +12,18 @@ spec:
   selector:
     app: joomla
     provider: joomla-server
-    version: 3.5.1-r0
+    version: 3.6.0-r0
   template:
     metadata:
       labels:
         app: joomla
         provider: joomla-server
-        version: 3.5.1-r0
+        version: 3.6.0-r0
         heritage: bitnami
     spec:
       containers:
       - name: joomla
-        image: bitnami/joomla:3.5.1-r0
+        image: bitnami/joomla:3.6.0-r0
         env:
         - name: MARIADB_HOST
           value: "mariadb"
