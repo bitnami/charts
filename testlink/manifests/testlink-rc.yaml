@@ -47,7 +47,7 @@ spec:
           value: "en_US"
         - name: TESTLINK_SMTP_ENABLE
           value: ""
-        - name: TESTINK_SMTP_CONNECTION_MODE
+        - name: TESTLINK_SMTP_CONNECTION_MODE
           value: ""
         - name: SMTP_HOST
           value: ""
