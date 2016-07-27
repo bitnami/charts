@@ -1,5 +1,4 @@
-imageTag: 10.1.14-r1
-
+imageTag: 10.1.14-r2
 mariadbRootPassword:
 mariadbUser:
 mariadbPassword:
