@@ -60,6 +60,8 @@ spec:
             secretKeyRef:
               name: wordpress
               key: smtp-password
+        - name: SMTP_USERNAME
+          value: ""
         - name: SMTP_PROTOCOL
           value: ""
         ports:
