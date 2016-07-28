@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
     provider: mariadb
     release: {{ .Release.Name }}
@@ -17,20 +17,20 @@ spec:
         heritage: bitnami
     spec:
       containers:
-      - name: mariadb
+      - name: {{ template "fullname" . }}
         image: bitnami/mariadb:{{ .Values.imageTag }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: mariadb-root-password
         - name: MARIADB_USER
           value: {{ default "" .Values.mariadbUser | quote }}
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: mariadb-password
         - name: MARIADB_DATABASE
           value: {{ default "" .Values.mariadbDatabase | quote }}
