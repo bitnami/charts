@@ -1,5 +1,14 @@
+# Bitnami MariaDB image version (https://hub.docker.com/r/bitnami/mariadb/tags/)
 imageTag: 10.1.14-r2
+
+# Specify password for root user
 mariadbRootPassword:
+
+# Create a database user
 mariadbUser:
+
+# Set password for database user (required)
 mariadbPassword:
+
+# Create a database
 mariadbDatabase:
