@@ -7,7 +7,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: bitnami
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
