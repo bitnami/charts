@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    provider: mariadb
+    provider: {{ .Chart.Name }}
     release: {{ .Release.Name }}
     heritage: bitnami
 spec:
@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       labels:
-        provider: mariadb
+        provider: {{ .Chart.Name }}
         release: {{ .Release.Name }}
         version: {{ .Values.imageTag }}
         heritage: bitnami

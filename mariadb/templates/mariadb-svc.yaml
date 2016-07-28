@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    provider: mariadb
+    provider: {{ .Chart.Name }}
     release: {{ .Release.Name }}
     heritage: bitnami
 spec:
@@ -12,5 +12,5 @@ spec:
     port: 3306
     targetPort: mysql
   selector:
-    provider: mariadb
+    provider: {{ .Chart.Name }}
     release: {{ .Release.Name }}
