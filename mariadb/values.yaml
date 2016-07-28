@@ -1,17 +1,20 @@
-# Bitnami MariaDB image version (https://hub.docker.com/r/bitnami/mariadb/tags/)
+# Bitnami MariaDB image version
+# ref: https://hub.docker.com/r/bitnami/mariadb/tags/
 imageTag: 10.1.14-r2
 
 # Specify a imagePullPolicy
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 imagePullPolicy:
 
 # Specify password for root user
+## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
 mariadbRootPassword:
 
 # Create a database user
+## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
 mariadbUser:
-
-# Set password for database user (required)
 mariadbPassword:
 
 # Create a database
+# ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
 mariadbDatabase:
