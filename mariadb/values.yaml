@@ -1,6 +1,9 @@
 # Bitnami MariaDB image version (https://hub.docker.com/r/bitnami/mariadb/tags/)
 imageTag: 10.1.14-r2
 
+# Specify a imagePullPolicy
+imagePullPolicy:
+
 # Specify password for root user
 mariadbRootPassword:
 
