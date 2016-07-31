@@ -5,7 +5,7 @@ metadata:
   labels:
     provider: {{ .Chart.Name }}
     release: {{ .Release.Name }}
-    heritage: bitnami
+    heritage: {{ .Release.Service }}
 spec:
   ports:
   - name: mysql
