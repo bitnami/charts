@@ -4,6 +4,7 @@ metadata:
   name: {{ template "fullname" . }}
   labels:
     provider: {{ .Chart.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Name }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -11,8 +12,9 @@ spec:
     metadata:
       labels:
         provider: {{ .Chart.Name }}
-        release: {{ .Release.Name }}
         version: {{ .Values.imageTag }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Name }}
+        release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
       containers:
