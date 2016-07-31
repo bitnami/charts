@@ -12,7 +12,6 @@ spec:
     metadata:
       labels:
         provider: {{ .Chart.Name }}
-        version: {{ .Values.imageTag }}
         chart: {{ .Chart.Name }}-{{ .Chart.Name }}
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
