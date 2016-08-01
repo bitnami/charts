@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    app: redmine
+    app: {{ template "fullname" . }}
     provider: redmine-server
     release: {{ .Release.Name }}
     heritage: "{{ .Release.Service }}"
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: redmine
+        app: {{ template "fullname" . }}
         provider: redmine-server
         release: {{ .Release.Name }}
         heritage: "{{ .Release.Service }}"
