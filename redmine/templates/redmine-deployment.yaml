@@ -4,7 +4,6 @@ metadata:
   name: {{ template "fullname" . }}
   labels:
     app: {{ template "fullname" . }}
-    provider: redmine-server
     release: {{ .Release.Name }}
     heritage: "{{ .Release.Service }}"
 spec:
@@ -13,7 +12,6 @@ spec:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-        provider: redmine-server
         release: {{ .Release.Name }}
         heritage: "{{ .Release.Service }}"
     spec:

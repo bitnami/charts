@@ -3,8 +3,7 @@ kind: Service
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    app: redmine
-    provider: redmine-server
+    app: {{ template "fullname" . }}
     release: {{ .Release.Name }}
     heritage: "{{ .Release.Service }}"
 spec:
@@ -15,5 +14,4 @@ spec:
     targetPort: http
   selector:
     app: {{ template "fullname" . }}
-    provider: redmine-server
     release: {{ .Release.Name }}
