@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "redmine" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
     app: redmine
     provider: redmine-server
@@ -19,7 +19,7 @@ spec:
         heritage: bitnami
     spec:
       containers:
-      - name: redmine
+      - name: {{ template "fullname" . }}
         image: bitnami/redmine:{{ .Values.imageTag }}
         env:
         - name: MARIADB_HOST
@@ -36,7 +36,7 @@ spec:
         - name: REDMINE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "redmine" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: redmine-password
         - name: REDMINE_EMAIL
           value: {{ default "" .Values.redmineEmail | quote }}
@@ -51,7 +51,7 @@ spec:
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "redmine" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: smtp-password
         - name: SMTP_TLS
           value: {{ default "" .Values.smtpTls | quote }}
