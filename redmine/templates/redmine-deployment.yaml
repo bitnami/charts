@@ -4,7 +4,7 @@ metadata:
   name: {{ template "fullname" . }}
   labels:
     app: {{ template "fullname" . }}
-    release: {{ .Release.Name }}
+    release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
@@ -12,12 +12,12 @@ spec:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-        release: {{ .Release.Name }}
+        release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: bitnami/redmine:{{ .Values.imageTag }}
+        image: "bitnami/redmine:{{ .Values.imageTag }}"
         env:
         - name: MARIADB_HOST
           value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}

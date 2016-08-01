@@ -4,7 +4,7 @@ metadata:
   name: {{ template "fullname" . }}
   labels:
     app: {{ template "fullname" . }}
-    release: {{ .Release.Name }}
+    release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   type: LoadBalancer
@@ -14,4 +14,4 @@ spec:
     targetPort: http
   selector:
     app: {{ template "fullname" . }}
-    release: {{ .Release.Name }}
+    release: "{{ .Release.Name }}"
