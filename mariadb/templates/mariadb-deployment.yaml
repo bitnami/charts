@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    provider: {{ .Chart.Name }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Name }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    provider: "{{ .Chart.Name }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Name }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   template:
     metadata:
       labels:
-        provider: {{ .Chart.Name }}
-        chart: {{ .Chart.Name }}-{{ .Chart.Name }}
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+        provider: "{{ .Chart.Name }}"
+        chart: "{{ .Chart.Name }}-{{ .Chart.Name }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: bitnami/mariadb:{{ .Values.imageTag }}
+        image: "bitnami/mariadb:{{ .Values.imageTag }}"
         imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_ROOT_PASSWORD
