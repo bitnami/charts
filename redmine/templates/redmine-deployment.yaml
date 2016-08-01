@@ -20,6 +20,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "bitnami/redmine:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_HOST
           value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}

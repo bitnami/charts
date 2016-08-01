@@ -1,4 +1,5 @@
 imageTag: 3.3.0-r0
+imagePullPolicy:
 redmineUser: user
 redminePassword: bitnami
 redmineEmail: user@example.com
