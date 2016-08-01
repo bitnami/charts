@@ -6,7 +6,7 @@ metadata:
     app: redmine
     provider: redmine-server
     release: {{ .Release.Name }}
-    heritage: bitnami
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
   template:
@@ -16,7 +16,7 @@ spec:
         provider: redmine-server
         release: {{ .Release.Name }}
         version: {{ .Values.imageTag }}
-        heritage: bitnami
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}

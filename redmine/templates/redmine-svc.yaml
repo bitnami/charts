@@ -6,7 +6,7 @@ metadata:
     app: redmine
     provider: redmine-server
     release: {{ .Release.Name }}
-    heritage: bitnami
+    heritage: "{{ .Release.Service }}"
 spec:
   type: LoadBalancer
   ports:
