@@ -1,5 +1,5 @@
-odooPassword = "bitnami"
 odooEmail = "user@example.com"
+odooPassword = "bitnami"
 smtpHost = ""
 smtpPort = ""
 smtpUser = ""
