@@ -14,4 +14,3 @@ spec:
     targetPort: mysql
   selector:
     app: {{ template "fullname" . }}
-    release: "{{ .Release.Name }}"
