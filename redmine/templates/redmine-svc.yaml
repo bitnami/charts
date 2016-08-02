@@ -15,4 +15,3 @@ spec:
     targetPort: http
   selector:
     app: {{ template "fullname" . }}
-    release: "{{ .Release.Name }}"
