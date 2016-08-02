@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    provider: "{{ .Chart.Name }}"
+    app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Name }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -13,5 +13,5 @@ spec:
     port: 3306
     targetPort: mysql
   selector:
-    provider: "{{ .Chart.Name }}"
+    app: {{ template "fullname" . }}
     release: "{{ .Release.Name }}"
