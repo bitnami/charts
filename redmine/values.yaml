@@ -33,3 +33,12 @@ imageTag: 3.3.0-r0
 # smtpUser:
 # smtpPassword:
 # smtpTls: true
+
+##
+## MariaDB chart configuration
+##
+# mariadb:
+  ## Specify password for root user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:
