@@ -1,49 +1,109 @@
 # MariaDB
 
-> MariaDB is a fast, reliable, scalable, and easy to use open-source relational database system. MariaDB Server is intended for mission-critical, heavy-load production systems as well as for embedding into mass-deployed software.
+[MariaDB](https://mariadb.org) is one of the most popular database servers in the world. It’s made by the original developers of MySQL and guaranteed to stay open source. Notable users include Wikipedia, Facebook and Google.
 
-Based on the [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image for docker, this Chart bootstraps a [MariaDB](https://mariadb.com/) deployment on a [Kubernetes](http://kubernetes.io) cluster using [Helm](https://helm.sh).
+MariaDB is developed as open source software and as a relational database it provides an SQL interface for accessing data. The latest versions of MariaDB also include GIS and JSON features.
+
+[source](https://mariadb.org/about/)
 
 ## TL;DR;
 
 ```bash
-$ helm install mariadb
+$ helm install mariadb-x.x.x.tgz
 ```
+
+## Introduction
+
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers, on a Kubernetes cluster, that are ready to handle production workloads.
+
+This chart bootstraps a [MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+## Get this chart
+
+Download the latest release of the chart from the [releases](../../../releases) page.
+
+Alternatively, clone the repo if you wish to use the development snapshot:
+
+```bash
+$ git clone https://github.com/bitnami/charts.git
+```
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```bash
+$ helm install --name my-release mariadb-x.x.x.tgz
+```
+
+*Replace the `x.x.x` placeholder with the chart release version.*
+
+The command deploys MariaDB on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```bash
+$ helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-The various configuration parameters of the MariaDB container used in the Chart can be specified in the `values.yaml`.
+The following tables lists the configurable parameters of the MariaDB chart and their default values.
 
-The following table briefly describes the configurable parameters of the chart.
+|       Parameter       |           Description            |                         Default                          |
+|-----------------------|----------------------------------|----------------------------------------------------------|
+| `imageTag`            | `bitnami/mariadb` image tag.     | Most recent release                                      |
+| `imagePullPolicy`     | Image pull policy.               | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `mariadbRootPassword` | Password for the `root` user.    | `nil`                                                    |
+| `mariadbUser`         | Username of new user to create.  | `nil`                                                    |
+| `mariadbPassword`     | Password for the new user.       | `nil`                                                    |
+| `mariadbDatabase`     | Name for new database to create. | `nil`                                                    |
 
-|      Parameter      |                                              Descripion                                             |
-|---------------------|-----------------------------------------------------------------------------------------------------|
-| `imageTag`            | `bitnami/mariadb` image tag.                                                                        |
-| `imagePullPolicy`     | Image pull policy. Defaults to `Always` if `imageTag` is `latest`, else defaults to `IfNotPresent`. |
-| `mariadbRootPassword` | Password for the `root` user. Defaults to `nil`.                                                    |
-| `mariadbUser`         | Username of new user to create.                                                                     |
-| `mariadbPassword`     | Password for the new user.                                                                          |
-| `mariadbDatabase`     | Name for new database to create.                                                                    |
+The above parameters map to the env variables defined in [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb). For more information please refer to the [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb) image documentation.
 
-Please refer the [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb) for additional information.
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
+```bash
+$ helm install --name my-release \
+  --set mariadbRootPassword=secretpassword,mariadbUser=my-user,mariadbPassword=my-password,mariadbDatabase=my-database \
+    mariadb-x.x.x.tgz
+```
+
+The above command set the MariaDB `root` account password to `secretpassword`. Additionally it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
+
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+
+```bash
+$ helm install --name my-release -f values.yaml mariadb-x.x.x.tgz
+```
+
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Persistence
 
-For the persistence of the data and configurations a [storage volume](http://kubernetes.io/docs/user-guide/volumes/) should be mounted at the `/bitnami/mariadb` path of the MariaDB container.
+The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
 
-By default, the Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
+As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
 
 > *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
 
-To persist the data and configurations across Pod shutdown and startup you should swap out the `emptyDir` volume with a persistent storage volume. For the purpose of demonstration we'll use a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk).
+For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
 
-### Step 1: Create a GCE PD using:
+### Step 1: Create a persistent disk
+
+You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
 
 ```bash
 $ gcloud compute disks create --size=500GB --zone=us-central1-a mariadb-data-disk
 ```
 
-### Step 2: Edit `templates/mariadb-deployment.yaml`
+### Step 2: Update `templates/deployment.yaml`
 
 Replace:
 
@@ -63,55 +123,4 @@ with
           fsType: ext4
 ```
 
-## Deploying the Chart
-
-```bash
-$ helm install mariadb
-awesome-bear
-```
-
-The above command deploy's the Chart and returns the release name of the deployment. Remember to note down the release name as it uniquely identifies the deployment.
-
-> **Tip**:
->
-> You can list all releases using:
->
-> ```bash
-> $ helm list
-> ```
-
-You can query the status of the deployment using:
-
-```bash
-$ kubectl get pods,deployment,replicasets,service -l release=awesome-bear,provider=mariadb
-NAME                                    READY          STATUS        RESTARTS     AGE
-awesome-bear-mariadb-2591315682-4qgrw   1/1            Running       0            38s
-NAME                                    DESIRED        CURRENT       UP-TO-DATE   AVAILABLE   AGE
-awesome-bear-mariadb                    1              1             1            1           38s
-NAME                                    DESIRED        CURRENT       AGE
-awesome-bear-mariadb-2591315682         1              1             38s
-NAME                                    CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-awesome-bear-mariadb                    10.15.241.66   <none>        3306/TCP   38s
-```
-
-> **Note**:
->
-> Update `release=awesome-bear` in the above command with your release name.
-
-Congratulations! You've successfully deployed the MariaDB Chart.
-
-## Cleanup
-
-To delete the MariaDB deployment completely:
-
-### Step 1. Uninstall the MariaDB Chart:
-
-```bash
-$ helm delete awesome-bear
-```
-
-### Step 2. Delete the persistent disk:
-
-```bash
-$ gcloud compute disks delete mariadb-data-disk
-```
+[Install](#installing-the-chart) the chart after making these changes.
