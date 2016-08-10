@@ -34,13 +34,13 @@ spec:
             secretKeyRef:
               name: postgresql
               key: postgres-password
+        - name: ODOO_EMAIL
+          value: "user@example.com"
         - name: ODOO_PASSWORD
           valueFrom:
             secretKeyRef:
               name: odoo
               key: odoo-password
-        - name: ODOO_EMAIL
-          value: "user@example.com"
         - name: SMTP_HOST
           value: ""
         - name: SMTP_PORT
