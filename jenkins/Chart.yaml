@@ -1,0 +1,10 @@
+name: jenkins
+home: https://jenkins.io/
+source:
+- https://github.com/bitnami/bitnami-docker-jenkins
+version: 0.2.1
+description: The leading open source automation server
+maintainers:
+- Bitnami <containers@bitnami.com>
+details: |-
+  Joomla is the leading open source automation server
