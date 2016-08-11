@@ -27,7 +27,7 @@ spec:
         env:
         - name: JENKINS_USERNAME
           value: "user"
-        - name: JENKINS_PASSWORD
+        - name: JENKIS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: jenkins
