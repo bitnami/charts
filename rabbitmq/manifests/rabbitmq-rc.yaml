@@ -46,8 +46,10 @@ spec:
           value: "/"
         - name: RABBITMQ_MANAGERBINDIP
           value: "0.0.0.0"
+        - name: RABBITMQ_MANAGERPORT
+          value: "15672"
         ports:
-        - name: rabbitmq
+        - name: rabbitmq-mgmt
           containerPort: 15672
         livenessProbe:
           exec:

@@ -10,7 +10,7 @@ spec:
   type: LoadBalancer
   ports:
   - name: rabbitmq-mgmt
-    port: 15672
+    port: {{ .rabbitmqManagerport }}
     targetPort: rabbitmq-mgmt
   selector:
     provider: rabbitmq

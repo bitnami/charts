@@ -46,9 +46,11 @@ spec:
           value: {{ .rabbitmqVhost | quote }}
         - name: RABBITMQ_MANAGERBINDIP
           value: {{ .rabbitmqManagerbindip | quote }}
+        - name: RABBITMQ_MANAGERPORT
+          value: {{ .rabbitmqManagerport | quote }}
         ports:
-        - name: rabbitmq
-          containerPort: 15672
+        - name: rabbitmq-mgmt
+          containerPort: {{ .rabbitmqManagerport }}
         livenessProbe:
           exec:
             command:
