@@ -7,7 +7,6 @@ metadata:
     provider: rabbitmq
     heritage: bitnami
 spec:
-  type: LoadBalancer
   ports:
   - name: rabbitmq
     port: {{ .rabbitmqNodeport }}
