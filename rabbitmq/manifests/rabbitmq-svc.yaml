@@ -9,6 +9,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
+  - name: rabbitmq
+    port: 5672
+    targetPort: rabbitmq
   - name: rabbitmq-mgmt
     port: 15672
     targetPort: rabbitmq-mgmt

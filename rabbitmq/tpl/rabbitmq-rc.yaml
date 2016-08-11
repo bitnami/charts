@@ -49,6 +49,8 @@ spec:
         - name: RABBITMQ_MANAGERPORT
           value: {{ .rabbitmqManagerport | quote }}
         ports:
+        - name: rabbitmq
+          containerPort: {{ .rabbitmqNodeport }}
         - name: rabbitmq-mgmt
           containerPort: {{ .rabbitmqManagerport }}
         livenessProbe:

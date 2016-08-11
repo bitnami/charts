@@ -9,6 +9,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
+  - name: rabbitmq
+    port: {{ .rabbitmqNodeport }}
+    targetPort: rabbitmq
   - name: rabbitmq-mgmt
     port: {{ .rabbitmqManagerport }}
     targetPort: rabbitmq-mgmt
