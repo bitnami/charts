@@ -44,8 +44,6 @@ spec:
           value: {{ .rabbitmqClusternodename | quote }}
         - name: RABBITMQ_VHOST
           value: {{ .rabbitmqVhost | quote }}
-        - name: RABBITMQ_MANAGERBINDIP
-          value: {{ .rabbitmqManagerbindip | quote }}
         - name: RABBITMQ_MANAGERPORT
           value: {{ .rabbitmqManagerport | quote }}
         ports:

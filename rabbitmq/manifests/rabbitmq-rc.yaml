@@ -44,8 +44,6 @@ spec:
           value: ""
         - name: RABBITMQ_VHOST
           value: "/"
-        - name: RABBITMQ_MANAGERBINDIP
-          value: "0.0.0.0"
         - name: RABBITMQ_MANAGERPORT
           value: "15672"
         ports:
