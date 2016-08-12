@@ -8,11 +8,11 @@ metadata:
     heritage: bitnami
 spec:
   ports:
-  - name: rabbitmq
+  - name: ampq
     port: {{ .rabbitmqNodeport }}
-    targetPort: rabbitmq
-  - name: rabbitmq-mgmt
+    targetPort: ampq
+  - name: stats
     port: {{ .rabbitmqManagerport }}
-    targetPort: rabbitmq-mgmt
+    targetPort: stats
   selector:
     provider: rabbitmq

@@ -47,9 +47,9 @@ spec:
         - name: RABBITMQ_MANAGERPORT
           value: "15672"
         ports:
-        - name: rabbitmq
+        - name: ampq
           containerPort: 5672
-        - name: rabbitmq-mgmt
+        - name: stats
           containerPort: 15672
         livenessProbe:
           exec:
