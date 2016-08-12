@@ -47,9 +47,13 @@ spec:
         - name: RABBITMQ_MANAGERPORT
           value: {{ .rabbitmqManagerport | quote }}
         ports:
-        - name: rabbitmq
+        - name: epmd
+          containerPort: 4369
+        - name: ampq
           containerPort: {{ .rabbitmqNodeport }}
-        - name: rabbitmq-mgmt
+        - name: dist
+          containerPort: {{ add 20000 .rabbitmqNodeport }}
+        - name: stats
           containerPort: {{ .rabbitmqManagerport }}
         livenessProbe:
           exec:
