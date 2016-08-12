@@ -8,9 +8,15 @@ metadata:
     heritage: bitnami
 spec:
   ports:
+  - name: epmd
+    port: 4369
+    targetPort: epmd
   - name: ampq
     port: {{ .rabbitmqNodeport }}
     targetPort: ampq
+  - name: dist
+    port: {{ add 20000 .rabbitmqNodeport }}
+    targetPort: dist
   - name: stats
     port: {{ .rabbitmqManagerport }}
     targetPort: stats

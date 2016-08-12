@@ -8,9 +8,15 @@ metadata:
     heritage: bitnami
 spec:
   ports:
+  - name: epmd
+    port: 4369
+    targetPort: epmd
   - name: ampq
     port: 5672
     targetPort: ampq
+  - name: dist
+    port: 25672
+    targetPort: dist
   - name: stats
     port: 15672
     targetPort: stats

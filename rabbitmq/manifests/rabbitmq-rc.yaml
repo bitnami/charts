@@ -47,8 +47,12 @@ spec:
         - name: RABBITMQ_MANAGERPORT
           value: "15672"
         ports:
+        - name: epmd
+          containerPort: 4369
         - name: ampq
           containerPort: 5672
+        - name: dist
+          containerPort: 25672
         - name: stats
           containerPort: 15672
         livenessProbe:
