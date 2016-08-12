@@ -21,7 +21,7 @@ spec:
         heritage: bitnami
     spec:
       containers:
-      - name: rabbitmq
+      - name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
         image: bitnami/rabbitmq:{{ .Values.imageTag }}
         env:
         - name: RABBITMQ_USERNAME
@@ -46,11 +46,17 @@ spec:
           value: {{ default "" .Values.rabbitmqClusternodename | quote }}
         - name: RABBITMQ_VHOST
           value: {{ default "" .Values.rabbitmqVhost | quote }}
-        - name: RABBITMQ_MANAGERBINDIP
-          value: {{ default "" .Values.rabbitmqManagerbindip | quote }}
+        - name: RABBITMQ_MANAGERPORT
+          value: {{ default "" .Values.rabbitmqManagerport | quote }}
         ports:
-        - name: rabbitmq
-          containerPort: 15672
+        - name: epmd
+          containerPort: 4369
+        - name: ampq
+          containerPort: {{ .Values.rabbitmqNodeport }}
+        - name: dist
+          containerPort: {{ add 20000 .Values.rabbitmqNodeport }}
+        - name: stats
+          containerPort: {{ .Values.rabbitmqManagerport }}
         livenessProbe:
           exec:
             command:

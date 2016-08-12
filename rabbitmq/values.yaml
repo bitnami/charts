@@ -1,4 +1,4 @@
-imageTag: 3.6.2-r0
+imageTag: 3.6.4-r0
 rabbitmqUsername: user
 rabbitmqPassword: bitnami
 rabbitmqErlangcookie:
@@ -7,4 +7,4 @@ rabbitmqNodetype: stats
 rabbitmqNodename: rabbit
 rabbitmqClusternodename:
 rabbitmqVhost: /
-rabbitmqManagerbindip: 0.0.0.0
+rabbitmqManagerport: 15672

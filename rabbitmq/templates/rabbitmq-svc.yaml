@@ -7,11 +7,19 @@ metadata:
     release: {{ .Release.Name }}
     heritage: bitnami
 spec:
-  type: LoadBalancer
   ports:
-  - name: rabbitmq
-    port: 15672
-    targetPort: rabbitmq
+  - name: epmd
+    port: 4369
+    targetPort: epmd
+  - name: ampq
+    port: {{ .Values.rabbitmqNodeport }}
+    targetPort: ampq
+  - name: dist
+    port: {{ add 20000 .Values.rabbitmqNodeport }}
+    targetPort: dist
+  - name: stats
+    port: {{ .Values.rabbitmqManagerport }}
+    targetPort: stats
   selector:
     provider: rabbitmq
     release: {{ .Release.Name }}
