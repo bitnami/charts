@@ -34,7 +34,7 @@ spec:
             secretKeyRef:
               name: mariadb
               key: mariadb-root-password
-        - name: GHOST_HOSTNAME
+        - name: GHOST_HOST
           value: ""
         - name: GHOST_HOSTPORT
           value: "80"

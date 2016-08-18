@@ -70,7 +70,18 @@ $ helmc generate --force ghost
 $ helmc install ghost
 ```
 
-You should now be able to access the application using the external IP reserved for the Ghost service.
+> Note:
+>
+> If you want to use a FQDN associated the IP reserved for the Load Balancer. You need to configure Ghost service properly.
+
+
+Edit values.toml and update ghostHost with the FQDN associated to the reserved IP, regenerate the chart and install.
+```bash
+$ helmc generate --force ghost
+$ helmc install ghost
+```
+
+You should now be able to access the application using the external IP reserved for the Ghost service (or the FQDN if configured). 
 
 The default credentials are:
 

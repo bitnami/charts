@@ -1,4 +1,4 @@
-ghostHostname = ""
+ghostHost = ""
 ghostHostIP = ""
 ghostHostPort = "80"
 ghostUser = "user"
