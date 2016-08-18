@@ -12,19 +12,32 @@ spec:
   selector:
     app: ghost
     provider: ghost-server
-    version: 0.7.9-r0
+    version: 0.7.9-r2
   template:
     metadata:
       labels:
         app: ghost
         provider: ghost-server
-        version: 0.7.9-r0
+        version: 0.7.9-r2
         heritage: bitnami
     spec:
       containers:
       - name: ghost
         image: bitnami/ghost:0.7.9-r0
         env:
+        - name: MARIADB_HOST
+          value: "mariadb"
+        - name: MARIADB_PORT
+          value: "3306"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-root-password
+        - name: GHOST_HOSTNAME
+          value: ""
+        - name: GHOST_HOSTPORT
+          value: "80"
         - name: GHOST_USERNAME
           value: "user"
         - name: GHOST_PASSWORD
