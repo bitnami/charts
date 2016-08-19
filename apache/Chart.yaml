@@ -4,6 +4,7 @@ description: Chart for Apache HTTP Server
 keywords:
 - apache
 - http
+- https
 - www
 - web
 - reverse proxy
