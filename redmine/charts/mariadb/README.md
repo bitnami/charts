@@ -14,7 +14,7 @@ $ helm install mariadb-x.x.x.tgz
 
 ## Introduction
 
-Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers, on a Kubernetes cluster, that are ready to handle production workloads.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
@@ -58,7 +58,7 @@ The following tables lists the configurable parameters of the MariaDB chart and 
 
 |       Parameter       |           Description            |                         Default                          |
 |-----------------------|----------------------------------|----------------------------------------------------------|
-| `imageTag`            | `bitnami/mariadb` image tag.     | Most recent release                                      |
+| `imageTag`            | `bitnami/mariadb` image tag.     | MariaDB image version                                    |
 | `imagePullPolicy`     | Image pull policy.               | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
 | `mariadbRootPassword` | Password for the `root` user.    | `nil`                                                    |
 | `mariadbUser`         | Username of new user to create.  | `nil`                                                    |
@@ -75,7 +75,7 @@ $ helm install --name my-release \
     mariadb-x.x.x.tgz
 ```
 
-The above command set the MariaDB `root` account password to `secretpassword`. Additionally it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
+The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
