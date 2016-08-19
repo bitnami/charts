@@ -12,18 +12,18 @@ spec:
   selector:
     app: ghost
     provider: ghost-server
-    version: 0.7.9-r2
+    version: 0.9.0-r0
   template:
     metadata:
       labels:
         app: ghost
         provider: ghost-server
-        version: 0.7.9-r2
+        version: 0.9.0-r0
         heritage: bitnami
     spec:
       containers:
       - name: ghost
-        image: bitnami/ghost:0.7.9-r2
+        image: bitnami/ghost:0.9.0-r0
         env:
         - name: MARIADB_HOST
           value: "mariadb"
