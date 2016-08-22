@@ -1,35 +1,33 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "postgresql" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    provider: postgresql
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    provider: postgresql
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        provider: postgresql
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: postgresql
-        image: bitnami/postgresql:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/postgresql:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: POSTGRES_USER
           value: {{ default "" .Values.postgresUser | quote }}
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "postgresql" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: postgres-password
         - name: POSTGRES_DB
           value: {{ default "" .Values.postgresDb | quote }}
