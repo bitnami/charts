@@ -1,33 +1,31 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "redis" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    provider: redis
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    provider: redis
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        provider: redis
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: redis
-        image: bitnami/redis:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/redis:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "redis" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: redis-password
         ports:
         - name: redis

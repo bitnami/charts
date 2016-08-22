@@ -1,2 +1,16 @@
-imageTag: 3.2.0-r0
-redisPassword:
+## Bitnami Redis image version
+## ref: https://hub.docker.com/r/bitnami/redis/tags/
+##
+## Default: none
+imageTag: 3.2.0-r1
+
+## Specify a imagePullPolicy
+## Default to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## Specify server password
+## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
+##
+# redisPassword:
