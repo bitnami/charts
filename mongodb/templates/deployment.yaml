@@ -1,40 +1,38 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "mongodb" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    provider: mongodb
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    provider: mongodb
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        provider: mongodb
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: mongodb
-        image: bitnami/mongodb:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/mongodb:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MONGODB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mongodb" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: mongodb-root-password
         - name: MONGODB_USER
           value: {{ default "" .Values.mongodbUser | quote }}
         - name: MONGODB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mongodb" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: mongodb-password
         - name: MONGODB_DATABASE
           value: {{ default "" .Values.mongodbDatabase | quote }}
