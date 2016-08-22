@@ -6,5 +6,8 @@ version: 0.2.1
 description: A simple, powerful publishing platform that allows you to share your stories with the world
 maintainers:
 - Bitnami <containers@bitnami.com>
+dependencies:
+- name: mariadb
+  version: 0.2.1
 details: |-
   Ghost is a simple, powerful publishing platform that allows you to share your stories with the world

@@ -4,6 +4,12 @@
 
 Based on the [Bitnami Ghost](https://github.com/bitnami/bitnami-docker-ghost) image for docker, this Chart bootstraps a [Ghost](https://ghost.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm Classic](https://helm.sh).
 
+## Dependencies
+
+The Ghost Chart requires the [Bitnami MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
+
+Please refer to the [README](https://github.com/bitnami/charts/tree/master/mariadb) of the Bitnami MariaDB Chart for deployment instructions.
+
 ## Persistence
 
 > *You may skip this section if your only interested in testing the Ghost Chart and have not yet made the decision to use it for your production workloads.*
@@ -20,7 +26,7 @@ To edit the default Ghost configuration, run
 $ helmc edit ghost
 ```
 
-Here you can update the Ghost admin username, password, email address, language and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
+Here you can update the Ghost hostname, host IP, host port, admin username, password, email address, language, and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
 
 Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-ghost/#environment-variables) section of the [Bitnami Ghost](https://github.com/bitnami/bitnami-docker-ghost) image for the default values.
 
@@ -34,23 +40,48 @@ $ helmc generate --force ghost
 
 ## Access your Ghost application
 
-You should now be able to access the application using the external IP configured for the Ghost service.
-
 > Note:
 >
-> On GKE, the service will automatically configure a firewall rule so that the Ghost instance is accessible from the internet, for which you will be charged additionally.
+> Ghost service needs to know the Load Balancer IP to be configured properly. That's why you need to create a public address before you install the Ghost Helm Chart. 
+>
+> On GKE, you can can reserve a static external address and then specify that as the loadBalancerIP of a service. More information at [https://cloud.google.com/compute/docs/configure-instance-ip-addresses] 
 >
 > On other cloud platforms you may have to setup a firewall rule manually. Please refer your cloud providers documentation.
 
-Get the external IP address of your Ghost instance using:
+Reserve a static external address using:
 
 ```bash
-$ kubectl get services ghost
-NAME    CLUSTER_IP      EXTERNAL_IP       PORT(S)   SELECTOR    AGE
-ghost   10.99.240.185   104.197.156.125   80/TCP    app=ghost   3m
+$ gcloud compute addresses create ghost-public-ip
+Created [https://www.googleapis.com/compute/v1/...].
+---
+address: 104.197.39.194
+creationTimestamp: '2016-08-12T03:02:30.702-07:00'
+description: ''
+id: '8563442497282383961'
+kind: compute#address
+name: ghost-public-ip
+region: ...
+status: RESERVED
 ```
 
-Access your Ghost deployment using the IP address listed under the `EXTERNAL_IP` column.
+Edit values.toml and update ghostHostIP with the public IP you reserved before (104.197.39.194 in this example), regenerate the chart and install.
+```bash
+$ helmc generate --force ghost
+$ helmc install ghost
+```
+
+> Note:
+>
+> If you want to use a FQDN associated the IP reserved for the Load Balancer. You need to configure Ghost service properly.
+
+
+Edit values.toml and update ghostHost with the FQDN associated to the reserved IP, regenerate the chart and install.
+```bash
+$ helmc generate --force ghost
+$ helmc install ghost
+```
+
+You should now be able to access the application using the external IP reserved for the Ghost service (or the FQDN if configured). 
 
 The default credentials are:
 
