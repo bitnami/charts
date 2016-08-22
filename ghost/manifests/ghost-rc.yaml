@@ -36,7 +36,7 @@ spec:
               key: mariadb-root-password
         - name: GHOST_HOST
           value: ""
-        - name: GHOST_HOSTPORT
+        - name: GHOST_PORT
           value: "80"
         - name: GHOST_USERNAME
           value: "user"

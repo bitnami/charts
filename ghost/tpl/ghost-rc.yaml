@@ -36,8 +36,8 @@ spec:
               key: mariadb-root-password
         - name: GHOST_HOST
           value: {{ default .ghostHostIP .ghostHost | quote }}
-        - name: GHOST_HOSTPORT
-          value: {{ default .ghostHostPort | quote }}
+        - name: GHOST_PORT
+          value: {{ default .ghostPort | quote }}
         - name: GHOST_USERNAME
           value: {{ .ghostUser | quote }}
         - name: GHOST_PASSWORD

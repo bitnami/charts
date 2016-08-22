@@ -1,6 +1,6 @@
 ghostHost = ""
 ghostHostIP = ""
-ghostHostPort = "80"
+ghostPort = "80"
 ghostUser = "user"
 ghostPassword = "bitnami1"
 ghostEmail = "user@example.com"

@@ -12,7 +12,7 @@ spec:
   loadBalancerIP: {{ .ghostHostIP }}
   ports:
   - name: http
-    port: {{ .ghostHostPort }}
+    port: {{ .ghostPort }}
     targetPort: http
   selector:
     app: ghost
