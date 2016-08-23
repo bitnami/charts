@@ -10,7 +10,7 @@ $ helm install redmine-x.x.x.tgz
 
 ## Introduction
 
-Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers, on a Kubernetes cluster, that are ready to handle production workloads.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
@@ -56,7 +56,7 @@ The following tables lists the configurable parameters of the Redmine chart and 
 
 |     Parameter     |          Description          |                         Default                          |
 |-------------------|-------------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/redmine` image tag.  | Most recent release                                      |
+| `imageTag`        | `bitnami/redmine` image tag.  | Redmine image version                                    |
 | `imagePullPolicy` | Image pull policy.            | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
 | `redmineUser`     | Admin account username        | `user`                                                   |
 | `redminePassword` | Admin account password.       | `bitnami`                                                |
@@ -88,7 +88,7 @@ Alternatively, a YAML file that specifies the values for the above parameters ca
 $ helm install --name my-release -f values.yaml redmine-x.x.x.tgz
 ```
 
-> **Tip**: You may use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Persistence
 
