@@ -1,47 +1,42 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "drupal" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    app: drupal
-    provider: drupal-server
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    app: drupal
-    provider: drupal-server
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        app: drupal
-        provider: drupal-server
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: drupal
-        image: bitnami/drupal:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/drupal:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_HOST
-          value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}
+          value: {{ template "mariadb.fullname" . }}
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: DRUPAL_USERNAME
           value: {{ default "" .Values.drupalUser | quote }}
         - name: DRUPAL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "drupal" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: drupal-password
         - name: DRUPAL_EMAIL
           value: {{ default "" .Values.drupalEmail | quote }}
