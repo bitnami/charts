@@ -1,35 +1,33 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "wildfly" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    provider: wildfly
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    provider: wildfly
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        provider: wildfly
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: wildfly
-        image: bitnami/wildfly:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/wildfly:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: WILDFLY_USER
           value: {{ default "" .Values.wildflyUser | quote }}
         - name: WILDFLY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "wildfly" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: wildfly-password
         ports:
         - name: http
