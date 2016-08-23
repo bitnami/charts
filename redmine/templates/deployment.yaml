@@ -23,13 +23,13 @@ spec:
         imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_HOST
-          value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}
+          value: {{ template "mariadb.fullname" . }}
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: REDMINE_USERNAME
           value: {{ default "" .Values.redmineUser | quote }}
