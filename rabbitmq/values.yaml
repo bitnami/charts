@@ -1,10 +1,52 @@
+## Bitnami RabbitMQ image version
+## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
+##
+## Default: none
 imageTag: 3.6.4-r0
-rabbitmqUsername: user
-rabbitmqPassword: bitnami
-rabbitmqErlangcookie:
-rabbitmqNodeport: 5672
-rabbitmqNodetype: stats
-rabbitmqNodename: rabbit
-rabbitmqClusternodename:
-rabbitmqVhost: /
-rabbitmqManagerport: 15672
+
+## Specify a imagePullPolicy
+## Default to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## RabbitMQ User Credentials
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq/blob/master/README.md#creating-a-database-user-on-first-run
+##
+# rabbitmqUsername: user
+# rabbitmqPassword: bitnami
+
+## Erlang Cookie
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+##
+# rabbitmqErlangcookie:
+
+## Node port
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+##
+# rabbitmqNodeport: 5672
+
+## Node Type
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+##
+# rabbitmqNodetype: stats
+
+## Node Name
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+##
+# rabbitmqNodename: rabbit
+
+## Node name to cluster
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+##
+# rabbitmqClusternodename:
+
+## RabbitMQ application vhost
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+##
+# rabbitmqVhost: /
+
+## RabbitMQ Manager port
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+##
+# rabbitmqManagerport: 15672

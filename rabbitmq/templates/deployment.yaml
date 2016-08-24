@@ -1,40 +1,38 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    provider: rabbitmq
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    provider: rabbitmq
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        provider: rabbitmq
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
-        image: bitnami/rabbitmq:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/rabbitmq:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: RABBITMQ_USERNAME
           value: {{ default "" .Values.rabbitmqUsername | quote }}
         - name: RABBITMQ_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: rabbitmq-password
         - name: RABBITMQ_ERLANGCOOKIE
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "rabbitmq" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: rabbitmq-erlangcookie
         - name: RABBITMQ_NODEPORT
           value: {{ default "" .Values.rabbitmqNodeport | quote }}
@@ -52,11 +50,11 @@ spec:
         - name: epmd
           containerPort: 4369
         - name: ampq
-          containerPort: {{ .Values.rabbitmqNodeport }}
+          containerPort: {{ default "5672" .Values.rabbitmqNodeport }}
         - name: dist
-          containerPort: {{ add 20000 .Values.rabbitmqNodeport }}
+          containerPort: {{ default "5672" .Values.rabbitmqNodeport | add 20000 }}
         - name: stats
-          containerPort: {{ .Values.rabbitmqManagerport }}
+          containerPort: {{ default "15672" .Values.rabbitmqManagerport }}
         livenessProbe:
           exec:
             command:
