@@ -1,47 +1,42 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "mediawiki" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    app: mediawiki
-    provider: mediawiki-server
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    app: mediawiki
-    provider: mediawiki-server
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        app: mediawiki
-        provider: mediawiki-server
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: mediawiki
-        image: bitnami/mediawiki:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/mediawiki:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_HOST
-          value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}
+          value: {{ template "mariadb.fullname" . }}
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: MEDIAWIKI_USERNAME
           value: {{ default "" .Values.mediawikiUser | quote }}
         - name: MEDIAWIKI_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mediawiki" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: mediawiki-password
         - name: MEDIAWIKI_EMAIL
           value: {{ default "" .Values.mediawikiEmail | quote }}
@@ -58,7 +53,7 @@ spec:
         - name: SMTP_Password
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mediawiki" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: smtp-password
         ports:
         - name: http
