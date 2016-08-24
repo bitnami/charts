@@ -1,11 +1,38 @@
-imageTag: 3.1.9-r0
+## Bitnami PhpBB image version
+## ref: https://hub.docker.com/r/bitnami/phpbb/tags/
+##
+imageTag: 3.1.9-r1
 
-phpbbUser: user
-phpbbPassword: bitnami
-phpbbEmail: user@example.com
+## Specify a imagePullPolicy
+## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
 
-smtpHost:
-smtpUser:
-smtpPassword:
-smtpPort:
-smtpProtocol:
+## Admin user credentials
+## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
+##
+# phpbbUser: user
+# phpbbPassword: bitnami
+
+## Admin user email
+## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
+##
+# phpbbEmail: user@example.com
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-phpbb#smtp-configuration
+##
+# smtpHost:
+# smtpPort: 25
+# smtpUser:
+# smtpPassword:
+
+##
+## MariaDB chart configuration
+##
+# mariadb:
+  ## Specify password for root user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:
