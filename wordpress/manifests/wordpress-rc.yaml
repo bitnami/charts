@@ -12,18 +12,18 @@ spec:
   selector:
     app: wordpress
     provider: wordpress-server
-    version: 4.5.3-r0
+    version: 4.6-r0
   template:
     metadata:
       labels:
         app: wordpress
         provider: wordpress-server
-        version: 4.5.3-r0
+        version: 4.6-r0
         heritage: bitnami
     spec:
       containers:
       - name: wordpress
-        image: bitnami/wordpress:4.5.3-r0
+        image: bitnami/wordpress:4.6-r0
         env:
         - name: MARIADB_HOST
           value: "mariadb"
