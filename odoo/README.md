@@ -1,76 +1,135 @@
 # Odoo
 
-> Odoo is a suite of web based open source business apps. The main Odoo Apps include an Open Source CRM, Website Builder, eCommerce, Project Management, Billing & Accounting, Point of Sale, Human Resources, Marketing, Manufacturing, Purchase Management, ...
+[Odoo](https://www.odoo.com/) is a suite of web based open source business apps. The main Odoo Apps include an Open Source CRM, Website Builder, eCommerce, Project Management, Billing & Accounting, Point of Sale, Human Resources, Marketing, Manufacturing, Purchase Management, ...
 
-> Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get a full-featured Open Source ERP when you install several Apps.
+Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get a full-featured Open Source ERP when you install several Apps.
 
-Based on the [Bitnami Odoo](https://github.com/bitnami/bitnami-docker-odoo) image for docker, this Chart bootstraps a [Odoo](https://odoo.com/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm Classic](https://helm.sh).
+## TL;DR;
 
-## Dependencies
+```bash
+$ helm install odoo-x.x.x.tgz
+```
 
-The Odoo Chart requires the [Bitnami PostgreSQL Chart](https://github.com/bitnami/charts/tree/master/postgresql) for setting up a database backend.
+## Introduction
 
-Please refer to the [README](https://github.com/bitnami/charts/tree/master/postgresql) of the Bitnami PostgreSQL Chart for deployment instructions.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-## Persistence
+This chart bootstraps a [Odoo](https://github.com/bitnami/bitnami-docker-odoo) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-> *You may skip this section if your only interested in testing the Odoo Chart and have not yet made the decision to use it for your production workloads.*
+It also packages the Bitnami PostgreSQL chart which is required for bootstrapping a PostgreSQL deployment for the database requirements of the Odoo application.
 
-For persistence of the Odoo configuration and user file uploads, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/odoo` path of the Odoo pod.
+## Get this chart
 
-By default the Odoo Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+Download the latest release of the chart from the [releases](../../../releases) page.
+
+Alternatively, clone the repo if you wish to use the development snapshot:
+
+```bash
+$ git clone https://github.com/bitnami/charts.git
+```
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```bash
+$ helm install --name my-release odoo-x.x.x.tgz
+```
+
+*Replace the `x.x.x` placeholder with the chart release version.*
+
+The command deploys Odoo on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```bash
+$ helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-To edit the default Odoo configuration, run
+The following tables lists the configurable parameters of the Odoo chart and their default values.
+
+|     Parameter     |        Description        |                         Default                          |
+|-------------------|---------------------------|----------------------------------------------------------|
+| `imageTag`        | `bitnami/odoo` image tag. | Odoo image version                                       |
+| `imagePullPolicy` | Image pull policy.        | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `odooPassword`    | Admin account password.   | `bitnami`                                                |
+| `odooEmail`       | Admin account email.      | `user@example.com`                                       |
+| `smtpHost`        | SMTP host.                | `nil`                                                    |
+| `smtpPort`        | SMTP port.                | `nil`                                                    |
+| `smtpUser`        | SMTP user.                | `nil`                                                    |
+| `smtpPassword`    | SMTP password.            | `nil`                                                    |
+| `smtpProtocol`    | SMTP protocol.            | `nil`                                                    |
+
+The above parameters map to the env variables defined in [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo) image documentation.
+
+Additionally a password can be specified for the PostgreSQL `root` user account using the `postgresql.postgresPassword` parameter.
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helmc edit odoo
+$ helm install --name my-release \
+  --set odooPassword=password,postgresql.postgresPassword=secretpassword \
+    odoo-x.x.x.tgz
 ```
 
-Here you can update the Odoo admin email address, password and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
+The above command sets the Odoo administrator account password to `password` and the PostgreSQL `postgres` user password to `secretpassword`.
 
-Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-odoo/#environment-variables) section of the [Bitnami Odoo](https://github.com/bitnami/bitnami-docker-odoo) image for the default values.
-
-The values of `odooEmail` and `odooPassword` are the login credentials when you [access the Odoo instance](#access-your-odoo-application).
-
-Finally, generate the chart to apply your changes to the configuration.
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helmc generate --force odoo
+$ helm install --name my-release -f values.yaml odoo-x.x.x.tgz
 ```
 
-## Access your Odoo application
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
-You should now be able to access the application using the external IP configured for the Odoo service.
+## Persistence
 
-> Note:
+The [Bitnami Odoo](https://github.com/bitnami/bitnami-docker-odoo) image stores the Odoo data and configurations at the `/bitnami/odoo` path of the container.
+
+As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
+
+> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
+
+For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
+
+### Step 1: Create a persistent disk
+
+You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
+
+```bash
+$ gcloud compute disks create --size=500GB --zone=us-central1-a odoo-data-disk
+```
+
+### Step 2: Update `templates/deployment.yaml`
+
+Replace:
+
+```yaml
+      volumes:
+      - name: data
+        emptyDir: {}
+```
+
+with
+
+```yaml
+      volumes:
+      - name: data
+        gcePersistentDisk:
+          pdName: odoo-data-disk
+          fsType: ext4
+```
+
+> **Note**:
 >
-> On GKE, the service will automatically configure a firewall rule so that the Odoo instance is accessible from the internet, for which you will be charged additionally.
->
-> On other cloud platforms you may have to setup a firewall rule manually. Please refer your cloud providers documentation.
+> You should also use a persistent storage volume for the PostgreSQL deployment.
 
-Get the external IP address of your Odoo instance using:
-
-```bash
-$ kubectl get services odoo
-NAME      CLUSTER_IP      EXTERNAL_IP       PORT(S)   SELECTOR      AGE
-odoo     10.99.240.185   104.197.156.125    80/TCP    app=odoo     3m
-```
-
-Access your Odoo deployment using the IP address listed under the `EXTERNAL_IP` column.
-
-The default credentials are:
-
- - Username: `user`
- - Password: `bitnami`
-
-## Cleanup
-
-To delete the Odoo deployment completely:
-
-```bash
-$ helmc uninstall -n default odoo
-```
-
-Additionally you may want to [Cleanup the PostgreSQL Chart](https://github.com/bitnami/charts/tree/master/postgresql#cleanup)
+[Install](#installing-the-chart) the chart after making these changes.

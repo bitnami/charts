@@ -1,8 +1,38 @@
-imageTag: 9.0.20160620-r0
-odooPassword: bitnami
-odooEmail: user@example.com
-smtpHost:
-smtpPort:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+## Bitnami Odoo image version
+## ref: https://hub.docker.com/r/bitnami/odoo/tags/
+##
+imageTag: 9.0.20160620-r1
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## Admin password
+## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
+##
+# odooPassword: bitnami
+
+## Admin user email
+## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
+##
+# odooEmail: user@example.com
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-odoo#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpProtocol:
+
+##
+## PostgreSQL chart configuration
+##
+# postgresql:
+  ## Specify password for postgres user
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql#setting-the-root-password-on-first-run
+  ##
+  # postgresPassword:

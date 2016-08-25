@@ -1,45 +1,40 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "odoo" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    app: odoo
-    provider: odoo-server
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    app: odoo
-    provider: odoo-server
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        app: odoo
-        provider: odoo-server
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: odoo
-        image: bitnami/odoo:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/odoo:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: POSTGRESQL_HOST
-          value: {{ printf "%s-%s" .Release.Name "postgresql" | trunc 24 | quote }}
+          value: {{ template "postgresql.fullname" . }}
         - name: POSTGRESQL_PORT
           value: "5432"
         - name: POSTGRESQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "postgresql" | trunc 24 }}
+              name: {{ template "postgresql.fullname" . }}
               key: postgres-password
         - name: ODOO_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "odoo" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: odoo-password
         - name: ODOO_EMAIL
           value: {{ default "" .Values.odooEmail | quote }}
@@ -52,7 +47,7 @@ spec:
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "odoo" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: smtp-password
         - name: SMTP_PROTOCOL
           value: {{ default "" .Values.smtpProtocol | quote }}
@@ -64,7 +59,7 @@ spec:
             path: /
             port: http
           initialDelaySeconds: 120
-          timeoutSeconds: 5
+          timeoutSeconds: 30
         readinessProbe:
           httpGet:
             path: /
