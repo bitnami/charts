@@ -27,6 +27,19 @@ spec:
       - name: ghost
         image: bitnami/ghost:{{ .Values.imageTag }}
         env:
+        - name: MARIADB_HOST
+          value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}
+        - name: MARIADB_PORT
+          value: "3306"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              key: mariadb-root-password
+        - name: GHOST_HOST
+          value: {{ default .Values.ghostHostIP .Values.ghostHost | quote }}
+        - name: GHOST_PORT
+          value: {{ default "" .ghostPort | quote }}
         - name: GHOST_USERNAME
           value: {{ default "" .Values.ghostUser | quote }}
         - name: GHOST_PASSWORD

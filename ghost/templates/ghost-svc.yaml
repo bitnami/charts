@@ -9,9 +9,10 @@ metadata:
     heritage: bitnami
 spec:
   type: LoadBalancer
+  loadBalancerIP: {{ default "" .Values.ghostHostIP }}
   ports:
   - name: http
-    port: 80
+    port: {{ default "80" .Values.ghostPort }}
     targetPort: http
   selector:
     app: ghost

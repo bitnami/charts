@@ -31,13 +31,13 @@ spec:
             secretKeyRef:
               name: {{ template "postgresql.fullname" . }}
               key: postgres-password
+        - name: ODOO_EMAIL
+          value: {{ default "" .Values.odooEmail | quote }}
         - name: ODOO_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: odoo-password
-        - name: ODOO_EMAIL
-          value: {{ default "" .Values.odooEmail | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT

@@ -44,7 +44,7 @@ spec:
           value: {{ default "" .Values.testlinkLanguage | quote }}
         - name: TESTLINK_SMTP_ENABLE
           value: {{ default "" .Values.testlinkSmtpEnable | quote }}
-        - name: TESTINK_SMTP_CONNECTION_MODE
+        - name: TESTLINK_SMTP_CONNECTION_MODE
           value: {{ default "" .Values.testlinkSmtpConnectionMode | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}

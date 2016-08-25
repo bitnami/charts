@@ -1,0 +1,13 @@
+name: wordpress
+home: http://www.wordpress.com/
+source:
+- https://github.com/bitnami/bitnami-docker-wordpress
+version: 0.2.1
+description: Web publishing platform for building blogs and websites.
+maintainers:
+- Bitnami <containers@bitnami.com>
+dependencies:
+- name: mariadb
+  version: 0.2.1
+details: |-
+  WordPress is a publishing platform for building blogs and websites.

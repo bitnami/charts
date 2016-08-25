@@ -9,15 +9,15 @@ imageTag: 9.0.20160620-r1
 ##
 # imagePullPolicy:
 
-## Admin password
-## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
-##
-# odooPassword: bitnami
-
 ## Admin user email
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
 ##
 # odooEmail: user@example.com
+
+## Admin password
+## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
+##
+# odooPassword: bitnami
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#smtp-configuration
