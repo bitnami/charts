@@ -1,47 +1,42 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "testlink" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    app: testlink
-    provider: testlink-server
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    app: testlink
-    provider: testlink-server
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        app: testlink
-        provider: testlink-server
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: testlink
-        image: bitnami/testlink:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/testlink:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_HOST
-          value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}
+          value: {{ template "mariadb.fullname" . }}
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: TESTLINK_USERNAME
           value: {{ default "" .Values.testlinkUsername | quote }}
         - name: TESTLINK_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "testlink" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: testlink-password
         - name: TESTLINK_EMAIL
           value: {{ default "" .Values.testlinkEmail | quote }}
@@ -60,10 +55,8 @@ spec:
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "testlink" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: smtp-password
-        - name: SMTP_PROTOCOL
-          value: {{ default "" .Values.smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80
