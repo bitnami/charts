@@ -64,7 +64,8 @@ region: ...
 status: RESERVED
 ```
 
-Edit values.toml and update phabricatorHost with the public IP you reserved before (104.197.39.194 in this example), regenerate the chart and install.
+Edit `values.toml` and update `phabricatorHostIP` with the public IP you reserved before (104.197.39.194 in this example), regenerate the chart and install.
+
 ```bash
 $ helmc generate --force phabricator
 $ helmc install phabricator

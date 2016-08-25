@@ -48,7 +48,7 @@ spec:
         - name: PHABRICATOR_LASTNAME
           value: {{ .phabricatorLastName | quote }}
         - name: PHABRICATOR_HOST
-          value: {{ .phabricatorHost | quote }}
+          value: {{ default .phabricatorHostIP .phabricatorHost | quote }}
         - name: SMTP_HOST
           value: {{ .smtpHost | quote }}
         - name: SMTP_PORT
@@ -68,17 +68,21 @@ spec:
         - name: https
           containerPort: 443
         livenessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 120
-          timeoutSeconds: 5
+          exec:
+            command:
+            - harpoon
+            - status
+            - phabricator
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
         readinessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+          exec:
+            command:
+            - harpoon
+            - status
+            - phabricator
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
         volumeMounts:
         - name: phabricator-data
           mountPath: /bitnami/phabricator

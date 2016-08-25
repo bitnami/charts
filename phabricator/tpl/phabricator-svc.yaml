@@ -9,7 +9,7 @@ metadata:
     heritage: bitnami
 spec:
   type: LoadBalancer
-  loadBalancerIP: 
+  loadBalancerIP: {{ .phabricatorHostIP }}
   ports:
   - name: http
     port: 80
