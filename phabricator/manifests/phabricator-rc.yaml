@@ -73,16 +73,16 @@ spec:
             - harpoon
             - status
             - phabricator
-          initialDelaySeconds: 120
-          timeoutSeconds: 5
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
         readinessProbe:
           exec:
             command:
             - harpoon
             - status
             - phabricator
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
         volumeMounts:
         - name: phabricator-data
           mountPath: /bitnami/phabricator
