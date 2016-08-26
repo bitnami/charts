@@ -1,13 +1,24 @@
 name: phabricator
-home: https://www.phacility.com
-source:
-- https://github.com/bitnami/bitnami-docker-phabricator
-version: 0.2.1
+version: 0.3.0
 description: Collection of open source web applications that help software companies build better software.
+keywords:
+- phabricator
+- http
+- https
+- web
+- application
+- collaboration
+- project management
+- bug tracking
+- code review
+- wiki
+- git
+- mercurial
+- subversion
+home: https://www.phacility.com
+sources:
+- https://github.com/bitnami/bitnami-docker-phabricator
 maintainers:
-- Bitnami <containers@bitnami.com>
-dependencies:
-- name: mariadb
-  version: 0.2.1
-details: |-
-  Phabricator is a collection of open source web applications that help software companies build better software.
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

@@ -1,0 +1,55 @@
+## Bitnami Phabricator image version
+## ref: https://hub.docker.com/r/bitnami/phabricator/tags/
+##
+imageTag: 2016.31-r0
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## Phabricator host to create application URLs. It can be either an IP or a domain.
+## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
+##
+# phabricatorHost:
+
+## loadBalancerIP for the Phabricator Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# phabricatorLoadBalancerIP:
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
+##
+# phabricatorUsername: user
+# phabricatorPassword: bitnami1
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
+##
+# phabricatorEmail: user@example.com
+
+## Admin users first and last name
+## ref: https://github.com/bitnami/bitnami-docker-phabricator#environment-variables
+##
+# phabricatorFirstName: First Name
+# phabricatorLastName: Last Name
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpProtocol:
+
+##
+## MariaDB chart configuration
+##
+# mariadb:
+  ## Specify password for root user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:

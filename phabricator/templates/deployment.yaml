@@ -1,67 +1,64 @@
-#helm:generate helmc tpl -d tpl/values.toml -o manifests/phabricator-rc.yaml $HELM_GENERATE_FILE
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: phabricator
+  name: {{ template "fullname" . }}
   labels:
-    app: phabricator
-    provider: phabricator-server
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    app: phabricator
-    provider: phabricator-server
-    version: 2016.31-r0
   template:
     metadata:
       labels:
-        app: phabricator
-        provider: phabricator-server
-        version: 2016.31-r0
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: phabricator
-        image: bitnami/phabricator:2016.31-r0
+      - name: {{ template "fullname" . }}
+        image: "bitnami/phabricator:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_HOST
-          value: "mariadb"
+          value: {{ template "mariadb.fullname" . }}
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mariadb
+              name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: PHABRICATOR_USERNAME
-          value: {{ .phabricatorUsername | quote }}
+          value: {{ default "" .Values.phabricatorUsername | quote }}
         - name: PHABRICATOR_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: phabricator
+              name: {{ template "fullname" . }}
               key: phabricator-password
         - name: PHABRICATOR_EMAIL
-          value: {{ .phabricatorEmail | quote }}
+          value: {{ default "" .Values.phabricatorEmail | quote }}
         - name: PHABRICATOR_FIRSTNAME
-          value: {{ .phabricatorFirstName | quote }}
+          value: {{ default "" .Values.phabricatorFirstName | quote }}
         - name: PHABRICATOR_LASTNAME
-          value: {{ .phabricatorLastName | quote }}
+          value: {{ default "" .Values.phabricatorLastName | quote }}
         - name: PHABRICATOR_HOST
-          value: {{ default .phabricatorHostIP .phabricatorHost | quote }}
+          value: {{ default .Values.phabricatorHostIP .Values.phabricatorLoadBalancerIP | quote }}
         - name: SMTP_HOST
-          value: {{ .smtpHost | quote }}
+          value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
-          value: {{ .smtpPort | quote }}
+          value: {{ default "" .Values.smtpPort | quote }}
         - name: SMTP_USER
-          value: {{ .smtpUser | quote }}
+          value: {{ default "" .Values.smtpUser | quote }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: phabricator
+              name: {{ template "fullname" . }}
               key: smtp-password
         - name: SMTP_PROTOCOL
-          value: {{ .smtpProtocol | quote }}
+          value: {{ default "" .Values.smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80
