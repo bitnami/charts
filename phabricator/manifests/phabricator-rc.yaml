@@ -1,0 +1,99 @@
+#helm:generate helmc tpl -d tpl/values.toml -o manifests/phabricator-rc.yaml $HELM_GENERATE_FILE
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: phabricator
+  labels:
+    app: phabricator
+    provider: phabricator-server
+    heritage: bitnami
+spec:
+  replicas: 1
+  selector:
+    app: phabricator
+    provider: phabricator-server
+    version: 2016.31-r0
+  template:
+    metadata:
+      labels:
+        app: phabricator
+        provider: phabricator-server
+        version: 2016.31-r0
+        heritage: bitnami
+    spec:
+      containers:
+      - name: phabricator
+        image: bitnami/phabricator:2016.31-r0
+        env:
+        - name: MARIADB_HOST
+          value: "mariadb"
+        - name: MARIADB_PORT
+          value: "3306"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: mariadb-root-password
+        - name: PHABRICATOR_USERNAME
+          value: "user"
+        - name: PHABRICATOR_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: phabricator
+              key: phabricator-password
+        - name: PHABRICATOR_EMAIL
+          value: "user@example.com"
+        - name: PHABRICATOR_FIRSTNAME
+          value: "First Name"
+        - name: PHABRICATOR_LASTNAME
+          value: "Last Name"
+        - name: PHABRICATOR_HOST
+          value: ""
+        - name: SMTP_HOST
+          value: ""
+        - name: SMTP_PORT
+          value: ""
+        - name: SMTP_USER
+          value: ""
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: phabricator
+              key: smtp-password
+        - name: SMTP_PROTOCOL
+          value: ""
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        livenessProbe:
+          exec:
+            command:
+            - harpoon
+            - status
+            - phabricator
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+        readinessProbe:
+          exec:
+            command:
+            - harpoon
+            - status
+            - phabricator
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: phabricator-data
+          mountPath: /bitnami/phabricator
+        - name: apache-data
+          mountPath: /bitnami/apache
+        - name: php-data
+          mountPath: /bitnami/php
+      volumes:
+      - name: phabricator-data
+        emptyDir: {}
+      - name: apache-data
+        emptyDir: {}
+      - name: php-data
+        emptyDir: {}
