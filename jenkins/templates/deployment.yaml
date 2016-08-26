@@ -1,36 +1,33 @@
-#helm:generate helmc tpl -d tpl/values.toml -o manifests/jenkins-rc.yaml $HELM_GENERATE_FILE
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: jenkins
+  name: {{ template "fullname" . }}
   labels:
-    app: jenkins
-    provider: jenkins-server
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    app: jenkins
-    provider: jenkins-server
-    version: 2.17-r0
   template:
     metadata:
       labels:
-        app: jenkins
-        provider: jenkins-server
-        version: 2.17-r0
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: jenkins
-        image: bitnami/jenkins:2.17-r0
+      - name: {{ template "fullname" . }}
+        image: "bitnami/jenkins:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: JENKINS_USERNAME
-          value: {{ .jenkinsUser | quote }}
+          value: {{ default "" .Values.jenkinsUser | quote }}
         - name: JENKINS_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: jenkins
+              name: {{ template "fullname" . }}
               key: jenkins-password
         ports:
         - name: http
@@ -50,8 +47,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: jenkins-data
+        - name: data
           mountPath: /bitnami/jenkins
       volumes:
-      - name: jenkins-data
+      - name: data
         emptyDir: {}

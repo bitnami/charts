@@ -1,66 +1,120 @@
 # Jenkins
 
-> Jenkins is widely recognized as the most feature-rich CI available with easy configuration, continuous delivery and continuous integration support, easily test, build and stage your app, and more. It supports multiple SCM tools including CVS, Subversion and Git. It can execute Apache Ant and Apache Maven-based projects as well as arbitrary scripts.
+[Jenkins](https://jenkins.io) is widely recognized as the most feature-rich CI available with easy configuration, continuous delivery and continuous integration support, easily test, build and stage your app, and more. It supports multiple SCM tools including CVS, Subversion and Git. It can execute Apache Ant and Apache Maven-based projects as well as arbitrary scripts.
 
-Based on the [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image for docker, this Chart bootstraps a [Jenkins](https://jenkins.io) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+## TL;DR;
 
-## Persistence
+```bash
+$ helm install jenkins-x.x.x.tgz
+```
 
-> *You may skip this section if your only interested in testing the Jenkins Chart and have not yet made the decision to use it for your production workloads.*
+## Introduction
 
-For persistence of the Jenkins data and configuration, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/jenkins` path of the Jenkins pod.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-By default the Jenkins Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+This chart bootstraps a [Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+## Get this chart
+
+Download the latest release of the chart from the [releases](../../../releases) page.
+
+Alternatively, clone the repo if you wish to use the development snapshot:
+
+```bash
+$ git clone https://github.com/bitnami/charts.git
+```
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```bash
+$ helm install --name my-release jenkins-x.x.x.tgz
+```
+
+*Replace the `x.x.x` placeholder with the chart release version.*
+
+The command deploys Jenkins on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```bash
+$ helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-To edit the default Jenkins configuration, run
+The following tables lists the configurable parameters of the Jenkins chart and their default values.
+
+|     Parameter     |         Description          |                         Default                          |
+|-------------------|------------------------------|----------------------------------------------------------|
+| `imageTag`        | `bitnami/jenkins` image tag. | Jenkins image version                                    |
+| `imagePullPolicy` | Image pull policy.           | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `jenkinsUser`     | Admin account username.      | `nil`                                                    |
+| `jenkinsPassword` | Admin account password.      | `nil`                                                    |
+
+The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helmc edit jenkins
+$ helm install --name my-release \
+  --set jenkinsUser=my-user,jenkinsPassword=my-password \
+    jenkins-x.x.x.tgz
 ```
 
-Here you can update the Jenkins admin username and password in `tpl/values.toml`. When not specified, the default values are used.
+The above command sets the Jenkins admin username and password to `my-user` and `my-password` respectively.
 
-Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-jenkins/#environment-variables) section of the [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image for the default values.
-
-The values of `jenkinsUser` and `jenkinsPassword` are the login credentials when you [access the Jenkins instance](#access-your-jenkins-application).
-
-Finally, generate the chart to apply your changes to the configuration.
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helmc generate --force jenkins
+$ helm install --name my-release -f values.yaml jenkins-x.x.x.tgz
 ```
 
-## Access your Jenkins application
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
-You should now be able to access the application using the external IP configured for the Joomla service.
+## Persistence
 
-> Note:
->
-> On GKE, the service will automatically configure a firewall rule so that the Joomla instance is accessible from the internet, for which you will be charged additionally.
->
-> On other cloud platforms you may have to setup a firewall rule manually. Please refer your cloud providers documentation.
+The [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image stores the Jenkins data and configurations at the `/bitnami/jenkins` path of the container.
 
-Get the external IP address of your Jenkins instance using:
+As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
+
+> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
+
+For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
+
+### Step 1: Create a persistent disk
+
+You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
 
 ```bash
-$ kubectl get services jenkins
-NAME      CLUSTER_IP      EXTERNAL_IP       PORT(S)         SELECTOR      AGE
-jenkins    10.63.246.116   146.148.20.117    80/TCP,443/TCP  app=jenkins    15m
+$ gcloud compute disks create --size=500GB --zone=us-central1-a jenkins-data-disk
 ```
 
-Access your Jenkins deployment using the IP address listed under the `EXTERNAL_IP` column.
+### Step 2: Update `templates/deployment.yaml`
 
-The default credentials are:
+Replace:
 
- - Username: `user`
- - Password: `bitnami`
-
-## Cleanup
-
-To delete the Jenkins deployment completely:
-
-```bash
-$ helmc uninstall -n default jenkins
+```yaml
+      volumes:
+      - name: data
+        emptyDir: {}
 ```
+
+with
+
+```yaml
+      volumes:
+      - name: data
+        gcePersistentDisk:
+          pdName: jenkins-data-disk
+          fsType: ext4
+```
+
+[Install](#installing-the-chart) the chart after making these changes.
