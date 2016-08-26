@@ -1,43 +1,38 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "ghost" | trunc 24 }}
+  name: {{ template "fullname" . }}
   labels:
-    app: ghost
-    provider: ghost-server
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    app: ghost
-    provider: ghost-server
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        app: ghost
-        provider: ghost-server
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: ghost
-        image: bitnami/ghost:{{ .Values.imageTag }}
+      - name: {{ template "fullname" . }}
+        image: "bitnami/ghost:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_HOST
-          value: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 | quote }}
+          value: {{ template "mariadb.fullname" . }}
         - name: MARIADB_PORT
           value: "3306"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: GHOST_HOST
-          value: {{ default .Values.ghostHostIP .Values.ghostHost | quote }}
+          value: {{ default .Values.ghostLoadBalancerIP .Values.ghostHost | quote }}
         - name: GHOST_PORT
           value: {{ default "" .ghostPort | quote }}
         - name: GHOST_USERNAME
@@ -45,7 +40,7 @@ spec:
         - name: GHOST_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "ghost" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: ghost-password
         - name: GHOST_EMAIL
           value: {{ default "" .Values.ghostEmail | quote }}
@@ -60,7 +55,7 @@ spec:
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "ghost" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: smtp-password
         - name: SMTP_SERVICE
           value: {{ default "" .Values.smtpService | quote }}
