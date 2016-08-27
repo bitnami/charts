@@ -1,43 +1,40 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ printf "%s-%s" .Release.Name "master" | trunc 24 }}
+  name: {{ template "master.fullname" . }}
   labels:
-    provider: mariadb
     mode: master
-    release: {{ .Release.Name }}
-    heritage: bitnami
+    app: {{ template "master.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  selector:
-    provider: mariadb
-    mode: master
-    release: {{ .Release.Name }}
-    version: {{ .Values.imageTag }}
   template:
     metadata:
       labels:
-        provider: mariadb
         mode: master
-        release: {{ .Release.Name }}
-        version: {{ .Values.imageTag }}
-        heritage: bitnami
+        app: {{ template "master.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: mariadb
-        image: bitnami/mariadb:{{ .Values.imageTag }}
+      - name: {{ template "master.fullname" . }}
+        image: "bitnami/mariadb:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: mariadb-root-password
         - name: MARIADB_USER
           value: {{ default "" .Values.mariadbUser | quote }}
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: mariadb-password
         - name: MARIADB_DATABASE
           value: {{ default "" .Values.mariadbDatabase | quote }}
@@ -48,7 +45,7 @@ spec:
         - name: MARIADB_REPLICATION_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "mariadb" | trunc 24 }}
+              name: {{ template "fullname" . }}
               key: mariadb-replication-password
         ports:
         - name: mysql

@@ -1,7 +1,45 @@
-imageTag: 10.1.14-r1
-mariadbRootPassword: my-root-password
-mariadbUser: my-user
-mariadbPassword: my-password
+## Bitnami MariaDB image version
+## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
+##
+## Default: none
+imageTag: 10.1.14-r3
+
+## Specify a imagePullPolicy
+## Default to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## Desired number of MariaDB slave Pods
+##
+# replicasCount: 1
+
+## MariaDB admin password
+## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+##
+# mariadbRootPassword:
+
+## MariaDB user
+## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
+##
+# mariadbUser:
+
+## MariaDB password
+## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
+##
+# mariadbPassword:
+
+## Database to create
+## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
+##
 mariadbDatabase: my-database
-mariadbReplicationUser: replication-user
-mariadbReplicationPassword: replication-password
+
+## MariaDB replication user
+## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+##
+mariadbReplicationUser: repl-user
+
+## MariaDB replication user password
+## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+##
+# mariadbReplicationPassword:
