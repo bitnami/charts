@@ -9,13 +9,17 @@ imageTag: 8.1.8-r1
 ##
 # imagePullPolicy:
 
-## Admin username and password
+## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
 ##
 # drupalUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
+##
 # drupalPassword: bitnami
 
-## Admin user email
+## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
 ##
 # drupalEmail: user@example.com
@@ -24,7 +28,7 @@ imageTag: 8.1.8-r1
 ## MariaDB chart configuration
 ##
 # mariadb:
-  ## Specify password for root user
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   # mariadbRootPassword:

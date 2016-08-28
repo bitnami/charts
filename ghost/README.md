@@ -54,26 +54,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Ghost chart and their default values.
 
-|       Parameter       |                                Description                                |                         Default                          |
-|-----------------------|---------------------------------------------------------------------------|----------------------------------------------------------|
-| `imageTag`            | `bitnami/ghost` image tag.                                                | Ghost image version                                      |
-| `imagePullPolicy`     | Image pull policy.                                                        | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `ghostHost`           | Ghost host to create application URLs. It can be either an IP or a domain | `nil`                                                    |
-| `ghostPort`           | Ghost port to create application URLs along with host                     | `80`                                                     |
-| `ghostLoadBalancerIP` | `loadBalancerIP` for the Ghost Service                                    | `nil`                                                    |
-| `ghostUser`           | User of the application                                                   | `user`                                                   |
-| `ghostPassword`       | Application password                                                      | `bitnami`                                                |
-| `ghostEmail`          | Admin email                                                               | `user@example.com`                                       |
-| `blogTitle`           | Ghost Blog name                                                           | `User's Blog`                                            |
-| `smtpHost`            | SMTP Host                                                                 | `nil`                                                    |
-| `smtpPort`            | SMTP Port                                                                 | `nil`                                                    |
-| `smtpUser`            | SMTP User                                                                 | `nil`                                                    |
-| `smtpPassword`        | SMTP Password                                                             | `nil`                                                    |
-| `smtpService`         | SMTP service                                                              | `nil`                                                    |
+|           Parameter           |                      Description                      |                         Default                         |
+|-------------------------------|-------------------------------------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/ghost` image tag                             | Ghost image version                                     |
+| `imagePullPolicy`             | Image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `ghostHost`                   | Ghost host to create application URLs                 | `nil`                                                   |
+| `ghostPort`                   | Ghost port to create application URLs along with host | `80`                                                    |
+| `ghostLoadBalancerIP`         | `loadBalancerIP` for the Ghost Service                | `nil`                                                   |
+| `ghostUser`                   | User of the application                               | `user`                                                  |
+| `ghostPassword`               | Application password                                  | `bitnami`                                               |
+| `ghostEmail`                  | Admin email                                           | `user@example.com`                                      |
+| `blogTitle`                   | Ghost Blog name                                       | `User's Blog`                                           |
+| `smtpHost`                    | SMTP Host                                             | `nil`                                                   |
+| `smtpPort`                    | SMTP Port                                             | `nil`                                                   |
+| `smtpUser`                    | SMTP User                                             | `nil`                                                   |
+| `smtpPassword`                | SMTP Password                                         | `nil`                                                   |
+| `smtpService`                 | SMTP service                                          | `nil`                                                   |
+| `mariadb.mariadbRootPassword` | MariaDB admin password                                | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost) image documentation.
-
-Additionally a password can be specified for the MariaDB `root` user account using the `mariadb.mariadbRootPassword` parameter.
 
 > **Note**:
 >
@@ -131,7 +130,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: ghost-data
         emptyDir: {}
 ```
 
@@ -139,7 +138,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: ghost-data
         gcePersistentDisk:
           pdName: ghost-data-disk
           fsType: ext4

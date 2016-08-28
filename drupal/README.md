@@ -54,17 +54,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Drupal chart and their default values.
 
-|     Parameter     |         Description         |                         Default                          |
-|-------------------|-----------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/drupal` image tag. | Drupal image version                                     |
-| `imagePullPolicy` | Image pull policy.          | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `drupalUser`      | Admin account username      | `user`                                                   |
-| `drupalPassword`  | Admin account password.     | `bitnami`                                                |
-| `drupalEmail`     | Admin account email.        | `user@example.com`                                       |
+|           Parameter           |        Description         |                         Default                         |
+|-------------------------------|----------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/drupal` image tag | Drupal image version                                    |
+| `imagePullPolicy`             | Image pull policy          | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `drupalUser`                  | User of the application    | `user`                                                  |
+| `drupalPassword`              | Application password       | `bitnami`                                               |
+| `drupalEmail`                 | Admin email                | `user@example.com`                                      |
+| `mariadb.mariadbRootPassword` | MariaDB admin password     | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal) image documentation.
-
-Additionally a password can be specified for the MariaDB `root` user account using the `mariadb.mariadbRootPassword` parameter.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -108,7 +107,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: drupal-data
         emptyDir: {}
 ```
 
@@ -116,7 +115,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: drupal-data
         gcePersistentDisk:
           pdName: drupal-data-disk
           fsType: ext4

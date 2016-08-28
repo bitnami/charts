@@ -54,21 +54,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the phpBB chart and their default values.
 
-|     Parameter     |        Description         |                         Default                          |
-|-------------------|----------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/phpbb` image tag. | phpBB image version                                      |
-| `imagePullPolicy` | Image pull policy.         | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `phpbbUser`       | Admin account username     | `user`                                                   |
-| `phpbbPassword`   | Admin account password.    | `bitnami`                                                |
-| `phpbbEmail`      | Admin account email.       | `user@example.com`                                       |
-| `smtpHost`        | SMTP host.                 | `nil`                                                    |
-| `smtpPort`        | SMTP port.                 | `nil`                                                    |
-| `smtpUser`        | SMTP user.                 | `nil`                                                    |
-| `smtpPassword`    | SMTP password.             | `nil`                                                    |
+|           Parameter           |        Description        |                         Default                         |
+|-------------------------------|---------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/phpbb` image tag | phpBB image version                                     |
+| `imagePullPolicy`             | Image pull policy         | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `phpbbUser`                   | User of the application   | `user`                                                  |
+| `phpbbPassword`               | Application password      | `bitnami`                                               |
+| `phpbbEmail`                  | Admin email               | `user@example.com`                                      |
+| `smtpHost`                    | SMTP host                 | `nil`                                                   |
+| `smtpPort`                    | SMTP port                 | `nil`                                                   |
+| `smtpUser`                    | SMTP user                 | `nil`                                                   |
+| `smtpPassword`                | SMTP password             | `nil`                                                   |
+| `mariadb.mariadbRootPassword` | MariaDB admin password    | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/phpbb](http://github.com/bitnami/bitnami-docker-phpbb). For more information please refer to the [bitnami/phpbb](http://github.com/bitnami/bitnami-docker-phpbb) image documentation.
-
-Additionally a password can be specified for the MariaDB `root` user account using the `mariadb.mariadbRootPassword` parameter.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -112,7 +111,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: phpbb-data
         emptyDir: {}
 ```
 
@@ -120,7 +119,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: phpbb-data
         gcePersistentDisk:
           pdName: phpbb-data-disk
           fsType: ext4

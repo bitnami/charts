@@ -1,23 +1,26 @@
 ## Bitnami PostgreSQL image version
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
 ##
-## Default: none
 imageTag: 9.5.3-r2
 
 ## Specify a imagePullPolicy
-## Default to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 # imagePullPolicy:
 #
 
-## Create a database user
+## PostgreSQL admin user
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql#creating-a-database-user-on-first-run
 ##
 # postgresUser: postgres
+
+## PostgreSQL password
+## ref: https://github.com/bitnami/bitnami-docker-postgresql#creating-a-database-user-on-first-run
+##
 # postgresPassword:
 
-## Create a database
+## Database to create
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql#creating-a-database-on-first-run
 ##
 # postgresDb:

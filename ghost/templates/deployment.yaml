@@ -75,8 +75,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: ghost-data
           mountPath: /bitnami/ghost
       volumes:
-      - name: data
+      - name: ghost-data
         emptyDir: {}

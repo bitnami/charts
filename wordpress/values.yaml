@@ -9,24 +9,32 @@ imageTag: 4.6-r0
 ##
 # imagePullPolicy:
 
-## Admin username and password
+## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 # wordpressUsername: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+##
 # wordpressPassword: bitnami
 
-## Admin user email
+## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 # wordpressEmail: user@example.com
 
-## Admin users first and last name
+## First name
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 # wordpressFirstName: FirstName
+
+## Last name
+## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+##
 # wordpressLastName: LastName
 
-## Blog title
+## Blog name
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 # wordpressBlogName: User's Blog!
@@ -45,7 +53,7 @@ imageTag: 4.6-r0
 ## MariaDB chart configuration
 ##
 # mariadb:
-  ## Specify password for root user
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   # mariadbRootPassword:

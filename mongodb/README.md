@@ -52,14 +52,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the MongoDB chart and their default values.
 
-|       Parameter       |           Description            |                         Default                          |
-|-----------------------|----------------------------------|----------------------------------------------------------|
-| `imageTag`            | `bitnami/mongodb` image tag.     | MongoDB image version                                    |
-| `imagePullPolicy`     | Image pull policy.               | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `mongodbRootPassword` | Password for the `root` user.    | `nil`                                                    |
-| `mongodbUser`         | Username of new user to create.  | `nil`                                                    |
-| `mongodbPassword`     | Password for the new user.       | `nil`                                                    |
-| `mongodbDatabase`     | Name for new database to create. | `nil`                                                    |
+|       Parameter       |         Description          |                         Default                         |
+|-----------------------|------------------------------|---------------------------------------------------------|
+| `imageTag`            | `bitnami/mongodb` image tag  | MongoDB image version                                   |
+| `imagePullPolicy`     | Image pull policy            | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `mongodbRootPassword` | MongoDB admin password       | `nil`                                                   |
+| `mongodbUser`         | MongoDB custom user          | `nil`                                                   |
+| `mongodbPassword`     | MongoDB custom user password | `nil`                                                   |
+| `mongodbDatabase`     | Database to create           | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/mongodb](http://github.com/bitnami/bitnami-docker-mongodb). For more information please refer to the [bitnami/mongodb](http://github.com/bitnami/bitnami-docker-mongodb) image documentation.
 
@@ -105,7 +105,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: mongodb-data
         emptyDir: {}
 ```
 
@@ -113,7 +113,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: mongodb-data
         gcePersistentDisk:
           pdName: mongodb-data-disk
           fsType: ext4

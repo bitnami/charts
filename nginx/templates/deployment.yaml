@@ -39,8 +39,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: nginx-data
           mountPath: /bitnami/nginx
       volumes:
-      - name: data
+      - name: nginx-data
         emptyDir: {}

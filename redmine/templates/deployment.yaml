@@ -71,8 +71,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: redmine-data
           mountPath: /bitnami/redmine
       volumes:
-      - name: data
+      - name: redmine-data
         emptyDir: {}

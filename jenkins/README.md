@@ -52,12 +52,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Jenkins chart and their default values.
 
-|     Parameter     |         Description          |                         Default                          |
-|-------------------|------------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/jenkins` image tag. | Jenkins image version                                    |
-| `imagePullPolicy` | Image pull policy.           | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `jenkinsUser`     | Admin account username.      | `nil`                                                    |
-| `jenkinsPassword` | Admin account password.      | `nil`                                                    |
+|     Parameter     |         Description         |                         Default                         |
+|-------------------|-----------------------------|---------------------------------------------------------|
+| `imageTag`        | `bitnami/jenkins` image tag | Jenkins image version                                   |
+| `imagePullPolicy` | Image pull policy           | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `jenkinsUser`     | User of the application     | `nil`                                                   |
+| `jenkinsPassword` | Application password        | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.
 
@@ -103,7 +103,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: jenkins-data
         emptyDir: {}
 ```
 
@@ -111,7 +111,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: jenkins-data
         gcePersistentDisk:
           pdName: jenkins-data-disk
           fsType: ext4

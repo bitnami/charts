@@ -9,13 +9,17 @@ imageTag: 3.1.9-r1
 ##
 # imagePullPolicy:
 
-## Admin user credentials
+## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
 ##
 # phpbbUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
+##
 # phpbbPassword: bitnami
 
-## Admin user email
+## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
 ##
 # phpbbEmail: user@example.com
@@ -24,7 +28,7 @@ imageTag: 3.1.9-r1
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#smtp-configuration
 ##
 # smtpHost:
-# smtpPort: 25
+# smtpPort:
 # smtpUser:
 # smtpPassword:
 
@@ -32,7 +36,7 @@ imageTag: 3.1.9-r1
 ## MariaDB chart configuration
 ##
 # mariadb:
-  ## Specify password for root user
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   # mariadbRootPassword:

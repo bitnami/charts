@@ -51,8 +51,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: postgresql-data
           mountPath: /bitnami/postgresql
       volumes:
-      - name: data
+      - name: postgresql-data
         emptyDir: {}

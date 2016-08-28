@@ -56,8 +56,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: mongodb-data
           mountPath: /bitnami/mongodb
       volumes:
-      - name: data
+      - name: mongodb-data
         emptyDir: {}

@@ -52,19 +52,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the RabbitMQ chart and their default values.
 
-|         Parameter         |         Description          |                         Default                          |
-|---------------------------|------------------------------|----------------------------------------------------------|
-| `imageTag`                | `bitnami/rabbitmq` image tag | RabbitMQ image version                                   |
-| `imagePullPolicy`         | Image pull policy            | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `rabbitmqUser`            | Admin username               | `user`                                                   |
-| `rabbitmqPassword`        | Admin password               | `bitnami`                                                |
-| `rabbitmqErlangcookie`    | Erlang Cookie                | `nil`                                                    |
-| `rabbitmqNodeport`        | Node port                    | `5672`                                                   |
-| `rabbitmqNodetype`        | Node type                    | `stats`                                                  |
-| `rabbitmqNodename`        | Node name                    | `rabbit`                                                 |
-| `rabbitmqClusternodename` | Node name to cluster         | `nil`                                                    |
-| `rabbitmqVhost`           | Application vhost            | `/`                                                      |
-| `rabbitmqManagerport`     | Manager port                 | `15672`                                                  |
+|         Parameter         |                       Description                       |                         Default                          |
+|---------------------------|---------------------------------------------------------|----------------------------------------------------------|
+| `imageTag`                | `bitnami/rabbitmq` image tag                            | RabbitMQ image version                                   |
+| `imagePullPolicy`         | Image pull policy                                       | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `rabbitmqUser`            | RabbitMQ application username                           | `user`                                                   |
+| `rabbitmqPassword`        | RabbitMQ application password                           | `bitnami`                                                |
+| `rabbitmqErlangcookie`    | Erlang cookie                                           | `nil`                                                    |
+| `rabbitmqNodeport`        | Node port                                               | `5672`                                                   |
+| `rabbitmqNodetype`        | Node type                                               | `stats`                                                  |
+| `rabbitmqNodename`        | Node name                                               | `rabbit`                                                 |
+| `rabbitmqClusternodename` | Node name to cluster with. e.g.: `clusternode@hostname` | `nil`                                                    |
+| `rabbitmqVhost`           | RabbitMQ application vhost                              | `/`                                                      |
+| `rabbitmqManagerport`     | RabbitMQ Manager port                                   | `15672`                                                  |
 
 The above parameters map to the env variables defined in [bitnami/rabbitmq](http://github.com/bitnami/bitnami-docker-rabbitmq). For more information please refer to the [bitnami/rabbitmq](http://github.com/bitnami/bitnami-docker-rabbitmq) image documentation.
 
@@ -110,7 +110,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: rabbitmq-data
         emptyDir: {}
 ```
 
@@ -118,7 +118,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: rabbitmq-data
         gcePersistentDisk:
           pdName: rabbitmq-data-disk
           fsType: ext4

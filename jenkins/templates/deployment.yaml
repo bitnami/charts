@@ -47,8 +47,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: jenkins-data
           mountPath: /bitnami/jenkins
       volumes:
-      - name: data
+      - name: jenkins-data
         emptyDir: {}

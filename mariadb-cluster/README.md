@@ -60,7 +60,7 @@ The following tables lists the configurable parameters of the MariaDB chart and 
 |------------------------------|--------------------------------------|----------------------------------------------------------|
 | `imageTag`                   | `bitnami/mariadb` image tag          | MariaDB image version                                    |
 | `imagePullPolicy`            | Image pull policy                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `replicasCount`              | Desired number of MariaDB slave Pods | `nil`                                                    |
+| `replicasCount`              | Desired number of MariaDB slave pods | `nil`                                                    |
 | `mariadbRootPassword`        | MariaDB admin password               | `nil`                                                    |
 | `mariadbUser`                | MariaDB user                         | `nil`                                                    |
 | `mariadbPassword`            | MariaDB password                     | `nil`                                                    |
@@ -112,7 +112,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: mariadb-master-data
         emptyDir: {}
 ```
 
@@ -120,7 +120,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: mariadb-master-data
         gcePersistentDisk:
           pdName: mariadb-data-disk
           fsType: ext4

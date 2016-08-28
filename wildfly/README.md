@@ -52,12 +52,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Wildfly chart and their default values.
 
-|     Parameter     |            Description            |                         Default                          |
-|-------------------|-----------------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/wildfly` image tag.      | Wildfly image version                                    |
-| `imagePullPolicy` | Image pull policy.                | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `wildflyUser`     | Username for the management user. | `user`                                                   |
-| `wildflyPassword` | Password for the management user. | `nil`                                                    |
+|     Parameter     |         Description         |                         Default                         |
+|-------------------|-----------------------------|---------------------------------------------------------|
+| `imageTag`        | `bitnami/wildfly` image tag | Wildfly image version                                   |
+| `imagePullPolicy` | Image pull policy           | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `wildflyUser`     | Admin user                  | `user`                                                  |
+| `wildflyPassword` | Admin password              | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
@@ -103,7 +103,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: wildfly-data
         emptyDir: {}
 ```
 
@@ -111,7 +111,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: wildfly-data
         gcePersistentDisk:
           pdName: wildfly-data-disk
           fsType: ext4

@@ -54,23 +54,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the TestLink chart and their default values.
 
-|      Parameter       |          Description          |                         Default                          |
-|----------------------|-------------------------------|----------------------------------------------------------|
-| `imageTag`           | `bitnami/testlink` image tag. | TestLink image version                                   |
-| `imagePullPolicy`    | Image pull policy.            | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `testlinkUsername`   | Admin account username        | `user`                                                   |
-| `testlinkPassword`   | Admin account password.       | `bitnami`                                                |
-| `testlinkEmail`      | Admin account email.          | `user@example.com`                                       |
-| `smtpEnable`         | Enable SMTP                   | `false`                                                  |
-| `smtpConnectionMode` | SMTP connection mode.         | `nil`                                                    |
-| `smtpHost`           | SMTP host.                    | `nil`                                                    |
-| `smtpPort`           | SMTP port.                    | `nil`                                                    |
-| `smtpUser`           | SMTP user.                    | `nil`                                                    |
-| `smtpPassword`       | SMTP password.                | `nil`                                                    |
+|           Parameter           |             Description             |                         Default                         |
+|-------------------------------|-------------------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/testlink` image tag        | TestLink image version                                  |
+| `imagePullPolicy`             | Image pull policy                   | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `testlinkUsername`            | Admin username                      | `user`                                                  |
+| `testlinkPassword`            | Admin user password                 | `bitnami`                                               |
+| `testlinkEmail`               | Admin user email                    | `user@example.com`                                      |
+| `smtpEnable`                  | Enable SMTP                         | `false`                                                 |
+| `smtpHost`                    | SMTP host                           | `nil`                                                   |
+| `smtpPort`                    | SMTP port                           | `nil`                                                   |
+| `smtpUser`                    | SMTP user                           | `nil`                                                   |
+| `smtpPassword`                | SMTP password                       | `nil`                                                   |
+| `smtpConnectionMode`          | SMTP connection mode [`ssl`, `tls`] | `nil`                                                   |
+| `mariadb.mariadbRootPassword` | MariaDB admin password              | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/testlink](http://github.com/bitnami/bitnami-docker-testlink). For more information please refer to the [bitnami/testlink](http://github.com/bitnami/bitnami-docker-testlink) image documentation.
-
-Additionally a password can be specified for the MariaDB `root` user account using the `mariadb.mariadbRootPassword` parameter.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -114,7 +113,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: testlink-data
         emptyDir: {}
 ```
 
@@ -122,7 +121,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: testlink-data
         gcePersistentDisk:
           pdName: testlink-data-disk
           fsType: ext4

@@ -45,8 +45,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: tomcat-data
           mountPath: /bitnami/tomcat
       volumes:
-      - name: data
+      - name: tomcat-data
         emptyDir: {}

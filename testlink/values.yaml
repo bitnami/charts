@@ -9,10 +9,14 @@ imageTag: 1.9.14-r0
 ##
 # imagePullPolicy:
 
-## Admin user credentials
+## Admin username
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
 ##
 # testlinkUsername: user
+
+## Admin user password
+## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
+##
 # testlinkPassword: bitnami
 
 ## Admin user email
@@ -20,7 +24,7 @@ imageTag: 1.9.14-r0
 ##
 # testlinkEmail: user@example.com
 
-## Default UI language
+## Default Language
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
 ##
 # testlinkLanguage: en_US
@@ -29,17 +33,17 @@ imageTag: 1.9.14-r0
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#smtp-configuration
 ##
 # smtpEnable:
-# smtpConnectionMode:
 # smtpHost:
 # smtpPort: 25
 # smtpUser:
 # smtpPassword:
+# smtpConnectionMode:
 
 ##
 ## MariaDB chart configuration
 ##
 # mariadb:
-  ## Specify password for root user
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   # mariadbRootPassword:

@@ -54,26 +54,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Wordpress chart and their default values.
 
-|      Parameter       |                         Description                         |                         Default                          |
-|----------------------|-------------------------------------------------------------|----------------------------------------------------------|
-| `imageTag`           | `bitnami/wordpress` image tag                               | Wordpress image version                                  |
-| `imagePullPolicy`    | Image pull policy                                           | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `wordpressUsername`  | User of the application                                     | `user`                                                   |
-| `wordpressPassword`  | Application password                                        | `bitnami`                                                |
-| `wordpressEmail`     | Admin email                                                 | `user@example.com`                                       |
-| `wordpressFirstName` | First name                                                  | `FirstName`                                              |
-| `wordpressLastName`  | Last name                                                   | `LastName`                                               |
-| `wordpressBlogName`  | Blog name                                                   | `User's Blog!`                                           |
-| `smtpHost`           | Host for outgoing SMTP email                                | `nil`                                                    |
-| `smtpPort`           | Port for outgoing SMTP email                                | `nil`                                                    |
-| `smtpUser`           | User of SMTP used for authentication (likely email)         | `nil`                                                    |
-| `smtpUsername`       | User name for SMTP emails                                   | `nil`                                                    |
-| `smtpPassword`       | Password for SMTP                                           | `nil`                                                    |
-| `smtpProtocol`       | Secure connection protocol to use for SMTP [tls, ssl, none] | `nil`                                                    |
+|           Parameter           |          Description          |                         Default                          |
+|-------------------------------|-------------------------------|----------------------------------------------------------|
+| `imageTag`                    | `bitnami/wordpress` image tag | Wordpress image version                                  |
+| `imagePullPolicy`             | Image pull policy             | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `wordpressUsername`           | User of the application       | `user`                                                   |
+| `wordpressPassword`           | Application password          | `bitnami`                                                |
+| `wordpressEmail`              | Admin email                   | `user@example.com`                                       |
+| `wordpressFirstName`          | First name                    | `FirstName`                                              |
+| `wordpressLastName`           | Last name                     | `LastName`                                               |
+| `wordpressBlogName`           | Blog name                     | `User's Blog!`                                           |
+| `smtpHost`                    | SMTP host                     | `nil`                                                    |
+| `smtpPort`                    | SMTP port                     | `nil`                                                    |
+| `smtpUser`                    | SMTP user                     | `nil`                                                    |
+| `smtpPassword`                | SMTP password                 | `nil`                                                    |
+| `smtpUsername`                | User name for SMTP emails     | `nil`                                                    |
+| `smtpProtocol`                | SMTP protocol [`tls`, `ssl`]  | `nil`                                                    |
+| `mariadb.mariadbRootPassword` | MariaDB admin password        | `nil`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress) image documentation.
-
-Additionally a password can be specified for the MariaDB `root` user account using the `mariadb.mariadbRootPassword` parameter.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -117,7 +116,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: wordpress-data
         emptyDir: {}
 ```
 
@@ -125,7 +124,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: wordpress-data
         gcePersistentDisk:
           pdName: wordpress-data-disk
           fsType: ext4

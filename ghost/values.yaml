@@ -9,7 +9,7 @@ imageTag: 0.9.0-r0
 ##
 # imagePullPolicy:
 
-## Ghost host to create application URLs. It can be either an IP or a domain.
+## Ghost host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-ghost#configuration
 ##
 # ghostHost:
@@ -28,6 +28,10 @@ imageTag: 0.9.0-r0
 ## ref: https://github.com/bitnami/bitnami-docker-ghost#configuration
 ##
 # ghostUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-ghost#configuration
+##
 # ghostPassword: bitnami1
 
 ## Admin email
@@ -53,7 +57,7 @@ imageTag: 0.9.0-r0
 ## MariaDB chart configuration
 ##
 # mariadb:
-  ## Specify password for root user
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   # mariadbRootPassword:

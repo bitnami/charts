@@ -52,13 +52,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the PostgreSQL chart and their default values.
 
-|     Parameter      |           Description            |                         Default                          |
-|--------------------|----------------------------------|----------------------------------------------------------|
-| `imageTag`         | `bitnami/postgresql` image tag.  | PostgreSQL image version                                 |
-| `imagePullPolicy`  | Image pull policy.               | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `postgresUser`     | Username of new user to create.  | `postgres`                                                    |
-| `postgresPassword` | Password for the new user.       | `nil`                                                    |
-| `postgresDb`       | Name for new database to create. | `nil`                                                    |
+|     Parameter      |          Description           |                         Default                         |
+|--------------------|--------------------------------|---------------------------------------------------------|
+| `imageTag`         | `bitnami/postgresql` image tag | PostgreSQL image version                                |
+| `imagePullPolicy`  | Image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `postgresUser`     | PostgreSQL admin user          | `postgres`                                              |
+| `postgresPassword` | Ppstgresql password            | `nil`                                                   |
+| `postgresDb`       | Database to create             | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/postgresql](http://github.com/bitnami/bitnami-docker-postgresql). For more information please refer to the [bitnami/postgresql](http://github.com/bitnami/bitnami-docker-postgresql) image documentation.
 
@@ -104,7 +104,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: postgresql-data
         emptyDir: {}
 ```
 
@@ -112,7 +112,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: postgresql-data
         gcePersistentDisk:
           pdName: postgresql-data-disk
           fsType: ext4

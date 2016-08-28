@@ -1,27 +1,30 @@
 ## Bitnami MongoDB image version
 ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
 ##
-## Default: none
 imageTag: 3.2.7-r2
 
 ## Specify a imagePullPolicy
-## Default to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 # imagePullPolicy:
 
-## Specify password for root user
+## MongoDB admin password
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
 ##
 # mongodbRootPassword:
 
-## Create a database user
+## MongoDB custom user
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
 ##
 # mongodbUser:
+
+## MongoDB custom user password
+## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+##
 # mongodbPassword:
 
-## Create a database
+## Database to create
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
 ##
 # mongodbDatabase:

@@ -1,74 +1,133 @@
 # Joomla
 
-> Joomla is a PHP content management system (CMS) for publishing web content. It includes features such as page caching, RSS feeds, printable versions of pages, news flashes, blogs, search, and support for language international.
+[Joomla](http://www.joomla.org/) is a PHP content management system (CMS) for publishing web content. It includes features such as page caching, RSS feeds, printable versions of pages, news flashes, blogs, search, and support for language international.
 
-Based on the [Bitnami Joomla](https://github.com/bitnami/bitnami-docker-joomla) image for docker, this Chart bootstraps a [Joomla](https://joomla.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+## TL;DR;
 
-## Dependencies
+```bash
+$ helm install joomla-x.x.x.tgz
+```
 
-The Joomla Chart requires the [Bitnami MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
+## Introduction
 
-Please refer to the [README](https://github.com/bitnami/charts/tree/master/mariadb) of the Bitnami MariaDB Chart for deployment instructions.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-## Persistence
+This chart bootstraps a [Joomla](https://github.com/bitnami/bitnami-docker-joomla) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-> *You may skip this section if your only interested in testing the Joomla Chart and have not yet made the decision to use it for your production workloads.*
+It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the Joomla application.
 
-For persistence of the Joomla configuration and user file uploads, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/joomla` path of the Joomla pod.
+## Get this chart
 
-By default the Joomla Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+Download the latest release of the chart from the [releases](../../../releases) page.
+
+Alternatively, clone the repo if you wish to use the development snapshot:
+
+```bash
+$ git clone https://github.com/bitnami/charts.git
+```
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```bash
+$ helm install --name my-release joomla-x.x.x.tgz
+```
+
+*Replace the `x.x.x` placeholder with the chart release version.*
+
+The command deploys Joomla on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```bash
+$ helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-To edit the default Joomla configuration, run
+The following tables lists the configurable parameters of the Joomla chart and their default values.
+
+|           Parameter           |         Description          |                         Default                          |
+|-------------------------------|------------------------------|----------------------------------------------------------|
+| `imageTag`                    | `bitnami/joomla` image tag   | Joomla image version                                     |
+| `imagePullPolicy`             | Image pull policy            | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `joomlaUser`                  | User of the application      | `user`                                                   |
+| `joomlaPassword`              | Application password         | `bitnami`                                                |
+| `joomlaEmail`                 | Admin email                  | `user@example.com`                                       |
+| `smtpHost`                    | SMTP host                    | `nil`                                                    |
+| `smtpPort`                    | SMTP port                    | `nil`                                                    |
+| `smtpUser`                    | SMTP user                    | `nil`                                                    |
+| `smtpPassword`                | SMTP password                | `nil`                                                    |
+| `smtpProtocol`                | SMTP protocol [`tls`, `ssl`] | `tls`                                                    |
+| `mariadb.mariadbRootPassword` | MariaDB admin password       | `nil`                                                    |
+
+The above parameters map to the env variables defined in [bitnami/joomla](http://github.com/bitnami/bitnami-docker-joomla). For more information please refer to the [bitnami/joomla](http://github.com/bitnami/bitnami-docker-joomla) image documentation.
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helmc edit joomla
+$ helm install --name my-release \
+  --set joomlaUser=admin,joomlaPassword=password,mariadb.mariadbRootPassword=secretpassword \
+    joomla-x.x.x.tgz
 ```
 
-Here you can update the Joomla admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
+The above command sets the Joomla application username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
 
-Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-joomla/#environment-variables) section of the [Bitnami Joomla](https://github.com/bitnami/bitnami-docker-joomla) image for the default values.
-
-The values of `joomlaUser` and `joomlaPassword` are the login credentials when you [access the Joomla instance](#access-your-joomla-application).
-
-Finally, generate the chart to apply your changes to the configuration.
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helmc generate --force joomla
+$ helm install --name my-release -f values.yaml joomla-x.x.x.tgz
 ```
 
-## Access your Joomla application
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
-You should now be able to access the application using the external IP configured for the Joomla service.
+## Persistence
 
-> Note:
+The [Bitnami Joomla](https://github.com/bitnami/bitnami-docker-joomla) image stores the Joomla data and configurations at the `/bitnami/joomla` path of the container.
+
+As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
+
+> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
+
+For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
+
+### Step 1: Create a persistent disk
+
+You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
+
+```bash
+$ gcloud compute disks create --size=500GB --zone=us-central1-a joomla-data-disk
+```
+
+### Step 2: Update `templates/deployment.yaml`
+
+Replace:
+
+```yaml
+      volumes:
+      - name: joomla-data
+        emptyDir: {}
+```
+
+with
+
+```yaml
+      volumes:
+      - name: joomla-data
+        gcePersistentDisk:
+          pdName: joomla-data-disk
+          fsType: ext4
+```
+
+> **Note**:
 >
-> On GKE, the service will automatically configure a firewall rule so that the Joomla instance is accessible from the internet, for which you will be charged additionally.
->
-> On other cloud platforms you may have to setup a firewall rule manually. Please refer your cloud providers documentation.
+> You should also use a persistent storage volume for the MariaDB deployment.
 
-Get the external IP address of your Joomla instance using:
-
-```bash
-$ kubectl get services joomla
-NAME      CLUSTER_IP      EXTERNAL_IP       PORT(S)         SELECTOR      AGE
-joomla    10.63.246.116   146.148.20.117    80/TCP,443/TCP  app=joomla    15m
-```
-
-Access your Joomla deployment using the IP address listed under the `EXTERNAL_IP` column.
-
-The default credentials are:
-
- - Username: `user`
- - Password: `bitnami`
-
-## Cleanup
-
-To delete the Joomla deployment completely:
-
-```bash
-$ helmc uninstall -n default joomla
-```
-
-Additionally you may want to [Cleanup the MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb#cleanup)
+[Install](#installing-the-chart) the chart after making these changes.

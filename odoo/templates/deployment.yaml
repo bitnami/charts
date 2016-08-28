@@ -67,8 +67,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: odoo-data
           mountPath: /bitnami/odoo
       volumes:
-      - name: data
+      - name: odoo-data
         emptyDir: {}

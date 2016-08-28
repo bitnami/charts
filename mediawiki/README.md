@@ -54,23 +54,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the MediaWiki chart and their default values.
 
-|      Parameter      |          Description           |                         Default                          |
-|---------------------|--------------------------------|----------------------------------------------------------|
-| `imageTag`          | `bitnami/mediawiki` image tag. | MediaWiki image version                                  |
-| `imagePullPolicy`   | Image pull policy.             | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `mediawikiUser`     | Admin account username         | `user`                                                   |
-| `mediawikiPassword` | Admin account password.        | `bitnami`                                                |
-| `mediawikiEmail`    | Admin account email.           | `user@example.com`                                       |
-| `mediawikiName`     | Wiki title.                    | `Bitnami MediaWiki`                                      |
-| `smtpHost`          | SMTP host.                     | `nil`                                                    |
-| `smtpPort`          | SMTP port.                     | `nil`                                                    |
-| `smtpHostID`        | SMTP host ID.                  | `nil`                                                    |
-| `smtpUser`          | SMTP user.                     | `nil`                                                    |
-| `smtpPassword`      | SMTP password.                 | `nil`                                                    |
+|           Parameter           |          Description          |                         Default                         |
+|-------------------------------|-------------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/mediawiki` image tag | MediaWiki image version                                 |
+| `imagePullPolicy`             | Image pull policy             | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `mediawikiUser`               | User of the application       | `user`                                                  |
+| `mediawikiPassword`           | Application password          | `bitnami`                                               |
+| `mediawikiEmail`              | Admin email                   | `user@example.com`                                      |
+| `mediawikiName`               | Name for the wiki             | `Bitnami MediaWiki`                                     |
+| `smtpHost`                    | SMTP host                     | `nil`                                                   |
+| `smtpPort`                    | SMTP port                     | `nil`                                                   |
+| `smtpHostID`                  | SMTP host ID                  | `nil`                                                   |
+| `smtpUser`                    | SMTP user                     | `nil`                                                   |
+| `smtpPassword`                | SMTP password                 | `nil`                                                   |
+| `mariadb.mariadbRootPassword` | MariaDB admin password        | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki) image documentation.
-
-Additionally a password can be specified for the MariaDB `root` user account using the `mariadb.mariadbRootPassword` parameter.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -114,7 +113,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: mediawiki-data
         emptyDir: {}
 ```
 
@@ -122,7 +121,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: mediawiki-data
         gcePersistentDisk:
           pdName: mediawiki-data-disk
           fsType: ext4

@@ -9,8 +9,12 @@ imageTag: 2.17-r0
 ##
 # imagePullPolicy:
 
-## Admin username and password
+## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-jenkins#configuration
 ##
 # jenkinsUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-jenkins#configuration
+##
 # jenkinsPassword: bitnami

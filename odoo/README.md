@@ -56,21 +56,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Odoo chart and their default values.
 
-|     Parameter     |        Description        |                         Default                          |
-|-------------------|---------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/odoo` image tag. | Odoo image version                                       |
-| `imagePullPolicy` | Image pull policy.        | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `odooPassword`    | Admin account password.   | `bitnami`                                                |
-| `odooEmail`       | Admin account email.      | `user@example.com`                                       |
-| `smtpHost`        | SMTP host.                | `nil`                                                    |
-| `smtpPort`        | SMTP port.                | `nil`                                                    |
-| `smtpUser`        | SMTP user.                | `nil`                                                    |
-| `smtpPassword`    | SMTP password.            | `nil`                                                    |
-| `smtpProtocol`    | SMTP protocol.            | `nil`                                                    |
+|           Parameter           |         Description          |                         Default                         |
+|-------------------------------|------------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/odoo` image tag     | Odoo image version                                      |
+| `imagePullPolicy`             | Image pull policy            | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `odooPassword`                | Admin account password       | `bitnami`                                               |
+| `odooEmail`                   | Admin account email          | `user@example.com`                                      |
+| `smtpHost`                    | SMTP host                    | `nil`                                                   |
+| `smtpPort`                    | SMTP port                    | `nil`                                                   |
+| `smtpUser`                    | SMTP user                    | `nil`                                                   |
+| `smtpPassword`                | SMTP password                | `nil`                                                   |
+| `smtpProtocol`                | SMTP protocol [`ssl`, `tls`] | `nil`                                                   |
+| `postgresql.postgresPassword` | PostgreSQL password          | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo) image documentation.
-
-Additionally a password can be specified for the PostgreSQL `root` user account using the `postgresql.postgresPassword` parameter.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -114,7 +113,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: odoo-data
         emptyDir: {}
 ```
 
@@ -122,7 +121,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: odoo-data
         gcePersistentDisk:
           pdName: odoo-data-disk
           fsType: ext4

@@ -54,23 +54,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Redmine chart and their default values.
 
-|     Parameter     |          Description          |                         Default                          |
-|-------------------|-------------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/redmine` image tag.  | Redmine image version                                    |
-| `imagePullPolicy` | Image pull policy.            | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `redmineUser`     | Admin account username        | `user`                                                   |
-| `redminePassword` | Admin account password.       | `bitnami`                                                |
-| `redmineEmail`    | Admin account email.          | `user@example.com`                                       |
-| `redmineLanguage` | Application default language. | `en`                                                     |
-| `smtpHost`        | SMTP host.                    | `nil`                                                    |
-| `smtpPort`        | SMTP port.                    | `nil`                                                    |
-| `smtpUser`        | SMTP user.                    | `nil`                                                    |
-| `smtpPassword`    | SMTP password.                | `nil`                                                    |
-| `smtpTls`         | Use TLS encryption with SMTP. | `true`                                                   |
+|           Parameter           |          Description          |                         Default                         |
+|-------------------------------|-------------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/redmine` image tag   | Redmine image version                                   |
+| `imagePullPolicy`             | Image pull policy             | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `redmineUser`                 | User of the application       | `user`                                                  |
+| `redminePassword`             | Application password          | `bitnami`                                               |
+| `redmineEmail`                | Admin email                   | `user@example.com`                                      |
+| `redmineLanguage`             | Redmine default data language | `en`                                                    |
+| `smtpHost`                    | SMTP host                     | `nil`                                                   |
+| `smtpPort`                    | SMTP port                     | `nil`                                                   |
+| `smtpUser`                    | SMTP user                     | `nil`                                                   |
+| `smtpPassword`                | SMTP password                 | `nil`                                                   |
+| `smtpTls`                     | Use TLS encryption with SMTP  | `nil`                                                   |
+| `mariadb.mariadbRootPassword` | MariaDB admin password        | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
-
-Additionally a password can be specified for the MariaDB `root` user account using the `mariadb.mariadbRootPassword` parameter.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -114,7 +113,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: redmine-data
         emptyDir: {}
 ```
 
@@ -122,7 +121,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: redmine-data
         gcePersistentDisk:
           pdName: redmine-data-disk
           fsType: ext4

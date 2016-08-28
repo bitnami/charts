@@ -45,8 +45,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: redis-data
           mountPath: /bitnami/redis
       volumes:
-      - name: data
+      - name: redis-data
         emptyDir: {}

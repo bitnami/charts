@@ -54,26 +54,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Phabricator chart and their default values.
 
-|          Parameter          |                  Description                   |                         Default                          |
-|-----------------------------|------------------------------------------------|----------------------------------------------------------|
-| `imageTag`                  | `bitnami/phabricator` image tag.               | Phabricator image version                                |
-| `imagePullPolicy`           | Image pull policy.                             | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `phabricatorHost`           | Host that will be used to create internal URLS | `nil`                                                    |
-| `phabricatorLoadBalancerIP` | `loadBalancerIP` for the Phabricator Service   | `nil`                                                    |
-| `phabricatorUsername`       | User of the application                        | `user`                                                   |
-| `phabricatorPassword`       | Application password                           | `bitnami`                                                |
-| `phabricatorEmail`          | Admin email                                    | `user@example.com`                                       |
-| `phabricatorFirstName`      | First name                                     | `First Name`                                             |
-| `phabricatorLastName`       | Last name                                      | `Last Name`                                              |
-| `smtpHost`                  | Host for outgoing SMTP email                   | `nil`                                                    |
-| `smtpPort`                  | Port for outgoing SMTP email                   | `nil`                                                    |
-| `smtpUser`                  | User of SMTP used for authentication           | `nil`                                                    |
-| `smtpPassword`              | Password for SMTP                              | `nil`                                                    |
-| `smtpProtocol`              | Secure connection protocol to use for SMTP     | `nil`                                                    |
+|           Parameter           |                 Description                  |                         Default                          |
+|-------------------------------|----------------------------------------------|----------------------------------------------------------|
+| `imageTag`                    | `bitnami/phabricator` image tag.             | Phabricator image version                                |
+| `imagePullPolicy`             | Image pull policy.                           | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `phabricatorHost`             | Phabricator host to create application URLs  | `nil`                                                    |
+| `phabricatorLoadBalancerIP`   | `loadBalancerIP` for the Phabricator Service | `nil`                                                    |
+| `phabricatorUsername`         | User of the application                      | `user`                                                   |
+| `phabricatorPassword`         | Application password                         | `bitnami`                                                |
+| `phabricatorEmail`            | Admin email                                  | `user@example.com`                                       |
+| `phabricatorFirstName`        | First name                                   | `First Name`                                             |
+| `phabricatorLastName`         | Last name                                    | `Last Name`                                              |
+| `smtpHost`                    | SMTP host                                    | `nil`                                                    |
+| `smtpPort`                    | SMTP port                                    | `nil`                                                    |
+| `smtpUser`                    | SMTP user                                    | `nil`                                                    |
+| `smtpPassword`                | SMTP password                                | `nil`                                                    |
+| `smtpProtocol`                | SMTP protocol [`ssl`, `tls`]                 | `nil`                                                    |
+| `mariadb.mariadbRootPassword` | MariaDB admin password                       | `nil`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/phabricator](http://github.com/bitnami/bitnami-docker-phabricator). For more information please refer to the [bitnami/phabricator](http://github.com/bitnami/bitnami-docker-phabricator) image documentation.
-
-Additionally a password can be specified for the MariaDB `root` user account using the `mariadb.mariadbRootPassword` parameter.
 
 > **Note**:
 >
@@ -131,7 +130,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: phabricator-data
         emptyDir: {}
 ```
 
@@ -139,7 +138,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: phabricator-data
         gcePersistentDisk:
           pdName: phabricator-data-disk
           fsType: ext4

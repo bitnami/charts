@@ -9,7 +9,7 @@ imageTag: 2016.31-r0
 ##
 # imagePullPolicy:
 
-## Phabricator host to create application URLs. It can be either an IP or a domain.
+## Phabricator host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
 ##
 # phabricatorHost:
@@ -23,6 +23,10 @@ imageTag: 2016.31-r0
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
 ##
 # phabricatorUsername: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
+##
 # phabricatorPassword: bitnami1
 
 ## Admin email
@@ -30,10 +34,14 @@ imageTag: 2016.31-r0
 ##
 # phabricatorEmail: user@example.com
 
-## Admin users first and last name
+## First name
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#environment-variables
 ##
 # phabricatorFirstName: First Name
+
+## Last name
+## ref: https://github.com/bitnami/bitnami-docker-phabricator#environment-variables
+##
 # phabricatorLastName: Last Name
 
 ## SMTP mail delivery configuration
@@ -49,7 +57,7 @@ imageTag: 2016.31-r0
 ## MariaDB chart configuration
 ##
 # mariadb:
-  ## Specify password for root user
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   # mariadbRootPassword:

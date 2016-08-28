@@ -39,8 +39,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: apache-data
           mountPath: /bitnami/apache
       volumes:
-      - name: data
+      - name: apache-data
         emptyDir: {}

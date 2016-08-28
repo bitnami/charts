@@ -52,12 +52,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Tomcat chart and their default values.
 
-|     Parameter     |            Description            |                         Default                          |
-|-------------------|-----------------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/tomcat` image tag.       | Tomcat image version                                     |
-| `imagePullPolicy` | Image pull policy.                | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `tomcatUser`      | Username for the management user. | `user`                                                   |
-| `tomcatPassword`  | Password for the management user. | `nil`                                                    |
+|     Parameter     |        Description         |                         Default                         |
+|-------------------|----------------------------|---------------------------------------------------------|
+| `imageTag`        | `bitnami/tomcat` image tag | Tomcat image version                                    |
+| `imagePullPolicy` | Image pull policy          | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `tomcatUser`      | Admin user                 | `user`                                                  |
+| `tomcatPassword`  | Admin password             | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
@@ -103,7 +103,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: tomcat-data
         emptyDir: {}
 ```
 
@@ -111,7 +111,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: tomcat-data
         gcePersistentDisk:
           pdName: tomcat-data-disk
           fsType: ext4

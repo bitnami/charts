@@ -65,8 +65,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: data
+        - name: mariadb-master-data
           mountPath: /bitnami/mariadb
       volumes:
-      - name: data
+      - name: mariadb-master-data
         emptyDir: {}

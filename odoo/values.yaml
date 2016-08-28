@@ -9,12 +9,12 @@ imageTag: 9.0.20160620-r1
 ##
 # imagePullPolicy:
 
-## Admin user email
+## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
 ##
 # odooEmail: user@example.com
 
-## Admin password
+## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
 ##
 # odooPassword: bitnami
@@ -32,7 +32,7 @@ imageTag: 9.0.20160620-r1
 ## PostgreSQL chart configuration
 ##
 # postgresql:
-  ## Specify password for postgres user
+  ## PostgreSQL Password
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql#setting-the-root-password-on-first-run
   ##
   # postgresPassword:

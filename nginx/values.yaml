@@ -1,11 +1,10 @@
 ## Bitnami NGINX image version
 ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
 ##
-## Default: none
 imageTag: 1.10.1-r1
 
 ## Specify a imagePullPolicy
-## Default to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 # imagePullPolicy:

@@ -9,18 +9,22 @@ imageTag: 1.27.0-r0
 ##
 # imagePullPolicy:
 
-## Admin user credentials
+## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 # mediawikiUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
+##
 # mediawikiPassword: bitnami1
 
-## Admin user email
+## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 # mediawikiEmail: user@example.com
 
-## Wiki Title
+## Name for the wiki
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 # mediawikiName: Bitnami MediaWiki
@@ -29,7 +33,7 @@ imageTag: 1.27.0-r0
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#smtp-configuration
 ##
 # smtpHost:
-# smtpPort: 25
+# smtpPort:
 # smtpHostID:
 # smtpUser:
 # smtpPassword:
@@ -38,7 +42,7 @@ imageTag: 1.27.0-r0
 ## MariaDB chart configuration
 ##
 # mariadb:
-  ## Specify password for root user
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   # mariadbRootPassword:

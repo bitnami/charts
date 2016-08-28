@@ -52,11 +52,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Redis chart and their default values.
 
-|     Parameter     |           Description            |                         Default                          |
-|-------------------|----------------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/redis` image tag.       | Redis image version                                      |
-| `imagePullPolicy` | Image pull policy.               | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `redisPassword`   | Server password.                 | `nil`                                                    |
+|     Parameter     |        Description        |                         Default                         |
+|-------------------|---------------------------|---------------------------------------------------------|
+| `imageTag`        | `bitnami/redis` image tag | Redis image version                                     |
+| `imagePullPolicy` | Image pull policy         | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `redisPassword`   | Redis password            | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/redis](http://github.com/bitnami/bitnami-docker-redis). For more information please refer to the [bitnami/redis](http://github.com/bitnami/bitnami-docker-redis) image documentation.
 
@@ -102,7 +102,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: data
+      - name: redis-data
         emptyDir: {}
 ```
 
@@ -110,7 +110,7 @@ with
 
 ```yaml
       volumes:
-      - name: data
+      - name: redis-data
         gcePersistentDisk:
           pdName: redis-data-disk
           fsType: ext4
