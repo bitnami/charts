@@ -1,10 +1,14 @@
 name: mongodb
-home: https://mongodb.org
-source:
-- https://github.com/bitnami/bitnami-docker-mongodb
-version: 0.2.1
+version: 0.3.0
 description: Chart for MongoDB
+keywords:
+- mongodb
+- database
+- nosql
+home: https://mongodb.org
+sources:
+- https://github.com/bitnami/bitnami-docker-mongodb
 maintainers:
-- Bitnami <containers@bitnami.com>
-details: |-
-  MongoDB is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

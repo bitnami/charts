@@ -1,10 +1,17 @@
 name: jenkins
-home: https://jenkins.io/
-source:
-- https://github.com/bitnami/bitnami-docker-jenkins
-version: 0.2.1
+version: 0.3.0
 description: The leading open source automation server
+keywords:
+- jenkins
+- ci
+- cd
+- http
+- web
+- application
+home: https://jenkins.io/
+sources:
+- https://github.com/bitnami/bitnami-docker-jenkins
 maintainers:
-- Bitnami <containers@bitnami.com>
-details: |-
-  Joomla is the leading open source automation server
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

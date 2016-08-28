@@ -1,8 +1,0 @@
-joomlaUser = "user"
-joomlaPassword = "bitnami"
-joomlaEmail = "user@example.com"
-smtpHost = ""
-smtpUser = ""
-smtpPassword = ""
-smtpPort = ""
-smtpProtocol = ""

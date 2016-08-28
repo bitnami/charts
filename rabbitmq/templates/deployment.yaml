@@ -1,0 +1,77 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "bitnami/rabbitmq:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        env:
+        - name: RABBITMQ_USERNAME
+          value: {{ default "" .Values.rabbitmqUsername | quote }}
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: rabbitmq-password
+        - name: RABBITMQ_ERLANGCOOKIE
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: rabbitmq-erlangcookie
+        - name: RABBITMQ_NODEPORT
+          value: {{ default "" .Values.rabbitmqNodeport | quote }}
+        - name: RABBITMQ_NODETYPE
+          value: {{ default "" .Values.rabbitmqNodetype | quote }}
+        - name: RABBITMQ_NODENAME
+          value: {{ default "" .Values.rabbitmqNodename | quote }}
+        - name: RABBITMQ_CLUSTERNODENAME
+          value: {{ default "" .Values.rabbitmqClusternodename | quote }}
+        - name: RABBITMQ_VHOST
+          value: {{ default "" .Values.rabbitmqVhost | quote }}
+        - name: RABBITMQ_MANAGERPORT
+          value: {{ default "" .Values.rabbitmqManagerport | quote }}
+        ports:
+        - name: epmd
+          containerPort: 4369
+        - name: ampq
+          containerPort: {{ default "5672" .Values.rabbitmqNodeport }}
+        - name: dist
+          containerPort: {{ default "5672" .Values.rabbitmqNodeport | add 20000 }}
+        - name: stats
+          containerPort: {{ default "15672" .Values.rabbitmqManagerport }}
+        livenessProbe:
+          exec:
+            command:
+            - rabbitmqctl
+            - status
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - rabbitmqctl
+            - status
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /bitnami/rabbitmq
+      volumes:
+      - name: rabbitmq-data
+        emptyDir: {}

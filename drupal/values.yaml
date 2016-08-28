@@ -1,0 +1,34 @@
+## Bitnami Drupal image version
+## ref: https://hub.docker.com/r/bitnami/drupal/tags/
+##
+imageTag: 8.1.8-r1
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
+##
+# drupalUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
+##
+# drupalPassword: bitnami
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
+##
+# drupalEmail: user@example.com
+
+##
+## MariaDB chart configuration
+##
+# mariadb:
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:

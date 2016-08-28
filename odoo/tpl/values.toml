@@ -1,7 +1,0 @@
-odooEmail = "user@example.com"
-odooPassword = "bitnami"
-smtpHost = ""
-smtpPort = ""
-smtpUser = ""
-smtpPassword = ""
-smtpProtocol = ""

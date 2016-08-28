@@ -1,10 +1,17 @@
 name: mariadb-cluster
-home: https://mariadb.org
-source:
-- https://github.com/bitnami/bitnami-docker-mariadb
-version: 0.2.1
+version: 0.3.0
 description: Chart to create a Highly available MariaDB cluster
+keywords:
+- mariadb
+- mysql
+- database
+- sql
+- cluster
+- high availablity
+home: https://mariadb.org
+sources:
+- https://github.com/bitnami/bitnami-docker-mariadb
 maintainers:
-- Bitnami <containers@bitnami.com>
-details: |-
-  MariaDB is a fast, reliable, scalable, and easy to use open-source relational database system. MariaDB Server is intended for mission-critical, heavy-load production systems as well as for embedding into mass-deployed software.
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

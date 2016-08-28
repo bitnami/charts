@@ -1,74 +1,134 @@
 # MediaWiki
 
-> MediaWiki is an extremely powerful, scalable software and a feature-rich wiki implementation that uses PHP to process and display data stored in a database, such as MySQL.
+[MediaWiki](https://www.mediawiki.org) is an extremely powerful, scalable software and a feature-rich wiki implementation that uses PHP to process and display data stored in a database, such as MySQL.
 
-Based on the [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image for docker, this Chart bootstraps a [MediaWiki](https://mediawiki.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+## TL;DR;
 
-## Dependencies
+```bash
+$ helm install mediawiki-x.x.x.tgz
+```
 
-The MediaWiki Chart requires the [Bitnami MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
+## Introduction
 
-Please refer to the [README](https://github.com/bitnami/charts/tree/master/mariadb) of the Bitnami MariaDB Chart for deployment instructions.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-## Persistence
+This chart bootstraps a [MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-> *You may skip this section if your only interested in testing the MediaWiki Chart and have not yet made the decision to use it for your production workloads.*
+It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the MediaWiki application.
 
-For persistence of the MediaWiki configuration and user file uploads, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/mediawiki` path of the MediaWiki pod.
+## Get this chart
 
-By default the MediaWiki Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+Download the latest release of the chart from the [releases](../../../releases) page.
+
+Alternatively, clone the repo if you wish to use the development snapshot:
+
+```bash
+$ git clone https://github.com/bitnami/charts.git
+```
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```bash
+$ helm install --name my-release mediawiki-x.x.x.tgz
+```
+
+*Replace the `x.x.x` placeholder with the chart release version.*
+
+The command deploys MediaWiki on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```bash
+$ helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-To edit the default MediaWiki configuration, run
+The following tables lists the configurable parameters of the MediaWiki chart and their default values.
+
+|           Parameter           |          Description          |                         Default                         |
+|-------------------------------|-------------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/mediawiki` image tag | MediaWiki image version                                 |
+| `imagePullPolicy`             | Image pull policy             | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `mediawikiUser`               | User of the application       | `user`                                                  |
+| `mediawikiPassword`           | Application password          | `bitnami`                                               |
+| `mediawikiEmail`              | Admin email                   | `user@example.com`                                      |
+| `mediawikiName`               | Name for the wiki             | `Bitnami MediaWiki`                                     |
+| `smtpHost`                    | SMTP host                     | `nil`                                                   |
+| `smtpPort`                    | SMTP port                     | `nil`                                                   |
+| `smtpHostID`                  | SMTP host ID                  | `nil`                                                   |
+| `smtpUser`                    | SMTP user                     | `nil`                                                   |
+| `smtpPassword`                | SMTP password                 | `nil`                                                   |
+| `mariadb.mariadbRootPassword` | MariaDB admin password        | `nil`                                                   |
+
+The above parameters map to the env variables defined in [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki) image documentation.
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helmc edit mediawiki
+$ helm install --name my-release \
+  --set mediawikiUser=admin,mediawikiPassword=password,mariadb.mariadbRootPassword=secretpassword \
+    mediawiki-x.x.x.tgz
 ```
 
-Here you can update the MediaWiki admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
+The above command sets the MediaWiki administrator account username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
 
-Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-mediawiki/#environment-variables) section of the [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image for the default values.
-
-The values of `mediawikiUser` and `mediawikiPassword` are the login credentials when you [access the MediaWiki instance](#access-your-mediawiki-application).
-
-Finally, generate the chart to apply your changes to the configuration.
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helmc generate --force mediawiki
+$ helm install --name my-release -f values.yaml mediawiki-x.x.x.tgz
 ```
 
-## Access your MediaWiki application
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
-You should now be able to access the application using the external IP configured for the MediaWiki service.
+## Persistence
 
-> Note:
+The [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image stores the MediaWiki data and configurations at the `/bitnami/mediawiki` path of the container.
+
+As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
+
+> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
+
+For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
+
+### Step 1: Create a persistent disk
+
+You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
+
+```bash
+$ gcloud compute disks create --size=500GB --zone=us-central1-a mediawiki-data-disk
+```
+
+### Step 2: Update `templates/deployment.yaml`
+
+Replace:
+
+```yaml
+      volumes:
+      - name: mediawiki-data
+        emptyDir: {}
+```
+
+with
+
+```yaml
+      volumes:
+      - name: mediawiki-data
+        gcePersistentDisk:
+          pdName: mediawiki-data-disk
+          fsType: ext4
+```
+
+> **Note**:
 >
-> On GKE, the service will automatically configure a firewall rule so that the MediaWiki instance is accessible from the internet, for which you will be charged additionally.
->
-> On other cloud platforms you may have to setup a firewall rule manually. Please refer your cloud providers documentation.
+> You should also use a persistent storage volume for the MariaDB deployment.
 
-Get the external IP address of your MediaWiki instance using:
-
-```bash
-$ kubectl get services mediawiki
-NAME         CLUSTER_IP      EXTERNAL_IP       PORT(S)         SELECTOR         AGE
-mediawiki    10.63.246.116   146.148.20.117    80/TCP,443/TCP  app=mediawiki    15m
-```
-
-Access your MediaWiki deployment using the IP address listed under the `EXTERNAL_IP` column.
-
-The default credentials are:
-
- - Username: `user`
- - Password: `bitnami1`
-
-## Cleanup
-
-To delete the MediaWiki deployment completely:
-
-```bash
-$ helmc uninstall -n default mediawiki
-```
-
-Additionally you may want to [Cleanup the MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb#cleanup)
+[Install](#installing-the-chart) the chart after making these changes.

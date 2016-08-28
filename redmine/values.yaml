@@ -1,0 +1,48 @@
+## Bitnami Redmine image version
+## ref: https://hub.docker.com/r/bitnami/redmine/tags/
+##
+imageTag: 3.3.0-r1
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
+##
+# redmineUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
+##
+# redminePassword: bitnami
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
+##
+# redmineEmail: user@example.com
+
+## Redmine default data language
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
+##
+# redmineLanguage: en
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpTls:
+
+##
+## MariaDB chart configuration
+##
+# mariadb:
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:

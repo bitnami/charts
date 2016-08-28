@@ -1,99 +1,151 @@
 # Phabricator
 
-> Phabricator is a collection of open source web applications that help software companies build better software. Phabricator is built by developers for developers. Every feature is optimized around developer efficiency for however you like to work. Code Quality starts with effective collaboration between team members.
+[Phabricator](https://www.phacility.com) is a collection of open source web applications that help software companies build better software. Phabricator is built by developers for developers. Every feature is optimized around developer efficiency for however you like to work. Code Quality starts with effective collaboration between team members.
 
-Based on the [Bitnami Phabricator](https://github.com/bitnami/bitnami-docker-phabricator) image for docker, this Chart bootstraps a [Phabricator](https://phabricator.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm](https://helm.sh).
+## TL;DR;
 
-## Dependencies
+```bash
+$ helm install phabricator-x.x.x.tgz
+```
 
-The Phabricator Chart requires the [Bitnami MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
+## Introduction
 
-Please refer to the [README](https://github.com/bitnami/charts/tree/master/mariadb) of the Bitnami MariaDB Chart for deployment instructions.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-## Persistence
+This chart bootstraps a [Phabricator](https://github.com/bitnami/bitnami-docker-phabricator) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-> *You may skip this section if your only interested in testing the Phabricator Chart and have not yet made the decision to use it for your production workloads.*
+It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the Phabricator application.
 
-For persistence of the Phabricator configuration and user file uploads, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/phabricator` path of the Phabricator pod.
+## Get this chart
 
-By default the Phabricator Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+Download the latest release of the chart from the [releases](../../../releases) page.
+
+Alternatively, clone the repo if you wish to use the development snapshot:
+
+```bash
+$ git clone https://github.com/bitnami/charts.git
+```
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```bash
+$ helm install --name my-release phabricator-x.x.x.tgz
+```
+
+*Replace the `x.x.x` placeholder with the chart release version.*
+
+The command deploys Phabricator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```bash
+$ helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-To edit the default Phabricator configuration, run
+The following tables lists the configurable parameters of the Phabricator chart and their default values.
 
-```bash
-$ helmc edit phabricator
-```
+|           Parameter           |                 Description                  |                         Default                          |
+|-------------------------------|----------------------------------------------|----------------------------------------------------------|
+| `imageTag`                    | `bitnami/phabricator` image tag.             | Phabricator image version                                |
+| `imagePullPolicy`             | Image pull policy.                           | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `phabricatorHost`             | Phabricator host to create application URLs  | `nil`                                                    |
+| `phabricatorLoadBalancerIP`   | `loadBalancerIP` for the Phabricator Service | `nil`                                                    |
+| `phabricatorUsername`         | User of the application                      | `user`                                                   |
+| `phabricatorPassword`         | Application password                         | `bitnami`                                                |
+| `phabricatorEmail`            | Admin email                                  | `user@example.com`                                       |
+| `phabricatorFirstName`        | First name                                   | `First Name`                                             |
+| `phabricatorLastName`         | Last name                                    | `Last Name`                                              |
+| `smtpHost`                    | SMTP host                                    | `nil`                                                    |
+| `smtpPort`                    | SMTP port                                    | `nil`                                                    |
+| `smtpUser`                    | SMTP user                                    | `nil`                                                    |
+| `smtpPassword`                | SMTP password                                | `nil`                                                    |
+| `smtpProtocol`                | SMTP protocol [`ssl`, `tls`]                 | `nil`                                                    |
+| `mariadb.mariadbRootPassword` | MariaDB admin password                       | `nil`                                                    |
 
-Here you can update the Phabricator admin username, password and email address in `tpl/values.toml`. When not specified, the default values are used.
+The above parameters map to the env variables defined in [bitnami/phabricator](http://github.com/bitnami/bitnami-docker-phabricator). For more information please refer to the [bitnami/phabricator](http://github.com/bitnami/bitnami-docker-phabricator) image documentation.
 
-Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-phabricator/#environment-variables) section of the [Bitnami Phabricator](https://github.com/bitnami/bitnami-docker-phabricator) image for the default values.
-
-The values of `phabricatorUser` and `phabricatorPassword` are the login credentials when you [access the Phabricator instance](#access-your-phabricator-application).
-
-Finally, generate the chart to apply your changes to the configuration.
-
-```bash
-$ helmc generate --force phabricator
-```
-
-## Access your Phabricator application
-
-> Note:
+> **Note**:
 >
-> Phabricator service needs to know the Load Balancer IP to be configured properly. That's why you need to create a public address before you install the Phabricator Helm Chart.
+> For the Phabricator application function correctly, you should specify the `phabricatorHost` parameter to specify the FQDN (recommended) or the public IP address of the Phabricator service.
 >
-> On GKE, you can can reserve a static external address and then specify that as the loadBalancerIP of a service. More information at [https://cloud.google.com/compute/docs/configure-instance-ip-addresses]
+> Optionally, you can specify the `phabricatorLoadBalancerIP` parameter to assign a reserved IP address to the Phabricator service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
 >
-> On other cloud platforms you may have to setup a firewall rule manually. Please refer your cloud providers documentation.
-
-Reserve a static external address using:
-
-```bash
-$ gcloud compute addresses create phabricator-public-ip
-Created [https://www.googleapis.com/compute/v1/...].
----
-address: 104.197.39.194
-creationTimestamp: '2016-08-12T03:02:30.702-07:00'
-description: ''
-id: '8563442497282383961'
-kind: compute#address
-name: phabricator-public-ip
-region: ...
-status: RESERVED
-```
-
-Edit `values.toml` and update `phabricatorHostIP` with the public IP you reserved before (104.197.39.194 in this example), regenerate the chart and install.
-
-```bash
-$ helmc generate --force phabricator
-$ helmc install phabricator
-```
-
-> Note:
+> To reserve a public IP address on GKE:
 >
-> If you want to use a FQDN associated the IP reserved for the Load Balancer. You need to configure Phabricator service properly.
+> ```bash
+> $ gcloud compute addresses create phabricator-public-ip
+> ```
+>
+> The reserved IP address can be associated to the Phabricator service by specifying it as the value of the `phabricatorLoadBalancerIP` parameter while installing the chart.
 
-
-Edit values.toml and update phabricatorHost with the FQDN associated to the reserved IP, regenerate the chart and install.
-```bash
-$ helmc generate --force phabricator
-$ helmc install phabricator
-```
-
-You should now be able to access the application using the external IP reserved for the Phabricator service (or the FQDN if configured).
-The default credentials are:
-
- - Username: `user`
- - Password: `bitnami1`
-
-## Cleanup
-
-To delete the Phabricator deployment completely:
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helmc uninstall -n default phabricator
+$ helm install --name my-release \
+  --set phabricatorUsername=admin,phabricatorPassword=password,mariadb.mariadbRootPassword=secretpassword \
+    phabricator-x.x.x.tgz
 ```
 
-Additionally you may want to [Cleanup the MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb#cleanup)
+The above command sets the Phabricator administrator account username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
+
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
+
+```bash
+$ helm install --name my-release -f values.yaml phabricator-x.x.x.tgz
+```
+
+> **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Persistence
+
+The [Bitnami Phabricator](https://github.com/bitnami/bitnami-docker-phabricator) image stores the Phabricator data and configurations at the `/bitnami/phabricator` path of the container.
+
+As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
+
+> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
+
+For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
+
+### Step 1: Create a persistent disk
+
+You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
+
+```bash
+$ gcloud compute disks create --size=500GB --zone=us-central1-a phabricator-data-disk
+```
+
+### Step 2: Update `templates/deployment.yaml`
+
+Replace:
+
+```yaml
+      volumes:
+      - name: phabricator-data
+        emptyDir: {}
+```
+
+with
+
+```yaml
+      volumes:
+      - name: phabricator-data
+        gcePersistentDisk:
+          pdName: phabricator-data-disk
+          fsType: ext4
+```
+
+> **Note**:
+>
+> You should also use a persistent storage volume for the MariaDB deployment.
+
+[Install](#installing-the-chart) the chart after making these changes.

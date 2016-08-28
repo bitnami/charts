@@ -1,13 +1,18 @@
 name: ghost
-home: http://www.ghost.org/
-source:
-- https://github.com/bitnami/bitnami-docker-ghost
-version: 0.2.1
+version: 0.3.0
 description: A simple, powerful publishing platform that allows you to share your stories with the world
+keywords:
+- ghost
+- blog
+- http
+- web
+- application
+- nodejs
+- javascript
+home: http://www.ghost.org/
+sources:
+- https://github.com/bitnami/bitnami-docker-ghost
 maintainers:
-- Bitnami <containers@bitnami.com>
-dependencies:
-- name: mariadb
-  version: 0.2.1
-details: |-
-  Ghost is a simple, powerful publishing platform that allows you to share your stories with the world
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

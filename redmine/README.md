@@ -1,74 +1,134 @@
 # Redmine
 
-> Redmine is a free and open source, web-based project management and issue tracking tool.
+[Redmine](http://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
 
-Based on the [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image for docker, this Chart bootstraps a [Redmine](https://redmine.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using [Helm Classic](https://helm.sh).
+## TL;DR;
 
-## Dependencies
+```bash
+$ helm install redmine-x.x.x.tgz
+```
 
-The Redmine Chart requires the [Bitnami MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb) for setting up a database backend.
+## Introduction
 
-Please refer to the [README](https://github.com/bitnami/charts/tree/master/mariadb) of the Bitnami MariaDB Chart for deployment instructions.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-## Persistence
+This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-> *You may skip this section if your only interested in testing the Redmine Chart and have not yet made the decision to use it for your production workloads.*
+It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the Redmine application.
 
-For persistence of the Redmine configuration and user file uploads, mount a [storage volume](http://kubernetes.io/v1.0/docs/user-guide/volumes.html) at the `/bitnami/redmine` path of the Redmine pod.
+## Get this chart
 
-By default the Redmine Chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume.
+Download the latest release of the chart from the [releases](../../../releases) page.
+
+Alternatively, clone the repo if you wish to use the development snapshot:
+
+```bash
+$ git clone https://github.com/bitnami/charts.git
+```
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```bash
+$ helm install --name my-release redmine-x.x.x.tgz
+```
+
+*Replace the `x.x.x` placeholder with the chart release version.*
+
+The command deploys Redmine on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```bash
+$ helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-To edit the default Redmine configuration, run
+The following tables lists the configurable parameters of the Redmine chart and their default values.
+
+|           Parameter           |          Description          |                         Default                         |
+|-------------------------------|-------------------------------|---------------------------------------------------------|
+| `imageTag`                    | `bitnami/redmine` image tag   | Redmine image version                                   |
+| `imagePullPolicy`             | Image pull policy             | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
+| `redmineUser`                 | User of the application       | `user`                                                  |
+| `redminePassword`             | Application password          | `bitnami`                                               |
+| `redmineEmail`                | Admin email                   | `user@example.com`                                      |
+| `redmineLanguage`             | Redmine default data language | `en`                                                    |
+| `smtpHost`                    | SMTP host                     | `nil`                                                   |
+| `smtpPort`                    | SMTP port                     | `nil`                                                   |
+| `smtpUser`                    | SMTP user                     | `nil`                                                   |
+| `smtpPassword`                | SMTP password                 | `nil`                                                   |
+| `smtpTls`                     | Use TLS encryption with SMTP  | `nil`                                                   |
+| `mariadb.mariadbRootPassword` | MariaDB admin password        | `nil`                                                   |
+
+The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helmc edit redmine
+$ helm install --name my-release \
+  --set redmineUser=admin,redminePassword=password,mariadb.mariadbRootPassword=secretpassword \
+    redmine-x.x.x.tgz
 ```
 
-Here you can update the Redmine admin username, password, email address, language and SMTP settings in `tpl/values.toml`. When not specified, the default values are used.
+The above command sets the Redmine administrator account username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
 
-Refer to the [Environment variables](https://github.com/bitnami/bitnami-docker-redmine/#environment-variables) section of the [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image for the default values.
-
-The values of `redmineUser` and `redminePassword` are the login credentials when you [access the Redmine instance](#access-your-redmine-application).
-
-Finally, generate the chart to apply your changes to the configuration.
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helmc generate --force redmine
+$ helm install --name my-release -f values.yaml redmine-x.x.x.tgz
 ```
 
-## Access your Redmine application
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
-You should now be able to access the application using the external IP configured for the Redmine service.
+## Persistence
 
-> Note:
+The [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image stores the Redmine data and configurations at the `/bitnami/redmine` path of the container.
+
+As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
+
+> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
+
+For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
+
+### Step 1: Create a persistent disk
+
+You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
+
+```bash
+$ gcloud compute disks create --size=500GB --zone=us-central1-a redmine-data-disk
+```
+
+### Step 2: Update `templates/deployment.yaml`
+
+Replace:
+
+```yaml
+      volumes:
+      - name: redmine-data
+        emptyDir: {}
+```
+
+with
+
+```yaml
+      volumes:
+      - name: redmine-data
+        gcePersistentDisk:
+          pdName: redmine-data-disk
+          fsType: ext4
+```
+
+> **Note**:
 >
-> On GKE, the service will automatically configure a firewall rule so that the Redmine instance is accessible from the internet, for which you will be charged additionally.
->
-> On other cloud platforms you may have to setup a firewall rule manually. Please refer your cloud providers documentation.
+> You should also use a persistent storage volume for the MariaDB deployment.
 
-Get the external IP address of your Redmine instance using:
-
-```bash
-$ kubectl get services redmine
-NAME      CLUSTER_IP      EXTERNAL_IP       PORT(S)   SELECTOR      AGE
-redmine   10.99.240.185   104.197.156.125   80/TCP    app=redmine   3m
-```
-
-Access your Redmine deployment using the IP address listed under the `EXTERNAL_IP` column.
-
-The default credentials are:
-
- - Username: `user`
- - Password: `bitnami`
-
-## Cleanup
-
-To delete the Redmine deployment completely:
-
-```bash
-$ helmc uninstall -n default redmine
-```
-
-Additionally you may want to [Cleanup the MariaDB Chart](https://github.com/bitnami/charts/tree/master/mariadb#cleanup)
+[Install](#installing-the-chart) the chart after making these changes.

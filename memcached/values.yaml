@@ -1,0 +1,20 @@
+## Bitnami Memcached image version
+## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
+##
+imageTag: 1.4.25-r2
+
+## Specify a imagePullPolicy
+## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+#
+## Memcached admin user
+## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
+##
+# memcachedUser:
+
+## Memcached admin password
+## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
+##
+# memcachedPassword:

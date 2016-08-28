@@ -1,10 +1,17 @@
 name: wildfly
-home: http://wildfly.org
-source:
-- https://github.com/bitnami/bitnami-docker-wildfly
-version: 0.2.1
+version: 0.3.0
 description: Chart for Wildfly
+keywords:
+- wildfly
+- java
+- http
+- web
+- application server
+- jsp
+home: http://wildfly.org
+sources:
+- https://github.com/bitnami/bitnami-docker-wildfly
 maintainers:
-- Bitnami <containers@bitnami.com>
-details: |-
-  Wildfly formerly known as JBoss AS, or simply JBoss, is an application server authored by JBoss, now developed by Red Hat. WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
