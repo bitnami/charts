@@ -1,6 +1,6 @@
 # Bitnami Charts Repository
 
-This repository contains Charts for [Helm Classic](http://helm.sh/) and use Docker containers developed and maintained by [Bitnami](https://bitnami.com/)
+This repository contains Charts for [Helm](https://github.com/kubernetes/helm) that use Docker containers developed and maintained by [Bitnami](https://bitnami.com/)
 
 To learn more about Bitnami-provided Docker containers, please visit http://bitnami.com/docker.
 
@@ -22,25 +22,7 @@ The above command creates a new cluster named `my-cluster`. You can name the clu
 
 ### Install Helm
 
-Dubbed as the Kubernetes Package Manager, Helm Classic bootstraps your Kubernetes cluster with Charts that provide ready-to-use workloads.
+Helm is a tool for managing Kubernetes charts. Charts are packages of pre-configured Kubernetes resources.
 
-To install Helm Classic, refer to the [Helm Classic install guide](https://github.com/helm/helm-classic#installing-helm-classic) and ensure that the `helmc` binary is in the `PATH` of your shell.
+To install Helm, refer to the [Helm install guide](https://github.com/kubernetes/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
 
-### Bitnami Charts Repo
-
-To use the awesome Charts from this repo, you should add the repo to Helm using:
-
-```bash
-$ helmc repo add bitnami https://github.com/bitnami/charts
-```
-
-Remember to periodically update your Charts to get the latest and greatest Helm Charts from Bitnami.
-
-```bash
-$ helmc update
-```
-
-### Next Steps
-
- - [Deploy MariaDB](https://github.com/bitnami/charts/tree/master/mariadb)
- - [Deploy Redmine](https://github.com/bitnami/charts/tree/master/redmine)
