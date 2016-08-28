@@ -19,7 +19,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "bitnami/mariadb:{{ .Values.imageTag }}"
-        imagePullPolicy: {{ template "imagePullPolicy" . }}
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:

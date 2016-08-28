@@ -20,7 +20,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "bitnami/odoo:{{ .Values.imageTag }}"
-        imagePullPolicy: {{ template "imagePullPolicy" . }}
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: POSTGRESQL_HOST
           value: {{ template "postgresql.fullname" . }}

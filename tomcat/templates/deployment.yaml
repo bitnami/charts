@@ -20,7 +20,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "bitnami/tomcat:{{ .Values.imageTag }}"
-        imagePullPolicy: {{ template "imagePullPolicy" . }}
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: TOMCAT_USER
           value: {{ default "" .Values.tomcatUser | quote }}

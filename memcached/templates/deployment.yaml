@@ -20,7 +20,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: bitnami/memcached:{{ .Values.imageTag }}
-        imagePullPolicy: {{ template "imagePullPolicy" . }}
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MEMCACHED_USER
           value: {{ default "" .Values.memcachedUser | quote }}

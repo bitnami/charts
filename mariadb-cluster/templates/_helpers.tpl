@@ -22,18 +22,3 @@ We truncate at 24 chars because some Kubernetes name fields are limited to this 
 {{- define "slave.fullname" -}}
 {{- printf "%s-%s" .Release.Name "slave" | trunc 24 -}}
 {{- end -}}
-
-{{/*
-Get the imagePullPolicy.
-*/}}
-{{- define "imagePullPolicy" -}}
-  {{- if .Values.imagePullPolicy -}}
-    {{- .Values.imagePullPolicy -}}
-  {{- else -}}
-    {{- if eq .Values.imageTag "latest" -}}
-      {{- "Always" -}}
-    {{- else -}}
-      {{- "IfNotPresent" -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}

@@ -20,7 +20,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "bitnami/apache:{{ .Values.imageTag }}"
-        imagePullPolicy: {{ template "imagePullPolicy" . }}
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         ports:
         - name: http
           containerPort: 80
