@@ -1,0 +1,53 @@
+## Bitnami OpenCart image version
+## ref: https://hub.docker.com/r/bitnami/opencart/tags/
+##
+imageTag: 2.3.0.2-r0
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## OpenCart host to create application URLs
+## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+##
+# opencartHost:
+
+## loadBalancerIP for the OpenCart Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# opencartLoadBalancerIP:
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+##
+# opencartUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+##
+# opencartPassword: bitnami1
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+##
+# opencartEmail: user@example.com
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-opencart/#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpProtocol:
+
+##
+## MariaDB chart configuration
+##
+# mariadb:
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:
