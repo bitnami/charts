@@ -1,0 +1,53 @@
+## Bitnami ownCloud image version
+## ref: https://hub.docker.com/r/bitnami/owncloud/tags/
+##
+imageTag: 9.1.0-r0
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## ownCloud host to create application URLs
+## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+##
+# owncloudHost:
+
+## loadBalancerIP for the ownCloud Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# owncloudLoadBalancerIP:
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+##
+# owncloudUser: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+##
+# owncloudPassword: bitnami1
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+##
+# owncloudEmail: user@example.com
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-owncloud/#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpAuth:
+
+##
+## MariaDB chart configuration
+##
+# mariadb:
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:
