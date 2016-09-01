@@ -40,11 +40,11 @@ spec:
               key: wordpress-password
         - name: WORDPRESS_EMAIL
           value: {{ default "" .Values.wordpressEmail | quote }}
-        - name: WORDPRESS_FIRSTNAME
+        - name: WORDPRESS_FIRST_NAME
           value: {{ default "" .Values.wordpressFirstName | quote }}
-        - name: WORDPRESS_LASTNAME
+        - name: WORDPRESS_LAST_NAME
           value: {{ default "" .Values.wordpressLastName | quote }}
-        - name: WORDPRESS_BLOGNAME
+        - name: WORDPRESS_BLOG_NAME
           value: {{ default "" .Values.wordpressBlogName | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}

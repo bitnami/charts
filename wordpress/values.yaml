@@ -1,7 +1,7 @@
 ## Bitnami Wordpress image version
 ## ref: https://hub.docker.com/r/bitnami/wordpress/tags/
 ##
-imageTag: 4.6-r0
+imageTag: 4.6-r1
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
