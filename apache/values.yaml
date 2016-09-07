@@ -1,7 +1,7 @@
 ## Bitnami Apache image version
 ## ref: https://hub.docker.com/r/bitnami/apache/tags/
 ##
-imageTag: 2.4.23-r2
+imageTag: 2.4.23-r3
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
