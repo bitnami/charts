@@ -1,7 +1,7 @@
 ## Bitnami Joomla image version
 ## ref: https://hub.docker.com/r/bitnami/joomla/tags/
 ##
-imageTag: 3.6.2-r1
+imageTag: 3.6.2-r2
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
