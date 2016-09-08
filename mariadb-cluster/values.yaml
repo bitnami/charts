@@ -11,7 +11,7 @@ imageTag: 10.1.14-r4
 
 ## Desired number of MariaDB slave Pods
 ##
-# replicasCount: 1
+replicasCount: 1
 
 ## MariaDB admin password
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run

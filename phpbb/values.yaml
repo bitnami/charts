@@ -12,17 +12,17 @@ imageTag: 3.1.9-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
 ##
-# phpbbUser: user
+phpbbUser: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
 ##
-# phpbbPassword: bitnami
+phpbbPassword: bitnami
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
 ##
-# phpbbEmail: user@example.com
+phpbbEmail: user@example.com
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#smtp-configuration

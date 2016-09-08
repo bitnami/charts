@@ -12,17 +12,17 @@ imageTag: 3.6.2-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
 ##
-# joomlaUser: user
+joomlaUser: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
 ##
-# joomlaPassword: bitnami
+joomlaPassword: bitnami
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
 ##
-# joomlaEmail: user@example.com
+joomlaEmail: user@example.com
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
@@ -31,7 +31,7 @@ imageTag: 3.6.2-r2
 # smtpPort:
 # smtpUser:
 # smtpPassword:
-# smtpProtocol: tls
+smtpProtocol: tls
 
 ##
 ## MariaDB chart configuration

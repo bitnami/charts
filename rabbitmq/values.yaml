@@ -12,12 +12,12 @@ imageTag: 3.6.5-r1
 ## RabbitMQ application username
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq/blob/master/README.md#creating-a-database-user-on-first-run
 ##
-# rabbitmqUsername: user
+rabbitmqUsername: user
 
 ## RabbitMQ application password
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq/blob/master/README.md#creating-a-database-user-on-first-run
 ##
-# rabbitmqPassword: bitnami
+rabbitmqPassword: bitnami
 
 ## Erlang cookie to determine whether different nodes are allowed to communicate with each other
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -27,17 +27,17 @@ imageTag: 3.6.5-r1
 ## Node port
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-# rabbitmqNodeport: 5672
+rabbitmqNodeport: 5672
 
 ## Node Type
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-# rabbitmqNodetype: stats
+rabbitmqNodetype: stats
 
 ## Node Name
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-# rabbitmqNodename: rabbit
+rabbitmqNodename: rabbit
 
 ## Node name to cluster with. e.g.: `clusternode@hostname`
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -47,9 +47,9 @@ imageTag: 3.6.5-r1
 ## RabbitMQ application vhost
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-# rabbitmqVhost: /
+rabbitmqVhost: /
 
 ## RabbitMQ Manager port
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-# rabbitmqManagerport: 15672
+rabbitmqManagerport: 15672

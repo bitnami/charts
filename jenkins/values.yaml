@@ -12,9 +12,9 @@ imageTag: 2.21-r1
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-jenkins#configuration
 ##
-# jenkinsUser: user
+jenkinsUser: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-jenkins#configuration
 ##
-# jenkinsPassword: bitnami
+jenkinsPassword: bitnami

@@ -12,12 +12,12 @@ imageTag: 9.0.20160620-r2
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
 ##
-# odooEmail: user@example.com
+odooEmail: user@example.com
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
 ##
-# odooPassword: bitnami
+odooPassword: bitnami
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#smtp-configuration

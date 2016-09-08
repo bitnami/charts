@@ -12,22 +12,22 @@ imageTag: 1.27.0-r1
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
-# mediawikiUser: user
+mediawikiUser: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
-# mediawikiPassword: bitnami1
+mediawikiPassword: bitnami1
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
-# mediawikiEmail: user@example.com
+mediawikiEmail: user@example.com
 
 ## Name for the wiki
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
-# mediawikiName: Bitnami MediaWiki
+mediawikiName: Bitnami MediaWiki
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#smtp-configuration
