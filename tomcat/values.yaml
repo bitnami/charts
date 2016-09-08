@@ -12,7 +12,7 @@ imageTag: 8.0.35-r2
 ## Admin user
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##
-# tomcatUser: user
+tomcatUser: user
 
 ## Admin password
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user

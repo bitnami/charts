@@ -12,32 +12,32 @@ imageTag: 4.6-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
-# wordpressUsername: user
+wordpressUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
-# wordpressPassword: bitnami
+wordpressPassword: bitnami
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
-# wordpressEmail: user@example.com
+wordpressEmail: user@example.com
 
 ## First name
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
-# wordpressFirstName: FirstName
+wordpressFirstName: FirstName
 
 ## Last name
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
-# wordpressLastName: LastName
+wordpressLastName: LastName
 
 ## Blog name
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
-# wordpressBlogName: User's Blog!
+wordpressBlogName: User's Blog!
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration

@@ -13,7 +13,7 @@ imageTag: 9.5.3-r4
 ## PostgreSQL admin user
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql#creating-a-database-user-on-first-run
 ##
-# postgresUser: postgres
+postgresUser: postgres
 
 ## PostgreSQL password
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql#creating-a-database-user-on-first-run

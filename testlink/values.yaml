@@ -12,29 +12,29 @@ imageTag: 1.9.14-r1
 ## Admin username
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
 ##
-# testlinkUsername: user
+testlinkUsername: user
 
 ## Admin user password
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
 ##
-# testlinkPassword: bitnami
+testlinkPassword: bitnami
 
 ## Admin user email
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
 ##
-# testlinkEmail: user@example.com
+testlinkEmail: user@example.com
 
 ## Default Language
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
 ##
-# testlinkLanguage: en_US
+testlinkLanguage: en_US
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#smtp-configuration
 ##
 # smtpEnable:
 # smtpHost:
-# smtpPort: 25
+smtpPort: 25
 # smtpUser:
 # smtpPassword:
 # smtpConnectionMode:

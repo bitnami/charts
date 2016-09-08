@@ -12,17 +12,17 @@ imageTag: 8.1.8-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
 ##
-# drupalUser: user
+drupalUser: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
 ##
-# drupalPassword: bitnami
+drupalPassword: bitnami
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
 ##
-# drupalEmail: user@example.com
+drupalEmail: user@example.com
 
 ##
 ## MariaDB chart configuration

@@ -12,9 +12,9 @@ imageTag: 10.0.0-r2
 ## Admin user
 ## ref: https://github.com/bitnami/bitnami-docker-wildfly#creating-a-custom-user
 ##
-# wildflyUser: user
+wildflyUser: user
 
 ## Admin password
 ## ref: https://github.com/bitnami/bitnami-docker-wildfly#creating-a-custom-user
 ##
-# wildflyPassword: password
+wildflyPassword: password

@@ -22,27 +22,27 @@ imageTag: 2016.31-r0
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
 ##
-# phabricatorUsername: user
+phabricatorUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
 ##
-# phabricatorPassword: bitnami1
+phabricatorPassword: bitnami1
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#configuration
 ##
-# phabricatorEmail: user@example.com
+phabricatorEmail: user@example.com
 
 ## First name
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#environment-variables
 ##
-# phabricatorFirstName: First Name
+phabricatorFirstName: First Name
 
 ## Last name
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#environment-variables
 ##
-# phabricatorLastName: Last Name
+phabricatorLastName: Last Name
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
