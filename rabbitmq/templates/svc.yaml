@@ -13,13 +13,13 @@ spec:
     port: 4369
     targetPort: epmd
   - name: ampq
-    port: {{ default "5672" .Values.rabbitmqNodeport }}
+    port: {{ default "5672" .Values.rabbitmqNodePort }}
     targetPort: ampq
   - name: dist
-    port: {{ default "5672" .Values.rabbitmqNodeport | add 20000 }}
+    port: {{ default "5672" .Values.rabbitmqNodePort | add 20000 }}
     targetPort: dist
   - name: stats
-    port: {{ default "15672" .Values.rabbitmqManagerport }}
+    port: {{ default "15672" .Values.rabbitmqManagerPort }}
     targetPort: stats
   selector:
     app: {{ template "fullname" . }}

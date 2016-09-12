@@ -1,7 +1,7 @@
 ## Bitnami PostgreSQL image version
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
 ##
-imageTag: 9.5.3-r4
+imageTag: 9.5.3-r5
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
@@ -13,14 +13,14 @@ imageTag: 9.5.3-r4
 ## PostgreSQL admin user
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql#creating-a-database-user-on-first-run
 ##
-postgresUser: postgres
+postgresqlUsername: postgres
 
 ## PostgreSQL password
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql#creating-a-database-user-on-first-run
 ##
-# postgresPassword:
+# postgresqlPassword:
 
 ## Database to create
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql#creating-a-database-on-first-run
 ##
-# postgresDb:
+# postgresqlDatabase:

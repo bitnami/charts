@@ -29,32 +29,32 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: rabbitmq-password
-        - name: RABBITMQ_ERLANGCOOKIE
+        - name: RABBITMQ_ERLANG_COOKIE
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: rabbitmq-erlangcookie
-        - name: RABBITMQ_NODEPORT
-          value: {{ default "" .Values.rabbitmqNodeport | quote }}
-        - name: RABBITMQ_NODETYPE
-          value: {{ default "" .Values.rabbitmqNodetype | quote }}
-        - name: RABBITMQ_NODENAME
-          value: {{ default "" .Values.rabbitmqNodename | quote }}
-        - name: RABBITMQ_CLUSTERNODENAME
-          value: {{ default "" .Values.rabbitmqClusternodename | quote }}
+              key: rabbitmq-erlang-cookie
+        - name: RABBITMQ_NODE_PORT
+          value: {{ default "" .Values.rabbitmqNodePort | quote }}
+        - name: RABBITMQ_NODE_TYPE
+          value: {{ default "" .Values.rabbitmqNodeType | quote }}
+        - name: RABBITMQ_NODE_NAME
+          value: {{ default "" .Values.rabbitmqNodeName | quote }}
+        - name: RABBITMQ_CLUSTER_NODE_NAME
+          value: {{ default "" .Values.rabbitmqClusterNodeName | quote }}
         - name: RABBITMQ_VHOST
           value: {{ default "" .Values.rabbitmqVhost | quote }}
-        - name: RABBITMQ_MANAGERPORT
-          value: {{ default "" .Values.rabbitmqManagerport | quote }}
+        - name: RABBITMQ_MANAGER_PORT
+          value: {{ default "" .Values.rabbitmqManagerPort | quote }}
         ports:
         - name: epmd
           containerPort: 4369
         - name: ampq
-          containerPort: {{ default "5672" .Values.rabbitmqNodeport }}
+          containerPort: {{ default "5672" .Values.rabbitmqNodePort }}
         - name: dist
-          containerPort: {{ default "5672" .Values.rabbitmqNodeport | add 20000 }}
+          containerPort: {{ default "5672" .Values.rabbitmqNodePort | add 20000 }}
         - name: stats
-          containerPort: {{ default "15672" .Values.rabbitmqManagerport }}
+          containerPort: {{ default "15672" .Values.rabbitmqManagerPort }}
         livenessProbe:
           exec:
             command:

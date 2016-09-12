@@ -56,7 +56,7 @@ The following tables lists the configurable parameters of the Wildfly chart and 
 |-------------------|-----------------------------|---------------------------------------------------------|
 | `imageTag`        | `bitnami/wildfly` image tag | Wildfly image version                                   |
 | `imagePullPolicy` | Image pull policy           | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `wildflyUser`     | Admin user                  | `user`                                                  |
+| `wildflyUsername` | Admin user                  | `user`                                                  |
 | `wildflyPassword` | Admin password              | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.

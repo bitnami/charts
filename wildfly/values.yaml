@@ -1,7 +1,7 @@
 ## Bitnami Wildfly image version
 ## ref: https://hub.docker.com/r/bitnami/wildfly/tags/
 ##
-imageTag: 10.0.0-r2
+imageTag: 10.0.0-r3
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
@@ -12,7 +12,7 @@ imageTag: 10.0.0-r2
 ## Admin user
 ## ref: https://github.com/bitnami/bitnami-docker-wildfly#creating-a-custom-user
 ##
-wildflyUser: user
+wildflyUsername: user
 
 ## Admin password
 ## ref: https://github.com/bitnami/bitnami-docker-wildfly#creating-a-custom-user

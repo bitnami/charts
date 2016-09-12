@@ -27,8 +27,8 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mongodb-root-password
-        - name: MONGODB_USER
-          value: {{ default "" .Values.mongodbUser | quote }}
+        - name: MONGODB_USERNAME
+          value: {{ default "" .Values.mongodbUsername | quote }}
         - name: MONGODB_PASSWORD
           valueFrom:
             secretKeyRef:
