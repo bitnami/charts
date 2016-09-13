@@ -1,7 +1,7 @@
 ## Bitnami Tomcat image version
 ## ref: https://hub.docker.com/r/bitnami/tomcat/tags/
 ##
-imageTag: 8.0.35-r2
+imageTag: 8.0.35-r3
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
@@ -12,7 +12,7 @@ imageTag: 8.0.35-r2
 ## Admin user
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##
-tomcatUser: user
+tomcatUsername: user
 
 ## Admin password
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user

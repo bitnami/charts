@@ -56,7 +56,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 |---------------------|-------------------------------|---------------------------------------------------------|
 | `imageTag`          | `bitnami/memcached` image tag | Memcached image version                                 |
 | `imagePullPolicy`   | Image pull policy             | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `memcachedUser`     | Memcached admin user          | `nil`                                                   |
+| `memcachedUsername` | Memcached admin user          | `nil`                                                   |
 | `memcachedPassword` | Memcached admin password      | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached). For more information please refer to the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) image documentation.

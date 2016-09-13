@@ -22,15 +22,15 @@ spec:
         image: "bitnami/postgresql:{{ .Values.imageTag }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
-        - name: POSTGRES_USER
-          value: {{ default "" .Values.postgresUser | quote }}
-        - name: POSTGRES_PASSWORD
+        - name: POSTGRESQL_USERNAME
+          value: {{ default "" .Values.postgresqlUsername | quote }}
+        - name: POSTGRESQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: postgres-password
-        - name: POSTGRES_DB
-          value: {{ default "" .Values.postgresDb | quote }}
+              key: postgresql-password
+        - name: POSTGRESQL_DATABASE
+          value: {{ default "" .Values.postgresqlDatabase | quote }}
         ports:
         - name: postgresql
           containerPort: 5432

@@ -35,4 +35,4 @@ odooPassword: bitnami
   ## PostgreSQL Password
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql#setting-the-root-password-on-first-run
   ##
-  # postgresPassword:
+  # postgresqlPassword:

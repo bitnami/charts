@@ -1,7 +1,7 @@
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
 ##
-imageTag: 3.6.5-r1
+imageTag: 3.6.5-r2
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
@@ -22,22 +22,22 @@ rabbitmqPassword: bitnami
 ## Erlang cookie to determine whether different nodes are allowed to communicate with each other
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-# rabbitmqErlangcookie:
+# rabbitmqErlangCookie:
 
 ## Node port
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-rabbitmqNodeport: 5672
+rabbitmqNodePort: 5672
 
 ## Node Type
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-rabbitmqNodetype: stats
+rabbitmqNodeType: stats
 
 ## Node Name
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-rabbitmqNodename: rabbit
+rabbitmqNodeName: rabbit
 
 ## Node name to cluster with. e.g.: `clusternode@hostname`
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -52,4 +52,4 @@ rabbitmqVhost: /
 ## RabbitMQ Manager port
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ##
-rabbitmqManagerport: 15672
+rabbitmqManagerPort: 15672

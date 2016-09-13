@@ -57,7 +57,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `imageTag`            | `bitnami/mongodb` image tag  | MongoDB image version                                   |
 | `imagePullPolicy`     | Image pull policy            | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `mongodbRootPassword` | MongoDB admin password       | `nil`                                                   |
-| `mongodbUser`         | MongoDB custom user          | `nil`                                                   |
+| `mongodbUsername`     | MongoDB custom user          | `nil`                                                   |
 | `mongodbPassword`     | MongoDB custom user password | `nil`                                                   |
 | `mongodbDatabase`     | Database to create           | `nil`                                                   |
 
