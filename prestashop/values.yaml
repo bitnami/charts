@@ -1,0 +1,63 @@
+## Bitnami PrestaShop image version
+## ref: https://hub.docker.com/r/bitnami/prestashop/tags/
+##
+imageTag: 1.6.1.6-r2
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## PrestaShop host to create application URLs
+## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+##
+# prestashopHost:
+
+## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# prestashopLoadBalancerIP:
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+##
+# prestashopUsername: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+##
+# prestashopPassword: bitnami1
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+##
+# prestashopEmail: user@example.com
+
+## First Name
+## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+##
+# prestashopFirstName: User
+
+## Last Name
+## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+##
+# prestashopLastName: Name
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-prestashop/#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpProtocol:
+
+##
+## MariaDB chart configuration
+##
+# mariadb:
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:
