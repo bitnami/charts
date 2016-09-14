@@ -54,20 +54,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Magento chart and their default values.
 
-|           Parameter           |                      Description                      |                         Default                         |
-|-------------------------------|-------------------------------------------------------|---------------------------------------------------------|
-| `imageTag`                    | `bitnami/magento` image tag                           | Magento image version                                   |
-| `imagePullPolicy`             | Image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `magentoHost`                 | Magento hostname                                      | `nil`                                                   |
-| `magentoLoadBalancerIP`       | `loadBalancerIP` for the Magento Service              | `nil`                                                   |
-| `magentoUsername`             | User of the application                               | `user`                                                  |
-| `magentoPassword`             | Application password                                  | `bitnami1`                                              |
-| `magentoEmail`                | Admin email                                           | `user@example.com`                                      |
-| `magentoFirstName`            | Magento Admin First Name                              | `FirstName`                                             |
-| `magentoLastName`             | Magento Admin Last Name                               | `LastName`                                              |
-| `magentoMode`                 | Magento mode                                          | `developer`                                             |
-| `magentoAdminUri`             | Magento prefix to access Magento Admin                | `admin`                                                 |
-| `mariadb.mariadbRootPassword` | MariaDB admin password                                | `nil`                                                   |
+|           Parameter           |               Description                |                         Default                          |
+|-------------------------------|------------------------------------------|----------------------------------------------------------|
+| `imageTag`                    | `bitnami/magento` image tag.             | Magento image version                                    |
+| `imagePullPolicy`             | Image pull policy.                       | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `magentoHost`                 | Magento host to create application URLs  | `nil`                                                    |
+| `magentoLoadBalancerIP`       | `loadBalancerIP` for the Magento Service | `nil`                                                    |
+| `magentoUsername`             | User of the application                  | `user`                                                   |
+| `magentoPassword`             | Application password                     | `bitnami`                                                |
+| `magentoEmail`                | Admin email                              | `user@example.com`                                       |
+| `magentoFirstName`            | Magento Admin First Name                 | `FirstName`                                              |
+| `magentoLastName`             | Magento Admin Last Name                  | `LastName`                                               |
+| `magentoMode`                 | Magento mode                             | `developer`                                              |
+| `magentoAdminUri`             | Magento prefix to access Magento Admin   | `admin`                                                  |
+| `mariadb.mariadbRootPassword` | MariaDB admin password                   | `nil`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/magento](http://github.com/bitnami/bitnami-docker-magento). For more information please refer to the [bitnami/magento](http://github.com/bitnami/bitnami-docker-magento) image documentation.
 
