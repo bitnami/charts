@@ -61,15 +61,19 @@ spec:
         - name: https
           containerPort: 443
         livenessProbe:
-          httpGet:
-            path: /
-            port: http
+          exec:
+            command:
+            - nami
+            - status
+            - apache
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
-          httpGet:
-            path: /
-            port: http
+          exec:
+            command:
+            - nami
+            - status
+            - apache
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
