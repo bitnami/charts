@@ -54,21 +54,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the OpenCart chart and their default values.
 
-|           Parameter           |                      Description                      |                         Default                         |
-|-------------------------------|-------------------------------------------------------|---------------------------------------------------------|
-| `imageTag`                    | `bitnami/opencart` image tag                          | OpenCart image version                                     |
-| `imagePullPolicy`             | Image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `opencartHost`                | OpenCart host                                         | `nil`                                                   |
-| `opencartLoadBalancerIP`      | `loadBalancerIP` for the OpenCart Service             | `nil`                                                   |
-| `opencartUser`                | User of the application                               | `user`                                                  |
-| `opencartPassword`            | Application password                                  | `bitnami`                                               |
-| `opencartEmail`               | Admin email                                           | `user@example.com`                                      |
-| `smtpHost`                    | SMTP Host                                             | `nil`                                                   |
-| `smtpPort`                    | SMTP Port                                             | `nil`                                                   |
-| `smtpUser`                    | SMTP User                                             | `nil`                                                   |
-| `smtpPassword`                | SMTP Password                                         | `nil`                                                   |
-| `smtpProtocol`                | SMTP Protocol                                         | `nil`                                                   |
-| `mariadb.mariadbRootPassword` | MariaDB admin password                                | `nil`                                                   |
+|           Parameter           |                Description                |                         Default                          |
+|-------------------------------|-------------------------------------------|----------------------------------------------------------|
+| `imageTag`                    | `bitnami/opencart` image tag.             | OpenCart image version                                   |
+| `imagePullPolicy`             | Image pull policy.                        | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `opencartHost`                | OpenCart host to create application URLs  | `nil`                                                    |
+| `opencartLoadBalancerIP`      | `loadBalancerIP` for the OpenCart Service | `nil`                                                    |
+| `opencartUser`                | User of the application                   | `user`                                                   |
+| `opencartPassword`            | Application password                      | `bitnami`                                                |
+| `opencartEmail`               | Admin email                               | `user@example.com`                                       |
+| `smtpHost`                    | SMTP host                                 | `nil`                                                    |
+| `smtpPort`                    | SMTP port                                 | `nil`                                                    |
+| `smtpUser`                    | SMTP user                                 | `nil`                                                    |
+| `smtpPassword`                | SMTP password                             | `nil`                                                    |
+| `smtpProtocol`                | SMTP protocol [`ssl`, `tls`]              | `nil`                                                    |
+| `mariadb.mariadbRootPassword` | MariaDB admin password                    | `nil`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/opencart](http://github.com/bitnami/bitnami-docker-opencart). For more information please refer to the [bitnami/opencart](http://github.com/bitnami/bitnami-docker-opencart) image documentation.
 
