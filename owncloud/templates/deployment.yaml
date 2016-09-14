@@ -34,7 +34,7 @@ spec:
         - name: OWNCLOUD_HOST
           value: {{ default .Values.owncloudLoadBalancerIP .Values.owncloudHost | quote }}
         - name: OWNCLOUD_USERNAME
-          value: {{ default "" .Values.owncloudUser | quote }}
+          value: {{ default "" .Values.owncloudUsername | quote }}
         - name: OWNCLOUD_PASSWORD
           valueFrom:
             secretKeyRef:

@@ -60,7 +60,7 @@ The following tables lists the configurable parameters of the ownCloud chart and
 | `imagePullPolicy`             | Image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `owncloudHost`                | ownCloud host to create application URLs              | `nil`                                                   |
 | `owncloudLoadBalancerIP`      | `loadBalancerIP` for the ownCloud Service             | `nil`                                                   |
-| `owncloudUser`                | User of the application                               | `user`                                                  |
+| `owncloudUsername`            | User of the application                               | `user`                                                  |
 | `owncloudPassword`            | Application password                                  | `bitnami`                                               |
 | `owncloudEmail`               | Admin email                                           | `user@example.com`                                      |
 | `smtpHost`                    | SMTP Host                                             | `nil`                                                   |
@@ -90,7 +90,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install --name my-release \
-  --set owncloudUser=admin,owncloudPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set owncloudUsername=admin,owncloudPassword=password,mariadb.mariadbRootPassword=secretpassword \
     owncloud-x.x.x.tgz
 ```
 

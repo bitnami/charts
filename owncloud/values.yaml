@@ -22,7 +22,7 @@ imageTag: 9.1.0-r1
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
 ##
-# owncloudUser: user
+# owncloudUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
