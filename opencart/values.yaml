@@ -1,7 +1,7 @@
 ## Bitnami OpenCart image version
 ## ref: https://hub.docker.com/r/bitnami/opencart/tags/
 ##
-imageTag: 2.3.0.2-r0
+imageTag: 2.3.0.2-r2
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
