@@ -1,7 +1,7 @@
 ## Bitnami Magento image version
 ## ref: https://hub.docker.com/r/bitnami/magento/tags/
 ##
-imageTag: 2.0.5-r1
+imageTag: 2.0.5-r2
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
@@ -22,7 +22,7 @@ imageTag: 2.0.5-r1
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoUser: user
+# magentoUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration

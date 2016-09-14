@@ -34,7 +34,7 @@ spec:
         - name: MAGENTO_HOST
           value: {{ default .Values.magentoLoadBalancerIP .Values.magentoHost | quote }}
         - name: MAGENTO_USERNAME
-          value: {{ default "" .Values.magentoUser | quote }}
+          value: {{ default "" .Values.magentoUsername | quote }}
         - name: MAGENTO_PASSWORD
           valueFrom:
             secretKeyRef:

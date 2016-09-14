@@ -60,7 +60,7 @@ The following tables lists the configurable parameters of the Magento chart and 
 | `imagePullPolicy`             | Image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `magentoHost`                 | Magento hostname                                      | `nil`                                                   |
 | `magentoLoadBalancerIP`       | `loadBalancerIP` for the Magento Service              | `nil`                                                   |
-| `magentoUser`                 | User of the application                               | `user`                                                  |
+| `magentoUsername`             | User of the application                               | `user`                                                  |
 | `magentoPassword`             | Application password                                  | `bitnami1`                                              |
 | `magentoEmail`                | Admin email                                           | `user@example.com`                                      |
 | `magentoFirstName`            | Magento Admin First Name                              | `FirstName`                                             |
@@ -89,7 +89,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install --name my-release \
-  --set magentoUser=admin,magentoPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set magentoUsername=admin,magentoPassword=password,mariadb.mariadbRootPassword=secretpassword \
     magento-x.x.x.tgz
 ```
 
