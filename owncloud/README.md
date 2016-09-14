@@ -54,21 +54,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the ownCloud chart and their default values.
 
-|           Parameter           |                      Description                      |                         Default                         |
-|-------------------------------|-------------------------------------------------------|---------------------------------------------------------|
-| `imageTag`                    | `bitnami/owncloud` image tag                          | ownCloud image version                                     |
-| `imagePullPolicy`             | Image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `owncloudHost`                | ownCloud host to create application URLs              | `nil`                                                   |
-| `owncloudLoadBalancerIP`      | `loadBalancerIP` for the ownCloud Service             | `nil`                                                   |
-| `owncloudUsername`            | User of the application                               | `user`                                                  |
-| `owncloudPassword`            | Application password                                  | `bitnami`                                               |
-| `owncloudEmail`               | Admin email                                           | `user@example.com`                                      |
-| `smtpHost`                    | SMTP Host                                             | `nil`                                                   |
-| `smtpPort`                    | SMTP Port                                             | `nil`                                                   |
-| `smtpUser`                    | SMTP User                                             | `nil`                                                   |
-| `smtpPassword`                | SMTP Password                                         | `nil`                                                   |
-| `smtpAuth`                    | SMTP Auth                                             | `nil`                                                   |
-| `mariadb.mariadbRootPassword` | MariaDB admin password                                | `nil`                                                   |
+|           Parameter           |                Description                |                         Default                          |
+|-------------------------------|-------------------------------------------|----------------------------------------------------------|
+| `imageTag`                    | `bitnami/owncloud` image tag.             | ownCloud image version                                   |
+| `imagePullPolicy`             | Image pull policy.                        | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `owncloudHost`                | ownCloud host to create application URLs  | `nil`                                                    |
+| `owncloudLoadBalancerIP`      | `loadBalancerIP` for the ownCloud Service | `nil`                                                    |
+| `owncloudUsername`            | User of the application                   | `user`                                                   |
+| `owncloudPassword`            | Application password                      | `bitnami`                                                |
+| `owncloudEmail`               | Admin email                               | `user@example.com`                                       |
+| `smtpHost`                    | SMTP host                                 | `nil`                                                    |
+| `smtpPort`                    | SMTP port                                 | `nil`                                                    |
+| `smtpUser`                    | SMTP user                                 | `nil`                                                    |
+| `smtpPassword`                | SMTP password                             | `nil`                                                    |
+| `smtpAuth`                    | SMTP Auth                                 | `nil`                                                    |
+| `mariadb.mariadbRootPassword` | MariaDB admin password                    | `nil`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/owncloud](http://github.com/bitnami/bitnami-docker-owncloud). For more information please refer to the [bitnami/owncloud](http://github.com/bitnami/bitnami-docker-owncloud) image documentation.
 
