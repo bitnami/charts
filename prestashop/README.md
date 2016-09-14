@@ -54,23 +54,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the PrestaShop chart and their default values.
 
-|           Parameter           |                      Description                      |                         Default                         |
-|-------------------------------|-------------------------------------------------------|---------------------------------------------------------|
-| `imageTag`                    | `bitnami/prestashop` image tag                        | PrestaShop image version                                |
-| `imagePullPolicy`             | Image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `prestashopHost`              | PrestaShop host                                       | `nil`                                                   |
-| `prestashopLoadBalancerIP`    | `loadBalancerIP` for the PrestaShop Service           | `nil`                                                   |
-| `prestashopUsername`          | User of the application                               | `user`                                                  |
-| `prestashopPassword`          | Application password                                  | `bitnami`                                               |
-| `prestashopEmail`             | Admin email                                           | `user@example.com`                                      |
-| `prestashopFirstName`         | First Name                                            | `User`                                                  |
-| `prestashopLastName`          | Last Name                                             | `Name`                                                  |
-| `smtpHost`                    | SMTP Host                                             | `nil`                                                   |
-| `smtpPort`                    | SMTP Port                                             | `nil`                                                   |
-| `smtpUser`                    | SMTP User                                             | `nil`                                                   |
-| `smtpPassword`                | SMTP Password                                         | `nil`                                                   |
-| `smtpProtocol`                | SMTP Protocol                                         | `nil`                                                   |
-| `mariadb.mariadbRootPassword` | MariaDB admin password                                | `nil`                                                   |
+|           Parameter           |                 Description                 |                         Default                          |
+|-------------------------------|---------------------------------------------|----------------------------------------------------------|
+| `imageTag`                    | `bitnami/prestashop` image tag.             | PrestaShop image version                                 |
+| `imagePullPolicy`             | Image pull policy.                          | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `prestashopHost`              | PrestaShop host to create application URLs  | `nil`                                                    |
+| `prestashopLoadBalancerIP`    | `loadBalancerIP` for the PrestaShop Service | `nil`                                                    |
+| `prestashopUsername`          | User of the application                     | `user`                                                   |
+| `prestashopPassword`          | Application password                        | `bitnami`                                                |
+| `prestashopEmail`             | Admin email                                 | `user@example.com`                                       |
+| `prestashopFirstName`         | First Name                                  | `User`                                                   |
+| `prestashopLastName`          | Last Name                                   | `Name`                                                   |
+| `smtpHost`                    | SMTP host                                   | `nil`                                                    |
+| `smtpPort`                    | SMTP port                                   | `nil`                                                    |
+| `smtpUser`                    | SMTP user                                   | `nil`                                                    |
+| `smtpPassword`                | SMTP password                               | `nil`                                                    |
+| `smtpProtocol`                | SMTP protocol [`ssl`, `tls`]                | `nil`                                                    |
+| `mariadb.mariadbRootPassword` | MariaDB admin password                      | `nil`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/prestashop](http://github.com/bitnami/bitnami-docker-prestashop). For more information please refer to the [bitnami/prestashop](http://github.com/bitnami/bitnami-docker-prestashop) image documentation.
 
