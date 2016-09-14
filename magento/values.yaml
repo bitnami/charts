@@ -22,37 +22,37 @@ imageTag: 2.0.5-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoUsername: user
+magentoUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoPassword: bitnami1
+magentoPassword: bitnami1
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoEmail: user@example.com
+magentoEmail: user@example.com
 
 ## Prefix for Magento Admin
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoAdminUri: admin
+magentoAdminUri: admin
 
 ## First Name
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoFirstName: FirstName
+magentoFirstName: FirstName
 
 ## Last Name
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoLastName: LastName
+magentoLastName: LastName
 
 ## Mode
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoMode: developer
+magentoMode: developer
 
 ##
 ## MariaDB chart configuration
