@@ -67,7 +67,7 @@ spec:
         livenessProbe:
           exec:
             command:
-            - harpoon
+            - nami
             - status
             - phabricator
           initialDelaySeconds: 180
@@ -75,7 +75,7 @@ spec:
         readinessProbe:
           exec:
             command:
-            - harpoon
+            - nami
             - status
             - phabricator
           initialDelaySeconds: 30
