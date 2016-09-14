@@ -60,7 +60,7 @@ The following tables lists the configurable parameters of the PrestaShop chart a
 | `imagePullPolicy`             | Image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `prestashopHost`              | PrestaShop host                                       | `nil`                                                   |
 | `prestashopLoadBalancerIP`    | `loadBalancerIP` for the PrestaShop Service           | `nil`                                                   |
-| `prestashopUser`              | User of the application                               | `user`                                                  |
+| `prestashopUsername`          | User of the application                               | `user`                                                  |
 | `prestashopPassword`          | Application password                                  | `bitnami`                                               |
 | `prestashopEmail`             | Admin email                                           | `user@example.com`                                      |
 | `prestashopFirstName`         | First Name                                            | `User`                                                  |
@@ -92,7 +92,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install --name my-release \
-  --set prestashopUser=admin,prestashopPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set prestashopUsername=admin,prestashopPassword=password,mariadb.mariadbRootPassword=secretpassword \
     prestashop-x.x.x.tgz
 ```
 

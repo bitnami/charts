@@ -34,7 +34,7 @@ spec:
         - name: PRESTASHOP_HOST
           value: {{ default .Values.prestashopLoadBalancerIP .Values.prestashopHost | quote }}
         - name: PRESTASHOP_USERNAME
-          value: {{ default "" .Values.prestashopUser | quote }}
+          value: {{ default "" .Values.prestashopUsername | quote }}
         - name: PRESTASHOP_PASSWORD
           valueFrom:
             secretKeyRef:

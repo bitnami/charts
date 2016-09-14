@@ -22,7 +22,7 @@ imageTag: 1.6.1.6-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
 ##
-# prestashopUser: user
+# prestashopUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
