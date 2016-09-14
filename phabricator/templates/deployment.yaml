@@ -45,7 +45,7 @@ spec:
         - name: PHABRICATOR_LASTNAME
           value: {{ default "" .Values.phabricatorLastName | quote }}
         - name: PHABRICATOR_HOST
-          value: {{ default .Values.phabricatorHostIP .Values.phabricatorLoadBalancerIP | quote }}
+          value: {{ default .Values.phabricatorLoadBalancerIP .Values.phabricatorHost | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
