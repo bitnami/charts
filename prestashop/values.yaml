@@ -22,27 +22,27 @@ imageTag: 1.6.1.6-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
 ##
-# prestashopUsername: user
+prestashopUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
 ##
-# prestashopPassword: bitnami1
+prestashopPassword: bitnami1
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
 ##
-# prestashopEmail: user@example.com
+prestashopEmail: user@example.com
 
 ## First Name
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
 ##
-# prestashopFirstName: User
+prestashopFirstName: User
 
 ## Last Name
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
 ##
-# prestashopLastName: Name
+prestashopLastName: Name
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop/#smtp-configuration

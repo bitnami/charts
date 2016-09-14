@@ -22,17 +22,17 @@ imageTag: 9.1.0-r1
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
 ##
-# owncloudUsername: user
+owncloudUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
 ##
-# owncloudPassword: bitnami1
+owncloudPassword: bitnami1
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
 ##
-# owncloudEmail: user@example.com
+owncloudEmail: user@example.com
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-owncloud/#smtp-configuration

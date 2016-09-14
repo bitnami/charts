@@ -22,17 +22,17 @@ imageTag: 2.3.0.2-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
 ##
-# opencartUser: user
+opencartUser: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
 ##
-# opencartPassword: bitnami1
+opencartPassword: bitnami1
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
 ##
-# opencartEmail: user@example.com
+opencartEmail: user@example.com
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-opencart/#smtp-configuration
