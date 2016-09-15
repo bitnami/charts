@@ -19,7 +19,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "bitnami/mariadb:{{ .Values.imageTag }}"
-        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        imagePullPolicy: {{ template "imagePullPolicy" . }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
@@ -53,8 +53,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: mariadb-data
+        - name: data
           mountPath: /bitnami/mariadb
       volumes:
-      - name: mariadb-data
+      - name: data
         emptyDir: {}
