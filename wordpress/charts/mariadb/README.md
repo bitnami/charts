@@ -4,8 +4,6 @@
 
 MariaDB is developed as open source software and as a relational database it provides an SQL interface for accessing data. The latest versions of MariaDB also include GIS and JSON features.
 
-[source](https://mariadb.org/about/)
-
 ## TL;DR;
 
 ```bash
@@ -13,8 +11,6 @@ $ helm install mariadb-x.x.x.tgz
 ```
 
 ## Introduction
-
-Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
@@ -25,7 +21,7 @@ Download the latest release of the chart from the [releases](../../../releases) 
 Alternatively, clone the repo if you wish to use the development snapshot:
 
 ```bash
-$ git clone https://github.com/bitnami/charts.git
+$ git clone https://github.com/kubernetes/charts.git
 ```
 
 ## Installing the Chart
@@ -56,14 +52,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the MariaDB chart and their default values.
 
-|       Parameter       |         Description         |                         Default                         |
-|-----------------------|-----------------------------|---------------------------------------------------------|
-| `imageTag`            | `bitnami/mariadb` image tag | MariaDB image version                                   |
-| `imagePullPolicy`     | Image pull policy           | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `mariadbRootPassword` | MariaDB admin password      | `nil`                                                   |
-| `mariadbUser`         | MariaDB user                | `nil`                                                   |
-| `mariadbPassword`     | MariaDB password            | `nil`                                                   |
-| `mariadbDatabase`     | Database to create          | `nil`                                                   |
+|       Parameter       |           Description            |                         Default                          |
+|-----------------------|----------------------------------|----------------------------------------------------------|
+| `imageTag`            | `bitnami/mariadb` image tag.     | Most recent release                                      |
+| `imagePullPolicy`     | Image pull policy.               | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+| `mariadbRootPassword` | Password for the `root` user.    | `nil`                                                    |
+| `mariadbUser`         | Username of new user to create.  | `nil`                                                    |
+| `mariadbPassword`     | Password for the new user.       | `nil`                                                    |
+| `mariadbDatabase`     | Name for new database to create. | `nil`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb). For more information please refer to the [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb) image documentation.
 
@@ -109,7 +105,7 @@ Replace:
 
 ```yaml
       volumes:
-      - name: mariadb-data
+      - name: data
         emptyDir: {}
 ```
 
@@ -117,7 +113,7 @@ with
 
 ```yaml
       volumes:
-      - name: mariadb-data
+      - name: data
         gcePersistentDisk:
           pdName: mariadb-data-disk
           fsType: ext4
