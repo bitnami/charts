@@ -10,8 +10,6 @@ $ helm install redmine-x.x.x.tgz
 
 ## Introduction
 
-Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
-
 This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the Redmine application.
@@ -23,7 +21,7 @@ Download the latest release of the chart from the [releases](../../../releases) 
 Alternatively, clone the repo if you wish to use the development snapshot:
 
 ```bash
-$ git clone https://github.com/bitnami/charts.git
+$ git clone https://github.com/kubernetes/charts.git
 ```
 
 ## Installing the Chart
@@ -68,6 +66,7 @@ The following tables lists the configurable parameters of the Redmine chart and 
 | `smtpPassword`                | SMTP password                 | `nil`                                                   |
 | `smtpTls`                     | Use TLS encryption with SMTP  | `nil`                                                   |
 | `mariadb.mariadbRootPassword` | MariaDB admin password        | `nil`                                                   |
+| `serviceType`                 | Kubernetes Service type       | `LoadBalancer`                                           |
 
 The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
