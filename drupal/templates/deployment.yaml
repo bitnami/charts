@@ -64,6 +64,16 @@ spec:
           mountPath: /bitnami/apache
       volumes:
       - name: drupal-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-drupal
+      {{- else }}
         emptyDir: {}
+      {{- end }}
       - name: apache-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-apache
+      {{- else }}
         emptyDir: {}
+      {{- end }}
