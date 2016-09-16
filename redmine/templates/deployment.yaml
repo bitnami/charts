@@ -75,4 +75,9 @@ spec:
           mountPath: /bitnami/redmine
       volumes:
       - name: redmine-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+      {{- else }}
         emptyDir: {}
+      {{- end -}}
