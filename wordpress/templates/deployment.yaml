@@ -85,6 +85,16 @@ spec:
           mountPath: /bitnami/apache
       volumes:
       - name: wordpress-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-wordpress
+      {{- else }}
         emptyDir: {}
+      {{- end }}
       - name: apache-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-apache
+      {{- else }}
         emptyDir: {}
+      {{- end }}
