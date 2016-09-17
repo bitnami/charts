@@ -19,8 +19,8 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "bitnami/wordpress:{{ .Values.imageTag }}"
-        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        image: "{{ .Values.image.repo }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
         env:
         - name: MARIADB_HOST
           value: {{ template "mariadb.fullname" . }}

@@ -1,4 +1,4 @@
-# Wordpress
+# WordPress
 
 [WordPress](https://wordpress.org/) is one of the most versatile open source content management systems on the market. A publishing platform for building blogs and websites.
 
@@ -10,9 +10,9 @@ $ helm install wordpress-x.x.x.tgz
 
 ## Introduction
 
-This chart bootstraps a [Wordpress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the Wordpress application.
+It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application.
 
 ## Get this chart
 
@@ -34,7 +34,7 @@ $ helm install --name my-release wordpress-x.x.x.tgz
 
 *Replace the `x.x.x` placeholder with the chart release version.*
 
-The command deploys Wordpress on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys WordPress on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -50,26 +50,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the Wordpress chart and their default values.
+The following tables lists the configurable parameters of the WordPress chart and their default values.
 
-|           Parameter           |          Description          |                         Default                          |
-|-------------------------------|-------------------------------|----------------------------------------------------------|
-| `imageTag`                    | `bitnami/wordpress` image tag | Wordpress image version                                  |
-| `imagePullPolicy`             | Image pull policy             | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `wordpressUsername`           | User of the application       | `user`                                                   |
-| `wordpressPassword`           | Application password          | `bitnami`                                                |
-| `wordpressEmail`              | Admin email                   | `user@example.com`                                       |
-| `wordpressFirstName`          | First name                    | `FirstName`                                              |
-| `wordpressLastName`           | Last name                     | `LastName`                                               |
-| `wordpressBlogName`           | Blog name                     | `User's Blog!`                                           |
-| `smtpHost`                    | SMTP host                     | `nil`                                                    |
-| `smtpPort`                    | SMTP port                     | `nil`                                                    |
-| `smtpUser`                    | SMTP user                     | `nil`                                                    |
-| `smtpPassword`                | SMTP password                 | `nil`                                                    |
-| `smtpUsername`                | User name for SMTP emails     | `nil`                                                    |
-| `smtpProtocol`                | SMTP protocol [`tls`, `ssl`]  | `nil`                                                    |
-| `mariadb.mariadbRootPassword` | MariaDB admin password        | `nil`                                                    |
-| `serviceType`                 | Kubernetes Service type       | `LoadBalancer`                                           |
+| Parameter                       | Description                     | Default                                                    |
+| ------------------------------- | ------------------------------- | ---------------------------------------------------------- |
+| `image.repo`                    | WordPress image repo            | `bitnami/wordpress`                                        |
+| `image.tag`                     | WordPress image tag             | Bitnami WordPress image version                            |
+| `image.pullPolicy`              | Image pull policy               | `Always` if `image.tag` is `latest`, else `IfNotPresent`   |
+| `wordpressUsername`             | User of the application         | `user`                                                     |
+| `wordpressPassword`             | Application password            | `bitnami`                                                  |
+| `wordpressEmail`                | Admin email                     | `user@example.com`                                         |
+| `wordpressFirstName`            | First name                      | `FirstName`                                                |
+| `wordpressLastName`             | Last name                       | `LastName`                                                 |
+| `wordpressBlogName`             | Blog name                       | `User's Blog!`                                             |
+| `smtpHost`                      | SMTP host                       | `nil`                                                      |
+| `smtpPort`                      | SMTP port                       | `nil`                                                      |
+| `smtpUser`                      | SMTP user                       | `nil`                                                      |
+| `smtpPassword`                  | SMTP password                   | `nil`                                                      |
+| `smtpUsername`                  | User name for SMTP emails       | `nil`                                                      |
+| `smtpProtocol`                  | SMTP protocol [`tls`, `ssl`]    | `nil`                                                      |
+| `mariadb.mariadbRootPassword`   | MariaDB admin password          | `nil`                                                      |
+| `serviceType`                   | Kubernetes Service type         | `LoadBalancer`                                             |
+| `persistence.enabled`           | Enable persistence using PVC    | `true`                                                     |
+| `persistence.storageClass`      | PVC Storage Class               | `generic`                                                  |
+| `persistence.accessMode`        | PVC Access Mode                 | `ReadWriteOnce`                                            |
+| `persistence.size`              | PVC Storage Request             | `8Gi`                                                      |
 
 The above parameters map to the env variables defined in [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress) image documentation.
 
@@ -81,7 +86,7 @@ $ helm install --name my-release \
     wordpress-x.x.x.tgz
 ```
 
-The above command sets the Wordpress application username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the WordPress application username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -93,44 +98,7 @@ $ helm install --name my-release -f values.yaml wordpress-x.x.x.tgz
 
 ## Persistence
 
-The [Bitnami Wordpress](https://github.com/bitnami/bitnami-docker-wordpress) image stores the Wordpress data and configurations at the `/bitnami/wordpress` path of the container.
+The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image stores the WordPress data and configurations at the `/bitnami/wordpress` and `/bitnami/apache` paths of the container.
 
-As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-
-For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
-
-### Step 1: Create a persistent disk
-
-You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
-
-```bash
-$ gcloud compute disks create --size=500GB --zone=us-central1-a wordpress-data-disk
-```
-
-### Step 2: Update `templates/deployment.yaml`
-
-Replace:
-
-```yaml
-      volumes:
-      - name: wordpress-data
-        emptyDir: {}
-```
-
-with
-
-```yaml
-      volumes:
-      - name: wordpress-data
-        gcePersistentDisk:
-          pdName: wordpress-data-disk
-          fsType: ext4
-```
-
-> **Note**:
->
-> You should also use a persistent storage volume for the MariaDB deployment.
-
-[Install](#installing-the-chart) the chart after making these changes.
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Configuration](#configuration) section to configure the PVC or to disable persistence.

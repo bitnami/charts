@@ -52,15 +52,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Drupal chart and their default values.
 
-|           Parameter           |        Description         |                         Default                         |
-|-------------------------------|----------------------------|---------------------------------------------------------|
-| `imageTag`                    | `bitnami/drupal` image tag | Drupal image version                                    |
-| `imagePullPolicy`             | Image pull policy          | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `drupalUser`                  | User of the application    | `user`                                                  |
-| `drupalPassword`              | Application password       | `bitnami`                                               |
-| `drupalEmail`                 | Admin email                | `user@example.com`                                      |
-| `mariadb.mariadbRootPassword` | MariaDB admin password     | `nil`                                                   |
-| `serviceType`                 | Kubernetes Service type    | `LoadBalancer`                                          |
+| Parameter                       | Description                  | Default                                                   |
+| ------------------------------- | ---------------------------- | --------------------------------------------------------- |
+| `image.repo`                    | Drupal image repo            | `bitnami/drupal`                                          |
+| `image.tag`                     | Drupal image tag             | Bitnami Drupal image version                              |
+| `image.pullPolicy`              | Image pull policy            | `Always` if `image.tag` is `latest`, else `IfNotPresent`  |
+| `drupalUsername`                | User of the application      | `user`                                                    |
+| `drupalPassword`                | Application password         | `bitnami`                                                 |
+| `drupalEmail`                   | Admin email                  | `user@example.com`                                        |
+| `mariadb.mariadbRootPassword`   | MariaDB admin password       | `nil`                                                     |
+| `serviceType`                   | Kubernetes Service type      | `LoadBalancer`                                            |
+| `persistence.enabled`           | Enable persistence using PVC | `true`                                                    |
+| `persistence.storageClass`      | PVC Storage Class            | `generic`                                                 |
+| `persistence.accessMode`        | PVC Access Mode              | `ReadWriteOnce`                                           |
+| `persistence.size`              | PVC Storage Request          | `8Gi`                                                     |
 
 The above parameters map to the env variables defined in [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal) image documentation.
 
@@ -68,7 +73,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install --name my-release \
-  --set drupalUser=admin,drupalPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set drupalUsername=admin,drupalPassword=password,mariadb.mariadbRootPassword=secretpassword \
     drupal-x.x.x.tgz
 ```
 
@@ -84,44 +89,7 @@ $ helm install --name my-release -f values.yaml drupal-x.x.x.tgz
 
 ## Persistence
 
-The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image stores the Drupal data and configurations at the `/bitnami/drupal` path of the container.
+The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image stores the Drupal data and configurations at the `/bitnami/drupal` and `/bitnami/apache` paths of the container.
 
-As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-
-For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
-
-### Step 1: Create a persistent disk
-
-You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
-
-```bash
-$ gcloud compute disks create --size=500GB --zone=us-central1-a drupal-data-disk
-```
-
-### Step 2: Update `templates/deployment.yaml`
-
-Replace:
-
-```yaml
-      volumes:
-      - name: drupal-data
-        emptyDir: {}
-```
-
-with
-
-```yaml
-      volumes:
-      - name: drupal-data
-        gcePersistentDisk:
-          pdName: drupal-data-disk
-          fsType: ext4
-```
-
-> **Note**:
->
-> You should also use a persistent storage volume for the MariaDB deployment.
-
-[Install](#installing-the-chart) the chart after making these changes.
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
