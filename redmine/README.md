@@ -14,6 +14,11 @@ This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redm
 
 It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the Redmine application.
 
+## Prerequisites
+
+- Kubernetes 1.3+ with Alpha APIs enabled
+- PV provisioner support in the underlying infrastructure
+
 ## Get this chart
 
 Download the latest release of the chart from the [releases](../../../releases) page.

@@ -14,6 +14,11 @@ This chart bootstraps a [Drupal](https://github.com/bitnami/bitnami-docker-drupa
 
 It also packages the Bitnami MariaDB chart which is required for bootstrapping a MariaDB deployment for the database requirements of the Drupal application.
 
+## Prerequisites
+
+- Kubernetes 1.3+ with Alpha APIs enabled
+- PV provisioner support in the underlying infrastructure
+
 ## Get this chart
 
 Download the latest release of the chart from the [releases](../../../releases) page.
