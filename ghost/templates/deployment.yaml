@@ -63,15 +63,19 @@ spec:
         - name: http
           containerPort: 2368
         livenessProbe:
-          httpGet:
-            path: /
-            port: http
+          exec:
+            command:
+            - nami
+            - status
+            - ghost
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
-          httpGet:
-            path: /
-            port: http
+          exec:
+            command:
+            - nami
+            - status
+            - ghost
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
