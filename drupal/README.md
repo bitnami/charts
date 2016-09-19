@@ -54,9 +54,8 @@ The following tables lists the configurable parameters of the Drupal chart and t
 
 | Parameter                       | Description                  | Default                                                   |
 | ------------------------------- | ---------------------------- | --------------------------------------------------------- |
-| `image.repo`                    | Drupal image repo            | `bitnami/drupal`                                          |
-| `image.tag`                     | Drupal image tag             | Bitnami Drupal image version                              |
-| `image.pullPolicy`              | Image pull policy            | `Always` if `image.tag` is `latest`, else `IfNotPresent`  |
+| `image`                         | Drupal image                 | `bitnami/drupal:{VERSION}`                                |
+| `imagePullPolicy`               | Image pull policy            | `Always` if `image` tag is `latest`, else `IfNotPresent`  |
 | `drupalUsername`                | User of the application      | `user`                                                    |
 | `drupalPassword`                | Application password         | `bitnami`                                                 |
 | `drupalEmail`                   | Admin email                  | `user@example.com`                                        |
