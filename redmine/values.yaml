@@ -1,10 +1,10 @@
 ## Bitnami Redmine image version
 ## ref: https://hub.docker.com/r/bitnami/redmine/tags/
 ##
-imageTag: 3.3.0-r2
+image: bitnami/redmine:3.3.0-r2
 
 ## Specify a imagePullPolicy
-## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 # imagePullPolicy:
@@ -12,7 +12,7 @@ imageTag: 3.3.0-r2
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
 ##
-redmineUser: user
+redmineUsername: user
 
 ## Application password
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables

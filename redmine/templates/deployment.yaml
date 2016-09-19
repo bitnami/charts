@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "bitnami/redmine:{{ .Values.imageTag }}"
+        image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MARIADB_HOST
@@ -32,7 +32,7 @@ spec:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: REDMINE_USERNAME
-          value: {{ default "" .Values.redmineUser | quote }}
+          value: {{ default "" .Values.redmineUsername | quote }}
         - name: REDMINE_PASSWORD
           valueFrom:
             secretKeyRef:
