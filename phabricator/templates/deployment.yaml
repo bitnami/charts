@@ -67,17 +67,19 @@ spec:
         livenessProbe:
           exec:
             command:
-            - nami
-            - status
-            - phabricator
+            - nc
+            - -z
+            - localhost
+            - "80"
           initialDelaySeconds: 180
           timeoutSeconds: 15
         readinessProbe:
           exec:
             command:
-            - nami
-            - status
-            - phabricator
+            - nc
+            - -z
+            - localhost
+            - "80"
           initialDelaySeconds: 30
           timeoutSeconds: 5
         volumeMounts:
