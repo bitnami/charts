@@ -1,7 +1,7 @@
 ## Bitnami Odoo image version
 ## ref: https://hub.docker.com/r/bitnami/odoo/tags/
 ##
-imageTag: 9.0.20160620-r2
+imageTag: 9.0.20160620-r3
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
