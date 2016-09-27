@@ -1,0 +1,78 @@
+## Bitnami SuiteCRM image version
+## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
+##
+image: bitnami/suitecrm:7.7.4-r0
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+suitecrmUsername: user
+
+## Application password
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+suitecrmPassword: bitnami
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+suitecrmEmail: user@example.com
+
+## Last name
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+suitecrmLastName: LastName
+
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpUsername:
+# smtpProtocol:
+
+##
+## MariaDB chart configuration
+##
+mariadb:
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+serviceType: LoadBalancer
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  apache:
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 1Gi
+  suitecrm:
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 8Gi
