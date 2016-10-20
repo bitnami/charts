@@ -1,7 +1,7 @@
 ## Bitnami Redis image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
 ##
-imageTag: 3.2.3-r1
+imageTag: 3.2.4-r0
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
