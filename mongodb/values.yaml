@@ -1,7 +1,7 @@
 ## Bitnami MongoDB image version
 ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
 ##
-imageTag: 3.2.9-r2
+imageTag: 3.2.10-r0
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
