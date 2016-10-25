@@ -1,8 +1,32 @@
-# Bitnami Charts Repository
+# The Bitnami Library for Kubernetes
 
-This repository contains Charts for [Helm](https://github.com/kubernetes/helm) that use Docker containers developed and maintained by [Bitnami](https://bitnami.com/)
+Popular applications, provided by Bitnami, ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/kubernetes/helm).
 
-To learn more about Bitnami-provided Docker containers, please visit http://bitnami.com/docker.
+- [WordPress (stable)](https://github.com/kubernetes/charts/tree/master/stable/wordpress)
+- [Joomla! (incubator)](https://github.com/bitnami/charts/tree/master/incubator/joomla)
+- [Redmine (stable)](https://github.com/kubernetes/charts/tree/master/stable/redmine)
+- [Drupal (stable)](https://github.com/kubernetes/charts/tree/master/stable/drupal)
+- [OpenCart (incubator)](https://github.com/bitnami/charts/tree/master/incubator/opencart)
+- [Magento (incubator)](https://github.com/bitnami/charts/tree/master/incubator/magento)
+- [RabbitMQ (incubator)](https://github.com/bitnami/charts/tree/master/incubator/rabbitmq)
+- [OwnCloud (incubator)](https://github.com/bitnami/charts/tree/master/incubator/owncloud)
+- [Memcached (incubator)](https://github.com/bitnami/charts/tree/master/incubator/memcached)
+- [Phabricator (incubator)](https://github.com/bitnami/charts/tree/master/incubator/phabricator)
+- [PrestaShop (incubator)](https://github.com/bitnami/charts/tree/master/incubator/prestashop)
+- [PostgreSQL (incubator)](https://github.com/bitnami/charts/tree/master/incubator/postgresql)
+- [MediaWiki (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mediawiki)
+- [MongoDB (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mongodb)
+- [Redis (incubator)](https://github.com/bitnami/charts/tree/master/incubator/redis)
+- [Odoo (incubator)](https://github.com/bitnami/charts/tree/master/incubator/odoo)
+- [nginx (incubator)](https://github.com/bitnami/charts/tree/master/incubator/nginx)
+- [TestLink (incubator)](https://github.com/bitnami/charts/tree/master/incubator/testlink)
+- [WildFly (incubator)](https://github.com/bitnami/charts/tree/master/incubator/wildfly)
+- [phpBB (incubator)](https://github.com/bitnami/charts/tree/master/incubator/phpbb)
+- [Ghost (incubator)](https://github.com/bitnami/charts/tree/master/incubator/ghost)
+- [Tomcat (incubator)](https://github.com/bitnami/charts/tree/master/incubator/tomcat)
+- [Apache (incubator)](https://github.com/bitnami/charts/tree/master/incubator/apache)
+- [MariaDB (stable)](https://github.com/kubernetes/charts/tree/master/stable/mariadb)
+- [MariaDB Cluster (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mariadb-cluster)
 
 ## Before you begin
 
@@ -25,4 +49,3 @@ The above command creates a new cluster named `my-cluster`. You can name the clu
 Helm is a tool for managing Kubernetes charts. Charts are packages of pre-configured Kubernetes resources.
 
 To install Helm, refer to the [Helm install guide](https://github.com/kubernetes/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
-
