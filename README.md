@@ -1,6 +1,6 @@
 # The Bitnami Library for Kubernetes
 
-Popular applications, provided by Bitnami, ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/kubernetes/helm).
+Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/kubernetes/helm).
 
 - [WordPress (stable)](https://github.com/kubernetes/charts/tree/master/stable/wordpress)
 - [Joomla! (incubator)](https://github.com/bitnami/charts/tree/master/incubator/joomla)
@@ -16,7 +16,7 @@ Popular applications, provided by Bitnami, ready to launch on Kubernetes using [
 - [PostgreSQL (incubator)](https://github.com/bitnami/charts/tree/master/incubator/postgresql)
 - [MediaWiki (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mediawiki)
 - [MongoDB (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mongodb)
-- [Redis (incubator)](https://github.com/bitnami/charts/tree/master/incubator/redis)
+- [Redis (stable)](https://github.com/kubernetes/charts/tree/master/stable/redis)
 - [Odoo (incubator)](https://github.com/bitnami/charts/tree/master/incubator/odoo)
 - [nginx (incubator)](https://github.com/bitnami/charts/tree/master/incubator/nginx)
 - [TestLink (incubator)](https://github.com/bitnami/charts/tree/master/incubator/testlink)
