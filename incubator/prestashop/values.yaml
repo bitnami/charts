@@ -1,7 +1,7 @@
 ## Bitnami PrestaShop image version
 ## ref: https://hub.docker.com/r/bitnami/prestashop/tags/
 ##
-imageTag: 1.6.1.7-r0
+imageTag: 1.6.1.8-r0
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
