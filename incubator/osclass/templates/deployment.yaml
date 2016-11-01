@@ -1,0 +1,96 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "bitnami/osclass:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        env:
+        - name: MARIADB_HOST
+          value: {{ template "mariadb.fullname" . }}
+        - name: MARIADB_PORT
+          value: "3306"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "mariadb.fullname" . }}
+              key: mariadb-root-password
+        - name: OSCLASS_HOST
+          value: {{ default .Values.osclassLoadBalancerIP .Values.osclassHost | quote }}
+        - name: OSCLASS_USERNAME
+          value: {{ default "" .Values.osclassUser | quote }}
+        - name: OSCLASS_WEB_TITLE
+          value: {{ default "" .Values.osclassWebTitle | quote }}
+        - name: OSCLASS_PING_ENGINES
+          value: {{ default "" .Values.osclassPingEngines | quote }}
+        - name: OSCLASS_SAVE_STATS
+          value: {{ default "" .Values.osclassSaveStats | quote }}
+        - name: OSCLASS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: osclass-password
+        - name: OSCLASS_EMAIL
+          value: {{ default "" .Values.osclassEmail | quote }}
+        - name: SMTP_HOST
+          value: {{ default "" .Values.smtpHost | quote }}
+        - name: SMTP_PORT
+          value: {{ default "" .Values.smtpPort | quote }}
+        - name: SMTP_USER
+          value: {{ default "" .Values.smtpUser | quote }}
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: smtp-password
+        - name: SMTP_PROTOCOL
+          value: {{ default "" .Values.smtpProtocol | quote }}
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        livenessProbe:
+          exec:
+            command:
+            - nc
+            - -z
+            - localhost
+            - "80"
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - nc
+            - -z
+            - localhost
+            - "80"
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: osclass-data
+          mountPath: /bitnami/osclass
+        - name: apache-data
+          mountPath: /bitnami/apache
+      volumes:
+      - name: osclass-data
+        emptyDir: {}
+      - name: apache-data
+        emptyDir: {}
