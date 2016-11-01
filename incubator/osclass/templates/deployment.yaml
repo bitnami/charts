@@ -67,15 +67,21 @@ spec:
         - name: https
           containerPort: 443
         livenessProbe:
-          httpGet:
-            path: /
-            port: http
+          exec:
+            command:
+            - nc
+            - -z
+            - localhost
+            - "80"
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
-          httpGet:
-            path: /
-            port: http
+          exec:
+            command:
+            - nc
+            - -z
+            - localhost
+            - "80"
           initialDelaySeconds: 5
           timeoutSeconds: 1
         volumeMounts:
