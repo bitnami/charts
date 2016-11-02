@@ -14,15 +14,11 @@ image: bitnami/mongodb:3.2.10-r0
 ##
 # mongodbRootPassword:
 
-## MongoDB custom user
+## MongoDB custom user and database
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
 ##
 # mongodbUsername:
 # mongodbPassword:
-
-## Database to create
-## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
-##
 # mongodbDatabase:
 
 ## Enable persistence using Persistent Volume Claims
