@@ -24,6 +24,7 @@ Alternatively, clone the repo if you wish to use the development snapshot:
 
 ```bash
 $ git clone https://github.com/bitnami/charts.git
+$ helm dependency update charts/incubator/opencart
 ```
 
 ## Installing the Chart
