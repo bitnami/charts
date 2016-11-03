@@ -1,7 +1,7 @@
 ## Bitnami Wildfly image version
 ## ref: https://hub.docker.com/r/bitnami/wildfly/tags/
 ##
-imageTag: 10.0.0-r4
+imageTag: 10.1.0-r0
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'

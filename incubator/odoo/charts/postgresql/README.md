@@ -57,7 +57,7 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `imageTag`           | `bitnami/postgresql` image tag | PostgreSQL image version                                |
 | `imagePullPolicy`    | Image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `postgresqlUsername` | PostgreSQL admin user          | `postgres`                                              |
-| `postgresqlPassword` | Postgresql password            | `nil`                                                   |
+| `postgresqlPassword` | PostgreSQL password            | `nil`                                                   |
 | `postgresqlDatabase` | Database to create             | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/postgresql](http://github.com/bitnami/bitnami-docker-postgresql). For more information please refer to the [bitnami/postgresql](http://github.com/bitnami/bitnami-docker-postgresql) image documentation.
