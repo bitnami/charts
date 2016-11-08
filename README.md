@@ -20,6 +20,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [Redis (stable)](https://github.com/kubernetes/charts/tree/master/stable/redis)
 - [Odoo (incubator)](https://github.com/bitnami/charts/tree/master/incubator/odoo)
 - [Osclass (incubator)](https://github.com/bitnami/charts/tree/master/incubator/osclass)
+- [OrangeHRM (incubator)](https://github.com/bitnami/charts/tree/master/incubator/orangehrm)
 - [nginx (incubator)](https://github.com/bitnami/charts/tree/master/incubator/nginx)
 - [TestLink (incubator)](https://github.com/bitnami/charts/tree/master/incubator/testlink)
 - [WildFly (incubator)](https://github.com/bitnami/charts/tree/master/incubator/wildfly)
