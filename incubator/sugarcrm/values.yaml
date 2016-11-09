@@ -1,7 +1,7 @@
 ## Bitnami SugarCRM image version
 ## ref: https://hub.docker.com/r/bitnami/sugarcrm/tags/
 ##
-image: bitnami/sugarcrm:6.5.24-r0
+image: bitnami/sugarcrm:6.5.24-r2
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
