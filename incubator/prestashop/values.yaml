@@ -1,7 +1,7 @@
 ## Bitnami PrestaShop image version
 ## ref: https://hub.docker.com/r/bitnami/prestashop/tags/
 ##
-imageTag: 1.6.1.8-r1
+imageTag: 1.6.1.9-r0
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
@@ -37,12 +37,12 @@ prestashopEmail: user@example.com
 ## First Name
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
 ##
-prestashopFirstName: User
+prestashopFirstName: Bitnami
 
 ## Last Name
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
 ##
-prestashopLastName: Name
+prestashopLastName: User
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-prestashop/#smtp-configuration
