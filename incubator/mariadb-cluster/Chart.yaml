@@ -1,5 +1,5 @@
 name: mariadb-cluster
-version: 0.3.2
+version: 0.3.3
 description: Chart to create a Highly available MariaDB cluster
 keywords:
 - mariadb
