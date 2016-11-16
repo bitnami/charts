@@ -1,5 +1,5 @@
 name: phabricator
-version: 0.3.5
+version: 0.3.6
 description: Collection of open source web applications that help software companies build better software.
 keywords:
 - phabricator
@@ -15,7 +15,7 @@ keywords:
 - git
 - mercurial
 - subversion
-home: https://www.phacility.com
+home: https://www.phacility.com/phabricator
 sources:
 - https://github.com/bitnami/bitnami-docker-phabricator
 maintainers:
