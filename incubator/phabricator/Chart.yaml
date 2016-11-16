@@ -15,7 +15,7 @@ keywords:
 - git
 - mercurial
 - subversion
-home: https://www.phacility.com/phabricator
+home: https://www.phacility.com/phabricator/
 sources:
 - https://github.com/bitnami/bitnami-docker-phabricator
 maintainers:
