@@ -25,7 +25,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [TestLink (incubator)](https://github.com/bitnami/charts/tree/master/incubator/testlink)
 - [WildFly (incubator)](https://github.com/bitnami/charts/tree/master/incubator/wildfly)
 - [phpBB (stable)](https://github.com/kubernetes/charts/tree/master/stable/phpbb)
-- [Ghost (incubator)](https://github.com/bitnami/charts/tree/master/incubator/ghost)
+- [Ghost (stable)](https://github.com/kubernetes/charts/tree/master/stable/ghost)
 - [Tomcat (incubator)](https://github.com/bitnami/charts/tree/master/incubator/tomcat)
 - [Apache (incubator)](https://github.com/bitnami/charts/tree/master/incubator/apache)
 - [MariaDB (stable)](https://github.com/kubernetes/charts/tree/master/stable/mariadb)
