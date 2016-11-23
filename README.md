@@ -16,7 +16,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [PrestaShop (incubator)](https://github.com/bitnami/charts/tree/master/incubator/prestashop)
 - [PostgreSQL (incubator)](https://github.com/bitnami/charts/tree/master/incubator/postgresql)
 - [MediaWiki (stable)](https://github.com/kubernetes/charts/tree/master/stable/mediawiki)
-- [MongoDB (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mongodb)
+- [MongoDB (stable)](https://github.com/kubernetes/charts/tree/master/stable/mongodb)
 - [Redis (stable)](https://github.com/kubernetes/charts/tree/master/stable/redis)
 - [Odoo (incubator)](https://github.com/bitnami/charts/tree/master/incubator/odoo)
 - [Osclass (incubator)](https://github.com/bitnami/charts/tree/master/incubator/osclass)
