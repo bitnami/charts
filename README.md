@@ -8,7 +8,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [Drupal (stable)](https://github.com/kubernetes/charts/tree/master/stable/drupal)
 - [OpenCart (incubator)](https://github.com/bitnami/charts/tree/master/incubator/opencart)
 - [Magento (incubator)](https://github.com/bitnami/charts/tree/master/incubator/magento)
-- [RabbitMQ (incubator)](https://github.com/bitnami/charts/tree/master/incubator/rabbitmq)
+- [RabbitMQ (stable)](https://github.com/kubernetes/charts/tree/master/stable/rabbitmq)
 - [OwnCloud (incubator)](https://github.com/bitnami/charts/tree/master/incubator/owncloud)
 - [Jenkins (incubator)](https://github.com/bitnami/charts/tree/master/incubator/jenkins)
 - [Memcached (incubator)](https://github.com/bitnami/charts/tree/master/incubator/memcached)
