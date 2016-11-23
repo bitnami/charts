@@ -9,7 +9,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [OpenCart (incubator)](https://github.com/bitnami/charts/tree/master/incubator/opencart)
 - [Magento (incubator)](https://github.com/bitnami/charts/tree/master/incubator/magento)
 - [RabbitMQ (stable)](https://github.com/kubernetes/charts/tree/master/stable/rabbitmq)
-- [OwnCloud (incubator)](https://github.com/bitnami/charts/tree/master/incubator/owncloud)
+- [OwnCloud (stable)](https://github.com/kubernetes/charts/tree/master/stable/owncloud)
 - [Jenkins (incubator)](https://github.com/bitnami/charts/tree/master/incubator/jenkins)
 - [Memcached (incubator)](https://github.com/bitnami/charts/tree/master/incubator/memcached)
 - [Phabricator (incubator)](https://github.com/bitnami/charts/tree/master/incubator/phabricator)
