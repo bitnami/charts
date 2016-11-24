@@ -1,0 +1,7 @@
+# Example:  mariadb 
+#dependencies:
+#- name: maridb
+#  version: 0.5.2
+#  repository: http://storage.googleapis.com/kubernetes-charts 
+
+
