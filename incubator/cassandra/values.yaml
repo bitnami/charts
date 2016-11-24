@@ -1,0 +1,83 @@
+## Cassandra 
+
+
+# Specify user name
+cassandraUser: "cassandra"
+
+# Specify password user 
+cassandraPassword: "bitnami"
+
+# Specify Cassandra cluster name 
+cassandraClusterName: "Bitnami Cluster"
+
+## Specify  Cassandra transports
+##
+## Specify  Cassandra transports
+cassandraTransportPort: "7000"
+
+# Specify  Cassandra SSL  transport 
+cassandraSslTransportPort: "7001"
+
+# Specify  Cassandra JMX  transport 
+cassandraJmxPort: "7199"
+
+# Specify Cassandra Query Language  transport 
+cassandraCqlPort: "9042"
+
+# Specify Cassandra RPC port 
+cassandraRpcPort: "9160"
+
+# Specify Cassandra  host 
+cassandraHost: ""
+
+# Specify Cassandra  host 
+cassandraClusterName: "cassandra-cluster"
+
+# Specify Cassandra seed hosts 
+cassandraSeeds: "" 
+
+# Specify if you enable or don't remote connections
+cassandraEnableRemoteConnections: true 
+
+# Specify if need to change credentials, true for the first node, false for others. 
+# We put true by default to true
+cassandraSetCredentials: 1
+
+
+# Specify Cassandra endpoint snitch
+cassandraEndpointSnitch: "SimpleSnitch"
+
+##  docker image version. Fetch tag from https://hub.docker.com/r/bitnami/cassandra/tags/
+##  Avoid to use 'latest' !
+image: "bitnami/cassandra"
+imageTag: "3.9-r3"
+
+## Specify a imagePullPolicy
+## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+## imagePullPolicy: 
+
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+serviceType: NodePort
+
+
+## Persist data to a persistent volume 
+persistence:
+  enabled: false
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 3000Mi
+    cpu: 300m
+
+

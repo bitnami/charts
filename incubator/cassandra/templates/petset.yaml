@@ -1,0 +1,77 @@
+apiVersion: "apps/v1alpha1"
+kind: PetSet
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  serviceName: {{ template "fullname" . }}
+  replicas: 2
+  template:
+    metadata:
+      annotations:
+        pod.alpha.kubernetes.io/initialized: "true"
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: {{ .Values.image }}:{{.Values.imageTag }}
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        env:
+        - name: CASSANDRA_TRANSPORT_PORT
+          value: {{ .Values.cassandraTransportPort  | quote }}
+        - name: CASSANDRA_SSLTRANSPORT_PORT
+          value: {{ .Values.cassandraSslTransportPort  | quote }}
+        - name: CASSANDRA_JMX_PORT
+          value: {{ .Values.cassandraJmxPort  | quote  }}
+        - name: CASSANDRA_CQL_PORT
+          value: {{ .Values.cassandraCqlPort | quote  }}
+        - name: CASSANDRA_RPC_PORT
+          value: {{ .Values.cassandraRpcPort | quote  }}
+        - name: CASSANDRA_USER
+          value: {{ .Values.cassandraUser  | quote }}
+        - name: CASSANDRA_PASSWORD
+          value: {{ .Values.cassandraPassword  | quote }}
+        - name: CASSANDRA_HOST
+          value: {{ default ""   .Values.cassandraHost | quote  }}
+        - name: CASSANDRA_CLUSTER_NAME
+          value: {{ .Values.cassandraClusterName | quote }}
+        - name: CASSANDRA_SEEDS
+          value: {{ template "fullname" . }}-0.{{ template "fullname" . }}.{{ .Release.Namespace  }}.svc.cluster.local,  {{ template "fullname" . }}-1.{{ template "fullname" . }}.{{ .Release.Namespace  }}.svc.cluster.local
+        - name: CASSANDRA_ENDPOINT_SNITCH
+          value: {{ .Values.cassandraEndpointSnitch | quote }}
+        - name: CASSANDRA_REMOTE_CONNECTIONS
+          value: {{ .Values.cassandraEnableRemoteConnections | quote }}
+        - name: CASSANDRA_SET_CREDENTIALS
+          value: "1"
+  
+        ports: 
+        - name: transport
+          containerPort: {{ .Values.cassandraTransportPort }}
+          protocol: "TCP"
+        - name: ssltransport
+          containerPort: {{ .Values.cassandraSslTransportPort }}
+          protocol: "TCP"
+        - name: cql
+          containerPort: {{ .Values.cassandraCqlPort }}
+          protocol: "TCP"
+        - name: rpc
+          containerPort: {{ .Values.cassandraRpcPort }}
+          protocol: "TCP"
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: {{ template "fullname" . }}-data
+          mountPath: "/bitnami/cassandra"
+      volumes: 
+      - name: {{ template "fullname" . }}-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim: 
+          claimName: {{ template "fullname" . }}-data
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
