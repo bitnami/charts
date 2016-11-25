@@ -17,8 +17,7 @@ moodleUser: user
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#environment-variables
-##
-moodlePassword: password
+## moodlePassword: password
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#environment-variables
@@ -42,8 +41,7 @@ moodleEmail: user@example.com
 mariadb:
   ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  mariadbRootPassword: secretpassword
+  ## mariadbRootPassword: secretpassword
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/

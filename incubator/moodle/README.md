@@ -1,16 +1,16 @@
 # moodle
 
-[moodle](https://www.moodle.org) Moodle is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalised learning environments
+[Moodle](https://www.moodle.org) Moodle is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalised learning environments
 
 ## TL;DR;
 
 ```console
-$ helm install .
+$ helm install ./moodle
 ```
 
 ## Introduction
 
-This chart bootstraps a [moodle](https://github.com/bitnami/bitnami-docker-moodle) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Moodle](https://github.com/bitnami/bitnami-docker-moodle) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/stable/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the moodle application.
 
@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/chart
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/moodle
+$ helm install --name my-release ./moodle
 ```
 
 The command deploys moodle on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -47,7 +47,8 @@ The following tables lists the configurable parameters of the moodle chart and t
 
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
-| `image`                              | moodle image                             | `bitnami/moodle:{VERSION}`                           |
+| `image`                              | moodle image                             | `bitnami/moodle:{VERSION}`                              |
+| `imageTag`                           | moodle image Tag                         | `3.1.3`                                               |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `moodleUser`                         | User of the application                  | `user`                                                  |
 | `moodlePassword`                     | Application password                     | _random 10 character long alphanumeric string_          |
