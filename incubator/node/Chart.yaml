@@ -1,0 +1,15 @@
+name: node
+version: 0.0.1
+description: NodeJs  Event-driven I/O server-side JavaScript environment based on V8
+keywords:
+- node
+- javascript 
+- nodejs
+home: http://nodejs.org/
+sources:
+- https://github.com/bitnami/bitnami-docker-node
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: 
