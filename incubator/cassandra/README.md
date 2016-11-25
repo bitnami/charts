@@ -10,9 +10,7 @@ $ helm install .
 
 ## Introduction
 
-This chart bootstraps a [cassandra](https://github.com/bitnami/bitnami-docker-cassandra) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/stable/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the cassandra application.
+This chart bootstraps a [Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -24,16 +22,16 @@ It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/chart
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/cassandra
+$ helm install --name my-release ./cassandra
 ```
 
-The command deploys cassandra on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys two nodes with Cassandra on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `my-release` petset:
 
 ```console
 $ helm delete my-release
@@ -47,16 +45,28 @@ The following tables lists the configurable parameters of the cassandra chart an
 
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
-| `image`                              | cassandra image                             | `bitnami/cassandra:{VERSION}`                           |
+| `image`                              | cassandra image                          | `bitnami/cassandra:{VERSION}`                           |
+| `imageTag`                           | cassandra image tag                      | `3.9-r3`                                                | 
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `cassandraUser`                         | User of the application                  | `user`                                                  |
-| `cassandraPassword`                     | Application password                     | `bitnami` |
-| `serviceType`                        | Kubernetes Service type                  | `nodePort`                                          |
+| `cassandraUser`                      | User of the application                  | `user`                                                  |
+| `cassandraPassword`                  | Application password                     | `bitnami`                                               |
+| `cassandraHost`                      | Hostname of the local node               | ``                                                      |
+| `cassandraClusterName`               | Cluster Name                             | `cassandra-cluster`                                     |
+| `cassandraSeeds`                     | List of nodes to seed the new node       | ``                                                      |
+| `cassandraEnableRemoteConnections`   | Enable remote connections                | `true`                                                  |
+| `cassandraSetCredentials`            | Enable the initial password change       | `1`                                                     |
+| `cassandraEndPointSnitch`            | Desired Snitch for the Endpoint          | `SimpleSnitch`                                          |
+| `cassandraTransportPort`             | Transport Port                           | `7000`                                                  |
+| `cassandraSslTransportPort`          | SSL Transport Port                       | `7001`                                                  |
+| `cassandraJmxPort`                   | JMX Port                                 | `7199`                                                  |
+| `cassandraCqlPort`                   | CQL Port                                 | `9042`                                                  |
+| `cassandraRpcPort`                   | RPC Port                                 | `9160`                                                  |
+| `serviceType`                        | Kubernetes Service type                  | `nodePort`                                              |
 | `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |
-| `persistence.cassandra.storageClass`    | PVC Storage Class for cassandra volume      | `generic`                                               |
-| `persistence.cassandra.accessMode`      | PVC Access Mode for cassandra volume        | `ReadWriteOnce`                                         |
-| `persistence.cassandra.size`            | PVC Storage Request for cassandra volume    | `8Gi`                                                   |
-| `resources`                          | CPU/Memory resource requests/limits      | Memory: `512Mi`, CPU: `300m`                            |
+| `persistence.cassandra.storageClass` | PVC Storage Class for cassandra volume   | `generic`                                               |
+| `persistence.cassandra.accessMode`   | PVC Access Mode for cassandra volume     | `ReadWriteOnce`                                         |
+| `persistence.cassandra.size`         | PVC Storage Request for cassandra volume | `8Gi`                                                   |
+| `resources`                          | CPU/Memory resource requests/limits      | Memory: `3000Mi`, CPU: `300m`                            |
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
 
@@ -65,14 +75,14 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set cassandraUser=admin,cassandraPassword=password\
-    stable/cassandra
+    ./cassandra
 ```
 
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml stable/cassandra
+$ helm install --name my-release -f values.yaml ./cassandra
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

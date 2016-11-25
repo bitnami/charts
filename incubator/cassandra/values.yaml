@@ -69,7 +69,7 @@ persistence:
   enabled: false
   storageClass: ""
   accessMode: ReadWriteOnce
-  size: 1Gi
+  size: 8Gi
 
 
 ## Configure resource requests and limits
