@@ -66,8 +66,8 @@ serviceType: NodePort
 
 ## Persist data to a persistent volume 
 persistence:
-  enabled: false
-  storageClass: ""
+  enabled: true
+  storageClass: "generic"
   accessMode: ReadWriteOnce
   size: 8Gi
 

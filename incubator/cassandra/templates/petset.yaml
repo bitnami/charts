@@ -35,7 +35,10 @@ spec:
         - name: CASSANDRA_USER
           value: {{ .Values.cassandraUser  | quote }}
         - name: CASSANDRA_PASSWORD
-          value: {{ .Values.cassandraPassword  | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: cassandra-password
         - name: CASSANDRA_HOST
           value: {{ default ""   .Values.cassandraHost | quote  }}
         - name: CASSANDRA_CLUSTER_NAME
