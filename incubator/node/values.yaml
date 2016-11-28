@@ -13,31 +13,6 @@ gitBranch: master
 ##
 # imagePullPolicy:
 
-## User of the application
-## ref: https://github.com/bitnami/bitnami-docker-node#environment-variables
-##
-nodeUser: user
-
-## Application password
-## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-node#environment-variables
-## nodePassword: password
-
-## Admin email
-## ref: https://github.com/bitnami/bitnami-docker-node#environment-variables
-##
-nodeEmail: user@example.com
-
-
-## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-node#smtp-configuration
-##
-# smtpHost:
-# smtpPort:
-# smtpHostID:
-# smtpUser:
-# smtpPassword:
-# smtpProtocol:
 
 ##
 ## MariaDB chart configuration
@@ -51,7 +26,7 @@ mariadb:
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    enabled: false
+    enabled: true 
     storageClass: generic
     accessMode: ReadWriteOnce
     size: 8Gi
@@ -65,7 +40,7 @@ serviceType: LoadBalancer
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  enabled: false 
+  enabled: true
   storageClass: default
   accessMode: ReadWriteOnce
   size: 8Gi

@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install ./node
+$ helm install .
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ It clones and deploy a nodejs application  from a git repository and  defined br
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release ./node
+$ helm install --name my-release .
 ```
 
 The command deploys node on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -66,7 +66,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set nodeUser=admin,nodePassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set gitRepository=,mariadb.mariadbRootPassword=secretpassword \
     stable/node
 ```
 

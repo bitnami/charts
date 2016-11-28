@@ -5,6 +5,7 @@ keywords:
 - node
 - javascript 
 - nodejs
+- git
 home: http://nodejs.org/
 sources:
 - https://github.com/bitnami/bitnami-docker-node
