@@ -3,12 +3,9 @@ Apache Cassandra can be accessed via port {{ .Values.cassandraCqlPort }} on the 
 
 {{- if contains "NodePort" .Values.serviceType }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo $NODE_IP:$NODE_PORT
+ $ kubectl describe ep {{ template "fullname" . }}
 
-
-To get your root password run:
+To get your password run:
 
     printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.Values.cassandraPassword[*]}"`);echo
 
@@ -16,11 +13,13 @@ To connect to your database:
 
 1. Run an Ubuntu pod that you can use as a client:
 
-    kubectl run -i --tty ubuntu --image=ubuntu:16.04 --restart=Never -- bash -il
+    kubectl run -i --tty ubuntu --image=ubuntu --restart=Never -- bash -il
 
 2. Install the cassandra client using Python PIP 
 
-    $ pip install qclsh 
+    # apt-get update
+    # apt-get install python-pip  -y 
+    # pip install qclsh 
 
     If you need to adjust some of the configuration needed to connect the Cassandra Cluster, tweak  ~/.cassandra/cqlsh 
     You can see it at  https://github.com/apache/cassandra/blob/trunk/conf/cqlshrc.sample

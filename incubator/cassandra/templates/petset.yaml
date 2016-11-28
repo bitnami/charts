@@ -51,7 +51,6 @@ spec:
           value: {{ .Values.cassandraEnableRemoteConnections | quote }}
         - name: CASSANDRA_SET_CREDENTIALS
           value: "1"
-  
         ports: 
         - name: transport
           containerPort: {{ .Values.cassandraTransportPort }}
@@ -65,6 +64,15 @@ spec:
         - name: rpc
           containerPort: {{ .Values.cassandraRpcPort }}
           protocol: "TCP"
+        readynessProbe:
+          exec:
+            command:
+            - /bin/nc 
+            - -zv 
+            - localhost
+            - 9042
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
