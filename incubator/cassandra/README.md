@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `cassandraPassword`                  | Application password                     | `bitnami`                                               |
 | `cassandraHost`                      | Hostname of the local node               | ``                                                      |
 | `cassandraClusterName`               | Cluster Name                             | `cassandra-cluster`                                     |
-| `cassandraSeeds`                     | List of nodes to seed the new node       | ``                                                      |
+| `cassandraSeeds`                     | List of nodes to seed the new node       | `all on cluster`                                        |
 | `cassandraEnableRemoteConnections`   | Enable remote connections                | `true`                                                  |
 | `cassandraSetCredentials`            | Enable the initial password change       | `1`                                                     |
 | `cassandraEndPointSnitch`            | Desired Snitch for the Endpoint          | `SimpleSnitch`                                          |
@@ -66,7 +66,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `persistence.cassandra.storageClass` | PVC Storage Class for cassandra volume   | `generic`                                               |
 | `persistence.cassandra.accessMode`   | PVC Access Mode for cassandra volume     | `ReadWriteOnce`                                         |
 | `persistence.cassandra.size`         | PVC Storage Request for cassandra volume | `8Gi`                                                   |
-| `resources`                          | CPU/Memory resource requests/limits      | Memory: `3000Mi`, CPU: `300m`                            |
+| `resources`                          | CPU/Memory resource requests/limits      | Memory: `3000Mi`, CPU: `300m`                           |
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
 
