@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install ./moodle
+$ helm install .
 ```
 
 ## Introduction

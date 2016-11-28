@@ -17,7 +17,7 @@ moodleUser: user
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#environment-variables
-## moodlePassword: password
+moodlePassword: password
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#environment-variables
@@ -47,7 +47,7 @@ mariadb:
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    enabled: false
+    enabled: true
     storageClass: generic
     accessMode: ReadWriteOnce
     size: 8Gi
@@ -61,7 +61,7 @@ serviceType: LoadBalancer
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  enabled: false
+  enabled: true
   apache:
     storageClass: generic
     accessMode: ReadWriteOnce
