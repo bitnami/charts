@@ -1,0 +1,20 @@
+name: jasperserver
+version: 0.0.1
+description: The JasperReports server can be used as a stand-alone or embedded reporting and BI server that offers web-based reporting, analytic tools and visualization, and a dashboard feature for compiling multiple custom views
+keywords:
+- BI
+- java 
+- jasper
+- reporting
+- analytic 
+- visualization
+- dashboard
+- mariadb
+home: http://community.jaspersoft.com/project/jasperreports-server
+sources:
+- https://github.com/bitnami/bitnami-docker-jasperserver
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: http://community-static.jaspersoft.com/sites/default/files/styles/project_icon/public/projects/icons/js_reports-server_rg2_0.png
