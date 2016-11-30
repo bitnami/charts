@@ -1,5 +1,7 @@
 ## Cassandra 
 
+# Number of replicas
+replicasCount: 2
 
 # Specify user name
 cassandraUser: "cassandra"

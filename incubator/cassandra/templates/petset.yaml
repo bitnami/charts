@@ -9,7 +9,7 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   serviceName: {{ template "fullname" . }}
-  replicas: 2
+  replicas: {{ .Values.replicasCount }}
   template:
     metadata:
       annotations:
@@ -51,6 +51,16 @@ spec:
           value: {{ .Values.cassandraEnableRemoteConnections | quote }}
         - name: CASSANDRA_SET_CREDENTIALS
           value: "1"
+        command:
+        - "/bin/bash"
+        - "-ec"
+        - |
+          if [ "${HOSTNAME}"  ==   "{{ template "fullname" . }}-0" ] ; then 
+            export CASSANDRA_SET_CREDENTIALS=1 
+          else
+            export CASSANDRA_SET_CREDENTIALS=0 
+          fi 
+          /app-entrypoint.sh nami start --foreground cassandra
         ports: 
         - name: transport
           containerPort: {{ .Values.cassandraTransportPort }}
@@ -67,22 +77,29 @@ spec:
         readynessProbe:
           exec:
             command:
-            - /bin/nc 
-            - -zv 
-            - localhost
-            - 9042
-          initialDelaySeconds: 60
+            - cqlsh
+            - 127.0.0.1
+            - -u
+            - {{ .Values.cassandraUser }}
+            - -p
+            - {{ .Values.cassandraPassword }}
+            - -e
+            - 'describe keyspaces'
+          initialDelaySeconds: 360
           timeoutSeconds: 5
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
         - name: {{ template "fullname" . }}-data
           mountPath: "/bitnami/cassandra"
-      volumes: 
-      - name: {{ template "fullname" . }}-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim: 
-          claimName: {{ template "fullname" . }}-data
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ template "fullname" . }}-data
+      annotations:
+        volume.alpha.kubernetes.io/storage-class: {{ .Values.persistence.storageClass }}
+    spec:
+      accessModes: [ {{ .Values.persistence.accessMode }}   ]
+      resources:
+        requests:
+          storage:  {{ .Values.persistence.size }} 
+
