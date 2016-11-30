@@ -18,9 +18,18 @@ spec:
       - name: {{ template "fullname" . }}
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
-        command: [ "sh" ]
-        args: [ "-c" , "git clone {{ .Values.gitRepository }} /app &&  cd /app &&  git checkout {{ .Values.gitBranch}}  &&  npm install &&  npm start" ] 
         env:
+        - name: GIT_REPO
+          value: {{ .Values.repository }}
+        command:
+        - "/bin/bash"
+        - "-ec"
+        - |
+          DIR=$(echo $GIT_REPO | awk -F '/' '{print $NF }' | sed 's/.git$//g')
+          chown -R bitnami:daemon /app 
+          cd /app/$DIR
+          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm install' 
+          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start' 
         ports:
         - name: http
           containerPort: 3000
@@ -34,7 +43,7 @@ spec:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 5
+          initialDelaySeconds: 60
           timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
@@ -43,9 +52,6 @@ spec:
           mountPath: /app
       volumes:
       - name: node-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
+        gitRepo:
+          repository: {{ .Values.repository }}
+          revision: {{ .Values.revision }}

@@ -11,7 +11,7 @@ spec:
   type: {{ .Values.serviceType }}
   ports:
   - name: http
-    port: 3000
+    port: 80
     targetPort: http
   selector:
     app: {{ template "fullname" . }}

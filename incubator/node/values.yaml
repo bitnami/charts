@@ -4,8 +4,10 @@
 image: bitnami/node
 imageTag: 7.0.0-r1
 
-gitRepository: https://github.com/jbianquetti-nami/simple-node-app.git
-gitBranch: master
+# Git repository http/https
+repository:  https://github.com/jbianquetti-nami/simple-node-app.git
+# Git repository revision to checkout 
+revision: master
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

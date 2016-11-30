@@ -12,7 +12,7 @@ $ helm install .
 
 This chart bootstraps a [Node](https://github.com/bitnami/bitnami-docker-node) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It clones and deploy a nodejs application  from a git repository and  defined branch 
+It clones and deploy a nodejs application  from a git repository and  defined revision.
 
 ## Prerequisites
 
@@ -50,8 +50,8 @@ The following tables lists the configurable parameters of the node chart and the
 | `image`                              | node image                               | `bitnami/node:{VERSION}`                                |
 | `imageTag`                           | node image Tag                           | ``                                                      |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `gitRepository`                      | Repo of the application                  | `git@github.com:jbianquetti-nami/simple-node-app.git`   |
-| `gitBranch`                          | Repo branch to checkout                  | `master`                                                |
+| `repository`                         | Repo of the application                  | `git@github.com:jbianquetti-nami/simple-node-app.git`   |
+| `revison`                            | Revision  to checkout                    | `master`                                                |
 | `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
 | `serviceType`                        | Kubernetes Service type                  | `LoadBalancer`                                          |
 | `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |
@@ -66,7 +66,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set gitRepository=,mariadb.mariadbRootPassword=secretpassword \
+  --set repository=git@github.com:jbianquetti-nami/simple-node-app.git,mariadb.mariadbRootPassword=secretpassword \
     stable/node
 ```
 
