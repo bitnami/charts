@@ -51,7 +51,7 @@ The following tables lists the configurable parameters of the node chart and the
 | `imageTag`                           | node image Tag                           | ``                                                      |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `repository`                         | Repo of the application                  | `git@github.com:jbianquetti-nami/simple-node-app.git`   |
-| `revison`                            | Revision  to checkout                    | `master`                                                |
+| `revision`                           | Revision  to checkout                    | `master`                                                |
 | `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
 | `serviceType`                        | Kubernetes Service type                  | `LoadBalancer`                                          |
 | `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |

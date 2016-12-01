@@ -2,11 +2,17 @@
 ## ref: https://hub.docker.com/r/bitnami/node/tags/
 ##
 image: bitnami/node
+
+## Bitnami image Tag
+##
 imageTag: 7.0.0-r1
 
-# Git repository http/https
+## Git repository http/https
+##
 repository:  https://github.com/jbianquetti-nami/simple-node-app.git
-# Git repository revision to checkout 
+
+## Git repository revision to checkout 
+##
 revision: master
 
 ## Specify a imagePullPolicy
