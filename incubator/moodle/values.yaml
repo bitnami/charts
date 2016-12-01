@@ -61,10 +61,6 @@ serviceType: LoadBalancer
 ##
 persistence:
   enabled: true
-  apache:
-    storageClass: generic
-    accessMode: ReadWriteOnce
-    size: 1Gi
   moodle:
     storageClass: generic
     accessMode: ReadWriteOnce

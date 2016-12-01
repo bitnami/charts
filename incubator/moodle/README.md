@@ -48,7 +48,6 @@ The following tables lists the configurable parameters of the moodle chart and t
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
 | `image`                              | moodle image                             | `bitnami/moodle:{VERSION}`                              |
-| `imageTag`                           | moodle image Tag                         | `3.1.3`                                               |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `moodleUsername`                         | User of the application                  | `user`                                                  |
 | `moodlePassword`                     | Application password                     | _random 10 character long alphanumeric string_          |
@@ -61,9 +60,6 @@ The following tables lists the configurable parameters of the moodle chart and t
 | `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
 | `serviceType`                        | Kubernetes Service type                  | `LoadBalancer`                                          |
 | `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |
-| `persistence.apache.storageClass`    | PVC Storage Class for Apache volume      | `generic`                                               |
-| `persistence.apache.accessMode`      | PVC Access Mode for Apache volume        | `ReadWriteOnce`                                         |
-| `persistence.apache.size`            | PVC Storage Request for Apache volume    | `1Gi`                                                   |
 | `persistence.moodle.storageClass`    | PVC Storage Class for moodle volume      | `generic`                                               |
 | `persistence.moodle.accessMode`      | PVC Access Mode for moodle volume        | `ReadWriteOnce`                                         |
 | `persistence.moodle.size`            | PVC Storage Request for moodle volume    | `8Gi`                                                   |
@@ -91,7 +87,7 @@ $ helm install --name my-release -f values.yaml stable/moodle
 
 ## Persistence
 
-The [Bitnami moodle](https://github.com/bitnami/bitnami-docker-moodle) image stores the moodle data and configurations at the `/bitnami/moodle` and `/bitnami/apache` paths of the container.
+The [Bitnami moodle](https://github.com/bitnami/bitnami-docker-moodle) image stores the moodle data and configurations at the `/bitnami/moodle` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.

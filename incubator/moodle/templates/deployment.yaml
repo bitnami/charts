@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+        image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MARIADB_HOST
@@ -71,20 +71,11 @@ spec:
         volumeMounts:
         - name: moodle-data
           mountPath: /bitnami/moodle
-        - name: apache-data
-          mountPath: /bitnami/apache
       volumes:
       - name: moodle-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-moodle
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
-      - name: apache-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-apache
+          claimName: {{ template "fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end }}
