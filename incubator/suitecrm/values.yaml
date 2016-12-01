@@ -1,0 +1,103 @@
+## Bitnami suitecrm image 
+## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
+##
+image: bitnami/suitecrm
+
+## Bitnami suitecrm image tags
+## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
+##
+imageTag: 6.5.24-r2
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+suitecrmUsername: user
+
+## Application password
+## Defaults to a random 10-character alphanumeric string if not set
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+## suitecrmPassword: 
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+suitecrmEmail: user@example.com
+
+## SugarCRM HOST
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+##  suitecrmHost: 
+
+
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpHostID:
+# smtpUser:
+# smtpPassword:
+# smtpProtocol:
+
+##
+## MariaDB chart configuration
+##
+mariadb:
+  ## MariaDB root password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ## mariadbRootPassword: 
+
+  ## MariaDB user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
+  ## mariadbUser:
+
+  ## MariaDB Host 
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
+  ## mariadbHost:
+
+  ## MariaDB Port 
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
+  ## mariadbPort:
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+serviceType: LoadBalancer
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  apache:
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 1Gi
+  suitecrm:
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 1Gi
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 300m
