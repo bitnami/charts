@@ -85,10 +85,6 @@ serviceType: LoadBalancer
 ##
 persistence:
   enabled: true
-  apache:
-    storageClass: generic
-    accessMode: ReadWriteOnce
-    size: 1Gi
   sugarcrm:
     storageClass: generic
     accessMode: ReadWriteOnce
