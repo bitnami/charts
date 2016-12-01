@@ -46,7 +46,6 @@ The following tables lists the configurable parameters of the cassandra chart an
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
 | `image`                              | cassandra image                          | `bitnami/cassandra:{VERSION}`                           |
-| `imageTag`                           | cassandra image tag                      | `3.9-r3`                                                | 
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `cassandraUser`                      | User of the application                  | `user`                                                  |
 | `cassandraPassword`                  | Application password                     | `bitnami`                                               |
@@ -63,9 +62,9 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `cassandraRpcPort`                   | RPC Port                                 | `9160`                                                  |
 | `serviceType`                        | Kubernetes Service type                  | `nodePort`                                              |
 | `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |
-| `persistence.cassandra.storageClass` | PVC Storage Class for cassandra volume   | `generic`                                               |
-| `persistence.cassandra.accessMode`   | PVC Access Mode for cassandra volume     | `ReadWriteOnce`                                         |
-| `persistence.cassandra.size`         | PVC Storage Request for cassandra volume | `8Gi`                                                   |
+| `persistence.storageClass`           | PVC Storage Class for cassandra volume   | `generic`                                               |
+| `persistence.accessMode`             | PVC Access Mode for cassandra volume     | `ReadWriteOnce`                                         |
+| `persistence.size`                   | PVC Storage Request for cassandra volume | `8Gi`                                                   |
 | `resources`                          | CPU/Memory resource requests/limits      | Memory: `3000Mi`, CPU: `300m`                           |
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.

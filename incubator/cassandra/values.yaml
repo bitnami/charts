@@ -52,7 +52,6 @@ cassandraEndpointSnitch: "SimpleSnitch"
 ##  docker image version. Fetch tag from https://hub.docker.com/r/bitnami/cassandra/tags/
 ##  Avoid to use 'latest' !
 image: "bitnami/cassandra"
-imageTag: "3.9-r3"
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
