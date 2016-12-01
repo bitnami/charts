@@ -11,4 +11,4 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
-icon :https://suitecrm.com/images/suite_icon.png
+icon: https://suitecrm.com/images/suite_icon.png

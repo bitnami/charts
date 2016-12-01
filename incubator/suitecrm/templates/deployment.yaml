@@ -8,7 +8,6 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
@@ -28,31 +27,31 @@ spec:
             secretKeyRef:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
-        - name: SUGARCRM_USERNAME
+        - name: SUITECRM_USERNAME
           value: {{ default "" .Values.suitecrmUsername | quote }}
-        - name: SUGARCRM_PASSWORD
+        - name: SUITECRM_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: suitecrm-password
-        - name: SUGARCRM_EMAIL
+        - name: SUITECRM_EMAIL
           value: {{ default "" .Values.suitecrmEmail | quote }}
-        - name: SUGARCRM_LASTNAME
+        - name: SUITECRM_LASTNAME
           value: {{ default "" .Values.suitecrmLastname | quote }}
-        - name: SUGARCRM_HOST
+        - name: SUITECRM_HOST
           value: {{ default "" .Values.suitecrmHost | quote }}
-        - name: SUGARCRM_SMTP_HOST
+        - name: SUITECRM_SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
-        - name: SUGARCRM_SMTP_PORT
+        - name: SUITECRM_SMTP_PORT
           value: {{ default "" .Values.smtpPort | quote }}
-        - name: SUGARCRM_SMTP_USER
+        - name: SUITECRM_SMTP_USER
           value: {{ default "" .Values.smtpUser | quote }}
-        - name: SUGARCRM_SMTP_PASSWORD
+        - name: SUITECRM_SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: smtp-password
-        - name: SUGARCRM_SMTP_PROTOCOL
+        - name: SUITECRM_SMTP_PROTOCOL
           value: {{ default "" .Values.smtpProtocol | quote }}
         ports:
         - name: http
