@@ -76,20 +76,11 @@ spec:
         volumeMounts:
         - name: suitecrm-data
           mountPath: /bitnami/suitecrm
-        - name: apache-data
-          mountPath: /bitnami/apache
       volumes:
       - name: suitecrm-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-suitecrm
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
-      - name: apache-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-apache
+          claimName: {{ template "fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end }}

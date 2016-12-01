@@ -6,7 +6,7 @@ image: bitnami/suitecrm
 ## Bitnami suitecrm image tags
 ## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
 ##
-imageTag: 6.5.24-r2
+imageTag: 7.7.8-r0
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -85,10 +85,6 @@ serviceType: LoadBalancer
 ##
 persistence:
   enabled: true
-  apache:
-    storageClass: generic
-    accessMode: ReadWriteOnce
-    size: 1Gi
   suitecrm:
     storageClass: generic
     accessMode: ReadWriteOnce
