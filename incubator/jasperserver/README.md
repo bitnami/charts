@@ -49,7 +49,6 @@ The following tables lists the configurable parameters of the jasperserver chart
 |              Parameter                              Description                         |                         Default                         |
 |------------------------------------------|----------------------------------------------|---------------------------------------------------------|
 | `image`                                  | jasperserver image                           | `bitnami/jasperserver:{VERSION}`                        |
-| `imageTag`                               | jasperserver image Tag                       | `3.1.3`                                                 |
 | `imagePullPolicy`                        | Image pull policy                            | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `jasperserverUsername`                   | User of the application                      | `user`                                                  |
 | `jasperserverPassword`                   | Application password                         | _random 10 character long alphanumeric string_          |
