@@ -7,7 +7,7 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-  name: {{ template "fullname" . }}
+  name: {{ template "fullname" . }}-moodle
   annotations:
     volume.alpha.kubernetes.io/storage-class: {{ .Values.persistence.moodle.storageClass | quote }}
 spec:

@@ -71,11 +71,20 @@ spec:
         volumeMounts:
         - name: moodle-data
           mountPath: /bitnami/moodle
+        - name: apache-data
+          mountPath: /bitnami/apache
       volumes:
       - name: moodle-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
+          claimName: {{ template "fullname" . }}-moodle
       {{- else }}
         emptyDir: {}
       {{- end }}
+      - name: apache-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-apache
+       {{- else }}
+         emptyDir: {}
+       {{- end }}
