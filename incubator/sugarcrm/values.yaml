@@ -1,12 +1,7 @@
 ## Bitnami sugarcrm image 
 ## ref: https://hub.docker.com/r/bitnami/sugarcrm/tags/
 ##
-image: bitnami/sugarcrm
-
-## Bitnami sugarcrm image tags
-## ref: https://hub.docker.com/r/bitnami/sugarcrm/tags/
-##
-imageTag: 6.5.24-r2
+image: bitnami/sugarcrm:6.5.24-r2
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -46,7 +41,6 @@ sugarcrmEmail: user@example.com
 ##
 # smtpHost:
 # smtpPort:
-# smtpHostID:
 # smtpUser:
 # smtpPassword:
 # smtpProtocol:

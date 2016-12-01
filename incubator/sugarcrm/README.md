@@ -48,7 +48,6 @@ The following tables lists the configurable parameters of the sugarcrm chart and
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
 | `image`                              | sugarcrm image                           | `bitnami/sugarcrm:{VERSION}`                            |
-| `imageTag`                           | sugarcrm image Tag                       | `3.1.3`                                                 |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `sugarcrmUsername`                   | User of the application                  | `user`                                                  |
 | `sugarcrmPassword`                   | Application password                     | _random 10 character long alphanumeric string_          |
