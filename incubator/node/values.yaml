@@ -3,9 +3,6 @@
 ##
 image: bitnami/node
 
-## Bitnami image Tag
-##
-imageTag: 7.0.0-r1
 
 ## Git repository http/https
 ##

@@ -48,7 +48,6 @@ The following tables lists the configurable parameters of the node chart and the
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
 | `image`                              | node image                               | `bitnami/node:{VERSION}`                                |
-| `imageTag`                           | node image Tag                           | ``                                                      |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `repository`                         | Repo of the application                  | `git@github.com:jbianquetti-nami/simple-node-app.git`   |
 | `revision`                           | Revision  to checkout                    | `master`                                                |
