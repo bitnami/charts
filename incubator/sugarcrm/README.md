@@ -74,7 +74,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set sugarcrmUser=admin,sugarcrmPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set sugarcrmUsername=admin,sugarcrmPassword=password,mariadb.mariadbRootPassword=secretpassword \
     stable/sugarcrm
 ```
 
