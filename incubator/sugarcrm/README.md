@@ -53,6 +53,7 @@ The following tables lists the configurable parameters of the sugarcrm chart and
 | `sugarcrmUsername`                   | User of the application                  | `user`                                                  |
 | `sugarcrmPassword`                   | Application password                     | _random 10 character long alphanumeric string_          |
 | `sugarcrmEmail`                      | Admin email                              | `user@example.com`                                      |
+| `sugarcrmLastname`                   | Last name                                | `Name`                                                  |
 | `sugarcrmHost`                       | Host domain or IP                        | `nil`                                                   |
 | `smtpHost`                           | SMTP host                                | `nil`                                                   |
 | `smtpPort`                           | SMTP port                                | `nil`                                                   |
