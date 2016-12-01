@@ -1,7 +1,12 @@
-## Bitnami sugarcrm image version
+## Bitnami sugarcrm image 
 ## ref: https://hub.docker.com/r/bitnami/sugarcrm/tags/
 ##
 image: bitnami/sugarcrm
+
+## Bitnami sugarcrm image tags
+## ref: https://hub.docker.com/r/bitnami/sugarcrm/tags/
+##
+imageTag: 6.5.24-r2
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -12,12 +17,12 @@ image: bitnami/sugarcrm
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
 ##
-sugarcrmUser: user
+sugarcrmUsername: user
 
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
-sugarcrmPassword: bitnami
+## sugarcrmPassword: 
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
@@ -27,7 +32,7 @@ sugarcrmEmail: user@example.com
 ## SugarCRM HOST
 ## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
 ##
-sugarcrmHost: 
+##  sugarcrmHost: 
 
 
 
@@ -45,9 +50,21 @@ sugarcrmHost:
 ## MariaDB chart configuration
 ##
 mariadb:
-  ## MariaDB admin password
+  ## MariaDB root password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ## mariadbRootPassword: secretpassword
+  ## mariadbRootPassword: 
+
+  ## MariaDB user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
+  ## mariadbUser:
+
+  ## MariaDB Host 
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
+  ## mariadbHost:
+
+  ## MariaDB Port 
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
+  ## mariadbPort:
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/

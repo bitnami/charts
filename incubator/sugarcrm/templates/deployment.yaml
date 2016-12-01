@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.image }}"
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MARIADB_HOST
@@ -29,7 +29,7 @@ spec:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: SUGARCRM_USERNAME
-          value: {{ default "" .Values.sugarcrmUser | quote }}
+          value: {{ default "" .Values.sugarcrmUsername | quote }}
         - name: SUGARCRM_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -69,7 +69,7 @@ spec:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           timeoutSeconds: 5
         resources:
 {{ toYaml .Values.resources | indent 10 }}
