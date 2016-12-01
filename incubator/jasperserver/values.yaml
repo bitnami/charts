@@ -1,7 +1,7 @@
 ## Bitnami jasperserver image version
 ## ref: https://hub.docker.com/r/bitnami/jasperserver/tags/
 ##
-image: bitnami/jasperserver
+image: bitnami/jasperserver:6.3.0-r3
 
 
 ## Specify a imagePullPolicy
