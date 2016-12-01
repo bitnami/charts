@@ -62,9 +62,6 @@ The following tables lists the configurable parameters of the sugarcrm chart and
 | `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
 | `serviceType`                        | Kubernetes Service type                  | `LoadBalancer`                                          |
 | `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |
-| `persistence.apache.storageClass`    | PVC Storage Class for Apache volume      | `generic`                                               |
-| `persistence.apache.accessMode`      | PVC Access Mode for Apache volume        | `ReadWriteOnce`                                         |
-| `persistence.apache.size`            | PVC Storage Request for Apache volume    | `1Gi`                                                   |
 | `persistence.sugarcrm.storageClass`  | PVC Storage Class for sugarcrm volume    | `generic`                                               |
 | `persistence.sugarcrm.accessMode`    | PVC Access Mode for sugarcrm volume      | `ReadWriteOnce`                                         |
 | `persistence.sugarcrm.size`          | PVC Storage Request for sugarcrm volume  | `8Gi`                                                   |

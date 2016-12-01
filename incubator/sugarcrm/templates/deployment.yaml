@@ -76,20 +76,11 @@ spec:
         volumeMounts:
         - name: sugarcrm-data
           mountPath: /bitnami/sugarcrm
-        - name: apache-data
-          mountPath: /bitnami/apache
       volumes:
       - name: sugarcrm-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-sugarcrm
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
-      - name: apache-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-apache
+          claimName: {{ template "fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end }}
