@@ -47,15 +47,16 @@ The following tables lists the configurable parameters of the sugarcrm chart and
 
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
-| `image`                              | sugarcrm image                             | `bitnami/sugarcrm:{VERSION}`                              |
-| `imageTag`                           | sugarcrm image Tag                         | `3.1.3`                                               |
+| `image`                              | sugarcrm image                           | `bitnami/sugarcrm:{VERSION}`                            |
+| `imageTag`                           | sugarcrm image Tag                       | `3.1.3`                                                 |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `sugarcrmUser`                         | User of the application                  | `user`                                                  |
-| `sugarcrmPassword`                     | Application password                     | _random 10 character long alphanumeric string_          |
-| `sugarcrmEmail`                        | Admin email                              | `user@example.com`                                      |
+| `sugarcrmUsername`                   | User of the application                  | `user`                                                  |
+| `sugarcrmPassword`                   | Application password                     | _random 10 character long alphanumeric string_          |
+| `sugarcrmEmail`                      | Admin email                              | `user@example.com`                                      |
+| `sugarcrmHost`                       | Host domain or IP                        | `nil`                                                   |
 | `smtpHost`                           | SMTP host                                | `nil`                                                   |
 | `smtpPort`                           | SMTP port                                | `nil`                                                   |
-| `smtpHostID`                         | SMTP host ID                             | `nil`                                                   |
+| `smtpProtocol`                       | SMTP Protocol                            | `nil`                                                   |
 | `smtpUser`                           | SMTP user                                | `nil`                                                   |
 | `smtpPassword`                       | SMTP password                            | `nil`                                                   |
 | `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
@@ -64,9 +65,9 @@ The following tables lists the configurable parameters of the sugarcrm chart and
 | `persistence.apache.storageClass`    | PVC Storage Class for Apache volume      | `generic`                                               |
 | `persistence.apache.accessMode`      | PVC Access Mode for Apache volume        | `ReadWriteOnce`                                         |
 | `persistence.apache.size`            | PVC Storage Request for Apache volume    | `1Gi`                                                   |
-| `persistence.sugarcrm.storageClass`    | PVC Storage Class for sugarcrm volume      | `generic`                                               |
-| `persistence.sugarcrm.accessMode`      | PVC Access Mode for sugarcrm volume        | `ReadWriteOnce`                                         |
-| `persistence.sugarcrm.size`            | PVC Storage Request for sugarcrm volume    | `8Gi`                                                   |
+| `persistence.sugarcrm.storageClass`  | PVC Storage Class for sugarcrm volume    | `generic`                                               |
+| `persistence.sugarcrm.accessMode`    | PVC Access Mode for sugarcrm volume      | `ReadWriteOnce`                                         |
+| `persistence.sugarcrm.size`          | PVC Storage Request for sugarcrm volume  | `8Gi`                                                   |
 | `resources`                          | CPU/Memory resource requests/limits      | Memory: `512Mi`, CPU: `300m`                            |
 
 The above parameters map to the env variables defined in [bitnami/sugarcrm](http://github.com/bitnami/bitnami-docker-sugarcrm). For more information please refer to the [bitnami/sugarcrm](http://github.com/bitnami/bitnami-docker-sugarcrm) image documentation.
