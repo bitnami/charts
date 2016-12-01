@@ -8,7 +8,6 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
@@ -16,7 +15,7 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.image }}"
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MARIADB_HOST
@@ -29,20 +28,22 @@ spec:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: JASPERSERVER_USERNAME
-          value: {{ default "" .Values.jasperserverUser | quote }}
+          value: {{ default "" .Values.jasperserverUsername | quote }}
         - name: JASPERSERVER_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: jasperserver-password
-        - name: SMTP_HOST_ID
-          value: {{ default "" .Values.smtpHostID | quote }}
+        - name: SMTP_EMAIL
+          value: {{ default "" .Values.smtpEmail| quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
           value: {{ default "" .Values.smtpPort | quote }}
         - name: SMTP_USER
           value: {{ default "" .Values.smtpUser | quote }}
+        - name: SMTP_PROTOCOL
+          value: {{ default "" .Values.smtpProtocol | quote }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -51,20 +52,18 @@ spec:
         ports:
         - name: http
           containerPort: 8080
-        - name: https
-          containerPort: 443
         livenessProbe:
           httpGet:
-            path: /
+            path: /jasperserver/
             port: http
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
-            path: /
+            path: /jasperserver/
             port: http
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
@@ -74,7 +73,7 @@ spec:
       - name: jasperserver-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-jasperserver
+          claimName: {{ template "fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end }}

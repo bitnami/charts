@@ -51,12 +51,13 @@ The following tables lists the configurable parameters of the jasperserver chart
 | `image`                                  | jasperserver image                           | `bitnami/jasperserver:{VERSION}`                        |
 | `imageTag`                               | jasperserver image Tag                       | `3.1.3`                                                 |
 | `imagePullPolicy`                        | Image pull policy                            | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `jasperserverUser`                       | User of the application                      | `user`                                                  |
+| `jasperserverUsername`                   | User of the application                      | `user`                                                  |
 | `jasperserverPassword`                   | Application password                         | _random 10 character long alphanumeric string_          |
 | `smtpHost`                               | SMTP host                                    | `nil`                                                   |
 | `smtpPort`                               | SMTP port                                    | `nil`                                                   |
-| `smtpHostID`                             | SMTP host ID                                 | `nil`                                                   |
+| `smtpEmail`                              | SMTP Email                                   | `nil`                                                   |
 | `smtpUser`                               | SMTP user                                    | `nil`                                                   |
+| `smtpProtocol`                           | SMTP protocol                                | `nil`                                                   |
 | `smtpPassword`                           | SMTP password                                | `nil`                                                   |
 | `mariadb.mariadbRootPassword`            | MariaDB admin password                       | `nil`                                                   |
 | `serviceType`                            | Kubernetes Service type                      | `LoadBalancer`                                          |
@@ -72,7 +73,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set jasperserverUser=admin,jasperserverPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set jasperserverUsername=admin,jasperserverPassword=bitnami,mariadb.mariadbRootPassword=secretpassword \
     stable/jasperserver
 ```
 
