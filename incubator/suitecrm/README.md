@@ -74,7 +74,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set suitecrmUser=admin,suitecrmPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set suitecrmUsername=admin,suitecrmPassword=password,mariadb.mariadbRootPassword=secretpassword \
     stable/suitecrm
 ```
 

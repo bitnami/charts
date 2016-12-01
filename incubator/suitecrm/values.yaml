@@ -19,6 +19,11 @@ imageTag: 7.7.8-r0
 ##
 suitecrmUsername: user
 
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+suitecrmLastname: Name
+
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
