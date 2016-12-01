@@ -48,7 +48,6 @@ The following tables lists the configurable parameters of the suitecrm chart and
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
 | `image`                              | suitecrm image                           | `bitnami/suitecrm:{VERSION}`                            |
-| `imageTag`                           | suitecrm image Tag                       | `3.1.3`                                                 |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `suitecrmUsername`                   | User of the application                  | `user`                                                  |
 | `suitecrmPassword`                   | Application password                     | _random 10 character long alphanumeric string_          |

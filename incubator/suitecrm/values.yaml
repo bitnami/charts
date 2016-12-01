@@ -3,10 +3,6 @@
 ##
 image: bitnami/suitecrm
 
-## Bitnami suitecrm image tags
-## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
-##
-imageTag: 7.7.8-r0
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -46,7 +42,6 @@ suitecrmEmail: user@example.com
 ##
 # smtpHost:
 # smtpPort:
-# smtpHostID:
 # smtpUser:
 # smtpPassword:
 # smtpProtocol:
