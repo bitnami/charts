@@ -50,12 +50,12 @@ The following tables lists the configurable parameters of the moodle chart and t
 | `image`                              | moodle image                             | `bitnami/moodle:{VERSION}`                              |
 | `imageTag`                           | moodle image Tag                         | `3.1.3`                                               |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `moodleUser`                         | User of the application                  | `user`                                                  |
+| `moodleUsername`                         | User of the application                  | `user`                                                  |
 | `moodlePassword`                     | Application password                     | _random 10 character long alphanumeric string_          |
 | `moodleEmail`                        | Admin email                              | `user@example.com`                                      |
 | `smtpHost`                           | SMTP host                                | `nil`                                                   |
 | `smtpPort`                           | SMTP port                                | `nil`                                                   |
-| `smtpHostID`                         | SMTP host ID                             | `nil`                                                   |
+| `smtpProtocol`                       | SMTP Protocol                            | `nil`                                                   |
 | `smtpUser`                           | SMTP user                                | `nil`                                                   |
 | `smtpPassword`                       | SMTP password                            | `nil`                                                   |
 | `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
@@ -75,7 +75,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set moodleUser=admin,moodlePassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set moodleUsername=admin,moodlePassword=password,mariadb.mariadbRootPassword=secretpassword \
     stable/moodle
 ```
 

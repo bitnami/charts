@@ -8,7 +8,6 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
@@ -16,7 +15,7 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.image }}"
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MARIADB_HOST
@@ -29,7 +28,7 @@ spec:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: MOODLE_USERNAME
-          value: {{ default "" .Values.moodleUser | quote }}
+          value: {{ default "" .Values.moodleUsername | quote }}
         - name: MOODLE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -37,8 +36,8 @@ spec:
               key: moodle-password
         - name: MOODLE_EMAIL
           value: {{ default "" .Values.moodleEmail | quote }}
-        - name: SMTP_HOST_ID
-          value: {{ default "" .Values.smtpHostID | quote }}
+        - name: SMTP_PROTOCOL
+          value: {{ default "" .Values.smtpProtocol | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
@@ -65,8 +64,8 @@ spec:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
