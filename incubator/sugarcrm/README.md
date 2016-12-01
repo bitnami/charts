@@ -89,7 +89,7 @@ $ helm install --name my-release -f values.yaml stable/sugarcrm
 
 ## Persistence
 
-The [Bitnami sugarcrm](https://github.com/bitnami/bitnami-docker-sugarcrm) image stores the sugarcrm data and configurations at the `/bitnami/sugarcrm` and `/bitnami/apache` paths of the container.
+The [Bitnami sugarcrm](https://github.com/bitnami/bitnami-docker-sugarcrm) image stores the sugarcrm data and configurations at the `/bitnami/sugarcrm` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
