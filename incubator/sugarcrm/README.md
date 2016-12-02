@@ -1,6 +1,6 @@
 # SugarCRM
 
-[SugarCRM](https://www.sugarcrm.org) Sugar offers the most innovative, flexible and affordable CRM in the market and delivers the best all-around value of any CRM.
+[SugarCRM](https://www.sugarcrm.com) Sugar offers the most innovative, flexible and affordable CRM in the market and delivers the best all-around value of any CRM.
 
 ## TL;DR;
 
@@ -12,7 +12,7 @@ $ helm install .
 
 This chart bootstraps a [SugarCRM](https://github.com/bitnami/bitnami-docker-sugarcrm) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/stable/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the sugarcrm application.
+It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/stable/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the SugarCRM application.
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release ./sugarcrm
 ```
 
-The command deploys sugarcrm on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys SugarCRM on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -43,14 +43,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the sugarcrm chart and their default values.
+The following tables lists the configurable parameters of the SugarCRM chart and their default values.
 
 |              Parameter               |               Description                |                         Default                         |
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
-| `image`                              | sugarcrm image                           | `bitnami/sugarcrm:{VERSION}`                            |
+| `image`                              | SugarCRM image                           | `bitnami/sugarcrm:{VERSION}`                            |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `sugarcrmUsername`                   | User of the application                  | `user`                                                  |
-| `sugarcrmPassword`                   | Application password                     | _random 10 character long alphanumeric string_          |
+| `sugarcrmPassword`                   | Application password                     | _random 10 character      alphanumeric string_          |
 | `sugarcrmEmail`                      | Admin email                              | `user@example.com`                                      |
 | `sugarcrmLastname`                   | Last name                                | `Name`                                                  |
 | `sugarcrmHost`                       | Host domain or IP                        | `nil`                                                   |
@@ -62,9 +62,12 @@ The following tables lists the configurable parameters of the sugarcrm chart and
 | `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
 | `serviceType`                        | Kubernetes Service type                  | `LoadBalancer`                                          |
 | `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |
-| `persistence.sugarcrm.storageClass`  | PVC Storage Class for sugarcrm volume    | `generic`                                               |
-| `persistence.sugarcrm.accessMode`    | PVC Access Mode for sugarcrm volume      | `ReadWriteOnce`                                         |
-| `persistence.sugarcrm.size`          | PVC Storage Request for sugarcrm volume  | `8Gi`                                                   |
+| `persistence.apache.storageClass`    | PVC Storage Class for apache volume      | `generic`                                               |
+| `persistence.apache.accessMode`      | PVC Access Mode for apache volume        | `ReadWriteOnce`                                         |
+| `persistence.apache.size`            | PVC Storage Request for apache volume    | `1Gi`                                                   |
+| `persistence.sugarcrm.storageClass`  | PVC Storage Class for SugarCRM volume    | `generic`                                               |
+| `persistence.sugarcrm.accessMode`    | PVC Access Mode for SugarCRM volume      | `ReadWriteOnce`                                         |
+| `persistence.sugarcrm.size`          | PVC Storage Request for SugarCRM volume  | `1Gi`                                                   |
 | `resources`                          | CPU/Memory resource requests/limits      | Memory: `512Mi`, CPU: `300m`                            |
 
 The above parameters map to the env variables defined in [bitnami/sugarcrm](http://github.com/bitnami/bitnami-docker-sugarcrm). For more information please refer to the [bitnami/sugarcrm](http://github.com/bitnami/bitnami-docker-sugarcrm) image documentation.
@@ -77,7 +80,7 @@ $ helm install --name my-release \
     stable/sugarcrm
 ```
 
-The above command sets the sugarcrm administrator account username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the SugarCRM administrator account username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -89,7 +92,7 @@ $ helm install --name my-release -f values.yaml stable/sugarcrm
 
 ## Persistence
 
-The [Bitnami sugarcrm](https://github.com/bitnami/bitnami-docker-sugarcrm) image stores the sugarcrm data and configurations at the `/bitnami/sugarcrm` path of the container.
+The [Bitnami SugarCRM](https://github.com/bitnami/bitnami-docker-sugarcrm) image stores the SugarCRM data and configurations at the `/bitnami/sugarcrm` and the `/bitnami/apache`  paths of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
