@@ -1,14 +1,14 @@
 name: sugarcrm
 version: 0.1.0
-description: Sugar offers the most innovative, flexible and affordable CRM in the market and delivers the best all-around value of any CRM.
+description: SugarCRM enables businesses to create extraordinary customer relationships with the most innovative and affordable CRM solution in the market.
 keywords:
 - sugarcrm
 - CRM
-home: http://www.sugarcrm.org/
+home: http://www.sugarcrm.com/
 sources:
 - https://github.com/bitnami/bitnami-docker-sugarcrm
 maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
-icon: http://d2owqhhe2x3j50.cloudfront.net/D7-images/header.png
+icon: https://d33np9n32j53g7.cloudfront.net/assets/stacks/sugarcrm/img/sugarcrm-stack-110x117-4591448c2217c45bc88d95d1509ee444.png
