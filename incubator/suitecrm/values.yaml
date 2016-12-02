@@ -1,8 +1,7 @@
 ## Bitnami suitecrm image 
 ## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
 ##
-image: bitnami/suitecrm
-
+image: bitnami/suitecrm:7.7.8-r0
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -15,22 +14,27 @@ image: bitnami/suitecrm
 ##
 suitecrmUsername: user
 
-## User of the application
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
-##
-suitecrmLastname: Name
-
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
 ## suitecrmPassword: 
+
+## Lastname
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+##
+suitecrmLastname: Name
+
+## loadBalancerIP for the  Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# suitecrmLoadBalancerIP:
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
 ##
 suitecrmEmail: user@example.com
 
-## SugarCRM HOST
+## SuiteCRM HOST
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
 ##
 ##  suitecrmHost: 
@@ -85,6 +89,10 @@ serviceType: LoadBalancer
 ##
 persistence:
   enabled: true
+  apache:
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 1Gi
   suitecrm:
     storageClass: generic
     accessMode: ReadWriteOnce

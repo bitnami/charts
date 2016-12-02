@@ -1,27 +1,44 @@
+{{- if empty (include "host" .) -}}
+###############################################################################
+### ERROR: You did not provide an external host in your 'helm install' call ###
+###############################################################################
 
-1. Get the suitecrm URL by running:
+This deployment will be incomplete until you configure SuiteCRM with a resolvable
+host. To configure Ghost with the URL of your service:
+
+1. Get the SuiteCRM URL by running:
 
 {{- if contains "NodePort" .Values.serviceType }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT/
+  export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
 
 {{- else if contains "LoadBalancer" .Values.serviceType }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc -w {{ template "fullname" . }} --namespace {{ .Release.Namespace }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo http://$SERVICE_IP/
-{{- else if contains "ClusterIP"  .Values.serviceType }}
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  {{- end }}
+
+2. Complete your Ghost deployment by running:
+
+  helm upgrade {{ .Release.Name }} \
+    --set suitecrmHost=$APP_HOST stable/suitecrm
+{{- else -}}
+1. Get the Ghost URL by running:
+ 
+{{- if eq .Values.serviceType "ClusterIP" }}
 
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "fullname" . }}" -o jsonpath="{.items[0].metadata.name}")
-  echo http://127.0.0.1:8080/
   kubectl port-forward $POD_NAME 8080:80
+{{- else }}
+
+  echo  URL  : http://{{ include "host" . }}/
 {{- end }}
 
-2. Get your suitecrm login credentials by running:
+2. Get your SuiteCRM login credentials by running:
 
     echo Username: {{ .Values.suitecrmUsername }}
     echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.suitecrm-password[*]}"`))
+{{- end }}
