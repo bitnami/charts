@@ -31,6 +31,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [MariaDB (stable)](https://github.com/kubernetes/charts/tree/master/stable/mariadb)
 - [MariaDB Cluster (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mariadb-cluster)
 - [JasperReports Server (incubator)](https://github.com/bitnami/charts/tree/master/incubator/jasperserver)
+- [Moodle (incubator)](https://github.com/bitnami/charts/tree/master/incubator/moodle)
 
 ## Before you begin
 
