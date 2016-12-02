@@ -54,6 +54,7 @@ The following tables lists the configurable parameters of the SugarCRM chart and
 | `sugarcrmEmail`                      | Admin email                              | `user@example.com`                                      |
 | `sugarcrmLastname`                   | Last name                                | `Name`                                                  |
 | `sugarcrmHost`                       | Host domain or IP                        | `nil`                                                   |
+| `sugarcrmLoadBalancerIP`             | `LoadBalancerIP for the application`     | `nil`                                                   |
 | `smtpHost`                           | SMTP host                                | `nil`                                                   |
 | `smtpPort`                           | SMTP port                                | `nil`                                                   |
 | `smtpProtocol`                       | SMTP Protocol                            | `nil`                                                   |
@@ -71,6 +72,23 @@ The following tables lists the configurable parameters of the SugarCRM chart and
 | `resources`                          | CPU/Memory resource requests/limits      | Memory: `512Mi`, CPU: `300m`                            |
 
 The above parameters map to the env variables defined in [bitnami/sugarcrm](http://github.com/bitnami/bitnami-docker-sugarcrm). For more information please refer to the [bitnami/sugarcrm](http://github.com/bitnami/bitnami-docker-sugarcrm) image documentation.
+
+
+> **Note**:
+>
+> For the SugarCRM  application function correctly, you should specify the `sugarcrmHost` parameter to specify the FQDN (recommended) or the public IP address of the SugarCRM service.
+>
+> Optionally, you can specify the `sugarcrmLoadBalancerIP` parameter to assign a reserved IP address to the SugarCRM service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
+>
+> To reserve a public IP address on GKE:
+>
+> ```bash
+> $ gcloud compute addresses create sugarcrm-public-ip
+> ```
+>
+> The reserved IP address can be associated to the SugarCRM service by specifying it as the value of the `sugarcrmLoadBalancerIP` parameter while installing the chart.
+
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
