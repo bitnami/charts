@@ -24,6 +24,10 @@ sugarcrmUsername: user
 ##
 sugarcrmLastname: Name
 
+## loadBalancerIP for the  Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# sugarcrmLoadBalancerIP:
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
@@ -34,6 +38,8 @@ sugarcrmEmail: user@example.com
 ## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
 ##
 ##  sugarcrmHost: 
+
+
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#smtp-configuration
