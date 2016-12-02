@@ -3,7 +3,6 @@
 ##
 image: bitnami/node:7.0.0-r1
 
-
 ## Git repository http/https
 ##
 repository:  https://github.com/jbianquetti-nami/simple-node-app.git
@@ -31,7 +30,7 @@ mariadb:
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    enabled: true 
+    enabled: true
     storageClass: generic
     accessMode: ReadWriteOnce
     size: 8Gi

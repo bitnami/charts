@@ -13,6 +13,20 @@ spec:
     metadata:
       labels:
         app: {{ template "fullname" . }}
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[
+            {
+                "name": "git-clone-app",
+                "image": "{{ .Values.image }}", 
+                "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app" ],
+                "volumeMounts": [
+                    {
+                        "name": "node-data",
+                        "mountPath": "/app"
+                    }
+                ]
+            }
+        ]'
     spec:
       containers:
       - name: {{ template "fullname" . }}
@@ -25,9 +39,8 @@ spec:
         - "/bin/bash"
         - "-ec"
         - |
-          DIR=$(echo $GIT_REPO | awk -F '/' '{print $NF }' | sed 's/.git$//g')
+          git checkout {{ .Values.revision }}
           chown -R bitnami:daemon /app 
-          cd /app/$DIR
           su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm install' 
           su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start' 
         ports:
@@ -52,6 +65,4 @@ spec:
           mountPath: /app
       volumes:
       - name: node-data
-        gitRepo:
-          repository: {{ .Values.repository }}
-          revision: {{ .Values.revision }}
+        emptyDir: {}

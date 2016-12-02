@@ -20,8 +20,3 @@
   echo http://127.0.0.1:8080/
   kubectl port-forward $POD_NAME 8080:80
 {{- end }}
-
-2. Get your node login credentials by running:
-
-    echo Username: {{ .Values.nodeUser }}
-    echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.node-password[*]}"`))
