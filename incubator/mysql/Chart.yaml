@@ -1,0 +1,14 @@
+name: mysql
+version: 0.1.0
+description: Chart for MySQL
+keywords:
+- mysql
+- database
+- sql
+home: https://mysql.com
+sources:
+- https://github.com/bitnami/bitnami-docker-mysql
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
