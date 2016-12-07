@@ -1,0 +1,51 @@
+## Bitnami MySQL image version
+## ref: https://hub.docker.com/r/bitnami/mysql/tags/
+##
+## Default: none
+image: bitnami/mysql:5.7.16-r2
+
+## Specify a imagePullPolicy
+## Default to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## Specify password for root user
+## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#setting-the-root-password-on-first-run
+##
+# mysqlRootPassword:
+
+## Create a database user
+## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-user-on-first-run
+##
+# mysqlUser:
+# mysqlPassword:
+
+## Create a database
+## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-on-first-run
+##
+# mysqlDatabase:
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  storageClass: generic
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+## Configure MySQL with a custom my.cnf file
+## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
+##
+# config: |-
+  # [mysqld]
+  # innodb_buffer_pool_size=2G
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m
