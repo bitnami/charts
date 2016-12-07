@@ -1,0 +1,15 @@
+name: dokuwiki
+version: 0.1.0
+description: DokuWiki is a simple to use and highly versatile Open Source wiki software that doesn't require a database. It is loved by users for its clean and readable syntax.
+keywords:
+- dokuwiki
+- wiki
+- php
+home: http://www.dokuwiki.org/
+sources:
+- https://github.com/bitnami/bitnami-docker-dokuwiki
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://d33np9n32j53g7.cloudfront.net/assets/stacks/dokuwiki/img/dokuwiki-stack-110x117-93f5de05ec90c0139b2b57db66de311e.png
