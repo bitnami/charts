@@ -1,6 +1,6 @@
 name: mysql
 version: 0.1.0
-description: Chart for MySQL
+description: MySQL is a fast, reliable, scalable, and easy to use open-source relational database system. MySQL Server is intended for mission-critical, heavy-load production systems as well as for embedding into mass-deployed software.
 keywords:
 - mysql
 - database
@@ -12,3 +12,4 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
+icon: https://d33np9n32j53g7.cloudfront.net/assets/stacks/mysql/img/mysql-stack-220x234-9b0b145795a63819818570807023d401.png

@@ -18,15 +18,15 @@ spec:
             {
               "name": "copy-custom-config",
               "image": "{{ .Values.image }}",
-              "command": ["sh", "-c", "mkdir -p /bitnami/mariadb/conf && cp -n /bitnami/mariadb_config/my.cnf /bitnami/mariadb/conf/my_custom.cnf"],
+              "command": ["sh", "-c", "mkdir -p /bitnami/mysql/conf && cp -n /bitnami/mysql_config/my.cnf /bitnami/mysql/conf/my_custom.cnf"],
               "volumeMounts": [
                 {
                   "name": "config",
-                  "mountPath": "/bitnami/mariadb_config"
+                  "mountPath": "/bitnami/mysql_config"
                 },
                 {
                   "name": "data",
-                  "mountPath": "/bitnami/mariadb"
+                  "mountPath": "/bitnami/mysql"
                 }
               ]
             }
@@ -37,20 +37,20 @@ spec:
         image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
-        - name: MARIADB_ROOT_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: mariadb-root-password
-        - name: MARIADB_USER
-          value: {{ default "" .Values.mariadbUser | quote }}
-        - name: MARIADB_PASSWORD
+              key: mysql-root-password
+        - name: MYSQL_USER
+          value: {{ default "" .Values.mysqlUser | quote }}
+        - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: mariadb-password
-        - name: MARIADB_DATABASE
-          value: {{ default "" .Values.mariadbDatabase | quote }}
+              key: mysql-password
+        - name: MYSQL_DATABASE
+          value: {{ default "" .Values.mysqlDatabase | quote }}
         ports:
         - name: mysql
           containerPort: 3306
@@ -72,7 +72,7 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
         - name: data
-          mountPath: /bitnami/mariadb
+          mountPath: /bitnami/mysql
       volumes:
       - name: config
         configMap:

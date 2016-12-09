@@ -1,8 +1,7 @@
 # MySQL
 
-[MySQL](https://mysql.com )
+[MySQL](https://mysql.com ) MySQL is a fast, reliable, scalable, and easy to use open-source relational database system. MySQL Server is intended for mission-critical, heavy-load production systems as well as for embedding into mass-deployed software.
 
-MySQL is developed as open
 
 ## TL;DR;
 
@@ -46,13 +45,13 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the MySQL chart and their default values.
 
 | Parameter                  | Description                                | Default                                                    |
-| -----------------------    | ----------------------------------         | ---------------------------------------------------------- |
-| `image`                    | MySQL image                              | `bitnami/mysql:{VERSION}`                                |
+| -------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| `image`                    | MySQL image                                | `bitnami/mysql:{VERSION}`                                  |
 | `imagePullPolicy`          | Image pull policy.                         | `Always` if `imageTag` is `latest`, else `IfNotPresent`.   |
-| `mysqlRootPassword`      | Password for the `root` user.              | `nil`                                                      |
-| `mysqlUser`              | Username of new user to create.            | `nil`                                                      |
-| `mysqlPassword`          | Password for the new user.                 | `nil`                                                      |
-| `mysqlDatabase`          | Name for new database to create.           | `nil`                                                      |
+| `mysqlRootPassword`        | Password for the `root` user.              | `nil`                                                      |
+| `mysqlUser`                | Username of new user to create.            | `nil`                                                      |
+| `mysqlPassword`            | Password for the new user.                 | `nil`                                                      |
+| `mysqlDatabase`            | Name for new database to create.           | `nil`                                                      |
 | `persistence.enabled`      | Use a PVC to persist data                  | `true`                                                     |
 | `persistence.storageClass` | Storage class of backing PVC               | `generic`                                                  |
 | `persistence.accessMode`   | Use volume as ReadOnly or ReadWrite        | `ReadWriteOnce`                                            |
