@@ -12,7 +12,7 @@ $ helm install .
 
 This chart bootstraps a [Node](https://github.com/bitnami/bitnami-docker-node) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It clones and deploys a Node.js application  from a git repository.
+It clones and deploys a Node.js application from a git repository.
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ $ helm install --name my-release .
 
 The command deploys Node.js on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box. 
 
-Due that the Helm Chart clones the application on the /app volume while the container is initializing, there's not a hard dependency on Persistent Volumes.
+Due that the Helm Chart clones the application on the /app volume while the container is initializing, a persistent volume is not required.
 
 > **Tip**: List all releases using `helm list`
 
@@ -63,7 +63,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set repository=http://github.com/jbianquetti-nami/simple-node-app.git,mariadb.mariadbRootPassword=secretpassword \
+  --set repository=https://github.com/jbianquetti-nami/simple-node-app.git,mariadb.mariadbRootPassword=secretpassword \
     stable/node
 ```
 

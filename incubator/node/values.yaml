@@ -38,7 +38,7 @@ mariadb:
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
-serviceType: LoadBalancer
+serviceType: NodePort
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -47,7 +47,7 @@ persistence:
   enabled: true
   storageClass: default
   accessMode: ReadWriteOnce
-  size: 8Gi
+  size: 1Gi
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
