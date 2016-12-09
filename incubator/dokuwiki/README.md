@@ -1,6 +1,6 @@
 # DokuWiki
 
-[DokuWiki](https://www.dokuwiki.org) DokuWiki is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalised learning environments
+[DokuWiki](https://www.dokuwiki.org) DokuWiki is a standards-compliant, simple to use wiki optimized for creating documentation. It is targeted at developer teams, workgroups, and small companies. All data is stored in plain text files, so no database is required.
 
 ## TL;DR;
 
