@@ -29,7 +29,10 @@ spec:
         - name: PARSE_SERVER_APP_ID
           value: {{ .Values.parseServer.appId | quote }}
         - name: PARSE_SERVER_MASTER_KEY
-          value: {{ .Values.parseServer.masterKey | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: master-key
         - name: MONGODB_HOST
           value: {{ template "mongodb.fullname" . }}
         - name: MONGODB_PORT
