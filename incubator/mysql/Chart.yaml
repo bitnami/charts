@@ -12,4 +12,4 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
-icon: https://d33np9n32j53g7.cloudfront.net/assets/stacks/mysql/img/mysql-stack-220x234-9b0b145795a63819818570807023d401.png
+icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png
