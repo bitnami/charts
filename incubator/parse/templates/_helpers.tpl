@@ -31,7 +31,7 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{- if eq .Values.serviceType "ClusterIP" -}}
 127.0.0.1
 {{- else -}}
-{{- index .Values (printf "%sLoadBalancerIP" .Chart.Name) | default "" -}}
+{{- default "" .Values.parseServer.loadBalancerIP -}}
 {{- end -}}
 {{- end -}}
 
@@ -40,6 +40,6 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "host" -}}
-{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- $host := default "" .Values.parseServer.host -}}
 {{- default (include "serviceIP" .) $host -}}
 {{- end -}}

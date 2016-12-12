@@ -39,7 +39,7 @@ spec:
           value: "27017"
         ports:
         - name: server-http
-          containerPort: 1337
+          containerPort: {{ .Values.parseServer.port }}
         # livenessProbe:
           # httpGet:
             # path: /
