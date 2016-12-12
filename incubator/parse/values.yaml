@@ -28,7 +28,7 @@ parseServer:
   ## Parse Server Master Key
   ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
   ##
-  # masterKey:
+  masterKey: mymasterKey
 
 parseDashboard:
   ## Enable deployment of Parse Dashboard
