@@ -13,4 +13,4 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
-icon: https://d33np9n32j53g7.cloudfront.net/assets/stacks/nodejs/img/nodejs-stack-110x117-331955cd5e874f1ebd26ff9bb0c5af4c.png
+icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-110x117.png
