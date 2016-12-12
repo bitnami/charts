@@ -38,7 +38,7 @@ persistence:
 ## Configure MySQL with a custom my.cnf file
 ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
 ##
-config: |-
+#config: |-
   # [mysqld]
   # innodb_buffer_pool_size=2G
 

@@ -10,5 +10,5 @@ metadata:
 data:
   my.cnf: |-
 {{- if .Values.config }}
-{{ .Values.config | indent 4 }}
+{{ default ""  .Values.config | indent 4 }}
 {{- end -}}
