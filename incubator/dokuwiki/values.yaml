@@ -1,4 +1,4 @@
-## Bitnami dokuwiki image version
+## Bitnami DokuWiki image version
 ## ref: https://hub.docker.com/r/bitnami/dokuwiki/tags/
 ##
 image: bitnami/dokuwiki:20160626a-r0
@@ -12,27 +12,27 @@ image: bitnami/dokuwiki:20160626a-r0
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
 ##
-dokuwikiUsername: superuser
-
-## User's Full Name
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
-##
-dokuwikiFullname: FullName
+dokuwikiUsername: user
 
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
-## dokuwikiPassword:  
+# dokuwikiPassword:  
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
 ##
 dokuwikiEmail: user@example.com
 
-## 
+## User's Full Name
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
 ##
-dokuwikiWikiname: Bitnami DokuWiki
+dokuwikiFullName: FullName
+
+## Name of the Wiki 
+## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
+##
+dokuwikiWikiName: My Wiki
 
 
 ## Kubernetes configuration

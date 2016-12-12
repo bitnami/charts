@@ -48,11 +48,11 @@ The following tables lists the configurable parameters of the DokuWiki chart and
 |--------------------------------------|------------------------------------------|---------------------------------------------------------|
 | `image`                              | DokuWiki image                           | `bitnami/dokuwiki:{VERSION}`                            |
 | `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `dokuwikiUsername`                   | User of the application                  | `superuser`                                             |
-| `dokuwikiFullname`                   | User's full name                         | `Full Name`                                             |
+| `dokuwikiUsername`                   | User of the application                  | `user`                                                  |
+| `dokuwikiFullName`                   | User's full name                         | `Full Name`                                             |
 | `dokuwikiPassword`                   | Application password                     | _random 10 character alphanumeric string_               |
 | `dokuwikiEmail`                      | User email                               | `user@example.com`                                      |
-| `dokuwikiWikiname`                   | Wiki name                                | `Bitnami DokuWiki`                                      |
+| `dokuwikiWikiName`                   | Wiki name                                | `My Wiki`                                               |
 | `serviceType`                        | Kubernetes Service type                  | `LoadBalancer`                                          |
 | `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |
 | `persistence.apache.storageClass`    | PVC Storage Class for apache volume      | `generic`                                               |
@@ -85,7 +85,7 @@ $ helm install --name my-release -f values.yaml stable/dokuwiki
 
 ## Persistence
 
-The [Bitnami DokuWiki](https://github.com/bitnami/bitnami-docker-dokuwiki) image stores the DokuWiki data and configurations at the `/bitnami/dokuwiki` and `/bitnami/apache`  paths of the container.
+The [Bitnami DokuWiki](https://github.com/bitnami/bitnami-docker-dokuwiki) image stores the DokuWiki data and configurations at the `/bitnami/dokuwiki` and `/bitnami/apache` paths of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.

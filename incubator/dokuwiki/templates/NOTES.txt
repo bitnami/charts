@@ -1,5 +1,5 @@
 
-1. Get the dokuwiki URL by running:
+1. Get the DokuWiki URL by running:
 
 {{- if contains "NodePort" .Values.serviceType }}
 
@@ -21,7 +21,7 @@
   kubectl port-forward $POD_NAME 8080:80
 {{- end }}
 
-2. Get your dokuwiki login credentials by running:
+2. Get your DokuWiki login credentials by running:
 
     echo Username: {{ .Values.dokuwikiUsername }}
     echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dokuwiki-password[*]}"`))
