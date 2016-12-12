@@ -12,4 +12,4 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
-icon: https://d33np9n32j53g7.cloudfront.net/assets/stacks/dokuwiki/img/dokuwiki-stack-110x117-93f5de05ec90c0139b2b57db66de311e.png
+icon: https://bitnami.com/assets/stacks/dokuwiki/img/dokuwiki-stack-110x117.png
