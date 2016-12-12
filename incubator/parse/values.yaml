@@ -1,0 +1,107 @@
+parseServer:
+  ## Bitnami Parse image version
+  ## ref: https://hub.docker.com/r/bitnami/parse/tags/
+  ##
+  image: bitnami/parse:2.2.24-r0
+
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  # imagePullPolicy:
+
+  ## Parse Server Port
+  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ##
+  port: 1337
+
+  ## Parse API mount path
+  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ##
+  mountPath: /parse
+
+  ## Parse Server App ID
+  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ##
+  appId: myAppId
+
+  ## Parse Server Master Key
+  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ##
+  # masterKey:
+
+parseDashboard:
+  ## Enable deployment of Parse Dashboard
+  ##
+  enabled: true
+
+  ## Bitnami Parse Dashboard image version
+  ## ref: https://hub.docker.com/r/bitnami/parse-dashboard/tags/
+  ##
+  image: bitnami/parse-dashboard:1.0.19-r2
+
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  # imagePullPolicy:
+
+  ## Parse Dashboard application username
+  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  ##
+  username: user
+
+  ## Parse Dashboard application password
+  ## Defaults to a random 10-character alphanumeric string if not set
+  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  ##
+  # password:
+
+  ## Parse Dashboard application name
+  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  ##
+  appName: MyDashboard
+
+##
+## MongoDB chart configuration
+##
+mongodb:
+  ## MongoDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mongodbRootPassword:
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+## Note: Parse Dashboard requires your Parse Server to be resolvable from your
+##       browser. Therefore, you should set a resolvable parseHost for the
+##       dashboard to function correctly
+##
+serviceType: LoadBalancer
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  storageClass: generic
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+# TODO: split for dashboard and server
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 300m

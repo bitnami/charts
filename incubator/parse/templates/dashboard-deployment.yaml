@@ -1,0 +1,69 @@
+{{- if and (include "host" .) .Values.parseDashboard.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-dashboard
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        component: "{{ .Chart.Name }}-dashboard"
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.parseDashboard.image }}"
+        imagePullPolicy: {{ default "" .Values.parseDashboard.imagePullPolicy | quote }}
+        env:
+        - name: PARSE_DASHBOARD_USER
+          value: {{ .Values.parseDashboard.username }}
+        - name: PARSE_DASHBOARD_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: dashboard-password
+        - name: PARSE_SERVER_HOST
+          value: {{ include "host" . | quote }}
+        - name: PARSE_SERVER_PORT
+          value: {{ .Values.parseServer.port | quote }}
+        - name: PARSE_SERVER_APP_ID
+          value: {{ .Values.parseServer.appId | quote }}
+        - name: PARSE_SERVER_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: master-key
+        - name: PARSE_SERVER_DASHBOARD_APP_NAME
+          value: {{ .Values.parseDashboard.appName | quote }}
+        ports:
+        - name: dashboard-http
+          containerPort: 4040
+        # livenessProbe:
+          # httpGet:
+            # path: /
+            # port: http
+          # initialDelaySeconds: 120
+          # timeoutSeconds: 5
+        # readinessProbe:
+          # exec:
+            # command:
+            # - sh
+            # - -c
+            # - nami status ghost | grep "ghost is running"
+          # initialDelaySeconds: 5
+          # timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: parse-dashboard-data
+          mountPath: /bitnami/parse-dashboard
+      volumes:
+      - name: parse-dashboard-data
+        emptyDir: {}
+{{- end -}}
