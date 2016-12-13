@@ -17,7 +17,7 @@ dokuwikiUsername: user
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
-# dokuwikiPassword:  
+# dokuwikiPassword:
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
@@ -29,11 +29,10 @@ dokuwikiEmail: user@example.com
 ##
 dokuwikiFullName: FullName
 
-## Name of the Wiki 
+## Name of the Wiki
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
 ##
 dokuwikiWikiName: My Wiki
-
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
