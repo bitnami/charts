@@ -40,20 +40,24 @@ spec:
         ports:
         - name: server-http
           containerPort: {{ .Values.parseServer.port }}
-        # livenessProbe:
-          # httpGet:
-            # path: /
-            # port: http
-          # initialDelaySeconds: 120
-          # timeoutSeconds: 5
-        # readinessProbe:
-          # exec:
-            # command:
-            # - sh
-            # - -c
-            # - nami status ghost | grep "ghost is running"
-          # initialDelaySeconds: 5
-          # timeoutSeconds: 1
+        livenessProbe:
+          exec:
+            command:
+            - nc
+            - -z
+            - localhost
+            - "{{ .Values.parseServer.port }}"
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - nc
+            - -z
+            - localhost
+            - "{{ .Values.parseServer.port }}"
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
