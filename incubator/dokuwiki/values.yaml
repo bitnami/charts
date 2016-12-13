@@ -27,7 +27,7 @@ dokuwikiEmail: user@example.com
 ## User's Full Name
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
 ##
-dokuwikiFullName: FullName
+dokuwikiFullName: Full Name
 
 ## Name of the Wiki
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
