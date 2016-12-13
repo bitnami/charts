@@ -1,3 +1,13 @@
+## Kubernetes serviceType for Parse Deployment
+## ref: http://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+##
+serviceType: LoadBalancer
+
+## loadBalancerIP for the Parse Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# loadBalancerIP:
+
 parseServer:
   ## Bitnami Parse image version
   ## ref: https://hub.docker.com/r/bitnami/parse/tags/
@@ -77,14 +87,6 @@ parseDashboard:
     requests:
       memory: 512Mi
       cpu: 300m
-
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
-## Note: Parse Dashboard requires your Parse Server to be resolvable from your
-##       browser. Therefore, you should set a resolvable parseHost for the
-##       dashboard to function correctly
-##
-serviceType: LoadBalancer
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/

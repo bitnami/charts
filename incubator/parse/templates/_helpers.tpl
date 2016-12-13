@@ -31,7 +31,7 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{- if eq .Values.serviceType "ClusterIP" -}}
 127.0.0.1
 {{- else -}}
-{{- default "" .Values.parseServer.loadBalancerIP -}}
+{{- default "" .Values.loadBalancerIP -}}
 {{- end -}}
 {{- end -}}
 

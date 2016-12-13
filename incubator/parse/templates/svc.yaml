@@ -10,7 +10,7 @@ metadata:
 spec:
   type: {{ .Values.serviceType }}
   {{- if eq .Values.serviceType "LoadBalancer" }}
-  loadBalancerIP: {{ default "" .Values.parseLoadBalancerIP }}
+  loadBalancerIP: {{ default "" .Values.loadBalancerIP }}
   {{- end }}
   ports:
   - name: server-http

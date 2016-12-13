@@ -45,6 +45,8 @@ The following tables lists the configurable parameters of the Parse chart and th
 
 |             Parameter              |              Description               |                         Default                          |
 |------------------------------------|----------------------------------------|----------------------------------------------------------|
+| `serviceType`                      | Kubernetes Service type                | `LoadBalancer`                                           |
+| `loadBalancerIP`                   | `loadBalancerIP` for the Parse Service | `nil`                                                    |
 | `parseServer.image`                | Parse image                            | `bitnami/parse:{VERSION}`                                |
 | `parseServer.imagePullPolicy`      | Parse image pull policy                | `Always` if `image` tag is `latest`, else `IfNotPresent` |
 | `parseServer.port`                 | Parse server port                      | `1337`                                                   |
@@ -59,7 +61,6 @@ The following tables lists the configurable parameters of the Parse chart and th
 | `parseDashboard.password`          | Dashboard user password                | `random 10 character alphanumeric string`                |
 | `parseDashboard.appName`           | Dashboard application name             | `MyDashboard`                                            |
 | `parseDashboard.resources`         | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                             |
-| `serviceType`                      | Kubernetes Service type                | `LoadBalancer`                                           |
 | `persistence.enabled`              | Enable Parse persistence using PVC     | `true`                                                   |
 | `persistence.storageClass`         | PVC Storage Class for Parse volume     | `generic`                                                |
 | `persistence.accessMode`           | PVC Access Mode for Parse volume       | `ReadWriteOnce`                                          |
@@ -75,7 +76,7 @@ The above parameters map to the env variables defined in [bitnami/parse](http://
 >
 > For the Parse application function correctly, you should specify the `parseHost` parameter to specify the FQDN (recommended) or the public IP address of the Parse service.
 >
-> Optionally, you can specify the `parseLoadBalancerIP` parameter to assign a reserved IP address to the Parse service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
+> Optionally, you can specify the `loadBalancerIP` parameter to assign a reserved IP address to the Parse service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
 >
 > To reserve a public IP address on GKE:
 >
@@ -83,7 +84,7 @@ The above parameters map to the env variables defined in [bitnami/parse](http://
 > $ gcloud compute addresses create parse-public-ip
 > ```
 >
-> The reserved IP address can be associated to the Parse service by specifying it as the value of the `parseLoadBalancerIP` parameter while installing the chart.
+> The reserved IP address can be associated to the Parse service by specifying it as the value of the `loadBalancerIP` parameter while installing the chart.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
