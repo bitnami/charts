@@ -1,18 +1,16 @@
-# Ghost
+# Parse
 
-[Ghost](https://ghost.org/) is one of the most versatile open source content management systems on the market.
+[Parse](https://parse.com/) is an open source version of the Parse backend that can be deployed to any infrastructure that can run Node.js.
 
 ## TL;DR;
 
 ```console
-$ helm install stable/ghost
+$ helm install stable/parse
 ```
 
 ## Introduction
 
-This chart bootstraps a [Ghost](https://github.com/bitnami/bitnami-docker-ghost) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/stable/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Ghost application.
+This chart bootstraps a [Parse](https://github.com/bitnami/bitnami-docker-parse) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -24,10 +22,10 @@ It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/chart
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/ghost
+$ helm install --name my-release stable/parse
 ```
 
-The command deploys Ghost on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys Parse on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -43,64 +41,71 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the Ghost chart and their default values.
+The following tables lists the configurable parameters of the Parse chart and their default values.
 
-| Parameter                         | Description                                           | Default                                                   |
-| --------------------------------- | ----------------------------------------------------- | --------------------------------------------------------- |
-| `image`                           | Ghost image                                           | `bitnami/ghost:{VERSION}`                                 |
-| `imagePullPolicy`                 | Image pull policy                                     | `Always` if `image` tag is `latest`, else `IfNotPresent`  |
-| `ghostHost`                       | Ghost host to create application URLs                 | `nil`                                                     |
-| `ghostPort`                       | Ghost port to create application URLs along with host | `80`                                                      |
-| `ghostLoadBalancerIP`             | `loadBalancerIP` for the Ghost Service                | `nil`                                                     |
-| `ghostUsername`                   | User of the application                               | `user`                                                    |
-| `ghostPassword`                   | Application password                                  | Randomly generated                                        |
-| `ghostEmail`                      | Admin email                                           | `user@example.com`                                        |
-| `ghostBlogTitle`                  | Ghost Blog name                                       | `User's Blog`                                             |
-| `mariadb.mariadbRootPassword`     | MariaDB admin password                                | `nil`                                                     |
-| `serviceType`                     | Kubernetes Service type                               | `LoadBalancer`                                            |
-| `persistence.enabled`             | Enable persistence using PVC                          | `true`                                                    |
-| `persistence.storageClass`        | PVC Storage Class for Ghost volume                    | `generic`                                                 |
-| `persistence.accessMode`          | PVC Access Mode for Ghost volume                      | `ReadWriteOnce`                                           |
-| `persistence.size`                | PVC Storage Request for Ghost volume                  | `8Gi`                                                     |
-| `resources`                       | CPU/Memory resource requests/limits                   | Memory: `512Mi`, CPU: `300m`                              |
+|             Parameter              |              Description               |                         Default                          |
+|------------------------------------|----------------------------------------|----------------------------------------------------------|
+| `parseServer.image`                | Parse image                            | `bitnami/parse:{VERSION}`                                |
+| `parseServer.imagePullPolicy`      | Parse image pull policy                | `Always` if `image` tag is `latest`, else `IfNotPresent` |
+| `parseServer.port`                 | Parse server port                      | `1337`                                                   |
+| `parseServer.mountPath`            | Parse API mount path                   | `/parse`                                                 |
+| `parseServer.appId`                | Parse server App Id                    | `myAppID`                                                |
+| `parseServer.masterKey`            | Parse server Master Key                | `mymasterKey`                                            |
+| `parseServer.resources`            | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                             |
+| `parseDashboard.enabled`           | Enable parse dashboard                 | `true`                                                   |
+| `parseDashboard.image`             | Dashboard image                        | `bitnami/parse-dashboard:{VERSION}`                      |
+| `parseDashboard.imagePullPolicy`   | Dashboard image pull policy            | `Always` if `image` tag is `latest`, else `IfNotPresent` |
+| `parseDashboard.username`          | Dashboard username                     | `user`                                                   |
+| `parseDashboard.password`          | Dashboard user password                | `random 10 character alphanumeric string`                |
+| `parseDashboard.appName`           | Dashboard application name             | `MyDashboard`                                            |
+| `parseDashboard.resources`         | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                             |
+| `serviceType`                      | Kubernetes Service type                | `LoadBalancer`                                           |
+| `persistence.enabled`              | Enable Parse persistence using PVC     | `true`                                                   |
+| `persistence.storageClass`         | PVC Storage Class for Parse volume     | `generic`                                                |
+| `persistence.accessMode`           | PVC Access Mode for Parse volume       | `ReadWriteOnce`                                          |
+| `persistence.size`                 | PVC Storage Request for Parse volume   | `8Gi`                                                    |
+| `mongodb.persistence.enabled`      | Enable MongoDB persistence using PVC   | `true`                                                   |
+| `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB volume   | `generic`                                                |
+| `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB volume     | `ReadWriteOnce`                                          |
+| `mongodb.persistence.size`         | PVC Storage Request for MongoDB volume | `1Gi`                                                    |
 
-The above parameters map to the env variables defined in [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost) image documentation.
+The above parameters map to the env variables defined in [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse) image documentation.
 
 > **Note**:
 >
-> For the Ghost application function correctly, you should specify the `ghostHost` parameter to specify the FQDN (recommended) or the public IP address of the Ghost service.
+> For the Parse application function correctly, you should specify the `parseHost` parameter to specify the FQDN (recommended) or the public IP address of the Parse service.
 >
-> Optionally, you can specify the `ghostLoadBalancerIP` parameter to assign a reserved IP address to the Ghost service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
+> Optionally, you can specify the `parseLoadBalancerIP` parameter to assign a reserved IP address to the Parse service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
 >
 > To reserve a public IP address on GKE:
 >
 > ```bash
-> $ gcloud compute addresses create ghost-public-ip
+> $ gcloud compute addresses create parse-public-ip
 > ```
 >
-> The reserved IP address can be associated to the Ghost service by specifying it as the value of the `ghostLoadBalancerIP` parameter while installing the chart.
+> The reserved IP address can be associated to the Parse service by specifying it as the value of the `parseLoadBalancerIP` parameter while installing the chart.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install --name my-release \
-  --set ghostUsername=admin,ghostPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    stable/ghost
+  --set parseDashboard.username=admin,parseDashboard.password=password \
+    stable/parse
 ```
 
-The above command sets the Ghost administrator account username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the Parse administrator account username and password to `admin` and `password` respectively.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml stable/ghost
+$ helm install --name my-release -f values.yaml stable/parse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Persistence
 
-The [Bitnami Ghost](https://github.com/bitnami/bitnami-docker-ghost) image stores the Ghost data and configurations at the `/bitnami/ghost` and `/bitnami/apache` paths of the container.
+The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) image stores the Parse data and configurations at the `/bitnami/parse` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
