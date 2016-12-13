@@ -59,7 +59,7 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
-{{ toYaml .Values.resources | indent 10 }}
+{{ toYaml .Values.parseServer.resources | indent 10 }}
         volumeMounts:
         - name: parse-data
           mountPath: /bitnami/parse

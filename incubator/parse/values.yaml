@@ -23,12 +23,20 @@ parseServer:
   ## Parse Server App ID
   ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
   ##
-  appId: myAppId
+  appId: myAppID
 
   ## Parse Server Master Key
   ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
   ##
   masterKey: mymasterKey
+
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 300m
 
 parseDashboard:
   ## Enable deployment of Parse Dashboard
@@ -62,18 +70,13 @@ parseDashboard:
   ##
   appName: MyDashboard
 
-##
-## MongoDB chart configuration
-##
-mongodb:
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  persistence:
-    enabled: true
-    storageClass: generic
-    accessMode: ReadWriteOnce
-    size: 8Gi
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 300m
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -92,11 +95,15 @@ persistence:
   accessMode: ReadWriteOnce
   size: 8Gi
 
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
-# TODO: split for dashboard and server
-resources:
-  requests:
-    memory: 512Mi
-    cpu: 300m
+## MongoDB chart configuration
+##
+mongodb:
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    storageClass: generic
+    accessMode: ReadWriteOnce
+    size: 8Gi
