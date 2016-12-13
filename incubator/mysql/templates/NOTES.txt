@@ -3,4 +3,4 @@ MySQL can be accessed via port 3306 on the following DNS name from within your c
 
 To connect to your database run the following command:
 
-   kubectl run {{ template "fullname" . }}-client --rm --tty -i --image bitnami/mysql --command -- mysql -h {{ template "fullname" . }} {{- if .Values.mysqlRootPassword }} -p {{ .Values.mysqlRootPassword }}{{- end -}}
+   kubectl run {{ template "fullname" . }}-client --rm --tty -i --image bitnami/mysql --command -- mysql -h {{ template "fullname" . }} -uroot  {{- if .Values.mysqlRootPassword }} -p{{ .Values.mysqlRootPassword }}{{- end -}}
