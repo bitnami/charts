@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install stable/parse
+$ helm install incubator/parse
 ```
 
 ## Introduction
@@ -22,7 +22,7 @@ This chart bootstraps a [Parse](https://github.com/bitnami/bitnami-docker-parse)
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/parse
+$ helm install --name my-release incubator/parse
 ```
 
 The command deploys Parse on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -91,7 +91,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set parseDashboard.username=admin,parseDashboard.password=password \
-    stable/parse
+    incubator/parse
 ```
 
 The above command sets the Parse administrator account username and password to `admin` and `password` respectively.
@@ -99,7 +99,7 @@ The above command sets the Parse administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml stable/parse
+$ helm install --name my-release -f values.yaml incubator/parse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
