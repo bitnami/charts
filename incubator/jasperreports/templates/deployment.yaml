@@ -27,28 +27,30 @@ spec:
             secretKeyRef:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
-        - name: JASPERSERVER_USERNAME
-          value: {{ default "" .Values.jasperserverUsername | quote }}
-        - name: JASPERSERVER_PASSWORD
+        - name: JASPERREPORTS_USERNAME
+          value: {{ default "" .Values.jasperreportsUsername | quote }}
+        - name: JASPERREPORTS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: jasperserver-password
-        - name: SMTP_EMAIL
-          value: {{ default "" .Values.smtpEmail| quote }}
+              key: jasperreports-password
+        - name: JASPERREPORTS_EMAIL
+          value: {{ default "" .Values.jasperreportsEmail | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
           value: {{ default "" .Values.smtpPort | quote }}
+        - name: SMTP_EMAIL
+          value: {{ default "" .Values.smtpEmail| quote }}
         - name: SMTP_USER
           value: {{ default "" .Values.smtpUser | quote }}
-        - name: SMTP_PROTOCOL
-          value: {{ default "" .Values.smtpProtocol | quote }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: smtp-password
+        - name: SMTP_PROTOCOL
+          value: {{ default "" .Values.smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 8080
@@ -67,10 +69,10 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: jasperserver-data
-          mountPath: /bitnami/jasperserver
+        - name: jasperreports-data
+          mountPath: /bitnami/jasperreports
       volumes:
-      - name: jasperserver-data
+      - name: jasperreports-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "fullname" . }}

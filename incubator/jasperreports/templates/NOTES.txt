@@ -1,5 +1,5 @@
 
-1. Get the jasperserver URL by running:
+1. Get the jasperreports URL by running:
 
 {{- if contains "NodePort" .Values.serviceType }}
 
@@ -21,7 +21,7 @@
   kubectl port-forward $POD_NAME 8080:8080
 {{- end }}
 
-2. Get your jasperserver login credentials by running:
+2. Get your jasperreports login credentials by running:
 
-    echo Username: {{ .Values.jasperserverUsername }}
-    echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.jasperserver-password[*]}"`))
+    echo Username: {{ .Values.jasperreportsUsername }}
+    echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.jasperreports-password[*]}"`))
