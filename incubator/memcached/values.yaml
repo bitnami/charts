@@ -1,7 +1,7 @@
 ## Bitnami Memcached image version
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
 ##
-imageTag: 1.4.33-r1
+imageTag: 1.4.33-r3
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'

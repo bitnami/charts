@@ -1,7 +1,7 @@
 ## Bitnami MariaDB image version
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
 ##
-imageTag: 10.1.19-r2
+imageTag: 10.1.19-r4
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'

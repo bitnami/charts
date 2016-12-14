@@ -1,7 +1,7 @@
 ## Bitnami Phabricator image version
 ## ref: https://hub.docker.com/r/bitnami/orangehrm/tags/
 ##
-imageTag: 3.3.3-r1
+imageTag: 3.3.3-r3
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
