@@ -35,6 +35,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [Moodle (incubator)](https://github.com/bitnami/charts/tree/master/incubator/moodle)
 - [MySQL (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mysql)
 - [Dokuwiki (incubator)](https://github.com/bitnami/charts/tree/master/incubator/dokuwiki)
+- [Parse (incubator)](https://github.com/bitnami/charts/tree/master/incubator/parse)
 
 ## Before you begin
 
