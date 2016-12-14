@@ -57,10 +57,9 @@ serviceType: LoadBalancer
 ##
 persistence:
   enabled: true
-  jasperreports:
-    storageClass: generic
-    accessMode: ReadWriteOnce
-    size: 8Gi
+  storageClass: generic
+  accessMode: ReadWriteOnce
+  size: 8Gi
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

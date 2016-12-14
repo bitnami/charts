@@ -61,9 +61,9 @@ The following tables lists the configurable parameters of the JasperReports char
 | `mariadb.mariadbRootPassword`                      | MariaDB admin password                       | `nil`                                                   |
 | `serviceType`                                      | Kubernetes Service type                      | `LoadBalancer`                                          |
 | `persistence.enabled`                              | Enable persistence using PVC                 | `true`                                                  |
-| `persistence.jasperreports.storageClass`           | PVC Storage Class for JasperReports volume   | `generic`                                               |
-| `persistence.jasperreports.accessMode`             | PVC Access Mode for JasperReports volume     | `ReadWriteOnce`                                         |
-| `persistence.jasperreports.size`                   | PVC Storage Request for JasperReports volume | `8Gi`                                                   |
+| `persistence.storageClass`                         | PVC Storage Class for JasperReports volume   | `generic`                                               |
+| `persistence.accessMode`                           | PVC Access Mode for JasperReports volume     | `ReadWriteOnce`                                         |
+| `persistence.size`                                 | PVC Storage Request for JasperReports volume | `8Gi`                                                   |
 | `resources`                                        | CPU/Memory resource requests/limits          | Memory: `512Mi`, CPU: `300m`                            |
 
 The above parameters map to the env variables defined in [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
