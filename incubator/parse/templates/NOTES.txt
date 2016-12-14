@@ -59,7 +59,7 @@ service:
 2. Complete your Parse Dashboard deployment by running:
 
   helm upgrade {{ .Release.Name }} \
-    --set parseServer.host=$APP_HOST,parseServer.port={{ .Values.parseServer.port }}{{ if .Values.parseServer.masterKey }},parseServer.masterKey={{ .Values.parseServer.masterKey }}{{ end }},parseDashboard.username={{ .Values.parseDashboard.username }},parseDashboard.password=$(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password[*]}"`)) stable/parse
+    --set parseServer.host=$APP_HOST,parseServer.port={{ .Values.parseServer.port }},parseServer.masterKey=$(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.master-key[*]}"`)),parseDashboard.username={{ .Values.parseDashboard.username }},parseDashboard.password=$(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password[*]}"`)) stable/parse
 
 {{ else }}
 1. Get the Parse Dashboard URL by running:

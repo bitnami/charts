@@ -38,7 +38,7 @@ parseServer:
   ## Parse Server Master Key
   ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
   ##
-  masterKey: mymasterKey
+  # masterKey:
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
