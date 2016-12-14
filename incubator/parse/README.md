@@ -68,7 +68,7 @@ The following tables lists the configurable parameters of the Parse chart and th
 | `mongodb.persistence.enabled`      | Enable MongoDB persistence using PVC   | `true`                                                   |
 | `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB volume   | `generic`                                                |
 | `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB volume     | `ReadWriteOnce`                                          |
-| `mongodb.persistence.size`         | PVC Storage Request for MongoDB volume | `1Gi`                                                    |
+| `mongodb.persistence.size`         | PVC Storage Request for MongoDB volume | `8Gi`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse) image documentation.
 
