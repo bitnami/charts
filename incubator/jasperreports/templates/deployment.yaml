@@ -27,13 +27,13 @@ spec:
             secretKeyRef:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
-        - name: JASPERSERVER_USERNAME
-          value: {{ default "" .Values.jasperserverUsername | quote }}
-        - name: JASPERSERVER_PASSWORD
+        - name: JASPERREPORTS_USERNAME
+          value: {{ default "" .Values.jasperreportsUsername | quote }}
+        - name: JASPERREPORTS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: jasperserver-password
+              key: jasperreports-password
         - name: SMTP_EMAIL
           value: {{ default "" .Values.smtpEmail| quote }}
         - name: SMTP_HOST
@@ -67,10 +67,10 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: jasperserver-data
-          mountPath: /bitnami/jasperserver
+        - name: jasperreports-data
+          mountPath: /bitnami/jasperreports
       volumes:
-      - name: jasperserver-data
+      - name: jasperreports-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "fullname" . }}
