@@ -52,6 +52,7 @@ The following tables lists the configurable parameters of the JasperReports char
 | `imagePullPolicy`                                  | Image pull policy                            | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
 | `jasperreportsUsername`                            | User of the application                      | `user`                                                  |
 | `jasperreportsPassword`                            | Application password                         | _random 10 character long alphanumeric string_          |
+| `jasperreportsEmail`                               | User email                                   | `user@example.com`                                      |
 | `smtpHost`                                         | SMTP host                                    | `nil`                                                   |
 | `smtpPort`                                         | SMTP port                                    | `nil`                                                   |
 | `smtpEmail`                                        | SMTP Email                                   | `nil`                                                   |

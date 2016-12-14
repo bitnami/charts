@@ -15,6 +15,11 @@ image: bitnami/jasperreports:6.3.0-r5
 ##
 jasperreportsUsername: user
 
+## Application mail
+## ref: https://github.com/bitnami/bitnami-docker-jasperreports#environment-variables
+##
+jasperreportsEmail: user@example.com
+
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#environment-variables
