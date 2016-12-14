@@ -43,19 +43,19 @@ spec:
         livenessProbe:
           exec:
             command:
-            - nc
-            - -z
-            - localhost
-            - "{{ .Values.parseServer.port }}"
+            - curl
+            - -H
+            - "X-Parse-Application-Id: {{ .Values.parseServer.appId }}"
+            - "http://localhost:{{ .Values.parseServer.port }}{{ .Values.parseServer.mountPath }}/users"
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
           exec:
             command:
-            - nc
-            - -z
-            - localhost
-            - "{{ .Values.parseServer.port }}"
+            - curl
+            - -H
+            - "X-Parse-Application-Id: {{ .Values.parseServer.appId }}"
+            - "http://localhost:{{ .Values.parseServer.port }}{{ .Values.parseServer.mountPath }}/users"
           initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
