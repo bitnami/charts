@@ -1,0 +1,73 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[
+            {
+                "name": "git-clone-app",
+                "image": "{{ .Values.image }}", 
+                "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app"  ], 
+                "volumeMounts": [
+                    {
+                        "name": "node-data",
+                        "mountPath": "/app"
+                    }
+                ]
+           }
+        ]'
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        env:
+        - name: GIT_REPO
+          value: {{ .Values.repository }}
+        command:
+        - "/bin/bash"
+        - "-ec"
+        -  |
+          git checkout {{ .Values.revision }}
+          chown -R bitnami:daemon /app
+          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm install'
+          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start' 
+        ports:
+        - name: http
+          containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: node-data
+          mountPath: /app
+      volumes:
+      - name: node-data
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+        {{- else }}
+        emptyDir: {}
+        {{- end -}}
