@@ -13,7 +13,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [Jenkins (incubator)](https://github.com/bitnami/charts/tree/master/incubator/jenkins)
 - [Memcached (incubator)](https://github.com/bitnami/charts/tree/master/incubator/memcached)
 - [Phabricator (stable)](https://github.com/kubernetes/charts/tree/master/stable/phabricator)
-- [PrestaShop (incubator)](https://github.com/bitnami/charts/tree/master/incubator/prestashop)
+- [PrestaShop (stable)](https://github.com/kubernetes/charts/tree/master/stable/prestashop)
 - [PostgreSQL (incubator)](https://github.com/bitnami/charts/tree/master/incubator/postgresql)
 - [MediaWiki (stable)](https://github.com/kubernetes/charts/tree/master/stable/mediawiki)
 - [MongoDB (stable)](https://github.com/kubernetes/charts/tree/master/stable/mongodb)
