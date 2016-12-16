@@ -6,7 +6,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [Joomla! (stable)](https://github.com/kubernetes/charts/tree/master/stable/joomla)
 - [Redmine (stable)](https://github.com/kubernetes/charts/tree/master/stable/redmine)
 - [Drupal (stable)](https://github.com/kubernetes/charts/tree/master/stable/drupal)
-- [OpenCart (incubator)](https://github.com/bitnami/charts/tree/master/incubator/opencart)
+- [OpenCart (stable)](https://github.com/kubernetes/charts/tree/master/stable/opencart)
 - [Magento (stable)](https://github.com/kubernetes/charts/tree/master/stable/magento)
 - [RabbitMQ (stable)](https://github.com/kubernetes/charts/tree/master/stable/rabbitmq)
 - [OwnCloud (stable)](https://github.com/kubernetes/charts/tree/master/stable/owncloud)
