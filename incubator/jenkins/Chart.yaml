@@ -1,5 +1,5 @@
 name: jenkins
-version: 0.3.7
+version: 0.4.0
 description: The leading open source automation server
 keywords:
 - jenkins
@@ -15,3 +15,4 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
+icon: https://bitnami.com/assets/stacks/jenkins/img/jenkins-stack-110x117.png
