@@ -1,40 +1,31 @@
-# Wildfly
+# WildFly
 
 [Wildfly](http://wildfly.org/) formerly known as JBoss AS, or simply JBoss, is an application server authored by JBoss, now developed by Red Hat. WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
 ## TL;DR;
 
-```bash
-$ helm install wildfly-x.x.x.tgz
+```console
+$ helm install incubator/wildfly
 ```
 
 ## Introduction
 
-Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
+This chart bootstraps a [WildFly](https://github.com/bitnami/bitnami-docker-wildfly) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-This chart bootstraps a [Wildfly](https://github.com/bitnami/bitnami-docker-wildfly) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+## Prerequisites
 
-## Get this chart
-
-Download the latest release of the chart from the [releases](../../../releases) page.
-
-Alternatively, clone the repo if you wish to use the development snapshot:
-
-```bash
-$ git clone https://github.com/bitnami/charts.git
-```
+- Kubernetes 1.4+ with Beta APIs enabled
+- PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
-```bash
-$ helm install --name my-release wildfly-x.x.x.tgz
+```console
+$ helm install --name my-release incubator/wildfly
 ```
 
-*Replace the `x.x.x` placeholder with the chart release version.*
-
-The command deploys Wildfly on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys WildFly on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -42,7 +33,7 @@ The command deploys Wildfly on the Kubernetes cluster in the default configurati
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -50,71 +41,44 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the Wildfly chart and their default values.
+The following tables lists the configurable parameters of the WildFly chart and their default values.
 
-|     Parameter     |         Description         |                         Default                         |
-|-------------------|-----------------------------|---------------------------------------------------------|
-| `imageTag`        | `bitnami/wildfly` image tag | Wildfly image version                                   |
-| `imagePullPolicy` | Image pull policy           | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `wildflyUsername` | Admin user                  | `user`                                                  |
-| `wildflyPassword` | Admin password              | `nil`                                                   |
+|         Parameter          |              Description               |                         Default                          |
+|----------------------------|----------------------------------------|----------------------------------------------------------|
+| `image`                    | WildFly image                          | `bitnami/wildfly:{VERSION}`                              |
+| `imagePullPolicy`          | Image pull policy                      | `Always` if `image` tag is `latest`, else `IfNotPresent` |
+| `wildflyUsername`          | WildFly admin user                     | `user`                                                   |
+| `wildflyPassword`          | WildFly admin password                 | _random 10 character alphanumeric string_                |
+| `serviceType`              | Kubernetes Service type                | `LoadBalancer`                                           |
+| `persistence.enabled`      | Enable persistence using PVC           | `true`                                                   |
+| `persistence.storageClass` | PVC Storage Class for WildFly volume   | `generic`                                                |
+| `persistence.accessMode`   | PVC Access Mode for WildFly volume     | `ReadWriteOnce`                                          |
+| `persistence.size`         | PVC Storage Request for WildFly volume | `8Gi`                                                    |
+| `resources`                | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                             |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install --name my-release \
   --set wildflyUser=manager,wildflyPassword=password \
     wildfly-x.x.x.tgz
 ```
 
-The above command sets the Wildfly management username and password to `manager` and `password` respectively.
+The above command sets the WildFly management username and password to `manager` and `password` respectively.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-$ helm install --name my-release -f values.yaml wildfly-x.x.x.tgz
+```console
+$ helm install --name my-release -f values.yaml incubator/wildfly
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Persistence
 
-The [Bitnami Wildfly](https://github.com/bitnami/bitnami-docker-wildfly) image stores the Wildfly data and configurations at the `/bitnami/wildfly` path of the container.
+The [Bitnami WildFly](https://github.com/bitnami/bitnami-docker-wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
 
-As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-
-For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
-
-### Step 1: Create a persistent disk
-
-You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
-
-```bash
-$ gcloud compute disks create --size=500GB --zone=us-central1-a wildfly-data-disk
-```
-
-### Step 2: Update `templates/deployment.yaml`
-
-Replace:
-
-```yaml
-      volumes:
-      - name: wildfly-data
-        emptyDir: {}
-```
-
-with
-
-```yaml
-      volumes:
-      - name: wildfly-data
-        gcePersistentDisk:
-          pdName: wildfly-data-disk
-          fsType: ext4
-```
-
-[Install](#installing-the-chart) the chart after making these changes.
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Configuration](#configuration) section to configure the PVC or to disable persistence.

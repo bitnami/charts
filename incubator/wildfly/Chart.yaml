@@ -1,5 +1,5 @@
 name: wildfly
-version: 0.3.6
+version: 0.4.0
 description: Chart for Wildfly
 keywords:
 - wildfly
@@ -15,3 +15,4 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
+icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-110x117.png

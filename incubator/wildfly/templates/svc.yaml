@@ -8,11 +8,11 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  type: LoadBalancer
+  type: {{ .Values.serviceType }}
   ports:
   - name: http
     port: 80
-    targetPort: 8080
+    targetPort: http
   - name: mgmt
     port: 9990
     targetPort: mgmt
