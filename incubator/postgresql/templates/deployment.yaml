@@ -8,18 +8,14 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "bitnami/postgresql:{{ .Values.imageTag }}"
+        image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: POSTGRESQL_USERNAME
@@ -39,7 +35,7 @@ spec:
             command:
             - pg_isready
             - -U
-            - postgres
+            - {{ default "" .Values.postgresqlUsername | quote }}
           initialDelaySeconds: 30
           timeoutSeconds: 5
         readinessProbe:
@@ -47,12 +43,19 @@ spec:
             command:
             - pg_isready
             - -U
-            - postgres
+            - {{ default "" .Values.postgresqlUsername | quote }}
           initialDelaySeconds: 5
           timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
         - name: postgresql-data
           mountPath: /bitnami/postgresql
       volumes:
       - name: postgresql-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+      {{- else }}
         emptyDir: {}
+      {{- end -}}
