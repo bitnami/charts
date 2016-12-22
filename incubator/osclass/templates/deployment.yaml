@@ -1,3 +1,4 @@
+{{- if include "host" . -}}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -8,18 +9,14 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "bitnami/osclass:{{ .Values.imageTag }}"
+        image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MARIADB_HOST
@@ -32,15 +29,9 @@ spec:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
         - name: OSCLASS_HOST
-          value: {{ default .Values.osclassLoadBalancerIP .Values.osclassHost | quote }}
+          value: {{ include "host" . | quote }}
         - name: OSCLASS_USERNAME
-          value: {{ default "" .Values.osclassUser | quote }}
-        - name: OSCLASS_WEB_TITLE
-          value: {{ default "" .Values.osclassWebTitle | quote }}
-        - name: OSCLASS_PING_ENGINES
-          value: {{ default "" .Values.osclassPingEngines | quote }}
-        - name: OSCLASS_SAVE_STATS
-          value: {{ default "" .Values.osclassSaveStats | quote }}
+          value: {{ default "" .Values.osclassUsername | quote }}
         - name: OSCLASS_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -48,6 +39,12 @@ spec:
               key: osclass-password
         - name: OSCLASS_EMAIL
           value: {{ default "" .Values.osclassEmail | quote }}
+        - name: OSCLASS_WEB_TITLE
+          value: {{ default "" .Values.osclassWebTitle | quote }}
+        - name: OSCLASS_PING_ENGINES
+          value: {{ default "" .Values.osclassPingEngines | quote }}
+        - name: OSCLASS_SAVE_STATS
+          value: {{ default "" .Values.osclassSaveStats | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
@@ -84,6 +81,8 @@ spec:
             - "80"
           initialDelaySeconds: 5
           timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
         - name: osclass-data
           mountPath: /bitnami/osclass
@@ -91,6 +90,17 @@ spec:
           mountPath: /bitnami/apache
       volumes:
       - name: osclass-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-osclass
+      {{- else }}
         emptyDir: {}
+      {{- end }}
       - name: apache-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-apache
+      {{- else }}
         emptyDir: {}
+      {{- end }}
+{{- end -}}
