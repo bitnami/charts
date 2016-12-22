@@ -8,18 +8,14 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "bitnami/wildfly:{{ .Values.imageTag }}"
+        image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: WILDFLY_USERNAME
@@ -38,17 +34,24 @@ spec:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 60
+          initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
         - name: wildfly-data
           mountPath: /bitnami/wildfly
       volumes:
       - name: wildfly-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+      {{- else }}
         emptyDir: {}
+      {{- end -}}
