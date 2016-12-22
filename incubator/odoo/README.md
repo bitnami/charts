@@ -6,37 +6,26 @@ Odoo Apps can be used as stand-alone applications, but they also integrate seaml
 
 ## TL;DR;
 
-```bash
-$ helm install odoo-x.x.x.tgz
+```console
+$ helm install stable/odoo
 ```
 
 ## Introduction
 
-Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
-
 This chart bootstraps a [Odoo](https://github.com/bitnami/bitnami-docker-odoo) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the Bitnami PostgreSQL chart which is required for bootstrapping a PostgreSQL deployment for the database requirements of the Odoo application.
+## Prerequisites
 
-## Get this chart
-
-Download the latest release of the chart from the [releases](../../../releases) page.
-
-Alternatively, clone the repo if you wish to use the development snapshot:
-
-```bash
-$ git clone https://github.com/bitnami/charts.git
-```
+- Kubernetes 1.4+ with Beta APIs enabled
+- PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
-```bash
-$ helm install --name my-release odoo-x.x.x.tgz
+```console
+$ helm install --name my-release stable/odoo
 ```
-
-*Replace the `x.x.x` placeholder with the chart release version.*
 
 The command deploys Odoo on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
@@ -46,7 +35,7 @@ The command deploys Odoo on the Kubernetes cluster in the default configuration.
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -73,18 +62,18 @@ The above parameters map to the env variables defined in [bitnami/odoo](http://g
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install --name my-release \
   --set odooPassword=password,postgresql.postgresPassword=secretpassword \
-    odoo-x.x.x.tgz
+    stable/odoo
 ```
 
 The above command sets the Odoo administrator account password to `password` and the PostgreSQL `postgres` user password to `secretpassword`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
-```bash
-$ helm install --name my-release -f values.yaml odoo-x.x.x.tgz
+```console
+$ helm install --name my-release -f values.yaml stable/odoo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -93,42 +82,5 @@ $ helm install --name my-release -f values.yaml odoo-x.x.x.tgz
 
 The [Bitnami Odoo](https://github.com/bitnami/bitnami-docker-odoo) image stores the Odoo data and configurations at the `/bitnami/odoo` path of the container.
 
-As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-
-For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
-
-### Step 1: Create a persistent disk
-
-You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
-
-```bash
-$ gcloud compute disks create --size=500GB --zone=us-central1-a odoo-data-disk
-```
-
-### Step 2: Update `templates/deployment.yaml`
-
-Replace:
-
-```yaml
-      volumes:
-      - name: odoo-data
-        emptyDir: {}
-```
-
-with
-
-```yaml
-      volumes:
-      - name: odoo-data
-        gcePersistentDisk:
-          pdName: odoo-data-disk
-          fsType: ext4
-```
-
-> **Note**:
->
-> You should also use a persistent storage volume for the PostgreSQL deployment.
-
-[Install](#installing-the-chart) the chart after making these changes.
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Configuration](#configuration) section to configure the PVC or to disable persistence.

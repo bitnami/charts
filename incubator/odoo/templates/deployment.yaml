@@ -8,18 +8,14 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "bitnami/odoo:{{ .Values.imageTag }}"
+        image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: POSTGRESQL_HOST
@@ -30,7 +26,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ template "postgresql.fullname" . }}
-              key: postgresql-password
+              key: postgres-password
         - name: ODOO_EMAIL
           value: {{ default "" .Values.odooEmail | quote }}
         - name: ODOO_PASSWORD
@@ -58,7 +54,7 @@ spec:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 120
+          initialDelaySeconds: 180
           timeoutSeconds: 30
         readinessProbe:
           httpGet:
@@ -66,9 +62,16 @@ spec:
             port: http
           initialDelaySeconds: 5
           timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
         - name: odoo-data
           mountPath: /bitnami/odoo
       volumes:
       - name: odoo-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+      {{- else }}
         emptyDir: {}
+      {{- end }}
