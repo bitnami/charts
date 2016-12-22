@@ -8,18 +8,14 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: bitnami/memcached:{{ .Values.imageTag }}
+        image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MEMCACHED_USERNAME
@@ -42,3 +38,5 @@ spec:
             port: memcache
           initialDelaySeconds: 5
           timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
