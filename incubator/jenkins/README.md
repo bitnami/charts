@@ -4,35 +4,26 @@
 
 ## TL;DR;
 
-```bash
-$ helm install jenkins-x.x.x.tgz
+```console
+$ helm install stable/jenkins
 ```
 
 ## Introduction
 
-Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
-
 This chart bootstraps a [Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-## Get this chart
+## Prerequisites
 
-Download the latest release of the chart from the [releases](../../../releases) page.
-
-Alternatively, clone the repo if you wish to use the development snapshot:
-
-```bash
-$ git clone https://github.com/bitnami/charts.git
-```
+- Kubernetes 1.4+ with Beta APIs enabled
+- PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
-```bash
-$ helm install --name my-release jenkins-x.x.x.tgz
+```console
+$ helm install --name my-release stable/jenkins
 ```
-
-*Replace the `x.x.x` placeholder with the chart release version.*
 
 The command deploys Jenkins on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
@@ -42,7 +33,7 @@ The command deploys Jenkins on the Kubernetes cluster in the default configurati
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -52,29 +43,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Jenkins chart and their default values.
 
-|     Parameter     |         Description         |                         Default                         |
-|-------------------|-----------------------------|---------------------------------------------------------|
-| `imageTag`        | `bitnami/jenkins` image tag | Jenkins image version                                   |
-| `imagePullPolicy` | Image pull policy           | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `jenkinsUser`     | User of the application     | `nil`                                                   |
-| `jenkinsPassword` | Application password        | `nil`                                                   |
+|         Parameter          |              Description               |                         Default                          |
+|----------------------------|----------------------------------------|----------------------------------------------------------|
+| `image`                    | Jenkins image                          | `bitnami/jenkins:{VERSION}`                              |
+| `imagePullPolicy`          | Image pull policy                      | `Always` if `image` tag is `latest`, else `IfNotPresent` |
+| `jenkinsUser`              | User of the application                | `user`                                                   |
+| `jenkinsPassword`          | Application password                   | _random 10 character alphanumeric string_                |
+| `serviceType`              | Kubernetes Service type                | `LoadBalancer`                                           |
+| `persistence.enabled`      | Enable persistence using PVC           | `true`                                                   |
+| `persistence.storageClass` | PVC Storage Class for Jenkins volume   | `generic`                                                |
+| `persistence.accessMode`   | PVC Access Mode for Jenkins volume     | `ReadWriteOnce`                                          |
+| `persistence.size`         | PVC Storage Request for Jenkins volume | `8Gi`                                                    |
+| `resources`                | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                             |
 
 The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install --name my-release \
-  --set jenkinsUser=my-user,jenkinsPassword=my-password \
-    jenkins-x.x.x.tgz
+  --set jenkinsUsername=admin,jenkinsPassword=password \
+    stable/jenkins
 ```
 
-The above command sets the Jenkins admin username and password to `my-user` and `my-password` respectively.
+The above command sets the Jenkins administrator account username and password to `admin` and `password` respectively.
 
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
-```bash
-$ helm install --name my-release -f values.yaml jenkins-x.x.x.tgz
+```console
+$ helm install --name my-release -f values.yaml stable/jenkins
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -83,38 +80,5 @@ $ helm install --name my-release -f values.yaml jenkins-x.x.x.tgz
 
 The [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image stores the Jenkins data and configurations at the `/bitnami/jenkins` path of the container.
 
-As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-
-For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
-
-### Step 1: Create a persistent disk
-
-You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
-
-```bash
-$ gcloud compute disks create --size=500GB --zone=us-central1-a jenkins-data-disk
-```
-
-### Step 2: Update `templates/deployment.yaml`
-
-Replace:
-
-```yaml
-      volumes:
-      - name: jenkins-data
-        emptyDir: {}
-```
-
-with
-
-```yaml
-      volumes:
-      - name: jenkins-data
-        gcePersistentDisk:
-          pdName: jenkins-data-disk
-          fsType: ext4
-```
-
-[Install](#installing-the-chart) the chart after making these changes.
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
