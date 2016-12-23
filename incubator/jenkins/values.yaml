@@ -1,7 +1,7 @@
 ## Bitnami Jenkins image version
 ## ref: https://hub.docker.com/r/bitnami/jenkins/tags/
 ##
-image: bitnami/jenkins:2.33-r0
+image: bitnami/jenkins:2.33-r1
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
