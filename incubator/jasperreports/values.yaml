@@ -1,7 +1,7 @@
 ## Bitnami JasperReports image version
 ## ref: https://hub.docker.com/r/bitnami/jasperreports/tags/
 ##
-image: bitnami/jasperreports:6.3.0-r5
+image: bitnami/jasperreports:6.3.0-r6
 
 
 ## Specify a imagePullPolicy
