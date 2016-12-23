@@ -1,7 +1,7 @@
 ## Bitnami OrangeHRM image version
 ## ref: https://hub.docker.com/r/bitnami/orangehrm/tags/
 ##
-image: bitnami/orangehrm:3.3.3-r3
+image: bitnami/orangehrm:3.3.3-r4
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
