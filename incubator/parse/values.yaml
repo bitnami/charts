@@ -56,7 +56,7 @@ parseDashboard:
   ## Bitnami Parse Dashboard image version
   ## ref: https://hub.docker.com/r/bitnami/parse-dashboard/tags/
   ##
-  image: bitnami/parse-dashboard:1.0.19-r4
+  image: bitnami/parse-dashboard:1.0.19-r5
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
