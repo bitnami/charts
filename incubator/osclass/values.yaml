@@ -1,7 +1,7 @@
 ## Bitnami Osclass image version
 ## ref: https://hub.docker.com/r/bitnami/osclass/tags/
 ##
-image: bitnami/osclass:3.6.1-r3
+image: bitnami/osclass:3.7.0-r0
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
