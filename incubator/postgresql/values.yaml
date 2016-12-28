@@ -1,7 +1,7 @@
 ## Bitnami PostgreSQL image version
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
 ##
-image: bitnami/postgresql:9.6.1-r4
+image: bitnami/postgresql:9.6.1-r5
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
