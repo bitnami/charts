@@ -1,7 +1,7 @@
 ## Bitnami Memcached image version
 ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
 ##
-image: bitnami/memcached:1.4.33-r4
+image: bitnami/memcached:1.4.33-r5
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
