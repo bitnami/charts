@@ -36,8 +36,8 @@ spec:
               key: suitecrm-password
         - name: SUITECRM_EMAIL
           value: {{ default "" .Values.suitecrmEmail | quote }}
-        - name: SUITECRM_LASTNAME
-          value: {{ default "" .Values.suitecrmLastname | quote }}
+        - name: SUITECRM_LAST_NAME
+          value: {{ default "" .Values.suitecrmLastName | quote }}
         - name: SUITECRM_HOST
           value: {{ default "" .Values.suitecrmHost | quote }}
         - name: SUITECRM_SMTP_HOST

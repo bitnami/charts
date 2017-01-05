@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the SuiteCRM chart and
 | `suitecrmUsername`                   | User of the application                  | `user`                                                  |
 | `suitecrmPassword`                   | Application password                     | _random 10 character      alphanumeric string_          |
 | `suitecrmEmail`                      | Admin email                              | `user@example.com`                                      |
-| `suitecrmLastname`                   | Last name                                | `Name`                                                  |
+| `suitecrmLastName`                   | Last name                                | `Name`                                                  |
 | `suitecrmHost`                       | Host domain or IP                        | `nil`                                                   |
 | `suitecrmLoadBalancerIP`             | `LoadBalancerIP for the application`     | `nil`                                                   |
 | `smtpHost`                           | SMTP host                                | `nil`                                                   |

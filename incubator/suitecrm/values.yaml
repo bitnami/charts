@@ -22,7 +22,7 @@ suitecrmUsername: user
 ## Lastname
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
 ##
-suitecrmLastname: Name
+suitecrmLastName: Name
 
 ## loadBalancerIP for the  Service (optional, cloud specific)
 ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
