@@ -47,7 +47,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 |         Parameter          |                Description                 |           Default            |
 |----------------------------|--------------------------------------------|------------------------------|
 | `image`                    | MySQL image                                | `bitnami/mysql:{VERSION}`    |
-| `imagePullPolicy`          | Image pull policy.                         | `IfNotPresent`.              |
+| `imagePullPolicy`          | Image pull policy.                         | `IfNotPresent`               |
 | `mysqlRootPassword`        | Password for the `root` user.              | `nil`                        |
 | `mysqlUser`                | Username of new user to create.            | `nil`                        |
 | `mysqlPassword`            | Password for the new user.                 | `nil`                        |

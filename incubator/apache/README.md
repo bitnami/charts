@@ -57,7 +57,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 |     Parameter     |         Description         |       Default        |
 |-------------------|-----------------------------|----------------------|
 | `imageTag`        | `bitnami/apache` image tag. | Apache image version |
-| `imagePullPolicy` | Image pull policy.          | `IfNotPresent`.      |
+| `imagePullPolicy` | Image pull policy.          | `IfNotPresent`       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

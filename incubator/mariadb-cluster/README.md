@@ -59,7 +59,7 @@ The following tables lists the configurable parameters of the MariaDB chart and 
 |          Parameter           |             Description              |        Default        |
 |------------------------------|--------------------------------------|-----------------------|
 | `imageTag`                   | `bitnami/mariadb` image tag          | MariaDB image version |
-| `imagePullPolicy`            | Image pull policy                    | `IfNotPresent`.       |
+| `imagePullPolicy`            | Image pull policy                    | `IfNotPresent`        |
 | `replicasCount`              | Desired number of MariaDB slave pods | `nil`                 |
 | `mariadbRootPassword`        | MariaDB admin password               | `nil`                 |
 | `mariadbUser`                | MariaDB user                         | `nil`                 |

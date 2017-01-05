@@ -48,7 +48,7 @@ The following tables lists the configurable parameters of the Osclass chart and 
 |           Parameter           |               Description                |        Default        |
 |-------------------------------|------------------------------------------|-----------------------|
 | `imageTag`                    | `bitnami/osclass` image tag.             | Osclass image version |
-| `imagePullPolicy`             | Image pull policy.                       | `IfNotPresent`.       |
+| `imagePullPolicy`             | Image pull policy.                       | `IfNotPresent`        |
 | `osclassHost`                 | Osclass host to create application URLs  | `nil`                 |
 | `osclassLoadBalancerIP`       | `loadBalancerIP` for the Osclass Service | `nil`                 |
 | `osclassUsername`             | User of the application                  | `user`                |
