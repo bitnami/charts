@@ -15,10 +15,9 @@ parseServer:
   image: bitnami/parse:2.2.24-r4
 
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  # imagePullPolicy:
+  imagePullPolicy: IfNotPresent
 
   ## Parse Server Port
   ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
@@ -59,10 +58,9 @@ parseDashboard:
   image: bitnami/parse-dashboard:1.0.19-r6
 
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  # imagePullPolicy:
+  imagePullPolicy: IfNotPresent
 
   ## Parse Dashboard application username
   ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration

@@ -56,17 +56,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the MariaDB chart and their default values.
 
-|          Parameter           |             Description              |                         Default                          |
-|------------------------------|--------------------------------------|----------------------------------------------------------|
-| `imageTag`                   | `bitnami/mariadb` image tag          | MariaDB image version                                    |
-| `imagePullPolicy`            | Image pull policy                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
-| `replicasCount`              | Desired number of MariaDB slave pods | `nil`                                                    |
-| `mariadbRootPassword`        | MariaDB admin password               | `nil`                                                    |
-| `mariadbUser`                | MariaDB user                         | `nil`                                                    |
-| `mariadbPassword`            | MariaDB password                     | `nil`                                                    |
-| `mariadbDatabase`            | Database to create                   | `my-database`                                            |
-| `mariadbReplicationUser`     | MariaDB replication user             | `repl-user`                                              |
-| `mariadbReplicationPassword` | MariaDB replication user password    | `nil`                                                    |
+|          Parameter           |             Description              |        Default        |
+|------------------------------|--------------------------------------|-----------------------|
+| `imageTag`                   | `bitnami/mariadb` image tag          | MariaDB image version |
+| `imagePullPolicy`            | Image pull policy                    | `IfNotPresent`        |
+| `replicasCount`              | Desired number of MariaDB slave pods | `nil`                 |
+| `mariadbRootPassword`        | MariaDB admin password               | `nil`                 |
+| `mariadbUser`                | MariaDB user                         | `nil`                 |
+| `mariadbPassword`            | MariaDB password                     | `nil`                 |
+| `mariadbDatabase`            | Database to create                   | `my-database`         |
+| `mariadbReplicationUser`     | MariaDB replication user             | `repl-user`           |
+| `mariadbReplicationPassword` | MariaDB replication user password    | `nil`                 |
 
 The above parameters map to the env variables defined in [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb). For more information please refer to the [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb) image documentation.
 
