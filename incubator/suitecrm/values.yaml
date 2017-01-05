@@ -1,45 +1,43 @@
-## Bitnami suitecrm image 
+## Bitnami SuiteCRM image version
 ## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
 ##
-image: bitnami/suitecrm:7.7.8-r0
+image: bitnami/suitecrm:7.7.9-r0
 
 ## Specify a imagePullPolicy
-## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
-# imagePullPolicy:
+imagePullPolicy: IfNotPresent
+
+## SuiteCRM host to create application URLs
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
+##
+# suitecrmHost:
+
+## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# suitecrmLoadBalancerIP:
 
 ## User of the application
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
 suitecrmUsername: user
 
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
-## suitecrmPassword: 
-
-## Lastname
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
-suitecrmLastName: Name
-
-## loadBalancerIP for the  Service (optional, cloud specific)
-## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-##
-# suitecrmLoadBalancerIP:
+# suitecrmPassword:
 
 ## Admin email
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
 suitecrmEmail: user@example.com
 
-## SuiteCRM HOST
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
+## Lastname
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
-##  suitecrmHost: 
-
-
+suitecrmLastName: Name
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm/#smtp-configuration
@@ -54,21 +52,10 @@ suitecrmEmail: user@example.com
 ## MariaDB chart configuration
 ##
 mariadb:
-  ## MariaDB root password
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ## mariadbRootPassword: 
-
-  ## MariaDB user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
-  ## mariadbUser:
-
-  ## MariaDB Host 
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
-  ## mariadbHost:
-
-  ## MariaDB Port 
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
-  ## mariadbPort:
+  ##
+  # mariadbRootPassword:
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -96,7 +83,7 @@ persistence:
   suitecrm:
     storageClass: generic
     accessMode: ReadWriteOnce
-    size: 1Gi
+    size: 8Gi
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
