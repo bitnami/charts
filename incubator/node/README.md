@@ -27,7 +27,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release .
 ```
 
-The command deploys Node.js on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box. 
+The command deploys Node.js on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
 
 Due that the Helm Chart clones the application on the /app volume while the container is initializing, a persistent volume is not required.
 
@@ -47,15 +47,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Node chart and their default values.
 
-|              Parameter               |               Description                |                         Default                         |
-|--------------------------------------|------------------------------------------|---------------------------------------------------------|
-| `image`                              | Node image                               | `bitnami/node:{VERSION}`                                |
-| `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `repository`                         | Repo of the application                  | `git@github.com:jbianquetti-nami/simple-node-app.git`   |
-| `revision`                           | Revision  to checkout                    | `master`                                                |
-| `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
-| `serviceType`                        | Kubernetes Service type                  | `LoadBalancer`                                          |
-| `resources`                          | CPU/Memory resource requests/limits      | Memory: `512Mi`, CPU: `300m`                            |
+|           Parameter           |             Description             |                        Default                        |
+|-------------------------------|-------------------------------------|-------------------------------------------------------|
+| `image`                       | Node image                          | `bitnami/node:{VERSION}`                              |
+| `imagePullPolicy`             | Image pull policy                   | `IfNotPresent`                                        |
+| `repository`                  | Repo of the application             | `git@github.com:jbianquetti-nami/simple-node-app.git` |
+| `revision`                    | Revision  to checkout               | `master`                                              |
+| `mariadb.mariadbRootPassword` | MariaDB admin password              | `nil`                                                 |
+| `serviceType`                 | Kubernetes Service type             | `LoadBalancer`                                        |
+| `resources`                   | CPU/Memory resource requests/limits | Memory: `512Mi`, CPU: `300m`                          |
 
 The above parameters map to the env variables defined in [bitnami/node](http://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](http://github.com/bitnami/bitnami-docker-node) image documentation.
 

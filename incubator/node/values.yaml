@@ -7,15 +7,14 @@ image: bitnami/node:7.3.0-r2
 ##
 repository:  https://github.com/jbianquetti-nami/simple-node-app.git
 
-## Git repository revision to checkout 
+## Git repository revision to checkout
 ##
 revision: master
 
 ## Specify a imagePullPolicy
-## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
-# imagePullPolicy:
+imagePullPolicy: IfNotPresent
 
 
 ##
@@ -24,7 +23,7 @@ revision: master
 mariadb:
   ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ## mariadbRootPassword: 
+  ## mariadbRootPassword:
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/

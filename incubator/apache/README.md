@@ -54,10 +54,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Apache chart and their default values.
 
-|     Parameter     |         Description         |                         Default                          |
-|-------------------|-----------------------------|----------------------------------------------------------|
-| `imageTag`        | `bitnami/apache` image tag. | Apache image version                                     |
-| `imagePullPolicy` | Image pull policy.          | `Always` if `imageTag` is `latest`, else `IfNotPresent`. |
+|     Parameter     |         Description         |       Default        |
+|-------------------|-----------------------------|----------------------|
+| `imageTag`        | `bitnami/apache` image tag. | Apache image version |
+| `imagePullPolicy` | Image pull policy.          | `IfNotPresent`.      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
