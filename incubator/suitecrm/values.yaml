@@ -42,13 +42,13 @@ suitecrmEmail: user@example.com
 
 
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#smtp-configuration
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm/#smtp-configuration
 ##
-# smtpHost:
-# smtpPort:
-# smtpUser:
-# smtpPassword:
-# smtpProtocol:
+# suitecrmSmtpHost:
+# suitecrmSmtpPort:
+# suitecrmSmtpUser:
+# suitecrmSmtpPassword:
+# suitecrmSmtpProtocol:
 
 ##
 ## MariaDB chart configuration
