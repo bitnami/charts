@@ -3,7 +3,7 @@
 Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/kubernetes/helm).
 
 - [Apache (incubator)](https://github.com/bitnami/charts/tree/master/incubator/apache)
-- [Dokuwiki (incubator)](https://github.com/bitnami/charts/tree/master/incubator/dokuwiki)
+- [Dokuwiki (incubator)](https://github.com/kubernetes/charts/tree/master/stable/dokuwiki)
 - [Drupal (stable)](https://github.com/kubernetes/charts/tree/master/stable/drupal)
 - [Ghost (stable)](https://github.com/kubernetes/charts/tree/master/stable/ghost)
 - [JasperReports Server (incubator)](https://github.com/kubernetes/charts/tree/master/stable/jasperreports)
