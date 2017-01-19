@@ -21,7 +21,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [NodeJS (incubator)](https://github.com/bitnami/charts/tree/master/incubator/node)
 - [Odoo (incubator)](https://github.com/bitnami/charts/tree/master/incubator/odoo)
 - [OpenCart (stable)](https://github.com/kubernetes/charts/tree/master/stable/opencart)
-- [OrangeHRM (incubator)](https://github.com/kubernetes/charts/tree/master/stable/orangehrm)
+- [OrangeHRM (stable)](https://github.com/kubernetes/charts/tree/master/stable/orangehrm)
 - [Osclass (incubator)](https://github.com/bitnami/charts/tree/master/incubator/osclass)
 - [OwnCloud (stable)](https://github.com/kubernetes/charts/tree/master/stable/owncloud)
 - [Parse (incubator)](https://github.com/bitnami/charts/tree/master/incubator/parse)
