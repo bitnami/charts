@@ -24,4 +24,4 @@
 2. Get your piwik login credentials by running:
 
     echo Username: {{ .Values.piwikUsername }}
-    echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.piwik-password[*]}"`))
+    echo Password: $(printf $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.piwik-password}" | base64 --decode))
