@@ -41,14 +41,6 @@ spec:
           value: {{ default "" .Values.piwikWebsiteName | quote }}
         - name: PIWIK_WEBSITE_HOST
           value: {{ default "" .Values.piwikWebsiteHost | quote }}
-        - name: SMTP_PROTOCOL
-          value: {{ default "" .Values.smtpProtocol | quote }}
-        - name: SMTP_HOST
-          value: {{ default "" .Values.smtpHost | quote }}
-        - name: SMTP_PORT
-          value: {{ default "" .Values.smtpPort | quote }}
-        - name: SMTP_USER
-          value: {{ default "" .Values.smtpUser | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
