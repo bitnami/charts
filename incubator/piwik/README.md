@@ -53,7 +53,7 @@ The following tables lists the configurable parameters of the piwik chart and th
 | `piwikPassword`                   | Application password                  | _random 10 character alphanumeric string_ |
 | `piwikEmail`                      | Admin email                           | `user@example.com`                        |
 | `piwikWebsiteName`                | Name of the example website to track  | `example`                                 |
-| `piwikWebsiteHost`                | Host of the example website to track  | `https://example.org                      |
+| `piwikWebsiteHost`                | Host of the example website to track  | `https://example.org`                     |
 | `smtpHost`                        | SMTP host                             | `nil`                                     |
 | `smtpPort`                        | SMTP port                             | `nil`                                     |
 | `smtpProtocol`                    | SMTP Protocol                         | `nil`                                     |
