@@ -1,0 +1,15 @@
+name: piwik
+version: 0.0.1
+description: Piwik is a free and open source web analytics application written by a team of international developers that runs on a PHP/MySQL webserver. It tracks online visits to one or more websites and displays reports on these visits for analysis.
+keywords:
+- piwik
+- analytics
+- php
+home: https://www.piwik.org/
+sources:
+- https://github.com/bitnami/bitnami-docker-piwik
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Piwik_2.0_logo.svg/2000px-Piwik_2.0_logo.svg.png
