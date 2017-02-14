@@ -18,6 +18,7 @@ spec:
             {
                 "name": "git-clone-app",
                 "image": "{{ .Values.image }}", 
+                "imagePullPolicy": "{{ .Values.imagePullPolicy }}", 
                 "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app"  ], 
                 "volumeMounts": [
                     {
