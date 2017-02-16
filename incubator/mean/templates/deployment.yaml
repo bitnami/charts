@@ -68,25 +68,26 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: http
+            port: 8080
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /
-            port: http
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+            port: 8080
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
         volumeMounts:
         - name: node-data
           mountPath: /app
         - name: config 
-          mountPath: /app/config/database.js
-          subPath: config/database.js
+          mountPath: /app/config
       volumes:
         - name: node-data
-          persistentVolumeClaim:
-            claimName: {{ template "fullname" . }}
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ template "fullname" . }}
+            items:
+            - key: database.js  
+              path: database.js
