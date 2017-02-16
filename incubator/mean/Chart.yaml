@@ -1,0 +1,19 @@
+name: mean
+version: 0.1.0
+description: The Bitnami MEAN Stack provides a complete development environment for the leading noSQL database, MongoDB. 
+keywords:
+- node
+- javascript 
+- mongodb
+- express
+- angular 
+- nodejs
+- git
+home: http://nodejs.org/
+sources:
+- https://github.com/bitnami/bitnami-docker-node
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://bitnami.com/assets/stacks/meanstack/img/meanstack-stack-220x234.png
