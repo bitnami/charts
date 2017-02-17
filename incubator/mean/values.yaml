@@ -23,8 +23,7 @@ imagePullPolicy: IfNotPresent
 config: |-
   module.exports = {
       remoteUrl: "mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE ,
-      localUrl: "mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE, 
-      console.log("mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE); 
+      localUrl: "mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE 
   };
 
 
