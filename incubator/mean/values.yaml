@@ -22,8 +22,9 @@ imagePullPolicy: IfNotPresent
 ##
 config: |-
   module.exports = {
-      remoteUrl : process.env.MONGO_URI 
-      localUrl: process.env.MONGO_URI 
+      remoteUrl: "mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE ,
+      localUrl: "mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE, 
+      console.log("mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE); 
   };
 
 
@@ -33,14 +34,14 @@ config: |-
 mongodb:
   ## MongoDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-MongoDB/blob/master/README.md#setting-the-root-password-on-first-run
-  ## mongodbRootPassword:
+  # mongodbRootPassword: 
    
   ## MongoDB custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
   ##
-  # mongodbUsername:
-  # mongodbPassword:
-  # mongodbDatabase:
+  # mongodbUsername: 
+  # mongodbPassword: 
+  # mongodbDatabase: 
    
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
