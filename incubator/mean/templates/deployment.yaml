@@ -62,7 +62,7 @@ spec:
         - "-ec"
         -  |
           git checkout {{ .Values.revision }}
-          chown -R bitnami:daemon /app
+          chown -R bitnami:daemon /app /home/bitnami
           su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm install'
           su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start'
         ports:
@@ -73,12 +73,17 @@ spec:
             path: /
             port: 8080
           initialDelaySeconds: 120
+          periodSeconds: 5
           timeoutSeconds: 5
         readinessProbe:
-          httpGet:
-            path: /
-            port: 8080
+          exec:
+            command: 
+            - nc 
+            - -zv 
+            - {{ template "mongodb.fullname" . }}
+            - "27017"
           initialDelaySeconds: 120
+          periodSeconds: 5
           timeoutSeconds: 5
         volumeMounts:
         - name: node-data
@@ -92,5 +97,5 @@ spec:
           configMap:
             name: {{ template "fullname" . }}
             items:
-            - key: database.js  
-              path: database.js
+            - key: {{ .Values.configfile | quote  }}   	
+              path: {{ .Values.configfile | quote  }}   	
