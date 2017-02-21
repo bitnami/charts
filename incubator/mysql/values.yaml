@@ -2,7 +2,7 @@
 ## ref: https://hub.docker.com/r/bitnami/mysql/tags/
 ##
 ## Default: none
-image: bitnami/mysql:5.7.17-r2
+image: bitnami/mysql:5.7.17-r3
 
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
