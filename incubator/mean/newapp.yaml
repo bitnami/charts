@@ -1,0 +1,44 @@
+# URL of the repository. HTTP transport prefered 
+repository: https://github.com/btushinde/mean-stack-demo.git
+
+# Revision, tag or branch to checkout 
+revision: master 
+
+# For minikube, set this to NodePort, use LoadBalancer for Cloud deployments 
+serviceType: LoadBalancer 
+
+# Database config file contents 
+# for use with the configMap 
+config: |-
+  {
+      "db": "mongodb://"+process.env.MONGODB_USERNAME+":"process.env.MONGODB_PASSWORD+"@"+process.env.MONGODB_HOST+":"+process.env.MONGODB_PORT+"/"+process.env.MONGODB_DATABASE",
+      "port": 8080,
+      "app": {
+          "name": "MEAN - A Modern Stack - Test"
+      }
+  }
+
+configfile: env/development.json
+
+# MongoDB database settings 
+# Database files needs to be persisted 
+mongodb.mongodbRootPassword: hbIU6JEHBi0=
+mongodb.mongodbUsername: asimpleuser
+mongodb.mongodbPassword: ZWuipD5/yjI=
+mongodb.mongodbDatabase: my_database_name
+mongodb.persistence.enabled: true 
+mongodb.persistence.storageClass: default
+mongodb.persistence.accessMode: ReadWriteOnce
+mongodb.persistence.size: 8Gi
+
+
+# MEAN's NodeJS container config 
+# We want disposable containers for running NodeJS code
+# since we can scale up and down as we need 
+persistence.enabled: false 
+persistence.size:  1Gi
+
+
+# Resource Limits 
+resources.requests.memory: 512Mi
+resources.requests.cpu: 300m 
