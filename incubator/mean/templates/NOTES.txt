@@ -1,5 +1,5 @@
 
-1. Get the URL of your Node app  by running:
+Get the URL of your Node app  by running:
 
 {{- if contains "NodePort" .Values.serviceType }}
 
@@ -12,8 +12,8 @@
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   echo http://$SERVICE_IP/
 
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc -w {{ template "fullname" . }} --namespace {{ .Release.Namespace }}'
+  It may take a few minutes for the LoadBalancer IP address to be available.
+  Watch the status with: 'kubectl get svc -w {{ template "fullname" . }} --namespace {{ .Release.Namespace }}'
 
 {{- else if contains "ClusterIP"  .Values.serviceType }}
 
