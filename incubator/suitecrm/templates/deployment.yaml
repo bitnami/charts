@@ -1,3 +1,4 @@
+{{- if include "host" . -}}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -27,6 +28,8 @@ spec:
             secretKeyRef:
               name: {{ template "mariadb.fullname" . }}
               key: mariadb-root-password
+        - name: SUITECRM_HOST
+          value: {{ include "host" . | quote }}
         - name: SUITECRM_USERNAME
           value: {{ default "" .Values.suitecrmUsername | quote }}
         - name: SUITECRM_PASSWORD
@@ -36,23 +39,21 @@ spec:
               key: suitecrm-password
         - name: SUITECRM_EMAIL
           value: {{ default "" .Values.suitecrmEmail | quote }}
-        - name: SUITECRM_LASTNAME
-          value: {{ default "" .Values.suitecrmLastname | quote }}
-        - name: SUITECRM_HOST
-          value: {{ default "" .Values.suitecrmHost | quote }}
+        - name: SUITECRM_LAST_NAME
+          value: {{ default "" .Values.suitecrmLastName | quote }}
         - name: SUITECRM_SMTP_HOST
-          value: {{ default "" .Values.smtpHost | quote }}
+          value: {{ default "" .Values.suitecrmSmtpHost | quote }}
         - name: SUITECRM_SMTP_PORT
-          value: {{ default "" .Values.smtpPort | quote }}
+          value: {{ default "" .Values.suitecrmSmtpPort | quote }}
         - name: SUITECRM_SMTP_USER
-          value: {{ default "" .Values.smtpUser | quote }}
+          value: {{ default "" .Values.suitecrmSmtpUser | quote }}
         - name: SUITECRM_SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: smtp-password
+              key: suitecrm-smtp-password
         - name: SUITECRM_SMTP_PROTOCOL
-          value: {{ default "" .Values.smtpProtocol | quote }}
+          value: {{ default "" .Values.suitecrmSmtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80
@@ -69,7 +70,7 @@ spec:
             path: /
             port: http
           initialDelaySeconds: 30
-          timeoutSeconds: 5
+          timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
@@ -92,3 +93,4 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
+{{- end -}}

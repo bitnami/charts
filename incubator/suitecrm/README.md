@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install .
+$ helm install stable/suitecrm
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/chart
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release ./suitecrm
+$ helm install --name my-release stable/suitecrm
 ```
 
 The command deploys SuiteCRM on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -45,38 +45,37 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the SuiteCRM chart and their default values.
 
-|              Parameter               |               Description                |                         Default                         |
-|--------------------------------------|------------------------------------------|---------------------------------------------------------|
-| `image`                              | SuiteCRM image                           | `bitnami/suitecrm:{VERSION}`                            |
-| `imagePullPolicy`                    | Image pull policy                        | `Always` if `imageTag` is `latest`, else `IfNotPresent` |
-| `suitecrmUsername`                   | User of the application                  | `user`                                                  |
-| `suitecrmPassword`                   | Application password                     | _random 10 character      alphanumeric string_          |
-| `suitecrmEmail`                      | Admin email                              | `user@example.com`                                      |
-| `suitecrmLastname`                   | Last name                                | `Name`                                                  |
-| `suitecrmHost`                       | Host domain or IP                        | `nil`                                                   |
-| `suitecrmLoadBalancerIP`             | `LoadBalancerIP for the application`     | `nil`                                                   |
-| `smtpHost`                           | SMTP host                                | `nil`                                                   |
-| `smtpPort`                           | SMTP port                                | `nil`                                                   |
-| `smtpProtocol`                       | SMTP Protocol                            | `nil`                                                   |
-| `smtpUser`                           | SMTP user                                | `nil`                                                   |
-| `smtpPassword`                       | SMTP password                            | `nil`                                                   |
-| `mariadb.mariadbRootPassword`        | MariaDB admin password                   | `nil`                                                   |
-| `serviceType`                        | Kubernetes Service type                  | `LoadBalancer`                                          |
-| `persistence.enabled`                | Enable persistence using PVC             | `true`                                                  |
-| `persistence.apache.storageClass`    | PVC Storage Class for apache volume      | `generic`                                               |
-| `persistence.apache.accessMode`      | PVC Access Mode for apache volume        | `ReadWriteOnce`                                         |
-| `persistence.apache.size`            | PVC Storage Request for apache volume    | `1Gi`                                                   |
-| `persistence.suitecrm.storageClass`  | PVC Storage Class for SuiteCRM volume    | `generic`                                               |
-| `persistence.suitecrm.accessMode`    | PVC Access Mode for SuiteCRM volume      | `ReadWriteOnce`                                         |
-| `persistence.suitecrm.size`          | PVC Storage Request for SuiteCRM volume  | `1Gi`                                                   |
-| `resources`                          | CPU/Memory resource requests/limits      | Memory: `512Mi`, CPU: `300m`                            |
+|              Parameter              |                Description                |                  Default                  |
+|-------------------------------------|-------------------------------------------|-------------------------------------------|
+| `imageTag`                          | `bitnami/suitecrm` image tag.             | SuiteCRM image version                    |
+| `imagePullPolicy`                   | Image pull policy.                        | `IfNotPresent`                            |
+| `suitecrmHost`                      | SuiteCRM host to create application URLs  | `nil`                                     |
+| `suitecrmLoadBalancerIP`            | `loadBalancerIP` for the SuiteCRM Service | `nil`                                     |
+| `suitecrmUsername`                  | User of the application                   | `user`                                    |
+| `suitecrmPassword`                  | Application password                      | _random 10 character alphanumeric string_ |
+| `suitecrmEmail`                     | Admin email                               | `user@example.com`                        |
+| `suitecrmLastName`                  | Last name                                 | `Last`                                    |
+| `suitecrmSmtpHost`                  | SMTP host                                 | `nil`                                     |
+| `suitecrmSmtpPort`                  | SMTP port                                 | `nil`                                     |
+| `suitecrmSmtpUser`                  | SMTP user                                 | `nil`                                     |
+| `suitecrmSmtpPassword`              | SMTP password                             | `nil`                                     |
+| `suitecrmSmtpProtocol`              | SMTP protocol [`ssl`, `tls`]              | `nil`                                     |
+| `mariadb.mariadbRootPassword`       | MariaDB admin password                    | `nil`                                     |
+| `serviceType`                       | Kubernetes Service type                   | `LoadBalancer`                            |
+| `persistence.enabled`               | Enable persistence using PVC              | `true`                                    |
+| `persistence.apache.storageClass`   | PVC Storage Class for apache volume       | `generic`                                 |
+| `persistence.apache.accessMode`     | PVC Access Mode for apache volume         | `ReadWriteOnce`                           |
+| `persistence.apache.size`           | PVC Storage Request for apache volume     | `1Gi`                                     |
+| `persistence.suitecrm.storageClass` | PVC Storage Class for SuiteCRM volume     | `generic`                                 |
+| `persistence.suitecrm.accessMode`   | PVC Access Mode for SuiteCRM volume       | `ReadWriteOnce`                           |
+| `persistence.suitecrm.size`         | PVC Storage Request for SuiteCRM volume   | `8Gi`                                     |
+| `resources`                         | CPU/Memory resource requests/limits       | Memory: `512Mi`, CPU: `300m`              |
 
 The above parameters map to the env variables defined in [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm). For more information please refer to the [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm) image documentation.
 
-
 > **Note**:
 >
-> For the SuiteCRM  application function correctly, you should specify the `suitecrmHost` parameter to specify the FQDN (recommended) or the public IP address of the SuiteCRM service.
+> For SuiteCRM to function correctly, you should specify the `suitecrmHost` parameter to specify the FQDN (recommended) or the public IP address of the SuiteCRM service.
 >
 > Optionally, you can specify the `suitecrmLoadBalancerIP` parameter to assign a reserved IP address to the SuiteCRM service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
 >
@@ -87,8 +86,6 @@ The above parameters map to the env variables defined in [bitnami/suitecrm](http
 > ```
 >
 > The reserved IP address can be associated to the SuiteCRM service by specifying it as the value of the `suitecrmLoadBalancerIP` parameter while installing the chart.
-
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -110,7 +107,7 @@ $ helm install --name my-release -f values.yaml stable/suitecrm
 
 ## Persistence
 
-The [Bitnami SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) image stores the SuiteCRM data and configurations at the `/bitnami/suitecrm` and the `/bitnami/apache`  paths of the container.
+The [Bitnami SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) image stores the SuiteCRM data and configurations at the `/bitnami/suitecrm` and `/bitnami/apache` paths of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
