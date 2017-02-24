@@ -36,8 +36,6 @@ spec:
               key: moodle-password
         - name: MOODLE_EMAIL
           value: {{ default "" .Values.moodleEmail | quote }}
-        - name: SMTP_PROTOCOL
-          value: {{ default "" .Values.smtpProtocol | quote }}
         - name: SMTP_HOST
           value: {{ default "" .Values.smtpHost | quote }}
         - name: SMTP_PORT
@@ -49,6 +47,8 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: smtp-password
+        - name: SMTP_PROTOCOL
+          value: {{ default "" .Values.smtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80
@@ -64,7 +64,7 @@ spec:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 30
+          initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
@@ -85,6 +85,6 @@ spec:
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "fullname" . }}-apache
-       {{- else }}
-         emptyDir: {}
-       {{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}

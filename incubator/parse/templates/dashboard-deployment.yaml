@@ -1,4 +1,4 @@
-{{- if and (include "host" .) .Values.parseDashboard.enabled -}}
+{{- if and (include "host" .) .Values.dashboard.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -18,29 +18,29 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.parseDashboard.image }}"
-        imagePullPolicy: {{ default "" .Values.parseDashboard.imagePullPolicy | quote }}
+        image: "{{ .Values.dashboard.image }}"
+        imagePullPolicy: {{ default "" .Values.dashboard.imagePullPolicy | quote }}
         env:
         - name: PARSE_DASHBOARD_USER
-          value: {{ .Values.parseDashboard.username }}
+          value: {{ .Values.dashboard.username }}
         - name: PARSE_DASHBOARD_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: dashboard-password
-        - name: PARSE_SERVER_HOST
+        - name: PARSE_HOST
           value: {{ include "host" . | quote }}
-        - name: PARSE_SERVER_PORT
-          value: {{ .Values.parseServer.port | quote }}
-        - name: PARSE_SERVER_APP_ID
-          value: {{ .Values.parseServer.appId | quote }}
-        - name: PARSE_SERVER_MASTER_KEY
+        - name: PARSE_PORT
+          value: {{ .Values.parse.port | quote }}
+        - name: PARSE_APP_ID
+          value: {{ .Values.parse.appId | quote }}
+        - name: PARSE_MASTER_KEY
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: master-key
-        - name: PARSE_SERVER_DASHBOARD_APP_NAME
-          value: {{ .Values.parseDashboard.appName | quote }}
+        - name: PARSE_DASHBOARD_APP_NAME
+          value: {{ .Values.dashboard.appName | quote }}
         ports:
         - name: dashboard-http
           containerPort: 4040
@@ -57,7 +57,7 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
-{{ toYaml .Values.parseDashboard.resources | indent 10 }}
+{{ toYaml .Values.dashboard.resources | indent 10 }}
         volumeMounts:
         - name: parse-dashboard-data
           mountPath: /bitnami/parse-dashboard

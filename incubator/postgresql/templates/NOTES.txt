@@ -5,4 +5,4 @@ PostgreSQL can be accessed on port 5432 on the following DNS name from within yo
 
 To connect to your database run the following command:
 
-kubectl run {{ template "fullname" . }}-client -it --rm --image {{ .Values.image }} --env PGPASSWORD=$(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.postgresql-password[*]}"`)) --command -- psql -h {{ template "fullname" . }} -U {{ .Values.postgresqlUsername }}{{- if .Values.postgresqlDatabase }} -d {{ .Values.postgresqlDatabase }}{{- end -}}
+kubectl run {{ template "fullname" . }}-client -it --rm --image {{ .Values.image }} --env PGPASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode) --command -- psql -h {{ template "fullname" . }} -U {{ .Values.postgresqlUsername }}{{- if .Values.postgresqlDatabase }} -d {{ .Values.postgresqlDatabase }}{{- end -}}
