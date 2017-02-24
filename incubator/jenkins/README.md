@@ -43,18 +43,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Jenkins chart and their default values.
 
-|         Parameter          |              Description               |                  Default                  |
-|----------------------------|----------------------------------------|-------------------------------------------|
-| `image`                    | Jenkins image                          | `bitnami/jenkins:{VERSION}`               |
-| `imagePullPolicy`          | Image pull policy                      | `IfNotPresent`                            |
-| `jenkinsUser`              | User of the application                | `user`                                    |
-| `jenkinsPassword`          | Application password                   | _random 10 character alphanumeric string_ |
-| `serviceType`              | Kubernetes Service type                | `LoadBalancer`                            |
-| `persistence.enabled`      | Enable persistence using PVC           | `true`                                    |
-| `persistence.storageClass` | PVC Storage Class for Jenkins volume   | `generic`                                 |
-| `persistence.accessMode`   | PVC Access Mode for Jenkins volume     | `ReadWriteOnce`                           |
-| `persistence.size`         | PVC Storage Request for Jenkins volume | `8Gi`                                     |
-| `resources`                | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`              |
+|         Parameter          |              Description               |                   Default                   |
+|----------------------------|----------------------------------------|---------------------------------------------|
+| `image`                    | Jenkins image                          | `bitnami/jenkins:{VERSION}`                 |
+| `imagePullPolicy`          | Image pull policy                      | `IfNotPresent`                              |
+| `jenkinsUser`              | User of the application                | `user`                                      |
+| `jenkinsPassword`          | Application password                   | _random 10 character alphanumeric string_   |
+| `serviceType`              | Kubernetes Service type                | `LoadBalancer`                              |
+| `persistence.enabled`      | Enable persistence using PVC           | `true`                                      |
+| `persistence.storageClass` | PVC Storage Class for Jenkins volume   | `nil` (uses alpha storage class annotation) |
+| `persistence.accessMode`   | PVC Access Mode for Jenkins volume     | `ReadWriteOnce`                             |
+| `persistence.size`         | PVC Storage Request for Jenkins volume | `8Gi`                                       |
+| `resources`                | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
 
 The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.
 
