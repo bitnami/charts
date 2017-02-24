@@ -31,9 +31,9 @@ spec:
         - name: PARSE_HOST
           value: {{ include "host" . | quote }}
         - name: PARSE_PORT
-          value: {{ .Values.parseServer.port | quote }}
+          value: {{ .Values.parse.port | quote }}
         - name: PARSE_APP_ID
-          value: {{ .Values.parseServer.appId | quote }}
+          value: {{ .Values.parse.appId | quote }}
         - name: PARSE_MASTER_KEY
           valueFrom:
             secretKeyRef:

@@ -20,22 +20,22 @@ Parse Server
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):{{ .Values.parseServer.port }}
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):{{ .Values.parse.port }}
 {{- else if contains "ClusterIP"  .Values.serviceType }}
 
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "fullname" . }},component={{ .Chart.Name }}-server" -o jsonpath="{.items[0].metadata.name}")
-  kubectl port-forward $POD_NAME {{ .Values.parseServer.port }}:{{ .Values.parseServer.port }}
-  export SERVICE_IP=127.0.0.1:{{ .Values.parseServer.port }}
+  kubectl port-forward $POD_NAME {{ .Values.parse.port }}:{{ .Values.parse.port }}
+  export SERVICE_IP=127.0.0.1:{{ .Values.parse.port }}
 
 {{- end }}
 
 Example Usage:
 
   curl -X POST \
-    -H "X-Parse-Application-Id: {{ .Values.parseServer.appId }}" \
+    -H "X-Parse-Application-Id: {{ .Values.parse.appId }}" \
     -H "Content-Type: application/json" \
     -d '{"score":1337,"playerName":"Sean Plott","cheatMode":false}' \
-    http://$SERVICE_IP{{ .Values.parseServer.mountPath }}/classes/GameScore
+    http://$SERVICE_IP{{ .Values.parse.mountPath }}/classes/GameScore
 
 {{ if .Values.parseDashboard.enabled -}}
 Parse Dashboard
@@ -59,7 +59,7 @@ service:
 2. Complete your Parse Dashboard deployment by running:
 
   helm upgrade {{ .Release.Name }} \
-    --set parseServer.host=$APP_HOST,parseServer.port={{ .Values.parseServer.port }},parseServer.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.master-key}" | base64 --decode),parseDashboard.username={{ .Values.parseDashboard.username }},parseDashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password}" | base64 --decode) incubator/parse
+    --set parse.host=$APP_HOST,parse.port={{ .Values.parse.port }},parse.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.master-key}" | base64 --decode),parseDashboard.username={{ .Values.parseDashboard.username }},parseDashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password}" | base64 --decode) incubator/parse
 
 {{ else }}
 1. Get the Parse Dashboard URL by running:

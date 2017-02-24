@@ -47,13 +47,13 @@ The following tables lists the configurable parameters of the Parse chart and th
 |------------------------------------|----------------------------------------|---------------------------------------------|
 | `serviceType`                      | Kubernetes Service type                | `LoadBalancer`                              |
 | `loadBalancerIP`                   | `loadBalancerIP` for the Parse Service | `nil`                                       |
-| `parseServer.image`                | Parse image                            | `bitnami/parse:{VERSION}`                   |
-| `parseServer.imagePullPolicy`      | Parse image pull policy                | `IfNotPresent`                              |
-| `parseServer.port`                 | Parse server port                      | `1337`                                      |
-| `parseServer.mountPath`            | Parse API mount path                   | `/parse`                                    |
-| `parseServer.appId`                | Parse server App Id                    | `myAppID`                                   |
-| `parseServer.masterKey`            | Parse server Master Key                | `random 10 character alphanumeric string`   |
-| `parseServer.resources`            | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
+| `parse.image`                      | Parse image                            | `bitnami/parse:{VERSION}`                   |
+| `parse.imagePullPolicy`            | Parse image pull policy                | `IfNotPresent`                              |
+| `parse.port`                       | Parse server port                      | `1337`                                      |
+| `parse.mountPath`                  | Parse API mount path                   | `/parse`                                    |
+| `parse.appId`                      | Parse server App Id                    | `myAppID`                                   |
+| `parse.masterKey`                  | Parse server Master Key                | `random 10 character alphanumeric string`   |
+| `parse.resources`                  | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
 | `parseDashboard.enabled`           | Enable parse dashboard                 | `true`                                      |
 | `parseDashboard.image`             | Dashboard image                        | `bitnami/parse-dashboard:{VERSION}`         |
 | `parseDashboard.imagePullPolicy`   | Dashboard image pull policy            | `IfNotPresent`                              |
