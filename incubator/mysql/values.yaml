@@ -4,9 +4,9 @@
 ## Default: none
 image: bitnami/mysql:5.7.17-r3
 
-## Specify a imagePullPolicy
-## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-##
+## Specify an imagePullPolicy (Required)
+## It's recommended to change this to 'Always' if the image tag is 'latest'
+## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
 imagePullPolicy: IfNotPresent
 
 ## Specify password for root user
@@ -40,7 +40,7 @@ persistence:
 ## Configure MySQL with a custom my.cnf file
 ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
 ##
-#config: |-
+# config: |-
   # [mysqld]
   # innodb_buffer_pool_size=2G
 

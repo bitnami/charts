@@ -6,10 +6,10 @@ keywords:
 - database
 - sql
 home: https://mysql.com
+icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png
 sources:
 - https://github.com/bitnami/bitnami-docker-mysql
 maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
-icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png

@@ -36,7 +36,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "{{ .Values.image }}"
-        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
