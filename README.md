@@ -15,7 +15,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [MediaWiki (stable)](https://github.com/kubernetes/charts/tree/master/stable/mediawiki)
 - [Memcached (incubator)](https://github.com/bitnami/charts/tree/master/incubator/memcached)
 - [MongoDB (stable)](https://github.com/kubernetes/charts/tree/master/stable/mongodb)
-- [Moodle (incubator)](https://github.com/bitnami/charts/tree/master/incubator/moodle)
+- [Moodle (stable)](https://github.com/kubernetes/charts/tree/master/stable/moodle)
 - [MySQL (incubator)](https://github.com/bitnami/charts/tree/master/incubator/mysql)
 - [nginx (incubator)](https://github.com/bitnami/charts/tree/master/incubator/nginx)
 - [NodeJS (incubator)](https://github.com/bitnami/charts/tree/master/incubator/node)
