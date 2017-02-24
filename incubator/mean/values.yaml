@@ -47,8 +47,11 @@ mongodb:
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    enabled: true
-    storageClass: default
+    enabled: false
+    ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+    ## Default: volume.alpha.kubernetes.io/storage-class: default
+    ##
+    # storageClass:
     accessMode: ReadWriteOnce
     size: 8Gi
 
