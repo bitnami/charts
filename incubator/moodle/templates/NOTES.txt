@@ -1,5 +1,7 @@
 
-1. Get the moodle URL by running:
+** Please be patient while the chart is being deployed **
+
+1. Get the Moodle URL by running:
 
 {{- if contains "NodePort" .Values.serviceType }}
 
@@ -9,8 +11,8 @@
 
 {{- else if contains "LoadBalancer" .Values.serviceType }}
 
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc -w {{ template "fullname" . }} --namespace {{ .Release.Namespace }}'
+** Please ensure an external IP is associated to the {{ template "fullname" . }} service before proceeding **
+** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fullname" . }} **
 
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   echo http://$SERVICE_IP/
@@ -21,7 +23,7 @@
   kubectl port-forward $POD_NAME 8080:80
 {{- end }}
 
-2. Get your moodle login credentials by running:
+2. Login with the following credentials
 
-    echo Username: {{ .Values.moodleUsername }}
-    echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.moodle-password[*]}"`))
+  echo Username: {{ .Values.moodleUsername }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.moodle-password}" | base64 --decode)
