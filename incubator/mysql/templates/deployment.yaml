@@ -18,6 +18,7 @@ spec:
             {
               "name": "copy-custom-config",
               "image": "{{ .Values.image }}",
+              "imagePullPolicy": {{ .Values.imagePullPolicy | quote }},
               "command": ["sh", "-c", "mkdir -p /bitnami/mysql/conf && cp -n /bitnami/mysql_config/my.cnf /bitnami/mysql/conf/my_custom.cnf"],
               "volumeMounts": [
                 {
@@ -35,7 +36,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "{{ .Values.image }}"
-        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:

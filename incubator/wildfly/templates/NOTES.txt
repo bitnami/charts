@@ -27,4 +27,4 @@
 2. Login with the following credentials
 
   echo Username: {{ .Values.wildflyUsername }}
-  echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.wildfly-password[*]}"`))
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.wildfly-password}" | base64 --decode)
