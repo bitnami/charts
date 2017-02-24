@@ -28,18 +28,18 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: dashboard-password
-        - name: PARSE_SERVER_HOST
+        - name: PARSE_HOST
           value: {{ include "host" . | quote }}
-        - name: PARSE_SERVER_PORT
+        - name: PARSE_PORT
           value: {{ .Values.parseServer.port | quote }}
-        - name: PARSE_SERVER_APP_ID
+        - name: PARSE_APP_ID
           value: {{ .Values.parseServer.appId | quote }}
-        - name: PARSE_SERVER_MASTER_KEY
+        - name: PARSE_MASTER_KEY
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: master-key
-        - name: PARSE_SERVER_DASHBOARD_APP_NAME
+        - name: PARSE_DASHBOARD_APP_NAME
           value: {{ .Values.parseDashboard.appName | quote }}
         ports:
         - name: dashboard-http

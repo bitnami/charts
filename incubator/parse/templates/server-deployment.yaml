@@ -20,15 +20,15 @@ spec:
         image: "{{ .Values.parseServer.image }}"
         imagePullPolicy: {{ default "" .Values.parseServer.imagePullPolicy | quote }}
         env:
-        - name: PARSE_SERVER_HOST
+        - name: PARSE_HOST
           value: "0.0.0.0"
-        - name: PARSE_SERVER_PORT
+        - name: PARSE_PORT
           value: {{ .Values.parseServer.port | quote }}
-        - name: PARSE_SERVER_MOUNT_PATH
+        - name: PARSE_MOUNT_PATH
           value: {{ .Values.parseServer.mountPath | quote }}
-        - name: PARSE_SERVER_APP_ID
+        - name: PARSE_APP_ID
           value: {{ .Values.parseServer.appId | quote }}
-        - name: PARSE_SERVER_MASTER_KEY
+        - name: PARSE_MASTER_KEY
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
