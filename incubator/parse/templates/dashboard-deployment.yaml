@@ -1,4 +1,4 @@
-{{- if and (include "host" .) .Values.parseDashboard.enabled -}}
+{{- if and (include "host" .) .Values.dashboard.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -18,11 +18,11 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.parseDashboard.image }}"
-        imagePullPolicy: {{ default "" .Values.parseDashboard.imagePullPolicy | quote }}
+        image: "{{ .Values.dashboard.image }}"
+        imagePullPolicy: {{ default "" .Values.dashboard.imagePullPolicy | quote }}
         env:
         - name: PARSE_DASHBOARD_USER
-          value: {{ .Values.parseDashboard.username }}
+          value: {{ .Values.dashboard.username }}
         - name: PARSE_DASHBOARD_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -40,7 +40,7 @@ spec:
               name: {{ template "fullname" . }}
               key: master-key
         - name: PARSE_DASHBOARD_APP_NAME
-          value: {{ .Values.parseDashboard.appName | quote }}
+          value: {{ .Values.dashboard.appName | quote }}
         ports:
         - name: dashboard-http
           containerPort: 4040
@@ -57,7 +57,7 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
-{{ toYaml .Values.parseDashboard.resources | indent 10 }}
+{{ toYaml .Values.dashboard.resources | indent 10 }}
         volumeMounts:
         - name: parse-dashboard-data
           mountPath: /bitnami/parse-dashboard

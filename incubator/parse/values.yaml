@@ -47,7 +47,7 @@ parse:
       memory: 512Mi
       cpu: 300m
 
-parseDashboard:
+dashboard:
   ## Enable deployment of Parse Dashboard
   ##
   enabled: true
