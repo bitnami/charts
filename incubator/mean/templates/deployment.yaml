@@ -46,7 +46,7 @@ spec:
                 "name": "npm-install",
                 "image": "{{ .Values.image }}",
                 "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": [ "/bin/su", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
+                "command": [ "/bin/sh", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
                 "volumeMounts": [
                     {
                         "name": "node-data",
@@ -96,7 +96,10 @@ spec:
         - name: GIT_REPO
           value: {{ .Values.repository }}
         command:
-        - su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start'
+        - "/bin/bash"
+        - "-ec"
+        -  |
+          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start'
         ports:
         - name: http
           containerPort: 8080
