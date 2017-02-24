@@ -26,21 +26,9 @@ spec:
             },
             {
                 "name": "git-clone-app",
-                "image": "{{ .Values.image }}", 
-                "imagePullPolicy": "{{ .Values.imagePullPolicy }}", 
-                "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app"  ], 
-                "volumeMounts": [
-                    {
-                        "name": "node-data",
-                        "mountPath": "/app"
-                    }
-                ]
-           },
-           {
-                "name": "git-checkout-app",
                 "image": "{{ .Values.image }}",
                 "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": [ "/bin/sh", "-c" , "git checkout {{ .Values.revision }}"  ],
+                "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}"  ],
                 "volumeMounts": [
                     {
                         "name": "node-data",
