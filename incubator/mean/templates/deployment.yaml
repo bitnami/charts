@@ -18,60 +18,48 @@ spec:
         heritage: "{{ .Release.Service }}"
       annotations:
         pod.beta.kubernetes.io/init-containers: '[
-            {
-                "name": "wait-for-db-service",
-                "image": "{{ .Values.image }}",
-                "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": ["/bin/bash", "-c", "for i in {1..100}; do if nc -z -w 1 {{ template "mongodb.fullname" . }} 27017; then exit 0; fi; done; exit 1;"]
-            },
-            {
-                "name": "git-clone-app",
-                "image": "{{ .Values.image }}", 
-                "imagePullPolicy": "{{ .Values.imagePullPolicy }}", 
-                "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app"  ], 
-                "volumeMounts": [
-                    {
-                        "name": "node-data",
-                        "mountPath": "/app"
-                    }
-                ]
-           },
-           {
-                "name": "git-checkout-app",
-                "image": "{{ .Values.image }}",
-                "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": [ "/bin/sh", "-c" , "git checkout {{ .Values.revision }}"  ],
-                "volumeMounts": [
-                    {
-                        "name": "node-data",
-                        "mountPath": "/app"
-                    }
-                ]
-           },
-           {
-                "name": "npm-install",
-                "image": "{{ .Values.image }}",
-                "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": [ "/bin/sh", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
-                "volumeMounts": [
-                    {
-                        "name": "node-data",
-                        "mountPath": "/app"
-                    }
-                ]
-           },
-           {
-                "name": "fixing-permissions",
-                "image": "{{ .Values.image }}",
-                "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": [ "/bin/sh", "-c" , "chown bitnami:bitnami -R /app /home/bitnami"],
-                "volumeMounts": [
-                    {
-                        "name": "node-data",
-                        "mountPath": "/app"
-                    }
-                ]
-           }
+          {
+            "name": "wait-for-db-service",
+            "image": "{{ .Values.image }}",
+            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+            "command": ["/bin/bash", "-c", "for i in {1..100}; do if nc -z -w 1 {{ template "mongodb.fullname" . }} 27017; then exit 0; fi; done; exit 1;"]
+          },
+          {
+            "name": "git-clone-app",
+            "image": "{{ .Values.image }}",
+            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+            "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}"  ],
+            "volumeMounts": [
+              {
+                "name": "node-data",
+                "mountPath": "/app"
+              }
+            ]
+          },
+          {
+            "name": "npm-install",
+            "image": "{{ .Values.image }}",
+            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+            "command": [ "/bin/sh", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
+            "volumeMounts": [
+              {
+                "name": "node-data",
+                "mountPath": "/app"
+              }
+            ]
+          },
+          {
+            "name": "fixing-permissions",
+            "image": "{{ .Values.image }}",
+            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+            "command": [ "/bin/sh", "-c" , "chown bitnami:bitnami -R /app /home/bitnami"],
+            "volumeMounts": [
+              {
+                "name": "node-data",
+                "mountPath": "/app"
+              }
+            ]
+          }
         ]'
     spec:
       containers:
@@ -117,9 +105,9 @@ spec:
           timeoutSeconds: 5
         readinessProbe:
           exec:
-            command: 
-            - nc 
-            - -zv 
+            command:
+            - nc
+            - -zv
             - {{ template "mongodb.fullname" . }}
             - "27017"
           initialDelaySeconds: 120
@@ -128,7 +116,7 @@ spec:
         volumeMounts:
         - name: node-data
           mountPath: /app
-        - name: config 
+        - name: config
           mountPath: /app/config
       volumes:
         - name: node-data
@@ -137,5 +125,5 @@ spec:
           configMap:
             name: {{ template "fullname" . }}
             items:
-            - key: {{ .Values.configfile | quote  }}   	
-              path: {{ .Values.configfile | quote  }}   	
+            - key: {{ .Values.configfile | quote }}
+              path: {{ .Values.configfile | quote }}
