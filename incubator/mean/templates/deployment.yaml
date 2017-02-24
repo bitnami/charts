@@ -43,10 +43,10 @@ spec:
                 ]
            },
            {
-                "name": "fixing-permissions",
+                "name": "npm-install",
                 "image": "{{ .Values.image }}",
                 "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": [ "/bin/sh", "-c" , "chown bitnami:bitnami -R /app /home/bitnami"],
+                "command": [ "/bin/su", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
                 "volumeMounts": [
                     {
                         "name": "node-data",
@@ -55,10 +55,10 @@ spec:
                 ]
            },
            {
-                "name": "npm-install",
+                "name": "fixing-permissions",
                 "image": "{{ .Values.image }}",
                 "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": [ "/bin/su", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
+                "command": [ "/bin/sh", "-c" , "chown bitnami:bitnami -R /app /home/bitnami"],
                 "volumeMounts": [
                     {
                         "name": "node-data",
