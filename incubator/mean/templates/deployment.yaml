@@ -29,11 +29,49 @@ spec:
                         "mountPath": "/app"
                     }
                 ]
+           },
+           {
+                "name": "git-checkout-app",
+                "image": "{{ .Values.image }}",
+                "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+                "command": [ "/bin/sh", "-c" , "git checkout {{ .Values.revision }}"  ],
+                "volumeMounts": [
+                    {
+                        "name": "node-data",
+                        "mountPath": "/app"
+                    }
+                ]
+           },
+           {
+                "name": "fixing-permissions",
+                "image": "{{ .Values.image }}",
+                "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+                "command": [ "/bin/sh", "-c" , "chown bitnami:bitnami -R /app /home/bitnami"],
+                "volumeMounts": [
+                    {
+                        "name": "node-data",
+                        "mountPath": "/app"
+                    }
+                ]
+           },
+           {
+                "name": "npm-install",
+                "image": "{{ .Values.image }}",
+                "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+                "command": [ "/bin/su", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
+                "volumeMounts": [
+                    {
+                        "name": "node-data",
+                        "mountPath": "/app"
+                    }
+                ]
            }
         ]'
     spec:
       containers:
       - name: {{ template "fullname" . }}
+        securityContext:
+          readOnlyRootFilesystem: true
         image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
@@ -58,13 +96,7 @@ spec:
         - name: GIT_REPO
           value: {{ .Values.repository }}
         command:
-        - "/bin/bash"
-        - "-ec"
-        -  |
-          git checkout {{ .Values.revision }}
-          chown -R bitnami:daemon /app /home/bitnami
-          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm install'
-          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start'
+        - su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start'
         ports:
         - name: http
           containerPort: 8080
