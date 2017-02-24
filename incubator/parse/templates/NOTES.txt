@@ -59,7 +59,7 @@ service:
 2. Complete your Parse Dashboard deployment by running:
 
   helm upgrade {{ .Release.Name }} \
-    --set parseServer.host=$APP_HOST,parseServer.port={{ .Values.parseServer.port }},parseServer.masterKey=$(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.master-key[*]}"`)),parseDashboard.username={{ .Values.parseDashboard.username }},parseDashboard.password=$(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password[*]}"`)) incubator/parse
+    --set parseServer.host=$APP_HOST,parseServer.port={{ .Values.parseServer.port }},parseServer.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.master-key}" | base64 --decode),parseDashboard.username={{ .Values.parseDashboard.username }},parseDashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password}" | base64 --decode) incubator/parse
 
 {{ else }}
 1. Get the Parse Dashboard URL by running:
@@ -77,6 +77,6 @@ service:
 2. Get your Parsh Dashboard login credentials by running:
 
   echo Username: {{ .Values.parseDashboard.username }}
-  echo Password: $(printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password[*]}"`))
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password}" | base64 --decode)
 {{- end }}
 {{- end }}
