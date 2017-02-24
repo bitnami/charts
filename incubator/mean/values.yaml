@@ -47,7 +47,7 @@ mongodb:
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    enabled: false
+    enabled: true
     storageClass: default
     accessMode: ReadWriteOnce
     size: 8Gi
