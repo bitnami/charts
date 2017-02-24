@@ -17,18 +17,18 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.parseServer.image }}"
-        imagePullPolicy: {{ default "" .Values.parseServer.imagePullPolicy | quote }}
+        image: "{{ .Values.parse.image }}"
+        imagePullPolicy: {{ default "" .Values.parse.imagePullPolicy | quote }}
         env:
-        - name: PARSE_SERVER_HOST
+        - name: PARSE_HOST
           value: "0.0.0.0"
-        - name: PARSE_SERVER_PORT
-          value: {{ .Values.parseServer.port | quote }}
-        - name: PARSE_SERVER_MOUNT_PATH
-          value: {{ .Values.parseServer.mountPath | quote }}
-        - name: PARSE_SERVER_APP_ID
-          value: {{ .Values.parseServer.appId | quote }}
-        - name: PARSE_SERVER_MASTER_KEY
+        - name: PARSE_PORT
+          value: {{ .Values.parse.port | quote }}
+        - name: PARSE_MOUNT_PATH
+          value: {{ .Values.parse.mountPath | quote }}
+        - name: PARSE_APP_ID
+          value: {{ .Values.parse.appId | quote }}
+        - name: PARSE_MASTER_KEY
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
@@ -39,14 +39,14 @@ spec:
           value: "27017"
         ports:
         - name: server-http
-          containerPort: {{ .Values.parseServer.port }}
+          containerPort: {{ .Values.parse.port }}
         livenessProbe:
           exec:
             command:
             - curl
             - -H
-            - "X-Parse-Application-Id: {{ .Values.parseServer.appId }}"
-            - "http://localhost:{{ .Values.parseServer.port }}{{ .Values.parseServer.mountPath }}/users"
+            - "X-Parse-Application-Id: {{ .Values.parse.appId }}"
+            - "http://localhost:{{ .Values.parse.port }}{{ .Values.parse.mountPath }}/users"
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
@@ -54,12 +54,12 @@ spec:
             command:
             - curl
             - -H
-            - "X-Parse-Application-Id: {{ .Values.parseServer.appId }}"
-            - "http://localhost:{{ .Values.parseServer.port }}{{ .Values.parseServer.mountPath }}/users"
+            - "X-Parse-Application-Id: {{ .Values.parse.appId }}"
+            - "http://localhost:{{ .Values.parse.port }}{{ .Values.parse.mountPath }}/users"
           initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
-{{ toYaml .Values.parseServer.resources | indent 10 }}
+{{ toYaml .Values.parse.resources | indent 10 }}
         volumeMounts:
         - name: parse-data
           mountPath: /bitnami/parse

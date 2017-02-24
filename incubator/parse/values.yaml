@@ -8,11 +8,11 @@ serviceType: LoadBalancer
 ##
 # loadBalancerIP:
 
-parseServer:
+parse:
   ## Bitnami Parse image version
   ## ref: https://hub.docker.com/r/bitnami/parse/tags/
   ##
-  image: bitnami/parse:2.3.2-r0
+  image: bitnami/parse:2.3.5-r1
 
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -47,7 +47,7 @@ parseServer:
       memory: 512Mi
       cpu: 300m
 
-parseDashboard:
+dashboard:
   ## Enable deployment of Parse Dashboard
   ##
   enabled: true
@@ -55,7 +55,7 @@ parseDashboard:
   ## Bitnami Parse Dashboard image version
   ## ref: https://hub.docker.com/r/bitnami/parse-dashboard/tags/
   ##
-  image: bitnami/parse-dashboard:1.0.19-r6
+  image: bitnami/parse-dashboard:1.0.19-r7
 
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -91,7 +91,10 @@ parseDashboard:
 ##
 persistence:
   enabled: true
-  storageClass: generic
+  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+  ## Default: volume.alpha.kubernetes.io/storage-class: default
+  ##
+  # storageClass:
   accessMode: ReadWriteOnce
   size: 8Gi
 
@@ -104,6 +107,9 @@ mongodb:
   ##
   persistence:
     enabled: true
-    storageClass: generic
+    ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+    ## Default: volume.alpha.kubernetes.io/storage-class: default
+    ##
+    # storageClass:
     accessMode: ReadWriteOnce
     size: 8Gi
