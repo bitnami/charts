@@ -43,32 +43,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Parse chart and their default values.
 
-|             Parameter              |              Description               |                  Default                  |
-|------------------------------------|----------------------------------------|-------------------------------------------|
-| `serviceType`                      | Kubernetes Service type                | `LoadBalancer`                            |
-| `loadBalancerIP`                   | `loadBalancerIP` for the Parse Service | `nil`                                     |
-| `parseServer.image`                | Parse image                            | `bitnami/parse:{VERSION}`                 |
-| `parseServer.imagePullPolicy`      | Parse image pull policy                | `IfNotPresent`                            |
-| `parseServer.port`                 | Parse server port                      | `1337`                                    |
-| `parseServer.mountPath`            | Parse API mount path                   | `/parse`                                  |
-| `parseServer.appId`                | Parse server App Id                    | `myAppID`                                 |
-| `parseServer.masterKey`            | Parse server Master Key                | `random 10 character alphanumeric string` |
-| `parseServer.resources`            | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`              |
-| `parseDashboard.enabled`           | Enable parse dashboard                 | `true`                                    |
-| `parseDashboard.image`             | Dashboard image                        | `bitnami/parse-dashboard:{VERSION}`       |
-| `parseDashboard.imagePullPolicy`   | Dashboard image pull policy            | `IfNotPresent`                            |
-| `parseDashboard.username`          | Dashboard username                     | `user`                                    |
-| `parseDashboard.password`          | Dashboard user password                | `random 10 character alphanumeric string` |
-| `parseDashboard.appName`           | Dashboard application name             | `MyDashboard`                             |
-| `parseDashboard.resources`         | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`              |
-| `persistence.enabled`              | Enable Parse persistence using PVC     | `true`                                    |
-| `persistence.storageClass`         | PVC Storage Class for Parse volume     | `generic`                                 |
-| `persistence.accessMode`           | PVC Access Mode for Parse volume       | `ReadWriteOnce`                           |
-| `persistence.size`                 | PVC Storage Request for Parse volume   | `8Gi`                                     |
-| `mongodb.persistence.enabled`      | Enable MongoDB persistence using PVC   | `true`                                    |
-| `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB volume   | `generic`                                 |
-| `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB volume     | `ReadWriteOnce`                           |
-| `mongodb.persistence.size`         | PVC Storage Request for MongoDB volume | `8Gi`                                     |
+|             Parameter              |              Description               |                   Default                   |
+|------------------------------------|----------------------------------------|---------------------------------------------|
+| `serviceType`                      | Kubernetes Service type                | `LoadBalancer`                              |
+| `loadBalancerIP`                   | `loadBalancerIP` for the Parse Service | `nil`                                       |
+| `parseServer.image`                | Parse image                            | `bitnami/parse:{VERSION}`                   |
+| `parseServer.imagePullPolicy`      | Parse image pull policy                | `IfNotPresent`                              |
+| `parseServer.port`                 | Parse server port                      | `1337`                                      |
+| `parseServer.mountPath`            | Parse API mount path                   | `/parse`                                    |
+| `parseServer.appId`                | Parse server App Id                    | `myAppID`                                   |
+| `parseServer.masterKey`            | Parse server Master Key                | `random 10 character alphanumeric string`   |
+| `parseServer.resources`            | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
+| `parseDashboard.enabled`           | Enable parse dashboard                 | `true`                                      |
+| `parseDashboard.image`             | Dashboard image                        | `bitnami/parse-dashboard:{VERSION}`         |
+| `parseDashboard.imagePullPolicy`   | Dashboard image pull policy            | `IfNotPresent`                              |
+| `parseDashboard.username`          | Dashboard username                     | `user`                                      |
+| `parseDashboard.password`          | Dashboard user password                | `random 10 character alphanumeric string`   |
+| `parseDashboard.appName`           | Dashboard application name             | `MyDashboard`                               |
+| `parseDashboard.resources`         | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
+| `persistence.enabled`              | Enable Parse persistence using PVC     | `true`                                      |
+| `persistence.storageClass`         | PVC Storage Class for Parse volume     | `nil` (uses alpha storage class annotation) |
+| `persistence.accessMode`           | PVC Access Mode for Parse volume       | `ReadWriteOnce`                             |
+| `persistence.size`                 | PVC Storage Request for Parse volume   | `8Gi`                                       |
+| `mongodb.persistence.enabled`      | Enable MongoDB persistence using PVC   | `true`                                      |
+| `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB volume   | `nil` (uses alpha storage class annotation) |
+| `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB volume     | `ReadWriteOnce`                             |
+| `mongodb.persistence.size`         | PVC Storage Request for MongoDB volume | `8Gi`                                       |
 
 The above parameters map to the env variables defined in [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse) image documentation.
 
