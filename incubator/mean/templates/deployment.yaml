@@ -19,6 +19,12 @@ spec:
       annotations:
         pod.beta.kubernetes.io/init-containers: '[
             {
+                "name": "wait-for-db-service",
+                "image": "{{ .Values.image }}",
+                "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+                "command": ["/bin/bash", "-c", "for i in {1..100}; do if nc -z -w 1 {{ template "mongodb.fullname" . }} 27017; then exit 0; fi; done; exit 1;"]
+            },
+            {
                 "name": "git-clone-app",
                 "image": "{{ .Values.image }}", 
                 "imagePullPolicy": "{{ .Values.imagePullPolicy }}", 
