@@ -9,7 +9,7 @@ repository:  https://github.com/scotch-io/node-todo.git
 
 ## Git repository revision to checkout
 ##
-revision: master
+revision: 5750cb4
 
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
