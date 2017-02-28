@@ -54,6 +54,10 @@ spec:
               {
                 "name": "app",
                 "mountPath": "/app"
+              },
+              {
+                "name": "data",
+                "mountPath": "{{ .Values.persistence.path }}"
               }
             ]
           }
