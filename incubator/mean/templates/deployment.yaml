@@ -113,11 +113,20 @@ spec:
         volumeMounts:
         - name: app
           mountPath: /app
+        - name: data
+          mountPath: /app/data
         - name: config
           mountPath: /app/config
       volumes:
         - name: app
           emptyDir: {}
+        - name: data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ template "fullname" . }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         - name: config
           configMap:
             name: {{ template "fullname" . }}
