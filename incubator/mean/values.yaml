@@ -17,16 +17,16 @@ revision: 5750cb4
 imagePullPolicy: IfNotPresent
 
 
-## Configure the application with a custom config file 
+## Configure the application with a custom config file
 ## ref: https://github.com/scotch-io/node-todo#installation
 ##
 config: |-
   module.exports = {
       remoteUrl: "mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE ,
-      localUrl: "mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE 
+      localUrl: "mongodb://" +  process.env.MONGODB_USERNAME +":" + process.env.MONGODB_PASSWORD + "@" +  process.env.MONGODB_HOST +":"+ process.env.MONGODB_PORT + "/" +  process.env.MONGODB_DATABASE
   };
 
-configfile: database.js 
+configfile: database.js
 
 ##
 ## MongoDB chart configuration
@@ -34,15 +34,15 @@ configfile: database.js
 mongodb:
   ## MongoDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-MongoDB/blob/master/README.md#setting-the-root-password-on-first-run
-  # mongodbRootPassword: 
-   
+  # mongodbRootPassword:
+
   ## MongoDB custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
   ##
-  # mongodbUsername: 
-  # mongodbPassword: 
-  # mongodbDatabase: 
-   
+  # mongodbUsername:
+  # mongodbPassword:
+  # mongodbDatabase:
+
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
