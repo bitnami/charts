@@ -16,7 +16,6 @@ revision: 5750cb4
 ##
 imagePullPolicy: IfNotPresent
 
-
 ## Configure the application with a custom config file
 ## ref: https://github.com/scotch-io/node-todo#installation
 ##
@@ -65,6 +64,7 @@ serviceType: LoadBalancer
 ##
 persistence:
   enabled: true
+  path: /app/data
   ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
   ## Default: volume.alpha.kubernetes.io/storage-class: default
   ##
