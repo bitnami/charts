@@ -97,9 +97,10 @@ spec:
           httpGet:
             path: /
             port: 8080
-          initialDelaySeconds: 120
+          initialDelaySeconds: 180
           periodSeconds: 5
           timeoutSeconds: 5
+          failureThreshold: 10
         readinessProbe:
           exec:
             command:
@@ -107,9 +108,9 @@ spec:
             - -zv
             - {{ template "mongodb.fullname" . }}
             - "27017"
-          initialDelaySeconds: 120
+          initialDelaySeconds: 5
           periodSeconds: 5
-          timeoutSeconds: 5
+          timeoutSeconds: 1
         volumeMounts:
         - name: node-data
           mountPath: /app
