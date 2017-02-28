@@ -16,7 +16,6 @@ revision: master
 ##
 imagePullPolicy: IfNotPresent
 
-
 ##
 ## MariaDB chart configuration
 ##
