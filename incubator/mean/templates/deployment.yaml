@@ -100,18 +100,15 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: 8080
+            port: http
           initialDelaySeconds: 180
           periodSeconds: 5
           timeoutSeconds: 5
           failureThreshold: 10
         readinessProbe:
-          exec:
-            command:
-            - nc
-            - -zv
-            - {{ template "mongodb.fullname" . }}
-            - "27017"
+          httpGet:
+            path: /
+            port: http
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 1
