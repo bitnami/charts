@@ -45,31 +45,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the SuiteCRM chart and their default values.
 
-|              Parameter              |                Description                |                  Default                  |
-|-------------------------------------|-------------------------------------------|-------------------------------------------|
-| `imageTag`                          | `bitnami/suitecrm` image tag.             | SuiteCRM image version                    |
-| `imagePullPolicy`                   | Image pull policy.                        | `IfNotPresent`                            |
-| `suitecrmHost`                      | SuiteCRM host to create application URLs  | `nil`                                     |
-| `suitecrmLoadBalancerIP`            | `loadBalancerIP` for the SuiteCRM Service | `nil`                                     |
-| `suitecrmUsername`                  | User of the application                   | `user`                                    |
-| `suitecrmPassword`                  | Application password                      | _random 10 character alphanumeric string_ |
-| `suitecrmEmail`                     | Admin email                               | `user@example.com`                        |
-| `suitecrmLastName`                  | Last name                                 | `Last`                                    |
-| `suitecrmSmtpHost`                  | SMTP host                                 | `nil`                                     |
-| `suitecrmSmtpPort`                  | SMTP port                                 | `nil`                                     |
-| `suitecrmSmtpUser`                  | SMTP user                                 | `nil`                                     |
-| `suitecrmSmtpPassword`              | SMTP password                             | `nil`                                     |
-| `suitecrmSmtpProtocol`              | SMTP protocol [`ssl`, `tls`]              | `nil`                                     |
-| `mariadb.mariadbRootPassword`       | MariaDB admin password                    | `nil`                                     |
-| `serviceType`                       | Kubernetes Service type                   | `LoadBalancer`                            |
-| `persistence.enabled`               | Enable persistence using PVC              | `true`                                    |
-| `persistence.apache.storageClass`   | PVC Storage Class for apache volume       | `generic`                                 |
-| `persistence.apache.accessMode`     | PVC Access Mode for apache volume         | `ReadWriteOnce`                           |
-| `persistence.apache.size`           | PVC Storage Request for apache volume     | `1Gi`                                     |
-| `persistence.suitecrm.storageClass` | PVC Storage Class for SuiteCRM volume     | `generic`                                 |
-| `persistence.suitecrm.accessMode`   | PVC Access Mode for SuiteCRM volume       | `ReadWriteOnce`                           |
-| `persistence.suitecrm.size`         | PVC Storage Request for SuiteCRM volume   | `8Gi`                                     |
-| `resources`                         | CPU/Memory resource requests/limits       | Memory: `512Mi`, CPU: `300m`              |
+|              Parameter              |                Description                |                   Default                   |
+|-------------------------------------|-------------------------------------------|---------------------------------------------|
+| `imageTag`                          | `bitnami/suitecrm` image tag.             | SuiteCRM image version                      |
+| `imagePullPolicy`                   | Image pull policy.                        | `IfNotPresent`                              |
+| `suitecrmHost`                      | SuiteCRM host to create application URLs  | `nil`                                       |
+| `suitecrmLoadBalancerIP`            | `loadBalancerIP` for the SuiteCRM Service | `nil`                                       |
+| `suitecrmUsername`                  | User of the application                   | `user`                                      |
+| `suitecrmPassword`                  | Application password                      | _random 10 character alphanumeric string_   |
+| `suitecrmEmail`                     | Admin email                               | `user@example.com`                          |
+| `suitecrmLastName`                  | Last name                                 | `Last`                                      |
+| `suitecrmSmtpHost`                  | SMTP host                                 | `nil`                                       |
+| `suitecrmSmtpPort`                  | SMTP port                                 | `nil`                                       |
+| `suitecrmSmtpUser`                  | SMTP user                                 | `nil`                                       |
+| `suitecrmSmtpPassword`              | SMTP password                             | `nil`                                       |
+| `suitecrmSmtpProtocol`              | SMTP protocol [`ssl`, `tls`]              | `nil`                                       |
+| `mariadb.mariadbRootPassword`       | MariaDB admin password                    | `nil`                                       |
+| `serviceType`                       | Kubernetes Service type                   | `LoadBalancer`                              |
+| `persistence.enabled`               | Enable persistence using PVC              | `true`                                      |
+| `persistence.apache.storageClass`   | PVC Storage Class for apache volume       | `nil` (uses alpha storage class annotation) |
+| `persistence.apache.accessMode`     | PVC Access Mode for apache volume         | `ReadWriteOnce`                             |
+| `persistence.apache.size`           | PVC Storage Request for apache volume     | `1Gi`                                       |
+| `persistence.suitecrm.storageClass` | PVC Storage Class for SuiteCRM volume     | `nil` (uses alpha storage class annotation) |
+| `persistence.suitecrm.accessMode`   | PVC Access Mode for SuiteCRM volume       | `ReadWriteOnce`                             |
+| `persistence.suitecrm.size`         | PVC Storage Request for SuiteCRM volume   | `8Gi`                                       |
+| `resources`                         | CPU/Memory resource requests/limits       | Memory: `512Mi`, CPU: `300m`                |
 
 The above parameters map to the env variables defined in [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm). For more information please refer to the [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm) image documentation.
 
