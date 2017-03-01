@@ -66,9 +66,4 @@ spec:
           mountPath: /app
       volumes:
       - name: node-data
-        {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
-        {{- else }}
         emptyDir: {}
-        {{- end -}}
