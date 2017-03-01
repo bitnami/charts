@@ -9,7 +9,7 @@ repository:  https://github.com/jbianquetti-nami/simple-node-app.git
 
 ## Git repository revision to checkout
 ##
-revision: master
+revision: 26679f6
 
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
