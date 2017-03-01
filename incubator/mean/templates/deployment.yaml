@@ -37,7 +37,7 @@ spec:
             "name": "npm-install",
             "image": "{{ .Values.image }}",
             "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
+            "command": [ "/bin/sh", "-c" , "npm install" ],
             "volumeMounts": [
               {
                 "name": "app",
