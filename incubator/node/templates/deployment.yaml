@@ -43,11 +43,15 @@ spec:
             "name": "fix-permissions",
             "image": "{{ .Values.image }}",
             "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "chown bitnami: -R /app /home/bitnami" ],
+            "command": [ "/bin/sh", "-c" , "chown bitnami: -R /app /home/bitnami {{ .Values.persistence.path }}" ],
             "volumeMounts": [
               {
                 "name": "app",
                 "mountPath": "/app"
+              },
+              {
+                "name": "data",
+                "mountPath": "{{ .Values.persistence.path }}"
               }
             ]
           }
@@ -87,6 +91,15 @@ spec:
         volumeMounts:
         - name: app
           mountPath: /app
+        - name: data
+          mountPath: {{ .Values.persistence.path }}
       volumes:
       - name: app
         emptyDir: {}
+      - name: data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
