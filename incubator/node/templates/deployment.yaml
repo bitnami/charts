@@ -61,10 +61,9 @@ spec:
         - name: GIT_REPO
           value: {{ .Values.repository }}
         command:
-        - "/bin/bash"
-        - "-ec"
-        -  |
-          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start'
+        - /bin/bash
+        - -ec
+        - sudo -HEu bitnami npm start
         ports:
         - name: http
           containerPort: 3000
