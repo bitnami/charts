@@ -22,7 +22,7 @@ spec:
             "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}" ],
             "volumeMounts": [
               {
-                "name": "node-data",
+                "name": "app",
                 "mountPath": "/app"
               }
             ]
@@ -34,7 +34,7 @@ spec:
             "command": [ "/bin/sh", "-c" , "npm install" ],
             "volumeMounts": [
               {
-                "name": "node-data",
+                "name": "app",
                 "mountPath": "/app"
               }
             ]
@@ -46,7 +46,7 @@ spec:
             "command": [ "/bin/sh", "-c" , "chown bitnami: -R /app /home/bitnami" ],
             "volumeMounts": [
               {
-                "name": "node-data",
+                "name": "app",
                 "mountPath": "/app"
               }
             ]
@@ -85,8 +85,8 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: node-data
+        - name: app
           mountPath: /app
       volumes:
-      - name: node-data
+      - name: app
         emptyDir: {}
