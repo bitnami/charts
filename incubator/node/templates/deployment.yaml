@@ -38,6 +38,18 @@ spec:
                 "mountPath": "/app"
               }
             ]
+          },
+          {
+            "name": "fix-permissions",
+            "image": "{{ .Values.image }}",
+            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+            "command": [ "/bin/sh", "-c" , "chown bitnami: -R /app /home/bitnami" ],
+            "volumeMounts": [
+              {
+                "name": "node-data",
+                "mountPath": "/app"
+              }
+            ]
           }
         ]'
     spec:
@@ -52,7 +64,6 @@ spec:
         - "/bin/bash"
         - "-ec"
         -  |
-          chown -R bitnami:daemon /app
           su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start'
         ports:
         - name: http
