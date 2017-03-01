@@ -59,6 +59,8 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
+        securityContext:
+          readOnlyRootFilesystem: true
         image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
