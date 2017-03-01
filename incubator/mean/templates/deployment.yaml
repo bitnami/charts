@@ -28,7 +28,7 @@ spec:
             "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}"  ],
             "volumeMounts": [
               {
-                "name": "node-data",
+                "name": "app",
                 "mountPath": "/app"
               }
             ]
@@ -40,7 +40,7 @@ spec:
             "command": [ "/bin/sh", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
             "volumeMounts": [
               {
-                "name": "node-data",
+                "name": "app",
                 "mountPath": "/app"
               }
             ]
@@ -49,11 +49,15 @@ spec:
             "name": "fixing-permissions",
             "image": "{{ .Values.image }}",
             "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "chown bitnami:bitnami -R /app /home/bitnami"],
+            "command": [ "/bin/sh", "-c" , "chown bitnami:bitnami -R /app /home/bitnami {{ .Values.persistence.path }}"],
             "volumeMounts": [
               {
-                "name": "node-data",
+                "name": "app",
                 "mountPath": "/app"
+              },
+              {
+                "name": "data",
+                "mountPath": "{{ .Values.persistence.path }}"
               }
             ]
           }
@@ -112,13 +116,22 @@ spec:
           periodSeconds: 5
           timeoutSeconds: 1
         volumeMounts:
-        - name: node-data
+        - name: app
           mountPath: /app
+        - name: data
+          mountPath: {{ .Values.persistence.path }}
         - name: config
           mountPath: /app/config
       volumes:
-        - name: node-data
+        - name: app
           emptyDir: {}
+        - name: data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ template "fullname" . }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         - name: config
           configMap:
             name: {{ template "fullname" . }}
