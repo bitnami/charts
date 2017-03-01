@@ -9,13 +9,12 @@ repository:  https://github.com/jbianquetti-nami/simple-node-app.git
 
 ## Git repository revision to checkout
 ##
-revision: master
+revision: 26679f6
 
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 imagePullPolicy: IfNotPresent
-
 
 ##
 ## MariaDB chart configuration
@@ -30,7 +29,10 @@ mariadb:
   ##
   persistence:
     enabled: true
-    storageClass: generic
+    ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+    ## Default: volume.alpha.kubernetes.io/storage-class: default
+    ##
+    # storageClass:
     accessMode: ReadWriteOnce
     size: 8Gi
 
@@ -43,8 +45,12 @@ serviceType: LoadBalancer
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  enabled: true
-  storageClass: default
+  enabled: false
+  path: /app/data
+  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+  ## Default: volume.alpha.kubernetes.io/storage-class: default
+  ##
+  # storageClass:
   accessMode: ReadWriteOnce
   size: 1Gi
 

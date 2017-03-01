@@ -15,35 +15,61 @@ spec:
         app: {{ template "fullname" . }}
       annotations:
         pod.beta.kubernetes.io/init-containers: '[
-            {
-                "name": "git-clone-app",
-                "image": "{{ .Values.image }}", 
-                "imagePullPolicy": "{{ .Values.imagePullPolicy }}", 
-                "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app"  ], 
-                "volumeMounts": [
-                    {
-                        "name": "node-data",
-                        "mountPath": "/app"
-                    }
-                ]
-           }
+          {
+            "name": "git-clone-app",
+            "image": "{{ .Values.image }}",
+            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+            "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}" ],
+            "volumeMounts": [
+              {
+                "name": "app",
+                "mountPath": "/app"
+              }
+            ]
+          },
+          {
+            "name": "npm-install",
+            "image": "{{ .Values.image }}",
+            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+            "command": [ "/bin/sh", "-c" , "npm install" ],
+            "volumeMounts": [
+              {
+                "name": "app",
+                "mountPath": "/app"
+              }
+            ]
+          },
+          {
+            "name": "fix-permissions",
+            "image": "{{ .Values.image }}",
+            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
+            "command": [ "/bin/sh", "-c" , "chown bitnami: -R /app /home/bitnami {{ .Values.persistence.path }}" ],
+            "volumeMounts": [
+              {
+                "name": "app",
+                "mountPath": "/app"
+              },
+              {
+                "name": "data",
+                "mountPath": "{{ .Values.persistence.path }}"
+              }
+            ]
+          }
         ]'
     spec:
       containers:
       - name: {{ template "fullname" . }}
+        securityContext:
+          readOnlyRootFilesystem: true
         image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: GIT_REPO
           value: {{ .Values.repository }}
         command:
-        - "/bin/bash"
-        - "-ec"
-        -  |
-          git checkout {{ .Values.revision }}
-          chown -R bitnami:daemon /app
-          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm install'
-          su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start' 
+        - /bin/bash
+        - -ec
+        - sudo -HEu bitnami npm start
         ports:
         - name: http
           containerPort: 3000
@@ -51,19 +77,31 @@ spec:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 120
+          initialDelaySeconds: 180
+          periodSeconds: 5
           timeoutSeconds: 5
+          failureThreshold: 10
         readinessProbe:
           httpGet:
             path: /
             port: http
           initialDelaySeconds: 5
+          periodSeconds: 5
           timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: node-data
+        - name: app
           mountPath: /app
+        - name: data
+          mountPath: {{ .Values.persistence.path }}
       volumes:
-      - name: node-data
+      - name: app
         emptyDir: {}
+      - name: data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}

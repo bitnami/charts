@@ -1,9 +1,9 @@
 name: node
-version: 0.1.6
+version: 0.1.7
 description: Event-driven I/O server-side JavaScript environment based on V8
 keywords:
 - node
-- javascript 
+- javascript
 - nodejs
 - git
 home: http://nodejs.org/

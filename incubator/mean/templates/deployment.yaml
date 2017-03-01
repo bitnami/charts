@@ -25,7 +25,7 @@ spec:
             "name": "git-clone-app",
             "image": "{{ .Values.image }}",
             "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}"  ],
+            "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}" ],
             "volumeMounts": [
               {
                 "name": "app",
@@ -37,7 +37,7 @@ spec:
             "name": "npm-install",
             "image": "{{ .Values.image }}",
             "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "PATH=$PATH:/opt/bitnami/node/bin/ npm install"  ],
+            "command": [ "/bin/sh", "-c" , "npm install" ],
             "volumeMounts": [
               {
                 "name": "app",
