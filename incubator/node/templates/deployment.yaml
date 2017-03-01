@@ -19,7 +19,7 @@ spec:
                 "name": "git-clone-app",
                 "image": "{{ .Values.image }}",
                 "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-                "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app" ],
+                "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}" ],
                 "volumeMounts": [
                     {
                         "name": "node-data",
@@ -40,7 +40,6 @@ spec:
         - "/bin/bash"
         - "-ec"
         -  |
-          git checkout {{ .Values.revision }}
           chown -R bitnami:daemon /app
           su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm install'
           su  bitnami -c 'PATH=$PATH:/opt/bitnami/node/bin/ npm start'
