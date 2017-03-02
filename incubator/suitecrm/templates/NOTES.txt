@@ -28,7 +28,7 @@ host. To configure SuiteCRM with the URL of your service:
 2. Complete your SuiteCRM deployment by running:
 
   helm upgrade {{ .Release.Name }} \
-    --set suitecrmHost=$APP_HOST,suitecrmPassword=$APP_PASSWORD{{ if .Values.mariadb.mariadbRootPassword }},mariadb.mariadbRootPassword=$APP_DATABASE_PASSWORD{{ end }} stable/suitecrm
+    --set suitecrmHost=$APP_HOST,suitecrmPassword=$APP_PASSWORD{{ if .Values.mariadb.mariadbRootPassword }},mariadb.mariadbRootPassword=$APP_DATABASE_PASSWORD{{ end }} incubator/suitecrm
 
 {{- else -}}
 1. Get the SuiteCRM URL by running:
