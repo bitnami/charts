@@ -1,4 +1,4 @@
-## Bitnami sugarcrm image 
+## Bitnami SugarCRM image version
 ## ref: https://hub.docker.com/r/bitnami/sugarcrm/tags/
 ##
 image: bitnami/sugarcrm:6.5.24-r2
@@ -8,37 +8,36 @@ image: bitnami/sugarcrm:6.5.24-r2
 ##
 imagePullPolicy: IfNotPresent
 
+## SugarCRM host to create application URLs
+## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#configuration
+##
+# sugarcrmHost:
+
+## loadBalancerIP for the SugarCRM Service (optional, cloud specific)
+## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+##
+# sugarcrmLoadBalancerIP:
+
 ## User of the application
-## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#configuration
 ##
 sugarcrmUsername: user
 
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
-## sugarcrmPassword: 
-
-## Lastname
-## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#configuration
 ##
-sugarcrmLastname: Name
-
-## loadBalancerIP for the  Service (optional, cloud specific)
-## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-##
-# sugarcrmLoadBalancerIP:
+# sugarcrmPassword:
 
 ## Admin email
-## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#configuration
 ##
 sugarcrmEmail: user@example.com
 
-## SugarCRM HOST
-## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#environment-variables
+## Last Name
+## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#configuration
 ##
-##  sugarcrmHost: 
-
-
+sugarcrmLastName: LastName
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-orangehrm/#smtp-configuration
@@ -52,21 +51,10 @@ sugarcrmEmail: user@example.com
 ## MariaDB chart configuration
 ##
 mariadb:
-  ## MariaDB root password
+  ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ## mariadbRootPassword: 
-
-  ## MariaDB user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
-  ## mariadbUser:
-
-  ## MariaDB Host 
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
-  ## mariadbHost:
-
-  ## MariaDB Port 
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md
-  ## mariadbPort:
+  ##
+  # mariadbRootPassword:
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -103,7 +91,7 @@ persistence:
     ##
     # storageClass:
     accessMode: ReadWriteOnce
-    size: 1Gi
+    size: 8Gi
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

@@ -68,7 +68,7 @@ The following tables lists the configurable parameters of the SugarCRM chart and
 | `persistence.apache.size`           | PVC Storage Request for apache volume   | `1Gi`                                       |
 | `persistence.sugarcrm.storageClass` | PVC Storage Class for SugarCRM volume   | `nil` (uses alpha storage class annotation) |
 | `persistence.sugarcrm.accessMode`   | PVC Access Mode for SugarCRM volume     | `ReadWriteOnce`                             |
-| `persistence.sugarcrm.size`         | PVC Storage Request for SugarCRM volume | `1Gi`                                       |
+| `persistence.sugarcrm.size`         | PVC Storage Request for SugarCRM volume | `8Gi`                                       |
 | `resources`                         | CPU/Memory resource requests/limits     | Memory: `512Mi`, CPU: `300m`                |
 
 The above parameters map to the env variables defined in [bitnami/sugarcrm](http://github.com/bitnami/bitnami-docker-sugarcrm). For more information please refer to the [bitnami/sugarcrm](http://github.com/bitnami/bitnami-docker-sugarcrm) image documentation.
@@ -107,7 +107,7 @@ $ helm install --name my-release -f values.yaml stable/sugarcrm
 
 ## Persistence
 
-The [Bitnami SugarCRM](https://github.com/bitnami/bitnami-docker-sugarcrm) image stores the SugarCRM data and configurations at the `/bitnami/sugarcrm` and the `/bitnami/apache`  paths of the container.
+The [Bitnami SugarCRM](https://github.com/bitnami/bitnami-docker-sugarcrm) image stores the SugarCRM data and configurations at the `/bitnami/sugarcrm` and `/bitnami/apache` paths of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
