@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install .
+$ helm install incubator/sugarcrm
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/chart
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release ./sugarcrm
+$ helm install --name my-release incubator/sugarcrm
 ```
 
 The command deploys SugarCRM on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -92,7 +92,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set sugarcrmUsername=admin,sugarcrmPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    stable/sugarcrm
+    incubator/sugarcrm
 ```
 
 The above command sets the SugarCRM administrator account username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
@@ -100,7 +100,7 @@ The above command sets the SugarCRM administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml stable/sugarcrm
+$ helm install --name my-release -f values.yaml incubator/sugarcrm
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

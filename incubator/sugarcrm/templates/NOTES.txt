@@ -28,7 +28,7 @@ host. To configure SugarCRM with the URL of your service:
 2. Complete your SugarCRM deployment by running:
 
   helm upgrade {{ .Release.Name }} \
-    --set sugarcrmHost=$APP_HOST,sugarcrmPassword=$APP_PASSWORD{{ if .Values.mariadb.mariadbRootPassword }},mariadb.mariadbRootPassword=$APP_DATABASE_PASSWORD{{ end }} stable/sugarcrm
+    --set sugarcrmHost=$APP_HOST,sugarcrmPassword=$APP_PASSWORD{{ if .Values.mariadb.mariadbRootPassword }},mariadb.mariadbRootPassword=$APP_DATABASE_PASSWORD{{ end }} incubator/sugarcrm
 
 {{- else -}}
 1. Get the SugarCRM URL by running:
