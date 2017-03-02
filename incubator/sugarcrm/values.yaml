@@ -41,13 +41,12 @@ sugarcrmEmail: user@example.com
 
 
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-sugarcrm#smtp-configuration
-##
-# smtpHost:
-# smtpPort:
-# smtpUser:
-# smtpPassword:
-# smtpProtocol:
+## ref: https://github.com/bitnami/bitnami-docker-orangehrm/#smtp-configuration
+# sugarcrmSmtpHost:
+# sugarcrmSmtpPort:
+# sugarcrmSmtpUser:
+# sugarcrmSmtpPassword:
+# sugarcrmSmtpProtocol:
 
 ##
 ## MariaDB chart configuration

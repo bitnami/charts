@@ -55,11 +55,11 @@ The following tables lists the configurable parameters of the SugarCRM chart and
 | `sugarcrmLastname`                  | Last name                               | `Name`                                      |
 | `sugarcrmHost`                      | Host domain or IP                       | `nil`                                       |
 | `sugarcrmLoadBalancerIP`            | `LoadBalancerIP for the application`    | `nil`                                       |
-| `smtpHost`                          | SMTP host                               | `nil`                                       |
-| `smtpPort`                          | SMTP port                               | `nil`                                       |
-| `smtpProtocol`                      | SMTP Protocol                           | `nil`                                       |
-| `smtpUser`                          | SMTP user                               | `nil`                                       |
-| `smtpPassword`                      | SMTP password                           | `nil`                                       |
+| `sugarcrmSmtpHost`                  | SMTP host                               | `nil`                                       |
+| `sugarcrmSmtpPort`                  | SMTP port                               | `nil`                                       |
+| `sugarcrmSmtpProtocol`              | SMTP Protocol                           | `nil`                                       |
+| `sugarcrmSmtpUser`                  | SMTP user                               | `nil`                                       |
+| `sugarcrmSmtpPassword`              | SMTP password                           | `nil`                                       |
 | `mariadb.mariadbRootPassword`       | MariaDB admin password                  | `nil`                                       |
 | `serviceType`                       | Kubernetes Service type                 | `LoadBalancer`                              |
 | `persistence.enabled`               | Enable persistence using PVC            | `true`                                      |

@@ -41,18 +41,18 @@ spec:
         - name: SUGARCRM_HOST
           value: {{ default "" .Values.sugarcrmHost | quote }}
         - name: SUGARCRM_SMTP_HOST
-          value: {{ default "" .Values.smtpHost | quote }}
+          value: {{ default "" .Values.sugarcrmSmtpHost | quote }}
         - name: SUGARCRM_SMTP_PORT
-          value: {{ default "" .Values.smtpPort | quote }}
+          value: {{ default "" .Values.sugarcrmSmtpPort | quote }}
         - name: SUGARCRM_SMTP_USER
-          value: {{ default "" .Values.smtpUser | quote }}
+          value: {{ default "" .Values.sugarcrmSmtpUser | quote }}
         - name: SUGARCRM_SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: smtp-password
+              key: sugarcrm-smtp-password
         - name: SUGARCRM_SMTP_PROTOCOL
-          value: {{ default "" .Values.smtpProtocol | quote }}
+          value: {{ default "" .Values.sugarcrmSmtpProtocol | quote }}
         ports:
         - name: http
           containerPort: 80
