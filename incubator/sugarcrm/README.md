@@ -54,7 +54,7 @@ The following tables lists the configurable parameters of the SugarCRM chart and
 | `sugarcrmEmail`                     | Admin email                             | `user@example.com`                          |
 | `sugarcrmLastname`                  | Last name                               | `Name`                                      |
 | `sugarcrmHost`                      | Host domain or IP                       | `nil`                                       |
-| `sugarcrmLoadBalancerIP`            | `LoadBalancerIP for the application`    | `nil`                                       |
+| `sugarcrmLoadBalancerIP`            | `loadBalancerIP` of the application     | `nil`                                       |
 | `sugarcrmSmtpHost`                  | SMTP host                               | `nil`                                       |
 | `sugarcrmSmtpPort`                  | SMTP port                               | `nil`                                       |
 | `sugarcrmSmtpProtocol`              | SMTP Protocol                           | `nil`                                       |
@@ -75,7 +75,7 @@ The above parameters map to the env variables defined in [bitnami/sugarcrm](http
 
 > **Note**:
 >
-> For the SugarCRM  application function correctly, you should specify the `sugarcrmHost` parameter to specify the FQDN (recommended) or the public IP address of the SugarCRM service.
+> For SugarCRM to function correctly, you should specify the `sugarcrmHost` parameter to specify the FQDN (recommended) or the public IP address of the SugarCRM service.
 >
 > Optionally, you can specify the `sugarcrmLoadBalancerIP` parameter to assign a reserved IP address to the SugarCRM service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
 >
