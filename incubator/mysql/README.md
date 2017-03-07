@@ -6,7 +6,7 @@
 ## TL;DR;
 
 ```bash
-$ helm install stable/mysql
+$ helm install incubator/mysql
 ```
 
 ## Introduction
@@ -23,7 +23,7 @@ This chart bootstraps a [MySQL](https://github.com/bitnami/bitnami-docker-mysql)
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release stable/mysql
+$ helm install --name my-release incubator/mysql
 ```
 
 The command deploys MySQL on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -66,7 +66,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install --name my-release \
   --set mysqlRootPassword=secretpassword,mysqlUser=my-user,mysqlPassword=my-password,mysqlDatabase=my-database \
-    stable/mysql
+    incubator/mysql
 ```
 
 The above command sets the MySQL `root` account password to `secretpassword`. Additionally it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
@@ -74,7 +74,7 @@ The above command sets the MySQL `root` account password to `secretpassword`. Ad
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml stable/mysql
+$ helm install --name my-release -f values.yaml incubator/mysql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -98,7 +98,7 @@ config: |-
   innodb_buffer_pool_size=2G
 EOF
 
-helm install --name my-release -f mysql-values.yaml stable/mysql
+helm install --name my-release -f mysql-values.yaml incubator/mysql
 ```
 
 ## Persistence
