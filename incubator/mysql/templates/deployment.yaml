@@ -52,6 +52,8 @@ spec:
               key: mysql-password
         - name: MYSQL_DATABASE
           value: {{ default "" .Values.mysqlDatabase | quote }}
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
         ports:
         - name: mysql
           containerPort: 3306
