@@ -51,7 +51,7 @@ The following tables lists the configurable parameters of the Parse chart and th
 | `parse.imagePullPolicy`            | Parse image pull policy                | `IfNotPresent`                              |
 | `parse.port`                       | Parse server port                      | `1337`                                      |
 | `parse.mountPath`                  | Parse API mount path                   | `/parse`                                    |
-| `parse.appId`                      | Parse server App Id                    | `myAppID`                                   |
+| `parse.appId`                      | Parse server App Id                    | `myappID`                                   |
 | `parse.masterKey`                  | Parse server Master Key                | `random 10 character alphanumeric string`   |
 | `parse.resources`                  | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
 | `dashboard.enabled`                | Enable parse dashboard                 | `true`                                      |
