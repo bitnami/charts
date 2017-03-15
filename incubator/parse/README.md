@@ -51,16 +51,16 @@ The following tables lists the configurable parameters of the Parse chart and th
 | `parse.imagePullPolicy`            | Parse image pull policy                | `IfNotPresent`                              |
 | `parse.port`                       | Parse server port                      | `1337`                                      |
 | `parse.mountPath`                  | Parse API mount path                   | `/parse`                                    |
-| `parse.appId`                      | Parse server App Id                    | `myAppID`                                   |
+| `parse.appId`                      | Parse server App Id                    | `myappID`                                   |
 | `parse.masterKey`                  | Parse server Master Key                | `random 10 character alphanumeric string`   |
 | `parse.resources`                  | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
-| `dashboard.enabled`                | Enable parse dashboard                 | `true`                                      |
-| `dashboard.image`                  | Dashboard image                        | `bitnami/parse-dashboard:{VERSION}`         |
-| `dashboard.imagePullPolicy`        | Dashboard image pull policy            | `IfNotPresent`                              |
-| `dashboard.username`               | Dashboard username                     | `user`                                      |
-| `dashboard.password`               | Dashboard user password                | `random 10 character alphanumeric string`   |
-| `dashboard.appName`                | Dashboard application name             | `MyDashboard`                               |
-| `dashboard.resources`              | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
+| `parseDashboard.enabled`           | Enable parse dashboard                 | `true`                                      |
+| `parseDashboard.image`             | Dashboard image                        | `bitnami/parse-dashboard:{VERSION}`         |
+| `parseDashboard.imagePullPolicy`   | Dashboard image pull policy            | `IfNotPresent`                              |
+| `parseDashboard.username`          | Dashboard username                     | `user`                                      |
+| `parseDashboard.password`          | Dashboard user password                | `random 10 character alphanumeric string`   |
+| `parseDashboard.appName`           | Dashboard application name             | `MyDashboard`                               |
+| `parseDashboard.resources`         | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                |
 | `persistence.enabled`              | Enable Parse persistence using PVC     | `true`                                      |
 | `persistence.storageClass`         | PVC Storage Class for Parse volume     | `nil` (uses alpha storage class annotation) |
 | `persistence.accessMode`           | PVC Access Mode for Parse volume       | `ReadWriteOnce`                             |
@@ -90,7 +90,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set dashboard.username=admin,dashboard.password=password \
+  --set parseDashboard.username=admin,parseDashboard.password=password \
     incubator/parse
 ```
 

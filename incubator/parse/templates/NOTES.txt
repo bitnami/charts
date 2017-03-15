@@ -37,7 +37,7 @@ Example Usage:
     -d '{"score":1337,"playerName":"Sean Plott","cheatMode":false}' \
     http://$SERVICE_IP{{ .Values.parse.mountPath }}/classes/GameScore
 
-{{ if .Values.dashboard.enabled -}}
+{{ if .Values.parseDashboard.enabled -}}
 Parse Dashboard
 ---------------
 {{ if empty (include "host" .) }}
@@ -59,14 +59,14 @@ service:
 2. Complete your Parse Dashboard deployment by running:
 
   helm upgrade {{ .Release.Name }} \
-    --set parse.host=$APP_HOST,parse.port={{ .Values.parse.port }},parse.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.master-key}" | base64 --decode),dashboard.username={{ .Values.dashboard.username }},dashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password}" | base64 --decode) incubator/parse
+    --set parse.host=$APP_HOST,parse.port={{ .Values.parse.port }},parse.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.master-key}" | base64 --decode),parseDashboard.username={{ .Values.parseDashboard.username }},parseDashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 --decode) incubator/parse
 
 {{ else }}
 1. Get the Parse Dashboard URL by running:
 
 {{- if eq .Values.serviceType "ClusterIP" }}
 
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "fullname" . }},component={{ .Chart.Name }}-dashboard" -o jsonpath="{.items[0].metadata.name}")
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "fullname" . }},component={{ .Chart.Name }}-parse-dashboard" -o jsonpath="{.items[0].metadata.name}")
   echo http://127.0.0.1:4040/
   kubectl port-forward $POD_NAME 4040:4040
 {{- else }}
@@ -76,7 +76,7 @@ service:
 
 2. Get your Parsh Dashboard login credentials by running:
 
-  echo Username: {{ .Values.dashboard.username }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.dashboard-password}" | base64 --decode)
+  echo Username: {{ .Values.parseDashboard.username }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 --decode)
 {{- end }}
 {{- end }}

@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}-server
+  name: {{ template "fullname" . }}
   labels:
     app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -13,7 +13,7 @@ spec:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-        component: "{{ .Chart.Name }}-server"
+        component: "{{ .Chart.Name }}"
     spec:
       containers:
       - name: {{ template "fullname" . }}

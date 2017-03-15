@@ -32,7 +32,7 @@ parse:
   ## Parse Server App ID
   ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
   ##
-  appId: myAppID
+  appId: myappID
 
   ## Parse Server Master Key
   ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
@@ -47,7 +47,7 @@ parse:
       memory: 512Mi
       cpu: 300m
 
-dashboard:
+parseDashboard:
   ## Enable deployment of Parse Dashboard
   ##
   enabled: true
