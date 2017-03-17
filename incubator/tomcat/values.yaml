@@ -1,7 +1,7 @@
 ## Bitnami Tomcat image version
 ## ref: https://hub.docker.com/r/bitnami/tomcat/tags/
 ##
-image: bitnami/tomcat:9.0.0.M17-r2
+image: bitnami/tomcat:9.0.0.M18-r0
 
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
