@@ -1,5 +1,5 @@
 name: node
-version: 0.1.9
+version: 0.1.10
 description: Event-driven I/O server-side JavaScript environment based on V8
 keywords:
 - node
