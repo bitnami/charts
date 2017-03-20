@@ -1,5 +1,5 @@
 name: memcached
-version: 0.4.5
+version: 0.4.6
 description: Chart for Memcached
 keywords:
 - memcached
