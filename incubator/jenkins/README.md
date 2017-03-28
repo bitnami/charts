@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install stable/jenkins
+$ helm install incubator/jenkins
 ```
 
 ## Introduction
@@ -22,7 +22,7 @@ This chart bootstraps a [Jenkins](https://github.com/bitnami/bitnami-docker-jenk
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/jenkins
+$ helm install --name my-release incubator/jenkins
 ```
 
 The command deploys Jenkins on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -63,7 +63,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set jenkinsUsername=admin,jenkinsPassword=password \
-    stable/jenkins
+    incubator/jenkins
 ```
 
 The above command sets the Jenkins administrator account username and password to `admin` and `password` respectively.
@@ -71,7 +71,7 @@ The above command sets the Jenkins administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml stable/jenkins
+$ helm install --name my-release -f values.yaml incubator/jenkins
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
