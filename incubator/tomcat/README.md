@@ -62,8 +62,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set tomcatUser=manager,tomcatPassword=password \
-    tomcat-x.x.x.tgz
+  --set tomcatUser=manager,tomcatPassword=password incubator/tomcat
 ```
 
 The above command sets the Tomcat management username and password to `manager` and `password` respectively.

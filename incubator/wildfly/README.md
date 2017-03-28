@@ -63,7 +63,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set wildflyUser=manager,wildflyPassword=password \
-    wildfly-x.x.x.tgz
+    incubator/wildfly
 ```
 
 The above command sets the WildFly management username and password to `manager` and `password` respectively.
