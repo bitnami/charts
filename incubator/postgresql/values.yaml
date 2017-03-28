@@ -1,7 +1,7 @@
 ## Bitnami PostgreSQL image version
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
 ##
-image: bitnami/postgresql:9.6.2-r1
+image: bitnami/postgresql:9.6.2-r2
 
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
