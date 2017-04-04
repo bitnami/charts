@@ -40,10 +40,10 @@ spec:
             ]
           },
           {
-            "name": "fix-permissions",
+            "name": "fixing-permissions",
             "image": "{{ .Values.image }}",
             "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "chown bitnami: -R /app /home/bitnami {{ .Values.persistence.path }}" ],
+            "command": [ "/bin/sh", "-c" , "chown bitnami:bitnami -R /app /home/bitnami {{ .Values.persistence.path }}"],
             "volumeMounts": [
               {
                 "name": "app",
