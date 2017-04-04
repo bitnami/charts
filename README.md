@@ -32,6 +32,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [RabbitMQ (stable)](https://github.com/kubernetes/charts/tree/master/stable/rabbitmq)
 - [Redis (stable)](https://github.com/kubernetes/charts/tree/master/stable/redis)
 - [Redmine (stable)](https://github.com/kubernetes/charts/tree/master/stable/redmine)
+- [SuiteCRM (incubator)](https://github.com/bitnami/charts/tree/master/incubator/suitecrm)
 - [TestLink (stable)](https://github.com/kubernetes/charts/tree/master/stable/testlink)
 - [Tomcat (incubator)](https://github.com/bitnami/charts/tree/master/incubator/tomcat)
 - [WildFly (incubator)](https://github.com/bitnami/charts/tree/master/incubator/wildfly)
