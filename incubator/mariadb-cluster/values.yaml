@@ -31,7 +31,7 @@ replicasCount: 3
 ## Database to create
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
 ##
-mariadbDatabase: my-database
+mariadbDatabase: my_database
 
 ## MariaDB replication user
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster

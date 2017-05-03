@@ -24,6 +24,7 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mariadb-root-password
+        {{- if .Values.mariadbUser }}
         - name: MARIADB_USER
           value: {{ default "" .Values.mariadbUser | quote }}
         - name: MARIADB_PASSWORD
@@ -31,6 +32,7 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mariadb-password
+        {{- end }}
         - name: MARIADB_DATABASE
           value: {{ default "" .Values.mariadbDatabase | quote }}
         - name: MARIADB_REPLICATION_MODE
