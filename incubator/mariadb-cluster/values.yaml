@@ -36,7 +36,7 @@ mariadbDatabase: my_database
 ## MariaDB replication user
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
 ##
-mariadbReplicationUser: repl-user
+mariadbReplicationUser: my_replication_user
 
 ## MariaDB replication user password
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
