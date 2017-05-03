@@ -44,8 +44,6 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mariadb-replication-password
-        - name: ALLOW_EMPTY_PASSWORD
-          value: "yes"
         ports:
         - name: mysql
           containerPort: 3306
