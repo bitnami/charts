@@ -40,12 +40,12 @@ spec:
         - name: MARIADB_MASTER_PORT
           value: "3306"
         - name: MARIADB_MASTER_USER
-          value: {{ default "" .Values.mariadbUser | quote }}
+          value: "root"
         - name: MARIADB_MASTER_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
-              key: mariadb-password
+              key: mariadb-root-password
         - name: MARIADB_REPLICATION_USER
           value: {{ default "" .Values.mariadbReplicationUser | quote }}
         - name: MARIADB_REPLICATION_PASSWORD
