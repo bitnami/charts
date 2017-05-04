@@ -4,14 +4,14 @@
 ## Default: none
 image: bitnami/mariadb:10.1.22-r1
 
-## Specify a imagePullPolicy
+## Image pull policy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 imagePullPolicy: IfNotPresent
 
-## Desired number of MariaDB slave Pods
+## Desired number of slave Pods
 ##
-replicasCount: 3
+numSlaves: 3
 
 ## MariaDB admin password
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
