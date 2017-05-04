@@ -1,27 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "slave.fullname" . }}
+  name: {{ template "master.fullname" . }}
   labels:
-    mode: slave
-    app: {{ template "slave.fullname" . }}
+    app: {{ template "master.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ default "1" .Values.replicasCount }}
+  replicas: 1
   template:
     metadata:
       labels:
-        mode: slave
-        app: {{ template "slave.fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
+        app: {{ template "master.fullname" . }}
     spec:
       containers:
-      - name: {{ template "slave.fullname" . }}
-        image: "bitnami/mariadb:{{ .Values.imageTag }}"
+      - name: {{ template "master.fullname" . }}
+        image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
@@ -29,6 +24,7 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mariadb-root-password
+        {{- if .Values.mariadbUser }}
         - name: MARIADB_USER
           value: {{ default "" .Values.mariadbUser | quote }}
         - name: MARIADB_PASSWORD
@@ -36,21 +32,11 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mariadb-password
+        {{- end }}
         - name: MARIADB_DATABASE
           value: {{ default "" .Values.mariadbDatabase | quote }}
         - name: MARIADB_REPLICATION_MODE
-          value: "slave"
-        - name: MARIADB_MASTER_HOST
-          value: {{ template "master.fullname" . }}
-        - name: MARIADB_MASTER_PORT
-          value: "3306"
-        - name: MARIADB_MASTER_USER
-          value: {{ default "" .Values.mariadbUser | quote }}
-        - name: MARIADB_MASTER_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: mariadb-password
+          value: "master"
         - name: MARIADB_REPLICATION_USER
           value: {{ default "" .Values.mariadbReplicationUser | quote }}
         - name: MARIADB_REPLICATION_PASSWORD
@@ -64,14 +50,29 @@ spec:
         livenessProbe:
           exec:
             command:
-            - mysqladmin
-            - ping
+            - sh
+            - -c
+            - exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
           initialDelaySeconds: 60
           timeoutSeconds: 5
         readinessProbe:
           exec:
             command:
-            - mysqladmin
-            - ping
+            - sh
+            - -c
+            - exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
           initialDelaySeconds: 5
           timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: mariadb-master-data
+          mountPath: /bitnami/mariadb
+      volumes:
+      - name: mariadb-master-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "master.fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}

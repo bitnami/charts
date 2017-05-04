@@ -1,16 +1,17 @@
 ## Bitnami MariaDB image version
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
 ##
-imageTag: 10.1.19-r4
+## Default: none
+image: bitnami/mariadb:10.1.22-r1
 
-## Specify a imagePullPolicy
+## Image pull policy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 imagePullPolicy: IfNotPresent
 
-## Desired number of MariaDB slave Pods
+## Desired number of slave Pods
 ##
-replicasCount: 1
+numSlaves: 3
 
 ## MariaDB admin password
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
@@ -30,14 +31,43 @@ replicasCount: 1
 ## Database to create
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
 ##
-mariadbDatabase: my-database
+mariadbDatabase: my_database
 
 ## MariaDB replication user
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
 ##
-mariadbReplicationUser: repl-user
+mariadbReplicationUser: my_replication_user
 
 ## MariaDB replication user password
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
 ##
 # mariadbReplicationPassword:
+
+## Kubernetes service type
+serviceType: ClusterIP
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
+
+  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+  ## Default: volume.alpha.kubernetes.io/storage-class: default
+  ##
+  # storageClass:
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m

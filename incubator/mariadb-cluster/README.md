@@ -4,39 +4,28 @@
 
 MariaDB is developed as open source software and as a relational database it provides an SQL interface for accessing data. The latest versions of MariaDB also include GIS and JSON features.
 
-[source](https://mariadb.org/about/)
-
-## TL;DR;
+## TL;DR
 
 ```bash
-$ helm install mariadb-cluster-x.x.x.tgz
+$ helm install incubator/mariadb-cluster
 ```
 
 ## Introduction
 
-Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
-
 This chart bootstraps a [MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) replication cluster deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-## Get this chart
+## Prerequisites
 
-Download the latest release of the chart from the [releases](../../../releases) page.
-
-Alternatively, clone the repo if you wish to use the development snapshot:
-
-```bash
-$ git clone https://github.com/bitnami/charts.git
-```
+- Kubernetes 1.4+ with Beta APIs enabled
+- PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release mariadb-cluster-x.x.x.tgz
+$ helm install --name my-release incubator/mariadb-cluster
 ```
-
-*Replace the `x.x.x` placeholder with the chart release version.*
 
 The command deploys MariaDB on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
@@ -56,17 +45,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the MariaDB chart and their default values.
 
-|          Parameter           |             Description              |        Default        |
-|------------------------------|--------------------------------------|-----------------------|
-| `imageTag`                   | `bitnami/mariadb` image tag          | MariaDB image version |
-| `imagePullPolicy`            | Image pull policy                    | `IfNotPresent`        |
-| `replicasCount`              | Desired number of MariaDB slave pods | `nil`                 |
-| `mariadbRootPassword`        | MariaDB admin password               | `nil`                 |
-| `mariadbUser`                | MariaDB user                         | `nil`                 |
-| `mariadbPassword`            | MariaDB password                     | `nil`                 |
-| `mariadbDatabase`            | Database to create                   | `my-database`         |
-| `mariadbReplicationUser`     | MariaDB replication user             | `repl-user`           |
-| `mariadbReplicationPassword` | MariaDB replication user password    | `nil`                 |
+|          Parameter           |             Description             |                   Default                   |
+|------------------------------|-------------------------------------|---------------------------------------------|
+| `image`                      | Bitnami MariaDB image version       | `bitnami/mariadb:{VERSION}`                 |
+| `imagePullPolicy`            | Image pull policy                   | `IfNotPresent`                              |
+| `numSlaves`                  | Desired number of slave Pods        | `3`                                         |
+| `mariadbRootPassword`        | Password for the `root` user.       | _random 10 character alphanumeric string_   |
+| `mariadbUser`                | Username of new user to create.     | `nil`                                       |
+| `mariadbPassword`            | Password for the new user.          | _random 10 character alphanumeric string_   |
+| `mariadbDatabase`            | Name for new database to create.    | `my_database`                               |
+| `mariadbReplicationUser`     | MariaDB replication user            | `my_replication_user`                       |
+| `mariadbReplicationPassword` | MariaDB replication user password   | _random 10 character alphanumeric string_   |
+| `serviceType`                | Kubernetes Service type             | `ClusterIP`                                 |
+| `persistence.enabled`        | Use a PVC to persist data           | `true`                                      |
+| `persistence.storageClass`   | Storage class of backing PVC        | `nil` (uses alpha storage class annotation) |
+| `persistence.accessMode`     | Use volume as ReadOnly or ReadWrite | `ReadWriteOnce`                             |
+| `persistence.size`           | Size of data volume                 | `8Gi`                                       |
+| `resources`                  | CPU/Memory resource requests/limits | Memory: `256Mi`, CPU: `250m`                |
 
 The above parameters map to the env variables defined in [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb). For more information please refer to the [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb) image documentation.
 
@@ -74,16 +69,16 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install --name my-release \
-  --set mariadbRootPassword=secretpassword,replicasCount=3 \
-    mariadb-cluster-x.x.x.tgz
+  --set mariadbRootPassword=secretpassword,mariadbUser=app_user,mariadbPassword=app_password,mariadbDatabase=app_database \
+    incubator/mariadb-cluster
 ```
 
-The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it sets the desired number of MariaDB slave pods to `3` by specifying the `replicasCount` parameter.
+The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml mariadb-cluster-x.x.x.tgz
+$ helm install --name my-release -f values.yaml incubator/mariadb-cluster
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -92,38 +87,4 @@ $ helm install --name my-release -f values.yaml mariadb-cluster-x.x.x.tgz
 
 The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
 
-As a placeholder, the chart mounts an [emptyDir](http://kubernetes.io/docs/user-guide/volumes/#emptydir) volume at this location.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-
-For persistence of the data you should replace the `emptyDir` volume with a persistent [storage volume](http://kubernetes.io/docs/user-guide/volumes/), else the data will be lost if the Pod is shutdown.
-
-### Step 1: Create a persistent disk
-
-You first need to create a persistent disk in the cloud platform your cluster is running. For example, on GCE you can use the `gcloud` tool to create a [gcePersistentDisk](http://kubernetes.io/docs/user-guide/volumes/#gcepersistentdisk):
-
-```bash
-$ gcloud compute disks create --size=500GB --zone=us-central1-a mariadb-data-disk
-```
-
-### Step 2: Update `templates/deployment-master.yaml`
-
-Replace:
-
-```yaml
-      volumes:
-      - name: mariadb-master-data
-        emptyDir: {}
-```
-
-with
-
-```yaml
-      volumes:
-      - name: mariadb-master-data
-        gcePersistentDisk:
-          pdName: mariadb-data-disk
-          fsType: ext4
-```
-
-[Install](#installing-the-chart) the chart after making these changes.
+The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.

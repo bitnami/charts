@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: {{ template "master.fullname" . }}
   labels:
-    mode: master
     app: {{ template "master.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
