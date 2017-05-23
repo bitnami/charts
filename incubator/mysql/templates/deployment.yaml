@@ -54,21 +54,25 @@ spec:
           value: {{ default "" .Values.mysqlDatabase | quote }}
         - name: ALLOW_EMPTY_PASSWORD
           value: "yes"
+        - name: POD_IP
+          valueFrom: { fieldRef: { fieldPath: status.podIP } }
         ports:
         - name: mysql
           containerPort: 3306
         livenessProbe:
           exec:
             command:
-            - mysqladmin
-            - ping
+            - sh
+            - -c
+            - exec mysqladmin --host $POD_IP ping
           initialDelaySeconds: 30
           timeoutSeconds: 5
         readinessProbe:
           exec:
             command:
-            - mysqladmin
-            - ping
+            - sh
+            - -c
+            - exec mysqladmin --host $POD_IP ping
           initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
