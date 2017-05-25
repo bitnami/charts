@@ -30,7 +30,7 @@ spec:
               key: parse-dashboard-password
         - name: PARSE_HOST
           value: {{ include "host" . | quote }}
-        - name: PARSE_PORT
+        - name: PARSE_PORT_NUMBER
           value: {{ .Values.parse.port | quote }}
         - name: PARSE_APP_ID
           value: {{ .Values.parse.appId | quote }}
