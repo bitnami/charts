@@ -22,7 +22,7 @@ spec:
         env:
         - name: PARSE_HOST
           value: "0.0.0.0"
-        - name: PARSE_PORT
+        - name: PARSE_PORT_NUMBER
           value: {{ .Values.parse.port | quote }}
         - name: PARSE_MOUNT_PATH
           value: {{ .Values.parse.mountPath | quote }}
