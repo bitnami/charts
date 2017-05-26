@@ -33,10 +33,12 @@ spec:
             port: memcache
           initialDelaySeconds: 30
           timeoutSeconds: 5
+          failureThreshold: 6
         readinessProbe:
           tcpSocket:
             port: memcache
           initialDelaySeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 3
+          periodSeconds: 5
         resources:
 {{ toYaml .Values.resources | indent 10 }}

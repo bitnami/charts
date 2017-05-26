@@ -33,19 +33,21 @@ spec:
         livenessProbe:
           exec:
             command:
-            - pg_isready
-            - -U
-            - {{ default "" .Values.postgresqlUsername | quote }}
+            - sh
+            - -c
+            - exec pg_isready -U {{ default "" .Values.postgresqlUsername | quote }} --host $POD_IP
           initialDelaySeconds: 30
           timeoutSeconds: 5
+          failureThreshold: 6
         readinessProbe:
           exec:
             command:
-            - pg_isready
-            - -U
-            - {{ default "" .Values.postgresqlUsername | quote }}
+            - sh
+            - -c
+            - exec pg_isready -U {{ default "" .Values.postgresqlUsername | quote }} --host $POD_IP
           initialDelaySeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 3
+          periodSeconds: 5
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:

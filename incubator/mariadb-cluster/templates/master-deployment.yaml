@@ -54,14 +54,17 @@ spec:
             - -c
             - exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
           initialDelaySeconds: 60
+          periodSeconds: 5
           timeoutSeconds: 5
+          failureThreshold: 10
         readinessProbe:
           exec:
             command:
             - sh
             - -c
             - exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
+          periodSeconds: 5
           timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}

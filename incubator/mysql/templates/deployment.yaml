@@ -65,8 +65,10 @@ spec:
             - sh
             - -c
             - exec mysqladmin --host $POD_IP ping
-          initialDelaySeconds: 30
+          initialDelaySeconds: 120
+          periodSeconds: 5
           timeoutSeconds: 5
+          failureThreshold: 10
         readinessProbe:
           exec:
             command:
@@ -74,6 +76,7 @@ spec:
             - -c
             - exec mysqladmin --host $POD_IP ping
           initialDelaySeconds: 5
+          periodSeconds: 5
           timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
