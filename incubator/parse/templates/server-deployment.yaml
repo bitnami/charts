@@ -41,23 +41,25 @@ spec:
         - name: server-http
           containerPort: {{ .Values.parse.port }}
         livenessProbe:
-          exec:
-            command:
-            - curl
-            - -H
-            - "X-Parse-Application-Id: {{ .Values.parse.appId }}"
-            - "http://localhost:{{ .Values.parse.port }}{{ .Values.parse.mountPath }}/users"
+          httpGet:
+            path: {{ .Values.parse.mountPath }}/users
+            port: server-http
+            httpHeaders:
+            - name: X-Parse-Application-Id
+              value: {{ .Values.parse.appId }}
           initialDelaySeconds: 120
           timeoutSeconds: 5
+          failureThreshold: 6
         readinessProbe:
-          exec:
-            command:
-            - curl
-            - -H
-            - "X-Parse-Application-Id: {{ .Values.parse.appId }}"
-            - "http://localhost:{{ .Values.parse.port }}{{ .Values.parse.mountPath }}/users"
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+          httpGet:
+            path: {{ .Values.parse.mountPath }}/users
+            port: server-http
+            httpHeaders:
+            - name: X-Parse-Application-Id
+              value: {{ .Values.parse.appId }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
         resources:
 {{ toYaml .Values.parse.resources | indent 10 }}
         volumeMounts:

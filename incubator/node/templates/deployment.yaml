@@ -78,16 +78,15 @@ spec:
             path: /
             port: http
           initialDelaySeconds: 180
-          periodSeconds: 5
           timeoutSeconds: 5
-          failureThreshold: 10
+          failureThreshold: 6
         readinessProbe:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
           periodSeconds: 5
-          timeoutSeconds: 1
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:

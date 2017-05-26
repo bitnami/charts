@@ -45,6 +45,6 @@ host. To configure SugarCRM with the URL of your service:
 
 2. Get your SugarCRM login credentials by running:
 
-  echo Username : {{ .Values.sugarcrmUsername }}
-  echo Password : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.sugarcrm-password}" | base64 --decode)
+  echo Username: {{ .Values.sugarcrmUsername }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.sugarcrm-password}" | base64 --decode)
 {{- end }}
