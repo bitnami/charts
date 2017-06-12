@@ -1,0 +1,14 @@
+{{- if .Values.vhost -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  vhost.conf: |-
+{{ .Values.vhost | indent 4 }}
+{{- end -}}
