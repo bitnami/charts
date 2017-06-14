@@ -1,0 +1,8 @@
+Get the port from the service list:
+$ kubectl get svc
+NAME                 CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
+tensorflow-serving   10.0.0.233   <nodes>       9000:32725/TCP   5m
+
+Test it:
+$ docker run --rm -it bitnami/tensorflow-serving-client:latest
+# inception_client  --server=192.168.99.100:32725 --image=/tmp/labrador-retriever-dog-pictures-6.jpg

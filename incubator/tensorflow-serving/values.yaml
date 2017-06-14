@@ -1,0 +1,23 @@
+## TensorFlow Serving server image version
+## ref: https://hub.docker.com/r/bitnami/tensorflow-serving/tags/
+##
+server:
+  image: tompizmor/tensorflow-serving:latest
+  port: 9000
+
+## TensorFlow Serving Client image version
+## ref: https://hub.docker.com/r/bitnami/tensorflow-serving-client/tags/
+##
+client:
+  image: tompizmor/tensorflow-serving-client:latest
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy:
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+serviceType: LoadBalancer
