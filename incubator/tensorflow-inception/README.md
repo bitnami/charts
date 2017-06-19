@@ -5,7 +5,7 @@ TensorFlow Serving is an open-source software library for serving machine learni
 ## TL;DR;
 
 ```console
-$ helm install incubator/tensorflow-serving
+$ helm install incubator/tensorflow-inception
 ```
 
 ## Introduction
@@ -32,7 +32,7 @@ $ git clone https://github.com/bitnami/tensorflow.git
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release incubator/tensorflow-serving
+$ helm install --name my-release incubator/tensorflow-inception
 ```
 
 The command deploys Tensorflow Serving Inception v3 model on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -58,23 +58,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the TensorFlow Inception chart and their default values.
 
-| Parameter                            | Description                              | Default                                                    |
-| -------------------------------      | -------------------------------          | ---------------------------------------------------------- |
-| `server.image`                       | Tensorflow server image                  | `bitnami/tf-server-slim:{VERSION}`                         |
-| `server.port`                        | Tensorflow server port                   | `9000`                                                     |
-| `client.image`                       | Tensorflow client image                  | `bitnami/tf-client-slim:{VERSION}`                         |
-| `imagePullPolicy`                    | Image pull policy                        | `Always` if `image` tag is `latest`, else `IfNotPresent`   |
+| Parameter                       | Description                         | Default                                                    |
+| ------------------------------- | -------------------------------     | ---------------------------------------------------------- |
+| `server.image`                  | Tensorflow server image             | `bitnami/tensorflow-serving:{VERSION}`                     |
+| `server.port`                   | Tensorflow server port              | `9000`                                                     |
+| `client.image`                  | Tensorflow client image             | `bitnami/tensorflow-inception:{VERSION}`                   |
+| `imagePullPolicy`               | Image pull policy                   | `Always` if `image` tag is `latest`, else `IfNotPresent`   |
+| `persistence.enabled`           | Use a PVC to persist data           | `true`                                                     |
+| `persistence.storageClass`      | Storage class of backing PVC        | `nil` (uses alpha storage class annotation)                |
+| `persistence.accessMode`        | Use volume as ReadOnly or ReadWrite | `ReadWriteOnce`                                            |
+| `persistence.size`              | Size of data volume                 | `500Mi`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release incubator/tensorflow-serving --set imagePullPolicy=Always
+$ helm install --name my-release incubator/tensorflow-inception --set imagePullPolicy=Always
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml incubator/tensorflow-serving
+$ helm install --name my-release -f values.yaml incubator/tensorflow-inception
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
