@@ -14,7 +14,7 @@ spec:
         args: ["-c", "curl -o /seed/inception-v3-2016-03-01.tar.gz http://download.tensorflow.org/models/image/imagenet/inception-v3-2016-03-01.tar.gz && \
                       cd /seed/ && tar -xzf inception-v3-2016-03-01.tar.gz && \
                       rm inception-v3-2016-03-01.tar.gz && \
-                      inception_saved_model --checkpoint_dir=/seed/inception-v3 --output_dir=/seed/inception-export && \
+                      inception_saved_model --checkpoint_dir=/seed/inception-v3 --output_dir=/seed/ && \
                       rm -rf inception-v3"]
         volumeMounts:
         - name: seed
