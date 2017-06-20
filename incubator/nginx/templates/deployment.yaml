@@ -43,6 +43,15 @@ spec:
         volumeMounts:
         - name: nginx-data
           mountPath: /bitnami/nginx
+        {{- if .Values.vhost }}
+        - name: nginx-vhost
+          mountPath: /bitnami/nginx/conf/vhosts
+        {{- end }}
       volumes:
       - name: nginx-data
         emptyDir: {}
+      {{- if .Values.vhost }}
+      - name: nginx-vhost
+        configMap:
+          name: {{ template "fullname" . }}
+      {{- end }}

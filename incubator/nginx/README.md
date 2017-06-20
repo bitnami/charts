@@ -53,9 +53,10 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the NGINX chart and their default values.
 
 |     Parameter     |        Description        |       Default       |
-|-------------------|---------------------------|---------------------|
+| ----------------- | ------------------------- | ------------------- |
 | `imageTag`        | `bitnami/nginx` image tag | NGINX image version |
 | `imagePullPolicy` | Image pull policy         | `IfNotPresent`      |
+| `vhost`           | Custom nginx virtual host | `nil`               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -74,3 +75,25 @@ $ helm install --name my-release -f values.yaml nginx-x.x.x.tgz
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Providing a custom virtual host
+
+You can use the `vhost` value to provide a custom virtual host for NGINX to use.
+To do this, create a values files with your virtual host:
+
+_custom-vhost.yaml_
+```yaml
+vhost: |-
+  server {
+    listen 0.0.0.0:80;
+    location / {
+      return 200 "hello!";
+    }
+  }
+```
+
+Install the chart with this value:
+
+```console
+$ helm install --name my-release -f custom-vhost.yaml nginx-x.x.x.tgz
+```
