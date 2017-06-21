@@ -34,6 +34,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [Redmine (stable)](https://github.com/kubernetes/charts/tree/master/stable/redmine)
 - [SugarCRM (incubator)](https://github.com/bitnami/charts/tree/master/incubator/sugarcrm)
 - [SuiteCRM (incubator)](https://github.com/bitnami/charts/tree/master/incubator/suitecrm)
+- [TensorFlow Inception (incubator)](https://github.com/bitnami/charts/tree/master/incubator/tensorflow-inception)
 - [TestLink (stable)](https://github.com/kubernetes/charts/tree/master/stable/testlink)
 - [Tomcat (incubator)](https://github.com/bitnami/charts/tree/master/incubator/tomcat)
 - [WildFly (incubator)](https://github.com/bitnami/charts/tree/master/incubator/wildfly)
