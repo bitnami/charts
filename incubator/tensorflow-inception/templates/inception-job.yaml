@@ -2,6 +2,11 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ template "fullname" . }}-seed-inception
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   template:
     metadata:
