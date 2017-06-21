@@ -1,6 +1,6 @@
 name: tensorflow-serving
 version: 0.0.1
-app_version: 0.5.1
+appVersion: 0.5.1
 description: Open-source software library for serving machine learning models
 keywords:
 - tensorflow

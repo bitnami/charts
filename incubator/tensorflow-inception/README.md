@@ -24,7 +24,7 @@ Download the latest release of the chart from the [releases](../../../releases) 
 Alternatively, clone the repo if you wish to use the development snapshot:
 
 ```console
-$ git clone https://github.com/bitnami/tensorflow.git
+$ git clone https://github.com/bitnami/charts.git
 ```
 
 ## Installing the Chart
