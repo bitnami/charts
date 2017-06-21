@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tensorflow-serving
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: {{ .Values.server.image }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.server.port }}
+          timeoutSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.server.port }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 6
+        volumeMounts:
+        - name: seed
+          mountPath: "/bitnami/model-data"
+        - name: data
+          mountPath: /bitnami/tensorflow-serving
+      volumes:
+      - name: seed
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-seed-inception
+      - name: data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}
