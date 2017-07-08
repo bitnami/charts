@@ -52,6 +52,7 @@ resources:
 #   tag: v2
 #   imagePullPolicy: IfNotPresent
 #   imageWarFileLoc: /sample.war
+#   command: ["tail", "-f", "/dev/null"]
 
 ## Volume Info
 ## deployDir - The Tomcat webapps deployment directory for this image?
