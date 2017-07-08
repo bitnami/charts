@@ -42,3 +42,13 @@ resources:
   requests:
     memory: 512Mi
     cpu: 300m
+
+## Containers for war sidecar
+## ref: https://github.com/kubernetes/kubernetes/tree/master/examples/javaweb-tomcat-sidecar
+##
+# sidecar:
+# - name: sample
+#   image: resouer/sample
+#   tag: v2
+#   imagePullPolicy: IfNotPresent
+#   imageWarFileLoc: /sample.war
