@@ -19,7 +19,7 @@ spec:
       - name: {{ $sidecar.name }}
         image: {{ $sidecar.image }}:{{ $sidecar.tag }}
         imagePullPolicy: {{ $sidecar.imagePullPolicy }}
-        {{-if $sidecar.command }}
+        {{- if $sidecar.command }}
         command: {{ $sidecar.command }}
         {{- end }}
         lifecycle:
