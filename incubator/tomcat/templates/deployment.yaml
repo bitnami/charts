@@ -28,7 +28,7 @@ spec:
                 - "/app{{ $key }}"
         volumeMounts:
         - mountPath: /app{{ $key }}
-          name: tomcat-data
+          name: {{ $.Values.webappsVolume.name }}
       {{- end }}
       {{- end }}
       - name: {{ template "fullname" . }}
@@ -62,10 +62,10 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: tomcat-data
-          mountPath: /bitnami/tomcat
+        - name: {{ .Values.webappsVolume.name }}
+          mountPath: {{ .Values.webappsVolume.deployDir }}
       volumes:
-      - name: tomcat-data
+      - name: {{ .Values.webappsVolume.name }}
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "fullname" . }}

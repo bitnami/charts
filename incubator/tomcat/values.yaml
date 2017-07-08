@@ -52,3 +52,10 @@ resources:
 #   tag: v2
 #   imagePullPolicy: IfNotPresent
 #   imageWarFileLoc: /sample.war
+
+## Volume Info
+## deployDir - The Tomcat webapps deployment directory for this image?
+## name: Volume name to mount to each container
+webappsVolume:
+  deployDir: /bitnami/tomcat/data
+  name: tomcat-data
