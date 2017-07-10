@@ -1,1 +1,3 @@
 .git
+tmp_chart/
+*.tgz

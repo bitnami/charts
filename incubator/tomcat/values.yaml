@@ -60,3 +60,41 @@ resources:
 webappsVolume:
   deployDir: /bitnami/tomcat/data
   name: tomcat-data
+
+## Additional Volume info.
+## Usually used to override conf files`
+# additionalVolumes:
+# - name: confs
+#     configMap:
+#       name: tomcat-config
+
+## Volume Mounts within the tomcat container
+## name - Which volume to mountPath
+## mountPath: where do you want it mounted
+## subPath: If using configMap, the singular file if only mounting files.
+##
+# tomcatVolumeMounts:
+# - name: confs
+#   mountPath: /bitnami/tomcat/conf/server.xml
+#   subPath: server.xml
+# - name: confs
+#   mountPath: /bitnami/tomcat/conf/web.xml
+#   subPath: web.xml
+# - name: confs
+#   mountPath: /bitnami/tomcat/conf/tomcat-users.xml
+#   subPath: tomcat-users.xml
+# - name: confs
+#   mountPath: /bitnami/tomcat/conf/context.xml
+#   subPath: context.xml
+# - name: confs
+#   mountPath: /bitnami/tomcat/conf/catalina.properties
+#   subPath: catalina.properties
+# - name: confs
+#   mountPath: /bitnami/tomcat/conf/catalina.policy
+#   subPath: catalina.policy
+# - name: confs
+#   mountPath: /bitnami/tomcat/conf/logging.properties
+#   subPath: logging.properties
+# - name: confs
+#   mountPath: /bitnami/tomcat/conf/jaspic-providers.xml
+#   subPath: jaspic-providers.xml

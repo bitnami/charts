@@ -25,7 +25,7 @@ spec:
         lifecycle:
           postStart:
             exec:
-              command: ["cp", "{{ $sidecar.imageWarFileLoc }}", "/app{{ $key }}"]
+              command: ["cp", "{{ $sidecar.imageWarFileLoc }}", "/app{{ $key }}/{{ $sidecar.imageWarDest }}"]
         volumeMounts:
         - mountPath: /app{{ $key }}
           name: {{ $.Values.webappsVolume.name }}
@@ -62,8 +62,19 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
+        {{- if .Values.webappsVolume }}
         - name: {{ .Values.webappsVolume.name }}
           mountPath: {{ .Values.webappsVolume.deployDir }}
+        {{- end }}
+        {{- if .Values.tomcatVolumeMounts }}
+{{ toYaml .Values.tomcatVolumeMounts | indent 8 }}
+        {{- end }}
+        - name: test-mount
+          mountPath: /bitnami/tomcat/conf/tomca.xml
+          subPath: MoquiProductionConf.xml
+        - name: test-mount
+          mountPath: /bitnami/tomcat/conf/req.yaml
+          subPath: requirements.yaml
       volumes:
       - name: {{ .Values.webappsVolume.name }}
       {{- if .Values.persistence.enabled }}
@@ -71,4 +82,7 @@ spec:
           claimName: {{ template "fullname" . }}
       {{- else }}
         emptyDir: {}
-      {{- end -}}
+      {{- end }}
+      {{- if .Values.additionalVolumes }}
+{{ toYaml .values.additionalVolumes | indent 6 }}
+      {{- end }}
