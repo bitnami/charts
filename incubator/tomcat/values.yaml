@@ -43,17 +43,6 @@ resources:
     memory: 512Mi
     cpu: 300m
 
-## Containers for war sidecar
-## ref: https://github.com/kubernetes/kubernetes/tree/master/examples/javaweb-tomcat-sidecar
-##
-# sidecar:
-# - name: sample
-#   image: resouer/sample
-#   tag: v2
-#   imagePullPolicy: IfNotPresent
-#   imageWarFileLoc: /sample.war
-#   command: ["tail", "-f", "/dev/null"]
-
 ## Volume Info
 ## deployDir - The Tomcat webapps deployment directory for this image?
 ## name: Volume name to mount to each container
@@ -67,6 +56,26 @@ webappsVolume:
 # - name: confs
 #     configMap:
 #       name: tomcat-config
+
+## Init Containers for WAR file
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+##
+# initContainers:
+# - name: sample
+#   image: resouer/sample
+#   tag: v2
+#   imagePullPolicy: IfNotPresent
+#   imageWarFileLoc: /sample.war
+#   imageWarDest: sample.war
+#   command: ["cp", "sample.war", "/app/"]
+#   volumeMounts:
+#   - mountPath: /app
+#     mountName: tomcat-data
+
+## Additional sidecar containers. Will be copied in as is
+## ref: https://github.com/kubernetes/kubernetes/tree/master/examples/javaweb-tomcat-sidecar
+## Might be beneficial if you want to keep the container running for a test setup that pulls from github
+# sidecarContainers:
 
 ## Volume Mounts within the tomcat container
 ## name - Which volume to mountPath
