@@ -50,12 +50,13 @@ webappsVolume:
   deployDir: /bitnami/tomcat/data
   name: tomcat-data
 
-## Additional Volume info.
-## Usually used to override conf files`
+## Additional Volume info is usually used to override conf files
+## ref - https://kubernetes.io/docs/api-reference/v1.7/#volume-v1-core
+##
 # additionalVolumes:
 # - name: confs
-#     configMap:
-#       name: tomcat-config
+#   configMap:
+#     name: tomcat-config
 
 ## Init Containers for WAR file
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
@@ -65,8 +66,6 @@ webappsVolume:
 #   image: resouer/sample
 #   tag: v2
 #   imagePullPolicy: IfNotPresent
-#   imageWarFileLoc: /sample.war
-#   imageWarDest: sample.war
 #   command: ["cp", "sample.war", "/app/"]
 #   volumeMounts:
 #   - mountPath: /app
@@ -78,9 +77,7 @@ webappsVolume:
 # sidecarContainers:
 
 ## Volume Mounts within the tomcat container
-## name - Which volume to mountPath
-## mountPath: where do you want it mounted
-## subPath: If using configMap, the singular file if only mounting files.
+## ref - https://kubernetes.io/docs/api-reference/v1.7/#volumemount-v1-core
 ##
 # tomcatVolumeMounts:
 # - name: confs

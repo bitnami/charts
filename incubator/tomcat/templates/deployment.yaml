@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       {{- if .Values.sidecarContainers }}
-{{ toYaml .Values.sidecarContainers }}
+{{ toYaml .Values.sidecarContainers | indent 6}}
       {{- end }}
       - name: {{ template "fullname" . }}
         image: "{{ .Values.image }}"
@@ -55,12 +55,6 @@ spec:
         {{- if .Values.tomcatVolumeMounts }}
 {{ toYaml .Values.tomcatVolumeMounts | indent 8 }}
         {{- end }}
-        - name: test-mount
-          mountPath: /bitnami/tomcat/conf/tomca.xml
-          subPath: MoquiProductionConf.xml
-        - name: test-mount
-          mountPath: /bitnami/tomcat/conf/req.yaml
-          subPath: requirements.yaml
       {{- if .Values.initContainers }}
       initContainers:
       {{- range $key, $container := .Values.initContainers }}
@@ -68,11 +62,14 @@ spec:
         image: {{ $container.image }}:{{ $container.tag }}
         imagePullPolicy: {{ $container.imagePullPolicy }}
         {{- if $container.command }}
-        command: {{ $container.command }}
+        command:
+        {{- range $container.command }}
+        - {{ . | quote }}
+        {{- end }}
         {{- end }}
         {{- if $container.volumeMounts }}
         volumeMounts:
-{{ toYaml $container.volumeMounts}}
+{{ toYaml $container.volumeMounts | indent 8 }}
         {{- end }}
       {{- end }}
       {{- end }}
