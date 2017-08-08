@@ -1,0 +1,81 @@
+## Bitnami Elasticsearch image version
+## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
+##
+image: bitnami/elasticsearch:5.5.1-r0
+
+## Specify a imagePullPolicy
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+imagePullPolicy: IfNotPresent
+
+## Elasticsearch cluster name
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+elasticsearchClusterName: elasticsearch-cluster
+
+## Elasticsearch node name
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+# elasticsearchNodeName:
+
+## Elasticsearch port
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+elasticsearchPortNumber: 9200
+
+## Elasticsearch Node to Node port
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+elasticsearchNodePortNumber: 9300
+
+## Elasticsearch hosts list (comma/colon seperated)
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+# elasticsearchClusterHosts:
+
+## Elasticsearch node to behave as a 'smart router' for Kibana app
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+elasticsearchClientNode: false
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+serviceType: ClusterIP
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+  ##
+  enabled: true
+
+  ## Persistent Volume Claim annotations
+  ##
+  annotations: {}
+
+  ## Persistent Volume existing claim name
+  # existingClaim:
+
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+
+  ## Persistent Volume Access Mode
+  accessModes:
+    - ReadWriteOnce
+
+  ## Persistent Volume size
+  ##
+  size: 8Gi
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}

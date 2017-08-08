@@ -1,0 +1,13 @@
+name: elasticsearch
+version: 0.0.1
+description: Chart for Elasticsearch
+keywords:
+- elasticsearch
+home: https://www.elastic.co/products/elasticsearch
+sources:
+- https://github.com/bitnami/bitnami-docker-elasticsearch
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-110x117.png
