@@ -27,6 +27,8 @@ spec:
               key: postgresql-password
         - name: POSTGRESQL_DATABASE
           value: {{ default "" .Values.postgresqlDatabase | quote }}
+        - name: POD_IP
+          valueFrom: { fieldRef: { fieldPath: status.podIP } }
         ports:
         - name: postgresql
           containerPort: 5432
