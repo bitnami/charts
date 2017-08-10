@@ -1,6 +1,6 @@
 name: node
-version: 0.1.20
-appVersion: 8.2.1
+version: 0.1.21
+appVersion: 8.3.0
 description: Event-driven I/O server-side JavaScript environment based on V8
 keywords:
 - node
