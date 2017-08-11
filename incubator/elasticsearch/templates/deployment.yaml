@@ -13,19 +13,18 @@ spec:
       labels:
         app: "{{ template "name" . }}"
         release: "{{ .Release.Name }}"
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[
-          {
-            "name": "sysctl",
-            "image": "{{ .Values.image }}",
-            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
-            "securityContext": {
-              "privileged": true
-            }
-          }
-        ]'
     spec:
+      initContainers:
+      - name: sysctl
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        command:
+        - bash
+        - -c
+        - |
+          sysctl -w vm.max_map_count=262144
+        securityContext:
+          privileged: true
       containers:
       - name: "{{ template "fullname" . }}"
         image: "{{ .Values.image }}"
