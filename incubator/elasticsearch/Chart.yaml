@@ -1,7 +1,7 @@
 name: elasticsearch
 version: 0.0.1
 appVersion: 5.5.1
-description: Chart for Elasticsearch
+description: A highly scalable open-source full-text search and analytics engine
 keywords:
 - elasticsearch
 home: https://www.elastic.co/products/elasticsearch
