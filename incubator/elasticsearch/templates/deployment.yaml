@@ -1,0 +1,72 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "fullname" . }}"
+  labels:
+    app: "{{ template "name" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  template:
+    metadata:
+      labels:
+        app: "{{ template "name" . }}"
+        release: "{{ .Release.Name }}"
+    spec:
+      initContainers:
+      - name: sysctl
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        command:
+        - bash
+        - -c
+        - |
+          sysctl -w vm.max_map_count=262144
+        securityContext:
+          privileged: true
+      containers:
+      - name: "{{ template "fullname" . }}"
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        env:
+        - name: ELASTICSEARCH_CLUSTER_NAME
+          value: "{{ .Values.elasticsearchClusterName }}"
+        - name: ELASTICSEARCH_NODE_NAME
+          value: "{{ .Values.elasticsearchNodeName }}"
+        - name: ELASTICSEARCH_PORT_NUMBER
+          value: "{{ .Values.elasticsearchPortNumber }}"
+        - name: ELASTICSEARCH_NODE_PORT_NUMBER
+          value: "{{ .Values.elasticsearchNodePortNumber }}"
+        - name: ELASTICSEARCH_CLUSTER_HOSTS
+          value: "{{ .Values.elasticsearchClusterHosts }}"
+        - name: ELASTICSEARCH_CLIENT_NODE
+          value: "{{ .Values.elasticsearchClientNode }}"
+        ports:
+        - name: "rest"
+          containerPort: {{ .Values.elasticsearchPortNumber }}
+        - name: transport
+          containerPort: {{ .Values.elasticsearchNodePortNumber }}
+        livenessProbe:
+          httpGet:
+            path: /_cluster/health?local=true
+            port: "rest"
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /_cluster/health?local=true
+            port: "rest"
+          initialDelaySeconds: 5
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: "data"
+          mountPath: "/bitnami"
+      volumes:
+      - name: "data"
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: "{{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "fullname" . }}{{- end }}"
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}

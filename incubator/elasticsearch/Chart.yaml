@@ -1,0 +1,14 @@
+name: elasticsearch
+version: 0.0.1
+appVersion: 5.5.1
+description: A highly scalable open-source full-text search and analytics engine
+keywords:
+- elasticsearch
+home: https://www.elastic.co/products/elasticsearch
+sources:
+- https://github.com/bitnami/bitnami-docker-elasticsearch
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-110x117.png
