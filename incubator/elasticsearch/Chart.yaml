@@ -1,5 +1,6 @@
 name: elasticsearch
 version: 0.0.1
+appVersion: 5.5.1
 description: Chart for Elasticsearch
 keywords:
 - elasticsearch
