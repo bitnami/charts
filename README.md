@@ -5,6 +5,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [Apache (incubator)](https://github.com/bitnami/charts/tree/master/incubator/apache)
 - [Dokuwiki (incubator)](https://github.com/kubernetes/charts/tree/master/stable/dokuwiki)
 - [Drupal (stable)](https://github.com/kubernetes/charts/tree/master/stable/drupal)
+- [Elasticsearch (incubator)](https://github.com/bitnami/charts/tree/master/incubator/elasticsearch)
 - [Ghost (stable)](https://github.com/kubernetes/charts/tree/master/stable/ghost)
 - [JasperReports Server (incubator)](https://github.com/kubernetes/charts/tree/master/stable/jasperreports)
 - [Jenkins (incubator)](https://github.com/bitnami/charts/tree/master/incubator/jenkins)
