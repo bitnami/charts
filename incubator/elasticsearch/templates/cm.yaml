@@ -10,9 +10,13 @@ metadata:
 data:
   elasticsearch_custom.yml: |-
 
-      cloud:
-        kubernetes:
-          service: ${SERVICE}
-          namespace: ${KUBERNETES_NAMESPACE}
-      discovery.zen.hosts_provider: kubernetes
-      plugin.mandatory: discovery-kubernetes
+    cloud:
+      kubernetes:
+        service: ${SERVICE}
+        namespace: ${KUBERNETES_NAMESPACE}
+    discovery.zen.hosts_provider: kubernetes
+    plugin.mandatory: discovery-kubernetes
+
+{{- if .Values.elasticsearchConfig }}
+{{ toYaml .Values.elasticsearchConfig | indent 4 }}
+{{- end }}

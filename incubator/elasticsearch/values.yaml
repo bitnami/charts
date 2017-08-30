@@ -63,6 +63,8 @@ persistence:
   ##
   size: 8Gi
 
+elasticsearchConfig:
+
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
