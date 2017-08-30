@@ -1,22 +1,23 @@
 ## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
 ##
-image: bitnami/elasticsearch:5.5.1-r0
+image: bitnami/elasticsearch:5.5.1-r1
 
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 imagePullPolicy: IfNotPresent
 
+replicas: 3
+
+serviceAccountName: default
+
+elasticsearchHeapSize: 256m
+
 ## Elasticsearch cluster name
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
 elasticsearchClusterName: elasticsearch-cluster
-
-## Elasticsearch node name
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-##
-# elasticsearchNodeName:
 
 ## Elasticsearch port
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
@@ -27,16 +28,6 @@ elasticsearchPortNumber: 9200
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
 elasticsearchNodePortNumber: 9300
-
-## Elasticsearch hosts list (comma/colon seperated)
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-##
-# elasticsearchClusterHosts:
-
-## Elasticsearch node to behave as a 'smart router' for Kibana app
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-##
-elasticsearchClientNode: false
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -54,9 +45,6 @@ persistence:
   ## Persistent Volume Claim annotations
   ##
   annotations: {}
-
-  ## Persistent Volume existing claim name
-  # existingClaim:
 
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>

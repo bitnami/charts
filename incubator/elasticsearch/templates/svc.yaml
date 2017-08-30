@@ -10,9 +10,9 @@ metadata:
 spec:
   type: "{{ .Values.serviceType }}"
   ports:
-  - name: "rest"
+  - name: "http"
     port: {{ .Values.elasticsearchPortNumber }}
-    targetPort: "rest"
+    targetPort: "http"
   - name: "transport"
     port: {{ .Values.elasticsearchNodePortNumber }}
     targetPort: "transport"

@@ -1,5 +1,5 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   name: "{{ template "fullname" . }}"
   labels:
@@ -8,21 +8,20 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  serviceName: "{{ template "fullname" . }}"
+  replicas: {{ .Values.replicas }}
   template:
     metadata:
       labels:
         app: "{{ template "name" . }}"
         release: "{{ .Release.Name }}"
     spec:
+      serviceAccountName: "{{ .Values.serviceAccountName }}"
       initContainers:
       - name: sysctl
         image: "{{ .Values.image }}"
         imagePullPolicy: "{{ .Values.imagePullPolicy }}"
-        command:
-        - bash
-        - -c
-        - |
-          sysctl -w vm.max_map_count=262144
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
@@ -30,43 +29,69 @@ spec:
         image: "{{ .Values.image }}"
         imagePullPolicy: "{{ .Values.imagePullPolicy }}"
         env:
+        - name: SERVICE
+          value: "{{ template "fullname" . }}"
+        - name: KUBERNETES_NAMESPACE
+          value: "{{ .Release.Namespace }}"
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: "{{ .Values.elasticsearchClusterName }}"
-        - name: ELASTICSEARCH_NODE_NAME
-          value: "{{ .Values.elasticsearchNodeName }}"
         - name: ELASTICSEARCH_PORT_NUMBER
           value: "{{ .Values.elasticsearchPortNumber }}"
         - name: ELASTICSEARCH_NODE_PORT_NUMBER
           value: "{{ .Values.elasticsearchNodePortNumber }}"
-        - name: ELASTICSEARCH_CLUSTER_HOSTS
-          value: "{{ .Values.elasticsearchClusterHosts }}"
-        - name: ELASTICSEARCH_CLIENT_NODE
-          value: "{{ .Values.elasticsearchClientNode }}"
+        - name: ELASTICSEARCH_PLUGINS
+          value: "io.fabric8:elasticsearch-cloud-kubernetes:5.5.1"
+        - name: ES_JAVA_OPTS
+          value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.elasticsearchHeapSize }} -Xmx{{ .Values.elasticsearchHeapSize }}"
         ports:
-        - name: "rest"
+        - name: "http"
           containerPort: {{ .Values.elasticsearchPortNumber }}
         - name: transport
           containerPort: {{ .Values.elasticsearchNodePortNumber }}
         livenessProbe:
           httpGet:
             path: /_cluster/health?local=true
-            port: "rest"
+            port: "http"
           initialDelaySeconds: 30
         readinessProbe:
           httpGet:
             path: /_cluster/health?local=true
-            port: "rest"
+            port: "http"
           initialDelaySeconds: 5
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
+        - mountPath: /bitnami/elasticsearch/conf/elasticsearch_custom.yml
+          name: "config"
+          subPath: elasticsearch_custom.yml
         - name: "data"
           mountPath: "/bitnami"
       volumes:
+      - name: "config"
+        configMap:
+          name: "{{ template "fullname" . }}"
+{{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: "data"
+{{- if .Values.persistence.annotations }}
+      annotations:
+{{ toYaml .Values.persistence.annotations | indent 6 }}
+{{- end }}
+    spec:
+      accessModes:
+{{ toYaml .Values.persistence.accessModes | indent 6 }}
+{{- if .Values.persistence.storageClass }}
+{{- if (eq "-" .Values.persistence.storageClass) }}
+      storageClassName: ""
+{{- else }}
+      storageClassName: "{{ .Values.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+      resources:
+        requests:
+          storage: "{{ .Values.persistence.size }}"
+{{- else }}
       - name: "data"
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: "{{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "fullname" . }}{{- end }}"
-      {{- else }}
         emptyDir: {}
-      {{- end -}}
+{{- end }}

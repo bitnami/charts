@@ -48,15 +48,11 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | `image`                       | Elasticsearch image                                             | `bitnami/elasticsearch:{VERSION}` |
 | `imagePullPolicy`             | Image pull policy                                               | `IfNotPresent`                    |
 | `elasticsearchClusterName`    | Elasticsearch cluster name                                      | `elasticsearch-cluster`           |
-| `elasticsearchNodeName`       | Elasticsearch node name                                         | ``                                |
 | `elasticsearchPortNumber`     | Elasticsearch port                                              | `9200`                            |
 | `elasticsearchNodePortNumber` | Elasticsearch Node to Node port                                 | `9300`                            |
-| `elasticsearchClusterHosts`   | Elasticsearch hosts list (comma/colon seperated)                | ``                                |
-| `elasticsClientNode`          | Elasticsearch node to behave as a 'smart router' for Kibana app | `false`                           |
 | `serviceType`                 | Kubernetes Service type                                         | `ClusterIP`                       |
 | `persistence.enabled`         | Enable persistence using a `PersistentVolumeClaim`              | `true`                            |
 | `persistence.annotations`     | Persistent Volume Claim annotations                             | `{}`                              |
-| `persistence.existingClaim`   | Persistent Volume existing claim name                           | ``                                |
 | `persistence.storageClass`    | Persistent Volume Storage Class                                 | ``                                |
 | `persistence.accessModes`     | Persistent Volume Access Modes                                  | `[ReadWriteOnce]`                 |
 | `persistence.size`            | Persistent Volume Size                                          | `8Gi`                             |
