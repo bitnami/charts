@@ -8,14 +8,15 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  type: "{{ .Values.serviceType }}"
+  type: "{{ .Values.service.type }}"
   ports:
   - name: "http"
-    port: {{ .Values.elasticsearchPortNumber }}
+    port: {{ .Values.service.port.http }}
     targetPort: "http"
   - name: "transport"
-    port: {{ .Values.elasticsearchNodePortNumber }}
+    port: {{ .Values.service.port.transport }}
     targetPort: "transport"
   selector:
     app: "{{ template "name" . }}"
     release: "{{ .Release.Name }}"
+    component: "master"

@@ -10,6 +10,9 @@ metadata:
 data:
   elasticsearch_custom.yml: |-
 
+    node.master: ${NODE_MASTER}
+    node.data: ${NODE_DATA}
+
     cloud:
       kubernetes:
         service: ${SERVICE}
@@ -17,6 +20,6 @@ data:
     discovery.zen.hosts_provider: kubernetes
     plugin.mandatory: discovery-kubernetes
 
-{{- if .Values.elasticsearchConfig }}
-{{ toYaml .Values.elasticsearchConfig | indent 4 }}
+{{- if .Values.cluster.config }}
+{{ toYaml .Values.cluster.config | indent 4 }}
 {{- end }}

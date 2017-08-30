@@ -1,38 +1,37 @@
-{{- if contains .Values.serviceType "LoadBalancer" }}
+{{- if contains .Values.service.type "LoadBalancer" }}
 
 -------------------------------------------------------------------------------
  WARNING
 
-    By specifying "serviceType=LoadBalancer" you have most likely exposed the
+    By specifying "service.type=LoadBalancer" you have most likely exposed the
     Elasticsearch service externally. Please note that Elasticsearch does not
     implement a authentication mechanism to secure your cluster.
 
-    For security reasons, we strongly suggest that you switch to using "ClusterIP"
-    or "NodePort" as the "serviceType".
+    For security reasons, we strongly suggest that you switch to using "ClusterIP" or "NodePort".
 -------------------------------------------------------------------------------
 {{- end }}
 
 ** Please be patient while the chart is being deployed **
 
-  Elasticsearch can be accessed within the cluster on port {{ .Values.elasticsearchPortNumber }} at {{ template "fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  Elasticsearch can be accessed within the cluster on port {{ .Values.service.port.http }} at {{ template "fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
   To access from outside the cluster execute the following commands:
 
-{{- if contains "NodePort" .Values.serviceType }}
+{{- if contains "NodePort" .Values.service.type }}
 
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo http://$NODE_IP:$NODE_PORT/
-{{- else if contains "LoadBalancer" .Values.serviceType }}
+{{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo http://$SERVICE_IP:{{ .Values.elasticsearchPortNumber }}/
-{{- else if contains "ClusterIP"  .Values.serviceType }}
+    echo http://$SERVICE_IP:{{ .Values.service.port.http }}/
+{{- else if contains "ClusterIP"  .Values.service.type }}
 
     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-    echo http://127.0.0.1:{{ .Values.elasticsearchPortNumber }}/
-    kubectl port-forward $POD_NAME {{ .Values.elasticsearchPortNumber }}:{{ .Values.elasticsearchPortNumber }}
+    echo http://127.0.0.1:{{ .Values.service.port.http }}/
+    kubectl port-forward $POD_NAME {{ .Values.service.port.http }}:{{ .Values.service.port.http }}
 {{- end }}

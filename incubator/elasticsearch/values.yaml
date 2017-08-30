@@ -1,73 +1,81 @@
-## Bitnami Elasticsearch image version
-## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
-##
-image: bitnami/elasticsearch:5.5.1-r1
-
-## Specify a imagePullPolicy
-## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-##
-imagePullPolicy: IfNotPresent
-
-replicas: 3
-
-serviceAccountName: default
-
-elasticsearchHeapSize: 256m
-
-## Elasticsearch cluster name
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-##
-elasticsearchClusterName: elasticsearch-cluster
-
-## Elasticsearch port
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-##
-elasticsearchPortNumber: 9200
-
-## Elasticsearch Node to Node port
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-##
-elasticsearchNodePortNumber: 9300
-
-elasticsearchPlugins: io.fabric8:elasticsearch-cloud-kubernetes:5.5.1
-
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
-##
-serviceType: ClusterIP
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+image:
+  ## Elasticsearch image
+  ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
+  name: bitnami/elasticsearch
+  tag: 5.5.2-r0
+  ## Specify a imagePullPolicy
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  enabled: true
+  pullPolicy: IfNotPresent
 
-  ## Persistent Volume Claim annotations
+service:
+  ## For minikube, set this to NodePort, elsewhere use LoadBalancer
   ##
-  annotations: {}
+  type: ClusterIP
+  port:
+    ## Elasticsearch REST port
+    ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+    ##
+    http: 9200
+    ## Elasticsearch transport port
+    ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+    ##
+    transport: 9300
 
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
+cluster:
+  ## Elasticsearch cluster name
+  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
   ##
-  # storageClass: "-"
+  name: elasticsearch-cluster
+  serviceAccountName: default
+  plugins: io.fabric8:elasticsearch-cloud-kubernetes:5.5.2
+  config:
 
-  ## Persistent Volume Access Mode
-  accessModes:
-    - ReadWriteOnce
+node:
+  master:
+    replicas: 1
+    heapSize: 256m
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      requests:
+        memory: "256Mi"
 
-  ## Persistent Volume size
-  ##
-  size: 8Gi
+  data:
+    replicas: 3
+    heapSize: 256m
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      requests:
+        memory: "256Mi"
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
+    persistence:
+      ## If true, use a Persistent Volume Claim, If false, use emptyDir
+      ##
+      enabled: true
 
-elasticsearchConfig:
+      ## Persistent Volume Claim annotations
+      ##
+      annotations: {}
 
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources: {}
+      ## Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      # storageClass: "-"
+
+      ## Persistent Volume Access Mode
+      accessModes:
+      - ReadWriteOnce
+
+      ## Persistent Volume size
+      ##
+      size: 8Gi
