@@ -29,6 +29,8 @@ elasticsearchPortNumber: 9200
 ##
 elasticsearchNodePortNumber: 9300
 
+elasticsearchPlugins: io.fabric8:elasticsearch-cloud-kubernetes:5.5.1
+
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##

@@ -40,7 +40,7 @@ spec:
         - name: ELASTICSEARCH_NODE_PORT_NUMBER
           value: "{{ .Values.elasticsearchNodePortNumber }}"
         - name: ELASTICSEARCH_PLUGINS
-          value: "io.fabric8:elasticsearch-cloud-kubernetes:5.5.1"
+          value: "{{ .Values.elasticsearchPlugins }}"
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.elasticsearchHeapSize }} -Xmx{{ .Values.elasticsearchHeapSize }}"
         ports:
