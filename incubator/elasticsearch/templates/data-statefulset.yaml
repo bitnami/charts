@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: "{{ template "fullname" . }}-data"
+  name: "{{ template "data.fullname" . }}"
   labels:
     app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -9,7 +9,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  serviceName: "{{ template "fullname" . }}-data"
+  serviceName: "{{ template "data.fullname" . }}"
   replicas: {{ .Values.node.data.replicas }}
   template:
     metadata:

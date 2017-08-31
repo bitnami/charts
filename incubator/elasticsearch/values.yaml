@@ -33,6 +33,7 @@ cluster:
 
 node:
   master:
+    name: master
     replicas: 1
     heapSize: 256m
     ## Configure resource requests and limits
@@ -43,6 +44,7 @@ node:
         memory: "256Mi"
 
   data:
+    name: data
     replicas: 3
     heapSize: 256m
     ## Configure resource requests and limits
