@@ -25,6 +25,8 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: tomcat-password
+        - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
+          value: {{ default "" .Values.allowRemoteManagement | quote }}
         ports:
         - name: http
           containerPort: 8080
