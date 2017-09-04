@@ -31,27 +31,11 @@ spec:
             "name": "npm-install",
             "image": "{{ .Values.image }}",
             "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "npm install" ],
+            "command": [ "npm", "install" ],
             "volumeMounts": [
               {
                 "name": "app",
                 "mountPath": "/app"
-              }
-            ]
-          },
-          {
-            "name": "fix-permissions",
-            "image": "{{ .Values.image }}",
-            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "chown bitnami: -R /app /home/bitnami {{ .Values.persistence.path }}" ],
-            "volumeMounts": [
-              {
-                "name": "app",
-                "mountPath": "/app"
-              },
-              {
-                "name": "data",
-                "mountPath": "{{ .Values.persistence.path }}"
               }
             ]
           }
@@ -66,10 +50,7 @@ spec:
         env:
         - name: GIT_REPO
           value: {{ .Values.repository }}
-        command:
-        - /bin/bash
-        - -ec
-        - sudo -HEu bitnami npm start
+        command: [ "npm", "start" ]
         ports:
         - name: http
           containerPort: 3000
