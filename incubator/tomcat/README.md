@@ -55,6 +55,8 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `persistence.accessMode`   | PVC Access Mode for Tomcat volume     | `ReadWriteOnce`                             |
 | `persistence.size`         | PVC Storage Request for Tomcat volume | `8Gi`                                       |
 | `resources`                | CPU/Memory resource requests/limits   | Memory: `512Mi`, CPU: `300m`                |
+| `allowRemoteManagement`    | Enable remote management of Tomcat    | `false`                                     |
+
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
