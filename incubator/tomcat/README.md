@@ -43,20 +43,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Tomcat chart and their default values.
 
-|         Parameter          |              Description              |                   Default                   |
-|----------------------------|---------------------------------------|---------------------------------------------|
-| `image`                    | Tomcat image                          | `bitnami/tomcat:{VERSION}`                  |
-| `imagePullPolicy`          | Image pull policy                     | `IfNotPresent`                              |
-| `tomcatUsername`           | Tomcat admin user                     | `user`                                      |
-| `tomcatPassword`           | Tomcat admin password                 | _random 10 character alphanumeric string_   |
-| `serviceType`              | Kubernetes Service type               | `LoadBalancer`                              |
-| `persistence.enabled`      | Enable persistence using PVC          | `true`                                      |
-| `persistence.storageClass` | PVC Storage Class for Tomcat volume   | `nil` (uses alpha storage class annotation) |
-| `persistence.accessMode`   | PVC Access Mode for Tomcat volume     | `ReadWriteOnce`                             |
-| `persistence.size`         | PVC Storage Request for Tomcat volume | `8Gi`                                       |
-| `resources`                | CPU/Memory resource requests/limits   | Memory: `512Mi`, CPU: `300m`                |
-| `allowRemoteManagement`    | Enable remote management of Tomcat    | `0`, `1` to enable it                  |
-
+|           Parameter           |                 Description                  |                   Default                   |
+|-------------------------------|----------------------------------------------|---------------------------------------------|
+| `image`                       | Tomcat image                                 | `bitnami/tomcat:{VERSION}`                  |
+| `imagePullPolicy`             | Image pull policy                            | `IfNotPresent`                              |
+| `tomcatUsername`              | Tomcat admin user                            | `user`                                      |
+| `tomcatPassword`              | Tomcat admin password                        | _random 10 character alphanumeric string_   |
+| `tomcatAllowRemoteManagement` | Enable remote access to management interface | `0` (disabled)                              |
+| `serviceType`                 | Kubernetes Service type                      | `LoadBalancer`                              |
+| `persistence.enabled`         | Enable persistence using PVC                 | `true`                                      |
+| `persistence.storageClass`    | PVC Storage Class for Tomcat volume          | `nil` (uses alpha storage class annotation) |
+| `persistence.accessMode`      | PVC Access Mode for Tomcat volume            | `ReadWriteOnce`                             |
+| `persistence.size`            | PVC Storage Request for Tomcat volume        | `8Gi`                                       |
+| `resources`                   | CPU/Memory resource requests/limits          | Memory: `512Mi`, CPU: `300m`                |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
