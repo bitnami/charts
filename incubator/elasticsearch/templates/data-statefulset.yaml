@@ -32,7 +32,7 @@ spec:
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         env:
         - name: SERVICE
-          value: "{{ template "fullname" . }}"
+          value: "{{ template "fullname" . }}-transport"
         - name: KUBERNETES_NAMESPACE
           value: "{{ .Release.Namespace }}"
         - name: NODE_MASTER
