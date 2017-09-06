@@ -28,5 +28,5 @@ data:
       mandatory: discovery-kubernetes
 
 {{- if .Values.cluster.config }}
-{{ toYaml .Values.cluster.config | indent 4 }}
+{{ toYaml .Values.node.config | indent 4 }}
 {{- end }}

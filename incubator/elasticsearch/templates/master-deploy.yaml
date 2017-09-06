@@ -45,7 +45,7 @@ spec:
         - name: ELASTICSEARCH_NODE_PORT_NUMBER
           value: "{{ .Values.service.port.transport }}"
         - name: ELASTICSEARCH_PLUGINS
-          value: "{{ .Values.cluster.plugins }}"
+          value: "{{ .Values.node.plugins }}"
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.node.master.heapSize }} -Xmx{{ .Values.node.master.heapSize }}"
         ports:
