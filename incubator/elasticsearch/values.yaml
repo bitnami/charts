@@ -12,15 +12,11 @@ service:
   ## For minikube, set this to NodePort, elsewhere use LoadBalancer
   ##
   type: ClusterIP
+  ## Elasticsearch REST port
+  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+  ##
   port:
-    ## Elasticsearch REST port
-    ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-    ##
     http: 9200
-    ## Elasticsearch transport port
-    ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-    ##
-    transport: 9300
 
 cluster:
   ## Elasticsearch cluster name

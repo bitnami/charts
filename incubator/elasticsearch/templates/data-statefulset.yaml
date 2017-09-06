@@ -42,18 +42,18 @@ spec:
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: "{{ .Values.cluster.name }}"
         - name: ELASTICSEARCH_PORT_NUMBER
-          value: "{{ .Values.service.port.http }}"
+          value: "9200"
         - name: ELASTICSEARCH_NODE_PORT_NUMBER
-          value: "{{ .Values.service.port.transport }}"
+          value: "9300"
         - name: ELASTICSEARCH_PLUGINS
           value: "{{ .Values.node.plugins }}"
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.node.data.heapSize }} -Xmx{{ .Values.node.data.heapSize }}"
         ports:
         - name: "http"
-          containerPort: {{ .Values.service.port.http }}
+          containerPort: 9200
         - name: transport
-          containerPort: {{ .Values.service.port.transport }}
+          containerPort: 9300
         livenessProbe:
           httpGet:
             path: /_cluster/health?local=true
