@@ -10,15 +10,21 @@ metadata:
 data:
   elasticsearch_custom.yml: |-
 
-    node.master: ${NODE_MASTER}
-    node.data: ${NODE_DATA}
+    node:
+      master: ${NODE_MASTER}
+      data: ${NODE_DATA}
 
     cloud:
       kubernetes:
         service: ${SERVICE}
         namespace: ${KUBERNETES_NAMESPACE}
-    discovery.zen.hosts_provider: kubernetes
-    plugin.mandatory: discovery-kubernetes
+
+    discovery:
+      zen:
+        hosts_provider: kubernetes
+
+    plugin:
+      mandatory: discovery-kubernetes
 
 {{- if .Values.cluster.config }}
 {{ toYaml .Values.cluster.config | indent 4 }}
