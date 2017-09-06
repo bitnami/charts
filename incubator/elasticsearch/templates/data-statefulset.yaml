@@ -18,7 +18,7 @@ spec:
         component: "data"
         release: "{{ .Release.Name }}"
     spec:
-      serviceAccountName: "{{ .Values.cluster.serviceAccountName }}"
+      serviceAccountName: "{{ .Values.node.serviceAccountName }}"
       initContainers:
       - name: sysctl
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"

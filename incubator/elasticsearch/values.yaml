@@ -23,10 +23,10 @@ cluster:
   ##
   port:
     http: 9200
-  ## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
-  serviceAccountName: default
 
 node:
+  ## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
+  serviceAccountName: default
   ## Comma seperated list of plugins
   ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
   ##
