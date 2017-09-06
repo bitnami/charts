@@ -27,7 +27,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-      - name: "{{ template "fullname" . }}"
+      - name: "elasticsearch"
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         env:
