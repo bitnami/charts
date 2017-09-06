@@ -40,7 +40,7 @@ cluster:
 node:
   master:
     name: master
-    replicas: 1
+    replicas: 2
     heapSize: 256m
     ## Configure resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

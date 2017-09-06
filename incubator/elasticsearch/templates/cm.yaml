@@ -22,6 +22,7 @@ data:
     discovery:
       zen:
         hosts_provider: kubernetes
+        minimum_master_nodes: 2
 
     plugin:
       mandatory: discovery-kubernetes
