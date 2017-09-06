@@ -52,13 +52,13 @@ node:
   data:
     name: data
     replicas: 3
-    heapSize: 256m
+    heapSize: 1024m
     ## Configure resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources:
       requests:
-        memory: "256Mi"
+        memory: "512Mi"
     ## Enable persistence using Persistent Volume Claims
     ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
     ##
