@@ -11,8 +11,8 @@ data:
   elasticsearch_custom.yml: |-
 
     node:
-      master: ${NODE_MASTER}
-      data: ${NODE_DATA}
+      master: ${NODE_MASTER:true}
+      data: ${NODE_DATA:true}
 
     cloud:
       kubernetes:
