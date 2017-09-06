@@ -30,7 +30,7 @@ spec:
   type: "{{ .Values.service.type }}"
   ports:
   - name: "http"
-    port: {{ .Values.service.port.http }}
+    port: {{ .Values.cluster.port.http }}
     targetPort: "http"
   selector:
     app: "{{ template "name" . }}"
