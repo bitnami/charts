@@ -2,7 +2,7 @@
 
 [Elasticsearch](https://www.elastic.co/products/elasticsearch) is a highly scalable open-source full-text search and analytics engine. It allows you to store, search, and analyze big volumes of data quickly and in near real time.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm install incubator/elasticsearch
@@ -43,24 +43,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Elasticsearch chart and their default values.
 
-|           Parameter           |                           Description                           |              Default              |
-|-------------------------------|-----------------------------------------------------------------|-----------------------------------|
-| `image`                       | Elasticsearch image                                             | `bitnami/elasticsearch:{VERSION}` |
-| `imagePullPolicy`             | Image pull policy                                               | `IfNotPresent`                    |
-| `elasticsearchClusterName`    | Elasticsearch cluster name                                      | `elasticsearch-cluster`           |
-| `elasticsearchNodeName`       | Elasticsearch node name                                         | ``                                |
-| `elasticsearchPortNumber`     | Elasticsearch port                                              | `9200`                            |
-| `elasticsearchNodePortNumber` | Elasticsearch Node to Node port                                 | `9300`                            |
-| `elasticsearchClusterHosts`   | Elasticsearch hosts list (comma/colon seperated)                | ``                                |
-| `elasticsClientNode`          | Elasticsearch node to behave as a 'smart router' for Kibana app | `false`                           |
-| `serviceType`                 | Kubernetes Service type                                         | `ClusterIP`                       |
-| `persistence.enabled`         | Enable persistence using a `PersistentVolumeClaim`              | `true`                            |
-| `persistence.annotations`     | Persistent Volume Claim annotations                             | `{}`                              |
-| `persistence.existingClaim`   | Persistent Volume existing claim name                           | ``                                |
-| `persistence.storageClass`    | Persistent Volume Storage Class                                 | ``                                |
-| `persistence.accessModes`     | Persistent Volume Access Modes                                  | `[ReadWriteOnce]`                 |
-| `persistence.size`            | Persistent Volume Size                                          | `8Gi`                             |
-| `resources`                   | CPU/Memory resource requests/limits                             | ``                                |
+|             Parameter              |                      Description                      |                               Default                               |
+|------------------------------------|-------------------------------------------------------|---------------------------------------------------------------------|
+| image.name                         | Elasticsearch image name                              | `bitnami/elasticsearch`                                             |
+| image.tag                          | Elasticsearch image tag                               | `{VERSION}`                                                         |
+| image.pullPolicy                   | Image pull policy                                     | `IfNotPresent`                                                      |
+| service.type                       | Kubernetes service type                               | `ClusterIP`                                                         |
+| cluster.name                       | Elasticsearch cluster name                            | `elasticsearch-cluster`                                             |
+| cluster.port.http                  | Elasticsearch REST port                               | `9200`                                                              |
+| node.serviceAccountName            | Kubernetes service account                            | `default`                                                           |
+| node.plugins                       | Elasticsearch node plugins                            | `io.fabric8:elasticsearch-cloud-kubernetes:5.5.2` (required plugin) |
+| node.config                        | Elasticsearch node custom configuration               | ``                                                                  |
+| node.master.name                   | Master node pod name                                  | `master`                                                            |
+| node.master.replicas               | Desired number of Elasticsearch master eligible nodes | `2`                                                                 |
+| node.master.heapSize               | master node heap size                                 | `128m`                                                              |
+| node.master.resources              | CPU/Memory resource requests/limits for master nodes  | `{ memory: "256Mi" }`                                               |
+| node.data.name                     | Data node pod name                                    | `data`                                                              |
+| node.data.replicas                 | Desired number of Elasticsearch data eligible nodes   | `3`                                                                 |
+| node.data.heapSize                 | data node heap size                                   | `1024m`                                                             |
+| node.data.resources                | CPU/Memory resource requests/limits for data nodes    | `{ memory: "512Mi" }`                                               |
+| node.data.persistence.enabled      | Enable persistence using a `PersistentVolumeClaim`    | `true`                                                              |
+| node.data.persistence.annotations  | Persistent Volume Claim annotations                   | `{}`                                                                |
+| node.data.persistence.storageClass | Persistent Volume Storage Class                       | ``                                                                  |
+| node.data.persistence.accessModes  | Persistent Volume Access Modes                        | `[ReadWriteOnce]`                                                   |
+| node.data.persistence.size         | Persistent Volume Size                                | `8Gi`                                                               |
 
 The above parameters map to the env variables defined in [bitnami/elasticsearch](http://github.com/bitnami/bitnami-docker-elasticsearch). For more information please refer to the [bitnami/elasticsearch](http://github.com/bitnami/bitnami-docker-elasticsearch) image documentation.
 
@@ -68,11 +74,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set elasticsearchClusterName=elastic,elasticsearchPortNumber=80 \
+  --set cluster.name=elastic,cluster.port.http=8080 \
   incubator/elasticsearch
 ```
 
-The above command sets the Elasticsearch cluster name and REST api port number to `elastic` and `80` respectively.
+The above command sets the Elasticsearch cluster name to `elastic` and REST port number to `8080`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -84,7 +90,5 @@ $ helm install --name my-release -f values.yaml incubator/elasticsearch
 
 ## Persistence
 
-The [Bitnami Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) image stores the Elasticsearch data and configurations at the `/bitnami` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+The [Bitnami Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) image stores the Elasticsearch data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to persist the state of the data processing Elasticsearch nodes. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.

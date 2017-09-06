@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  elasticsearch_custom.yml: |-
+
+    node:
+      name: ${HOSTNAME}
+      master: ${NODE_MASTER:true}
+      data: ${NODE_DATA:true}
+
+    cloud:
+      kubernetes:
+        service: ${SERVICE}
+        namespace: ${KUBERNETES_NAMESPACE}
+
+    discovery:
+      zen:
+        hosts_provider: kubernetes
+        minimum_master_nodes: 2
+
+    plugin:
+      mandatory: discovery-kubernetes
+
+{{- if .Values.cluster.config }}
+{{ toYaml .Values.node.config | indent 4 }}
+{{- end }}

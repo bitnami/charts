@@ -1,0 +1,79 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "master.fullname" . }}"
+  labels:
+    app: "{{ template "name" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: "master"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.node.master.replicas }}
+  template:
+    metadata:
+      labels:
+        app: "{{ template "name" . }}"
+        component: "master"
+        release: "{{ .Release.Name }}"
+    spec:
+      serviceAccountName: "{{ .Values.node.serviceAccountName }}"
+      initContainers:
+      - name: sysctl
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      containers:
+      - name: "{{ template "fullname" . }}"
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        env:
+        - name: SERVICE
+          value: "{{ template "fullname" . }}-transport"
+        - name: KUBERNETES_NAMESPACE
+          value: "{{ .Release.Namespace }}"
+        - name: NODE_MASTER
+          value: "true"
+        - name: NODE_DATA
+          value: "false"
+        - name: ELASTICSEARCH_CLUSTER_NAME
+          value: "{{ .Values.cluster.name }}"
+        - name: ELASTICSEARCH_PORT_NUMBER
+          value: "9200"
+        - name: ELASTICSEARCH_NODE_PORT_NUMBER
+          value: "9300"
+        - name: ELASTICSEARCH_PLUGINS
+          value: "{{ .Values.node.plugins }}"
+        - name: ES_JAVA_OPTS
+          value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.node.master.heapSize }} -Xmx{{ .Values.node.master.heapSize }}"
+        ports:
+        - name: "http"
+          containerPort: 9200
+        - name: transport
+          containerPort: 9300
+        livenessProbe:
+          httpGet:
+            path: /_cluster/health?local=true
+            port: "http"
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /_cluster/health?local=true
+            port: "http"
+          initialDelaySeconds: 5
+        resources:
+{{ toYaml .Values.node.master.resources | indent 10 }}
+        volumeMounts:
+        - mountPath: /bitnami/elasticsearch/conf/elasticsearch_custom.yml
+          name: "config"
+          subPath: elasticsearch_custom.yml
+        - name: "data"
+          mountPath: "/bitnami"
+      volumes:
+      - name: "config"
+        configMap:
+          name: "{{ template "fullname" . }}"
+      - name: "data"
+        emptyDir: {}
