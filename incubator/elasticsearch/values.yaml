@@ -2,7 +2,7 @@ image:
   ## Elasticsearch image
   ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
   name: bitnami/elasticsearch
-  tag: 5.5.2-r0
+  tag: 5.5.2-r1
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
