@@ -55,7 +55,7 @@ node:
     ##
     resources:
       requests:
-        memory: "512Mi"
+        memory: "1536Mi"
     ## Enable persistence using Persistent Volume Claims
     ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
     ##
