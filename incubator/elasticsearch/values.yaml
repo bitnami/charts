@@ -1,3 +1,8 @@
+## Elasticsearch cluster name
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+name: elastic
+
 image:
   ## Elasticsearch image
   ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
@@ -8,84 +13,78 @@ image:
   ##
   pullPolicy: IfNotPresent
 
-cluster:
-  ## Elasticsearch cluster name
-  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+
+## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
+serviceAccountName: default
+## Comma seperated list of plugins
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+plugins: io.fabric8:elasticsearch-cloud-kubernetes:5.5.2
+## Customize elasticsearch configuration
+## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
+config:
+
+master:
+  name: master
+  replicas: 2
+  heapSize: 128m
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  name: elasticsearch-cluster
+  resources:
+    requests:
+      memory: "256Mi"
 
-node:
-  ## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
-  serviceAccountName: default
-  ## Comma seperated list of plugins
-  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+client:
+  name: client
+  replicas: 2
+  heapSize: 128m
+  service:
+    type: ClusterIP
+    ## Externally accessible elasticsearch REST API port
+    port: 9200
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  plugins: io.fabric8:elasticsearch-cloud-kubernetes:5.5.2
-  ## Customize elasticsearch configuration
-  ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
-  config:
+  resources:
+    requests:
+      memory: "256Mi"
 
-  master:
-    name: master
-    replicas: 2
-    heapSize: 128m
-    ## Configure resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+data:
+  name: data
+  replicas: 3
+  heapSize: 1024m
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      memory: "1536Mi"
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
-    resources:
-      requests:
-        memory: "256Mi"
+    enabled: true
 
-  client:
-    name: client
-    replicas: 2
-    heapSize: 128m
-    service:
-      type: ClusterIP
-      ## Externally accessible elasticsearch REST API port
-      port: 9200
-    ## Configure resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## Persistent Volume Claim annotations
     ##
-    resources:
-      requests:
-        memory: "256Mi"
+    annotations: {}
 
-  data:
-    name: data
-    replicas: 3
-    heapSize: 1024m
-    ## Configure resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
     ##
-    resources:
-      requests:
-        memory: "1536Mi"
-    ## Enable persistence using Persistent Volume Claims
-    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    # storageClass: "-"
+
+    ## Persistent Volume Access Mode
+    accessModes:
+    - ReadWriteOnce
+
+    ## Persistent Volume size
     ##
-    persistence:
-      ## If true, use a Persistent Volume Claim, If false, use emptyDir
-      ##
-      enabled: true
-
-      ## Persistent Volume Claim annotations
-      ##
-      annotations: {}
-
-      ## Persistent Volume Storage Class
-      ## If defined, storageClassName: <storageClass>
-      ## If set to "-", storageClassName: "", which disables dynamic provisioning
-      ## If undefined (the default) or set to null, no storageClassName spec is
-      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-      ##   GKE, AWS & OpenStack)
-      ##
-      # storageClass: "-"
-
-      ## Persistent Volume Access Mode
-      accessModes:
-      - ReadWriteOnce
-
-      ## Persistent Volume size
-      ##
-      size: 8Gi
+    size: 8Gi

@@ -9,7 +9,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.node.client.replicas }}
+  replicas: {{ .Values.client.replicas }}
   template:
     metadata:
       labels:
@@ -17,7 +17,7 @@ spec:
         component: "client"
         release: "{{ .Release.Name }}"
     spec:
-      serviceAccountName: "{{ .Values.node.serviceAccountName }}"
+      serviceAccountName: "{{ .Values.serviceAccountName }}"
       initContainers:
       - name: sysctl
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
@@ -39,11 +39,11 @@ spec:
         - name: NODE_DATA
           value: "false"
         - name: ELASTICSEARCH_CLUSTER_NAME
-          value: "{{ .Values.cluster.name }}"
+          value: "{{ .Values.name }}"
         - name: ELASTICSEARCH_PLUGINS
-          value: "{{ .Values.node.plugins }}"
+          value: "{{ .Values.plugins }}"
         - name: ES_JAVA_OPTS
-          value: "-Xms{{ .Values.node.client.heapSize }} -Xmx{{ .Values.node.client.heapSize }}"
+          value: "-Xms{{ .Values.client.heapSize }} -Xmx{{ .Values.client.heapSize }}"
         ports:
         - name: "http"
           containerPort: 9200
@@ -60,7 +60,7 @@ spec:
             port: "http"
           initialDelaySeconds: 5
         resources:
-{{ toYaml .Values.node.client.resources | indent 10 }}
+{{ toYaml .Values.client.resources | indent 10 }}
         volumeMounts:
         - mountPath: /bitnami/elasticsearch/conf/elasticsearch_custom.yml
           name: "config"

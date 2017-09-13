@@ -43,34 +43,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Elasticsearch chart and their default values.
 
-|             Parameter              |                      Description                      |                               Default                               |
-|------------------------------------|-------------------------------------------------------|---------------------------------------------------------------------|
-| image.name                         | Elasticsearch image name                              | `bitnami/elasticsearch`                                             |
-| image.tag                          | Elasticsearch image tag                               | `{VERSION}`                                                         |
-| image.pullPolicy                   | Image pull policy                                     | `IfNotPresent`                                                      |
-| cluster.name                       | Elasticsearch cluster name                            | `elasticsearch-cluster`                                             |
-| node.serviceAccountName            | Kubernetes service account                            | `default`                                                           |
-| node.plugins                       | Elasticsearch node plugins                            | `io.fabric8:elasticsearch-cloud-kubernetes:5.5.2` (required plugin) |
-| node.config                        | Elasticsearch node custom configuration               | ``                                                                  |
-| node.master.name                   | Master node pod name                                  | `master`                                                            |
-| node.master.replicas               | Desired number of Elasticsearch master eligible nodes | `2`                                                                 |
-| node.master.heapSize               | master node heap size                                 | `128m`                                                              |
-| node.master.resources              | CPU/Memory resource requests/limits for master nodes  | `{ memory: "256Mi" }`                                               |
-| node.client.name                   | Client node pod name                                  | `client`                                                            |
-| node.client.replicas               | Desired number of Elasticsearch client nodes          | `2`                                                                 |
-| node.client.heapSize               | Client node heap size                                 | `128m`                                                              |
-| node.client.service.type           | Client node kubernetes service type                   | `ClusterIP`                                                         |
-| node.client.service.port           | Externally accessible elasticsearch REST API port     | `9200`                                                              |
-| node.client.resources              | CPU/Memory resource requests/limits for client nodes  | `{ memory: "256Mi" }`                                               |
-| node.data.name                     | Data node pod name                                    | `data`                                                              |
-| node.data.replicas                 | Desired number of Elasticsearch data eligible nodes   | `3`                                                                 |
-| node.data.heapSize                 | data node heap size                                   | `1024m`                                                             |
-| node.data.resources                | CPU/Memory resource requests/limits for data nodes    | `{ memory: "512Mi" }`                                               |
-| node.data.persistence.enabled      | Enable persistence using a `PersistentVolumeClaim`    | `true`                                                              |
-| node.data.persistence.annotations  | Persistent Volume Claim annotations                   | `{}`                                                                |
-| node.data.persistence.storageClass | Persistent Volume Storage Class                       | ``                                                                  |
-| node.data.persistence.accessModes  | Persistent Volume Access Modes                        | `[ReadWriteOnce]`                                                   |
-| node.data.persistence.size         | Persistent Volume Size                                | `8Gi`                                                               |
+|           Parameter           |                      Description                      |                               Default                               |
+|-------------------------------|-------------------------------------------------------|---------------------------------------------------------------------|
+| image.name                    | Elasticsearch image name                              | `bitnami/elasticsearch`                                             |
+| image.tag                     | Elasticsearch image tag                               | `{VERSION}`                                                         |
+| image.pullPolicy              | Image pull policy                                     | `IfNotPresent`                                                      |
+| name                          | Elasticsearch cluster name                            | `elastic`                                                           |
+| serviceAccountName            | Kubernetes service account                            | `default`                                                           |
+| plugins                       | Elasticsearch node plugins                            | `io.fabric8:elasticsearch-cloud-kubernetes:5.5.2` (required plugin) |
+| config                        | Elasticsearch node custom configuration               | ``                                                                  |
+| master.name                   | Master node pod name                                  | `master`                                                            |
+| master.replicas               | Desired number of Elasticsearch master eligible nodes | `2`                                                                 |
+| master.heapSize               | master node heap size                                 | `128m`                                                              |
+| master.resources              | CPU/Memory resource requests/limits for master nodes  | `{ memory: "256Mi" }`                                               |
+| client.name                   | Client node pod name                                  | `client`                                                            |
+| client.replicas               | Desired number of Elasticsearch client nodes          | `2`                                                                 |
+| client.heapSize               | Client node heap size                                 | `128m`                                                              |
+| client.service.type           | Client node kubernetes service type                   | `ClusterIP`                                                         |
+| client.service.port           | Externally accessible elasticsearch REST API port     | `9200`                                                              |
+| client.resources              | CPU/Memory resource requests/limits for client nodes  | `{ memory: "256Mi" }`                                               |
+| data.name                     | Data node pod name                                    | `data`                                                              |
+| data.replicas                 | Desired number of Elasticsearch data eligible nodes   | `3`                                                                 |
+| data.heapSize                 | data node heap size                                   | `1024m`                                                             |
+| data.resources                | CPU/Memory resource requests/limits for data nodes    | `{ memory: "512Mi" }`                                               |
+| data.persistence.enabled      | Enable persistence using a `PersistentVolumeClaim`    | `true`                                                              |
+| data.persistence.annotations  | Persistent Volume Claim annotations                   | `{}`                                                                |
+| data.persistence.storageClass | Persistent Volume Storage Class                       | ``                                                                  |
+| data.persistence.accessModes  | Persistent Volume Access Modes                        | `[ReadWriteOnce]`                                                   |
+| data.persistence.size         | Persistent Volume Size                                | `8Gi`                                                               |
 
 The above parameters map to the env variables defined in [bitnami/elasticsearch](http://github.com/bitnami/bitnami-docker-elasticsearch). For more information please refer to the [bitnami/elasticsearch](http://github.com/bitnami/bitnami-docker-elasticsearch) image documentation.
 
@@ -78,11 +78,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set cluster.name=elastic,node.client.service.port=8080 \
+  --set name=my-elastic,client.service.port=8080 \
   incubator/elasticsearch
 ```
 
-The above command sets the Elasticsearch cluster name to `elastic` and REST port number to `8080`.
+The above command sets the Elasticsearch cluster name to `my-elastic` and REST port number to `8080`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 

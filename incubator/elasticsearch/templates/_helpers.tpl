@@ -21,7 +21,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "master.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.node.master.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.master.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -30,7 +30,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "client.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.node.client.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.client.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -39,6 +39,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "data.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.node.data.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.data.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/*
+Create a default fully qualified master name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "metrics.fullname" -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.metrics.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
