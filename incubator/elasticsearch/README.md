@@ -48,7 +48,6 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | image.name                         | Elasticsearch image name                              | `bitnami/elasticsearch`                                             |
 | image.tag                          | Elasticsearch image tag                               | `{VERSION}`                                                         |
 | image.pullPolicy                   | Image pull policy                                     | `IfNotPresent`                                                      |
-| service.type                       | Kubernetes service type                               | `ClusterIP`                                                         |
 | cluster.name                       | Elasticsearch cluster name                            | `elasticsearch-cluster`                                             |
 | cluster.port.http                  | Elasticsearch REST port                               | `9200`                                                              |
 | node.serviceAccountName            | Kubernetes service account                            | `default`                                                           |
@@ -60,7 +59,8 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | node.master.resources              | CPU/Memory resource requests/limits for master nodes  | `{ memory: "256Mi" }`                                               |
 | node.client.name                   | Client node pod name                                  | `client`                                                            |
 | node.client.replicas               | Desired number of Elasticsearch client nodes          | `2`                                                                 |
-| node.client.heapSize               | client node heap size                                 | `128m`                                                              |
+| node.client.heapSize               | Client node heap size                                 | `128m`                                                              |
+| node.client.service.type           | Client node kubernetes service type                   | `ClusterIP`                                                         |
 | node.client.resources              | CPU/Memory resource requests/limits for client nodes  | `{ memory: "256Mi" }`                                               |
 | node.data.name                     | Data node pod name                                    | `data`                                                              |
 | node.data.replicas                 | Desired number of Elasticsearch data eligible nodes   | `3`                                                                 |

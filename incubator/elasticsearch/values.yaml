@@ -8,11 +8,6 @@ image:
   ##
   pullPolicy: IfNotPresent
 
-service:
-  ## For minikube, set this to NodePort, elsewhere use LoadBalancer
-  ##
-  type: ClusterIP
-
 cluster:
   ## Elasticsearch cluster name
   ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
@@ -50,6 +45,8 @@ node:
     name: client
     replicas: 2
     heapSize: 128m
+    service:
+      type: ClusterIP
     ## Configure resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
