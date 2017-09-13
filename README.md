@@ -45,7 +45,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 - [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/incubator/tensorflow-inception)
 - [Tomcat](https://github.com/bitnami/charts/tree/master/incubator/tomcat)
 - [WildFly](https://github.com/bitnami/charts/tree/master/incubator/wildfly)
--
+
 ## Before you begin
 
 ### Setup a Kubernetes Cluster
