@@ -101,4 +101,6 @@ metrics:
     prometheus.io/port: "9108"
   service:
     type: ClusterIP
-  resources: {}
+  resources:
+    requests:
+      cpu: 25m

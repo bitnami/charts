@@ -77,7 +77,7 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | `metrics.image.tag`             | Metrics exporter image tag                            | `1.0.1`                                                             |
 | `metrics.image.pullPolicy`      | Metrics exporter image pull policy                    | `IfNotPresent`                                                      |
 | `metrics.service.type`          | Metrics exporter endpoint service type                | `ClusterIP`                                                         |
-| `metrics.resources`             | Metrics exporter resource requests/limit              | `nil`                                                               |
+| `metrics.resources`             | Metrics exporter resource requests/limit              | `requests: { cpu: "25m" }`                                          |
 
 The above parameters map to the env variables defined in [bitnami/elasticsearch](http://github.com/bitnami/bitnami-docker-elasticsearch). For more information please refer to the [bitnami/elasticsearch](http://github.com/bitnami/bitnami-docker-elasticsearch) image documentation.
 
