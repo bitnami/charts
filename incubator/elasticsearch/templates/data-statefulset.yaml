@@ -50,19 +50,17 @@ spec:
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.node.data.heapSize }} -Xmx{{ .Values.node.data.heapSize }}"
         ports:
-        - name: "http"
-          containerPort: 9200
         - name: transport
           containerPort: 9300
         livenessProbe:
           httpGet:
             path: /_cluster/health?local=true
-            port: "http"
+            port: 9200
           initialDelaySeconds: 30
         readinessProbe:
           httpGet:
             path: /_cluster/health?local=true
-            port: "http"
+            port: 9200
           initialDelaySeconds: 5
         resources:
 {{ toYaml .Values.node.data.resources | indent 10 }}
