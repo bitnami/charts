@@ -41,10 +41,6 @@ spec:
           value: "true"
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: "{{ .Values.cluster.name }}"
-        - name: ELASTICSEARCH_PORT_NUMBER
-          value: "9200"
-        - name: ELASTICSEARCH_NODE_PORT_NUMBER
-          value: "9300"
         - name: ELASTICSEARCH_PLUGINS
           value: "{{ .Values.node.plugins }}"
         - name: ES_JAVA_OPTS
