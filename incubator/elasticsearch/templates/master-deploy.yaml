@@ -53,7 +53,7 @@ spec:
           httpGet:
             path: /_cluster/health?local=true
             port: "http"
-          initialDelaySeconds: 30
+          initialDelaySeconds: 90
         readinessProbe:
           httpGet:
             path: /_cluster/health?local=true
