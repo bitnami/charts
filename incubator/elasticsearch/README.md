@@ -55,17 +55,17 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | `master.name`                   | Master node pod name                                  | `master`                                                            |
 | `master.replicas`               | Desired number of Elasticsearch master eligible nodes | `2`                                                                 |
 | `master.heapSize`               | master node heap size                                 | `128m`                                                              |
-| `master.resources`              | CPU/Memory resource requests/limits for master nodes  | `{ memory: "256Mi" }`                                               |
+| `master.resources`              | CPU/Memory resource requests/limits for master nodes  | `requests: { cpu: "25m", memory: "256Mi" }`                         |
 | `client.name`                   | Client node pod name                                  | `client`                                                            |
 | `client.replicas`               | Desired number of Elasticsearch client nodes          | `2`                                                                 |
 | `client.heapSize`               | Client node heap size                                 | `128m`                                                              |
 | `client.service`.type           | Client node kubernetes service type                   | `ClusterIP`                                                         |
 | `client.service`.port           | Externally accessible elasticsearch REST API port     | `9200`                                                              |
-| `client.resources`              | CPU/Memory resource requests/limits for client nodes  | `{ memory: "256Mi" }`                                               |
+| `client.resources`              | CPU/Memory resource requests/limits for client nodes  | `requests: { cpu: "25m", memory: "256Mi" }`                         |
 | `data.name`                     | Data node pod name                                    | `data`                                                              |
 | `data.replicas`                 | Desired number of Elasticsearch data eligible nodes   | `3`                                                                 |
 | `data.heapSize`                 | data node heap size                                   | `1024m`                                                             |
-| `data.resources`                | CPU/Memory resource requests/limits for data nodes    | `{ memory: "512Mi" }`                                               |
+| `data.resources`                | CPU/Memory resource requests/limits for data nodes    | `requests: { cpu: "25m", memory: "1536Mi" }`                        |
 | `data.persistence.enabled`      | Enable persistence using a `PersistentVolumeClaim`    | `true`                                                              |
 | `data.persistence.annotations`  | Persistent Volume Claim annotations                   | `{}`                                                                |
 | `data.persistence.storageClass` | Persistent Volume Storage Class                       | ``                                                                  |

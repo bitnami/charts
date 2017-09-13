@@ -33,6 +33,7 @@ master:
   ##
   resources:
     requests:
+      cpu: 25m
       memory: "256Mi"
 
 client:
@@ -48,6 +49,7 @@ client:
   ##
   resources:
     requests:
+      cpu: 25m
       memory: "256Mi"
 
 data:
@@ -59,6 +61,7 @@ data:
   ##
   resources:
     requests:
+      cpu: 25m
       memory: "1536Mi"
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
