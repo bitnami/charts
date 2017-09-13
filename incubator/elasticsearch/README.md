@@ -65,7 +65,7 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | `data.name`                     | Data node pod name                                    | `data`                                                              |
 | `data.replicas`                 | Desired number of Elasticsearch data eligible nodes   | `3`                                                                 |
 | `data.heapSize`                 | data node heap size                                   | `1024m`                                                             |
-| `data.resources`                | CPU/Memory resource requests/limits for data nodes    | `requests: { cpu: "25m", memory: "1536Mi" }`                        |
+| `data.resources`                | CPU/Memory resource requests/limits for data nodes    | `requests: { cpu: "25m", memory: "1152Mi" }`                        |
 | `data.persistence.enabled`      | Enable persistence using a `PersistentVolumeClaim`    | `true`                                                              |
 | `data.persistence.annotations`  | Persistent Volume Claim annotations                   | `{}`                                                                |
 | `data.persistence.storageClass` | Persistent Volume Storage Class                       | ``                                                                  |

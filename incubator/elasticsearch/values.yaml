@@ -62,7 +62,7 @@ data:
   resources:
     requests:
       cpu: 25m
-      memory: "1536Mi"
+      memory: "1152Mi"
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
