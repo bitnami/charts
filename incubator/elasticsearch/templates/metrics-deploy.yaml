@@ -1,0 +1,43 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "metrics.fullname" . }}"
+  labels:
+    app: "{{ template "name" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: "metrics"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "{{ template "name" . }}"
+        component: "metrics"
+        release: "{{ .Release.Name }}"
+    spec:
+      containers:
+      - name: "metrics"
+        image: "{{ .Values.metrics.image.name }}:{{ .Values.metrics.image.tag }}"
+        imagePullPolicy: "{{ .Values.metrics.image.pullPolicy }}"
+        args: [ "-es.uri=http://{{ template "client.fullname" . }}:{{ .Values.client.service.port }}", "-es.all=true" ]
+        ports:
+        - name: "metrics"
+          containerPort: 9108
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}

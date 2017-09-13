@@ -88,3 +88,17 @@ data:
     ## Persistent Volume size
     ##
     size: 8Gi
+
+metrics:
+  enabled: false
+  name: metrics
+  image:
+    name: justwatch/elasticsearch_exporter
+    tag: 1.0.1
+    pullPolicy: IfNotPresent
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9108"
+  service:
+    type: ClusterIP
+  resources: {}
