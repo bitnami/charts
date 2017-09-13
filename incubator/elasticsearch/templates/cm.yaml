@@ -28,6 +28,6 @@ data:
     plugin:
       mandatory: discovery-kubernetes
 
-{{- if .Values.cluster.config }}
-{{ toYaml .Values.node.config | indent 4 }}
+{{- if .Values.config }}
+{{ toYaml .Values.config | indent 4 }}
 {{- end }}

@@ -1,3 +1,8 @@
+## Elasticsearch cluster name
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+name: elastic
+
 image:
   ## Elasticsearch image
   ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
@@ -8,79 +13,100 @@ image:
   ##
   pullPolicy: IfNotPresent
 
-service:
-  ## For minikube, set this to NodePort, elsewhere use LoadBalancer
-  ##
-  type: ClusterIP
 
-cluster:
-  ## Elasticsearch cluster name
-  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-  ##
-  name: elasticsearch-cluster
-  ## Elasticsearch REST port
-  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-  ##
-  port:
-    http: 9200
+## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
+serviceAccountName: default
+## Comma seperated list of plugins
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+plugins: io.fabric8:elasticsearch-cloud-kubernetes:5.5.2
+## Customize elasticsearch configuration
+## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
+config:
 
-node:
-  ## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
-  serviceAccountName: default
-  ## Comma seperated list of plugins
-  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+master:
+  name: master
+  replicas: 2
+  heapSize: 128m
+  antiAffinity: "soft"
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  plugins: io.fabric8:elasticsearch-cloud-kubernetes:5.5.2
-  ## Customize elasticsearch configuration
-  ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
-  config:
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
 
-  master:
-    name: master
-    replicas: 2
-    heapSize: 128m
-    ## Configure resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+client:
+  name: client
+  replicas: 2
+  heapSize: 128m
+  antiAffinity: "soft"
+  service:
+    type: ClusterIP
+    ## Externally accessible elasticsearch REST API port
+    port: 9200
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
+
+data:
+  name: data
+  replicas: 3
+  heapSize: 1024m
+  antiAffinity: "soft"
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      cpu: 25m
+      memory: "1152Mi"
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
-    resources:
-      requests:
-        memory: "256Mi"
+    enabled: true
 
-  data:
-    name: data
-    replicas: 3
-    heapSize: 1024m
-    ## Configure resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## Persistent Volume Claim annotations
     ##
-    resources:
-      requests:
-        memory: "1536Mi"
-    ## Enable persistence using Persistent Volume Claims
-    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    annotations: {}
+
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
     ##
-    persistence:
-      ## If true, use a Persistent Volume Claim, If false, use emptyDir
-      ##
-      enabled: true
+    # storageClass: "-"
 
-      ## Persistent Volume Claim annotations
-      ##
-      annotations: {}
+    ## Persistent Volume Access Mode
+    accessModes:
+    - ReadWriteOnce
 
-      ## Persistent Volume Storage Class
-      ## If defined, storageClassName: <storageClass>
-      ## If set to "-", storageClassName: "", which disables dynamic provisioning
-      ## If undefined (the default) or set to null, no storageClassName spec is
-      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-      ##   GKE, AWS & OpenStack)
-      ##
-      # storageClass: "-"
+    ## Persistent Volume size
+    ##
+    size: 8Gi
 
-      ## Persistent Volume Access Mode
-      accessModes:
-      - ReadWriteOnce
-
-      ## Persistent Volume size
-      ##
-      size: 8Gi
+metrics:
+  enabled: false
+  name: metrics
+  image:
+    name: justwatch/elasticsearch_exporter
+    tag: 1.0.1
+    pullPolicy: IfNotPresent
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9108"
+  service:
+    type: ClusterIP
+  resources:
+    requests:
+      cpu: 25m

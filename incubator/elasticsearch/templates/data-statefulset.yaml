@@ -10,7 +10,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   serviceName: "{{ template "data.fullname" . }}"
-  replicas: {{ .Values.node.data.replicas }}
+  replicas: {{ .Values.data.replicas }}
   template:
     metadata:
       labels:
@@ -18,7 +18,30 @@ spec:
         component: "data"
         release: "{{ .Release.Name }}"
     spec:
-      serviceAccountName: "{{ .Values.node.serviceAccountName }}"
+      serviceAccountName: "{{ .Values.serviceAccountName }}"
+      {{- if eq .Values.data.antiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "name" . }}"
+                  component: "data"
+                  release: "{{ .Release.Name }}"
+      {{- else if eq .Values.data.antiAffinity "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "name" . }}"
+                  component: "data"
+                  release: "{{ .Release.Name }}"
+      {{- end }}
       initContainers:
       - name: sysctl
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
@@ -27,12 +50,12 @@ spec:
         securityContext:
           privileged: true
       containers:
-      - name: "{{ template "fullname" . }}"
+      - name: "elasticsearch"
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         env:
         - name: SERVICE
-          value: "{{ template "fullname" . }}-transport"
+          value: "{{ template "master.fullname" . }}"
         - name: KUBERNETES_NAMESPACE
           value: "{{ .Release.Namespace }}"
         - name: NODE_MASTER
@@ -40,32 +63,26 @@ spec:
         - name: NODE_DATA
           value: "true"
         - name: ELASTICSEARCH_CLUSTER_NAME
-          value: "{{ .Values.cluster.name }}"
-        - name: ELASTICSEARCH_PORT_NUMBER
-          value: "9200"
-        - name: ELASTICSEARCH_NODE_PORT_NUMBER
-          value: "9300"
+          value: "{{ .Values.name }}"
         - name: ELASTICSEARCH_PLUGINS
-          value: "{{ .Values.node.plugins }}"
+          value: "{{ .Values.plugins }}"
         - name: ES_JAVA_OPTS
-          value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.node.data.heapSize }} -Xmx{{ .Values.node.data.heapSize }}"
+          value: "-Xms{{ .Values.data.heapSize }} -Xmx{{ .Values.data.heapSize }}"
         ports:
-        - name: "http"
-          containerPort: 9200
         - name: transport
           containerPort: 9300
         livenessProbe:
           httpGet:
             path: /_cluster/health?local=true
-            port: "http"
-          initialDelaySeconds: 30
+            port: 9200
+          initialDelaySeconds: 90
         readinessProbe:
           httpGet:
             path: /_cluster/health?local=true
-            port: "http"
+            port: 9200
           initialDelaySeconds: 5
         resources:
-{{ toYaml .Values.node.data.resources | indent 10 }}
+{{ toYaml .Values.data.resources | indent 10 }}
         volumeMounts:
         - mountPath: /bitnami/elasticsearch/conf/elasticsearch_custom.yml
           name: "config"
@@ -76,27 +93,27 @@ spec:
       - name: "config"
         configMap:
           name: "{{ template "fullname" . }}"
-{{- if .Values.node.data.persistence.enabled }}
+{{- if .Values.data.persistence.enabled }}
   volumeClaimTemplates:
   - metadata:
       name: "data"
-{{- if .Values.node.data.persistence.annotations }}
+{{- if .Values.data.persistence.annotations }}
       annotations:
-{{ toYaml .Values.node.data.persistence.annotations | indent 6 }}
+{{ toYaml .Values.data.persistence.annotations | indent 6 }}
 {{- end }}
     spec:
       accessModes:
-{{ toYaml .Values.node.data.persistence.accessModes | indent 6 }}
-{{- if .Values.node.data.persistence.storageClass }}
-{{- if (eq "-" .Values.node.data.persistence.storageClass) }}
+{{ toYaml .Values.data.persistence.accessModes | indent 6 }}
+{{- if .Values.data.persistence.storageClass }}
+{{- if (eq "-" .Values.data.persistence.storageClass) }}
       storageClassName: ""
 {{- else }}
-      storageClassName: "{{ .Values.node.data.persistence.storageClass }}"
+      storageClassName: "{{ .Values.data.persistence.storageClass }}"
 {{- end }}
 {{- end }}
       resources:
         requests:
-          storage: "{{ .Values.node.data.persistence.size }}"
+          storage: "{{ .Values.data.persistence.size }}"
 {{- else }}
       - name: "data"
         emptyDir: {}
