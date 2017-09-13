@@ -13,11 +13,6 @@ cluster:
   ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
   ##
   name: elasticsearch-cluster
-  ## Elasticsearch REST port
-  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-  ##
-  port:
-    http: 9200
 
 node:
   ## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
@@ -47,6 +42,8 @@ node:
     heapSize: 128m
     service:
       type: ClusterIP
+      ## Externally accessible elasticsearch REST API port
+      port: 9200
     ## Configure resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##

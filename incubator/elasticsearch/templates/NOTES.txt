@@ -14,7 +14,7 @@
 
 ** Please be patient while the chart is being deployed **
 
-  Elasticsearch can be accessed within the cluster on port {{ .Values.cluster.port.http }} at {{ template "client.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  Elasticsearch can be accessed within the cluster on port {{ .Values.node.client.service.port }} at {{ template "client.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
   To access from outside the cluster execute the following commands:
 
@@ -29,10 +29,10 @@
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "client.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "client.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo http://$SERVICE_IP:{{ .Values.cluster.port.http }}/
+    echo http://$SERVICE_IP:{{ .Values.node.client.service.port }}/
 {{- else if contains "ClusterIP"  .Values.node.client.service.type }}
 
     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "name" . }},release={{ .Release.Name }},component=master" -o jsonpath="{.items[0].metadata.name}")
-    echo http://127.0.0.1:{{ .Values.cluster.port.http }}/
-    kubectl port-forward $POD_NAME {{ .Values.cluster.port.http }}:9200
+    echo http://127.0.0.1:{{ .Values.node.client.service.port }}/
+    kubectl port-forward $POD_NAME {{ .Values.node.client.service.port }}:9200
 {{- end }}

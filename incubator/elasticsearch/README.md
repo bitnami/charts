@@ -49,7 +49,6 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | image.tag                          | Elasticsearch image tag                               | `{VERSION}`                                                         |
 | image.pullPolicy                   | Image pull policy                                     | `IfNotPresent`                                                      |
 | cluster.name                       | Elasticsearch cluster name                            | `elasticsearch-cluster`                                             |
-| cluster.port.http                  | Elasticsearch REST port                               | `9200`                                                              |
 | node.serviceAccountName            | Kubernetes service account                            | `default`                                                           |
 | node.plugins                       | Elasticsearch node plugins                            | `io.fabric8:elasticsearch-cloud-kubernetes:5.5.2` (required plugin) |
 | node.config                        | Elasticsearch node custom configuration               | ``                                                                  |
@@ -61,6 +60,7 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | node.client.replicas               | Desired number of Elasticsearch client nodes          | `2`                                                                 |
 | node.client.heapSize               | Client node heap size                                 | `128m`                                                              |
 | node.client.service.type           | Client node kubernetes service type                   | `ClusterIP`                                                         |
+| node.client.service.port           | Externally accessible elasticsearch REST API port     | `9200`                                                              |
 | node.client.resources              | CPU/Memory resource requests/limits for client nodes  | `{ memory: "256Mi" }`                                               |
 | node.data.name                     | Data node pod name                                    | `data`                                                              |
 | node.data.replicas                 | Desired number of Elasticsearch data eligible nodes   | `3`                                                                 |
@@ -78,7 +78,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set cluster.name=elastic,cluster.port.http=8080 \
+  --set cluster.name=elastic,node.client.service.port=8080 \
   incubator/elasticsearch
 ```
 
