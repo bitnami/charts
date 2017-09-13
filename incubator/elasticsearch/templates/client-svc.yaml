@@ -1,18 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "master.fullname" . }}"
+  name: "{{ template "client.fullname" . }}"
   labels:
     app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  type: "{{ .Values.service.type }}"
   ports:
-  - name: "transport"
-    port: 9300
-    targetPort: "transport"
+  - name: "http"
+    port: {{ .Values.cluster.port.http }}
+    targetPort: "http"
   selector:
     app: "{{ template "name" . }}"
     release: "{{ .Release.Name }}"
-    component: "master"
+    component: "client"

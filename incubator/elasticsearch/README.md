@@ -58,6 +58,10 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | node.master.replicas               | Desired number of Elasticsearch master eligible nodes | `2`                                                                 |
 | node.master.heapSize               | master node heap size                                 | `128m`                                                              |
 | node.master.resources              | CPU/Memory resource requests/limits for master nodes  | `{ memory: "256Mi" }`                                               |
+| node.client.name                   | Client node pod name                                  | `client`                                                            |
+| node.client.replicas               | Desired number of Elasticsearch client nodes          | `2`                                                                 |
+| node.client.heapSize               | client node heap size                                 | `128m`                                                              |
+| node.client.resources              | CPU/Memory resource requests/limits for client nodes  | `{ memory: "256Mi" }`                                               |
 | node.data.name                     | Data node pod name                                    | `data`                                                              |
 | node.data.replicas                 | Desired number of Elasticsearch data eligible nodes   | `3`                                                                 |
 | node.data.heapSize                 | data node heap size                                   | `1024m`                                                             |

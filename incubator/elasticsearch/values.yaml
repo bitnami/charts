@@ -46,6 +46,17 @@ node:
       requests:
         memory: "256Mi"
 
+  client:
+    name: client
+    replicas: 2
+    heapSize: 128m
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      requests:
+        memory: "256Mi"
+
   data:
     name: data
     replicas: 3

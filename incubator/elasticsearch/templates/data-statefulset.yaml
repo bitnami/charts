@@ -32,7 +32,7 @@ spec:
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         env:
         - name: SERVICE
-          value: "{{ template "fullname" . }}-transport"
+          value: "{{ template "master.fullname" . }}"
         - name: KUBERNETES_NAMESPACE
           value: "{{ .Release.Namespace }}"
         - name: NODE_MASTER
@@ -44,7 +44,7 @@ spec:
         - name: ELASTICSEARCH_PLUGINS
           value: "{{ .Values.node.plugins }}"
         - name: ES_JAVA_OPTS
-          value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.node.data.heapSize }} -Xmx{{ .Values.node.data.heapSize }}"
+          value: "-Xms{{ .Values.node.data.heapSize }} -Xmx{{ .Values.node.data.heapSize }}"
         ports:
         - name: transport
           containerPort: 9300
