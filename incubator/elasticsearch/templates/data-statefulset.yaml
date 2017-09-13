@@ -19,6 +19,29 @@ spec:
         release: "{{ .Release.Name }}"
     spec:
       serviceAccountName: "{{ .Values.serviceAccountName }}"
+      {{- if eq .Values.data.antiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "name" . }}"
+                  component: "data"
+                  release: "{{ .Release.Name }}"
+      {{- else if eq .Values.data.antiAffinity "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "name" . }}"
+                  component: "data"
+                  release: "{{ .Release.Name }}"
+      {{- end }}
       initContainers:
       - name: sysctl
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"

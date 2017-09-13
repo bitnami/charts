@@ -28,6 +28,7 @@ master:
   name: master
   replicas: 2
   heapSize: 128m
+  antiAffinity: "soft"
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -40,6 +41,7 @@ client:
   name: client
   replicas: 2
   heapSize: 128m
+  antiAffinity: "soft"
   service:
     type: ClusterIP
     ## Externally accessible elasticsearch REST API port
@@ -56,6 +58,7 @@ data:
   name: data
   replicas: 3
   heapSize: 1024m
+  antiAffinity: "soft"
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
