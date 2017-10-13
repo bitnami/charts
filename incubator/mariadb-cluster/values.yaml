@@ -9,6 +9,9 @@ image: bitnami/mariadb:10.1.22-r1
 ##
 imagePullPolicy: IfNotPresent
 
+## Kubernetes service type
+serviceType: ClusterIP
+
 ## Desired number of slave Pods
 ##
 numSlaves: 3
@@ -44,9 +47,6 @@ mariadbReplicationUser: my_replication_user
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
 ##
 # mariadbReplicationPassword:
-
-## Kubernetes service type
-serviceType: ClusterIP
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
