@@ -2,7 +2,7 @@
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
 ##
 ## Default: none
-image: bitnami/mariadb:10.1.22-r1
+image: bitnami/mariadb:10.1.28-r2
 
 ## Image pull policy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

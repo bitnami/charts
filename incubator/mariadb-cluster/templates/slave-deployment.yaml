@@ -17,6 +17,9 @@ spec:
         component: "slave"
         release: "{{ .Release.Name }}"
     spec:
+      securityContext:
+        runAsUser: 1001
+        fsGroup: 1001
       {{- if eq .Values.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
