@@ -96,8 +96,8 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: mariadb-slave-data
-          mountPath: /bitnami/mariadb
+        - name: data
+          mountPath: /bitnami
       volumes:
-      - name: mariadb-slave-data
+      - name: data
         emptyDir: {}

@@ -85,13 +85,13 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: mariadb-master-data
-          mountPath: /bitnami/mariadb
+        - name: data
+          mountPath: /bitnami
       volumes:
-      - name: mariadb-master-data
+      - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "master.fullname" . }}
+          claimName: {{ template "master.fullname" . }}-data
       {{- else }}
         emptyDir: {}
       {{- end -}}
