@@ -13,6 +13,8 @@ imagePullPolicy: IfNotPresent
 ##
 numSlaves: 3
 
+antiAffinity: "soft"
+
 ## MariaDB admin password
 ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
 ##

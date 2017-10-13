@@ -17,6 +17,27 @@ spec:
         component: "master"
         release: "{{ .Release.Name }}"
     spec:
+      {{- if eq .Values.antiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "name" . }}"
+                  release: "{{ .Release.Name }}"
+      {{- else if eq .Values.antiAffinity "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "name" . }}"
+                  release: "{{ .Release.Name }}"
+      {{- end }}
       containers:
       - name: "mariadb"
         image: "{{ .Values.image }}"
