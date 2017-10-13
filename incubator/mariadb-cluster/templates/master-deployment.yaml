@@ -3,8 +3,9 @@ kind: Deployment
 metadata:
   name: {{ template "master.fullname" . }}
   labels:
-    app: {{ template "master.fullname" . }}
+    app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: "master"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
@@ -12,10 +13,12 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "master.fullname" . }}
+        app: "{{ template "name" . }}"
+        component: "master"
+        release: "{{ .Release.Name }}"
     spec:
       containers:
-      - name: {{ template "master.fullname" . }}
+      - name: "mariadb"
         image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:

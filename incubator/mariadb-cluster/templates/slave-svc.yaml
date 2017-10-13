@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "slave.fullname" . }}
   labels:
-    app: {{ template "slave.fullname" . }}
+    app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -13,4 +13,6 @@ spec:
     port: 3306
     targetPort: mysql
   selector:
-    app: {{ template "slave.fullname" . }}
+    app: "{{ template "name" . }}"
+    component: "slave"
+    release: "{{ .Release.Name }}"
