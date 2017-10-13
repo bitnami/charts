@@ -20,7 +20,7 @@ spec:
       containers:
       - name: "mariadb"
         image: "{{ .Values.image }}"
-        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
@@ -29,7 +29,7 @@ spec:
               key: mariadb-root-password
         {{- if .Values.mariadbUser }}
         - name: MARIADB_USER
-          value: {{ default "" .Values.mariadbUser | quote }}
+          value: "{{ .Values.mariadbUser }}"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -37,11 +37,11 @@ spec:
               key: mariadb-password
         {{- end }}
         - name: MARIADB_DATABASE
-          value: {{ default "" .Values.mariadbDatabase | quote }}
+          value: "{{ .Values.mariadbDatabase }}"
         - name: MARIADB_REPLICATION_MODE
           value: "master"
         - name: MARIADB_REPLICATION_USER
-          value: {{ default "" .Values.mariadbReplicationUser | quote }}
+          value: "{{ .Values.mariadbReplicationUser }}"
         - name: MARIADB_REPLICATION_PASSWORD
           valueFrom:
             secretKeyRef:
