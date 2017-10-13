@@ -52,17 +52,11 @@ spec:
           containerPort: 3306
         livenessProbe:
           exec:
-            command:
-            - sh
-            - -c
-            - exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
+            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
           initialDelaySeconds: 120
         readinessProbe:
           exec:
-            command:
-            - sh
-            - -c
-            - exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
+            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
           initialDelaySeconds: 15
         resources:
 {{ toYaml .Values.resources | indent 10 }}
