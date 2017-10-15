@@ -101,3 +101,22 @@ spec:
       volumes:
       - name: data
         emptyDir: {}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "slave.fullname" . }}
+  labels:
+    app: "{{ template "name" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: "slave"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  minReplicas: 1
+  maxReplicas: 5
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ template "slave.fullname" . }}
+  targetCPUUtilizationPercentage: 50
