@@ -9,7 +9,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.minSlaves }}
+  replicas: {{ .Values.slave.replicas }}
   template:
     metadata:
       labels:
@@ -20,7 +20,7 @@ spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
-      {{- if eq .Values.antiAffinity "hard" }}
+      {{- if eq .Values.slave.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -29,7 +29,7 @@ spec:
                 matchLabels:
                   app: "{{ template "name" . }}"
                   release: "{{ .Release.Name }}"
-      {{- else if eq .Values.antiAffinity "soft" }}
+      {{- else if eq .Values.slave.antiAffinity "soft" }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -43,17 +43,17 @@ spec:
       {{- end }}
       containers:
       - name: "mariadb"
-        image: "{{ .Values.image }}"
-        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mariadb-root-password
-        {{- if .Values.mariadbUser }}
+        {{- if .Values.db.user }}
         - name: MARIADB_USER
-          value: "{{ .Values.mariadbUser }}"
+          value: "{{ .Values.db.user }}"
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -61,7 +61,7 @@ spec:
               key: mariadb-password
         {{- end }}
         - name: MARIADB_DATABASE
-          value: "{{ .Values.mariadbDatabase }}"
+          value: "{{ .Values.db.name }}"
         - name: MARIADB_REPLICATION_MODE
           value: "slave"
         - name: MARIADB_MASTER_HOST
@@ -76,7 +76,7 @@ spec:
               name: {{ template "fullname" . }}
               key: mariadb-root-password
         - name: MARIADB_REPLICATION_USER
-          value: "{{ .Values.mariadbReplicationUser }}"
+          value: "{{ .Values.replication.user }}"
         - name: MARIADB_REPLICATION_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -94,7 +94,7 @@ spec:
             command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
           initialDelaySeconds: 15
         resources:
-{{ toYaml .Values.resources | indent 10 }}
+{{ toYaml .Values.slave.resources | indent 10 }}
         volumeMounts:
         - name: data
           mountPath: /bitnami
@@ -113,10 +113,10 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  minReplicas: {{ .Values.minSlaves }}
-  maxReplicas: {{ .Values.maxSlaves }}
+  minReplicas: {{ .Values.slave.hpa.min }}
+  maxReplicas: {{ .Values.slave.hpa.max }}
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
     name: {{ template "slave.fullname" . }}
-  targetCPUUtilizationPercentage: 50
+  targetCPUUtilizationPercentage: {{ .Values.slave.hpa.target.cpuPercentage }}
