@@ -45,23 +45,37 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the MariaDB chart and their default values.
 
-|          Parameter           |             Description             |                   Default                   |
-|------------------------------|-------------------------------------|---------------------------------------------|
-| `image`                      | Bitnami MariaDB image version       | `bitnami/mariadb:{VERSION}`                 |
-| `imagePullPolicy`            | Image pull policy                   | `IfNotPresent`                              |
-| `numSlaves`                  | Desired number of slave Pods        | `3`                                         |
-| `mariadbRootPassword`        | Password for the `root` user.       | _random 10 character alphanumeric string_   |
-| `mariadbUser`                | Username of new user to create.     | `nil`                                       |
-| `mariadbPassword`            | Password for the new user.          | _random 10 character alphanumeric string_   |
-| `mariadbDatabase`            | Name for new database to create.    | `my_database`                               |
-| `mariadbReplicationUser`     | MariaDB replication user            | `my_replication_user`                       |
-| `mariadbReplicationPassword` | MariaDB replication user password   | _random 10 character alphanumeric string_   |
-| `serviceType`                | Kubernetes Service type             | `ClusterIP`                                 |
-| `persistence.enabled`        | Use a PVC to persist data           | `true`                                      |
-| `persistence.storageClass`   | Storage class of backing PVC        | `nil` (uses alpha storage class annotation) |
-| `persistence.accessMode`     | Use volume as ReadOnly or ReadWrite | `ReadWriteOnce`                             |
-| `persistence.size`           | Size of data volume                 | `8Gi`                                       |
-| `resources`                  | CPU/Memory resource requests/limits | Memory: `256Mi`, CPU: `250m`                |
+|             Parameter             |                     Description                     |                              Default                              |
+|-----------------------------------|-----------------------------------------------------|-------------------------------------------------------------------|
+| `image.name`                      | MariaDB image name                                  | `bitnami/mariadb`                                                 |
+| `image.tag`                       | MariaDB image tag                                   | _current version_                                                 |
+| `image.pullPolicy`                | MariaDB image pull policy                           | `IfNotPresent`                                                    |
+| `service.type`                    | Kubernetes service type                             | `ClusterIP`                                                       |
+| `service.port`                    | MySQL service port                                  | `3306`                                                            |
+| `root.password`                   | Password for the `root` user                        | _random 10 character alphanumeric string_                         |
+| `db.user`                         | Username of new user to create                      | `nil`                                                             |
+| `db.password`                     | Password for the new user                           | _random 10 character alphanumeric string if `db.user` is defined_ |
+| `db.name`                         | Name for new database to create                     | `my_database`                                                     |
+| `replication.user`                | MariaDB replication user                            | `replicator`                                                      |
+| `replication.password`            | MariaDB replication user password                   | _random 10 character alphanumeric string_                         |
+| `master.antiAffinity`             | Master pod anti-affinity policy                     | `soft`                                                            |
+| `master.persistence.enabled`      | Enable persistence using a `PersistentVolumeClaim`  | `true`                                                            |
+| `master.persistence.annotations`  | Persistent Volume Claim annotations                 | `{}`                                                              |
+| `master.persistence.storageClass` | Persistent Volume Storage Class                     | ``                                                                |
+| `master.persistence.accessModes`  | Persistent Volume Access Modes                      | `[ReadWriteOnce]`                                                 |
+| `master.persistence.size`         | Persistent Volume Size                              | `8Gi`                                                             |
+| `master.resources`                | CPU/Memory resource requests/limits for master node | `{}`                                                              |
+| `slave.replicas`                  | Desired number of slave replicas                    | `1`                                                               |
+| `slave.antiAffinity`              | Slave pod anti-affinity policy                      | `soft`                                                            |
+| `slave.hpa.min`                   | Minimum number of slave pods                        | `1`                                                               |
+| `slave.hpa.max`                   | Maximum number of slave pods                        | `3`                                                               |
+| `slave.hpa.target.cpuPercentage`  | Target CPU percentage to trigger pod autoscaling    | `75`                                                              |
+| `slave.resources`                 | CPU/Memory resource requests/limits for slave nodes | `{}`                                                              |
+| `metrics.enabled`                 | Start a side-car prometheus exporter                | `false`                                                           |
+| `metrics.image`                   | Exporter image name                                 | `prom/mysqld-exporter`                                            |
+| `metrics.imageTag`                | Exporter image tag                                  | `v0.10.0`                                                         |
+| `metrics.imagePullPolicy`         | Exporter image pull policy                          | `IfNotPresent`                                                    |
+| `metrics.resources`               | Exporter resource requests/limit                    | `nil`                                                             |
 
 The above parameters map to the env variables defined in [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb). For more information please refer to the [bitnami/mariadb](http://github.com/bitnami/bitnami-docker-mariadb) image documentation.
 
@@ -69,11 +83,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install --name my-release \
-  --set mariadbRootPassword=secretpassword,mariadbUser=app_user,mariadbPassword=app_password,mariadbDatabase=app_database \
+  --set root.password=secretpassword,user.database=app_database \
     incubator/mariadb-cluster
 ```
 
-The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
+The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 

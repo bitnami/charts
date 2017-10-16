@@ -7,8 +7,8 @@ Tip:
 
 Services:
 
-  echo Master: {{ template "master.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:3306
-  echo Slave:  {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:3306
+  echo Master: {{ template "master.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+  echo Slave:  {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
 
 Administrator credentials:
 
@@ -23,8 +23,8 @@ To connect to your database
 
   2. To connect to master service (read/write):
 
-      mysql -h {{ template "master.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.mariadbDatabase }}
+      mysql -h {{ template "master.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
 
   3. To connect to slave service (read-only):
 
-      mysql -h {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.mariadbDatabase }}
+      mysql -h {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}

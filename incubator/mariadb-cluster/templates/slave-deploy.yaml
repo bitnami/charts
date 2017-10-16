@@ -1,0 +1,151 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "slave.fullname" . }}
+  labels:
+    app: "{{ template "name" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: "slave"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.slave.replicas }}
+  template:
+    metadata:
+      labels:
+        app: "{{ template "name" . }}"
+        component: "slave"
+        release: "{{ .Release.Name }}"
+    spec:
+      securityContext:
+        runAsUser: 1001
+        fsGroup: 1001
+      {{- if eq .Values.slave.antiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "name" . }}"
+                  release: "{{ .Release.Name }}"
+      {{- else if eq .Values.slave.antiAffinity "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "name" . }}"
+                  release: "{{ .Release.Name }}"
+      {{- end }}
+      containers:
+      - name: "mariadb"
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: mariadb-root-password
+        {{- if .Values.db.user }}
+        - name: MARIADB_USER
+          value: "{{ .Values.db.user }}"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: mariadb-password
+        {{- end }}
+        - name: MARIADB_DATABASE
+          value: "{{ .Values.db.name }}"
+        - name: MARIADB_REPLICATION_MODE
+          value: "slave"
+        - name: MARIADB_MASTER_HOST
+          value: {{ template "master.fullname" . }}
+        - name: MARIADB_MASTER_PORT
+          value: "3306"
+        - name: MARIADB_MASTER_USER
+          value: "root"
+        - name: MARIADB_MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: mariadb-root-password
+        - name: MARIADB_REPLICATION_USER
+          value: "{{ .Values.replication.user }}"
+        - name: MARIADB_REPLICATION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: mariadb-replication-password
+        ports:
+        - name: mysql
+          containerPort: 3306
+        livenessProbe:
+          exec:
+            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
+          initialDelaySeconds: 120
+        readinessProbe:
+          exec:
+            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
+          initialDelaySeconds: 15
+        resources:
+{{ toYaml .Values.slave.resources | indent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami
+{{- if .Values.metrics.enabled }}
+      - name: metrics
+        image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
+        imagePullPolicy: {{ .Values.metrics.imagePullPolicy | quote }}
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: mariadb-root-password
+        command: [ 'sh', '-c', 'DATA_SOURCE_NAME="root:$MARIADB_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter' ]
+        ports:
+        - name: metrics
+          containerPort: 9104
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}
+      volumes:
+      - name: data
+        emptyDir: {}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "slave.fullname" . }}
+  labels:
+    app: "{{ template "name" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: "slave"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  minReplicas: {{ .Values.slave.hpa.min }}
+  maxReplicas: {{ .Values.slave.hpa.max }}
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ template "slave.fullname" . }}
+  targetCPUUtilizationPercentage: {{ .Values.slave.hpa.target.cpuPercentage }}

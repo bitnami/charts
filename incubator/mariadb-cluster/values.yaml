@@ -1,73 +1,92 @@
-## Bitnami MariaDB image version
-## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
-##
-## Default: none
-image: bitnami/mariadb:10.1.22-r1
+## Bitnami MariaDB image
+image:
+  name: bitnami/mariadb
+  tag: 10.1.28-r2
+  pullPolicy: IfNotPresent
 
-## Image pull policy
-## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-##
-imagePullPolicy: IfNotPresent
+service:
+  ## Kubernetes service type
+  type: ClusterIP
+  port: 3306
 
-## Desired number of slave Pods
-##
-numSlaves: 3
-
-## MariaDB admin password
-## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
-##
-# mariadbRootPassword:
-
-## MariaDB user
-## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
-##
-# mariadbUser:
-
-## MariaDB password
-## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
-##
-# mariadbPassword:
-
-## Database to create
-## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
-##
-mariadbDatabase: my_database
-
-## MariaDB replication user
-## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
-##
-mariadbReplicationUser: my_replication_user
-
-## MariaDB replication user password
-## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
-##
-# mariadbReplicationPassword:
-
-## Kubernetes service type
-serviceType: ClusterIP
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  enabled: true
-
-  ## A manually managed Persistent Volume and Claim
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  # existingClaim:
-
-  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
-  ## Default: volume.alpha.kubernetes.io/storage-class: default
+root:
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
   ##
-  # storageClass:
-  accessMode: ReadWriteOnce
-  size: 8Gi
+  password:
 
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  requests:
-    memory: 256Mi
-    cpu: 250m
+db:
+  ## MariaDB username and password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
+  ##
+  user:
+  password:
+  ## Database to create
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
+  ##
+  name: my_database
+
+replication:
+  ## MariaDB replication user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+  ##
+  user: replicator
+  ## MariaDB replication user password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+  ##
+  password:
+
+master:
+  antiAffinity: soft
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ##
+    enabled: true
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    ## Persistent Volume Claim annotations
+    ##
+    annotations:
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+    - ReadWriteOnce
+    ## Persistent Volume size
+    ##
+    size: 8Gi
+  ## Configure master resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources: {}
+
+slave:
+  replicas: 1
+  antiAffinity: soft
+  hpa:
+    min: 1
+    max: 3
+    target:
+      cpuPercentage: 75
+  ## Configure slave resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources: {}
+
+metrics:
+  enabled: false
+  image: prom/mysqld-exporter
+  imageTag: v0.10.0
+  imagePullPolicy: IfNotPresent
+  resources: {}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9104"
