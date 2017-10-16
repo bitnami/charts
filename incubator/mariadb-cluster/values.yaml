@@ -14,7 +14,8 @@ serviceType: ClusterIP
 
 ## Desired number of slave Pods
 ##
-numSlaves: 3
+minSlaves: 1
+maxSlaves: 5
 
 antiAffinity: "soft"
 

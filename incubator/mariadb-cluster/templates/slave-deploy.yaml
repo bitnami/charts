@@ -9,7 +9,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ default "1" .Values.numSlaves }}
+  replicas: {{ .Values.minSlaves }}
   template:
     metadata:
       labels:
@@ -113,8 +113,8 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  minReplicas: 1
-  maxReplicas: 5
+  minReplicas: {{ .Values.minSlaves }}
+  maxReplicas: {{ .Values.maxSlaves }}
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
