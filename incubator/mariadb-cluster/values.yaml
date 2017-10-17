@@ -82,7 +82,7 @@ slave:
   resources: {}
 
 metrics:
-  enabled: true
+  enabled: false
   image: prom/mysqld-exporter
   imageTag: v0.10.0
   imagePullPolicy: IfNotPresent
