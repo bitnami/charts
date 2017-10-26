@@ -31,7 +31,7 @@ jobs:
 
 workflows:
   version: 2
-  package-and-deploy:
+  package-and-publish:
     jobs:
       - package:
           filters:
