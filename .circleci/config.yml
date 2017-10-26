@@ -4,7 +4,6 @@ jobs:
     working_directory: /workdir
     docker:
       - image: docker:17.06.0-ce-git
-        environment:
 
     steps:
       - checkout
