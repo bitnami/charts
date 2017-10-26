@@ -4,7 +4,6 @@ jobs:
     working_directory: /workdir
     docker:
       - image: docker:17.06.0-ce-git
-        environment:
 
     steps:
       - checkout
@@ -31,7 +30,7 @@ jobs:
 
 workflows:
   version: 2
-  package-and-deploy:
+  package-and-publish:
     jobs:
       - package:
           filters:
