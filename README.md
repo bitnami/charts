@@ -2,6 +2,13 @@
 
 Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/kubernetes/helm).
 
+## TL;DR
+
+```bash
+$ helm repo add bitnami-incubator http://charts.bitnami.com/incubator
+$ helm search bitnami-incubator
+```
+
 ## Stable charts (contributed to [kubernetes/charts](https://github.com/kubernetes/charts))
 
 - [Drupal](https://github.com/kubernetes/charts/tree/master/stable/drupal)
@@ -68,11 +75,17 @@ Helm is a tool for managing Kubernetes charts. Charts are packages of pre-config
 
 To install Helm, refer to the [Helm install guide](https://github.com/kubernetes/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
 
+### Add Repo
+
+The stable charts are contributed to the upstream [kubernetes/charts](https://github.com/kubernetes/charts) repository. The following command allows you to download and install the incubator charts from this repository.
+
+```bash
+$ helm repo add bitnami-incubator http://charts.bitnami.com/incubator
+```
+
 ### Using Helm
 
 Once you have installed the Helm client and initialized the Tiller server, you can deploy a Bitnami Helm Chart into a Kubernetes cluster.
-
-> Run `helm init` to initialize the Tiller server.
 
 Please refer to the [Quick Start guide](https://github.com/kubernetes/helm/blob/master/docs/quickstart.md) if you wish to get running in just a few commands, otherwise the [Using Helm Guide](https://github.com/kubernetes/helm/blob/master/docs/using_helm.md) provides detailed instructions on how to use the Helm client to manage packages on your Kubernetes cluster.
 
