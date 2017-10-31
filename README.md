@@ -5,7 +5,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami-incubator http://charts.bitnami.com/incubator
+$ helm repo add bitnami-incubator https://charts.bitnami.com/incubator
 $ helm search bitnami-incubator
 ```
 
@@ -80,7 +80,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/kubernetes
 The stable charts are contributed to the upstream [kubernetes/charts](https://github.com/kubernetes/charts) repository. The following command allows you to download and install the incubator charts from this repository.
 
 ```bash
-$ helm repo add bitnami-incubator http://charts.bitnami.com/incubator
+$ helm repo add bitnami-incubator https://charts.bitnami.com/incubator
 ```
 
 ### Using Helm
