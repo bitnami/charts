@@ -1,0 +1,11 @@
+apiVersion: v1
+description: Get a Crypto currency price
+home: https://bitnami.com
+keywords:
+- cryptocurrency
+- crypto
+- bitcoin
+name: crypto
+sources:
+- https://github.com/kubeless/functions
+version: 0.0.1
