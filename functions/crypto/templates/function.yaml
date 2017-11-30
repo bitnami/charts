@@ -1,0 +1,14 @@
+apiVersion: k8s.io/v1
+kind: Function
+metadata:
+  name: crypto
+  namespace: default
+spec:
+  deps: |
+    requests
+  function: "import requests\nimport urlparse\n\ndef handler(event):\n   ticker =
+    event.json['crypto']\n   path = urlparse.urljoin('https://api.coinmarketcap.com/v1/ticker/',
+    ticker)   \n   return requests.get(path).json()[0]['price_usd']\n"
+  handler: crypto.handler
+  runtime: python2.7
+  type: HTTP
