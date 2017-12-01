@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: docker:17.06.0-ce-git
         environment:
-          CHARTS_URL: https://charts.bitnami.com
+          CHART_URL: https://charts.bitnami.com
 
     steps:
       - checkout
