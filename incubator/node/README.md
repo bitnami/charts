@@ -132,7 +132,7 @@ ingress:
         - example.com
 ```
 
-## Provision a database using the Open Source Broker for Azure
+## Provision a database using the Open Service Broker for Azure
 
 1. Install Service Catalog in your Kubernetes cluster following [this instructions](https://kubernetes.io/docs/tasks/service-catalog/install-service-catalog-using-helm/)
 2. Install the Open Service Broker for Azure in your Kubernetes cluster following [this instructions](https://github.com/Azure/helm-charts/tree/master/open-service-broker-azure)
