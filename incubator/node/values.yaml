@@ -1,7 +1,13 @@
 ## Bitnami node image version
 ## ref: https://hub.docker.com/r/bitnami/node/tags/
 ##
-image: bitnami/node:6.12.3-r0
+image: bitnami/node:9.5.0-r0-prod
+devImage: bitnami/node:9.5.0-r0
+
+## Specify a imagePullPolicy
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+imagePullPolicy: IfNotPresent
 
 ## Git repository http/https
 ##
@@ -11,30 +17,13 @@ repository:  https://github.com/jbianquetti-nami/simple-node-app.git
 ##
 revision: 26679f6
 
-## Specify a imagePullPolicy
-## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+## Specify the number of replicas for the application
 ##
-imagePullPolicy: IfNotPresent
+replicas: 1
 
+## Specify the port where your applucation will be running
 ##
-## MariaDB chart configuration
-##
-mariadb:
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ## mariadbRootPassword:
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  persistence:
-    enabled: true
-    ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
-    ## Default: volume.alpha.kubernetes.io/storage-class: default
-    ##
-    # storageClass:
-    accessMode: ReadWriteOnce
-    size: 8Gi
+applicationPort: 3000
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -57,7 +46,38 @@ persistence:
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
-resources:
-  requests:
-    memory: 512Mi
-    cpu: 300m
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 500m
+  #   memory: 512Mi
+
+## Provision an external database using kubernetes service catalog and the Open Service Broker for Azure 
+##
+externalDatabase:
+## All of these values are only used when mariadb.enabled is set to false
+  azure:
+    enabled: false
+    ## The Azure region in which to deploy Azure Cosmos MongoDB
+    location: eastus
+    ## The plan to request for Azure Cosmos MongoDB
+    servicePlan: mongo-db
+
+## Configure ingress resource that allow you to access the application. 
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  enabled: false
+  path: /
+  # Used to create an Ingress record.
+  host: example.local
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: "true"
+  # tls:
+  #   Secrets must be manually created in the namespace.
+  #   - secretName: your-tls-cert
+  #     hosts:
+  #       - example.local

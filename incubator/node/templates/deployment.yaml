@@ -1,71 +1,86 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "node.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "node.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[
-          {
-            "name": "git-clone-app",
-            "image": "{{ .Values.image }}",
-            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}" ],
-            "volumeMounts": [
-              {
-                "name": "app",
-                "mountPath": "/app"
-              }
-            ]
-          },
-          {
-            "name": "npm-install",
-            "image": "{{ .Values.image }}",
-            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "npm", "install" ],
-            "volumeMounts": [
-              {
-                "name": "app",
-                "mountPath": "/app"
-              }
-            ]
-          }
-        ]'
+        app: {{ template "node.name" . }}
+        release: {{ .Release.Name | quote }}
     spec:
+      initContainers:
+      - name: git-clone-app
+        image: {{ .Values.devImage }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}']
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      - name: npm-install
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        workingDir: /app
+        command: ['/bin/bash', '-c', 'useradd bitnami && chown -R bitnami:bitnami /app && npm install']
+        volumeMounts:
+        - name: app
+          mountPath: /app
       containers:
-      - name: {{ template "fullname" . }}
+      - name: {{ template "node.fullname" . }}
         securityContext:
           readOnlyRootFilesystem: true
         image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
-        - name: GIT_REPO
-          value: {{ .Values.repository }}
-        command: [ "npm", "start" ]
+        {{- if .Values.externalDatabase.azure.enabled }}
+        - name: DATABASE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "node.fullname" . }}-mongodb-secret
+              key: host
+        - name: DATABASE_PORT
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "node.fullname" . }}-mongodb-secret
+              key: port
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "node.fullname" . }}-mongodb-secret
+              key: username
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "node.fullname" . }}-mongodb-secret
+              key: password
+        - name: DATABASE_CONNECTION_OPTIONS
+          value: "ssl=true&replicaSet=globaldb"
+        {{- end }}
+        - name: DATA_FOLDER
+          value: "/app"
+        workingDir: /app
+        command: ['/bin/bash', '-c', 'useradd bitnami && su bitnami -c "PATH=/opt/bitnami/node/bin:$PATH npm start"']
         ports:
         - name: http
-          containerPort: 3000
+          containerPort: {{ .Values.applicationPort }}
         livenessProbe:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 180
+          initialDelaySeconds: 60
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           timeoutSeconds: 3
           periodSeconds: 5
         resources:

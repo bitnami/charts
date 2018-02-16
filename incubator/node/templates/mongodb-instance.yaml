@@ -1,0 +1,20 @@
+{{- if .Values.externalDatabase.azure.enabled }}
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: {{ template "node.fullname" . }}-mongodb-instance
+  labels:
+    app: {{ template "node.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  clusterServiceClassExternalName: azure-cosmos-mongo-db
+  clusterServicePlanExternalName: {{ .Values.externalDatabase.azure.servicePlan }}
+  parameters:
+    location: {{ .Values.externalDatabase.azure.location }}
+    resourceGroup: {{ .Release.Namespace }}
+    sslEnforcement: disabled
+    firewallStartIPAddress: 0.0.0.0
+    firewallEndIPAddress: 255.255.255.255
+{{- end }}
