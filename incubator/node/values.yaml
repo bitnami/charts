@@ -11,15 +11,15 @@ imagePullPolicy: IfNotPresent
 
 ## Git repository http/https
 ##
-repository:  https://github.com/jbianquetti-nami/simple-node-app.git
+repository:  https://github.com/bitnami/sample-node-app.git
 
 ## Git repository revision to checkout
 ##
-revision: 26679f6
+revision: master
 
 ## Specify the number of replicas for the application
 ##
-replicas: 1
+replicas: 3
 
 ## Specify the port where your applucation will be running
 ##

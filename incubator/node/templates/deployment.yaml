@@ -33,8 +33,6 @@ spec:
           mountPath: /app
       containers:
       - name: {{ template "node.fullname" . }}
-        securityContext:
-          readOnlyRootFilesystem: true
         image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
