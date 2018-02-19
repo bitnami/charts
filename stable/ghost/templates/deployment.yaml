@@ -1,0 +1,130 @@
+{{- if include "ghost.host" . -}}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "ghost.fullname" . }}
+  labels:
+    app: {{ template "ghost.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "ghost.fullname" . }}
+    spec:
+      initContainers:
+      - name: volume-permissions
+        image: "{{ .Values.volumePermissions.image.name }}:{{ .Values.volumePermissions.image.tag }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ['sh', '-c', 'chmod -R g+rwX /bitnami']
+        volumeMounts:
+        - mountPath: /bitnami
+          name: ghost-data
+      containers:
+      - name: {{ template "ghost.fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+        {{- if .Values.allowEmptyPassword }}
+          value: "yes"
+        {{- else }}
+          value: "no"
+        {{- end }}
+        - name: MARIADB_HOST
+        {{- if .Values.mariadb.enabled }}
+          value: {{ template "ghost.mariadb.fullname" . }}
+        {{- else }}
+          value: {{ default "" .Values.externalDatabase.host | quote }}
+        {{- end }}
+        - name: MARIADB_PORT_NUMBER
+          value: "3306"
+        - name: GHOST_DATABASE_NAME
+        {{- if .Values.mariadb.enabled }}
+          value: {{ default "" .Values.mariadb.mariadbDatabase | quote }}
+        {{- else }}
+          value: {{ default "" .Values.externalDatabase.database | quote }}
+        {{- end }}
+        - name: GHOST_DATABASE_USER
+        {{- if .Values.mariadb.enabled }}
+          value: {{ default "" .Values.mariadb.mariadbUser | quote }}
+        {{- else }}
+          value: {{ default "" .Values.externalDatabase.user | quote }}
+        {{- end }}
+        - name: GHOST_DATABASE_PASSWORD
+        {{- if .Values.mariadb.enabled }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "ghost.mariadb.fullname" . }}
+              key: mariadb-password
+        {{- else }}
+          value: {{ default "" .Values.externalDatabase.password | quote }}
+        {{- end }}
+        - name: GHOST_HOST
+          value: {{ include "ghost.host" . | quote }}
+        - name: GHOST_PORT_NUMBER
+          value: {{ default "80" .Values.ghostPort | quote }}
+        - name: GHOST_USERNAME
+          value: {{ default "" .Values.ghostUsername | quote }}
+        - name: GHOST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "ghost.fullname" . }}
+              key: ghost-password
+        - name: GHOST_EMAIL
+          value: {{ default "" .Values.ghostEmail | quote }}
+        - name: BLOG_TITLE
+          value: {{ default "" .Values.ghostBlogTitle | quote }}
+        - name: SMTP_HOST
+          value: {{ default "" .Values.smtpHost | quote }}
+        - name: SMTP_PORT
+          value: {{ default "" .Values.smtpPort | quote }}
+        - name: SMTP_USER
+          value: {{ default "" .Values.smtpUser | quote }}
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "ghost.fullname" . }}
+              key: smtp-password
+        - name: SMTP_SERVICE
+          value: {{ default "" .Values.smtpService | quote }}
+        ports:
+        - name: http
+          containerPort: 2368
+        livenessProbe:
+          httpGet:
+            path: /ghost
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "ghost.host" . | quote }}
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /ghost
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "ghost.host" . | quote }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: ghost-data
+          mountPath: /bitnami/ghost
+      volumes:
+      - name: ghost-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "ghost.fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+{{- end -}}
