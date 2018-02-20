@@ -54,7 +54,7 @@ The following tables lists the configurable parameters of the Node chart and the
 | `imagePullPolicy`                    | Image pull policy                                         | `IfNotPresent`                                            |
 | `repository`                         | Repo of the application                                   | `https://github.com/jbianquetti-nami/simple-node-app.git` |
 | `revision`                           | Revision  to checkout                                     | `master`                                                  |
-| `replicas`                           | Number of replicas for the application                    | `1`                                                       |
+| `replicas`                           | Number of replicas for the application                    | `3`                                                       |
 | `applicationPort`                    | Port where the application will be running                | `3000`                                                    |
 | `serviceType`                        | Kubernetes Service type                                   | `LoadBalancer`                                            |
 | `persistence.enabled`                | Enable persistence using PVC                              | `false`                                                   |
