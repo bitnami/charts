@@ -1,0 +1,106 @@
+{{- if include "prestashop.host" . -}}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "prestashop.fullname" . }}
+  labels:
+    app: {{ template "prestashop.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "prestashop.fullname" . }}
+    spec:
+      containers:
+      - name: {{ template "prestashop.fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        env:
+        - name: MARIADB_HOST
+          value: {{ template "prestashop.mariadb.fullname" . }}
+        - name: MARIADB_PORT_NUMBER
+          value: "3306"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "prestashop.mariadb.fullname" . }}
+              key: mariadb-root-password
+        - name: PRESTASHOP_HOST
+          value: {{ include "prestashop.host" . | quote }}
+        - name: PRESTASHOP_USERNAME
+          value: {{ default "" .Values.prestashopUsername | quote }}
+        - name: PRESTASHOP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "prestashop.fullname" . }}
+              key: prestashop-password
+        - name: PRESTASHOP_EMAIL
+          value: {{ default "" .Values.prestashopEmail | quote }}
+        - name: PRESTASHOP_FIRST_NAME
+          value: {{ default "" .Values.prestashopFirstName | quote }}
+        - name: PRESTASHOP_LAST_NAME
+          value: {{ default "" .Values.prestashopLastName | quote }}
+        - name: SMTP_HOST
+          value: {{ default "" .Values.smtpHost | quote }}
+        - name: SMTP_PORT
+          value: {{ default "" .Values.smtpPort | quote }}
+        - name: SMTP_USER
+          value: {{ default "" .Values.smtpUser | quote }}
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "prestashop.fullname" . }}
+              key: smtp-password
+        - name: SMTP_PROTOCOL
+          value: {{ default "" .Values.smtpProtocol | quote }}
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        livenessProbe:
+          httpGet:
+            path: /login
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "prestashop.host" . | quote }}
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /login
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "prestashop.host" . | quote }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: prestashop-data
+          mountPath: /bitnami/prestashop
+        - name: apache-data
+          mountPath: /bitnami/apache
+      volumes:
+      - name: prestashop-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "prestashop.fullname" . }}-prestashop
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      - name: apache-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "prestashop.fullname" . }}-apache
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+{{- end -}}

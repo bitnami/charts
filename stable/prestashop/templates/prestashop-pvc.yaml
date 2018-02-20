@@ -1,0 +1,24 @@
+{{- if .Values.persistence.enabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "prestashop.fullname" . }}-prestashop
+  labels:
+    app: {{ template "prestashop.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  accessModes:
+    - {{ .Values.persistence.prestashop.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.prestashop.size | quote }}
+{{- if .Values.persistence.prestashop.storageClass }}
+{{- if (eq "-" .Values.persistence.prestashop.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.persistence.prestashop.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end -}}
