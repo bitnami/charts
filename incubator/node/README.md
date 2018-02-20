@@ -146,7 +146,7 @@ Setting `externalDatabase.azure.enabled` to `true` makes the chart to create a `
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.
 
 Deploy the helm chart enabling the Azure external database makes the following assumptions:
-  - You would want an Azure Cosmos MongoDB database
+  - You would want an Azure CosmosDB MongoDB database
   - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER and DATABASE_PASSWORD environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-incubator/service-catalog 
