@@ -1,0 +1,88 @@
+{{- if include "owncloud.host" . -}}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "owncloud.fullname" . }}
+  labels:
+    app: {{ template "owncloud.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "owncloud.fullname" . }}
+    spec:
+      containers:
+      - name: {{ template "owncloud.fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        env:
+        - name: MARIADB_HOST
+          value: {{ template "owncloud.mariadb.fullname" . }}
+        - name: MARIADB_PORT_NUMBER
+          value: "3306"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "owncloud.mariadb.fullname" . }}
+              key: mariadb-root-password
+        - name: OWNCLOUD_HOST
+          value: {{ include "owncloud.host" . | quote }}
+        - name: OWNCLOUD_USERNAME
+          value: {{ default "" .Values.owncloudUsername | quote }}
+        - name: OWNCLOUD_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "owncloud.fullname" . }}
+              key: owncloud-password
+        - name: OWNCLOUD_EMAIL
+          value: {{ default "" .Values.owncloudEmail | quote }}
+        ports:
+        - name: http
+          containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /status.php
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "owncloud.host" . | quote }}
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /status.php
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "owncloud.host" . | quote }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: owncloud-data
+          mountPath: /bitnami/owncloud
+        - name: apache-data
+          mountPath: /bitnami/apache
+      volumes:
+      - name: owncloud-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.owncloud.existingClaim }}{{ .Values.persistence.owncloud.existingClaim }}{{- else }}{{ template "owncloud.fullname" . }}-owncloud{{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      - name: apache-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.apache.existingClaim }}{{ .Values.persistence.apache.existingClaim }}{{- else }}{{ template "owncloud.fullname" . }}-apache{{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+{{- end -}}
