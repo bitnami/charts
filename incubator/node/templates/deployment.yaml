@@ -13,34 +13,23 @@ spec:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[
-          {
-            "name": "git-clone-app",
-            "image": "{{ .Values.image }}",
-            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "/bin/sh", "-c" , "git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}" ],
-            "volumeMounts": [
-              {
-                "name": "app",
-                "mountPath": "/app"
-              }
-            ]
-          },
-          {
-            "name": "npm-install",
-            "image": "{{ .Values.image }}",
-            "imagePullPolicy": "{{ .Values.imagePullPolicy }}",
-            "command": [ "npm", "install" ],
-            "volumeMounts": [
-              {
-                "name": "app",
-                "mountPath": "/app"
-              }
-            ]
-          }
-        ]'
     spec:
+      initContainers:
+      - name: git-clone-app
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}']
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      - name: npm-install
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        workingDir: /app
+        command: ['npm', 'install']
+        volumeMounts:
+        - name: app
+          mountPath: /app
       containers:
       - name: {{ template "fullname" . }}
         securityContext:
