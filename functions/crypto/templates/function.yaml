@@ -1,4 +1,4 @@
-apiVersion: k8s.io/v1
+apiVersion: kubeless.io/v1beta1
 kind: Function
 metadata:
   name: crypto
