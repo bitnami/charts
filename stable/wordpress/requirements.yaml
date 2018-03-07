@@ -1,6 +1,6 @@
 dependencies:
 - name: mariadb
-  version: 2.1.5
+  version: 2.1.x
   repository: https://charts.bitnami.com/stable
   condition: mariadb.enabled
   tags:
