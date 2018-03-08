@@ -52,6 +52,8 @@ spec:
         - name: ALLOW_EMPTY_PASSWORD
           value: "yes"
         {{- end }}
+        - name: REDIS_DISABLE_COMMANDS
+          value: {{ .Values.redisDisableCommands }}
         ports:
         - name: redis
           containerPort: 6379
