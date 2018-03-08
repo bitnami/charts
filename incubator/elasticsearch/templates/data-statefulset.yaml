@@ -44,15 +44,15 @@ spec:
       {{- end }}
       initContainers:
       - name: sysctl
-        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
       - name: "elasticsearch"
-        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
         env:
         - name: SERVICE
           value: "{{ template "master.fullname" . }}"

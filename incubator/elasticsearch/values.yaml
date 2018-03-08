@@ -3,15 +3,14 @@
 ##
 name: elastic
 
-image:
-  ## Elasticsearch image
-  ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
-  name: bitnami/elasticsearch
-  tag: 5.5.2-r1
-  ## Specify a imagePullPolicy
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
+## Elasticsearch image
+## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
+image: bitnami/elasticsearch:5.5.2-r1
+ 
+## Specify a imagePullPolicy
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+pullPolicy: IfNotPresent
 
 
 ## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
