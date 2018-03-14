@@ -1,7 +1,7 @@
 dependencies:
 - name: mariadb
-  version: 2.1.1
-  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 2.1.x
+  repository: https://charts.bitnami.com/stable
   condition: mariadb.enabled
   tags:
     - wordpress-database
