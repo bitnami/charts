@@ -13,6 +13,7 @@ spec:
   type: {{ .Values.serviceType }}
   {{- if eq .Values.serviceType "LoadBalancer" }}
   loadBalancerIP: {{ .Values.suitecrmLoadBalancerIP }}
+  externalTrafficPolicy: Local
   {{- end }}
   ports:
   - name: http
