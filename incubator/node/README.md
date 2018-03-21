@@ -47,27 +47,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Node chart and their default values.
 
-|              Parameter               |            Description                                    |                        Default                            |
-|--------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
-| `image`                              | Node image                                                | `bitnami/node:{VERSION}`                                  |
-| `devImage`                           | Image used for initContainers                             | `bitnami/node:{VERSION}`                                  |
-| `imagePullPolicy`                    | Image pull policy                                         | `IfNotPresent`                                            |
-| `repository`                         | Repo of the application                                   | `https://github.com/jbianquetti-nami/simple-node-app.git` |
-| `revision`                           | Revision  to checkout                                     | `master`                                                  |
-| `replicas`                           | Number of replicas for the application                    | `3`                                                       |
-| `applicationPort`                    | Port where the application will be running                | `3000`                                                    |
-| `serviceType`                        | Kubernetes Service type                                   | `LoadBalancer`                                            |
-| `persistence.enabled`                | Enable persistence using PVC                              | `false`                                                   |
-| `persistence.path`                   | Path to persisted directory                               | `/app/data`                                               |
-| `persistence.accessMode`             | PVC Access Mode                                           | `ReadWriteOnce`                                           |
-| `persistence.size`                   | PVC Storage Request                                       | `1Gi`                                                     |
-| `externalDatabase.azure.enabled`     | Create a database on Azure cloud with k8s service catalog | `false`                                                   |
-| `externalDatabase.azure.location`    | The Azure region in which to deploy the database          | `eastus`                                                  |
-| `externalDatabase.azure.servicePlan` | The plan to request for the Azure database                | `mongo-db`                                                |
-| `ingress.enabled`                    | Enable ingress creation                                   | `false`                                                   |
-| `ingress.path`                       | Ingress path                                              | `/`                                                       |
-| `ingress.host`                       | Ingress host                                              | `example.local`                                           |
-| `ingress.tls`                        | TLS configuration for the ingress                         | `{}`                                                      |
+|              Parameter                  |            Description                                    |                        Default                            |
+|-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
+| `image`                                 | Node image                                                | `bitnami/node:{VERSION}`                                  |
+| `devImage`                              | Image used for initContainers                             | `bitnami/node:{VERSION}`                                  |
+| `imagePullPolicy`                       | Image pull policy                                         | `IfNotPresent`                                            |
+| `repository`                            | Repo of the application                                   | `https://github.com/jbianquetti-nami/simple-node-app.git` |
+| `revision`                              | Revision  to checkout                                     | `master`                                                  |
+| `replicas`                              | Number of replicas for the application                    | `3`                                                       |
+| `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
+| `serviceType`                           | Kubernetes Service type                                   | `LoadBalancer`                                            |
+| `persistence.enabled`                   | Enable persistence using PVC                              | `false`                                                   |
+| `persistence.path`                      | Path to persisted directory                               | `/app/data`                                               |
+| `persistence.accessMode`                | PVC Access Mode                                           | `ReadWriteOnce`                                           |
+| `persistence.size`                      | PVC Storage Request                                       | `1Gi`                                                     |
+| `mongodb.install`                       | Wheter to install or not the MongoDB chart                | `true`                                                    |
+| `externaldb.secretName`                 | Secret containing existing database credentials           | `nil`                                                     |
+| `externaldb.type`                       | Type of database that defines the database secret mapping | `osba`                                                    |
+| `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                   | `nil`                                                     |
+| `ingress.enabled`                       | Enable ingress creation                                   | `false`                                                   |
+| `ingress.path`                          | Ingress path                                              | `/`                                                       |
+| `ingress.host`                          | Ingress host                                              | `example.local`                                           |
+| `ingress.tls`                           | TLS configuration for the ingress                         | `{}`                                                      |
 
 The above parameters map to the env variables defined in [bitnami/node](http://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](http://github.com/bitnami/bitnami-docker-node) image documentation.
 
@@ -132,17 +133,57 @@ ingress:
         - example.com
 ```
 
+## Connect your application to an already existing database
+
+1. Create a secret containing your database credentials:
+
+  ```
+  $ kubectl create secret generic my-database-secret --from-literal=host=YOUR_DATABASE_HOST --from-literal=port=YOUR_DATABASE_PORT --from-literal=user=YOUR_DATABASE_USER --from-literal=password=YOUR_DATABASE_PASSWORD
+  ```
+  
+  `YOUR_DATABASE_HOST`, `YOUR_DATABASE_PORT`, `YOUR_DATABASE_USER` and `YOUR_DATABASE_PASSWORD` are placeholders that must be replaced with correct values.
+
+2. Deploy the node chart specifying the secret name
+
+  ```
+  $ helm install --name node-app --set mongodb.install=false,externaldb.secretName=my-database-secret bitnami-incubator/node
+  ```
+
 ## Provision a database using the Open Service Broker for Azure
 
 1. Install Service Catalog in your Kubernetes cluster following [this instructions](https://kubernetes.io/docs/tasks/service-catalog/install-service-catalog-using-helm/)
 2. Install the Open Service Broker for Azure in your Kubernetes cluster following [this instructions](https://github.com/Azure/helm-charts/tree/master/open-service-broker-azure)
-3. Deploy the helm chart:
+3. Create and deploy a ServiceBinding to provision a database server in Azure cloud.
+
+  ```
+  apiVersion: servicecatalog.k8s.io/v1beta1
+  kind: ServiceInstance
+  metadata:
+    name: azure-mongodb-instance
+    labels:
+      app: mongodb
+  spec:
+    clusterServiceClassExternalName: azure-cosmos-mongo-db
+    clusterServicePlanExternalName: mongo-db
+    parameters:
+      location: YOUR_AZURE_LOCATION
+      resourceGroup: mongodb-k8s-service-catalog
+      sslEnforcement: disabled
+      firewallStartIPAddress: 0.0.0.0
+      firewallEndIPAddress: 255.255.255.255
+  ```
+  Please update the `YOUR_AZURE_LOCATION` placeholder in the above example. 
+
+  ```
+  $ kubectl create -f mongodb-service-instance.yml
+  ```
+
+4. Deploy the helm chart:
 
     ```
-    $ helm install --name node-app --set externalDatabase.azure.enabled=true bitnami-incubator/node
+    $ helm install --name node-app --set mongodb.install=false,externaldb.serviceInstanceName=azure-mongodb-instance bitnami-incubator/node
     ```
 
-Setting `externalDatabase.azure.enabled` to `true` makes the chart to create a `ServiceInstance` and a `ServiceBinding` kubernetes resources.
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.
 
 Deploy the helm chart enabling the Azure external database makes the following assumptions:

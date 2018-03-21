@@ -36,27 +36,37 @@ spec:
         image: "{{ .Values.image }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         env:
-        {{- if .Values.externalDatabase.azure.enabled }}
+        {{- if .Values.mongodb.install }}
+        - name: DATABASE_HOST
+          value: {{ template "mongodb.fullname" . }}
+        - name: DATABASE_PORT
+          value: "27017"
+        - name: DATABASE_USER
+          value: {{ .Values.mongodb.mongodbUsername | quote }}
+        - name: DATABASE_PASSWORD
+          value: {{ .Values.mongodb.mongodbDatabase | quote }}
+        {{ else }}
+        {{- $type := dict "type" .Values.externaldb.type }}
         - name: DATABASE_HOST
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.fullname" . }}-mongodb-secret
-              key: host
+              name: {{ .Values.externaldb.secretName }}
+              key: {{ template "externaldb.host" $type }} 
         - name: DATABASE_PORT
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.fullname" . }}-mongodb-secret
-              key: port
+              name: {{ .Values.externaldb.secretName }}
+              key: {{ template "externaldb.port" $type }} 
         - name: DATABASE_USER
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.fullname" . }}-mongodb-secret
-              key: username
+              name: {{ .Values.externaldb.secretName }}
+              key: {{ template "externaldb.host" $type }} 
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.fullname" . }}-mongodb-secret
-              key: password
+              name: {{ .Values.externaldb.secretName }}
+              key: {{ template "externaldb.host" $type }} 
         - name: DATABASE_CONNECTION_OPTIONS
           value: "ssl=true&replicaSet=globaldb"
         {{- end }}

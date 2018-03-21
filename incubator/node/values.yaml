@@ -11,7 +11,7 @@ imagePullPolicy: IfNotPresent
 
 ## Git repository http/https
 ##
-repository:  https://github.com/bitnami/sample-node-app.git
+repository:  https://github.com/bitnami/sample-mean.git
 
 ## Git repository revision to checkout
 ##
@@ -54,16 +54,27 @@ resources: {}
   #   cpu: 500m
   #   memory: 512Mi
 
-## Provision an external database using kubernetes service catalog and the Open Service Broker for Azure 
 ##
-externalDatabase:
-## All of these values are only used when mariadb.enabled is set to false
-  azure:
-    enabled: false
-    ## The Azure region in which to deploy Azure CosmosDB MongoDB
-    location: eastus
-    ## The plan to request for Azure CosmosDB MongoDB
-    servicePlan: mongo-db
+## MongoDB chart configuration
+##
+mongodb:
+  ## Whether to deploy a mongodb server to satisfy the applications database requirements.
+  ## To use an external database set this to false and configure the externaldb parameters
+  install: true # Check mongodb chart for configuration values
+
+## Provision an external database (Only if mongodb.install is false)
+## You can:
+##    1) Pass an already existing Secret with your database credentials
+##    2) Pass an already existing ServiceInstance name and specify the service catalog broker to automatically create a ServiceBinding for your application.
+externaldb:
+  # You can use an existing secret containing your database credentials
+  # Please refer to the respective section in the README to know the details about this secret.
+  secretName:
+  # Only if using Kubernetes Service Catalog you can specify the kind of broker used. Available options are osba|gce|aws
+  type: osba
+  # If you provide the serviceInstanceName, the chart will create a ServiceBinding for that ServiceInstance
+  broker:
+    serviceInstanceName:
 
 ## Configure ingress resource that allow you to access the application. 
 ## ref: http://kubernetes.io/docs/user-guide/ingress/

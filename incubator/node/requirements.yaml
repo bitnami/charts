@@ -1,0 +1,7 @@
+dependencies:
+- name: mongodb
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.4.x
+- name: externaldb-helper
+  repository: https://charts.bitnami.com/stable
+  version: 0.0.x

@@ -1,4 +1,4 @@
-{{- if .Values.externalDatabase.azure.enabled }}
+{{- if .Values.externaldb.broker.serviceInstanceName }}
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceBinding
 metadata:
@@ -10,6 +10,10 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   instanceRef:
-    name: {{ template "node.fullname" . }}-mongodb-instance
+    name: {{ .Values.externaldb.broker.serviceInstanceName }}
+{{- if .Values.externaldb.broker.serviceInstanceName }}
+  secretName: {{ .Values.externaldb.secretName }}
+{{ else }}
   secretName: {{ template "node.fullname" . }}-mongodb-secret
+{{- end }}
 {{- end }}

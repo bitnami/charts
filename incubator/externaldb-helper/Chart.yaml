@@ -1,0 +1,13 @@
+name: externaldb-helper
+version: 0.0.1
+appVersion: 0.0.1
+description: Helper to define templates for external databases
+keywords:
+- helper
+- broker
+- service
+- catalog
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
