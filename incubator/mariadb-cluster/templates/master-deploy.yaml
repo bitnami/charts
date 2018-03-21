@@ -92,7 +92,9 @@ spec:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:
         - name: data
-          mountPath: /bitnami
+          mountPath: /bitnami/mariadb/data
+        - name: config
+          mountPath: /bitnami/mariadb/conf
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
@@ -123,6 +125,9 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
       volumes:
+      - name: config
+        configMap:
+          name: {{ template "fullname" . }}
       - name: data
       {{- if .Values.master.persistence.enabled }}
         persistentVolumeClaim:
