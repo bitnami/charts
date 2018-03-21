@@ -11,8 +11,10 @@ $ helm search bitnami-incubator
 
 ## Stable charts (contributed to [kubernetes/charts](https://github.com/kubernetes/charts))
 
+- [Dokuwiki](https://github.com/kubernetes/charts/tree/master/stable/dokuwiki)
 - [Drupal](https://github.com/kubernetes/charts/tree/master/stable/drupal)
 - [Ghost](https://github.com/kubernetes/charts/tree/master/stable/ghost)
+- [JasperReports](https://github.com/kubernetes/charts/tree/master/stable/jasperreports)
 - [Joomla!](https://github.com/kubernetes/charts/tree/master/stable/joomla)
 - [Magento](https://github.com/kubernetes/charts/tree/master/stable/magento)
 - [MariaDB](https://github.com/kubernetes/charts/tree/master/stable/mariadb)
@@ -39,7 +41,6 @@ $ helm search bitnami-incubator
 ## Incubator charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/incubator/apache)
-- [Dokuwiki](https://github.com/kubernetes/charts/tree/master/stable/dokuwiki)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/incubator/elasticsearch)
 - [JasperReports Server](https://github.com/kubernetes/charts/tree/master/stable/jasperreports)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/incubator/jenkins)

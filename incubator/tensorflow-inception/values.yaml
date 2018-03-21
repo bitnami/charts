@@ -9,7 +9,7 @@ server:
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-inception/tags/
 ##
 client:
-  image: bitnami/tensorflow-inception:1.5.0-r0
+  image: bitnami/tensorflow-inception:1.5.0-r2
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

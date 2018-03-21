@@ -1,0 +1,24 @@
+{{- if .Values.persistence.enabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "dokuwiki.fullname" . }}-dokuwiki
+  labels:
+    app: {{ template "dokuwiki.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  accessModes:
+    - {{ .Values.persistence.dokuwiki.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.dokuwiki.size | quote }}
+{{- if .Values.persistence.dokuwiki.storageClass }}
+{{- if (eq "-" .Values.persistence.dokuwiki.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.persistence.dokuwiki.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end -}}

@@ -8,4 +8,4 @@ keywords:
 name: crypto
 sources:
 - https://github.com/kubeless/functions
-version: 0.0.1
+version: 0.0.2

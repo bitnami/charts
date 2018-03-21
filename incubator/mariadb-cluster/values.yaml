@@ -1,8 +1,6 @@
 ## Bitnami MariaDB image
-image:
-  name: bitnami/mariadb
-  tag: 10.1.28-r2
-  pullPolicy: IfNotPresent
+image: bitnami/mariadb:10.1.28-r2
+pullPolicy: IfNotPresent
 
 service:
   ## Kubernetes service type
