@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "consul.fullname" . }}-configuration
+  labels:
+    app: {{ template "consul.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  config.json: | 
+    {
+    "datacenter":"dc1",
+    "domain":"consul",
+    "data_dir":"/opt/bitnami/consul/data",
+    "pid_file":"/opt/bitnami/consul/tmp/consul.pid",
+    "server":true,
+    "ui":true,
+    "bootstrap_expect":3,
+    "addresses": {
+        "http":"0.0.0.0"
+    },
+    "retry_join": ["{{ template "consul.fullname" . }}-0.{{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc"],
+    "ports": {
+        "http":8500,
+        "dns":8600,
+        "serf_lan":8301,
+        "server":8300
+    },
+    "serf_lan":"0.0.0.0"
+    }
