@@ -94,7 +94,8 @@ spec:
         - name: data
           mountPath: /bitnami/mariadb/data
         - name: config
-          mountPath: /bitnami/mariadb/conf
+          mountPath: /opt/bitnami/mariadb/conf/my.cnf
+          subPath: my.cnf
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
