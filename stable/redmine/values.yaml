@@ -1,0 +1,158 @@
+## Bitnami Redmine image version
+## ref: https://hub.docker.com/r/bitnami/redmine/tags/
+##
+image: bitnami/redmine:3.4.4-r2
+
+## Specify a imagePullPolicy
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+imagePullPolicy: IfNotPresent
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
+##
+redmineUsername: user
+
+## Application password
+## Defaults to a random 10-character alphanumeric string if not set
+## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+##
+# redminePassword:
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
+##
+redmineEmail: user@example.com
+
+## Redmine default data language
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
+##
+redmineLanguage: en
+
+## SMTP mail delivery configuration
+## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
+##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpTls:
+
+## Environment variables, to pass to the entry point
+##
+# extraVars:
+#   - name: NAMI_DEBUG
+#     value: --log-level trace
+
+## Database configuration. Please note that only one of the following databases should be selected.
+## ref: https://github.com/bitnami/bitnami-docker-redmine#run-the-application-using-postgresql-database
+##
+databaseType:
+  mariadb: true
+  postgresql: false
+
+##
+## MariaDB chart configuration
+##
+mariadb:
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # mariadbRootPassword:
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    ## A manually manage Persistent Volume Claim
+    ## Requires mariadb.persistence.enable: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+
+    ## mariadb data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+##
+## PostgreSQL chart configuration
+##
+postgresql:
+  ## PostgreSQL admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # postgresqlPassword:
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    ## A manually manage Persistent Volume Claim
+    ## Requires postgresql.persistence.enable: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+
+    ## postgresql data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+## Kubernetes configuration
+##   minikube: NodePort
+##   ingress: ClusterIP
+##   elsewhere: LoadBalancer
+##
+serviceType: LoadBalancer
+## Control hosts connecting to "LoadBalancer" only
+serviceLoadBalancerSourceRanges:
+  - 0.0.0.0/0
+
+ingress:
+  enabled: false
+  hostname: redmine.cluser.local
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    # ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/24,172.10.0.1"
+  tls:
+    # - secretName: redmine.cluster.local
+    #   hosts:
+    #     - redmine.cluster.local
+
+## For Kubernetes v1.4, v1.5 and v1.6, use 'extensions/v1beta1'
+## For Kubernetes v1.7, use 'networking.k8s.io/v1'
+networkPolicyApiVersion: extensions/v1beta1
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  ## A manually manage Persistent Volume Claim
+  ## Requires persistence.enable: true
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
+
+  ## redmine data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  accessMode: ReadWriteOnce
+  size: 8Gi

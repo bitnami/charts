@@ -1,0 +1,120 @@
+{{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "mediawiki.fullname" . }}
+  labels:
+    app: {{ template "mediawiki.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "mediawiki.fullname" . }}
+    spec:
+      containers:
+      - name: {{ template "mediawiki.fullname" . }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: {{ .Values.allowEmptyPassword | quote }}
+        - name: MARIADB_HOST
+        {{- if .Values.mariadb.enabled }}
+          value: {{ template "mediawiki.mariadb.fullname" . }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.host | quote }}
+        {{- end }}
+        - name: MARIADB_PORT_NUMBER
+        {{- if .Values.mariadb.enabled }}
+          value: "3306"
+        {{ else }}
+          value: {{ .Values.externalDatabase.port | quote }}
+        {{ end }}
+        - name: MEDIAWIKI_DATABASE_NAME
+        {{- if .Values.mariadb.enabled }}
+          value: {{ .Values.mariadb.mariadbDatabase | quote }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.database | quote }}
+        {{- end }}
+        - name: MEDIAWIKI_DATABASE_USER
+        {{- if .Values.mariadb.enabled }}
+          value: {{ .Values.mariadb.mariadbUser | quote }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.user | quote }}
+        {{- end }}
+        - name: MEDIAWIKI_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+            {{- if .Values.mariadb.enabled }}
+              name: {{ template "mediawiki.mariadb.fullname" . }}
+              key: mariadb-password
+            {{- else }}
+              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+              key: db-password
+            {{- end }}
+        - name: MEDIAWIKI_USERNAME
+          value: {{ .Values.mediawikiUser | quote }}
+        - name: MEDIAWIKI_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "mediawiki.fullname" . }}
+              key: mediawiki-password
+        - name: MEDIAWIKI_EMAIL
+          value: {{ .Values.mediawikiEmail | quote }}
+        - name: MEDIAWIKI_WIKI_NAME
+          value: {{ .Values.mediawikiName | quote }}
+        - name: SMTP_HOST_ID
+          value: {{ .Values.smtpHostID | quote }}
+        - name: SMTP_HOST
+          value: {{ .Values.smtpHost | quote }}
+        - name: SMTP_PORT
+          value: {{ .Values.smtpPort | quote }}
+        - name: SMTP_USER
+          value: {{ .Values.smtpUser | quote }}
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "mediawiki.fullname" . }}
+              key: smtp-password
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        livenessProbe:
+          httpGet:
+            path: /index.php
+            port: http
+          initialDelaySeconds: 120
+        readinessProbe:
+          httpGet:
+            path: /index.php
+            port: http
+          initialDelaySeconds: 30
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: mediawiki-data
+          mountPath: /bitnami/mediawiki
+        - name: apache-data
+          mountPath: /bitnami/apache
+      volumes:
+      - name: mediawiki-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "mediawiki.fullname" . }}-mediawiki
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      - name: apache-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "mediawiki.fullname" . }}-apache
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+{{- end }}
