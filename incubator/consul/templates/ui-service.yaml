@@ -1,0 +1,17 @@
+{{- if .Values.uiService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "consul.fullname" . }}-ui"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    app: "{{ template "consul.name" . }}"
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  type: "{{ .Values.uiService.type }}"
+{{- end }}

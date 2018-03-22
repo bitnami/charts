@@ -1,0 +1,119 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "{{ template "consul.fullname" . }}"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    app: "{{ template "consul.name" . }}"
+spec:
+  serviceName: "{{ template "consul.fullname" . }}"
+  replicas: {{ default 3 .Values.replicas }}
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      name: "{{ template "consul.fullname" . }}"
+      labels:
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+        app: "{{ template "consul.name" . }}"
+    spec:
+      containers:
+      - name: "{{ template "consul.fullname" . }}"
+        image: "{{ .Values.registry }}/{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        ports:
+        - name: http
+          containerPort: {{ .Values.httpPort }}
+        - name: rpc
+          containerPort: {{ .Values.rpcPort }}
+        - name: serflan-tcp
+          protocol: "TCP"
+          containerPort: {{ .Values.serflanPort }}
+        - name: serflan-udp
+          protocol: "UDP"
+          containerPort: {{ .Values.serflanUdpPort }}
+        - name: serfwan-tcp
+          protocol: "TCP"
+          containerPort: {{ .Values.serfwanPort }}
+        - name: serfwan-udp
+          protocol: "UDP"
+          containerPort: {{ .Values.serfwanUdpPort }}
+        - name: server
+          containerPort: {{.Values.serverPort}}
+        - name: consuldns-tcp
+          containerPort: {{.Values.consulDnsPort}}
+        - name: consuldns-udp
+          protocol: "UDP"
+          containerPort: {{.Values.consulDnsPort}}
+        resources:
+{{ toYaml .Values.Resources | indent 10 }}
+        env:
+        - name: CONSUL_RETRY_JOIN
+          value: "{{ template "consul.fullname" . }}-0.{{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc"
+        - name: CONSUL_DISABLE_KEYRING_FILE
+          value: 'true'
+        - name: CONSUL_BOOTSTRAP_EXPECT
+          value: {{ default 3 .Values.replicas | quote }}
+        livenessProbe:
+          exec:
+            command:
+            - consul
+            - operator
+            - raft
+            - list-peers
+{{ toYaml .Values.livenessProbe | indent 10 }}
+        readinessProbe:
+          exec:
+            command:
+            - consul
+            - members
+{{ toYaml .Values.readinessProbe | indent 10 }}
+        lifecycle:
+          preStop:
+            exec:
+              command:              
+              - consul 
+              - leave
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/consul/data
+        - name: gossip-key
+          mountPath: /opt/bitnami/consul/secrets
+          readOnly: true
+      volumes:
+      - name: gossip-key
+        secret:
+          secretName: {{ template "consul.fullname" . }}-gossip-key
+{{- if .Values.persistentVolume.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        annotations:
+        {{- range $key, $value := .Values.persistentVolume.annotations }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistentVolume.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistentVolume.size | quote }}
+      {{- if .Values.persistentVolume.storageClass }}
+      {{- if (eq "-" .Values.persistentVolume.storageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: "{{ .Values.persistentVolume.storageClass }}"
+      {{- end }}
+      {{- end }}
+{{- else }}
+        - name: data
+          emptyDir: {}
+{{- end }}
+
+
