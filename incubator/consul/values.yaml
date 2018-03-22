@@ -58,11 +58,12 @@ Storage: "1Gi"
 # DatacenterName: dc1
 
 ## Encrypt Gossip traffic
-EncryptGossip: false
+## If 'true', it is mandatory to define a predefined value for the gossip key
+#encryptGossip: true
 
-## predefined value for gossip key.
-## Will use a generated random alpha numeric if not provided
-# GossipKey: key
+## Predefined value for gossip key.
+## The key must be 16-bytes, can be generated with $(consul keygen)
+#gossipKey: key
 
 
 ## Setting maxUnavailable will create a pod disruption budget that will prevent

@@ -82,7 +82,7 @@ spec:
         - name: data
           mountPath: /bitnami/consul/data
         - name: gossip-key
-          mountPath: /opt/bitnami/consul/secrets
+          mountPath: /opt/bitnami/consul/
           readOnly: true
       volumes:
       - name: gossip-key
