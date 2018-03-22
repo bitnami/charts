@@ -67,6 +67,8 @@ mongodb:
 ##    1) Pass an already existing Secret with your database credentials
 ##    2) Pass an already existing ServiceInstance name and specify the service catalog broker to automatically create a ServiceBinding for your application.
 externaldb:
+  # Set to true if your external database has ssl enabled
+  ssl: false
   # You can use an existing secret containing your database credentials
   # Please refer to the respective section in the README to know the details about this secret.
   secretName:

@@ -44,6 +44,8 @@ spec:
         - name: DATABASE_USER
           value: {{ .Values.mongodb.mongodbUsername | quote }}
         - name: DATABASE_PASSWORD
+          value: {{ .Values.mongodb.mongodbPassword | quote }}
+        - name: DATABASE_NAME
           value: {{ .Values.mongodb.mongodbDatabase | quote }}
         {{ else }}
         {{- $type := dict "type" .Values.externaldb.type }}
@@ -61,14 +63,16 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ .Values.externaldb.secretName }}
-              key: {{ template "externaldb.host" $type }} 
+              key: {{ template "externaldb.username" $type }} 
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ .Values.externaldb.secretName }}
-              key: {{ template "externaldb.host" $type }} 
+              key: {{ template "externaldb.password" $type }} 
+        {{- if .Values.externaldb.ssl }}
         - name: DATABASE_CONNECTION_OPTIONS
-          value: "ssl=true&replicaSet=globaldb"
+          value: "ssl=true"
+        {{- end }}
         {{- end }}
         - name: DATA_FOLDER
           value: "/app"

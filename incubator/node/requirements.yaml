@@ -2,6 +2,7 @@ dependencies:
 - name: mongodb
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 0.4.x
+  condition: mongodb.install
 - name: externaldb-helper
   repository: https://charts.bitnami.com/stable
   version: 0.0.x
