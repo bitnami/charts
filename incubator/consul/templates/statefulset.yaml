@@ -109,17 +109,21 @@ spec:
         - name: gossip-key
           mountPath: /opt/bitnami/consul/
         {{ end }}
+        {{ if .Values.configmap }}
         - name: consul-config
           mountPath: /opt/bitnami/consul/conf/ 
+        {{ end }}
       volumes:
       {{ if .Values.gossipKey }}
       - name: gossip-key
         secret:
           secretName: {{ template "consul.fullname" . }}-gossip-key
       {{ end }}
+      {{ if .Values.configmap }}
       - name: consul-config
         configMap:
           name: {{ template "consul.fullname" . }}-configuration
+      {{ end }}
 {{- if .Values.persistentVolume.enabled }}
   volumeClaimTemplates:
     - metadata:
