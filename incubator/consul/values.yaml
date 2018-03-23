@@ -1,18 +1,18 @@
 ## Bitnami Consul image version
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
 ##
-image: consul:1.0.6-r1
+image: consul:latest
 
 ## Bitnami Dockerhub registry
 ## ref: https://hub.docker.com/r/bitnami/
 ##
-registry: bitnami
+registry: dbarranco
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
-imagePullPolicy: IfNotPresent
+imagePullPolicy: Always
 
 ## Kubernetes service type
 serviceType: ClusterIP
@@ -24,9 +24,6 @@ replicas: 3
 httpPort: 8500
 rpcPort: 8400
 serflanPort: 8301
-serflanUdpPort: 8301
-serfwanPort: 8302
-serfwanUdpPort: 8302
 serverPort: 8300
 consulDnsPort: 8600
 
@@ -55,16 +52,26 @@ Storage: "1Gi"
 
 ## Datacenter name for consul. If not supplied, will use the consul
 ## default 'dc1'
-# DatacenterName: dc1
-
-## Encrypt Gossip traffic
-## If 'true', it is mandatory to define a predefined value for the gossip key
-#encryptGossip: true
+datacenterName: dc1
 
 ## Predefined value for gossip key.
 ## The key must be 16-bytes, can be generated with $(consul keygen)
-#gossipKey: key
+#gossipKey: ACRt1rlRGSLwtsme5sGdWQ==
 
+## Extra configuration that will be added to the default one.
+#localConfig: |
+#  {
+#    "key": "value"
+#  }
+
+## Consul domain name.
+domain: consul
+
+## Consul address in which will bind client interfaces.
+clientAddress: '0.0.0.0'
+
+##Consul Serf lan address.
+serlanAddress: '0.0.0.0'
 
 ## Setting maxUnavailable will create a pod disruption budget that will prevent
 ## voluntarty cluster administration from taking down too many consul pods. If
@@ -97,6 +104,9 @@ antiAffinity: "soft"
 uiService:
   enabled: false
   type: "ClusterIP"
+
+## Consul raft multiplier.
+raftMultiplier: 1
 
 ## Configure the ingress resource that allows you to access the
 ## Consul user interface. Set up the URL
@@ -142,7 +152,27 @@ uiIngress:
   # - name: consul-ui.local-tls
   #   key:
   #   certificate:
-
+## Consul configmap
+#configmap: | 
+#    {
+#    "datacenter":"dc2",
+#    "domain":"consul",
+#    "data_dir":"/opt/bitnami/consul/data",
+#    "pid_file":"/opt/bitnami/consul/tmp/consul.pid",
+#    "server":true,
+#    "ui":true,
+#    "bootstrap_expect":3,
+#    "addresses": {
+#        "http":"0.0.0.0"
+#    },
+#    "ports": {
+#        "http":8500,
+#        "dns":8600,
+#        "serf_lan":8301,
+#        "server":8300
+#    },
+#    "serf_lan":"0.0.0.0"
+#    }
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -159,6 +189,7 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector

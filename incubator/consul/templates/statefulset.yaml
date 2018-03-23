@@ -35,20 +35,14 @@ spec:
           containerPort: {{ .Values.serflanPort }}
         - name: serflan-udp
           protocol: "UDP"
-          containerPort: {{ .Values.serflanUdpPort }}
-        - name: serfwan-tcp
-          protocol: "TCP"
-          containerPort: {{ .Values.serfwanPort }}
-        - name: serfwan-udp
-          protocol: "UDP"
-          containerPort: {{ .Values.serfwanUdpPort }}
+          containerPort: {{ .Values.serflanPort }}
         - name: server
-          containerPort: {{.Values.serverPort}}
+          containerPort: {{ .Values.serverPort }}
         - name: consuldns-tcp
-          containerPort: {{.Values.consulDnsPort}}
+          containerPort: {{ .Values.consulDnsPort }}
         - name: consuldns-udp
           protocol: "UDP"
-          containerPort: {{.Values.consulDnsPort}}
+          containerPort: {{ .Values.consulDnsPort }}
         resources:
 {{ toYaml .Values.Resources | indent 10 }}
         env:
@@ -58,6 +52,36 @@ spec:
           value: 'true'
         - name: CONSUL_BOOTSTRAP_EXPECT
           value: {{ default 3 .Values.replicas | quote }}
+        - name: CONSUL_CLIENT_LAN_ADDRESS
+          value: {{ .Values.clientAddress }}
+        - name: CONSUL_BOOTSTRAP_EXPECT
+          value: {{ .Values.replicas | quote }}
+        - name: CONSUL_RAFT_MULTIPLIER
+          value: {{ .Values.raftMultiplier }}
+        - name: CONSUL_DOMAIN
+          value: {{ .Values.domain }}
+        - name: CONSUL_DATACENTER
+          value: {{ .Values.datacenterName }}
+        {{ if .Values.gossipKey }}
+        - name: CONSUL_GOSSIP_ENCRYPTION_KEY
+          value: {{ .Values.gossipKey }}
+        {{ end }}
+        {{ if .Value.localConfig }}
+        - name: CONSUL_LOCAL_CONFIG
+          value: {{ .Value.localConfig }}
+        {{ end }}
+        - name: CONSUL_SERF_LAN_ADDRESS
+          value: {{ .Values.serflanAddress}}
+        - name: CONSUL_UI
+          value: {{ .Values.uiService.enabled }}
+        - name: CONSUL_HTTP_PORT_NUMBER
+          value: {{ .Values.httpPort }}
+        - name: CONSUL_DNS_PORT_NUMBER
+          value: {{ .Values.consulDnsPort }}
+        - name: CONSUL_RPC_PORT_NUMBER
+          value: {{ .Values.serverPort }}
+        - name: CONSUL_SERF_LAN_PORT_NUMBER
+          value: {{ .Values.serflanPort }}
         livenessProbe:
           exec:
             command:
@@ -81,13 +105,21 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /bitnami/consul/data
+        {{ if .Values.gossipKey}}
         - name: gossip-key
           mountPath: /opt/bitnami/consul/
-          readOnly: true
+        {{ end }}
+        - name: consul-config
+          mountPath: /opt/bitnami/consul/conf/ 
       volumes:
+      {{ if .Values.gossipKey }}
       - name: gossip-key
         secret:
           secretName: {{ template "consul.fullname" . }}-gossip-key
+      {{ end }}
+      - name: consul-config
+        configMap:
+          name: {{ template "consul.fullname" . }}-configuration
 {{- if .Values.persistentVolume.enabled }}
   volumeClaimTemplates:
     - metadata:
