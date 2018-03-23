@@ -92,10 +92,12 @@ spec:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:
         - name: data
-          mountPath: /bitnami/mariadb/data
+          mountPath: /bitnami/mariadb
+{{- if .Values.master.config }}
         - name: config
           mountPath: /opt/bitnami/mariadb/conf/my.cnf
           subPath: my.cnf
+{{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
