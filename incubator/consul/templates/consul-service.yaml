@@ -21,13 +21,7 @@ spec:
     port: {{ .Values.serflanPort }}
   - name: serflan-udp
     protocol: "UDP"
-    port: {{ .Values.serflanUdpPort }}
-  - name: serfwan-tcp
-    protocol: "TCP"
-    port: {{ .Values.serfwanPort }}
-  - name: serfwan-udp
-    protocol: "UDP"
-    port: {{ .Values.serfwanUdpPort }}
+    port: {{ .Values.serflanPort }}
   - name: server
     port: {{.Values.serverPort}}
   - name: consuldns-tcp

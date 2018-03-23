@@ -1,12 +1,12 @@
 ## Bitnami Consul image version
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
 ##
-image: consul:latest
+image: consul:1.0.6-r1
 
 ## Bitnami Dockerhub registry
 ## ref: https://hub.docker.com/r/bitnami/
 ##
-registry: dbarranco
+registry: bitnami
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
@@ -71,7 +71,9 @@ domain: consul
 clientAddress: '0.0.0.0'
 
 ##Consul Serf lan address.
-serlanAddress: '0.0.0.0'
+serflanAddress: '0.0.0.0'
+
+## Disable 
 
 ## Setting maxUnavailable will create a pod disruption budget that will prevent
 ## voluntarty cluster administration from taking down too many consul pods. If
@@ -106,7 +108,7 @@ uiService:
   type: "ClusterIP"
 
 ## Consul raft multiplier.
-raftMultiplier: 1
+raftMultiplier: '1'
 
 ## Configure the ingress resource that allows you to access the
 ## Consul user interface. Set up the URL

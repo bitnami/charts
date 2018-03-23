@@ -49,39 +49,39 @@ spec:
         - name: CONSUL_RETRY_JOIN
           value: "{{ template "consul.fullname" . }}-0.{{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc"
         - name: CONSUL_DISABLE_KEYRING_FILE
-          value: 'true'
+          value: "true"
         - name: CONSUL_BOOTSTRAP_EXPECT
           value: {{ default 3 .Values.replicas | quote }}
         - name: CONSUL_CLIENT_LAN_ADDRESS
-          value: {{ .Values.clientAddress }}
+          value: "{{ .Values.clientAddress }}"
         - name: CONSUL_BOOTSTRAP_EXPECT
           value: {{ .Values.replicas | quote }}
         - name: CONSUL_RAFT_MULTIPLIER
-          value: {{ .Values.raftMultiplier }}
+          value: {{ .Values.raftMultiplier | quote }}
         - name: CONSUL_DOMAIN
-          value: {{ .Values.domain }}
+          value: "{{ .Values.domain }}"
         - name: CONSUL_DATACENTER
-          value: {{ .Values.datacenterName }}
+          value: "{{ .Values.datacenterName }}"
         {{ if .Values.gossipKey }}
         - name: CONSUL_GOSSIP_ENCRYPTION_KEY
-          value: {{ .Values.gossipKey }}
+          value: "{{ .Values.gossipKey | quote }}"
         {{ end }}
-        {{ if .ValueslocalConfig }}
+        {{ if .Values.localConfig }}
         - name: CONSUL_LOCAL_CONFIG
           value: {{ .Values.localConfig }}
         {{ end }}
         - name: CONSUL_SERF_LAN_ADDRESS
-          value: {{ .Values.serflanAddress}}
+          value: "{{ .Values.serflanAddress}}"
         - name: CONSUL_UI
           value: "{{ .Values.uiService.enabled }}"
         - name: CONSUL_HTTP_PORT_NUMBER
-          value: {{ .Values.httpPort }}
+          value: {{ .Values.httpPort | quote}}
         - name: CONSUL_DNS_PORT_NUMBER
-          value: {{ .Values.consulDnsPort }}
+          value: {{ .Values.consulDnsPort | quote }}
         - name: CONSUL_RPC_PORT_NUMBER
-          value: {{ .Values.serverPort }}
+          value: {{ .Values.serverPort | quote }}
         - name: CONSUL_SERF_LAN_PORT_NUMBER
-          value: {{ .Values.serflanPort }}
+          value: {{ .Values.serflanPort | quote }}
         livenessProbe:
           exec:
             command:
