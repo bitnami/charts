@@ -66,14 +66,14 @@ spec:
         - name: CONSUL_GOSSIP_ENCRYPTION_KEY
           value: {{ .Values.gossipKey }}
         {{ end }}
-        {{ if .Value.localConfig }}
+        {{ if .ValueslocalConfig }}
         - name: CONSUL_LOCAL_CONFIG
-          value: {{ .Value.localConfig }}
+          value: {{ .Values.localConfig }}
         {{ end }}
         - name: CONSUL_SERF_LAN_ADDRESS
           value: {{ .Values.serflanAddress}}
         - name: CONSUL_UI
-          value: {{ .Values.uiService.enabled }}
+          value: "{{ .Values.uiService.enabled }}"
         - name: CONSUL_HTTP_PORT_NUMBER
           value: {{ .Values.httpPort }}
         - name: CONSUL_DNS_PORT_NUMBER
