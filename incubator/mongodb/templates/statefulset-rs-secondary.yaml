@@ -1,0 +1,106 @@
+{{- if .Values.replicaSet.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: {{ template "mongodb.name" . }}
+    chart: {{ template "mongodb.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "mongodb.fullname" . }}-secondary
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "mongodb.name" . }}
+      release: {{ .Release.Name }}
+      component: secondary
+  serviceName: {{ template "mongodb.fullname" . }}
+  replicas: {{ .Values.replicaSet.replicas.secondary }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "mongodb.name" . }}
+        release: {{ .Release.Name }}
+        component: secondary
+    spec:
+      containers:
+        - name: {{ template "mongodb.name" . }}-secondary
+          image: "{{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          ports:
+          - containerPort: {{ .Values.port }}
+            name: mongodb
+          env:
+          - name: NAMI_LOG_LEVEL
+            value: "trace8"
+          - name: MONGODB_REPLICA_SET_MODE
+            value: "secondary"
+          - name: MONGODB_PRIMARY_HOST
+            value: {{ template "mongodb.fullname" . }} 
+          - name: MONGODB_REPLICA_SET_NAME
+            value: {{ .Values.replicaSet.replicaSetName | quote }}
+            {{- if .Values.auth.enabled }}
+          - name: MONGODB_PRIMARY_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{- else }}{{ template "mongodb.fullname" . }}{{- end }}
+                key: mongodb-root-password
+          - name: MONGODB_REPLICA_SET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{- else }}{{ template "mongodb.fullname" . }}{{- end }}
+                key: mongodb-replica-set-key
+            {{- end }}
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+          volumeMounts:
+            - name: datadir
+              mountPath: /bitnami/mongodb
+            {{- if .Values.configmap }}
+            - name: config
+              mountPath: /opt/bitnami/mongodb/conf/
+            {{- end }}
+      volumes:
+        {{- if .Values.configmap }}
+        - name: config
+          configMap:
+            name: {{ template "mongodb.fullname" . }}
+        {{- end }}
+{{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+        annotations:
+        {{- range $key, $value := .Values.persistence.annotations }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+      {{- if .Values.persistence.storageClass }}
+      {{- if (eq "-" .Values.persistence.storageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: "{{ .Values.persistence.storageClass }}"
+      {{- end }}
+      {{- end }}
+{{- else }}
+        - name: datadir
+          emptyDir: {}
+{{- end }}
+{{- end }}
