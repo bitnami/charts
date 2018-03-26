@@ -50,9 +50,9 @@ The following tables lists the configurable parameters of the Node chart and the
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
 | `image`                                 | Node image                                                | `bitnami/node:{VERSION}`                                  |
-| `devImage`                              | Image used for initContainers                             | `bitnami/node:{VERSION}`                                  |
+| `gitImage`                              | Image used for initContainers                             | `alpine/git`                                              |
 | `imagePullPolicy`                       | Image pull policy                                         | `IfNotPresent`                                            |
-| `repository`                            | Repo of the application                                   | `https://github.com/jbianquetti-nami/simple-node-app.git` |
+| `repository`                            | Repo of the application                                   | `https://github.com/jbianquetti-nami/sample-mean.git`     |
 | `revision`                              | Revision  to checkout                                     | `master`                                                  |
 | `replicas`                              | Number of replicas for the application                    | `3`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
@@ -80,7 +80,7 @@ $ helm install --name my-release \
     bitnami-incubator/node
 ```
 
-The above command clones the remote git  repository to the `/app/` directory  of the container. Additionally it sets the number or `replicas` to `2`.
+The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number or `replicas` to `2`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -97,7 +97,7 @@ The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
 
-## Set an Ingress
+## Set an Ingress controller
 
 First install the nginx-ingress controller via helm:
 
@@ -181,7 +181,7 @@ ingress:
 4. Deploy the helm chart:
 
     ```
-    $ helm install --name node-app --set mongodb.install=false,externaldb.serviceInstanceName=azure-mongodb-instance bitnami-incubator/node
+    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance bitnami-incubator/node
     ```
 
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.

@@ -2,10 +2,10 @@
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceBinding
 metadata:
-  name: {{ template "node.fullname" . }}-mongodb-binding
+  name: {{ template "node.mongodb.fullname" . }}-binding
   labels:
     app: {{ template "node.name" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: {{ template "node.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:

@@ -17,9 +17,9 @@ spec:
     spec:
       initContainers:
       - name: git-clone-app
-        image: {{ .Values.devImage }}
+        image: {{ .Values.gitImage }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
-        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}']
+        command: ['git', 'clone', '{{ .Values.repository }}', '-b', '{{ .Values.revision }}', '/app']
         volumeMounts:
         - name: app
           mountPath: /app
@@ -38,13 +38,16 @@ spec:
         env:
         {{- if .Values.mongodb.install }}
         - name: DATABASE_HOST
-          value: {{ template "mongodb.fullname" . }}
+          value: {{ template "node.mongodb.fullname" . }}
         - name: DATABASE_PORT
           value: "27017"
         - name: DATABASE_USER
           value: {{ .Values.mongodb.mongodbUsername | quote }}
         - name: DATABASE_PASSWORD
-          value: {{ .Values.mongodb.mongodbPassword | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "node.mongodb.fullname" . }}
+              key: mongodb-password 
         - name: DATABASE_NAME
           value: {{ .Values.mongodb.mongodbDatabase | quote }}
         {{ else }}
