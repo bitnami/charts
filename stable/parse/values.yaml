@@ -12,7 +12,11 @@ server:
   ## Bitnami Parse image version
   ## ref: https://hub.docker.com/r/bitnami/parse/tags/
   ##
-  image: bitnami/parse:2.7.4-r0
+  image:
+    registry: docker.io
+    repository: bitnami/parse
+    tag: 2.7.4-r0
+    pullPolicy: IfNotPresent
 
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,7 +59,11 @@ dashboard:
   ## Bitnami Parse Dashboard image version
   ## ref: https://hub.docker.com/r/bitnami/parse-dashboard/tags/
   ##
-  image: bitnami/parse-dashboard:1.1.2-r2
+  image:
+    registry: docker.io
+    repository: bitnami/parse-dashboard
+    tag: 1.1.2-r2
+    pullPolicy: IfNotPresent
 
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
