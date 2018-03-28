@@ -3,7 +3,7 @@
 ##
 image:
   registry: docker.io
-  repository: bitnami/ghost
+  repository: tompizmor/ghost
   tag: 1.21.6
   pullPolicy: IfNotPresent
 
