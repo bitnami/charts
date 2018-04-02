@@ -43,19 +43,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the PostgreSQL chart and their default values.
 
-|         Parameter          |                Description                |                  Default                  |
-|----------------------------|-------------------------------------------|-------------------------------------------|
-| `image`                    | PostgreSQL image                          | `bitnami/postgresql:{VERSION}`            |
-| `imagePullPolicy`          | Image pull policy                         | `IfNotPresent`                            |
-| `postgresqlUsername`       | PostgreSQL admin user                     | `postgres`                                |
-| `postgresqlPassword`       | PostgreSQL admin password                 | _random 10 character alphanumeric string_ |
-| `postgresqlDatabase`       | PostgreSQL database                       | `nil`_                                    |
-| `serviceType`              | Kubernetes Service type                   | `ClusterIP`                               |
-| `persistence.enabled`      | Enable persistence using PVC              | `true`                                    |
-| `persistence.storageClass` | PVC Storage Class for PostgreSQL volume   | `generic`                                 |
-| `persistence.accessMode`   | PVC Access Mode for PostgreSQL volume     | `ReadWriteOnce`                           |
-| `persistence.size`         | PVC Storage Request for PostgreSQL volume | `8Gi`                                     |
-| `resources`                | CPU/Memory resource requests/limits       | Memory: `256Mi`, CPU: `250m`              |
+|         Parameter          |                Description                |                            Default                        |
+|----------------------------|-------------------------------------------|---------------------------------------------------------- |
+| `image.registry`           | PostgreSQL image registry                 | `docker.io`                                               |
+| `image.repository`         | PostgreSQL Image name                     | `bitnami/postgresql`                                      |
+| `image.tag`                | PostgreSQL Image tag                      | `{VERSION}`                                               |
+| `image.pullPolicy`         | PostgreSQL image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullSecrets`        | Specify image pull secrets                | `nil` (does not add image pull secrets to deployed pods)  |
+| `postgresqlUsername`       | PostgreSQL admin user                     | `postgres`                                                |
+| `postgresqlPassword`       | PostgreSQL admin password                 | _random 10 character alphanumeric string_                 |
+| `postgresqlDatabase`       | PostgreSQL database                       | `nil`_                                                    |
+| `serviceType`              | Kubernetes Service type                   | `ClusterIP`                                               |
+| `persistence.enabled`      | Enable persistence using PVC              | `true`                                                    |
+| `persistence.storageClass` | PVC Storage Class for PostgreSQL volume   | `generic`                                                 |
+| `persistence.accessMode`   | PVC Access Mode for PostgreSQL volume     | `ReadWriteOnce`                                           |
+| `persistence.size`         | PVC Storage Request for PostgreSQL volume | `8Gi`                                                     |
+| `resources`                | CPU/Memory resource requests/limits       | Memory: `256Mi`, CPU: `250m`                              |
 
 The above parameters map to the env variables defined in [bitnami/postgresql](http://github.com/bitnami/bitnami-docker-postgresql). For more information please refer to the [bitnami/postgresql](http://github.com/bitnami/bitnami-docker-postgresql) image documentation.
 

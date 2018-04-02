@@ -41,6 +41,12 @@ spec:
                   component: "master"
                   release: "{{ .Release.Name }}"
       {{- end }}
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
       initContainers:
       - name: sysctl
         image: "{{ .Values.image }}"
@@ -50,8 +56,8 @@ spec:
           privileged: true
       containers:
       - name: "elasticsearch"
-        image: "{{ .Values.image }}"
-        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: SERVICE
           value: "{{ template "master.fullname" . }}"

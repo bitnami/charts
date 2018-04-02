@@ -1,5 +1,5 @@
 name: mariadb-cluster
-version: 0.5.1
+version: 0.5.2
 appVersion: 10.1.28
 description: Chart to create a Highly available MariaDB cluster
 keywords:

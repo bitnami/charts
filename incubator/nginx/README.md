@@ -52,11 +52,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the NGINX chart and their default values.
 
-|     Parameter     |        Description        |       Default       |
-| ----------------- | ------------------------- | ------------------- |
-| `imageTag`        | `bitnami/nginx` image tag | NGINX image version |
-| `imagePullPolicy` | Image pull policy         | `IfNotPresent`      |
-| `vhost`           | Custom nginx virtual host | `nil`               |
+|          Parameter        |             Description        |                        Default                            |
+| ------------------------- | ------------------------------ | --------------------------------------------------------- |
+| `image.registry`          | Nginx image registry           | `docker.io`                                               |
+| `image.repository`        | Nginx Image name               | `bitnami/nginx`                                           |
+| `image.tag`               | Nginx Image tag                | `{VERSION}`                                               |
+| `image.pullPolicy`        | Nginx image pull policy        | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullSecrets`       | Specify image pull secrets     | `nil` (does not add image pull secrets to deployed pods)  |
+| `vhost`                   | Custom nginx virtual host      | `nil`                                                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

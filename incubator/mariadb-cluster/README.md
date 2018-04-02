@@ -47,9 +47,11 @@ The following tables lists the configurable parameters of the MariaDB chart and 
 
 |             Parameter             |                     Description                     |                              Default                              |
 |-----------------------------------|-----------------------------------------------------|-------------------------------------------------------------------|
-| `image.name`                      | MariaDB image name                                  | `bitnami/mariadb`                                                 |
-| `image.tag`                       | MariaDB image tag                                   | _current version_                                                 |
-| `image.pullPolicy`                | MariaDB image pull policy                           | `IfNotPresent`                                                    |
+| `image.registry`                  | MariaDB image registry                              | `docker.io`                                                       |
+| `image.repository`                | MariaDB Image name                                  | `bitnami/mariadb`                                                 |
+| `image.tag`                       | MariaDB Image tag                                   | `{VERSION}`                                                       |
+| `image.pullPolicy`                | MariaDB image pull policy                           | `Always` if `imageTag` is `latest`, else `IfNotPresent`           |
+| `image.pullSecrets`               | Specify image pull secrets                          | `nil` (does not add image pull secrets to deployed pods)          |
 | `service.type`                    | Kubernetes service type                             | `ClusterIP`                                                       |
 | `service.port`                    | MySQL service port                                  | `3306`                                                            |
 | `root.password`                   | Password for the `root` user                        | _random 10 character alphanumeric string_                         |

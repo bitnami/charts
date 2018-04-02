@@ -44,20 +44,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the MySQL chart and their default values.
 
-|         Parameter          |                Description                 |                   Default                   |
-|----------------------------|--------------------------------------------|---------------------------------------------|
-| `image`                    | MySQL image                                | `bitnami/mysql:{VERSION}`                   |
-| `imagePullPolicy`          | Image pull policy.                         | `IfNotPresent`                              |
-| `mysqlRootPassword`        | Password for the `root` user.              | `nil`                                       |
-| `mysqlUser`                | Username of new user to create.            | `nil`                                       |
-| `mysqlPassword`            | Password for the new user.                 | `nil`                                       |
-| `mysqlDatabase`            | Name for new database to create.           | `nil`                                       |
-| `persistence.enabled`      | Use a PVC to persist data                  | `true`                                      |
-| `persistence.storageClass` | Storage class of backing PVC               | `nil` (uses alpha storage class annotation) |
-| `persistence.accessMode`   | Use volume as ReadOnly or ReadWrite        | `ReadWriteOnce`                             |
-| `persistence.size`         | Size of data volume                        | `8Gi`                                       |
-| `resources`                | CPU/Memory resource requests/limits        | Memory: `256Mi`, CPU: `250m`                |
-| `config`                   | Multi-line string for my.cnf configuration | `nil`                                       |
+|         Parameter          |                Description                 |                         Default                           |
+|----------------------------|--------------------------------------------|-----------------------------------------------------------|
+| `image.registry`           | MySQL image registry                       | `docker.io`                                               |
+| `image.repository`         | MySQL Image name                           | `bitnami/mysql`                                           |
+| `image.tag`                | MySQL Image tag                            | `{VERSION}`                                               |
+| `image.pullPolicy`         | MySQL image pull policy                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullSecrets`        | Specify image pull secrets                 | `nil` (does not add image pull secrets to deployed pods)  |
+| `mysqlRootPassword`        | Password for the `root` user.              | `nil`                                                     |
+| `mysqlUser`                | Username of new user to create.            | `nil`                                                     |
+| `mysqlPassword`            | Password for the new user.                 | `nil`                                                     |
+| `mysqlDatabase`            | Name for new database to create.           | `nil`                                                     |
+| `persistence.enabled`      | Use a PVC to persist data                  | `true`                                                    |
+| `persistence.storageClass` | Storage class of backing PVC               | `nil` (uses alpha storage class annotation)               |
+| `persistence.accessMode`   | Use volume as ReadOnly or ReadWrite        | `ReadWriteOnce`                                           |
+| `persistence.size`         | Size of data volume                        | `8Gi`                                                     |
+| `resources`                | CPU/Memory resource requests/limits        | Memory: `256Mi`, CPU: `250m`                              |
+| `config`                   | Multi-line string for my.cnf configuration | `nil`                                                     |
 
 The above parameters map to the env variables defined in [bitnami/mysql](http://github.com/bitnami/bitnami-docker-mysql). For more information please refer to the [bitnami/mysql](http://github.com/bitnami/bitnami-docker-mysql) image documentation.
 
