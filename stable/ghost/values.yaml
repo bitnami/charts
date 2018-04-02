@@ -4,7 +4,7 @@
 image:
   registry: docker.io
   repository: tompizmor/ghost
-  tag: 1.21.6
+  tag: 1.22.1
   pullPolicy: IfNotPresent
 
 ## Busybox image used to configure volume permissions
