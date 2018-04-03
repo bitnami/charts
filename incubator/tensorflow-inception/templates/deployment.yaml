@@ -14,9 +14,16 @@ spec:
       labels:
         app: tensorflow-serving
     spec:
+      {{- if .Values.server.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.server.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
       containers:
       - name: {{ template "fullname" . }}
-        image: {{ .Values.server.image }}
+        image: "{{ .Values.server.image.registry }}/{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
+        imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
         readinessProbe:
           tcpSocket:
             port: {{ .Values.server.port }}

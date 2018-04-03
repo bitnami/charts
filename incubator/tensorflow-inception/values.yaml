@@ -2,14 +2,42 @@
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-serving/tags/
 ##
 server:
-  image: bitnami/tensorflow-serving:0.6.0-r0
+  image:
+    registry: docker.io
+    repository: bitnami/tensorflow-serving
+    tag: 0.6.0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistrKeySecretName 
   port: 9000
 
 ## TensorFlow Inception image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-inception/tags/
 ##
 client:
-  image: bitnami/tensorflow-inception:1.5.0-r2
+  image:
+    registry: docker.io
+    repository: bitnami/tensorflow-inception
+    tag: 1.5.0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistrKeySecretName 
 
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

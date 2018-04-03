@@ -18,10 +18,16 @@ spec:
         component: "metrics"
         release: "{{ .Release.Name }}"
     spec:
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
       containers:
       - name: "metrics"
-        image: "{{ .Values.metrics.image.name }}:{{ .Values.metrics.image.tag }}"
-        imagePullPolicy: "{{ .Values.metrics.image.pullPolicy }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         args: [ "-es.uri=http://{{ template "client.fullname" . }}:{{ .Values.client.service.port }}", "-es.all=true" ]
         ports:
         - name: "metrics"

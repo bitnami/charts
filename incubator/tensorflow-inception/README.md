@@ -58,16 +58,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the TensorFlow Inception chart and their default values.
 
-| Parameter                       | Description                         | Default                                                    |
-| ------------------------------- | -------------------------------     | ---------------------------------------------------------- |
-| `server.image`                  | Tensorflow server image             | `bitnami/tensorflow-serving:{VERSION}`                     |
-| `server.port`                   | Tensorflow server port              | `9000`                                                     |
-| `client.image`                  | Tensorflow client image             | `bitnami/tensorflow-inception:{VERSION}`                   |
-| `imagePullPolicy`               | Image pull policy                   | `Always` if `image` tag is `latest`, else `IfNotPresent`   |
-| `persistence.enabled`           | Use a PVC to persist data           | `true`                                                     |
-| `persistence.storageClass`      | Storage class of backing PVC        | `nil` (uses alpha storage class annotation)                |
-| `persistence.accessMode`        | Use volume as ReadOnly or ReadWrite | `ReadWriteOnce`                                            |
-| `persistence.size`              | Size of data volume                 | `500Mi`                                                    |
+| Parameter                       | Description                            | Default                                                    |
+| ------------------------------- | -------------------------------------- | ---------------------------------------------------------- |
+| `server.image.registry`         | TensorFlow Serving image registry      | `docker.io`                                                |
+| `server.image.repository`       | TensorFlow Serving Image name          | `bitnami/tensorflow-serving`                               |
+| `server.image.tag`              | TensorFlow Serving Image tag           | `{VERSION}`                                                |
+| `server.image.pullPolicy`       | TensorFlow Serving image pull policy   | `Always` if `imageTag` is `latest`, else `IfNotPresent`    |
+| `server.image.pullSecrets`      | Specify image pull secrets             | `nil` (does not add image pull secrets to deployed pods)   |
+| `server.port`                   | Tensorflow server port                 | `9000`                                                     |
+| `client.image.registry`         | TensorFlow Inception image registry    | `docker.io`                                                |
+| `client.image.repository`       | TensorFlow Inception Image name        | `bitnami/tensorflow-inception`                             |
+| `client.image.tag`              | TensorFlow Inception Image tag         | `{VERSION}`                                                |
+| `client.image.pullPolicy`       | TensorFlow Inception image pull policy | `Always` if `imageTag` is `latest`, else `IfNotPresent`    |
+| `client.image.pullSecrets`      | Specify image pull secrets             | `nil` (does not add image pull secrets to deployed pods)   |
+| `imagePullPolicy`               | Image pull policy                      | `Always` if `image` tag is `latest`, else `IfNotPresent`   |
+| `persistence.enabled`           | Use a PVC to persist data              | `true`                                                     |
+| `persistence.storageClass`      | Storage class of backing PVC           | `nil` (uses alpha storage class annotation)                |
+| `persistence.accessMode`        | Use volume as ReadOnly or ReadWrite    | `ReadWriteOnce`                                            |
+| `persistence.size`              | Size of data volume                    | `500Mi`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
