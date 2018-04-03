@@ -3,6 +3,6 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 0.4.x
   condition: mongodb.install
-- name: externaldb-helper
+- name: bitnami-common
   repository: https://charts.bitnami.com/stable
   version: 0.0.x

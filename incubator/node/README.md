@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Node chart and the
 | `image`                                 | Node image                                                | `bitnami/node:{VERSION}`                                  |
 | `gitImage`                              | Image used for initContainers                             | `alpine/git`                                              |
 | `imagePullPolicy`                       | Image pull policy                                         | `IfNotPresent`                                            |
-| `repository`                            | Repo of the application                                   | `https://github.com/jbianquetti-nami/sample-mean.git`     |
+| `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
 | `revision`                              | Revision  to checkout                                     | `master`                                                  |
 | `replicas`                              | Number of replicas for the application                    | `3`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
@@ -169,8 +169,10 @@ ingress:
       location: YOUR_AZURE_LOCATION
       resourceGroup: mongodb-k8s-service-catalog
       sslEnforcement: disabled
-      firewallStartIPAddress: 0.0.0.0
-      firewallEndIPAddress: 255.255.255.255
+      firewallRules:
+      - startIPAddress: "0.0.0.0"
+        endIPAddress: "255.255.255.255"
+        name: "AllowAll"
   ```
   Please update the `YOUR_AZURE_LOCATION` placeholder in the above example. 
 

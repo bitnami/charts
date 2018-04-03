@@ -17,15 +17,15 @@ spec:
     spec:
       initContainers:
       - name: git-clone-app
-        image: {{ .Values.gitImage }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        image: "{{ .Values.gitImage.registry }}/{{ .Values.gitImage.repository }}:{{ .Values.gitImage.tag }}"
+        imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
         command: ['git', 'clone', '{{ .Values.repository }}', '-b', '{{ .Values.revision }}', '/app']
         volumeMounts:
         - name: app
           mountPath: /app
       - name: npm-install
-        image: {{ .Values.image }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         workingDir: /app
         command: ['/bin/bash', '-c', 'useradd bitnami && chown -R bitnami:bitnami /app && npm install']
         volumeMounts:
@@ -33,8 +33,8 @@ spec:
           mountPath: /app
       containers:
       - name: {{ template "node.fullname" . }}
-        image: "{{ .Values.image }}"
-        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         {{- if .Values.mongodb.install }}
         - name: DATABASE_HOST
