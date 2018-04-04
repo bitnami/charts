@@ -54,6 +54,10 @@ The following tables lists the configurable parameters of the Node chart and the
 | `image.tag`                             | NodeJS Image tag                                          | `{VERSION}`                                               |
 | `image.pullPolicy`                      | NodeJS image pull policy                                  | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
 | `image.pullSecrets`                     | Specify image pull secrets                                | `nil` (does not add image pull secrets to deployed pods)  |
+| `gitImage.registry`                     | Git image registry                                        | `docker.io`                                               |
+| `gitImage.repository`                   | Git Image name                                            | `alpine/git`                                              |
+| `gitImage.tag`                          | Git Image tag                                             | `latest`                                                  |
+| `gitImage.pullPolicy`                   | Git image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
 | `gitImage`                              | Image used for initContainers                             | `alpine/git`                                              |
 | `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
 | `revision`                              | Revision  to checkout                                     | `master`                                                  |
