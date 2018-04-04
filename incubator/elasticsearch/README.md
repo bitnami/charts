@@ -45,9 +45,11 @@ The following tables lists the configurable parameters of the Elasticsearch char
 
 |            Parameter            |                      Description                      |                               Default                               |
 |---------------------------------|-------------------------------------------------------|---------------------------------------------------------------------|
-| `image.name`                    | Elasticsearch image name                              | `bitnami/elasticsearch`                                             |
-| `image.tag`                     | Elasticsearch image tag                               | `{VERSION}`                                                         |
-| `image.pullPolicy`              | Image pull policy                                     | `IfNotPresent`                                                      |
+| `image.registry`                | ElasticSearch image registry                          | `docker.io`                                                         |
+| `image.repository`              | ElasticSearch Image name                              | `bitnami/elasticsearch`                                             |
+| `image.tag`                     | ElasticSearch Image tag                               | `{VERSION}`                                                         |
+| `image.pullPolicy`              | ElasticSearch image pull policy                       | `Always` if `imageTag` is `latest`, else `IfNotPresent`             |
+| `image.pullSecrets`             | Specify image pull secrets                            | `nil` (does not add image pull secrets to deployed pods)            |
 | `name`                          | Elasticsearch cluster name                            | `elastic`                                                           |
 | `serviceAccountName`            | Kubernetes service account                            | `default`                                                           |
 | `plugins`                       | Elasticsearch node plugins                            | `io.fabric8:elasticsearch-cloud-kubernetes:5.5.2` (required plugin) |

@@ -41,10 +41,16 @@ spec:
                   app: "{{ template "name" . }}"
                   release: "{{ .Release.Name }}"
       {{- end }}
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
       containers:
       - name: "mariadb"
-        image: "{{ .Values.image }}"
-        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:

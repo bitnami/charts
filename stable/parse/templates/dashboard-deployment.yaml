@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
       - name: {{ template "parse.fullname" . }}
-        image: "{{ .Values.dashboard.image }}"
-        imagePullPolicy: {{ .Values.dashboard.imagePullPolicy | quote }}
+        image: "{{ .Values.dashboard.image.registry }}/{{ .Values.dashboard.image.repository }}:{{ .Values.dashboard.image.tag }}"
+        imagePullPolicy: {{ default .Values.dashboard.image.pullPolicy | quote }}
         env:
         - name: PARSE_DASHBOARD_USER
           value: {{ .Values.dashboard.username }}

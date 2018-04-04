@@ -49,9 +49,12 @@ The following tables lists the configurable parameters of the Node chart and the
 
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
-| `image`                                 | Node image                                                | `bitnami/node:{VERSION}`                                  |
+| `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
+| `image.repository`                      | NodeJS Image name                                         | `bitnami/node`                                            |
+| `image.tag`                             | NodeJS Image tag                                          | `{VERSION}`                                               |
+| `image.pullPolicy`                      | NodeJS image pull policy                                  | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullSecrets`                     | Specify image pull secrets                                | `nil` (does not add image pull secrets to deployed pods)  |
 | `gitImage`                              | Image used for initContainers                             | `alpine/git`                                              |
-| `imagePullPolicy`                       | Image pull policy                                         | `IfNotPresent`                                            |
 | `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
 | `revision`                              | Revision  to checkout                                     | `master`                                                  |
 | `replicas`                              | Number of replicas for the application                    | `3`                                                       |

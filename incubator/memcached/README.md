@@ -43,14 +43,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Memcached chart and their default values.
 
-|      Parameter      |             Description             |            Default            |
-|---------------------|-------------------------------------|-------------------------------|
-| `image`             | Memcached image                     | `bitnami/memcached:{VERSION}` |
-| `imagePullPolicy`   | Image pull policy                   | `IfNotPresent`                |
-| `memcachedUsername` | Memcached admin user                | `nil`                         |
-| `memcachedPassword` | Memcached admin password            | `nil`                         |
-| `serviceType`       | Kubernetes Service type             | `ClusterIP`                   |
-| `resources`         | CPU/Memory resource requests/limits | Memory: `256Mi`, CPU: `250m`  |
+|      Parameter      |             Description             |                          Default                          |
+|---------------------|-------------------------------------|---------------------------------------------------------- |
+| `image.registry`    | Memcached image registry            | `docker.io`                                               |
+| `image.repository`  | Memcached Image name                | `bitnami/memcached`                                       |
+| `image.tag`         | Memcached Image tag                 | `{VERSION}`                                               |
+| `image.pullPolicy`  | Memcached image pull policy         | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullSecrets` | Specify image pull secrets          | `nil` (does not add image pull secrets to deployed pods)  |
+| `memcachedUsername` | Memcached admin user                | `nil`                                                     |
+| `memcachedPassword` | Memcached admin password            | `nil`                                                     |
+| `serviceType`       | Kubernetes Service type             | `ClusterIP`                                               |
+| `resources`         | CPU/Memory resource requests/limits | Memory: `256Mi`, CPU: `250m`                              |
 
 The above parameters map to the env variables defined in [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached). For more information please refer to the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) image documentation.
 

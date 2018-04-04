@@ -49,8 +49,11 @@ The following tables lists the configurable parameters of the NodeJS chart and t
 
 |           Parameter                |             Description             |                        Default                            |
 |------------------------------------|-------------------------------------|-----------------------------------------------------------|
-| `image`                            | NodeJS image                        | `bitnami/node:{VERSION}`                                  |
-| `imagePullPolicy`                  | Image pull policy                   | `IfNotPresent`                                            |
+| `image.registry`                   | NodeJs image registry               | `docker.io`                                               |
+| `image.repository`                 | NodeJs Image name                   | `bitnami/node`                                            |
+| `image.tag`                        | NodeJs Image tag                    | `{VERSION}`                                               |
+| `image.pullPolicy`                 | NodeJs image pull policy            | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullSecrets`                | Specify image pull secrets          | `nil` (does not add image pull secrets to deployed pods)  |
 | `repository`                       | Repo of the application             | `https://github.com/scotch-io/node-todo.git`              |
 | `revision`                         | Revision  to checkout               | `master`                                                  |
 | `config`                           | Contents of the config file for app | `See repo file config/database.js`                        |

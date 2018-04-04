@@ -13,8 +13,15 @@ spec:
       name: seed-inception
     spec:
       containers:
+      {{- if .Values.client.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.client.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
       - name: seed
-        image: {{ .Values.client.image }}
+        image: "{{ .Values.client.image.registry }}/{{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}"
+        imagePullPolicy: {{ .Values.client.image.pullPolicy | quote }}
         command:
           - "/bin/sh"
           - "-c"
