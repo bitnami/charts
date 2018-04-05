@@ -25,15 +25,7 @@ spec:
       - name: git-clone-repository
         image: "{{ .Values.gitImage.registry }}/{{ .Values.gitImage.repository }}:{{ .Values.gitImage.tag }}"
         imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
-        command: ['git', 'clone', '{{ .Values.repository }}', '/app']
-        volumeMounts:
-        - name: app
-          mountPath: /app
-      - name: git-checkout-revision
-        image: "{{ .Values.gitImage.registry }}/{{ .Values.gitImage.repository }}:{{ .Values.gitImage.tag }}"
-        imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
-        command: ['git', 'checkout', '{{ .Values.revision }}']
-        workingDir: /app
+        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.repository }} /app && cd /app && git checkout {{ .Values.revision }}']
         volumeMounts:
         - name: app
           mountPath: /app
