@@ -18,5 +18,5 @@ spec:
   selector:
     app: "{{ template "name" . }}"
     release: "{{ .Release.Name }}"
-    component: "metrics"
+    role: "metrics"
 {{- end }}

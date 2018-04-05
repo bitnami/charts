@@ -6,7 +6,7 @@ metadata:
   labels:
     app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    component: "ingest"
+    role: "ingest"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app: "{{ template "name" . }}"
-        component: "ingest"
+        role: "ingest"
         release: "{{ .Release.Name }}"
     spec:
       serviceAccountName: "{{ .Values.serviceAccountName }}"
@@ -27,7 +27,7 @@ spec:
               labelSelector:
                 matchLabels:
                   app: "{{ template "name" . }}"
-                  component: "ingest"
+                  role: "ingest"
                   release: "{{ .Release.Name }}"
       {{- else if eq .Values.ingest.antiAffinity "soft" }}
       affinity:
@@ -39,20 +39,20 @@ spec:
               labelSelector:
                 matchLabels:
                   app: "{{ template "name" . }}"
-                  component: "ingest"
+                  role: "ingest"
                   release: "{{ .Release.Name }}"
       {{- end }}
       initContainers:
       - name: sysctl
-        image: "{{ .Values.image }}"
-        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
       - name: "elasticsearch"
-        image: "{{ .Values.image }}"
-        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: "{{ .Values.name }}"

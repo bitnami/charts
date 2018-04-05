@@ -5,7 +5,7 @@ metadata:
   labels:
     app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    component: "master"
+    role: "master"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: "{{ template "name" . }}"
-        component: "master"
+        role: "master"
         release: "{{ .Release.Name }}"
     spec:
       serviceAccountName: "{{ .Values.serviceAccountName }}"
@@ -26,7 +26,7 @@ spec:
               labelSelector:
                 matchLabels:
                   app: "{{ template "name" . }}"
-                  component: "master"
+                  role: "master"
                   release: "{{ .Release.Name }}"
       {{- else if eq .Values.master.antiAffinity "soft" }}
       affinity:
@@ -38,7 +38,7 @@ spec:
               labelSelector:
                 matchLabels:
                   app: "{{ template "name" . }}"
-                  component: "master"
+                  role: "master"
                   release: "{{ .Release.Name }}"
       {{- end }}
       {{- if .Values.image.pullSecrets }}
@@ -49,13 +49,13 @@ spec:
       {{- end }}
       initContainers:
       - name: sysctl
-        image: "{{ .Values.image }}"
-        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
-      - name: "elasticsearch"
+      - name: {{ template "master.fullname" . }}
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
@@ -72,16 +72,28 @@ spec:
         ports:
         - name: transport
           containerPort: 9300
+        {{- if .Values.master.livenessProbe.enabled }}
         livenessProbe:
+          initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.master.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
           httpGet:
             path: /_cluster/health?local=true
             port: 9200
-          initialDelaySeconds: 90
+        {{- end }}
+        {{- if .Values.master.readinessProbe.enabled }}
         readinessProbe:
+          initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.master.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
           httpGet:
             path: /_cluster/health?local=true
             port: 9200
-          initialDelaySeconds: 5
+      {{- end }}
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:

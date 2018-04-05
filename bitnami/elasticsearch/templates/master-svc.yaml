@@ -9,10 +9,10 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   ports:
-  - name: "transport"
+  - name: transport
     port: 9300
-    targetPort: "transport"
+    targetPort: transport
   selector:
     app: "{{ template "name" . }}"
     release: "{{ .Release.Name }}"
-    component: "master"
+    role: "master"

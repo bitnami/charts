@@ -32,7 +32,7 @@
     echo http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
 {{- else if contains "ClusterIP"  .Values.coordinating.service.type }}
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "name" . }},release={{ .Release.Name }},component=master" -o jsonpath="{.items[0].metadata.name}")
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "name" . }},release={{ .Release.Name }},role=coordinating-only" -o jsonpath="{.items[0].metadata.name}")
     echo http://127.0.0.1:{{ .Values.coordinating.service.port }}/
     kubectl port-forward $POD_NAME {{ .Values.coordinating.service.port }}:9200
 {{- end }}

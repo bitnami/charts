@@ -10,10 +10,10 @@ metadata:
 spec:
   type: "{{ .Values.coordinating.service.type }}"
   ports:
-  - name: "http"
+  - name: http
     port: {{ .Values.coordinating.service.port }}
-    targetPort: "http"
+    targetPort: http
   selector:
     app: "{{ template "name" . }}"
     release: "{{ .Release.Name }}"
-    component: "coordinating-only"
+    role: "coordinating-only"
