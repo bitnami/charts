@@ -1,18 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "node.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "node.name" . }}
+    chart: {{ template "node.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "node.name" . }}
+        release: {{ .Release.Name | quote }}
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -21,46 +22,88 @@ spec:
       {{- end}}
       {{- end }}
       initContainers:
-      - name: git-clone-app
-        image: {{ .Values.image }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
-        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.repository }} /app && git checkout {{ .Values.revision }}']
+      - name: git-clone-repository
+        image: "{{ .Values.gitImage.registry }}/{{ .Values.gitImage.repository }}:{{ .Values.gitImage.tag }}"
+        imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
+        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.repository }} /app && cd /app && git checkout {{ .Values.revision }}']
         volumeMounts:
         - name: app
           mountPath: /app
       - name: npm-install
-        image: {{ .Values.image }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         workingDir: /app
-        command: ['npm', 'install']
+        command: ['/bin/bash', '-c', 'useradd bitnami && chown -R bitnami:bitnami /app && npm install']
         volumeMounts:
         - name: app
           mountPath: /app
       containers:
-      - name: {{ template "fullname" . }}
+      - name: {{ template "node.fullname" . }}
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        securityContext:
-          readOnlyRootFilesystem: true
         env:
-        - name: GIT_REPO
-          value: {{ .Values.repository }}
-        command: [ "npm", "start" ]
+        {{- if .Values.mongodb.install }}
+        - name: DATABASE_HOST
+          value: {{ template "node.mongodb.fullname" . }}
+        - name: DATABASE_PORT
+          value: "27017"
+        - name: DATABASE_USER
+          value: {{ .Values.mongodb.mongodbUsername | quote }}
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "node.mongodb.fullname" . }}
+              key: mongodb-password 
+        - name: DATABASE_NAME
+          value: {{ .Values.mongodb.mongodbDatabase | quote }}
+        - name: DATABASE_CONNECTION_OPTIONS
+          value: ""
+        {{ else }}
+        {{- $type := dict "type" .Values.externaldb.type }}
+        - name: DATABASE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.externaldb.secretName }}
+              key: {{ template "externaldb.host" $type }} 
+        - name: DATABASE_PORT
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.externaldb.secretName }}
+              key: {{ template "externaldb.port" $type }} 
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.externaldb.secretName }}
+              key: {{ template "externaldb.username" $type }} 
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.externaldb.secretName }}
+              key: {{ template "externaldb.password" $type }} 
+        {{- if .Values.externaldb.ssl }}
+        - name: DATABASE_CONNECTION_OPTIONS
+          value: "ssl=true"
+        {{- end }}
+        {{- end }}
+        - name: DATA_FOLDER
+          value: "/app"
+        workingDir: /app
+        command: ['/bin/bash', '-c', 'useradd bitnami && su bitnami -c "PATH=/opt/bitnami/node/bin:$PATH npm start"']
         ports:
         - name: http
-          containerPort: 3000
+          containerPort: {{ .Values.applicationPort }}
         livenessProbe:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 180
+          initialDelaySeconds: 60
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           timeoutSeconds: 3
           periodSeconds: 5
         resources:
