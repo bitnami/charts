@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
   name: "{{ template "data.fullname" . }}"
@@ -9,6 +9,11 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  selector:
+    matchLabels:
+      release: "{{ .Release.Name }}"
+      component: "data"
+      app: {{ template "name" . }}
   serviceName: "{{ template "data.fullname" . }}"
   replicas: {{ .Values.data.replicas }}
   template:
@@ -58,16 +63,16 @@ spec:
           value: "{{ template "master.fullname" . }}"
         - name: KUBERNETES_NAMESPACE
           value: "{{ .Release.Namespace }}"
-        - name: NODE_MASTER
-          value: "false"
-        - name: NODE_DATA
-          value: "true"
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: "{{ .Values.name }}"
         - name: ELASTICSEARCH_PLUGINS
           value: "{{ .Values.plugins }}"
-        - name: ES_JAVA_OPTS
-          value: "-Xms{{ .Values.data.heapSize }} -Xmx{{ .Values.data.heapSize }}"
+        - name: ELASTICSEARCH_HEAP_SIZE
+          value: "{{ .Values.ingest.heapSize }}"
+        - name: ELASTICSEARCH_IS_DEDICATED_NODE
+          value: "yes"
+        - name: ELASTICSEARCH_NODE_TYPE
+          value: "data"
         ports:
         - name: transport
           containerPort: 9300
@@ -88,7 +93,7 @@ spec:
           name: "config"
           subPath: elasticsearch_custom.yml
         - name: "data"
-          mountPath: "/bitnami"
+          mountPath: "/bitnami/elasticsearch/data"
       volumes:
       - name: "config"
         configMap:

@@ -1,22 +1,20 @@
-{{- if .Values.metrics.enabled }}
+{{- if .Values.ingest.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "metrics.fullname" . }}"
+  name: "{{ template "ingest.fullname" . }}"
   labels:
     app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-  annotations:
-{{ toYaml .Values.metrics.annotations | indent 4 }}
 spec:
   ports:
-  - name: metrics
-    port: 9108
-    targetPort: metrics
+  - name: "transport"
+    port: 9300
+    targetPort: "transport"
   selector:
     app: "{{ template "name" . }}"
     release: "{{ .Release.Name }}"
-    component: "metrics"
+    component: "ingest"
 {{- end }}

@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Elasticsearch char
 | `image.pullSecrets`             | Specify image pull secrets                            | `nil` (does not add image pull secrets to deployed pods)            |
 | `name`                          | Elasticsearch cluster name                            | `elastic`                                                           |
 | `serviceAccountName`            | Kubernetes service account                            | `default`                                                           |
-| `plugins`                       | Elasticsearch node plugins                            | `io.fabric8:elasticsearch-cloud-kubernetes:5.5.2` (required plugin) |
+| `plugins`                       | Elasticsearch node plugins                            | `io.fabric8:elasticsearch-cloud-kubernetes:6.2.3` (required plugin) |
 | `config`                        | Elasticsearch node custom configuration               | ``                                                                  |
 | `master.name`                   | Master node pod name                                  | `master`                                                            |
 | `master.replicas`               | Desired number of Elasticsearch master eligible nodes | `2`                                                                 |

@@ -1,22 +1,19 @@
-{{- if .Values.metrics.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "metrics.fullname" . }}"
+  name: "{{ template "coordinating.fullname" . }}"
   labels:
     app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-  annotations:
-{{ toYaml .Values.metrics.annotations | indent 4 }}
 spec:
+  type: "{{ .Values.coordinating.service.type }}"
   ports:
-  - name: metrics
-    port: 9108
-    targetPort: metrics
+  - name: "http"
+    port: {{ .Values.coordinating.service.port }}
+    targetPort: "http"
   selector:
     app: "{{ template "name" . }}"
     release: "{{ .Release.Name }}"
-    component: "metrics"
-{{- end }}
+    component: "coordinating-only"

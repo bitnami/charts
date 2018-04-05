@@ -1,24 +1,24 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "master.fullname" . }}"
+  name: "{{ template "coordinating.fullname" . }}"
   labels:
     app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    component: "master"
+    component: "coordinating-only"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.master.replicas }}
+  replicas: {{ .Values.coordinating.replicas }}
   template:
     metadata:
       labels:
         app: "{{ template "name" . }}"
-        component: "master"
+        component: "coordinating-only"
         release: "{{ .Release.Name }}"
     spec:
       serviceAccountName: "{{ .Values.serviceAccountName }}"
-      {{- if eq .Values.master.antiAffinity "hard" }}
+      {{- if eq .Values.coordinating.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -26,9 +26,9 @@ spec:
               labelSelector:
                 matchLabels:
                   app: "{{ template "name" . }}"
-                  component: "master"
+                  component: "coordinating-only"
                   release: "{{ .Release.Name }}"
-      {{- else if eq .Values.master.antiAffinity "soft" }}
+      {{- else if eq .Values.coordinating.antiAffinity "soft" }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -38,7 +38,7 @@ spec:
               labelSelector:
                 matchLabels:
                   app: "{{ template "name" . }}"
-                  component: "master"
+                  component: "coordinating-only"
                   release: "{{ .Release.Name }}"
       {{- end }}
       {{- if .Values.image.pullSecrets }}
@@ -49,15 +49,15 @@ spec:
       {{- end }}
       initContainers:
       - name: sysctl
-        image: "{{ .Values.image }}"
-        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
       - name: "elasticsearch"
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
         env:
         - name: SERVICE
           value: "{{ template "master.fullname" . }}"
@@ -72,28 +72,30 @@ spec:
         - name: ELASTICSEARCH_IS_DEDICATED_NODE
           value: "yes"
         - name: ELASTICSEARCH_NODE_TYPE
-          value: "master"
+          value: "coordinating"
         ports:
+        - name: "http"
+          containerPort: 9200
         - name: transport
           containerPort: 9300
         livenessProbe:
           httpGet:
             path: /_cluster/health?local=true
-            port: 9200
+            port: "http"
           initialDelaySeconds: 90
         readinessProbe:
           httpGet:
             path: /_cluster/health?local=true
-            port: 9200
+            port: "http"
           initialDelaySeconds: 5
         resources:
-{{ toYaml .Values.master.resources | indent 10 }}
+{{ toYaml .Values.coordinating.resources | indent 10 }}
         volumeMounts:
         - mountPath: /bitnami/elasticsearch/conf/elasticsearch_custom.yml
           name: "config"
           subPath: elasticsearch_custom.yml
         - name: "data"
-          mountPath: "/bitnami/elasticsearch/data"
+          mountPath: "/bitnami/elasticsearch/data/"
       volumes:
       - name: "config"
         configMap:

@@ -26,9 +26,9 @@ spec:
       {{- end }}
       containers:
       - name: "metrics"
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        args: [ "-es.uri=http://{{ template "client.fullname" . }}:{{ .Values.client.service.port }}", "-es.all=true" ]
+        image: "{{ .Values.metrics.image.name }}:{{ .Values.metrics.image.tag }}"
+        imagePullPolicy: "{{ .Values.metrics.image.pullPolicy }}"
+        args: [ "-es.uri=http://{{ template "coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
         ports:
         - name: "metrics"
           containerPort: 9108

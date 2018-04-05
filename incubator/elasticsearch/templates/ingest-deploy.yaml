@@ -1,24 +1,25 @@
+{{- if .Values.ingest.enabled }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "master.fullname" . }}"
+  name: "{{ template "ingest.fullname" . }}"
   labels:
     app: "{{ template "name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    component: "master"
+    component: "ingest"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.master.replicas }}
+  replicas: {{ .Values.ingest.replicas }}
   template:
     metadata:
       labels:
         app: "{{ template "name" . }}"
-        component: "master"
+        component: "ingest"
         release: "{{ .Release.Name }}"
     spec:
       serviceAccountName: "{{ .Values.serviceAccountName }}"
-      {{- if eq .Values.master.antiAffinity "hard" }}
+      {{- if eq .Values.ingest.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -26,9 +27,9 @@ spec:
               labelSelector:
                 matchLabels:
                   app: "{{ template "name" . }}"
-                  component: "master"
+                  component: "ingest"
                   release: "{{ .Release.Name }}"
-      {{- else if eq .Values.master.antiAffinity "soft" }}
+      {{- else if eq .Values.ingest.antiAffinity "soft" }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -38,14 +39,8 @@ spec:
               labelSelector:
                 matchLabels:
                   app: "{{ template "name" . }}"
-                  component: "master"
+                  component: "ingest"
                   release: "{{ .Release.Name }}"
-      {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
       {{- end }}
       initContainers:
       - name: sysctl
@@ -56,8 +51,8 @@ spec:
           privileged: true
       containers:
       - name: "elasticsearch"
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        image: "{{ .Values.image }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
         env:
         - name: SERVICE
           value: "{{ template "master.fullname" . }}"
@@ -72,7 +67,7 @@ spec:
         - name: ELASTICSEARCH_IS_DEDICATED_NODE
           value: "yes"
         - name: ELASTICSEARCH_NODE_TYPE
-          value: "master"
+          value: "ingest"
         ports:
         - name: transport
           containerPort: 9300
@@ -87,16 +82,17 @@ spec:
             port: 9200
           initialDelaySeconds: 5
         resources:
-{{ toYaml .Values.master.resources | indent 10 }}
+{{ toYaml .Values.ingest.resources | indent 10 }}
         volumeMounts:
         - mountPath: /bitnami/elasticsearch/conf/elasticsearch_custom.yml
           name: "config"
           subPath: elasticsearch_custom.yml
         - name: "data"
-          mountPath: "/bitnami/elasticsearch/data"
+          mountPath: "/bitnami/elasticsearch/data/"
       volumes:
       - name: "config"
         configMap:
           name: "{{ template "fullname" . }}"
       - name: "data"
         emptyDir: {}
+{{- end }}

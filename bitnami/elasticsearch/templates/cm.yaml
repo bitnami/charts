@@ -10,11 +10,6 @@ metadata:
 data:
   elasticsearch_custom.yml: |-
 
-    node:
-      name: ${HOSTNAME}
-      master: ${NODE_MASTER:true}
-      data: ${NODE_DATA:true}
-
     cloud:
       kubernetes:
         service: ${SERVICE}
