@@ -12,8 +12,8 @@ data:
 
     cloud:
       kubernetes:
-        service: ${SERVICE}
-        namespace: ${KUBERNETES_NAMESPACE}
+        service: "{{ template "master.fullname" . }}"
+        namespace: "{{ .Release.Namespace }}"
 
     discovery:
       zen:

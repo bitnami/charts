@@ -59,10 +59,6 @@ spec:
         image: "{{ .Values.image }}"
         imagePullPolicy: "{{ .Values.pullPolicy }}"
         env:
-        - name: SERVICE
-          value: "{{ template "master.fullname" . }}"
-        - name: KUBERNETES_NAMESPACE
-          value: "{{ .Release.Namespace }}"
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: "{{ .Values.name }}"
         - name: ELASTICSEARCH_PLUGINS
