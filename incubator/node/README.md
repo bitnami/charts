@@ -45,14 +45,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the Node chart and their default values.
+The following table lists the configurable parameters of the Node chart and their default values.
 
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
 | `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
 | `image.repository`                      | NodeJS Image name                                         | `bitnami/node`                                            |
 | `image.tag`                             | NodeJS Image tag                                          | `{VERSION}`                                               |
-| `image.pullPolicy`                      | NodeJS image pull policy                                  | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullPolicy`                      | NodeJS image pull policy                                  | `IfNotPresent`                                            |
 | `image.pullSecrets`                     | Specify image pull secrets                                | `nil` (does not add image pull secrets to deployed pods)  |
 | `gitImage.registry`                     | Git image registry                                        | `docker.io`                                               |
 | `gitImage.repository`                   | Git Image name                                            | `alpine/git`                                              |
@@ -60,8 +60,8 @@ The following tables lists the configurable parameters of the Node chart and the
 | `gitImage.pullPolicy`                   | Git image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
 | `gitImage`                              | Image used for initContainers                             | `alpine/git`                                              |
 | `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
-| `revision`                              | Revision  to checkout                                     | `master`                                                  |
-| `replicas`                              | Number of replicas for the application                    | `3`                                                       |
+| `revision`                              | Revision to checkout                                      | `master`                                                  |
+| `replicas`                              | Number of replicas for the application                    | `1`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
 | `serviceType`                           | Kubernetes Service type                                   | `LoadBalancer`                                            |
 | `persistence.enabled`                   | Enable persistence using PVC                              | `false`                                                   |
@@ -87,7 +87,7 @@ $ helm install --name my-release \
     bitnami-incubator/node
 ```
 
-The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number or `replicas` to `2`.
+The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number of `replicas` to `2`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -104,7 +104,7 @@ The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
 
-## Set an Ingress controller
+## Set up an Ingress controller
 
 First install the nginx-ingress controller via helm:
 

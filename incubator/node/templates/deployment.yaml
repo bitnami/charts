@@ -22,10 +22,18 @@ spec:
       {{- end}}
       {{- end }}
       initContainers:
-      - name: git-clone-app
+      - name: git-clone-repository
         image: "{{ .Values.gitImage.registry }}/{{ .Values.gitImage.repository }}:{{ .Values.gitImage.tag }}"
         imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
-        command: ['git', 'clone', '{{ .Values.repository }}', '-b', '{{ .Values.revision }}', '/app']
+        command: ['git', 'clone', '{{ .Values.repository }}', '/app']
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      - name: git-checkout-revision
+        image: "{{ .Values.gitImage.registry }}/{{ .Values.gitImage.repository }}:{{ .Values.gitImage.tag }}"
+        imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
+        command: ['git', 'checkout', '{{ .Values.revision }}']
+        workingDir: /app
         volumeMounts:
         - name: app
           mountPath: /app
@@ -56,6 +64,8 @@ spec:
               key: mongodb-password 
         - name: DATABASE_NAME
           value: {{ .Values.mongodb.mongodbDatabase | quote }}
+        - name: DATABASE_CONNECTION_OPTIONS
+          value: ""
         {{ else }}
         {{- $type := dict "type" .Values.externaldb.type }}
         - name: DATABASE_HOST
