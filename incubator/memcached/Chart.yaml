@@ -1,6 +1,6 @@
 name: memcached
-version: 0.4.27
-appVersion: 1.5.6
+version: 0.4.28
+appVersion: 1.5.7
 description: Chart for Memcached
 keywords:
 - memcached
