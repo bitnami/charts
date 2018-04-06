@@ -27,13 +27,16 @@ root:
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
   ##
   password:
-
+  ## Use existing secret (ignores root, db and replication passwords)
+  # existingSecret: 
+  
 db:
   ## MariaDB username and password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
   ##
   user:
   password:
+  ## Password is ignored if existingSecret is specified.
   ## Database to create
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
   ##
@@ -50,6 +53,7 @@ replication:
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
   ##
   password:
+  ## Password is ignored if existingSecret is specified.
 
 master:
   antiAffinity: soft
