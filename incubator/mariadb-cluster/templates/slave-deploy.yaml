@@ -1,3 +1,4 @@
+{{- if .Values.replication.enabled }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -155,3 +156,4 @@ spec:
     kind: Deployment
     name: {{ template "slave.fullname" . }}
   targetCPUUtilizationPercentage: {{ .Values.slave.hpa.target.cpuPercentage }}
+{{- end }}

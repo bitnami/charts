@@ -68,6 +68,7 @@ spec:
         {{- end }}
         - name: MARIADB_DATABASE
           value: "{{ .Values.db.name }}"
+        {{- if .Values.replication.enabled }}
         - name: MARIADB_REPLICATION_MODE
           value: "master"
         - name: MARIADB_REPLICATION_USER
@@ -77,6 +78,7 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mariadb-replication-password
+        {{- end }}
         ports:
         - name: mysql
           containerPort: 3306

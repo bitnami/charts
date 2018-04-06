@@ -16,9 +16,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "master.fullname" -}}
-{{- printf "%s-%s" .Release.Name "master" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Release.Name "mariadb-master" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "slave.fullname" -}}
-{{- printf "%s-%s" .Release.Name "slave" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Release.Name "mariadb-slave" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

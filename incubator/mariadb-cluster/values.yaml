@@ -40,6 +40,8 @@ db:
   name: my_database
 
 replication:
+  ## Enable replication
+  enabled: false
   ## MariaDB replication user
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
   ##

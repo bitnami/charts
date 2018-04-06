@@ -1,3 +1,4 @@
+{{- if .Values.replication.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -26,3 +27,4 @@ spec:
     app: "{{ template "name" . }}"
     component: "slave"
     release: "{{ .Release.Name }}"
+{{- end }}
