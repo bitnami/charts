@@ -132,7 +132,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ template "fullname" . }}
+          name: {{ template "master.fullname" . }}
       - name: data
       {{- if .Values.master.persistence.enabled }}
         persistentVolumeClaim:

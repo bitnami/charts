@@ -8,7 +8,9 @@ Tip:
 Services:
 
   echo Master: {{ template "master.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+{{- if .Values.replication.enabled }}
   echo Slave:  {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+{{- end }}
 
 Administrator credentials:
 
@@ -25,6 +27,8 @@ To connect to your database
 
       mysql -h {{ template "master.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
 
+{{- if .Values.replication.enabled }}
   3. To connect to slave service (read-only):
 
       mysql -h {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
+{{- end }}

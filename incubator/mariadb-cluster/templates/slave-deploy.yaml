@@ -105,6 +105,11 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /bitnami
+{{- if .Values.slave.config }}
+        - name: config
+          mountPath: /opt/bitnami/mariadb/conf/my.cnf
+          subPath: my.cnf
+{{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
@@ -135,8 +140,16 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
       volumes:
+      - name: config
+        configMap:
+          name: {{ template "slave.fullname" . }}
       - name: data
+      {{- if .Values.slave.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "slave.fullname" . }}-data
+      {{- else }}
         emptyDir: {}
+      {{- end }}
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler

@@ -44,7 +44,7 @@ db:
 
 replication:
   ## Enable replication
-  enabled: false
+  enabled: true
   ## MariaDB replication user
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
   ##
@@ -82,12 +82,12 @@ master:
     ## Persistent Volume size
     ##
     size: 8Gi
-  ## Configure MySQL with a custom my.cnf file
-  ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
-  ##
-  ## config: |-
-    ## [mysqld]
-    ## skip-name-resolve
+    ## Configure MySQL with a custom my.cnf file
+    ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
+    ##
+    # config: |-
+    # [mysqld]
+    # skip-name-resolve
     ##
 
   ## Configure master resource requests and limits
@@ -103,6 +103,22 @@ slave:
     max: 3
     target:
       cpuPercentage: 75
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ##
+    enabled: false
+    # storageClass: "-"
+    annotations:
+    accessModes:
+    - ReadWriteOnce
+    ## Persistent Volume size
+    ##
+    size: 8Gi
+  ## Configure MySQL with a custom my.cnf file
+  # config: |-
+  # [mysqld]
+  # skip-name-resolve
+  ##
   ## Configure slave resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

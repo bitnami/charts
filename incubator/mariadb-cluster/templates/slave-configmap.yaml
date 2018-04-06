@@ -1,0 +1,16 @@
+{{- if .Values.replication.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "slave.fullname" . }}
+  labels:
+    app: {{ template "slave.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  my.cnf: |-
+{{- if .Values.slave.config }}
+{{ .Values.slave.config | indent 4 }}
+{{- end -}}
+{{- end -}}
