@@ -4,7 +4,7 @@
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 5.5.2
+  tag: 6.2.3-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -15,7 +15,7 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName 
+  #   - myRegistrKeySecretName
 
 ## Elasticsearch cluster name
 ##
@@ -29,7 +29,7 @@ serviceAccountName: elastic
 ## Comma seperated list of plugins
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
-plugins: io.fabric8:elasticsearch-cloud-kubernetes:6.2.3
+plugins: http://github.com/fabric8io/elasticsearch-cloud-kubernetes/archive/elasticsearch-cloud-kubernetes-6.2.3.zip
 
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
