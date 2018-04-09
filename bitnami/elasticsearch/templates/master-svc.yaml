@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "master.fullname" . | quote }}
+  name: {{ template "master.fullname" . }}
   labels:
-    app: {{ template "elasticsearch.name" . | quote }}
-    chart: {{ template "elasticsearch.chart" . | quote }}
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . }}
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     role: "master"
@@ -14,6 +14,6 @@ spec:
     port: 9300
     targetPort: transport
   selector:
-    app: {{ template "elasticsearch.name" . | quote }}
-    release: {{ .Release.Name | quote }} 
+    app: {{ template "elasticsearch.name" . }}
+    release: {{ .Release.Name | quote }}
     role: "master"

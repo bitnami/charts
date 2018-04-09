@@ -2,10 +2,10 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "metrics.fullname" . | quote }}
+  name: {{ template "metrics.fullname" . }}
   labels:
-    app: {{ template "elasticsearch.name" . | quote }}
-    chart: {{ template "elasticsearch.chart" . | quote }}
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . }}
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     role: "metrics"
@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "elasticsearch.name" . | quote }}
+        app: {{ template "elasticsearch.name" . }}
         release: {{ .Release.Name | quote }}
         role: "metrics"
     spec:
@@ -26,7 +26,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "metrics.fullname" . }}
-        image:  {{ template "metrics.image" . | quote }}
+        image:  {{ template "metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         args: [ "-es.uri=http://{{ template "coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
         ports:

@@ -26,8 +26,8 @@ Create chart name and version as used by the chart label.
 Return the proper ES image name
 */}}
 {{- define "elasticsearch.image" -}}
-{{- $registryName :=  default .Values.image.registry "docker.io" -}}
-{{- $tag := default .Values.image.tag "latest" -}}
+{{- $registryName :=  default "docker.io" .Values.image.registry -}}
+{{- $tag := default "latest" .Values.image.tag -}}
 {{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
 {{- end -}}
 
@@ -80,7 +80,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the proper ES exporter image name
 */}}
 {{- define "metrics.image" -}}
-{{- $registryName :=  default .Values.metrics.image.registry "docker.io" -}}
-{{- $tag := default .Values.metrics.image.tag "latest" -}}
+{{- $registryName :=  default "docker.io" .Values.metrics.image.registry -}}
+{{- $tag := default "latest" .Values.metrics.image.tag -}}
 {{- printf "%s/%s:%s" $registryName .Values.metrics.image.repository $tag -}}
 {{- end -}}

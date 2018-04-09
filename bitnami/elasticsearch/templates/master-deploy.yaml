@@ -1,10 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "master.fullname" . | quote }}
+  name: {{ template "master.fullname" . }}
   labels:
-    app: {{ template "elasticsearch.name" . | quote }}
-    chart: {{ template "elasticsearch.chart" . | quote }}
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . }}
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     role: "master"
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "elasticsearch.name" . | quote }}
+        app: {{ template "elasticsearch.name" . }}
         release: {{ .Release.Name | quote }}
         role: "master"
     spec:
@@ -25,7 +25,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ template "elasticsearch.name" . | quote }}
+                  app: {{ template "elasticsearch.name" . }}
                   release: {{ .Release.Name | quote }}
                   role: "master"
       {{- else if eq .Values.master.antiAffinity "soft" }}
@@ -37,7 +37,7 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ template "elasticsearch.name" . | quote }}
+                  app: {{ template "elasticsearch.name" . }}
                   release: {{ .Release.Name | quote }}
                   role: "master"
       {{- end }}
@@ -49,14 +49,14 @@ spec:
       {{- end }}
       initContainers:
       - name: sysctl
-        image: {{ template "elasticsearch.image" . | quote }}
+        image: {{ template "elasticsearch.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
       - name: {{ template "master.fullname" . }}
-        image: {{ template "elasticsearch.image" . | quote }}
+        image: {{ template "elasticsearch.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
@@ -105,6 +105,6 @@ spec:
       volumes:
       - name: "config"
         configMap:
-          name: {{ template "elasticsearch.fullname" . | quote }}
+          name: {{ template "elasticsearch.fullname" . }}
       - name: "data"
         emptyDir: {}
