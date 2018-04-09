@@ -82,14 +82,18 @@ spec:
         ports:
         - name: mysql
           containerPort: 3306
+        {{- if .Values.master.livenessProbe.enabled }}
         livenessProbe:
           exec:
             command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
-          initialDelaySeconds: 120
+          initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
+        {{- end }}
+        {{- if .Values.master.readinessProbe.enabled }}
         readinessProbe:
           exec:
             command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
-          initialDelaySeconds: 15
+          initialDelaySeconds: {{ .Values.master.readinessProbe.initialDelaySeconds }}
+        {{- end }}
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:

@@ -94,6 +94,12 @@ master:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
 
 slave:
   replicas: 1
@@ -118,6 +124,12 @@ slave:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
 
 metrics:
   enabled: false
