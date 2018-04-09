@@ -23,7 +23,7 @@ spec:
         role: "data"
         release: "{{ .Release.Name }}"
     spec:
-      serviceAccountName: "{{ .Values.serviceAccountName }}"
+      serviceAccountName: {{ .Values.serviceAccountName | quote }}
       {{- if eq .Values.data.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:

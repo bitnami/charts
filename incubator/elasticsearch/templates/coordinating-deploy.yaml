@@ -17,7 +17,7 @@ spec:
         role: "coordinating-only"
         release: "{{ .Release.Name }}"
     spec:
-      serviceAccountName: "{{ .Values.serviceAccountName }}"
+      serviceAccountName: {{ .Values.serviceAccountName | quote }}
       {{- if eq .Values.coordinating.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:

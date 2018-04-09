@@ -18,7 +18,7 @@ spec:
         role: "ingest"
         release: "{{ .Release.Name }}"
     spec:
-      serviceAccountName: "{{ .Values.serviceAccountName }}"
+      serviceAccountName: {{ .Values.serviceAccountName | quote }}
       {{- if eq .Values.ingest.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
