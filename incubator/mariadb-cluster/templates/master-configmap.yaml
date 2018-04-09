@@ -1,3 +1,4 @@
+{{- if .Values.master.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,6 +10,5 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   my.cnf: |-
-{{- if .Values.master.config }}
 {{ .Values.master.config | indent 4 }}
 {{- end -}}

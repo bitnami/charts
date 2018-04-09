@@ -1,4 +1,4 @@
-{{- if .Values.replication.enabled }}
+{{- if and .Values.replication.enabled .Values.slave.config}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,7 +10,5 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   my.cnf: |-
-{{- if .Values.slave.config }}
 {{ .Values.slave.config | indent 4 }}
-{{- end -}}
 {{- end -}}
