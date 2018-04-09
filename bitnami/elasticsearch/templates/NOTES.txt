@@ -22,17 +22,17 @@
 
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "coordinating.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    echo http://$NODE_IP:$NODE_PORT/
+    curl http://$NODE_IP:$NODE_PORT/
 {{- else if contains "LoadBalancer" .Values.coordinating.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "coordinating.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "coordinating.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
+    curl http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
 {{- else if contains "ClusterIP"  .Values.coordinating.service.type }}
 
     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "elasticsearch.name" . }},release={{ .Release.Name }},role=coordinating-only" -o jsonpath="{.items[0].metadata.name}")
-    echo http://127.0.0.1:{{ .Values.coordinating.service.port }}/
-    kubectl port-forward $POD_NAME {{ .Values.coordinating.service.port }}:9200
+    kubectl port-forward $POD_NAME {{ .Values.coordinating.service.port }}:9200 &
+    curl http://127.0.0.1:{{ .Values.coordinating.service.port }}/
 {{- end }}

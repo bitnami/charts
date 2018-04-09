@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Values.serviceAccountName }}
+  name: {{ .Values.serviceAccountName | quote }}
   labels:
     app: {{ template "elasticsearch.name" . }}
     chart: {{ template "elasticsearch.chart" . }}
