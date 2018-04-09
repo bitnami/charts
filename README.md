@@ -41,6 +41,7 @@ $ helm search bitnami-incubator
 ## Incubator charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/incubator/apache)
+- [Consul](https://github.com/bitnami/charts/tree/master/incubator/consul)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/incubator/elasticsearch)
 - [JasperReports Server](https://github.com/kubernetes/charts/tree/master/stable/jasperreports)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/incubator/jenkins)
