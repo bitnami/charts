@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "elasticsearch.fullname" . | quote }}
   labels:
-    app: {{ template "name" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app: {{ template "elasticsearch.name" . | quote }}
+    chart: {{ template "elasticsearch.chart" . | quote }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
 data:
   elasticsearch_custom.yml: |-
 
     cloud:
       kubernetes:
-        service: "{{ template "master.fullname" . }}"
-        namespace: "{{ .Release.Namespace }}"
+        service: {{ template "master.fullname" . | quote }}
+        namespace: {{ .Release.Namespace | quote }}
 
     discovery:
       zen:

@@ -197,7 +197,8 @@ metrics:
   enabled: false
   name: metrics
   image:
-    name: justwatch/elasticsearch_exporter
+    registry: docker.io
+    repository: justwatch/elasticsearch_exporter
     tag: 1.0.1
     pullPolicy: IfNotPresent
   annotations:

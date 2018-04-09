@@ -3,10 +3,10 @@ kind: RoleBinding
 metadata:
   name: {{ .Values.serviceAccountName | quote }}
   labels:
-    app: {{ template "name" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: {{ .Release.Name | quote }}
+    app: {{ template "elasticsearch.name" . | quote }}
+    chart: {{ template "elasticsearch.chart" . | quote }}
     heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

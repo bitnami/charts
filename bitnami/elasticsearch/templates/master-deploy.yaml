@@ -1,21 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "master.fullname" . }}"
+  name: {{ template "master.fullname" . | quote }}
   labels:
-    app: "{{ template "name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "elasticsearch.name" . | quote }}
+    chart: {{ template "elasticsearch.chart" . | quote }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
     role: "master"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
 spec:
   replicas: {{ .Values.master.replicas }}
   template:
     metadata:
       labels:
-        app: "{{ template "name" . }}"
+        app: {{ template "elasticsearch.name" . | quote }}
+        release: {{ .Release.Name | quote }}
         role: "master"
-        release: "{{ .Release.Name }}"
     spec:
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
       {{- if eq .Values.master.antiAffinity "hard" }}
@@ -25,9 +25,9 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: "{{ template "name" . }}"
+                  app: {{ template "elasticsearch.name" . | quote }}
+                  release: {{ .Release.Name | quote }}
                   role: "master"
-                  release: "{{ .Release.Name }}"
       {{- else if eq .Values.master.antiAffinity "soft" }}
       affinity:
         podAntiAffinity:
@@ -37,9 +37,9 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: "{{ template "name" . }}"
+                  app: {{ template "elasticsearch.name" . | quote }}
+                  release: {{ .Release.Name | quote }}
                   role: "master"
-                  release: "{{ .Release.Name }}"
       {{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -49,22 +49,22 @@ spec:
       {{- end }}
       initContainers:
       - name: sysctl
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        image: {{ template "elasticsearch.image" . | quote }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
       - name: {{ template "master.fullname" . }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: {{ template "elasticsearch.image" . | quote }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
-          value: "{{ .Values.name }}"
+          value: {{ .Values.name | quote }}
         - name: ELASTICSEARCH_PLUGINS
-          value: "{{ .Values.plugins }}"
+          value: {{ .Values.plugins | quote }}
         - name: ELASTICSEARCH_HEAP_SIZE
-          value: "{{ .Values.ingest.heapSize }}"
+          value: {{ .Values.coordinating.heapSize | quote }}
         - name: ELASTICSEARCH_IS_DEDICATED_NODE
           value: "yes"
         - name: ELASTICSEARCH_NODE_TYPE
@@ -105,6 +105,6 @@ spec:
       volumes:
       - name: "config"
         configMap:
-          name: "{{ template "fullname" . }}"
+          name: {{ template "elasticsearch.fullname" . | quote }}
       - name: "data"
         emptyDir: {}

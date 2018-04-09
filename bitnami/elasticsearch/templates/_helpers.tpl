@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "name" -}}
+{{- define "elasticsearch.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -10,9 +10,25 @@ Expand the name of the chart.
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "fullname" -}}
+{{- define "elasticsearch.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "elasticsearch.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper ES image name
+*/}}
+{{- define "elasticsearch.image" -}}
+{{- $registryName :=  default .Values.image.registry "docker.io" -}}
+{{- $tag := default .Values.image.tag "latest" -}}
+{{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
 {{- end -}}
 
 {{/*
@@ -58,4 +74,13 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "metrics.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s-%s" .Release.Name $name .Values.metrics.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper ES exporter image name
+*/}}
+{{- define "metrics.image" -}}
+{{- $registryName :=  default .Values.metrics.image.registry "docker.io" -}}
+{{- $tag := default .Values.metrics.image.tag "latest" -}}
+{{- printf "%s/%s:%s" $registryName .Values.metrics.image.repository $tag -}}
 {{- end -}}

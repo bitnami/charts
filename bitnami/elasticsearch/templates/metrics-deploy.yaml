@@ -2,21 +2,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "metrics.fullname" . }}"
+  name: {{ template "metrics.fullname" . | quote }}
   labels:
-    app: "{{ template "name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "elasticsearch.name" . | quote }}
+    chart: {{ template "elasticsearch.chart" . | quote }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
     role: "metrics"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: "{{ template "name" . }}"
+        app: {{ template "elasticsearch.name" . | quote }}
+        release: {{ .Release.Name | quote }}
         role: "metrics"
-        release: "{{ .Release.Name }}"
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -25,12 +25,12 @@ spec:
       {{- end}}
       {{- end }}
       containers:
-      - name: "metrics"
-        image: "{{ .Values.metrics.image.name }}:{{ .Values.metrics.image.tag }}"
-        imagePullPolicy: "{{ .Values.metrics.image.pullPolicy }}"
+      - name: {{ template "metrics.fullname" . }}
+        image:  {{ template "metrics.image" . | quote }}
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         args: [ "-es.uri=http://{{ template "coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
         ports:
-        - name: "metrics"
+        - name: metrics
           containerPort: 9108
         livenessProbe:
           httpGet:

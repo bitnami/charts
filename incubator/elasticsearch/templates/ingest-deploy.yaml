@@ -2,21 +2,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "ingest.fullname" . }}"
+  name: {{ template "ingest.fullname" . | quote }}
   labels:
-    app: "{{ template "name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "elasticsearch.name" . | quote }}
+    chart: {{ template "elasticsearch.chart" . | quote }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
     role: "ingest"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
 spec:
   replicas: {{ .Values.ingest.replicas }}
   template:
     metadata:
       labels:
-        app: "{{ template "name" . }}"
+        app: {{ template "elasticsearch.name" . | quote }}
+        release: {{ .Release.Name | quote }}
         role: "ingest"
-        release: "{{ .Release.Name }}"
     spec:
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
       {{- if eq .Values.ingest.antiAffinity "hard" }}
@@ -26,9 +26,9 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: "{{ template "name" . }}"
+                  app: {{ template "elasticsearch.name" . | quote }}
+                  release: {{ .Release.Name | quote }}
                   role: "ingest"
-                  release: "{{ .Release.Name }}"
       {{- else if eq .Values.ingest.antiAffinity "soft" }}
       affinity:
         podAntiAffinity:
@@ -38,9 +38,9 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: "{{ template "name" . }}"
+                  app: {{ template "elasticsearch.name" . | quote }}
+                  release: {{ .Release.Name | quote }}
                   role: "ingest"
-                  release: "{{ .Release.Name }}"
       {{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -50,22 +50,22 @@ spec:
       {{- end }}
       initContainers:
       - name: sysctl
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        image: {{ template "elasticsearch.image" . | quote }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
       - name: {{ template "ingest.fullname" . }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: {{ template "elasticsearch.image" . | quote }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
-          value: "{{ .Values.name }}"
+          value: {{ .Values.name | quote }}
         - name: ELASTICSEARCH_PLUGINS
-          value: "{{ .Values.plugins }}"
+          value: {{ .Values.plugins | quote }}
         - name: ELASTICSEARCH_HEAP_SIZE
-          value: "{{ .Values.ingest.heapSize }}"
+          value: {{ .Values.ingest.heapSize | quote }}
         - name: ELASTICSEARCH_IS_DEDICATED_NODE
           value: "yes"
         - name: ELASTICSEARCH_NODE_TYPE
@@ -73,16 +73,30 @@ spec:
         ports:
         - name: transport
           containerPort: 9300
+        {{- if .Values.ingest.livenessProbe.enabled }}
         livenessProbe:
+          initialDelaySeconds: {{ .Values.ingest.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.ingest.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.ingest.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.ingest.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.ingest.livenessProbe.failureThreshold }}
           httpGet:
             path: /_cluster/health?local=true
             port: 9200
           initialDelaySeconds: 90
+        {{- end }}
+        {{- if .Values.ingest.readinessProbe.enabled}}
         readinessProbe:
+          initialDelaySeconds: {{ .Values.ingest.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.ingest.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.ingest.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.ingest.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.ingest.readinessProbe.failureThreshold }}
           httpGet:
             path: /_cluster/health?local=true
             port: 9200
           initialDelaySeconds: 5
+        {{- end}}
         resources:
 {{ toYaml .Values.ingest.resources | indent 10 }}
         volumeMounts:
@@ -94,7 +108,7 @@ spec:
       volumes:
       - name: "config"
         configMap:
-          name: "{{ template "fullname" . }}"
+          name: {{ template "elasticsearch.fullname" . | quote }}
       - name: "data"
         emptyDir: {}
 {{- end }}
