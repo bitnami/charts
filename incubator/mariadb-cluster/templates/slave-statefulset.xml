@@ -105,7 +105,7 @@ spec:
 {{ toYaml .Values.slave.resources | indent 10 }}
         volumeMounts:
         - name: data
-          mountPath: /bitnami
+          mountPath: /bitnami/mariadb
 {{- if .Values.slave.config }}
         - name: config
           mountPath: /opt/bitnami/mariadb/conf/my.cnf
@@ -140,8 +140,13 @@ spec:
         resources:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
-{{- if .Values.slave.persistence.enabled }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "slave.fullname" . }}
+
   volumeClaimTemplates:
+{{- if .Values.slave.persistence.enabled }}
     - metadata:
         name: data
       spec:
