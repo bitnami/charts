@@ -33,7 +33,7 @@ In order to access to the Consul Web UI:
 
     kubectl port-forward {{ template "consul.fullname" . }}-0 --namespace {{ .Release.Namespace }} {{ .Values.httpPort }}:{{ .Values.httpPort }}
 
-    echo URL : http://127.0.0.1:{{ .Values.httpPort }}
+    URL : http://127.0.0.1:{{ .Values.httpPort }}
 
 {{- end }}
 
