@@ -72,7 +72,7 @@ spec:
         ports:
         - name: transport
           containerPort: 9300
-        {- if .Values.data.livenessProbe.enabled }}
+        {{- if .Values.data.livenessProbe.enabled }}
         livenessProbe:
           initialDelaySeconds: {{ .Values.data.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.data.livenessProbe.periodSeconds }}

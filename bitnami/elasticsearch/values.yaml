@@ -4,12 +4,12 @@
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 6.2.3-r3
+  tag: 6.2.3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -46,10 +46,10 @@ master:
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources:
-    requests:
-      cpu: 25m
-      memory: "256Mi"
+  resources: {}
+  #  requests:
+  #    cpu: 25m
+  #    memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: false
@@ -81,10 +81,10 @@ coordinating:
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources:
-    requests:
-      cpu: 25m
-      memory: "256Mi"
+  resources: {}
+  #  requests:
+  #    cpu: 25m
+  #    memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: false
@@ -172,10 +172,10 @@ ingest:
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources:
-    requests:
-      cpu: 25m
-      memory: "256Mi"
+  resources: {}
+  #  requests:
+  #    cpu: 25m
+  #    memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: false
@@ -207,5 +207,5 @@ metrics:
   service:
     type: ClusterIP
   resources:
-    requests:
-      cpu: 25m
+    # requests:
+    #   cpu: 25m
