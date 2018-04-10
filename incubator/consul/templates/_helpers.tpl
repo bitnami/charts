@@ -21,3 +21,12 @@ Create chart name and version as used by the chart label.
 {{- define "consul.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Return the proper Consul image name
+*/}}
+{{- define "consul.image" -}}
+{{- $registryName :=  default "docker.io" .Values.image.registry -}}
+{{- $tag := default "latest" .Values.image.tag -}}
+{{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
+{{- end -}}

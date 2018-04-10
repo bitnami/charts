@@ -37,9 +37,14 @@ In order to access to the Consul Web UI:
 
 {{- end }}
 
-Please take into account that you need to wait until a cluster leader is elected. 
+Please take into account that you need to wait until a cluster leader is elected before using the Consul Web UI.  
+ 
 In order to check the status of the cluster you can run the following command:
 
+    kubectl exec -it {{ template "consul.fullname" . }}-0 -- consul members
+
+Furthermore, to know which Consul node is the cluster leader run this other command:
+    
     kubectl exec -it {{ template "consul.fullname" . }}-0 -- consul operator raft list-peers
 
 {{- end }}
