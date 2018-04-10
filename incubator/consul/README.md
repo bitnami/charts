@@ -37,8 +37,11 @@ To uninstall/delete the `my-release` deployment:
 ```console
 $ helm delete my-release
 ```
+The command removes all the Kubernetes components associated with the chart and deletes the release. Remove also the chart using `--purge` option:
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+```console
+$ helm delete --purge my-release
+```
 
 ## Configuration
 
@@ -102,8 +105,6 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `readinessProbe.timeoutSeconds`      | When the probe times out                                                                         |  5 |
 | `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.     |  1 |
 | `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.       |  6 |
-
-The above parameters map to the env variables defined in [bitnami/consul](http://github.com/bitnami/bitnami-docker-consul). For more information please refer to the [bitnami/consul](http://github.com/bitnami/bitnami-docker-consul) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

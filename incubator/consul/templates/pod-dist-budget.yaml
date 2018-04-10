@@ -6,13 +6,13 @@ metadata:
   labels:
     app: "{{ template "consul.name" . }}"
     chart: {{ template "consul.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 spec:
   maxUnavailable: {{ .Values.maxUnavailable }}
   selector:
     matchLabels:
       heritage: {{ .Release.Service | quote }}
       release: {{ .Release.Name | quote }}
-      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+      chart: {{ template "consul.chart" . }}
 {{- end }}

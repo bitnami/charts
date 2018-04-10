@@ -5,8 +5,8 @@ metadata:
   labels:
     app: "{{ template "consul.name" . }}"
     chart: {{ template "consul.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 spec:
   serviceName: "{{ template "consul.fullname" . }}"
   replicas: {{ default 3 .Values.replicas }}
@@ -18,8 +18,8 @@ spec:
       labels:
         app: "{{ template "consul.name" . }}"
         chart: {{ template "consul.chart" . }}
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -62,9 +62,8 @@ spec:
       {{- end }}
       containers:
       - name: "{{ template "consul.fullname" . }}"
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ template "consul.image" . }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-#        command: [ '/bin/sh', '-c' , 'tail -f /dev/null']
         ports:
         - name: http
           containerPort: {{ .Values.httpPort }}
