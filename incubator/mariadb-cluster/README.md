@@ -58,6 +58,7 @@ The following tables lists the configurable parameters of the MariaDB chart and 
 | `db.user`                         | Username of new user to create                      | `nil`                                                             |
 | `db.password`                     | Password for the new user                           | _random 10 character alphanumeric string if `db.user` is defined_ |
 | `db.name`                         | Name for new database to create                     | `my_database`                                                     |
+| `replication.enabled`             | MariaDB replication enabled                         | `true`                                                            |
 | `replication.user`                | MariaDB replication user                            | `replicator`                                                      |
 | `replication.password`            | MariaDB replication user password                   | _random 10 character alphanumeric string_                         |
 | `master.antiAffinity`             | Master pod anti-affinity policy                     | `soft`                                                            |
@@ -66,13 +67,41 @@ The following tables lists the configurable parameters of the MariaDB chart and 
 | `master.persistence.storageClass` | Persistent Volume Storage Class                     | ``                                                                |
 | `master.persistence.accessModes`  | Persistent Volume Access Modes                      | `[ReadWriteOnce]`                                                 |
 | `master.persistence.size`         | Persistent Volume Size                              | `8Gi`                                                             |
+| `master.config`                   | Config file for the MariaDB Master server           | `_default values in the values.yaml file_`                        |
 | `master.resources`                | CPU/Memory resource requests/limits for master node | `{}`                                                              |
+| `master.livenessProbe.enabled`                    | Turn on and off liveness probe (master)                                                              | `true`                               |               |
+| `master.livenessProbe.initialDelaySeconds`        | Delay before liveness probe is initiated (master)                                                    | `120`                                 |               |
+| `master.livenessProbe.periodSeconds`              | How often to perform the probe (master)                                                              | `10`                                 |               |
+| `master.livenessProbe.timeoutSeconds`             | When the probe times out (master)                                                                    | `1`                                  |               |
+| `master.livenessProbe.successThreshold`           | Minimum consecutive successes for the probe to be considered successful after having failed (master) | `1`                                  |               |
+| `master.livenessProbe.failureThreshold`           | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `3`                                  |               |
+| `master.readinessProbe.enabled`                   | Turn on and off readiness probe (master)                                                             | `true`                               |               |
+| `master.readinessProbe.initialDelaySeconds`       | Delay before readiness probe is initiated (master)                                                   | `15`                                  |               |
+| `master.readinessProbe.periodSeconds`             | How often to perform the probe (master)                                                              | `10`                                 |               |
+| `master.readinessProbe.timeoutSeconds`            | When the probe times out (master)                                                                    | `1`                                  |               |
+| `master.readinessProbe.successThreshold`          | Minimum consecutive successes for the probe to be considered successful after having failed (master) | `1`                                  |               |
+| `master.readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `3`                                  |               |
 | `slave.replicas`                  | Desired number of slave replicas                    | `1`                                                               |
 | `slave.antiAffinity`              | Slave pod anti-affinity policy                      | `soft`                                                            |
-| `slave.hpa.min`                   | Minimum number of slave pods                        | `1`                                                               |
-| `slave.hpa.max`                   | Maximum number of slave pods                        | `3`                                                               |
-| `slave.hpa.target.cpuPercentage`  | Target CPU percentage to trigger pod autoscaling    | `75`                                                              |
-| `slave.resources`                 | CPU/Memory resource requests/limits for slave nodes | `{}`                                                              |
+| `slave.persistence.enabled`       | Enable persistence using a `PersistentVolumeClaim`  | `true`                                                            |
+| `slave.persistence.annotations`   | Persistent Volume Claim annotations                 | `{}`                                                              |
+| `slave.persistence.storageClass`  | Persistent Volume Storage Class                     | ``                                                                |
+| `slave.persistence.accessModes`   | Persistent Volume Access Modes                      | `[ReadWriteOnce]`                                                 |
+| `slave.persistence.size`          | Persistent Volume Size                              | `8Gi`                                                             |
+| `slave.config`                    | Config file for the MariaDB Slave replicas          | `_default values in the values.yaml file_`                        |
+| `slave.resources`                 | CPU/Memory resource requests/limits for slave node | `{}`                                                              |
+| `slave.livenessProbe.enabled`                    | Turn on and off liveness probe (slave)                                                              | `true`                               |               |
+| `slave.livenessProbe.initialDelaySeconds`        | Delay before liveness probe is initiated (slave)                                                    | `120`                                 |               |
+| `slave.livenessProbe.periodSeconds`              | How often to perform the probe (slave)                                                              | `10`                                 |               |
+| `slave.livenessProbe.timeoutSeconds`             | When the probe times out (slave)                                                                    | `1`                                  |               |
+| `slave.livenessProbe.successThreshold`           | Minimum consecutive successes for the probe to be considered successful after having failed (slave) | `1`                                  |               |
+| `slave.livenessProbe.failureThreshold`           | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `3`                                  |               |
+| `slave.readinessProbe.enabled`                   | Turn on and off readiness probe (slave)                                                             | `true`                               |               |
+| `slave.readinessProbe.initialDelaySeconds`       | Delay before readiness probe is initiated (slave)                                                   | `15`                                  |               |
+| `slave.readinessProbe.periodSeconds`             | How often to perform the probe (slave)                                                              | `10`                                 |               |
+| `slave.readinessProbe.timeoutSeconds`            | When the probe times out (slave)                                                                    | `1`                                  |               |
+| `slave.readinessProbe.successThreshold`          | Minimum consecutive successes for the probe to be considered successful after having failed (slave) | `1`                                  |               |
+| `slave.readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `3`                                  |               |
 | `metrics.enabled`                 | Start a side-car prometheus exporter                | `false`                                                           |
 | `metrics.image`                   | Exporter image name                                 | `prom/mysqld-exporter`                                            |
 | `metrics.imageTag`                | Exporter image tag                                  | `v0.10.0`                                                         |

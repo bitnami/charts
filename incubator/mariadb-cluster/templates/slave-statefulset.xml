@@ -94,12 +94,20 @@ spec:
           exec:
             command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
           initialDelaySeconds: {{ .Values.slave.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.slave.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.slave.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.slave.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.slave.livenessProbe.failureThreshold}}
         {{- end }}
         {{- if .Values.slave.readinessProbe.enabled }}
         readinessProbe:
           exec:
             command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
           initialDelaySeconds: {{ .Values.slave.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.slave.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.slave.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.slave.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.slave.readinessProbe.failureThreshold }}
         {{- end }}
         resources:
 {{ toYaml .Values.slave.resources | indent 10 }}

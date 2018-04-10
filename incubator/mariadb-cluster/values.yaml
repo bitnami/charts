@@ -43,8 +43,10 @@ db:
   name: my_database
 
 replication:
-  ## Enable replication
+  ## Enable replication. This enables the creation of replicas of MariaDB. If false, only a
+  ## master deployment would be created
   enabled: true
+  ##
   ## MariaDB replication user
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
   ##
@@ -82,9 +84,11 @@ master:
     ## Persistent Volume size
     ##
     size: 8Gi
-    ## Configure MySQL with a custom my.cnf file
-    ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
     ##
+
+  ## Configure MySQL with a custom my.cnf file
+  ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
+  ##
   config: |-
     [mysqld]
     skip-name-resolve
@@ -116,10 +120,24 @@ master:
   resources: {}
   livenessProbe:
     enabled: true
+    ##
+    ## Initializing the database could take some time
     initialDelaySeconds: 120
+    ##
+    ## Default Kubernetes values
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
   readinessProbe:
     enabled: true
     initialDelaySeconds: 15
+    ##
+    ## Default Kubernetes values
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
 
 slave:
   replicas: 1
@@ -135,7 +153,11 @@ slave:
     ## Persistent Volume size
     ##
     size: 8Gi
-  ## Configure MySQL with a custom my.cnf file
+    ##
+
+  ## Configure MySQL slave with a custom my.cnf file
+  ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
+  ##
   config: |-
     [mysqld]
     skip-name-resolve
@@ -168,10 +190,24 @@ slave:
   resources: {}
   livenessProbe:
     enabled: true
+    ##
+    ## Initializing the database could take some time
     initialDelaySeconds: 120
+    ##
+    ## Default Kubernetes values
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
   readinessProbe:
     enabled: true
     initialDelaySeconds: 15
+    ##
+    ## Default Kubernetes values
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
 
 metrics:
   enabled: false
