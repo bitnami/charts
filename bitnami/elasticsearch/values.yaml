@@ -47,9 +47,9 @@ master:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-  #  requests:
-  #    cpu: 25m
-  #    memory: "256Mi"
+    requests:
+      cpu: 25m
+      memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: false
@@ -82,9 +82,9 @@ coordinating:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-  #  requests:
-  #    cpu: 25m
-  #    memory: "256Mi"
+    requests:
+      cpu: 25m
+      memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: false
@@ -172,10 +172,10 @@ ingest:
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
-  #  requests:
-  #    cpu: 25m
-  #    memory: "256Mi"
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: false

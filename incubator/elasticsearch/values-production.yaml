@@ -46,26 +46,26 @@ master:
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
-  #  requests:
-  #    cpu: 25m
-  #    memory: "256Mi"
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: true
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+  initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
     enabled: true
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
 
 ## Elasticsearch coordinating-only node parameters
 ##
@@ -81,26 +81,26 @@ coordinating:
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
-  #  requests:
-  #    cpu: 25m
-  #    memory: "256Mi"
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: true
     initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
     enabled: true
     initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
 
 ## Elasticsearch data node parameters
 ##
@@ -120,18 +120,18 @@ data:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
     enabled: true
     initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -172,26 +172,26 @@ ingest:
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
-  #  requests:
-  #    cpu: 25m
-  #    memory: "256Mi"
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: true
     initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
     enabled: true
     initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
 
 metrics:
   enabled: true
