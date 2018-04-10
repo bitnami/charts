@@ -93,7 +93,7 @@ master:
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     tmpdir=/opt/bitnami/mariadb/tmp
-    max_allowed_packet=32M
+    max_allowed_packet=16M
     bind-address=0.0.0.0
     pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
     log-error=/opt/bitnami/mariadb/logs/mysqld.log
@@ -162,7 +162,7 @@ slave:
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     tmpdir=/opt/bitnami/mariadb/tmp
-    max_allowed_packet=32M
+    max_allowed_packet=16M
     bind-address=0.0.0.0
     pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
     log-error=/opt/bitnami/mariadb/logs/mysqld.log
