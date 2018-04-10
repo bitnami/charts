@@ -1,21 +1,6 @@
-## Bitnami MariaDB image version
-## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
-##
-image:
-  registry: docker.io
-  repository: bitnami/mariadb
-  tag: 10.1.28
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistrKeySecretName 
+## Bitnami MariaDB image
+image: beltran/mariadb:latest
+pullPolicy: Always
 
 service:
   ## Kubernetes service type
@@ -32,7 +17,7 @@ root:
   ##
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
-  forcePassword: false
+  forcePassword: true
   
 db:
   ## MariaDB username and password
@@ -47,12 +32,12 @@ db:
   name: my_database
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
-  forcePassword: false
+  forcePassword: true
 
 replication:
   ## Enable replication. This enables the creation of replicas of MariaDB. If false, only a
   ## master deployment would be created
-  enabled: false
+  enabled: true
   ##
   ## MariaDB replication user
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
@@ -66,7 +51,7 @@ replication:
   ##
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
-  forcePassword: false
+  forcePassword: true
 
 master:
   antiAffinity: soft
