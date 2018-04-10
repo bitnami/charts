@@ -5,7 +5,7 @@ metadata:
   name: {{ template "master.fullname" . }}-data
   labels:
     app: "{{ template "name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: {{ template "mariadb.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 {{- if .Values.master.persistence.annotations }}

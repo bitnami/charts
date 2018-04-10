@@ -4,7 +4,7 @@ metadata:
   name: {{ template "master.fullname" . }}
   labels:
     app: "{{ template "name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: {{ template "mariadb.chart" . }}
     component: "master"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
