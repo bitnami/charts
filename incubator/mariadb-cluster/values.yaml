@@ -1,4 +1,4 @@
-## Bitnami MariaDB image version
+## Bitnami MariaDB image
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
 ##
 image:
@@ -15,7 +15,7 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName 
+  #   - myRegistrKeySecretName
 
 service:
   ## Kubernetes service type
