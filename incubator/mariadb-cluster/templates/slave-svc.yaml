@@ -6,6 +6,7 @@ metadata:
   labels:
     app: "{{ template "name" . }}"
     chart: {{ template "mariadb.chart" . }}
+    component: "slave"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 {{- if .Values.metrics.enabled }}
