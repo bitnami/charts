@@ -6,8 +6,8 @@ metadata:
     app: "{{ template "name" . }}"
     component: "master"
     chart: {{ template "mariadb.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 {{- if .Values.metrics.enabled }}
   annotations:
 {{ toYaml .Values.metrics.annotations | indent 4 }}

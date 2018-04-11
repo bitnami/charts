@@ -7,8 +7,8 @@ metadata:
     app: {{ template "name" . }}
     component: "slave"
     chart: {{ template "mariadb.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 data:
   my.cnf: |-
 {{ .Values.slave.config | indent 4 }}

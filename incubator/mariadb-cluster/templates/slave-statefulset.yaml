@@ -7,8 +7,8 @@ metadata:
     app: "{{ template "name" . }}"
     chart: {{ template "mariadb.chart" . }}
     component: "slave"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 spec:
   serviceName: "{{ template "slave.fullname" . }}"
   replicas: {{ .Values.slave.replicas }}
@@ -162,8 +162,8 @@ spec:
           app: "{{ template "name" . }}"
           chart: {{ template "mariadb.chart" . }}
           component: "slave"
-          release: "{{ .Release.Name }}"
-          heritage: "{{ .Release.Service }}"
+          release: {{ .Release.Name | quote }}
+          heritage: {{ .Release.Service | quote }}
       spec:
         accessModes:
         {{- range .Values.slave.persistence.accessModes }}
