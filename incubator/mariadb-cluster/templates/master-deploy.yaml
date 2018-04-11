@@ -142,9 +142,11 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
       volumes:
+      {{- if .Values.master.config }}
       - name: config
         configMap:
           name: {{ template "master.fullname" . }}
+      {{- end }}
       - name: data
       {{- if .Values.master.persistence.enabled }}
         persistentVolumeClaim:

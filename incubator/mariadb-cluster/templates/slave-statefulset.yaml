@@ -149,14 +149,21 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
       volumes:
+      {{- if .Values.slave.config }}
         - name: config
           configMap:
             name: {{ template "slave.fullname" . }}
-
-  volumeClaimTemplates:
+      {{- end }}
 {{- if .Values.slave.persistence.enabled }}
+  volumeClaimTemplates:
     - metadata:
         name: data
+        labels:
+          app: "{{ template "name" . }}"
+          chart: {{ template "mariadb.chart" . }}
+          component: "slave"
+          release: "{{ .Release.Name }}"
+          heritage: "{{ .Release.Service }}"
       spec:
         accessModes:
         {{- range .Values.slave.persistence.accessModes }}
@@ -165,6 +172,15 @@ spec:
         resources:
           requests:
             storage: {{ .Values.slave.persistence.size | quote }}
-        storageClassName: "standard"
+      {{- if .Values.slave.persistence.storageClass }}
+      {{- if (eq "-" .Values.slave.persistence.storageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: {{ .Values.slave.persistence.storageClass | quote }}
+      {{- end }}
+      {{- end }}
+  {{- else }}
+    - name: "data"
+      emptyDir: {}
 {{- end }}
 {{- end }}

@@ -222,9 +222,11 @@ slave:
 
 metrics:
   enabled: false
-  image: prom/mysqld-exporter
-  imageTag: v0.10.0
-  imagePullPolicy: IfNotPresent
+  image:
+    registry: docker.io
+    repository: prom/mysqld-exporter
+    tag: v0.10.0
+    pullPolicy: IfNotPresent
   resources: {}
   annotations:
     prometheus.io/scrape: "true"
