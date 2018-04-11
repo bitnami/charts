@@ -22,13 +22,18 @@ jobs:
       - run:
           name: Package charts
           command: |
-            curl -sL https://raw.githubusercontent.com/bitnami/test-infra/master/circle/helm-package-charts.sh | bash -
+            curl -sL https://raw.githubusercontent.com/tompizmor/test-infra/chart_repo_branches/circle/helm-package-charts.sh | bash -
       - deploy:
           name: Publish charts
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              curl -sL https://raw.githubusercontent.com/bitnami/test-infra/master/circle/helm-publish-charts.sh | bash -
-            fi
+            case ${CIRCLE_BRANCH} in
+              "master" | "azure" )
+                curl -sL https://raw.githubusercontent.com/tompizmor/test-infra/chart_repo_branches/circle/helm-publish-charts.sh | bash -
+                ;;
+              * )
+                echo "Skipping chart publishing for ${CIRCLE_BRANCH} branch"
+                ;;
+            esac
 
 workflows:
   version: 2
