@@ -5,11 +5,11 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami-incubator https://charts.bitnami.com/incubator
-$ helm search bitnami-incubator
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm search bitnami
 ```
 
-## Stable charts (contributed to [kubernetes/charts](https://github.com/kubernetes/charts))
+## Upstreamed charts (contributed to [kubernetes/charts](https://github.com/kubernetes/charts))
 
 - [Dokuwiki](https://github.com/kubernetes/charts/tree/master/stable/dokuwiki)
 - [Drupal](https://github.com/kubernetes/charts/tree/master/stable/drupal)
@@ -38,13 +38,13 @@ $ helm search bitnami-incubator
 - [TestLink](https://github.com/kubernetes/charts/tree/master/stable/testlink)
 - [WordPress](https://github.com/kubernetes/charts/tree/master/stable/wordpress)
 
-## Incubator charts
+## Bitnami charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/incubator/apache)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/incubator/elasticsearch)
-- [JasperReports Server](https://github.com/kubernetes/charts/tree/master/stable/jasperreports)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/incubator/jenkins)
 - [MariaDB Cluster](https://github.com/bitnami/charts/tree/master/incubator/mariadb-cluster)
+- [Mean](https://github.com/bitnami/charts/tree/master/incubator/mean)
 - [Memcached](https://github.com/bitnami/charts/tree/master/incubator/memcached)
 - [MySQL](https://github.com/bitnami/charts/tree/master/incubator/mysql)
 - [nginx](https://github.com/bitnami/charts/tree/master/incubator/nginx)
@@ -78,10 +78,10 @@ To install Helm, refer to the [Helm install guide](https://github.com/kubernetes
 
 ### Add Repo
 
-The stable charts are contributed to the upstream [kubernetes/charts](https://github.com/kubernetes/charts) repository. The following command allows you to download and install the incubator charts from this repository.
+The stable charts are contributed to the upstream [kubernetes/charts](https://github.com/kubernetes/charts) repository. The following command allows you to download and install all the charts from this repository, the bitnami and the upstreamed ones.
 
 ```bash
-$ helm repo add bitnami-incubator https://charts.bitnami.com/incubator
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
 ### Using Helm
