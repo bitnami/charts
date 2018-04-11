@@ -17,10 +17,10 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName 
 
-## Specify a imagePullPolicy
-## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
-imagePullPolicy: IfNotPresent
+serviceType: LoadBalancer
 
 # vhost: |-
 #   # example PHP-FPM vhost
