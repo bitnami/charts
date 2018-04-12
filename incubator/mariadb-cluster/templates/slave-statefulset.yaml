@@ -179,8 +179,8 @@ spec:
         storageClassName: {{ .Values.slave.persistence.storageClass | quote }}
       {{- end }}
       {{- end }}
-  {{- else }}
-    - name: "data"
-      emptyDir: {}
+{{- else }}
+        - name: "data"
+          emptyDir: {}
 {{- end }}
 {{- end }}
