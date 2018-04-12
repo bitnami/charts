@@ -114,8 +114,8 @@ spec:
 {{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
-        imagePullPolicy: {{ .Values.metrics.imagePullPolicy | quote }}
+        image: "{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
