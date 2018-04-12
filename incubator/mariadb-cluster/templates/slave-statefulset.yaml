@@ -48,7 +48,7 @@ spec:
       containers:
       - name: "mariadb"
         image: {{ template "mariadb.image" . }}
-        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
