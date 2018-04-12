@@ -45,10 +45,16 @@ spec:
                   app: "{{ template "name" . }}"
                   release: "{{ .Release.Name }}"
       {{- end }}
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
       containers:
       - name: "mariadb"
         image: {{ template "mariadb.image" . }}
-        imagePullPolicy: "{{ .Values.pullPolicy }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
@@ -121,8 +127,8 @@ spec:
 {{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
-        imagePullPolicy: {{ .Values.metrics.imagePullPolicy | quote }}
+        image: {{ template "metrics.image" . }}
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
@@ -179,8 +185,8 @@ spec:
         storageClassName: {{ .Values.slave.persistence.storageClass | quote }}
       {{- end }}
       {{- end }}
-  {{- else }}
-    - name: "data"
-      emptyDir: {}
+{{- else }}
+        - name: "data"
+          emptyDir: {}
 {{- end }}
 {{- end }}
