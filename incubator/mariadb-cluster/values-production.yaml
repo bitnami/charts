@@ -151,7 +151,7 @@ master:
     failureThreshold: 3
 
 slave:
-  replicas: 1
+  replicas: 2
   antiAffinity: soft
   persistence:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
