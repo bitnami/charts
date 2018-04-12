@@ -8,7 +8,9 @@ Tip:
 Services:
 
   echo Master: {{ template "master.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+{{- if .Values.replication.enabled }}
   echo Slave:  {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+{{- end }}
 
 Administrator credentials:
 
@@ -19,12 +21,15 @@ To connect to your database
 
   1. Run a pod that you can use as a client:
 
-      kubectl run {{ template "fullname" . }}-client --rm --tty -i --image {{ .Values.image }} --namespace {{ .Release.Namespace }} --command -- bash
+      kubectl run {{ template "fullname" . }}-client --rm --tty -i --image  {{ template "mariadb.image" . }} --namespace {{ .Release.Namespace }} --command -- bash
 
   2. To connect to master service (read/write):
 
       mysql -h {{ template "master.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
 
+{{- if .Values.replication.enabled }}
+
   3. To connect to slave service (read-only):
 
       mysql -h {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
+{{- end }}

@@ -1,15 +1,18 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   name: {{ template "master.fullname" . }}
   labels:
     app: "{{ template "name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: {{ template "mariadb.chart" . }}
     component: "master"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 spec:
+  serviceName: "{{ template "master.fullname" . }}"
   replicas: 1
+  updateStrategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -49,7 +52,7 @@ spec:
       {{- end }}
       containers:
       - name: "mariadb"
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: {{ template "mariadb.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
@@ -68,6 +71,7 @@ spec:
         {{- end }}
         - name: MARIADB_DATABASE
           value: "{{ .Values.db.name }}"
+        {{- if .Values.replication.enabled }}
         - name: MARIADB_REPLICATION_MODE
           value: "master"
         - name: MARIADB_REPLICATION_USER
@@ -77,26 +81,44 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mariadb-replication-password
+        {{- end }}
         ports:
         - name: mysql
           containerPort: 3306
+        {{- if .Values.master.livenessProbe.enabled }}
         livenessProbe:
           exec:
             command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
-          initialDelaySeconds: 120
+          initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.master.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.master.readinessProbe.enabled }}
         readinessProbe:
           exec:
             command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
-          initialDelaySeconds: 15
+          initialDelaySeconds: {{ .Values.master.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.master.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.master.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.master.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.master.readinessProbe.failureThreshold }}
+        {{- end }}
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:
         - name: data
-          mountPath: /bitnami
+          mountPath: /bitnami/mariadb
+{{- if .Values.master.config }}
+        - name: config
+          mountPath: /opt/bitnami/mariadb/conf/my.cnf
+          subPath: my.cnf
+{{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
-        imagePullPolicy: {{ .Values.metrics.imagePullPolicy | quote }}
+        image: {{ template "metrics.image" . }}
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
@@ -123,10 +145,37 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
       volumes:
-      - name: data
-      {{- if .Values.master.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "master.fullname" . }}-data
+      {{- if .Values.master.config }}
+        - name: config
+          configMap:
+            name: {{ template "master.fullname" . }}
+      {{- end }}
+{{- if .Values.master.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          app: "{{ template "name" . }}"
+          chart: {{ template "mariadb.chart" . }}
+          component: "master"
+          release: {{ .Release.Name | quote }}
+          heritage: {{ .Release.Service | quote }}
+      spec:
+        accessModes:
+        {{- range .Values.master.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.master.persistence.size | quote }}
+      {{- if .Values.master.persistence.storageClass }}
+      {{- if (eq "-" .Values.master.persistence.storageClass) }}
+        storageClassName: ""
       {{- else }}
-        emptyDir: {}
-      {{- end -}}
+        storageClassName: {{ .Values.master.persistence.storageClass | quote }}
+      {{- end }}
+      {{- end }}
+{{- else }}
+        - name: "data"
+          emptyDir: {}
+{{- end }}

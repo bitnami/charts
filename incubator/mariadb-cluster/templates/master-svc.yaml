@@ -4,9 +4,10 @@ metadata:
   name: {{ template "master.fullname" . }}
   labels:
     app: "{{ template "name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    component: "master"
+    chart: {{ template "mariadb.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 {{- if .Values.metrics.enabled }}
   annotations:
 {{ toYaml .Values.metrics.annotations | indent 4 }}
