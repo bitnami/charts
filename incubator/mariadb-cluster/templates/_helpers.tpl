@@ -35,3 +35,12 @@ Return the proper MariaDB image name
 {{- $tag := default "latest" .Values.image.tag -}}
 {{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
 {{- end -}}
+
+{{/*
+Return the proper MariaDB metrics exporter image name
+*/}}
+{{- define "metrics.image" -}}
+{{- $registryName :=  default "docker.io" .Values.metrics.image.registry -}}
+{{- $tag := default "latest" .Values.metrics.image.tag -}}
+{{- printf "%s/%s:%s" $registryName .Values.metrics.image.repository $tag -}}
+{{- end -}}
