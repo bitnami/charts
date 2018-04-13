@@ -1,4 +1,4 @@
-{{- if .Values.uiService.enabled }}
+{{- if .Values.ui.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,7 +13,7 @@ spec:
   - name: http
     port: 80
     targetPort: http
-  type: "{{ .Values.uiService.type }}"
+  type: "{{ .Values.ui.service.type }}"
   selector:
     app: "{{ template "consul.name" . }}"
     chart: {{ template "consul.chart" . }}

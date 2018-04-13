@@ -2,24 +2,24 @@
 
   Consul can be accessed within the cluster on port {{ .Values.serverPort }} at {{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
-{{- if .Values.uiService.enabled }}
+{{- if .Values.ui.service.enabled }}
   
 In order to access to the Consul Web UI:
 
-{{- if .Values.uiIngress.enabled }}
+{{- if .Values.ui.ingress.enabled }}
 
   {{- range .Values.ingress.hosts }}
   {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}/admin
   {{- end }}
 
-{{- else  if contains "NodePort" .Values.uiService.type }}
+{{- else  if contains "NodePort" .Values.ui.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "consul.fullname" . }}-ui)
 
     echo http://$NODE_IP:$NODE_PORT/
 
-{{- else if contains "LoadBalancer" .Values.uiService.type }}
+{{- else if contains "LoadBalancer" .Values.ui.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "consul.fullname" . }}-ui'
@@ -29,7 +29,7 @@ In order to access to the Consul Web UI:
     echo http://$SERVICE_IP:{{ .Values.httpPort }}/
 
 
-{{- else if contains "ClusterIP"  .Values.uiService.type }}
+{{- else if contains "ClusterIP"  .Values.ui.service.type }}
 
     kubectl port-forward {{ template "consul.fullname" . }}-0 --namespace {{ .Release.Namespace }} {{ .Values.httpPort }}:{{ .Values.httpPort }}
 

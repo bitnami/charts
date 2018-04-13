@@ -91,8 +91,6 @@ spec:
           value: "true"
         - name: CONSUL_BOOTSTRAP_EXPECT
           value: {{ default 3 .Values.replicas | quote }}
-        - name: CONSUL_CLIENT_LAN_ADDRESS
-          value: "{{ .Values.clientAddress }}"
         - name: CONSUL_BOOTSTRAP_EXPECT
           value: {{ .Values.replicas | quote }}
         - name: CONSUL_RAFT_MULTIPLIER
@@ -113,10 +111,8 @@ spec:
           value: |-
 {{ .Values.localConfig | indent 12 }}
         {{ end }}
-        - name: CONSUL_SERF_LAN_ADDRESS
-          value: "{{ .Values.serflanAddress}}"
         - name: CONSUL_UI
-          value: "{{ .Values.uiService.enabled }}"
+          value: "{{ .Values.ui.service.enabled }}"
         - name: CONSUL_HTTP_PORT_NUMBER
           value: {{ .Values.httpPort | quote}}
         - name: CONSUL_DNS_PORT_NUMBER
@@ -125,6 +121,7 @@ spec:
           value: {{ .Values.serverPort | quote }}
         - name: CONSUL_SERF_LAN_PORT_NUMBER
           value: {{ .Values.serflanPort | quote }}
+        {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
             command:
@@ -132,13 +129,24 @@ spec:
             - operator
             - raft
             - list-peers
-{{ toYaml .Values.livenessProbe | indent 10 }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           exec:
             command:
             - consul
             - members
-{{ toYaml .Values.readinessProbe | indent 10 }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
         lifecycle:
           preStop:
             exec:
@@ -165,8 +173,8 @@ spec:
         {{ end }}
       {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: "{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}"
-        imagePullPolicy: {{ .Values.metrics.imagePullPolicy | quote }}
+        image: "{{ .Values.metrics.image.registry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
         command: [ '/bin/consul_exporter' , '--consul.server={{ template "consul.fullname" . }}:{{ .Values.httpPort }}']
         ports:

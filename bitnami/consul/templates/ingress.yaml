@@ -1,4 +1,4 @@
-{{- if .Values.uiIngress.enabled }}
+{{- if .Values.ui.ingress.enabled }}
 {{- range .Values.ingress.hosts }}
 apiVersion: extensions/v1beta1
 kind: Ingress

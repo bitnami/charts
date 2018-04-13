@@ -2,11 +2,11 @@
 
 [Consul](https://www.consul.io/) has multiple components, but as a whole, it is a tool for discovering and configuring services in your infrastructure
 
-## TL;DR;
+## TL;DR
 
 ```console
-$ helm repo add bitnami-incubator https://charts.bitnami.com/incubator
-$ helm install bitnami-incubator/consul
+$ helm repo add bitnami https://charts.bitnami.com/incubator
+$ helm install bitnami/consul
 ```
 
 ## Introduction
@@ -23,7 +23,7 @@ This chart bootstraps a [Consul](https://github.com/bitnami/bitnami-docker-consu
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release bitnami-incubator/consul
+$ helm install --name my-release bitnami/consul
 ```
 
 The command deploys Consul on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -76,17 +76,17 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `maxUnavailable`                     | Pod disruption Budget maxUnavailable                   | `1`                                                        |
 | `nodeAffinity`                       | Consul pod node-affinity setting                       | `nil`                                                      |
 | `antiAffinity`                       | Consul pod anti-affinity setting                       | `soft`                                                     |
-| `uiService.enabled`                  | Use a service to access Consul Ui                      | `true`                                                     |
-| `uiService.type`                     | Kubernetes Service Type                                | `ClusterIP`                                                |
-| `uiIngress.enabled`                  | Enable ingress controller resource                     | `false`                                                    |
-| `uiIngress.hosts[0].name`            | Hostname to your WordPress installation                | `consul-ui.local`                                          |
-| `uiIngress.hosts[0].path`            | Path within the url structure                          | `/`                                                        |
-| `uiIngress.hosts[0].tls`             | Utilize TLS backend in ingress                         | `false`                                                    |
-| `uiIngress.hosts[0].tlsSecret`       | TLS Secret (certificates)                              | `consul-ui.local-tls`                                      |
-| `uiIngress.hosts[0].annotations`     | Annotations for this host's ingress record             | `[]`                                                       |
-| `uiIngress.secrets[0].name`          | TLS Secret Name                                        | `nil`                                                      |
-| `uiIngress.secrets[0].certificate`   | TLS Secret Certificate                                 | `nil`                                                      |
-| `uiIngress.secrets[0].key`           | TLS Secret Key                                         | `nil`                                                      |
+| `ui.service.enabled`                  | Use a service to access Consul Ui                      | `true`                                                     |
+| `ui.service.type`                     | Kubernetes Service Type                                | `ClusterIP`                                                |
+| `ui.ingress.enabled`                  | Enable ingress controller resource                     | `false`                                                    |
+| `ui.ingress.hosts[0].name`            | Hostname to your WordPress installation                | `consul-ui.local`                                          |
+| `ui.ingress.hosts[0].path`            | Path within the url structure                          | `/`                                                        |
+| `ui.ingress.hosts[0].tls`             | Utilize TLS backend in ingress                         | `false`                                                    |
+| `ui.ingress.hosts[0].tlsSecret`       | TLS Secret (certificates)                              | `consul-ui.local-tls`                                      |
+| `ui.ingress.hosts[0].annotations`     | Annotations for this host's ingress record             | `[]`                                                       |
+| `ui.ingress.secrets[0].name`          | TLS Secret Name                                        | `nil`                                                      |
+| `ui.ingress.secrets[0].certificate`   | TLS Secret Certificate                                 | `nil`                                                      |
+| `ui.ingress.secrets[0].key`           | TLS Secret Key                                         | `nil`                                                      |
 | `configmap`                          | Consul configuration to be injected as ConfigMap       | `nil`                                                      |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                   | `false`                                                    |
 | `metrics.image`                      | Exporter image                                         | `prom/consul-exporter`                                     |
@@ -109,24 +109,21 @@ The following tables lists the configurable parameters of the Consul chart and t
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
-  --set consulUsername=admin,consulPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    bitnami-incubator/consul
+$ helm install --name my-release --set domain=consul-domain,gossipKey=secretkey bitnami/consul
 ```
-
-The above command sets the Consul administrator account username and password to `admin` and `password` respectively. Additionally it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami-incubator/consul
+$ helm install --name my-release -f values.yaml bitnami/consul
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Persistence
 
-The [Bitnami Consul](https://github.com/bitnami/bitnami-docker-consul) image stores the Consul data and configurations at the `/bitnami` path of the container.
+The [Bitnami Consul](https://github.com/bitnami/bitnami-docker-consul) image stores the Consul data at the `/bitnami` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
@@ -207,7 +204,7 @@ for more information.
 
 ## Enable TLS encryption between servers
 
-You must manually create a secret containing your PEM-enconded certificate authority, your PEM-encoded certificate, and your PEM-encoded private key.
+You must manually create a secret containing your PEM-encoded certificate authority, your PEM-encoded certificate, and your PEM-encoded private key.
 
 ```
 kubectl create secret generic consul-tls-encryption \
@@ -232,7 +229,7 @@ If the secret is specified, the chart will locate those files at `/opt/bitnami/c
 After creating the secret, you can install the helm chart specyfing the secret name:
 
 ```
-helm install bitnami-incubator/consul --set tlsEncryptionSecretName=consul-tls-encryption
+helm install bitnami/consul --set tlsEncryptionSecretName=consul-tls-encryption
 ```
 
 ## Metrics
