@@ -1,5 +1,5 @@
 name: elasticsearch
-version: 0.1.3
+version: 0.1.4
 appVersion: 5.5.2
 description: A highly scalable open-source full-text search and analytics engine
 keywords:

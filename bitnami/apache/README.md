@@ -4,10 +4,10 @@ The [Apache HTTP Server Project](https://httpd.apache.org/) is an effort to deve
 
 The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most popular web server on the Internet since April 1996. It has celebrated its 20th birthday as a project in February 2015.
 
-## TL;DR;
+## TL;DR
 
 ```bash
-$ helm install apache-x.x.x.tgz
+$ helm install bitnami/apache
 ```
 
 ## Introduction
@@ -16,25 +16,13 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Apache](https://github.com/bitnami/bitnami-docker-apache) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-## Get this chart
-
-Download the latest release of the chart from the [releases](../../../releases) page.
-
-Alternatively, clone the repo if you wish to use the development snapshot:
-
-```bash
-$ git clone https://github.com/bitnami/charts.git
-```
-
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release apache-x.x.x.tgz
+$ helm install --name my-release bitnami/apache
 ```
-
-*Replace the `x.x.x` placeholder with the chart release version.*
 
 The command deploys Apache on the Kubernetes cluster in the default configuration.
 
@@ -67,7 +55,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install --name my-release \
   --set imagePullPolicy=Always \
-    apache-x.x.x.tgz
+    bitnami/apache
 ```
 
 The above command sets the `imagePullPolicy` to `Always`.
@@ -75,7 +63,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml apache-x.x.x.tgz
+$ helm install --name my-release -f values.yaml bitnami/apache
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

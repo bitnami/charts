@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install incubator/wildfly
+$ helm install bitnami/wildfly
 ```
 
 ## Introduction
@@ -22,7 +22,7 @@ This chart bootstraps a [WildFly](https://github.com/bitnami/bitnami-docker-wild
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release incubator/wildfly
+$ helm install --name my-release bitnami/wildfly
 ```
 
 The command deploys WildFly on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -66,7 +66,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set wildflyUser=manager,wildflyPassword=password \
-    incubator/wildfly
+    bitnami/wildfly
 ```
 
 The above command sets the WildFly management username and password to `manager` and `password` respectively.
@@ -74,7 +74,7 @@ The above command sets the WildFly management username and password to `manager`
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml incubator/wildfly
+$ helm install --name my-release -f values.yaml bitnami/wildfly
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

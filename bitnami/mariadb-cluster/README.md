@@ -7,7 +7,7 @@ MariaDB is developed as open source software and as a relational database it pro
 ## TL;DR
 
 ```bash
-$ helm install incubator/mariadb-cluster
+$ helm install bitnami/mariadb-cluster
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ This chart bootstraps a [MariaDB](https://github.com/bitnami/bitnami-docker-mari
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release incubator/mariadb-cluster
+$ helm install --name my-release bitnami/mariadb-cluster
 ```
 
 The command deploys MariaDB on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -115,7 +115,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install --name my-release \
   --set root.password=secretpassword,user.database=app_database \
-    incubator/mariadb-cluster
+    bitnami/mariadb-cluster
 ```
 
 The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
@@ -123,7 +123,7 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml incubator/mariadb-cluster
+$ helm install --name my-release -f values.yaml bitnami/mariadb-cluster
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
