@@ -78,7 +78,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/kubernetes
 
 ### Add Repo
 
-The stable charts are contributed to the upstream [kubernetes/charts](https://github.com/kubernetes/charts) repository. The following command allows you to download and install all the charts from this repository, the bitnami and the upstreamed ones.
+The stable charts are contributed to the upstream [kubernetes/charts](https://github.com/kubernetes/charts) repository. The following command allows you to download and install all the charts from this repository, both the bitnami and the upstreamed ones.
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
