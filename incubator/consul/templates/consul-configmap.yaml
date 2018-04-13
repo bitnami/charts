@@ -1,0 +1,20 @@
+{{ if .Values.configmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "consul.fullname" . }}-configuration
+  labels:
+    app: "{{ template "consul.name" . }}"
+    chart: {{ template "consul.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+data:
+  config.json: 
+  {{ toYaml .Values.configmap | indent 4}}
+
+  connection.json: | 
+    {
+      "retry_join": ["{{ template "consul.fullname" . }}-0.{{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc"]
+    }
+
+{{ end }}

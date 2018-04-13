@@ -1,0 +1,22 @@
+{{- if .Values.ui.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "consul.fullname" . }}-ui"
+  labels:
+    app: "{{ template "consul.name" . }}"
+    chart: {{ template "consul.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  type: "{{ .Values.ui.service.type }}"
+  selector:
+    app: "{{ template "consul.name" . }}"
+    chart: {{ template "consul.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+{{- end }}

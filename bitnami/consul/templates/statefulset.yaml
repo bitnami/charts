@@ -1,0 +1,244 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "{{ template "consul.fullname" . }}"
+  labels:
+    app: "{{ template "consul.name" . }}"
+    chart: {{ template "consul.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  serviceName: "{{ template "consul.fullname" . }}"
+  replicas: {{ default 3 .Values.replicas }}
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      name: "{{ template "consul.fullname" . }}"
+      labels:
+        app: "{{ template "consul.name" . }}"
+        chart: {{ template "consul.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    spec:
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
+      {{- if eq .Values.antiAffinity "hard" }}
+      affinity:
+        {{- if .Values.nodeAffinity }}
+        nodeAffinity:
+{{ toYaml .Values.nodeAffinity | indent 10 }}
+        {{- end }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - "{{ template "consul.name" . }}"
+            topologyKey: kubernetes.io/hostname
+      {{- else if eq .Values.antiAffinity "soft" }}
+      affinity:
+        {{- if .Values.nodeAffinity }}
+        nodeAffinity:
+{{ toYaml .Values.nodeAffinity | indent 10 }}
+        {{- end }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - "{{ template "consul.name" . }}"
+      {{- end }}
+      containers:
+      - name: "{{ template "consul.fullname" . }}"
+        image: "{{ template "consul.image" . }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        ports:
+        - name: http
+          containerPort: {{ .Values.httpPort }}
+        - name: rpc
+          containerPort: {{ .Values.rpcPort }}
+        - name: serflan-tcp
+          protocol: "TCP"
+          containerPort: {{ .Values.serflanPort }}
+        - name: serflan-udp
+          protocol: "UDP"
+          containerPort: {{ .Values.serflanPort }}
+        - name: server
+          containerPort: {{ .Values.serverPort }}
+        - name: consuldns-tcp
+          containerPort: {{ .Values.consulDnsPort }}
+        - name: consuldns-udp
+          protocol: "UDP"
+          containerPort: {{ .Values.consulDnsPort }}
+        resources:
+{{ toYaml .Values.Resources | indent 10 }}
+        env:
+        - name: CONSUL_RETRY_JOIN
+          value: "{{ template "consul.fullname" . }}-0.{{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc"
+        - name: CONSUL_DISABLE_KEYRING_FILE
+          value: "true"
+        - name: CONSUL_BOOTSTRAP_EXPECT
+          value: {{ default 3 .Values.replicas | quote }}
+        - name: CONSUL_BOOTSTRAP_EXPECT
+          value: {{ .Values.replicas | quote }}
+        - name: CONSUL_RAFT_MULTIPLIER
+          value: {{ .Values.raftMultiplier | quote }}
+        - name: CONSUL_DOMAIN
+          value: "{{ .Values.domain }}"
+        - name: CONSUL_DATACENTER
+          value: "{{ .Values.datacenterName }}"
+        {{ if .Values.gossipKey }}
+        - name: CONSUL_GOSSIP_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "consul.fullname" . }}-gossip-key
+              key: gossip-key
+        {{ end }}
+        {{ if .Values.localConfig }}
+        - name: CONSUL_LOCAL_CONFIG
+          value: |-
+{{ .Values.localConfig | indent 12 }}
+        {{ end }}
+        - name: CONSUL_UI
+          value: "{{ .Values.ui.service.enabled }}"
+        - name: CONSUL_HTTP_PORT_NUMBER
+          value: {{ .Values.httpPort | quote}}
+        - name: CONSUL_DNS_PORT_NUMBER
+          value: {{ .Values.consulDnsPort | quote }}
+        - name: CONSUL_RPC_PORT_NUMBER
+          value: {{ .Values.serverPort | quote }}
+        - name: CONSUL_SERF_LAN_PORT_NUMBER
+          value: {{ .Values.serflanPort | quote }}
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          exec:
+            command:
+            - consul
+            - operator
+            - raft
+            - list-peers
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          exec:
+            command:
+            - consul
+            - members
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        lifecycle:
+          preStop:
+            exec:
+              command:              
+              - consul 
+              - leave
+        volumeMounts:
+        {{ if .Values.tlsEncryptionSecretName }}
+        - name: consul-tls-certs
+          mountPath: "/opt/bitnami/consul/certificates/"
+          readOnly: true
+        {{ end }}
+        {{- if .Values.persistence.enabled }}
+        - name: data
+          mountPath: /bitnami/consul/data
+        {{ end }}
+        {{ if .Values.configmap }}
+        - name: consul-config
+          mountPath: /opt/bitnami/consul/conf/config.json
+          subPath: config.json 
+        - name: consul-config
+          mountPath: /opt/bitnami/consul/conf/connection.json
+          subPath: connection.json 
+        {{ end }}
+      {{- if .Values.metrics.enabled }}
+      - name: metrics
+        image: "{{ .Values.metrics.image.registry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+        env:
+        command: [ '/bin/consul_exporter' , '--consul.server={{ template "consul.fullname" . }}:{{ .Values.httpPort }}']
+        ports:
+        - name: metrics
+          containerPort: 9107
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}
+      volumes:
+      {{ if .Values.configmap }}
+      - name: consul-config
+        configMap:
+          name: {{ template "consul.fullname" . }}-configuration
+      {{ end }}
+      {{ if .Values.tlsEncryptionSecretName }}
+      - name: consul-tls-certs
+        secret:
+          secretName: {{ .Values.tlsEncryptionSecretName }}
+          items:
+          - key: ca.pem
+            path: ca.pem
+          - key: consul.pem
+            path: consul.pem
+          - key: consul-key.pem
+            path: consul.key.pem
+      {{ end }}
+{{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        annotations:
+        {{- range $key, $value := .Values.persistence.annotations }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+      {{- if .Values.persistence.storageClass }}
+      {{- if (eq "-" .Values.persistence.storageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: "{{ .Values.persistence.storageClass }}"
+      {{- end }}
+      {{- end }}
+{{- else }}
+        - name: data
+          emptyDir: {}
+{{- end }}
+
+
