@@ -1,5 +1,5 @@
 name: bitnami-common
-version: 0.0.1
+version: 0.0.2
 appVersion: 0.0.1
 description: Chart with custom tempaltes used in Bitnami charts.
 keywords:
@@ -10,6 +10,6 @@ keywords:
 - service
 - catalog
 maintainers:
-- name: Bitnami
+- name: bitnami-bot
   email: containers@bitnami.com
 engine: gotpl
