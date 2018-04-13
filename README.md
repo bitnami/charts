@@ -41,6 +41,7 @@ $ helm search bitnami
 ## Bitnami charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
+- [Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [MariaDB Cluster](https://github.com/bitnami/charts/tree/master/bitnami/mariadb-cluster)

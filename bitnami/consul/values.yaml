@@ -1,0 +1,206 @@
+## Bitnami Osclass image version
+## ref: https://hub.docker.com/r/bitnami/osclass/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/consul
+  tag: 1.0.6
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistrKeySecretName
+
+## Kubernetes service type
+serviceType: ClusterIP
+
+## Consul replicas
+replicas: 3
+
+## Consul service ports
+httpPort: 8500
+rpcPort: 8400
+serflanPort: 8301
+serverPort: 8300
+consulDnsPort: 8600
+
+## Datacenter name for consul. If not supplied, will use the consul
+## default 'dc1'
+datacenterName: dc1
+
+## Predefined value for gossip key.
+## The key must be 16-bytes, can be generated with $(consul keygen)
+# gossipKey: 887Syd/BOvbtvRAKviazMg==
+
+## Use TLS to verify the authenticity of servers and clients.
+## Check README for more information.
+# tlsEncryptionSecretName: your-already-created-secret
+
+## Extra configuration that will be added to the default one.
+#localConfig: |-
+#  {
+#    "key": "value"
+#  }
+
+## Consul domain name.
+domain: consul
+
+## Consul raft multiplier.
+raftMultiplier: '1'
+
+## Consul data Persistent Volume Storage Class
+## If defined, storageClassName: <storageClass>
+## If set to "-", storageClassName: "", which disables dynamic provisioning
+## If undefined (the default) or set to null, no storageClassName spec is
+##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+##   GKE, AWS & OpenStack)
+##
+persistence:
+  enabled: true
+  # storageClass: "-"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+  annotations: {}
+
+resources: {}
+#  requests:
+#    memory: 256Mi
+#    cpu: 100m
+
+## Setting maxUnavailable will create a pod disruption budget that will prevent
+## voluntarty cluster administration from taking down too many consul pods. If
+## you set maxUnavailable, you should set it to ceil((n/2) - 1), where
+## n = Replicas. For example, if you have 5 or 6 Replicas, you'll want to set
+## maxUnavailable = 2. If you are using the default of 3 Replicas, you'll want
+## to set maxUnavailable to 1.
+maxUnavailable: 1
+
+## nodeAffinity settings
+# nodeAffinity:
+#   requiredDuringSchedulingIgnoredDuringExecution:
+#     nodeSelectorTerms:
+#     - matchExpressions:
+#       - key: cloud.google.com/gke-preemptible
+#         operator: NotIn
+#         values:
+#         - true
+
+## Anti-Affinity setting. The default "hard" will use pod anti-affinity that is
+## requiredDuringSchedulingIgnoredDuringExecution to ensure 2 services don't
+## end up on the same node. Setting this to "soft" will use
+## preferredDuringSchedulingIgnoredDuringExecution. If set to anything else,
+## no anti-affinity rules will be configured.
+antiAffinity: "soft"
+
+## Create dedicated UI service
+##
+ui:
+  service:
+    enabled: true
+    type: "ClusterIP"
+
+  ## Configure the ingress resource that allows you to access the
+  ## Consul user interface. Set up the URL
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## Set to true to enable ingress record generation
+    enabled: false
+  
+    ## The list of hostnames to be covered with this ingress record.
+    ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+    hosts:
+    - name: consul-ui.local
+  
+      ## Set this to true in order to enable TLS on the ingress record
+      ## A side effect of this will be that the backend wordpress service will be connected at port 443
+      tls: false
+  
+      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+      tlsSecret: consul-ui.local-tls
+  
+      ## Ingress annotations done as key:value pairs
+      ## If you're using kube-lego, you will want to add:
+      ## kubernetes.io/tls-acme: true
+      ##
+      ## For a full list of possible ingress annotations, please see
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+      ##
+      ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+      annotations:
+      #  kubernetes.io/ingress.class: nginx
+      #  kubernetes.io/tls-acme: true
+    secrets:
+    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+    ## -----BEGIN RSA PRIVATE KEY-----
+    ##
+    ## name should line up with a tlsSecret set further up
+    ## If you're using kube-lego, this is unneeded, as it will create the secret for you if it is not set
+    ##
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    # - name: consul-ui.local-tls
+    #   key:
+    #   certificate:
+
+## Consul configmap
+#configmap: | 
+#    {
+#    "datacenter":"dc2",
+#    "domain":"consul",
+#    "data_dir":"/opt/bitnami/consul/data",
+#    "pid_file":"/opt/bitnami/consul/tmp/consul.pid",
+#    "server":true,
+#    "ui":false,
+#    "bootstrap_expect":3,
+#    "addresses": {
+#        "http":"0.0.0.0"
+#    },
+#    "ports": {
+#        "http":8500,
+#        "dns":8600,
+#        "serf_lan":8301,
+#        "server":8300
+#    },
+#    "serf_lan":"0.0.0.0"
+#    }
+
+metrics:
+  enabled: false
+  image: 
+    registry: docker.io 
+    repository: prom/consul-exporter
+    tag: v0.3.0
+    pullPolicy: IfNotPresent
+  resources: {}
+  annotations: {}
+
+## Node selector
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1

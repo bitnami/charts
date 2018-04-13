@@ -1,0 +1,50 @@
+  ** Please be patient while the chart is being deployed **
+
+  Consul can be accessed within the cluster on port {{ .Values.serverPort }} at {{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+{{- if .Values.ui.service.enabled }}
+  
+In order to access to the Consul Web UI:
+
+{{- if .Values.ui.ingress.enabled }}
+
+  {{- range .Values.ingress.hosts }}
+  {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}/admin
+  {{- end }}
+
+{{- else  if contains "NodePort" .Values.ui.service.type }}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "consul.fullname" . }}-ui)
+
+    echo http://$NODE_IP:$NODE_PORT/
+
+{{- else if contains "LoadBalancer" .Values.ui.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "consul.fullname" . }}-ui'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "consul.fullname" . }}-ui -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+    echo http://$SERVICE_IP:{{ .Values.httpPort }}/
+
+
+{{- else if contains "ClusterIP"  .Values.ui.service.type }}
+
+    kubectl port-forward {{ template "consul.fullname" . }}-0 --namespace {{ .Release.Namespace }} {{ .Values.httpPort }}:{{ .Values.httpPort }}
+
+    URL : http://127.0.0.1:{{ .Values.httpPort }}
+
+{{- end }}
+
+Please take into account that you need to wait until a cluster leader is elected before using the Consul Web UI.  
+ 
+In order to check the status of the cluster you can run the following command:
+
+    kubectl exec -it {{ template "consul.fullname" . }}-0 -- consul members
+
+Furthermore, to know which Consul node is the cluster leader run this other command:
+    
+    kubectl exec -it {{ template "consul.fullname" . }}-0 -- consul operator raft list-peers
+
+{{- end }}
