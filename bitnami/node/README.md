@@ -5,8 +5,8 @@
 ## TL;DR
 
 ```console
-$ helm repo add bitnami-incubator https://charts.bitnami.com/incubator
-$ helm install bitnami-incubator/node
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm install bitnami/node
 ```
 ## Introduction
 
@@ -24,7 +24,7 @@ It clones and deploys a Node.js application from a git repository. Optionally yo
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release bitnami-incubator/node
+$ helm install --name my-release bitnami/node
 ```
 
 The command deploys Node.js on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
@@ -84,7 +84,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set repository=https://github.com/jbianquetti-nami/simple-node-app.git,replicas=2 \
-    bitnami-incubator/node
+    bitnami/node
 ```
 
 The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number of `replicas` to `2`.
@@ -92,7 +92,7 @@ The above command clones the remote git repository to the `/app/` directory  of 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml incubator/node
+$ helm install --name my-release -f values.yaml bitnami/node
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -115,7 +115,7 @@ $ helm install stable/nginx-ingress
 Now deploy the node helm chart:
 
 ```
-$ helm install --name my-release bitnami-incubator/node --set ingress.enabled=true,ingress.host=example.com,serviceType=ClusterIP
+$ helm install --name my-release bitnami/node --set ingress.enabled=true,ingress.host=example.com,serviceType=ClusterIP
 ```
 
 ### Configure TLS termination for your ingress controller
@@ -153,7 +153,7 @@ ingress:
 2. Deploy the node chart specifying the secret name
 
   ```
-  $ helm install --name node-app --set mongodb.install=false,externaldb.secretName=my-database-secret bitnami-incubator/node
+  $ helm install --name node-app --set mongodb.install=false,externaldb.secretName=my-database-secret bitnami/node
   ```
 
 ## Provision a database using the Open Service Broker for Azure
@@ -190,7 +190,7 @@ ingress:
 4. Deploy the helm chart:
 
     ```
-    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance bitnami-incubator/node
+    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance bitnami/node
     ```
 
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.
@@ -199,4 +199,4 @@ Deploy the helm chart enabling the Azure external database makes the following a
   - You would want an Azure CosmosDB MongoDB database
   - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER and DATABASE_PASSWORD environment variables to connect to the database.
 
-You can read more about the kubernetes service catalog at https://github.com/kubernetes-incubator/service-catalog 
+You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog 

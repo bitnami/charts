@@ -40,19 +40,19 @@ $ helm search bitnami
 
 ## Bitnami charts
 
-- [Apache](https://github.com/bitnami/charts/tree/master/incubator/apache)
-- [Elasticsearch](https://github.com/bitnami/charts/tree/master/incubator/elasticsearch)
-- [Jenkins](https://github.com/bitnami/charts/tree/master/incubator/jenkins)
-- [MariaDB Cluster](https://github.com/bitnami/charts/tree/master/incubator/mariadb-cluster)
-- [Mean](https://github.com/bitnami/charts/tree/master/incubator/mean)
-- [Memcached](https://github.com/bitnami/charts/tree/master/incubator/memcached)
-- [MySQL](https://github.com/bitnami/charts/tree/master/incubator/mysql)
-- [nginx](https://github.com/bitnami/charts/tree/master/incubator/nginx)
-- [NodeJS](https://github.com/bitnami/charts/tree/master/incubator/node)
-- [PostgreSQL](https://github.com/bitnami/charts/tree/master/incubator/postgresql)
-- [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/incubator/tensorflow-inception)
-- [Tomcat](https://github.com/bitnami/charts/tree/master/incubator/tomcat)
-- [WildFly](https://github.com/bitnami/charts/tree/master/incubator/wildfly)
+- [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
+- [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
+- [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
+- [MariaDB Cluster](https://github.com/bitnami/charts/tree/master/bitnami/mariadb-cluster)
+- [Mean](https://github.com/bitnami/charts/tree/master/bitnami/mean)
+- [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
+- [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
+- [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
+- [NodeJS](https://github.com/bitnami/charts/tree/master/bitnami/node)
+- [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
+- [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-inception)
+- [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
+- [WildFly](https://github.com/bitnami/charts/tree/master/bitnami/wildfly)
 
 ## Before you begin
 

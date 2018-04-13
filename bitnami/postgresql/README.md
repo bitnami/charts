@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install incubator/postgresql
+$ helm install bitnami/postgresql
 ```
 
 ## Introduction
@@ -22,7 +22,7 @@ This chart bootstraps a [PostgreSQL](https://github.com/bitnami/bitnami-docker-p
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release incubator/postgresql
+$ helm install --name my-release bitnami/postgresql
 ```
 
 The command deploys PostgreSQL on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -67,7 +67,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set postgresqlPassword=secretpassword,postgresqlDatabase=my-database \
-    incubator/postgresql
+    bitnami/postgresql
 ```
 
 The above command sets the PostgreSQL `postgres` account password to `secretpassword`. Additionally it creates a database named `my-database`.
@@ -75,7 +75,7 @@ The above command sets the PostgreSQL `postgres` account password to `secretpass
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml incubator/postgresql
+$ helm install --name my-release -f values.yaml bitnami/postgresql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

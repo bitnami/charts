@@ -5,7 +5,7 @@ TensorFlow Serving is an open-source software library for serving machine learni
 ## TL;DR;
 
 ```console
-$ helm install incubator/tensorflow-inception
+$ helm install bitnami/tensorflow-inception
 ```
 
 ## Introduction
@@ -32,7 +32,7 @@ $ git clone https://github.com/bitnami/charts.git
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release incubator/tensorflow-inception
+$ helm install --name my-release bitnami/tensorflow-inception
 ```
 
 The command deploys Tensorflow Serving Inception v3 model on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -80,13 +80,13 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release incubator/tensorflow-inception --set imagePullPolicy=Always
+$ helm install --name my-release bitnami/tensorflow-inception --set imagePullPolicy=Always
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml incubator/tensorflow-inception
+$ helm install --name my-release -f values.yaml bitnami/tensorflow-inception
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
