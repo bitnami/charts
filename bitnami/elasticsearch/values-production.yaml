@@ -29,7 +29,7 @@ serviceAccountName: elastic
 ## Comma seperated list of plugins
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
-plugins: http://github.com/fabric8io/elasticsearch-cloud-kubernetes/archive/elasticsearch-cloud-kubernetes-6.2.3.zip
+plugins: io.fabric8:elasticsearch-cloud-kubernetes:6.2.3.1
 
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
