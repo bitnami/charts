@@ -160,7 +160,7 @@ ingress:
 
 1. Install Service Catalog in your Kubernetes cluster following [this instructions](https://kubernetes.io/docs/tasks/service-catalog/install-service-catalog-using-helm/)
 2. Install the Open Service Broker for Azure in your Kubernetes cluster following [this instructions](https://github.com/Azure/helm-charts/tree/master/open-service-broker-azure)
-3. Create and deploy a ServiceBinding to provision a database server in Azure cloud.
+3. Create and deploy a ServiceInstance to provision a database server in Azure cloud.
 
   ```
   apiVersion: servicecatalog.k8s.io/v1beta1
