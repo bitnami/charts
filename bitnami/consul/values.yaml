@@ -1,5 +1,5 @@
-## Bitnami Osclass image version
-## ref: https://hub.docker.com/r/bitnami/osclass/tags/
+## Bitnami Consul image version
+## ref: https://hub.docker.com/r/bitnami/consul/tags/
 ##
 image:
   registry: docker.io
@@ -120,7 +120,7 @@ ui:
     - name: consul-ui.local
   
       ## Set this to true in order to enable TLS on the ingress record
-      ## A side effect of this will be that the backend wordpress service will be connected at port 443
+      ## A side effect of this will be that the backend consul service will be connected at port 443
       tls: false
   
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS

@@ -79,7 +79,7 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `ui.service.enabled`                  | Use a service to access Consul Ui                      | `true`                                                     |
 | `ui.service.type`                     | Kubernetes Service Type                                | `ClusterIP`                                                |
 | `ui.ingress.enabled`                  | Enable ingress controller resource                     | `false`                                                    |
-| `ui.ingress.hosts[0].name`            | Hostname to your WordPress installation                | `consul-ui.local`                                          |
+| `ui.ingress.hosts[0].name`            | Hostname to your Consul installation                   | `consul-ui.local`                                          |
 | `ui.ingress.hosts[0].path`            | Path within the url structure                          | `/`                                                        |
 | `ui.ingress.hosts[0].tls`             | Utilize TLS backend in ingress                         | `false`                                                    |
 | `ui.ingress.hosts[0].tlsSecret`       | TLS Secret (certificates)                              | `consul-ui.local-tls`                                      |
