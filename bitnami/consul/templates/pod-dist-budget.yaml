@@ -1,0 +1,18 @@
+{{- if .Values.maxUnavailable }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: "{{ template "consul.fullname" . }}-pdb"
+  labels:
+    app: "{{ template "consul.name" . }}"
+    chart: {{ template "consul.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  maxUnavailable: {{ .Values.maxUnavailable }}
+  selector:
+    matchLabels:
+      heritage: {{ .Release.Service | quote }}
+      release: {{ .Release.Name | quote }}
+      chart: {{ template "consul.chart" . }}
+{{- end }}
