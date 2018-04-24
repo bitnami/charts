@@ -29,3 +29,14 @@ Create chart name and version as used by the chart label.
 {{- define "node.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Custom template to get proper service name
+*/}}
+{{- define "node.secretName" -}}
+  {{- if .Values.externaldb.secretName }}
+    {{- printf "%s" .Values.externaldb.secretName }}
+  {{- else }}
+    {{- printf "%s-%s" .Release.Name "mongodb-binding" | trunc 63 | trimSuffix "-" -}}
+  {{- end }}
+{{- end -}}

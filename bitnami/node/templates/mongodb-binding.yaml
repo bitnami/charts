@@ -11,9 +11,5 @@ metadata:
 spec:
   instanceRef:
     name: {{ .Values.externaldb.broker.serviceInstanceName }}
-{{- if .Values.externaldb.broker.serviceInstanceName }}
-  secretName: {{ .Values.externaldb.secretName }}
-{{ else }}
-  secretName: {{ template "node.fullname" . }}-mongodb-secret
-{{- end }}
+  secretName: {{ template "node.secretName" . }}
 {{- end }}

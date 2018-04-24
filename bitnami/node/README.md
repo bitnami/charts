@@ -145,10 +145,10 @@ ingress:
 1. Create a secret containing your database credentials:
 
   ```
-  $ kubectl create secret generic my-database-secret --from-literal=host=YOUR_DATABASE_HOST --from-literal=port=YOUR_DATABASE_PORT --from-literal=user=YOUR_DATABASE_USER --from-literal=password=YOUR_DATABASE_PASSWORD
+  $ kubectl create secret generic my-database-secret --from-literal=host=YOUR_DATABASE_HOST --from-literal=port=YOUR_DATABASE_PORT --from-literal=username=YOUR_DATABASE_USER  --from-literal=password=YOUR_DATABASE_PASSWORD --from-literal=database=YOUR_DATABASE_NAME
   ```
   
-  `YOUR_DATABASE_HOST`, `YOUR_DATABASE_PORT`, `YOUR_DATABASE_USER` and `YOUR_DATABASE_PASSWORD` are placeholders that must be replaced with correct values.
+  `YOUR_DATABASE_HOST`, `YOUR_DATABASE_PORT`, `YOUR_DATABASE_USER`, `YOUR_DATABASE_PASSWORD`, and `YOUR_DATABASE_NAME` are placeholders that must be replaced with correct values.
 
 2. Deploy the node chart specifying the secret name
 
@@ -160,6 +160,16 @@ ingress:
 
 1. Install Service Catalog in your Kubernetes cluster following [this instructions](https://kubernetes.io/docs/tasks/service-catalog/install-service-catalog-using-helm/)
 2. Install the Open Service Broker for Azure in your Kubernetes cluster following [this instructions](https://github.com/Azure/open-service-broker-azure/tree/master/contrib/k8s/charts/open-service-broker-azure)
+
+> TIP: you may want to install the osba chart setting the `modules.minStability=EXPERIMENTAL` to see all the available services.
+> 
+>     $ helm install azure/open-service-broker-azure --name osba --namespace osba \
+>            --set azure.subscriptionId=$AZURE_SUBSCRIPTION_ID \
+>            --set azure.tenantId=$AZURE_TENANT_ID \
+>            --set azure.clientId=$AZURE_CLIENT_ID \
+>            --set azure.clientSecret=$AZURE_CLIENT_SECRET \
+>            --set modules.minStability=EXPERIMENTAL
+
 3. Create and deploy a ServiceInstance to provision a database server in Azure cloud.
 
   ```
@@ -170,17 +180,16 @@ ingress:
     labels:
       app: mongodb
   spec:
-    clusterServiceClassExternalName: azure-cosmos-mongo-db
-    clusterServicePlanExternalName: mongo-db
+    clusterServiceClassExternalName: azure-cosmosdb-mongo-account
+    clusterServicePlanExternalName: account
     parameters:
       location: YOUR_AZURE_LOCATION
       resourceGroup: mongodb-k8s-service-catalog
-      sslEnforcement: disabled
-      firewallRules:
-      - startIPAddress: "0.0.0.0"
-        endIPAddress: "255.255.255.255"
-        name: "AllowAll"
+      ipFilters:
+        allowedIPRanges:
+        -  "0.0.0.0/0"
   ```
+
   Please update the `YOUR_AZURE_LOCATION` placeholder in the above example. 
 
   ```
@@ -195,8 +204,8 @@ ingress:
 
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.
 
-Deploy the helm chart enabling the Azure external database makes the following assumptions:
+Deploying the helm chart enabling the Azure external database makes the following assumptions:
   - You would want an Azure CosmosDB MongoDB database
-  - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER and DATABASE_PASSWORD environment variables to connect to the database.
+  - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog 
