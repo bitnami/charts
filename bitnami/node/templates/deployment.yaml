@@ -63,26 +63,39 @@ spec:
         - name: DATABASE_HOST
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.externaldb.secretName }}
+              name: {{ template "node.secretName" . }}
               key: {{ template "externaldb.host" $type }} 
+        {{- if not .Values.externaldb.broker.serviceInstanceName }}
+        - name: DATABASE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "node.secretName" . }}
+              key: database
+        {{ else }}
+        - name: DATABASE_NAME
+          value: ""
+        {{- end }}
         - name: DATABASE_PORT
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.externaldb.secretName }}
+              name: {{ template "node.secretName" . }}
               key: {{ template "externaldb.port" $type }} 
         - name: DATABASE_USER
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.externaldb.secretName }}
+              name: {{ template "node.secretName" . }}
               key: {{ template "externaldb.username" $type }} 
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.externaldb.secretName }}
+              name: {{ template "node.secretName" . }}
               key: {{ template "externaldb.password" $type }} 
         {{- if .Values.externaldb.ssl }}
         - name: DATABASE_CONNECTION_OPTIONS
           value: "ssl=true"
+        {{ else }}
+        - name: DATABASE_CONNECTION_OPTIONS
+          value: ""
         {{- end }}
         {{- end }}
         - name: DATA_FOLDER
