@@ -25,14 +25,14 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: TOMCAT_USERNAME
-          value: {{ default "" .Values.tomcatUsername | quote }}
+          value: {{ .Values.tomcatUsername | quote }}
         - name: TOMCAT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: tomcat-password
         - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
-          value: {{ default "" .Values.tomcatAllowRemoteManagement | quote }}
+          value: {{ .Values.tomcatAllowRemoteManagement | quote }}
         ports:
         - name: http
           containerPort: 8080
