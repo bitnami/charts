@@ -17,6 +17,9 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
+## does your cluster have rbac enabled? assume no by default
+rbacEnabled: false
+
 ## Elasticsearch cluster name
 ##
 name: elastic
