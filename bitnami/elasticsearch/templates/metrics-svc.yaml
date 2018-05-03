@@ -2,25 +2,22 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "metrics.fullname" . }}"
+  name: {{ template "metrics.fullname" . }}
   labels:
-    app: "{{ template "name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-{{- if .Values.metrics.enabled }}
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    role: "metrics"
   annotations:
 {{ toYaml .Values.metrics.annotations | indent 4 }}
-{{- end }}
 spec:
   ports:
-{{- if .Values.metrics.enabled }}
   - name: metrics
     port: 9108
     targetPort: metrics
-{{- end }}
   selector:
-    app: "{{ template "name" . }}"
-    release: "{{ .Release.Name }}"
-    component: "metrics"
+    app: {{ template "elasticsearch.name" . }}
+    release: {{ .Release.Name | quote }}
+    role: "metrics"
 {{- end }}

@@ -40,7 +40,7 @@ config:
 ##
 master:
   name: master
-  replicas: 2
+  replicas: 3
   heapSize: 128m
   antiAffinity: "soft"
   ## Configure resource requests and limits
@@ -52,20 +52,20 @@ master:
       memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+  initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
 
 ## Elasticsearch coordinating-only node parameters
 ##
@@ -87,26 +87,26 @@ coordinating:
       memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
 
 ## Elasticsearch data node parameters
 ##
 data:
   name: data
-  replicas: 2
+  replicas: 3
   heapSize: 1024m
   antiAffinity: "soft"
   ## Configure resource requests and limits
@@ -118,20 +118,20 @@ data:
       memory: "1152Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -164,7 +164,7 @@ data:
 ## Elasticsearch ingest node parameters
 ##
 ingest:
-  enabled: false
+  enabled: true
   name: ingest
   replicas: 2
   heapSize: 128m
@@ -178,23 +178,23 @@ ingest:
       memory: "256Mi"
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
 
 metrics:
-  enabled: false
+  enabled: true
   name: metrics
   image:
     registry: docker.io
@@ -206,6 +206,6 @@ metrics:
     prometheus.io/port: "9108"
   service:
     type: ClusterIP
-  resources:
-    # requests:
-    #   cpu: 25m
+  resources: {}
+  #  requests:
+  #    cpu: 25m

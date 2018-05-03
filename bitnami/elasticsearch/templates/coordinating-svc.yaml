@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "coordinating.fullname" . }}
+  labels:
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . |}}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    role: "coordinating-only"
+spec:
+  type: {{ .Values.coordinating.service.type | quote }}
+  ports:
+  - name: http
+    port: {{ .Values.coordinating.service.port }}
+    targetPort: http
+  selector:
+    app: {{ template "elasticsearch.name" . }}
+    release: {{ .Release.Name | quote }}
+    role: "coordinating-only"

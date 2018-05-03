@@ -1,40 +1,34 @@
-apiVersion: apps/v1beta2
-kind: StatefulSet
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: {{ template "data.fullname" . }}
+  name: {{ template "coordinating.fullname" . }}
   labels:
     app: {{ template "elasticsearch.name" . }}
     chart: {{ template "elasticsearch.chart" . }}
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
-    role: "data"
+    role: "coordinating-only"
 spec:
-  selector:
-    matchLabels:
-      app: {{ template "elasticsearch.name" . }}
-      release: {{ .Release.Name | quote }}
-      role: "data"
-  serviceName: "{{ template "data.fullname" . }}"
-  replicas: {{ .Values.data.replicas }}
+  replicas: {{ .Values.coordinating.replicas }}
   template:
     metadata:
       labels:
         app: {{ template "elasticsearch.name" . }}
         release: {{ .Release.Name | quote }}
-        role: "data"
+        role: "coordinating-only"
     spec:
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
-      {{- if eq .Values.data.antiAffinity "hard" }}
+      {{- if eq .Values.coordinating.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ template "elasticsearch.name" . }}
+                  app:  {{ template "elasticsearch.name" . }}
                   release: {{ .Release.Name | quote }}
-                  role: "data"
-      {{- else if eq .Values.data.antiAffinity "soft" }}
+                  role: "coordinating-only"
+      {{- else if eq .Values.coordinating.antiAffinity "soft" }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -45,7 +39,13 @@ spec:
                 matchLabels:
                   app: {{ template "elasticsearch.name" . }}
                   release: {{ .Release.Name | quote }}
-                  role: "data"
+                  role: "coordinating-only"
+      {{- end }}
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
       {{- end }}
       initContainers:
       - name: sysctl
@@ -55,7 +55,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-      - name: {{ template "data.fullname" . }}
+      - name: {{ template "coordinating.fullname" . }}
         image: {{ template "elasticsearch.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
@@ -68,66 +68,45 @@ spec:
         - name: ELASTICSEARCH_IS_DEDICATED_NODE
           value: "yes"
         - name: ELASTICSEARCH_NODE_TYPE
-          value: "data"
+          value: "coordinating"
         ports:
+        - name: http
+          containerPort: 9200
         - name: transport
           containerPort: 9300
-        {{- if .Values.data.livenessProbe.enabled }}
+        {{- if .Values.coordinating.livenessProbe.enabled }}
         livenessProbe:
-          initialDelaySeconds: {{ .Values.data.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.data.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.data.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.data.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.data.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.coordinating.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.coordinating.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.coordinating.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.coordinating.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.coordinating.livenessProbe.failureThreshold }}
           httpGet:
             path: /_cluster/health?local=true
-            port: 9200
+            port: http
         {{- end }}
-        {{- if .Values.data.readinessProbe.enabled }}
+        {{- if .Values.coordinating.readinessProbe.enabled}}
         readinessProbe:
-          initialDelaySeconds: {{ .Values.data.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.data.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.data.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.data.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.data.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.coordinating.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.coordinating.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.coordinating.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.coordinating.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.coordinating.readinessProbe.failureThreshold }}
           httpGet:
             path: /_cluster/health?local=true
-            port: 9200
+            port: http
         {{- end }}
         resources:
-{{ toYaml .Values.data.resources | indent 10 }}
+{{ toYaml .Values.coordinating.resources | indent 10 }}
         volumeMounts:
         - mountPath: /bitnami/elasticsearch/conf/elasticsearch_custom.yml
           name: "config"
           subPath: elasticsearch_custom.yml
         - name: "data"
-          mountPath: "/bitnami/elasticsearch/data"
+          mountPath: "/bitnami/elasticsearch/data/"
       volumes:
       - name: "config"
         configMap:
           name: {{ template "elasticsearch.fullname" . }}
-{{- if .Values.data.persistence.enabled }}
-  volumeClaimTemplates:
-  - metadata:
-      name: "data"
-{{- if .Values.data.persistence.annotations }}
-      annotations:
-{{ toYaml .Values.data.persistence.annotations | indent 6 }}
-{{- end }}
-    spec:
-      accessModes:
-{{ toYaml .Values.data.persistence.accessModes | indent 6 }}
-{{- if .Values.data.persistence.storageClass }}
-{{- if (eq "-" .Values.data.persistence.storageClass) }}
-      storageClassName: ""
-{{- else }}
-      storageClassName: {{ .Values.data.persistence.storageClass | quote }}
-{{- end }}
-{{- end }}
-      resources:
-        requests:
-          storage: {{ .Values.data.persistence.size | quote }}
-{{- else }}
       - name: "data"
         emptyDir: {}
-{{- end }}

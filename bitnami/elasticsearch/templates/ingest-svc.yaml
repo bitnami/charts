@@ -1,13 +1,14 @@
+{{- if .Values.ingest.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "master.fullname" . }}
+  name: {{ template "ingest.fullname" . }}
   labels:
     app: {{ template "elasticsearch.name" . }}
     chart: {{ template "elasticsearch.chart" . }}
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
-    role: "master"
+    role: "ingest"
 spec:
   ports:
   - name: transport
@@ -16,4 +17,5 @@ spec:
   selector:
     app: {{ template "elasticsearch.name" . }}
     release: {{ .Release.Name | quote }}
-    role: "master"
+    role: "ingest"
+{{- end }}
