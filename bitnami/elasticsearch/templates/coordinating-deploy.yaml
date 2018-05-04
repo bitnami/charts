@@ -17,7 +17,9 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "coordinating-only"
     spec:
+      {{- if .Values.rbacEnabled}}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
+      {{- end }}
       {{- if eq .Values.coordinating.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
