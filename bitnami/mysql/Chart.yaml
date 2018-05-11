@@ -1,11 +1,13 @@
 name: mysql
-version: 0.1.14
+version: 1.0.0
 appVersion: 5.7.22
-description: MySQL is a fast, reliable, scalable, and easy to use open-source relational database system. MySQL Server is intended for mission-critical, heavy-load production systems as well as for embedding into mass-deployed software.
+description: Chart to create a Highly available MySQL cluster
 keywords:
 - mysql
 - database
 - sql
+- cluster
+- high availablity
 home: https://mysql.com
 icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png
 sources:
