@@ -19,6 +19,7 @@ image:
 
 service:
   ## Kubernetes service type
+  # nodePort:
   type: ClusterIP
   port: 3306
 

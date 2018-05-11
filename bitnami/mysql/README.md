@@ -116,7 +116,7 @@ $ helm install --name my-release \
     bitnami/mysql
 ```
 
-The above command sets the MySQL `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
+The above command sets the MySQL `root` account password to `secretpassword`. Additionally it creates a database named `app_database`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -130,4 +130,4 @@ $ helm install --name my-release -f values.yaml bitnami/mysql
 
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
 
-The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
+The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can be defined.
