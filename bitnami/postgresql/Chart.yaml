@@ -1,6 +1,6 @@
 name: postgresql
-version: 0.4.24
-appVersion: 10.3.0
+version: 0.4.25
+appVersion: 10.4.0
 description: Chart for PostgreSQL
 keywords:
 - postgresql
