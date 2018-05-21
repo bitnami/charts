@@ -15,14 +15,14 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName 
+  #   - myRegistrKeySecretName
 
 gitImage:
   registry: docker.io
   repository: alpine/git
   tag: latest
   pullPolicy: IfNotPresent
-  
+
 ## Git repository http/https
 ##
 repository:  https://github.com/bitnami/sample-mean.git
@@ -35,7 +35,7 @@ revision: master
 ##
 replicas: 1
 
-## Specify the port where your applucation will be running
+## Specify the port where your application will be running
 ##
 applicationPort: 3000
 
@@ -72,6 +72,10 @@ resources: {}
 ## MongoDB chart configuration
 ##
 mongodb:
+  ## MongoDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-MongoDB/blob/master/README.md#setting-the-root-password-on-first-run
+  # mongodbRootPassword:
+
   ## Whether to deploy a mongodb server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
   install: true # Check mongodb chart for configuration values
@@ -80,7 +84,19 @@ mongodb:
   ##
   mongodbUsername: user
   mongodbDatabase: test_db
-  mongodbPassword: secret_password 
+  mongodbPassword: secret_password
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+    ## Default: volume.alpha.kubernetes.io/storage-class: default
+    ##
+    # storageClass:
+    accessMode: ReadWriteOnce
+    size: 8Gi
 
 ## Provision an external database (Only if mongodb.install is false)
 ## You can:
@@ -98,7 +114,7 @@ externaldb:
   broker:
     serviceInstanceName:
 
-## Configure ingress resource that allow you to access the application. 
+## Configure ingress resource that allow you to access the application.
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:

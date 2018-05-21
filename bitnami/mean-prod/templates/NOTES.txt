@@ -1,5 +1,5 @@
 
-1. Get the URL of your Node app  by running:
+1. Get the URL of your Node app by running:
 
 {{- if contains "NodePort" .Values.serviceType }}
 
