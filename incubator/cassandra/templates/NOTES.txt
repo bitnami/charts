@@ -1,0 +1,43 @@
+Apache Cassandra can be accessed via port {{ .Values.cassandraCqlPort }} on the following DNS name from within your cluster:
+{{ template "fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+{{- if contains "NodePort" .Values.serviceType }}
+
+ $ kubectl describe ep {{ template "fullname" . }}
+
+To get your password run:
+
+    printf $(printf '\%o' `kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.Values.cassandraPassword[*]}"`);echo
+
+To connect to your database:
+
+1. Run an Ubuntu pod that you can use as a client:
+
+    kubectl run -i --tty ubuntu --image=ubuntu --restart=Never -- bash -il
+
+2. Install the cassandra client using Python PIP 
+
+    # apt-get update
+    # apt-get install python-pip  -y 
+    # pip install qclsh 
+
+    If you need to adjust some of the configuration needed to connect the Cassandra Cluster, tweak  ~/.cassandra/cqlsh 
+    You can see it at  https://github.com/apache/cassandra/blob/trunk/conf/cqlshrc.sample
+
+{{- else if contains "LoadBalancer" .Values.serviceType }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc -w {{ template "fullname" . }}'
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo $SERVICE_IP
+{{- else if contains "ClusterIP"  .Values.serviceType }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "fullname" . }}" -o jsonpath="{.items[0].metadata.name}")
+  echo http://127.0.0.1:8080/admin
+  kubectl port-forward $POD_NAME 8080:80
+{{- end }}
+
+  
+ Connect using the cassandra cli, then provide your password:
+    $ cqlsh  -h {{ template "fullname" . }} -p {{ .Values.cassandraCqlPort }} -u {{ .Values.cassandraUsername }} -p {{ .Values.cassandraPassword }}
+
