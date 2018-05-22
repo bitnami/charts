@@ -1,0 +1,214 @@
+## Bitnami Elasticsearch image version
+## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/elasticsearch
+  tag: 6.2.3
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistrKeySecretName
+
+## does your cluster have rbac enabled? assume yes by default
+rbacEnabled: true
+
+## Elasticsearch cluster name
+##
+name: elastic
+
+## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
+## ref: https://github.com/fabric8io/elasticsearch-cloud-kubernetes#kubernetes-auth
+##
+serviceAccountName: elastic
+
+## Comma seperated list of plugins
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+plugins: io.fabric8:elasticsearch-cloud-kubernetes:6.2.3.2
+
+## Customize elasticsearch configuration
+## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
+##
+config:
+
+## Elasticsearch master-eligible node parameters
+##
+master:
+  name: master
+  replicas: 3
+  heapSize: 128m
+  antiAffinity: "soft"
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
+  ## Elasticsearch master-eligible Liveness Probe
+  livenessProbe:
+    enabled: true
+  initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Elasticsearch master-eligible Readiness Probe
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+## Elasticsearch coordinating-only node parameters
+##
+coordinating:
+  name: coordinating-only
+  replicas: 2
+  heapSize: 128m
+  antiAffinity: "soft"
+  service:
+    type: ClusterIP
+    ## Externally accessible elasticsearch REST API port
+    port: 9200
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
+  ## Elasticsearch master-eligible Liveness Probe
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Elasticsearch master-eligible Readiness Probe
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+## Elasticsearch data node parameters
+##
+data:
+  name: data
+  replicas: 3
+  heapSize: 1024m
+  antiAffinity: "soft"
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      cpu: 25m
+      memory: "1152Mi"
+  ## Elasticsearch master-eligible Liveness Probe
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Elasticsearch master-eligible Readiness Probe
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ##
+    enabled: true
+
+    ## Persistent Volume Claim annotations
+    ##
+    annotations: {}
+
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+
+    ## Persistent Volume Access Mode
+    accessModes:
+    - ReadWriteOnce
+
+    ## Persistent Volume size
+    ##
+    size: 8Gi
+
+## Elasticsearch ingest node parameters
+##
+ingest:
+  enabled: true
+  name: ingest
+  replicas: 2
+  heapSize: 128m
+  antiAffinity: "soft"
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
+  ## Elasticsearch master-eligible Liveness Probe
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Elasticsearch master-eligible Readiness Probe
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+metrics:
+  enabled: true
+  name: metrics
+  image:
+    registry: docker.io
+    repository: justwatch/elasticsearch_exporter
+    tag: 1.0.1
+    pullPolicy: IfNotPresent
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9108"
+  service:
+    type: ClusterIP
+  resources: {}
+  #  requests:
+  #    cpu: 25m

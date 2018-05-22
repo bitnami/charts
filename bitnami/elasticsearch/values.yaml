@@ -1,36 +1,46 @@
-## Elasticsearch cluster name
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-##
-name: elastic
-
-## Elasticsearch image
+## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
+##
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 5.5.2
+  tag: 6.2.3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName 
+  #   - myRegistrKeySecretName
+
+## does your cluster have rbac enabled? assume yes by default
+rbacEnabled: true
+
+## Elasticsearch cluster name
+##
+name: elastic
 
 ## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
-serviceAccountName: default
+## ref: https://github.com/fabric8io/elasticsearch-cloud-kubernetes#kubernetes-auth
+##
+serviceAccountName: elastic
+
 ## Comma seperated list of plugins
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
-plugins: io.fabric8:elasticsearch-cloud-kubernetes:5.5.2
+plugins: io.fabric8:elasticsearch-cloud-kubernetes:6.2.3.2
+
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
+##
 config:
 
+## Elasticsearch master-eligible node parameters
+##
 master:
   name: master
   replicas: 2
@@ -43,9 +53,27 @@ master:
     requests:
       cpu: 25m
       memory: "256Mi"
+  ## Elasticsearch master-eligible Liveness Probe
+  livenessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
+  ## Elasticsearch master-eligible Readiness Probe
+  readinessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
 
-client:
-  name: client
+## Elasticsearch coordinating-only node parameters
+##
+coordinating:
+  name: coordinating-only
   replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
@@ -60,10 +88,28 @@ client:
     requests:
       cpu: 25m
       memory: "256Mi"
+  ## Elasticsearch master-eligible Liveness Probe
+  livenessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
+  ## Elasticsearch master-eligible Readiness Probe
+  readinessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
 
+## Elasticsearch data node parameters
+##
 data:
   name: data
-  replicas: 3
+  replicas: 2
   heapSize: 1024m
   antiAffinity: "soft"
   ## Configure resource requests and limits
@@ -73,6 +119,22 @@ data:
     requests:
       cpu: 25m
       memory: "1152Mi"
+  ## Elasticsearch master-eligible Liveness Probe
+  livenessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
+  ## Elasticsearch master-eligible Readiness Probe
+  readinessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -102,11 +164,44 @@ data:
     ##
     size: 8Gi
 
+## Elasticsearch ingest node parameters
+##
+ingest:
+  enabled: false
+  name: ingest
+  replicas: 2
+  heapSize: 128m
+  antiAffinity: "soft"
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      cpu: 25m
+      memory: "256Mi"
+  ## Elasticsearch master-eligible Liveness Probe
+  livenessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
+  ## Elasticsearch master-eligible Readiness Probe
+  readinessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
+
 metrics:
   enabled: false
   name: metrics
   image:
-    name: justwatch/elasticsearch_exporter
+    registry: docker.io
+    repository: justwatch/elasticsearch_exporter
     tag: 1.0.1
     pullPolicy: IfNotPresent
   annotations:
@@ -115,5 +210,5 @@ metrics:
   service:
     type: ClusterIP
   resources:
-    requests:
-      cpu: 25m
+    # requests:
+    #   cpu: 25m

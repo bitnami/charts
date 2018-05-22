@@ -1,10 +1,10 @@
-## Bitnami MariaDB image
-## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
+## Bitnami MySQL image
+## ref: https://hub.docker.com/r/bitnami/mysql/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.2.14
+  tag: 5.7.22
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -23,8 +23,8 @@ service:
   port: 3306
 
 root:
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+  ## MySQL admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-the-root-password-on-first-run
   ##
   password:
   ## Use existing secret (ignores root, db and replication passwords)
@@ -35,14 +35,14 @@ root:
   forcePassword: true
   
 db:
-  ## MariaDB username and password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
+  ## MySQL username and password
+  ## ref: https://github.com/bitnami/bitnami-docker-mysql#creating-a-database-user-on-first-run
   ##
   user:
   password:
   ## Password is ignored if existingSecret is specified.
   ## Database to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
+  ## ref: https://github.com/bitnami/bitnami-docker-mysql#creating-a-database-on-first-run
   ##
   name: my_database
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
@@ -50,16 +50,16 @@ db:
   forcePassword: true
 
 replication:
-  ## Enable replication. This enables the creation of replicas of MariaDB. If false, only a
+  ## Enable replication. This enables the creation of replicas of MySQL. If false, only a
   ## master deployment would be created
   enabled: true
   ##
-  ## MariaDB replication user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+  ## MySQL replication user
+  ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-up-a-replication-cluster
   ##
   user: replicator
-  ## MariaDB replication user password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+  ## MySQL replication user password
+  ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-up-a-replication-cluster
   ##
   password:
   ## Password is ignored if existingSecret is specified.
@@ -104,26 +104,26 @@ master:
     [mysqld]
     skip-name-resolve
     explicit_defaults_for_timestamp
-    basedir=/opt/bitnami/mariadb
+    basedir=/opt/bitnami/mysql
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    tmpdir=/opt/bitnami/mariadb/tmp
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
+    tmpdir=/opt/bitnami/mysql/tmp
     max_allowed_packet=16M
     bind-address=0.0.0.0
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-    log-error=/opt/bitnami/mariadb/logs/mysqld.log
+    pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
+    log-error=/opt/bitnami/mysql/logs/mysqld.log
     character-set-server=UTF8
     collation-server=utf8_general_ci
 
     [client]
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
 
     [manager]
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
+    pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
 
   ## Configure master resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -173,26 +173,26 @@ slave:
     [mysqld]
     skip-name-resolve
     explicit_defaults_for_timestamp
-    basedir=/opt/bitnami/mariadb
+    basedir=/opt/bitnami/mysql
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    tmpdir=/opt/bitnami/mariadb/tmp
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
+    tmpdir=/opt/bitnami/mysql/tmp
     max_allowed_packet=16M
     bind-address=0.0.0.0
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-    log-error=/opt/bitnami/mariadb/logs/mysqld.log
+    pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
+    log-error=/opt/bitnami/mysql/logs/mysqld.log
     character-set-server=UTF8
     collation-server=utf8_general_ci
 
     [client]
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
 
     [manager]
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
+    pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
 
   ##
   ## Configure slave resource requests and limits

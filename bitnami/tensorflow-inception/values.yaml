@@ -5,7 +5,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-serving
-    tag: 0.6.0
+    tag: 1.6.0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

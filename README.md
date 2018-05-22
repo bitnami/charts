@@ -44,7 +44,6 @@ $ helm search bitnami
 - [Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
-- [MariaDB Cluster](https://github.com/bitnami/charts/tree/master/bitnami/mariadb-cluster)
 - [Mean](https://github.com/bitnami/charts/tree/master/bitnami/mean)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)

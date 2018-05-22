@@ -1,11 +1,12 @@
+{{- if .Values.replication.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "master.fullname" . }}
+  name: {{ template "slave.fullname" . }}
   labels:
     app: "{{ template "name" . }}"
-    component: "master"
-    chart: {{ template "mariadb.chart" . }}
+    chart: {{ template "mysql.chart" . }}
+    component: "slave"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 {{- if .Values.metrics.enabled }}
@@ -25,5 +26,6 @@ spec:
 {{- end }}
   selector:
     app: "{{ template "name" . }}"
-    component: "master"
+    component: "slave"
     release: "{{ .Release.Name }}"
+{{- end }}
