@@ -12,6 +12,7 @@ metadata:
   annotations:
 {{ toYaml .Values.metrics.annotations | indent 4 }}
 spec:
+  type: {{ .Values.metrics.service.type | quote }}
   ports:
   - name: metrics
     port: 9108
