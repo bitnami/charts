@@ -201,9 +201,9 @@ metrics:
   name: metrics
   image:
     registry: docker.io
-    repository: justwatch/elasticsearch_exporter
-    tag: 1.0.1
-    pullPolicy: IfNotPresent
+    repository: bitnami/elasticsearch-exporter
+    tag: latest
+    pullPolicy: Always
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9108"
