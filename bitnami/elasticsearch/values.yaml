@@ -1,4 +1,4 @@
-## Bitnami Elasticsearch image version
+G## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
 ##
 image:
@@ -202,8 +202,8 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.0.2
-    pullPolicy: IfNotPresent
+    tag: latest
+    pullPolicy: Always
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9108"
