@@ -1,4 +1,4 @@
-G## Bitnami Elasticsearch image version
+## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
 ##
 image:
