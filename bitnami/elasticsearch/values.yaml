@@ -201,8 +201,8 @@ metrics:
   name: metrics
   image:
     registry: docker.io
-    repository: justwatch/elasticsearch_exporter
-    tag: 1.0.1
+    repository: bitnami/elasticsearch-exporter
+    tag: 1.0.2
     pullPolicy: IfNotPresent
   annotations:
     prometheus.io/scrape: "true"
