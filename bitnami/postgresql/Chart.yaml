@@ -1,11 +1,13 @@
 name: postgresql
-version: 0.4.25
+version: 1.0.0
 appVersion: 10.4.0
 description: Chart for PostgreSQL
 keywords:
 - postgresql
 - database
 - sql
+- replication
+- cluster
 home: http://www.postgresql.org
 sources:
 - https://github.com/bitnami/bitnami-docker-postgresql
