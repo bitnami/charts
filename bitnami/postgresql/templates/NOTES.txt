@@ -1,5 +1,5 @@
 {{- if contains .Values.service.type "LoadBalancer" }}
-{{- if not .Values.postgresPassword }}
+{{- if not .Values.postgresqlPassword }}
 -------------------------------------------------------------------------------
  WARNING
 
