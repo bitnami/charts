@@ -47,7 +47,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `image.registry`                  | Apache image registry                 | `docker.io`                                               |
 | `image.repository`                | Apache Image name                     | `bitnami/apache`                                          |
 | `image.tag`                       | Apache Image tag                      | `{VERSION}`                                               |
-| `image.pullPolicy`                | Apache image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullPolicy`                | Apache image pull policy              | `Always`                                                  |
 | `image.pullSecrets`               | Specify image pull secrets            | `nil` (does not add image pull secrets to deployed pods)  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
