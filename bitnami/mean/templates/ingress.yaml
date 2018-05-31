@@ -3,11 +3,11 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   labels:
-    app: {{ template "node.name" . }}
-    chart: {{ template "node.chart" . }}
+    app: {{ template "mean.name" . }}
+    chart: {{ template "mean.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "node.fullname" . }}
+  name: {{ template "mean.fullname" . }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
       {{ $key }}: {{ $value | quote }}
@@ -19,7 +19,7 @@ spec:
         paths:
           - path: {{ .Values.ingress.path }}
             backend:
-              serviceName: {{ include "node.fullname" . }}
+              serviceName: {{ include "mean.fullname" . }}
               servicePort: 80
   {{- if .Values.ingress.tls }}
   tls:

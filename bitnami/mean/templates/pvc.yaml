@@ -2,10 +2,10 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "node.fullname" . }}
+  name: {{ template "mean.fullname" . }}
   labels:
-    app: {{ template "node.name" . }}
-    chart: {{ template "node.chart" . }}
+    app: {{ template "mean.name" . }}
+    chart: {{ template "mean.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
   annotations:

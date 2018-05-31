@@ -1,10 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "node.fullname" . }}
+  name: {{ template "mean.fullname" . }}
   labels:
-    app: {{ template "node.name" . }}
-    chart: {{ template "node.chart" . }}
+    app: {{ template "mean.name" . }}
+    chart: {{ template "mean.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "node.name" . }}
+        app: {{ template "mean.name" . }}
         release: {{ .Release.Name | quote }}
     spec:
       {{- if .Values.image.pullSecrets }}
@@ -38,13 +38,13 @@ spec:
         - name: app
           mountPath: /app
       containers:
-      - name: {{ template "node.fullname" . }}
+      - name: {{ template "mean.fullname" . }}
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         {{- if .Values.mongodb.install }}
         - name: DATABASE_HOST
-          value: {{ template "node.mongodb.fullname" . }}
+          value: {{ template "mean.mongodb.fullname" . }}
         - name: DATABASE_PORT
           value: "27017"
         - name: DATABASE_USER
@@ -52,8 +52,8 @@ spec:
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.mongodb.fullname" . }}
-              key: mongodb-password 
+              name: {{ template "mean.mongodb.fullname" . }}
+              key: mongodb-password
         - name: DATABASE_NAME
           value: {{ .Values.mongodb.mongodbDatabase | quote }}
         - name: DATABASE_CONNECTION_OPTIONS
@@ -63,13 +63,13 @@ spec:
         - name: DATABASE_HOST
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.host" $type }} 
+              name: {{ template "mean.secretName" . }}
+              key: {{ template "externaldb.host" $type }}
         {{- if not .Values.externaldb.broker.serviceInstanceName }}
         - name: DATABASE_NAME
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.secretName" . }}
+              name: {{ template "mean.secretName" . }}
               key: database
         {{ else }}
         - name: DATABASE_NAME
@@ -78,18 +78,18 @@ spec:
         - name: DATABASE_PORT
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.port" $type }} 
+              name: {{ template "mean.secretName" . }}
+              key: {{ template "externaldb.port" $type }}
         - name: DATABASE_USER
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.username" $type }} 
+              name: {{ template "mean.secretName" . }}
+              key: {{ template "externaldb.username" $type }}
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.password" $type }} 
+              name: {{ template "mean.secretName" . }}
+              key: {{ template "externaldb.password" $type }}
         {{- if .Values.externaldb.ssl }}
         - name: DATABASE_CONNECTION_OPTIONS
           value: "ssl=true"

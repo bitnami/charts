@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "node.fullname" . }}
+  name: {{ template "mean.fullname" . }}
   labels:
-    app: {{ template "node.name" . }}
-    chart: {{ template "node.chart" . }}
+    app: {{ template "mean.name" . }}
+    chart: {{ template "mean.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
@@ -14,5 +14,5 @@ spec:
     port: 80
     targetPort: http
   selector:
-    app: {{ template "node.name" . }}
+    app: {{ template "mean.name" . }}
     release: "{{ .Release.Name }}"
