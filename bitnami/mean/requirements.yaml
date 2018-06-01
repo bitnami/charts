@@ -1,4 +1,8 @@
 dependencies:
 - name: mongodb
   repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 0.4.x
+  version: 2.x.x
+  condition: mongodb.install
+- name: bitnami-common
+  repository: https://charts.bitnami.com/bitnami
+  version: 0.0.x

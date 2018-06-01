@@ -2,10 +2,10 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "mean.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "mean.name" . }}
+    chart: {{ template "mean.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
   annotations:
@@ -13,9 +13,6 @@ metadata:
     volume.beta.kubernetes.io/storage-class: {{ .Values.persistence.storageClass | quote }}
   {{- else }}
     volume.alpha.kubernetes.io/storage-class: default
-  {{- end }}
-  {{- range $key, $value := .Values.persistence.annotations }}
-    {{ $key }}: {{ $value }}
   {{- end }}
 spec:
   accessModes:
