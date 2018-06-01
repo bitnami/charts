@@ -48,19 +48,47 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `image.registry`           | PostgreSQL image registry                 | `docker.io`                                               |
 | `image.repository`         | PostgreSQL Image name                     | `bitnami/postgresql`                                      |
 | `image.tag`                | PostgreSQL Image tag                      | `{VERSION}`                                               |
-| `image.pullPolicy`         | PostgreSQL image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullPolicy`         | PostgreSQL image pull policy              | `Always`                                                  |
 | `image.pullSecrets`        | Specify image pull secrets                | `nil` (does not add image pull secrets to deployed pods)  |
+| `image.debug`              | Specify if debug values should be set     | `false`                                                   |
+| `replication.enabled`      | Would you like to enable replication      | `false`                                                   |
+| `replication.user`         | Replication user                          | `repl_user`                                               |
+| `replication.password`     | Replication user password                 | `repl_password`                                           |
+| `replication.slaveReplicas`| Number of slaves replicas                 | `1`                                                       |
 | `postgresqlUsername`       | PostgreSQL admin user                     | `postgres`                                                |
 | `postgresqlPassword`       | PostgreSQL admin password                 | _random 10 character alphanumeric string_                 |
-| `postgresqlDatabase`       | PostgreSQL database                       | `nil`_                                                    |
-| `serviceType`              | Kubernetes Service type                   | `ClusterIP`                                               |
+| `postgresqlDatabase`       | PostgreSQL database                       | `nil`                                                     |
+| `service.type`             | Kubernetes Service type                   | `ClusterIP`                                               |
+| `service.port`             | PostgreSQL port                           | `5432`                                                    |
 | `persistence.enabled`      | Enable persistence using PVC              | `true`                                                    |
-| `persistence.storageClass` | PVC Storage Class for PostgreSQL volume   | `generic`                                                 |
+| `persistence.storageClass` | PVC Storage Class for PostgreSQL volume   | `nil`                                                     |
 | `persistence.accessMode`   | PVC Access Mode for PostgreSQL volume     | `ReadWriteOnce`                                           |
 | `persistence.size`         | PVC Storage Request for PostgreSQL volume | `8Gi`                                                     |
+| `persistence.annotations`  | Annotations for the PVC                   | `{}`                                                      |
+| `nodeSelector`             | Node labels for pod assignment            | `{}`                                                      |
+| `tolerations`              | Toleration labels for pod assignment      | `[]`                                                      |
 | `resources`                | CPU/Memory resource requests/limits       | Memory: `256Mi`, CPU: `250m`                              |
-
-The above parameters map to the env variables defined in [bitnami/postgresql](http://github.com/bitnami/bitnami-docker-postgresql). For more information please refer to the [bitnami/postgresql](http://github.com/bitnami/bitnami-docker-postgresql) image documentation.
+| `livenessProbe.enabled`               | would you like a livessProbed to be enabled                                                   |  `true`                                                   |
+| `livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                                      |  30                                                       |
+| `livenessProbe.periodSeconds`         | How often to perform the probe                                                                |  10                                                       |
+| `livenessProbe.timeoutSeconds`        | When the probe times out                                                                      |  5                                                        |
+| `livenessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.    |  6                                                        |
+| `livenessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed   |  1                                                        |
+| `readinessProbe.enabled`              | would you like a readinessProbe to be enabled                                                 |  `true`                                                   |
+| `readinessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                      |  5                                                        |
+| `readinessProbe.periodSeconds`        | How often to perform the probe                                                                |  10                                                       |
+| `readinessProbe.timeoutSeconds`       | When the probe times out                                                                      |  5                                                        |
+| `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.    |  6                                                        |
+| `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed   |  1                                                        |
+| `metrics.enabled`                     | Start a prometheus exporter                                                                   | `false`                                                   |
+| `metrics.service.type`                | Kubernetes Service type                                                                       |  `ClusterIP`                                              |
+| `metrics.service.annotatios`          | Additional annotations for metrics exporter pod                                               |  `{}`                                                     |
+| `metrics.service.loadBalancerIP`      | loadBalancerIP if redis metrics service type is `LoadBalancer`                                | `nil`                                                     |
+| `metrics.image.registry`              | PostgreSQL image registry                                                                     | `docker.io`                                               |
+| `metrics.image.repository`            | PostgreSQL Image name                                                                         | `wrouesnel/postgres_exporter`                             |
+| `metrics.image.tag`                   | PostgreSQL Image tag                                                                          | `{VERSION}`                                               |
+| `metrics.image.pullPolicy`            | PostgreSQL image pull policy                                                                  | `IfNotPresent`                                            |
+| `metrics.image.pullSecrets`           | Specify image pull secrets                                                                    | `nil` (does not add image pull secrets to deployed pods)  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -79,6 +107,17 @@ $ helm install --name my-release -f values.yaml bitnami/postgresql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Production and horizontal scaling
+
+The following repo contains the recommended production settings for PostgreSQL server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment
+
+To horizontally scale this chart, first download the [values-production.yaml](values-production.yaml) file to your local folder, then:
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/postgresql
+$ kubectl scale statefulset my-postgresql-slave --replicas=3
+```
 
 ## Persistence
 

@@ -24,7 +24,7 @@ image:
   debug: false
 
 replication:
-  enabled: false
+  enabled: true
   user: repl_user
   password: repl_password
   slaveReplicas: 1
@@ -46,9 +46,8 @@ postgresqlUsername: postgres
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
-service:
-  type: ClusterIP
-  port: 5432
+serviceType: ClusterIP
+port: 5432
 
 ## PostgreSQL data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
