@@ -27,7 +27,7 @@ Return the proper ES image name
 */}}
 {{- define "elasticsearch.image" -}}
 {{- $registryName :=  default "docker.io" .Values.image.registry -}}
-{{- $tag := default "latest" .Values.image.tag -}}
+{{- $tag := default "latest" .Values.image.tag | quote | trimAll "\"" -}}
 {{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
 {{- end -}}
 
@@ -81,6 +81,6 @@ Return the proper ES exporter image name
 */}}
 {{- define "metrics.image" -}}
 {{- $registryName :=  default "docker.io" .Values.metrics.image.registry -}}
-{{- $tag := default "latest" .Values.metrics.image.tag -}}
+{{- $tag := default "latest" .Values.metrics.image.tag | quote | trimAll "\"" -}}
 {{- printf "%s/%s:%s" $registryName .Values.metrics.image.repository $tag -}}
 {{- end -}}
