@@ -27,6 +27,6 @@ Return the proper Consul image name
 */}}
 {{- define "consul.image" -}}
 {{- $registryName :=  default "docker.io" .Values.image.registry -}}
-{{- $tag := default "latest" .Values.image.tag -}}
+{{- $tag := default "latest" .Values.image.tag | quote | trimAll "\"" -}}
 {{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
 {{- end -}}

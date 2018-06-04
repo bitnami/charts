@@ -1,5 +1,5 @@
 name: postgresql
-version: 1.0.0
+version: 1.0.1
 appVersion: 10.4.0
 description: Chart for PostgreSQL
 keywords:
