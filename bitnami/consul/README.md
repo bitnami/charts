@@ -54,7 +54,6 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `image.tag`                          | Consul image tag                                       | `{VERSION}`                                                |
 | `image.pullPolicy`                   | Image pull policy                                      | `Always`                                                   |
 | `image.pullSecrets`                  | Specify image pull secrets                             | `nil`                                                      |
-| `serviceType`                        | Kubernetes Service type                                | `ClusterIP`                                                |
 | `replicas`                           | Number of replicas                                     | `3`                                                        |
 | `httpPort`                           | Consul http listening port                             | `8500`                                                     |
 | `rpcPort`                            | Consul rpc listening port                              | `8400`                                                     |

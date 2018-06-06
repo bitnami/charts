@@ -10,7 +10,6 @@ metadata:
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
-  type: "{{ .Values.serviceType }}"
   ports:
   - name: http
     port: {{ .Values.httpPort }}
@@ -29,10 +28,7 @@ spec:
   - name: consuldns-udp
     protocol: "UDP"
     port: {{.Values.consulDnsPort}}
-  {{- if contains "ClusterIP" .Values.serviceType }}
   clusterIP: None
-  {{- end }}  
   selector:
     app: "{{ template "consul.name" . }}"
     release: {{ .Release.Name | quote }}
-
