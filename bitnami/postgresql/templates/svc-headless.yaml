@@ -9,7 +9,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   type: ClusterIP
-  ClusterIP: None
+  clusterIP: None
   ports:
   - name: postgresql
     port: 5432
