@@ -23,9 +23,6 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "data"
     spec:
-      {{- if .Values.rbacEnabled}}
-      serviceAccountName: {{ .Values.serviceAccountName | quote }}
-      {{- end }}
       {{- if eq .Values.data.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:

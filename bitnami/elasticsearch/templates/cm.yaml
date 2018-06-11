@@ -17,11 +17,8 @@ data:
 
     discovery:
       zen:
-        hosts_provider: kubernetes
+        ping.unicast.hosts:{{ template "discovery.fullname" . }}
         minimum_master_nodes: 2
-
-    plugin:
-      mandatory: discovery-kubernetes
 
 {{- if .Values.config }}
 {{ toYaml .Values.config | indent 4 }}

@@ -17,9 +17,6 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "master"
     spec:
-      {{- if .Values.rbacEnabled}}
-      serviceAccountName: {{ .Values.serviceAccountName | quote }}
-      {{- end }}
       {{- if eq .Values.master.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:

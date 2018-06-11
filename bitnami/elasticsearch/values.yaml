@@ -17,22 +17,9 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
-## does your cluster have rbac enabled? assume yes by default
-rbacEnabled: true
-
 ## Elasticsearch cluster name
 ##
 name: elastic
-
-## The serviceAccountName to be used, required by the elasticsearch-cloud-kubernetes plugin
-## ref: https://github.com/fabric8io/elasticsearch-cloud-kubernetes#kubernetes-auth
-##
-serviceAccountName: elastic
-
-## Comma seperated list of plugins
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
-##
-plugins: io.fabric8:elasticsearch-cloud-kubernetes:6.2.3.2
 
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
@@ -69,6 +56,11 @@ master:
   #  timeoutSeconds: 5
   #  successThreshold: 1
   #  failureThreshold: 5
+
+## Elasticsearch discovery node parameters
+##
+discovery:
+  name: discovery
 
 ## Elasticsearch coordinating-only node parameters
 ##

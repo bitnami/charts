@@ -18,9 +18,6 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "ingest"
     spec:
-      {{- if .Values.rbacEnabled}}
-      serviceAccountName: {{ .Values.serviceAccountName | quote }}
-      {{- end }}
       {{- if eq .Values.ingest.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
