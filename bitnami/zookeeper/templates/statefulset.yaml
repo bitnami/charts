@@ -1,0 +1,163 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: "{{ template "zookeeper.fullname" . }}"
+  labels:
+    app: {{ template "zookeeper.name" . }}
+    chart: {{ template "zookeeper.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  serviceName: {{ template "zookeeper.fullname" . }}-headless
+  replicas: 1
+  updateStrategy:
+    type: {{ .Values.updateStrategy | quote }}
+  selector:
+    matchLabels:
+      app: {{ template "zookeeper.name" . }}
+      chart: {{ template "zookeeper.chart" . }}
+      release: {{ .Release.Name | quote }}
+      heritage: {{ .Release.Service | quote }}
+  template:
+    metadata:
+      name: "{{ template "zookeeper.fullname" . }}"
+      labels:
+        app: {{ template "zookeeper.name" . }}
+        chart: {{ template "zookeeper.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    spec:
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
+      containers:
+      - name: "{{ template "zookeeper.fullname" . }}"
+        image: "{{ template "zookeeper.image" . }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        resources:
+{{ toYaml .Values.Resources | indent 10 }}
+        env:
+        - name: ZOO_PORT_NUMBER
+          value: {{ .Values.service.port | quote }}
+        - name: ZOO_SERVER_ID
+          value: {{ .Values.serverID | quote }}
+        - name: ZOO_TICK_TIME
+          value: {{ .Values.tickTime | quote }}
+        - name: ZOO_INIT_LIMIT
+          value: {{ .Values.initLimit | quote }}
+        - name: ZOO_SYNC_LIMIT
+          value: {{ .Values.syncLimit | quote }}
+        - name: ZOO_MAX_CLIENT_CNXNS
+          value: {{ .Values.maxClientCnxns | quote }}
+        - name: ZOO_SERVERS
+          value: {{ .Values.servers | quote }}
+        {{- if .Values.auth.enabled }}
+        - name: ZOO_ENABLE_AUTH
+          value: "yes"
+        - name: ZOO_CLIENT_USER
+          value: {{ .Values.auth.clientUser | quote }}
+        - name: ZOO_CLIENT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "zookeeper.fullname" . }}{{ end }}
+              key: client-password
+        - name: ZOO_SERVER_USERS
+          value: {{ .Values.auth.serverUsers | quote }}
+        - name: ZOO_SERVER_PASSWORDS
+          valueFrom:
+            secretKeyRef:
+              name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "zookeeper.fullname" . }}{{ end }}
+              key: server-password
+        {{- end }}
+        - name: ZOO_HEAP_SIZE
+          value: {{ .Values.heapSize | quote }}
+        - name: ALLOW_ANONYMOUS_LOGIN
+        {{- if .Values.allowAnonymousLogin }}
+          value: "yes"
+        {{- else }}
+          value: "no"
+        {{- end }}
+        - name: JVMFLAGS
+          value: {{ .Values.jvmFlags | quote }}
+        ports:
+        - name: zookeeper
+          containerPort: {{ .Values.service.port }}
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          tcpSocket:
+            port: zookeeper
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          tcpSocket:
+            port: zookeeper
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        volumeMounts:
+        {{- if .Values.persistence.enabled }}
+        - name: data
+          mountPath: /bitnami/zookeeper
+        {{ end }}
+        {{- if .Values.config }}
+        - name: config
+          mountPath: /opt/bitnami/zookeeper/conf/zoo.cfg
+          subPath: zoo.cfg
+        {{- end }}
+      volumes:
+      {{- if .Values.config }}
+        - name: config
+          configMap:
+            name: {{ template "zookeeper.fullname" . }}
+      {{- end }}
+{{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        annotations:
+        {{- range $key, $value := .Values.persistence.annotations }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+      {{- if .Values.persistence.storageClass }}
+      {{- if (eq "-" .Values.persistence.storageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: {{ .Values.persistence.storageClass | quote }}
+      {{- end }}
+      {{- end }}
+{{- else }}
+        - name: data
+          emptyDir: {}
+{{- end }}
