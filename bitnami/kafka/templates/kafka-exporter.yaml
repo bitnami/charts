@@ -1,0 +1,44 @@
+{{- if .Values.metrics.kafka.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "kafka.fullname" . }}-exporter
+  labels:
+    app: {{ template "kafka.name" . }}
+    chart: {{ template "kafka.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "kafka.name" . }}
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      annotations:
+        {{- if and .Values.metrics.kafka.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.metrics.kafka.port | quote }}
+        {{- end }}
+      labels:
+        app: {{ template "kafka.name" . }}
+        release: "{{ .Release.Name }}"
+    spec:
+      {{- if .Values.metrics.kafka.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.metrics.kafka.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
+      containers:
+      - image: {{ template  "kafka.metrics.kafka.image" . }}
+        name: kafka-exporter
+        args:
+          - --kafka.server={{ template "kafka.fullname" . }}:{{ .Values.service.port }}
+          - --web.listen-address=:{{ .Values.metrics.kafka.port }}
+        ports:
+          - containerPort: {{ .Values.metrics.kafka.port }}
+        resources:
+{{ toYaml .Values.metrics.kafka.resources | indent 10 }}
+{{- end }}

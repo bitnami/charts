@@ -1,0 +1,329 @@
+## Bitnami Kafka image version
+## ref: https://hub.docker.com/r/bitnami/kafka/tags/
+##
+image:
+  registry: docker.io
+  repository: tompizmor/kafka
+  tag: 1.1.0
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistrKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+updateStrategy: RollingUpdate
+replicaCount: 1
+
+config: |-
+#  broker.id=-1
+#  listeners=PLAINTEXT://:9092
+#  advertised.listeners=PLAINTEXT://KAFKA_IP:9092
+#  num.network.threads=3
+#  num.io.threads=8
+#  socket.send.buffer.bytes=102400
+#  socket.receive.buffer.bytes=102400
+#  socket.request.max.bytes=104857600
+#  log.dirs=/opt/bitnami/kafka/data
+#  num.partitions=1
+#  num.recovery.threads.per.data.dir=1
+#  offsets.topic.replication.factor=1
+#  transaction.state.log.replication.factor=1
+#  transaction.state.log.min.isr=1
+#  log.flush.interval.messages=10000
+#  log.flush.interval.ms=1000
+#  log.retention.hours=168
+#  log.retention.bytes=1073741824
+#  log.segment.bytes=1073741824
+#  log.retention.check.interval.ms=300000
+#  zookeeper.connect=ZOOKEEPER_SERVICE_NAME
+#  zookeeper.connection.timeout.ms=6000
+#  group.initial.rebalance.delay.ms=0
+
+## Kafka docker image available customizations
+## https://github.com/bitnami/bitnami-docker-kafka#configuration
+##
+## Allow to use the PLAINTEXT listener.
+allowPlaintextListener: true
+
+## The address the socket server listens on.
+# listeners:
+
+## Hostname and port the broker will advertise to producers and consumers.
+# advertisedListeners:
+
+## ID of the Kafka node.
+brokerId: -1
+
+## Switch to enable topic deletion or not.
+deteleTopicEnable: false
+
+## Kafka's Java Heap size.
+heapOpts: -Xmx1024m -Xms1024m
+
+## The number of messages to accept before forcing a flush of data to disk.
+logFlushIntervalMessages: 10000
+
+## The maximum amount of time a message can sit in a log before we force a flush.
+logFlushIntervalMs: 1000
+
+## A size-based retention policy for logs.
+logRetentionBytes: _1073741824
+
+## The interval at which log segments are checked to see if they can be deleted.
+logRetentionCheckIntervalMs: 300000
+
+## The minimum age of a log file to be eligible for deletion due to age.
+logRetentionHours: 168
+
+## The maximum size of a log segment file. When this size is reached a new log segment will be created.
+logSegmentBytes: _1073741824
+
+## A comma separated list of directories under which to store log files.
+logsDirs: /opt/bitnami/kafka/data
+
+## The number of threads doing disk I/O.
+numIoThreads: 8
+
+## The number of threads handling network requests.
+numNetworkThreads: 3
+
+## The default number of log partitions per topic.
+numPartitions: 1
+
+## The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
+numRecoveryThreadsPerDataDir: 1
+
+## The receive buffer (SO_RCVBUF) used by the socket server.
+socketReceiveBufferBytes: 102400
+
+## The maximum size of a request that the socket server will accept (protection against OOM).
+socketRequestMaxBytes: _104857600
+
+## The send buffer (SO_SNDBUF) used by the socket server.
+socketSendBufferBytes: 102400
+
+## Timeout in ms for connecting to zookeeper.
+zookeeperConnectionTimeoutMs: 6000
+
+## Authentication parameteres
+## https://github.com/bitnami/bitnami-docker-kafka#security
+##
+auth:
+  ## Switch to enable the kafka authentication.
+  enabled: false
+
+  ## Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser.
+  #existingSecret:
+
+  ## Name of the existing secret containing the certificate files that will be used by Kafka.
+  #certificatesSecret:
+
+  ## Password for the above certificates if they are password protected.
+  #certificatesPassword:
+
+  ## Kafka client user.
+  brokerUser: user
+
+  ## Kafka client password.
+  # brokerPassword:
+
+  ## Kafka inter broker communication user.
+  interBrokerUser: admin
+
+  ## Kafka inter broker communication password.
+  # interBrokerPassword:
+
+  ## Kafka Zookeeper user.
+  #zookeeperUser:
+
+  ## Kafka Zookeeper password.
+  #zookeeperPassword:
+
+## Kubernetes Security Context
+## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+service:
+  type: ClusterIP
+  port: 9092
+
+## Kafka data Persistent Volume Storage Class
+## If defined, storageClassName: <storageClass>
+## If set to "-", storageClassName: "", which disables dynamic provisioning
+## If undefined (the default) or set to null, no storageClassName spec is
+##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+##   GKE, AWS & OpenStack)
+##
+persistence:
+  enabled: true
+  # storageClass: "-"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+  annotations: {}
+
+## Node labels and tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+nodeSelector: {}
+tolerations: []
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 2
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+jmx:
+  ## Credits to the incubator/kafka chart for the JMX configuration.
+  ## https://github.com/kubernetes/charts/tree/master/incubator/kafka
+  ##
+  ## Rules to apply to the Prometheus JMX Exporter.  Note while lots of stats have been cleaned and exposed,
+  ## there are still more stats to clean up and expose, others will never get exposed.  They keep lots of duplicates
+  ## that can be derived easily.  The configMap in this chart cleans up the metrics it exposes to be in a Prometheus
+  ## format, eg topic, broker are labels and not part of metric name. Improvements are gladly accepted and encouraged.
+  configMap:
+
+    ## Allows disabling the default configmap, note a configMap is needed
+    enabled: true
+
+    ## Allows setting values to generate confimap
+    ## To allow all metrics through (warning its crazy excessive) comment out below `overrideConfig` and set
+    ## `whitelistObjectNames: []`
+    overrideConfig: {}
+      # jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
+      # lowercaseOutputName: true
+      # lowercaseOutputLabelNames: true
+      # ssl: false
+      # rules:
+      # - pattern: ".*"
+
+    ## If you would like to supply your own ConfigMap for JMX metrics, supply the name of that
+    ## ConfigMap as an `overrideName` here.
+    overrideName: ""
+
+  ## Port the jmx metrics are exposed in native jmx format, not in Prometheus format
+  port: 5555
+
+  ## JMX Whitelist Objects, can be set to control which JMX metrics are exposed.  Only whitelisted
+  ## values will be exposed via JMX Exporter.  They must also be exposed via Rules.  To expose all metrics
+  ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
+  ## (2) commented out above `overrideConfig`.
+  whitelistObjectNames:  # []
+  - kafka.controller:*
+  - kafka.server:*
+  - java.lang:*
+  - kafka.network:*
+  - kafka.log:*
+
+## Prometheus Exporters / Metrics
+##
+metrics:
+  ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
+  kafka:
+    enabled: false
+
+    image:
+      registry: docker.io
+      repository: danielqsj/kafka-exporter
+      tag: v1.0.1
+      pullPolicy: Always
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ##
+      # pullSecrets:
+      #   - myRegistrKeySecretName
+
+    ## Interval at which Prometheus scrapes metrics, note: only used by Prometheus Operator
+    interval: 10s
+
+    ## Port kafka-exporter exposes for Prometheus to scrape metrics
+    port: 9308
+
+    ## Resource limits
+    resources: {}
+#      limits:
+#        cpu: 200m
+#        memory: 1Gi
+#      requests:
+#        cpu: 100m
+#        memory: 100Mi
+
+  ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
+  jmx:
+    enabled: false
+
+    image:
+      registry: docker.io
+      repository: solsson/kafka-prometheus-jmx-exporter@sha256
+      tag: a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8
+      pullPolicy: Always
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ##
+      # pullSecrets:
+      #   - myRegistrKeySecretName
+
+    ## Interval at which Prometheus scrapes metrics, note: only used by Prometheus Operator
+    interval: 10s
+
+    ## Port jmx-exporter exposes Prometheus format metrics to scrape
+    port: 5556
+
+    resources: {}
+      # limits:
+      #   cpu: 200m
+      #   memory: 1Gi
+      # requests:
+      #   cpu: 100m
+      #   memory: 100Mi
+
+zookeeper:
+  enabled: true
+
+externalZookeeper:
+  ## This value is only used when zookeeper.enabled is set to false
+
+  ## Server or list of external zookeeper servers to use.
+  # servers:

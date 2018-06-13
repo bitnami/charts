@@ -1,0 +1,14 @@
+{{- if .Values.config }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kafka.fullname" . }}-configuration
+  labels:
+    app: "{{ template "kafka.name" . }}"
+    chart: {{ template "kafka.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+data:
+  server.properties: |-
+{{ .Values.config | indent 4 }}
+{{- end -}}
