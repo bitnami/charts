@@ -91,6 +91,8 @@ spec:
           value: "PLAINTEXT://$(MY_POD_IP):$(KAFKA_PORT_NUMBER)"
           {{- end }}
         {{- if .Values.auth.enabled }}
+        - name: KAFKA_OPTS
+          value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/conf/kafka_jaas.conf"
         - name: KAFKA_BROKER_USER
           value: {{ .Values.auth.brokerUser | quote }}
         - name: KAFKA_BROKER_PASSWORD
@@ -105,6 +107,10 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-inter-broker-password
+        {{- end }}
+        {{- if .Values.auth.certificatesPassword }}
+        - name: KAFKA_CERTIFICATE_PASSWORD
+          value: {{ .Values.auth.certificatesPassword | quote }}
         {{- end }}
         {{- if .Values.auth.zookeeperUser }}
         - name: KAFKA_ZOOKEEPER_USER
@@ -194,9 +200,9 @@ spec:
           mountPath: /opt/bitnami/kafka/conf/server.properties
           subPath: server.properties
         {{ end }}
-        {{ if .Values.auth.certificatesSecret }}
+        {{ if .Values.auth }}
         - name: kafka-certificates
-          mountPath: /opt/bitnami/kafka/config/certs/
+          mountPath: /opt/bitnami/kafka/conf/certs/
           readOnly: true
         {{ end }}
       {{ if .Values.metrics.jmx.enabled }}
@@ -236,10 +242,10 @@ spec:
         configMap:
           name: {{ template "kafka.fullname" . }}-configuration
       {{ end }}
-      {{ if .Values.auth.certificatesSecret }}
+      {{ if .Values.auth }}
       - name: kafka-certificates
         secret:
-          secretName: {{ .Values.auth.certificatesSecret }}
+          secretName: {{ required "A secret containinig the Kafka JKS certificates is required when authentication in enabled" .Values.auth.certificatesSecret }}
           defaultMode: 256
       {{ end }}
 {{- if .Values.persistence.enabled }}

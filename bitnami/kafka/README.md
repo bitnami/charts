@@ -170,30 +170,18 @@ $ kubectl scale statefulset my-kafka-slave --replicas=3
 If you enabled the authentication for Kafka, the SASL_SSL listener will be configured with your provided inputs. In particular you can set the following pair of credentials:
 
  * brokerUser/brokerPassword: To authenticate kafka clients against kafka brokers
- * interBrokerUser/interBrokerPassword: To authenticate kafka brokers among them.
- * zookeeperUser/zookeeperPassword: In the case that the Zookeeper chart has been deployed with SASL authentication enabled.
+ * interBrokerUser/interBrokerPassword: To authenticate kafka brokers between them.
+ * zookeeperUser/zookeeperPassword: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
-An example of Kafka installed with authentication you can use this command:
+In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.trustore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
 
-```console
-helm install --name my-release bitnami/kafka --set auth.enabled=true \
-             --set auth.brokerUser=brokerUser --set auth.brokerPassword=brokerPassword \
-             --set auth.interBrokerUser=interBrokerUser --set auth.interBrokerPassword=interBrokerPassword \
-             --set auth.zookeeperUser=zookeeperUser --set auth.zookeeperPassword=zookeeperPassword \
-             --set zookeeper.auth.enabled=-true --set zookeeper.auth.serverUser=zookeeperUser --set zookeeper.auth.serverPassword=zookeeperPassword \
-             --set zookeeper.auth.clientUser=zookeeperUser --set zookeeper.auth.clientPassword=zookeeperPassword
-```
-
-### Use your custom certificates
-
-Apart from this credentials, the security also relies on a set of certificates.
-By default, the kafka image bundles dummy certificates that can be overwritten by creating a secret and passing the secret name with the option `certificatesSecret`:
+You can create the secret with this command assuming you have your certificates in your working directory:
 
 ```console
-kubectl create secret generic kafka-certificates --from-file=./ca-key --from-file=./kafka.keystore.jks --from-file=./kafka.truststore.jks
+kubectl create secret generic kafka-certificates --from-file=./kafka.keystore.jks --from-file=./kafka.truststore.jks
 ```
 
-And install with:
+As an example of Kafka installed with authentication you can use this command:
 
 ```console
 helm install --name my-release bitnami/kafka --set auth.enabled=true \
@@ -205,7 +193,7 @@ helm install --name my-release bitnami/kafka --set auth.enabled=true \
              --set auth.certificatesSecret=kafka-certificates
 ```
 
-> **Note**: If the JKS is password protected (recommended), you will need to provide it to get access to the keystores. To do so, use the `auth.certificatePassword` option to provide your password.
+> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `--auth.certificatesPassword` option to provide your password.
 
 ## Persistence
 
