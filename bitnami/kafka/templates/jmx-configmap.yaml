@@ -1,4 +1,4 @@
-{{- if and .Values.metrics.jmx.enabled .Values.jmx.configMap.enabled }}
+{{- if and .Values.metrics.jmx.enabled .Values.metrics.jmx.configMap.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,15 +10,15 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 data:
   jmx-kafka-prometheus.yml: |+
-{{- if .Values.jmx.configMap.overrideConfig }}
-{{ toYaml .Values.jmx.configMap.overrideConfig | indent 4 }}
+{{- if .Values.metrics.jmx.configMap.overrideConfig }}
+{{ toYaml .Values.metrics.jmx.configMap.overrideConfig | indent 4 }}
 {{- else }}
     jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:{{ .Values.metrics.jmx.jmxPort }}/jmxrmi
     lowercaseOutputName: true
     lowercaseOutputLabelNames: true
     ssl: false
-    {{ if .Values.jmx.whitelistObjectNames }}
-    whitelistObjectNames: ["{{ join "\",\"" .Values.jmx.whitelistObjectNames }}"]
+    {{ if .Values.metrics.jmx.whitelistObjectNames }}
+    whitelistObjectNames: ["{{ join "\",\"" .Values.metrics.jmx.whitelistObjectNames }}"]
     {{ end }}
     rules:
     - pattern: kafka.controller<type=(ControllerChannelManager), name=(QueueSize), broker-id=(\d+)><>(Value)
