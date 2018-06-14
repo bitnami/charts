@@ -191,9 +191,12 @@ tolerations: []
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
-  requests:
-    memory: 256Mi
-    cpu: 250m
+#  limits:
+#    cpu: 200m
+#    memory: 1Gi
+#  requests:
+#    memory: 256Mi
+#    cpu: 250m
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -212,48 +215,6 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
-jmx:
-  ## Credits to the incubator/kafka chart for the JMX configuration.
-  ## https://github.com/kubernetes/charts/tree/master/incubator/kafka
-  ##
-  ## Rules to apply to the Prometheus JMX Exporter.  Note while lots of stats have been cleaned and exposed,
-  ## there are still more stats to clean up and expose, others will never get exposed.  They keep lots of duplicates
-  ## that can be derived easily.  The configMap in this chart cleans up the metrics it exposes to be in a Prometheus
-  ## format, eg topic, broker are labels and not part of metric name. Improvements are gladly accepted and encouraged.
-  configMap:
-
-    ## Allows disabling the default configmap, note a configMap is needed
-    enabled: true
-
-    ## Allows setting values to generate confimap
-    ## To allow all metrics through (warning its crazy excessive) comment out below `overrideConfig` and set
-    ## `whitelistObjectNames: []`
-    overrideConfig: {}
-      # jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
-      # lowercaseOutputName: true
-      # lowercaseOutputLabelNames: true
-      # ssl: false
-      # rules:
-      # - pattern: ".*"
-
-    ## If you would like to supply your own ConfigMap for JMX metrics, supply the name of that
-    ## ConfigMap as an `overrideName` here.
-    overrideName: ""
-
-  ## Port the jmx metrics are exposed in native jmx format, not in Prometheus format
-  port: 5555
-
-  ## JMX Whitelist Objects, can be set to control which JMX metrics are exposed.  Only whitelisted
-  ## values will be exposed via JMX Exporter.  They must also be exposed via Rules.  To expose all metrics
-  ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
-  ## (2) commented out above `overrideConfig`.
-  whitelistObjectNames:  # []
-  - kafka.controller:*
-  - kafka.server:*
-  - java.lang:*
-  - kafka.network:*
-  - kafka.log:*
 
 ## Prometheus Exporters / Metrics
 ##
@@ -309,7 +270,7 @@ metrics:
     interval: 10s
 
     ## Port jmx-exporter exposes Prometheus format metrics to scrape
-    port: 5556
+    exporterPort: 5556
 
     resources: {}
       # limits:
@@ -318,6 +279,42 @@ metrics:
       # requests:
       #   cpu: 100m
       #   memory: 100Mi
+
+    ## Credits to the incubator/kafka chart for the JMX configuration.
+    ## https://github.com/kubernetes/charts/tree/master/incubator/kafka
+    ##
+    ## Rules to apply to the Prometheus JMX Exporter.  Note while lots of stats have been cleaned and exposed,
+    ## there are still more stats to clean up and expose, others will never get exposed.  They keep lots of duplicates
+    ## that can be derived easily.  The configMap in this chart cleans up the metrics it exposes to be in a Prometheus
+    ## format, eg topic, broker are labels and not part of metric name. Improvements are gladly accepted and encouraged.
+    configMap:
+      ## Allows disabling the default configmap, note a configMap is needed
+      enabled: true
+      ## Allows setting values to generate confimap
+      ## To allow all metrics through (warning its crazy excessive) comment out below `overrideConfig` and set
+      ## `whitelistObjectNames: []`
+      overrideConfig: {}
+        # jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
+        # lowercaseOutputName: true
+        # lowercaseOutputLabelNames: true
+        # ssl: false
+        # rules:
+        # - pattern: ".*"
+      ## If you would like to supply your own ConfigMap for JMX metrics, supply the name of that
+      ## ConfigMap as an `overrideName` here.
+      overrideName: ""
+    ## Port the jmx metrics are exposed in native jmx format, not in Prometheus format
+    jmxPort: 5555
+    ## JMX Whitelist Objects, can be set to control which JMX metrics are exposed.  Only whitelisted
+    ## values will be exposed via JMX Exporter.  They must also be exposed via Rules.  To expose all metrics
+    ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
+    ## (2) commented out above `overrideConfig`.
+    whitelistObjectNames:  # []
+    - kafka.controller:*
+    - kafka.server:*
+    - java.lang:*
+    - kafka.network:*
+    - kafka.log:*
 
 zookeeper:
   enabled: true
