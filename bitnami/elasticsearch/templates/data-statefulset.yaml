@@ -63,7 +63,7 @@ spec:
         - name: ELASTICSEARCH_PLUGINS
           value: {{ .Values.plugins | quote }}
         - name: ELASTICSEARCH_HEAP_SIZE
-          value: {{ .Values.coordinating.heapSize | quote }}
+          value: {{ .Values.data.heapSize | quote }}
         - name: ELASTICSEARCH_IS_DEDICATED_NODE
           value: "yes"
         - name: ELASTICSEARCH_NODE_TYPE

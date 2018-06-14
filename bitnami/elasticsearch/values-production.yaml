@@ -43,7 +43,7 @@ master:
   ## Elasticsearch master-eligible Liveness Probe
   livenessProbe:
     enabled: true
-  initialDelaySeconds: 90
+    initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
