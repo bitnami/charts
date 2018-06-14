@@ -44,6 +44,7 @@ $ helm search bitnami
 - [Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
+- [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
 - [Mean](https://github.com/bitnami/charts/tree/master/bitnami/mean)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
@@ -53,6 +54,7 @@ $ helm search bitnami
 - [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-inception)
 - [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
 - [WildFly](https://github.com/bitnami/charts/tree/master/bitnami/wildfly)
+- [ZooKeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper)
 
 ## Before you begin
 
