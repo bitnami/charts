@@ -1,0 +1,18 @@
+name: kafka
+version: 0.0.1
+appVersion: 1.1.0
+description: Apache Kafka is a distributed streaming platform.
+keywords:
+- kafka
+- zookeeper
+- streaming
+- producer
+- consumer
+home: https://kafka.apache.org/
+sources:
+- https://github.com/bitnami/bitnami-docker-kafka
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-110x117.png

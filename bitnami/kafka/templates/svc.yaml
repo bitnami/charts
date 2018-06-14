@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kafka.fullname" . }}
+  labels:
+    app: {{ template "kafka.name" . }}
+    chart: {{ template "kafka.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: kafka
+    port: 9092
+    targetPort: kafka
+  selector:
+    app: {{ template "kafka.name" . }}
+    release: {{ .Release.Name | quote }}
