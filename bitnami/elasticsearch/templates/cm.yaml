@@ -10,11 +10,6 @@ metadata:
 data:
   elasticsearch_custom.yml: |-
 
-    cloud:
-      kubernetes:
-        service: {{ template "master.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
-
     discovery:
       zen:
         ping.unicast.hosts: {{ template "discovery.fullname" . }}
