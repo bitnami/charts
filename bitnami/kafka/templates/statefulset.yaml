@@ -200,7 +200,7 @@ spec:
           mountPath: /opt/bitnami/kafka/conf/server.properties
           subPath: server.properties
         {{ end }}
-        {{ if .Values.auth }}
+        {{ if .Values.auth.enabled }}
         - name: kafka-certificates
           mountPath: /opt/bitnami/kafka/conf/certs/
           readOnly: true
@@ -242,7 +242,7 @@ spec:
         configMap:
           name: {{ template "kafka.fullname" . }}-configuration
       {{ end }}
-      {{ if .Values.auth }}
+      {{ if .Values.auth.enabled }}
       - name: kafka-certificates
         secret:
           secretName: {{ required "A secret containinig the Kafka JKS certificates is required when authentication in enabled" .Values.auth.certificatesSecret }}
