@@ -10,9 +10,15 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-  - name: zookeeper
+  - name: client
     port: 2181
-    targetPort: zookeeper
+    targetPort: client
+  - name: follower
+    port: 2888
+    targetPort: follower
+  - name: election
+    port: 3888
+    targetPort: election
   selector:
     app: {{ template "zookeeper.name" . }}
     release: {{ .Release.Name | quote }}
