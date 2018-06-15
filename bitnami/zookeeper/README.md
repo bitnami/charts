@@ -58,7 +58,6 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `initLimit`                           | Time the ZooKeeper servers in quorum have to connect to a leader    | `10`                                                     |
 | `syncLimit`                           | How far out of date a server can be from a leader                   | `5`                                                      |
 | `maxClientCnxns`                      | Number of concurrent connections that a single client may make to a single member | `60`                                       |
-| `servers`                             | List of servers                                                     | `[]`                                                     |
 | `allowAnonymousLogin`                 | Allow to accept connections from unauthenticated users              | `yes`                                                    |
 | `auth.existingSecret`                 | Use existing secret (ignores previous password)                     | `nil`                                                    |
 | `auth.enabled`                        | Enable Zookeeper auth                                               | `false`                                                  |
