@@ -27,9 +27,9 @@ image:
 ##
 updateStrategy: RollingUpdate
 
-## ID of the server in the ensemble
+## Number of ZooKeeper nodes
 ##
-serverID: 1
+replicaCount: 1
 
 ## Basic time unit in milliseconds used by ZooKeeper for heartbeats
 ##

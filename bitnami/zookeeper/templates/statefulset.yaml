@@ -9,7 +9,7 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   updateStrategy:
     type: {{ .Values.updateStrategy | quote }}
   selector:
@@ -50,13 +50,30 @@ spec:
       - name: "{{ template "zookeeper.fullname" . }}"
         image: "{{ template "zookeeper.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        command:
+         - bash
+         - -ec
+         - |
+            # Execute entrypoint as usual after obtaining ZOO_SERVER_ID based on POD hostname
+            HOST=`hostname -s`
+            if [[ $HOST =~ (.*)-([0-9]+)$ ]]; then
+              ORD=${BASH_REMATCH[2]}
+              export ZOO_SERVER_ID=$((ORD+1))
+            else
+              echo "Failed to get index from hostname $HOST"
+              exit 1
+            fi
+            . /opt/bitnami/base/functions
+            . /opt/bitnami/base/helpers
+            print_welcome_page
+            . /init.sh
+            nami_initialize zookeeper
+            exec tini -- /run.sh
         resources:
 {{ toYaml .Values.Resources | indent 10 }}
         env:
         - name: ZOO_PORT_NUMBER
           value: {{ .Values.service.port | quote }}
-        - name: ZOO_SERVER_ID
-          value: {{ .Values.serverID | quote }}
         - name: ZOO_TICK_TIME
           value: {{ .Values.tickTime | quote }}
         - name: ZOO_INIT_LIMIT
@@ -66,7 +83,11 @@ spec:
         - name: ZOO_MAX_CLIENT_CNXNS
           value: {{ .Values.maxClientCnxns | quote }}
         - name: ZOO_SERVERS
-          value: {{ .Values.servers | quote }}
+          {{- $replicaCount := int .Values.replicaCount }}
+          {{- $name := default .Chart.Name .Values.nameOverride -}}
+          {{- $zookeeperFullname := printf "%s-%s" .Release.Name $name | trunc 24  }}
+          {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 24  }}
+          value: {{range $i, $e := until $replicaCount }}{{ $zookeeperHostname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}:2888:3888 {{ end }}
         {{- if .Values.auth.enabled }}
         - name: ZOO_ENABLE_AUTH
           value: "yes"
