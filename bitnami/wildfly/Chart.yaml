@@ -1,5 +1,5 @@
 name: wildfly
-version: 0.4.13
+version: 0.4.14
 appVersion: 13.0.0
 description: Chart for Wildfly
 keywords:
