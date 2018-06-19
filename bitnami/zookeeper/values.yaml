@@ -22,14 +22,24 @@ image:
   ##
   debug: false
 
-## StatefulSet controller supports automated updates, there are two valid update strategies, RollingUpdate and OnDelete
+## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
 ##
 updateStrategy: RollingUpdate
 
-## ID of the server in the ensemble
+## Partition update strategy
+## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
 ##
-serverID: 1
+# rollingUpdatePartition:
+
+## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: Parallel
+
+## Number of ZooKeeper nodes
+##
+replicaCount: 1
 
 ## Basic time unit in milliseconds used by ZooKeeper for heartbeats
 ##
@@ -46,10 +56,6 @@ syncLimit: 5
 ## Limits the number of concurrent connections that a single client may make to a single member of the ZooKeeper ensemble
 ##
 maxClientCnxns: 60
-
-## Comma, space or colon separated list of servers. Example: zoo1:2888:3888,zoo2:2888:3888
-##
-# servers: []
 
 ## Allow to accept connections from unauthenticated users
 ##
@@ -93,6 +99,8 @@ heapSize: 1024
 service:
   type: ClusterIP
   port: 2181
+  followerPort: 2888
+  electionPort: 3888
 
 ## Zookeeper Pod Security Context
 securityContext:

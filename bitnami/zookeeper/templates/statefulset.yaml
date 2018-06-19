@@ -9,9 +9,14 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
+  podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   updateStrategy:
     type: {{ .Values.updateStrategy | quote }}
+    {{- if .Values.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.rollingUpdatePartition }}
+    {{- end }}
   selector:
     matchLabels:
       app: {{ template "zookeeper.name" . }}
@@ -50,13 +55,30 @@ spec:
       - name: "{{ template "zookeeper.fullname" . }}"
         image: "{{ template "zookeeper.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        command:
+         - bash
+         - -ec
+         - |
+            # Execute entrypoint as usual after obtaining ZOO_SERVER_ID based on POD hostname
+            HOSTNAME=`hostname -s`
+            if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
+              ORD=${BASH_REMATCH[2]}
+              export ZOO_SERVER_ID=$((ORD+1))
+            else
+              echo "Failed to get index from hostname $HOST"
+              exit 1
+            fi
+            . /opt/bitnami/base/functions
+            . /opt/bitnami/base/helpers
+            print_welcome_page
+            . /init.sh
+            nami_initialize zookeeper
+            exec tini -- /run.sh
         resources:
 {{ toYaml .Values.Resources | indent 10 }}
         env:
         - name: ZOO_PORT_NUMBER
           value: {{ .Values.service.port | quote }}
-        - name: ZOO_SERVER_ID
-          value: {{ .Values.serverID | quote }}
         - name: ZOO_TICK_TIME
           value: {{ .Values.tickTime | quote }}
         - name: ZOO_INIT_LIMIT
@@ -66,7 +88,12 @@ spec:
         - name: ZOO_MAX_CLIENT_CNXNS
           value: {{ .Values.maxClientCnxns | quote }}
         - name: ZOO_SERVERS
-          value: {{ .Values.servers | quote }}
+          {{- $replicaCount := int .Values.replicaCount }}
+          {{- $followerPort := int .Values.service.followerPort }}
+          {{- $electionPort := int .Values.service.electionPort }}
+          {{- $zookeeperFullname := include "zookeeper.fullname" . }}
+          {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 24  }}
+          value: {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.default.svc.cluster.local:{{ $followerPort }}:{{ $electionPort }} {{ end }}
         {{- if .Values.auth.enabled }}
         - name: ZOO_ENABLE_AUTH
           value: "yes"
@@ -96,12 +123,16 @@ spec:
         - name: JVMFLAGS
           value: {{ .Values.jvmFlags | quote }}
         ports:
-        - name: zookeeper
+        - name: client
           containerPort: {{ .Values.service.port }}
+        - name: follower
+          containerPort: {{ .Values.service.followerPort }}
+        - name: election
+          containerPort: {{ .Values.service.electionPort }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           tcpSocket:
-            port: zookeeper
+            port: client
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -111,7 +142,7 @@ spec:
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           tcpSocket:
-            port: zookeeper
+            port: client
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

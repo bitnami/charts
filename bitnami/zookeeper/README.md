@@ -52,12 +52,13 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `image.pullSecrets`                   | Specify image pull secrets                                          | `nil` (does not add image pull secrets to deployed pods) |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
 | `updateStrategy`                      | Update strategies                                                   | `RollingUpdate`                                          |
-| `serverID`                            | ID of the server in the ensemble                                    | `1`                                                      |
+| `rollingUpdatePartition`              | Partition update strategy                                           | `nil`                                                    |
+| `podManagementpolicy`                 | Pod management policy                                               | `Parallel`                                               |
+| `replicaCount`                        | Number of ZooKeeper nodes                                           | `1`                                                      |
 | `tickTime`                            | Basic time unit in milliseconds used by ZooKeeper for heartbeats    | `2000`                                                   |
 | `initLimit`                           | Time the ZooKeeper servers in quorum have to connect to a leader    | `10`                                                     |
 | `syncLimit`                           | How far out of date a server can be from a leader                   | `5`                                                      |
 | `maxClientCnxns`                      | Number of concurrent connections that a single client may make to a single member | `60`                                       |
-| `servers`                             | List of servers                                                     | `[]`                                                     |
 | `allowAnonymousLogin`                 | Allow to accept connections from unauthenticated users              | `yes`                                                    |
 | `auth.existingSecret`                 | Use existing secret (ignores previous password)                     | `nil`                                                    |
 | `auth.enabled`                        | Enable Zookeeper auth                                               | `false`                                                  |
