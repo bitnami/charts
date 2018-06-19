@@ -13,6 +13,10 @@ spec:
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   updateStrategy:
     type: {{ .Values.updateStrategy | quote }}
+    {{- if .Values.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.rollingUpdatePartition }}
+    {{- end }}
   selector:
     matchLabels:
       app: {{ template "zookeeper.name" . }}

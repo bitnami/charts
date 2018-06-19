@@ -52,6 +52,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `image.pullSecrets`                   | Specify image pull secrets                                          | `nil` (does not add image pull secrets to deployed pods) |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
 | `updateStrategy`                      | Update strategies                                                   | `RollingUpdate`                                          |
+| `rollingUpdatePartition`              | Partition update strategy                                           | `nil`                                                    |
 | `podManagementpolicy`                 | Pod management policy                                               | `Parallel`                                               |
 | `replicaCount`                        | Number of ZooKeeper nodes                                           | `1`                                                      |
 | `tickTime`                            | Basic time unit in milliseconds used by ZooKeeper for heartbeats    | `2000`                                                   |
