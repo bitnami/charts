@@ -95,7 +95,7 @@ service:
 ##   GKE, AWS & OpenStack)
 ##
 persistence:
-  enabled: false
+  enabled: true
   # storageClass: "-"
   accessModes:
     - ReadWriteOnce
