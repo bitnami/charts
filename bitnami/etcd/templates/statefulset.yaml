@@ -9,10 +9,14 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 spec:
   serviceName: {{ template "etcd.fullname" . }}-headless
-  podManagementPolicy: {{ .Values.podManagementPolicy }}
-  replicas: {{ .Values.replicaCount }}
+  podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
+  replicas: {{ .Values.statefulset.replicaCount }}
   updateStrategy:
-    type: {{ .Values.updateStratey }}
+    type: {{ .Values.statefulset.updateStratey }}
+    {{- if .Values.statefulset.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.statefulset.rollingUpdatePartition }}
+    {{- end }}
   selector:
     matchLabels:
       app: {{ template "etcd.name" . }}
@@ -49,7 +53,7 @@ spec:
       {{- end }}
       containers:
       # Variables to populate static cluster
-      {{- $replicaCount := int .Values.replicaCount }}
+      {{- $replicaCount := int .Values.statefulset.replicaCount }}
       {{- $clientPort := int .Values.service.port }}
       {{- $peerPort := int .Values.service.peerPort }}
       {{- $etcdFullname := include "etcd.fullname" . }}

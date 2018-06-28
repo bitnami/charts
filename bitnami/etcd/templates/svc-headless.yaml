@@ -21,4 +21,4 @@ spec:
     targetPort: peer
   selector:
     app: {{ template "etcd.name" . }}
-    release: "{{ .Release.Name }}"
+    release: {{ .Release.Name | quote }}

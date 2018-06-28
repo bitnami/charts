@@ -23,9 +23,22 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
-updateStrategy: RollingUpdate
-podManagementPolicy: OrderedReady
-replicaCount: 1
+statefulset:
+  ## Update strategy, can be set to RollingUpdate or OnDelete by default.
+  ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ##
+  updateStrategy: RollingUpdate
+  ## Partition update strategy
+  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+  ##
+  # rollingUpdatePartition:
+  ## Pod management policy
+  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## Number od replicas
+  ##
+  replicaCount: 1
 
 ## Take into account that if you use a config map you need to provide the whole configuration
 ## as the env vars defined in the statefulset.yaml will not be applied
@@ -85,7 +98,24 @@ securityContext:
 service:
   type: ClusterIP
   port: 2379
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types for the client port
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
   peerPort: 2380
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types for the peer port
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # peerNodePort:
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+  ## Use loadBalancerIP to request a specific static IP,
+  ## otherwise leave blank
+  ##
+  # loadBalancerIP:
 
 ## etcd data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>

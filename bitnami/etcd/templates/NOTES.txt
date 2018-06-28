@@ -17,7 +17,7 @@
 
 ** Please be patient while the chart is being deployed **
 
-etcd can be accessed via port 2379 on the following DNS name from within your cluster:
+etcd can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
     {{ template "etcd.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
@@ -61,9 +61,9 @@ To connect to your etcd server from outside the cluster execute the following co
 {{ end }}
 {{- if .Values.auth.client.secureTransport }}
 {{- if .Values.auth.client.useAutoTLS }}
- * As TLS secured transport is enabled you should add the flag `--cert-file {{ template "etcd.dataDir" . }}/fixtures/client/cert.pem --key-file {{ template "etcd.dataDir" .}}/fixtures/client/key.pem` to the etcdctl commands.
+ * As TLS is enabled you should add the flag `--cert-file {{ template "etcd.dataDir" . }}/fixtures/client/cert.pem --key-file {{ template "etcd.dataDir" .}}/fixtures/client/key.pem` to the etcdctl commands.
 {{- else }}
- * As TLS secured transport is enabled you should add the flag `--cert-file /opt/bitnami/etcd/certs/client/cert.pem --key-file /opt/bitnami/etcd/certs/client/key.pem` to the etcdctl commands.
+ * As TLS is enabled you should add the flag `--cert-file /opt/bitnami/etcd/certs/client/cert.pem --key-file /opt/bitnami/etcd/certs/client/key.pem` to the etcdctl commands.
 {{- end }}
  * You should also export a proper etcdctl endpoint using the https schema. Eg.
 
