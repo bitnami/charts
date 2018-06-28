@@ -64,3 +64,21 @@ Return the proper etcd data dir
 {{- print "/opt/bitnami/etcd/data" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the proper etcdctl authentication options
+*/}}
+{{- define "etcd.authOptions" -}}
+{{- $rbacOption := "-u root:$ETCD_ROOT_PASSWORD" -}}
+{{- $certsOption := " --cert-file $ETCD_CERT_FILE --key-file $ETCD_KEY_FILE" -}}
+{{- $caOption := " --ca-file $ETCD_TRUSTED_CA_FILE" -}}
+{{- if .Values.auth.rbac.enabled -}}
+{{- printf "%s" $rbacOption -}}
+{{- end -}}
+{{- if .Values.auth.client.secureTransport -}}
+{{- printf "%s" $certsOption -}}
+{{- end -}}
+{{- if .Values.auth.client.enableAuthentication -}}
+{{- printf "%s" $caOption -}}
+{{- end -}}
+{{- end -}}
