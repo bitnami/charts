@@ -56,7 +56,7 @@ To connect to your etcd server from outside the cluster execute the following co
 {{ if .Values.auth.rbac.enabled }}
  * As rbac is enabled you should add the flag `-u root:$ETCD_ROOT_PASSWORD` to the etcdctl commands. Export the password with this command:
 
-    export ETCD_ROOT_PASSWORD=${kubectl get secret --namespace {{ .Release.Namespace }} {{ template "etcd.fullname" . }} -o jsonpath="{.data.etcd-root-password}" | base64 --decode)}
+    export ETCD_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "etcd.fullname" . }} -o jsonpath="{.data.etcd-root-password}" | base64 --decode)
 
 {{ end }}
 {{- if .Values.auth.client.secureTransport }}

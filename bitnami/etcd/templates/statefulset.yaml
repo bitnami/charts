@@ -112,6 +112,7 @@ spec:
             ## Setting up new cluster
             else
               echo "==> There is no data at all. Creating new cluster"
+              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.default.svc.cluster.local:{{ $clientPort }}"
 
               store_member_id &
 
@@ -120,9 +121,9 @@ spec:
                 etcd > /dev/null 2>&1 &
                 ETCD_PID=$!
                 sleep 5
-                echo "$ETCD_ROOT_PASSWORD" | etcdctl user add root
-                etcdctl auth enable
-                etcdctl -u root:"$ETCD_ROOT_PASSWORD" role revoke guest -path '/*' --readwrite
+                echo "$ETCD_ROOT_PASSWORD" | ${AUTH_OPTIONS} etcdctl user add root
+                etcdctl ${AUTH_OPTIONS} auth enable
+                etcdctl ${AUTH_OPTIONS} role revoke guest -path '/*' --readwrite
                 kill $ETCD_PID
                 sleep 5
               fi
