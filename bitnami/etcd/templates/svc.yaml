@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "etcd.fullname" . }}
+  labels:
+    app: {{ template "etcd.name" . }}
+    chart: {{ template "etcd.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  {{- if .Values.service.annotations }}
+  annotations:
+{{ toYaml .Values.service.annotations | indent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerIP -}}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+  - name: client
+    port: 2379
+    targetPort: client
+    {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort)) }}
+    nodePort: {{ .Values.service.nodePort  }}
+    {{- end }}
+  - name: peer
+    port: 2380
+    targetPort: peer
+    {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.peerNodePort)) }}
+    nodePort: {{ .Values.service.peerNodePort  }}
+    {{- end }}
+  selector:
+    app: {{ template "etcd.name" . }}
+    release: {{ .Release.Name | quote }}
