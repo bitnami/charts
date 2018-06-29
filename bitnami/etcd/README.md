@@ -131,7 +131,7 @@ To horizontally scale this chart once it has been deployed:
 $ kubectl scale statefulset my-etcd --replicas=5
 ```
 
-## Enable security for etcd and Zookeeper
+## Enable security for etcd
 
 ### Configure RBAC
 
