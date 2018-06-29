@@ -43,6 +43,7 @@ $ helm search bitnami
 - [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
 - [Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
+- [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
 - [Mean](https://github.com/bitnami/charts/tree/master/bitnami/mean)
