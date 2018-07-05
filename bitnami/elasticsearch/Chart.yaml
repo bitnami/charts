@@ -1,5 +1,5 @@
 name: elasticsearch
-version: 1.0.5
+version: 1.0.6
 appVersion: 6.3.1-debian-9
 description: A highly scalable open-source full-text search and analytics engine
 keywords:
