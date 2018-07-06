@@ -1,6 +1,6 @@
 name: memcached
 version: 0.4.30
-appVersion: 1.5.8
+appVersion: 1.5.8-debian-9
 description: Chart for Memcached
 keywords:
 - memcached
