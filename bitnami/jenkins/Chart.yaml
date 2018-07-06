@@ -1,6 +1,6 @@
 name: jenkins
-version: 0.4.70
-appVersion: 2.121.1
+version: 0.4.71
+appVersion: 2.121.1-debian-9
 description: The leading open source automation server
 keywords:
 - jenkins
