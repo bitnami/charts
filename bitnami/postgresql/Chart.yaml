@@ -1,6 +1,6 @@
 name: postgresql
-version: 1.0.2
-appVersion: 10.4.0
+version: 1.0.3
+appVersion: 10.4.0-debian-9
 description: Chart for PostgreSQL
 keywords:
 - postgresql
