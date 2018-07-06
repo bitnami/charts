@@ -1,5 +1,5 @@
 name: apache
-version: 0.3.12
+version: 0.3.13
 appVersion: 2.4.33-debian-9
 description: Chart for Apache HTTP Server
 keywords:
