@@ -67,6 +67,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `logRetentionHours`              | The minimum age of a log file to be eligible for deletion due to age.                                      | `168`                                                              |
 | `logSegmentBytes`                | The maximum size of a log segment file. When this size is reached a new log segment will be created.       | `_1073741824`                                                      |
 | `logsDirs`                       | A comma separated list of directories under which to store log files.                                      | `/opt/bitnami/kafka/data`                                          |
+| `maxMessageBytes`                       | The largest record batch size allowed by Kafka.                                      | `1000012`                                          |
 | `numIoThreads`                   | The number of threads doing disk I/O.                                                                      | `8`                                                                |
 | `numNetworkThreads`              | The number of threads handling network requests.                                                           | `3`                                                                |
 | `numPartitions`                  | The default number of log partitions per topic.                                                            | `1`                                                                |
