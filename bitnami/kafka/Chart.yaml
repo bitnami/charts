@@ -1,5 +1,5 @@
 name: kafka
-version: 0.0.5
+version: 0.0.6
 appVersion: 1.1.0-debian-9
 description: Apache Kafka is a distributed streaming platform.
 keywords:
