@@ -1,18 +1,16 @@
-name: etcd
+name: metrics-server
 version: 0.0.1
-appVersion: 3.3.8
-description: etcd is a distributed key value store that provides a reliable way to store data across a cluster of machines
+appVersion: 0.2.1
+description: Metrics Server is a cluster-wide aggregator of resource usage data. Metrics Server collects metrics from the Summary API, exposed by Kubelet on each node.
 keywords:
-- etcd
+- metrics-server
 - cluster
-- database
-- cache
-- key-value
-home: https://coreos.com/etcd/
+- metrics
+home: https://github.com/kubernetes-incubator/metrics-server
 sources:
-- https://github.com/bitnami/bitnami-docker-etcd
+- https://github.com/bitnami/bitnami-docker-metrics-server
 maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
-icon: https://bitnami.com/assets/stacks/etcd/img/etcd-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/metrics-server/img/metrics-server-stack-110x117.png

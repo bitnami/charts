@@ -1,75 +1,13 @@
-{{- if contains .Values.service.type "LoadBalancer" }}
-{{- if .Values.allowNoneAuthentication }}
--------------------------------------------------------------------------------
- WARNING
-
-    By specifying "service.type=LoadBalancer" and "allowNoneAuthentication=true" you
-    have most likely exposed the Redis service externally without any authentication
-    mechanism.
-
-    For security reasons, we strongly suggest that you switch to "ClusterIP" or
-    "NodePort". As alternative, you can also switch to "usePassword=true"
-    providing a valid password on "password" parameter.
-
--------------------------------------------------------------------------------
-{{- end }}
-{{- end }}
-
 ** Please be patient while the chart is being deployed **
 
-etcd can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
+The metric server has been deployed.
+{{ if .Values.apiService.create }}
+In a few minutes you should be able to list metrics using the following
+command:
 
-    {{ template "etcd.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
-
-To set a key run the following command:
-
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "etcd.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl exec -it $POD_NAME -- etcdctl set /message Hello
-
-To get a key run the following command:
-
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "etcd.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl exec -it $POD_NAME -- etcdctl get /message
-
-To connect to your etcd server from outside the cluster execute the following commands:
-
-{{- if contains "NodePort" .Values.service.type }}
-
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "etcd.fullname" . }})
-
-{{- else if contains "LoadBalancer" .Values.service.type }}
-
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "etcd.fullname" . }}'
-
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "etcd.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-
-{{- else if contains "ClusterIP" .Values.service.type }}
-
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "etcd.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 2379:2379 &
-
-{{- end }}
-
-
-{{ if .Values.auth.rbac.enabled }}
- * As rbac is enabled you should add the flag `-u root:$ETCD_ROOT_PASSWORD` to the etcdctl commands. Export the password with this command:
-
-    export ETCD_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "etcd.fullname" . }} -o jsonpath="{.data.etcd-root-password}" | base64 --decode)
-
-{{ end }}
-{{- if .Values.auth.client.secureTransport }}
-{{- if .Values.auth.client.useAutoTLS }}
- * As TLS is enabled you should add the flag `--cert-file {{ template "etcd.dataDir" . }}/fixtures/client/cert.pem --key-file {{ template "etcd.dataDir" .}}/fixtures/client/key.pem` to the etcdctl commands.
-{{- else }}
- * As TLS is enabled you should add the flag `--cert-file /opt/bitnami/etcd/certs/client/cert.pem --key-file /opt/bitnami/etcd/certs/client/key.pem` to the etcdctl commands.
-{{- end }}
- * You should also export a proper etcdctl endpoint using the https schema. Eg.
-
-    export ETCDCTL_ENDPOINTS=https://{{ template "etcd.fullname" . }}-0:{{ .Values.service.port }}
-
-{{- end }}
-{{ if .Values.auth.client.enableAuthentication }}
- * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/ca.crt` to the etcdctl commands.
-{{- end }}
+  kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"
+{{ else }}
+NOTE: You have disabled the API service creation for this release. The metrics
+API will not work with this release unless you configure the metrics API
+service outside of this Helm chart.
+{{- end -}}
