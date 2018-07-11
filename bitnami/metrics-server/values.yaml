@@ -1,0 +1,168 @@
+## Bitnami etcd image version
+## ref: https://hub.docker.com/r/bitnami/etcd/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/etcd
+  tag: 3.3.8
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistrKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+statefulset:
+  ## Update strategy, can be set to RollingUpdate or OnDelete by default.
+  ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ##
+  updateStrategy: RollingUpdate
+  ## Partition update strategy
+  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+  ##
+  # rollingUpdatePartition:
+  ## Pod management policy
+  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## Number od replicas
+  ##
+  replicaCount: 1
+
+## Take into account that if you use a config map you need to provide the whole configuration
+## as the env vars defined in the statefulset.yaml will not be applied
+##
+useConfigmap: false
+
+## etcd docker image available customizations
+## https://github.com/bitnami/bitnami-docker-etcd#configuration
+##
+## Allow to use etcd without configuring RBAC authentication
+allowNoneAuthentication: true
+
+
+## Authentication parameteres
+## https://github.com/bitnami/bitnami-docker-etcd#security
+##
+auth:
+  rbac:
+    enabled: true
+    ## etcd root user password. The root user is always `root`.
+    # rootPassword:
+    ## Name of the existing secret containing credentials for the root user.
+    # existingSecret:
+
+  client:
+    ## Switch to encrypt client communication using TLS certificates
+    secureTransport: false
+    ## Switch to automatically create the TLS certificates
+    useAutoTLS: false
+    ## Switch to enable host authentication using TLS certificates. Requires existing secret.
+    enableAuthentication: false
+    ## Name of the existing secret containing cert files for client communication.
+    # existingSecret:
+
+  peer:
+    ## Switch to encrypt client communication using TLS certificates
+    secureTransport: false
+    ## Switch to automatically create the TLS certificates
+    useAutoTLS: false
+    ## Switch to enable host authentication using TLS certificates. Requires existing secret.
+    enableAuthentication: false
+    ## Name of the existing secret containing cert files for client communication.
+    # existingSecret:
+
+
+## Kubernetes Security Context
+## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+service:
+  type: ClusterIP
+  port: 2379
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types for the client port
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+  peerPort: 2380
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types for the peer port
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # peerNodePort:
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+  ## Use loadBalancerIP to request a specific static IP,
+  ## otherwise leave blank
+  ##
+  # loadBalancerIP:
+
+## etcd data Persistent Volume Storage Class
+## If defined, storageClassName: <storageClass>
+## If set to "-", storageClassName: "", which disables dynamic provisioning
+## If undefined (the default) or set to null, no storageClassName spec is
+##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+##   GKE, AWS & OpenStack)
+##
+persistence:
+  enabled: true
+  # storageClass: "-"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+  annotations: {}
+
+## Node labels and tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+nodeSelector: {}
+tolerations: []
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+#  limits:
+#    cpu: 200m
+#    memory: 1Gi
+#  requests:
+#    memory: 256Mi
+#    cpu: 250m
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 2
+  successThreshold: 1
+
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
