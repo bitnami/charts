@@ -1,5 +1,5 @@
 name: tensorflow-inception
-version: 0.0.9
+version: 0.0.10
 appVersion: 1.8.0
 description: Open-source software library for serving machine learning models
 keywords:
