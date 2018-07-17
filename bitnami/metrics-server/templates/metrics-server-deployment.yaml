@@ -5,24 +5,26 @@ metadata:
   labels:
     app: {{ template "metrics-server.name" . }}
     chart: {{ template "metrics-server.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 spec:
   selector:
     matchLabels:
       app: {{ template "metrics-server.name" . }}
-      release: {{ .Release.Name }}
+      release: {{ .Release.Name | quote }}
   template:
     metadata:
       labels:
         app: {{ template "metrics-server.name" . }}
-        release: {{ .Release.Name }}
+        release: {{ .Release.Name | quote }}
     spec:
       serviceAccountName: {{ template "metrics-server.serviceAccountName" . }}
       containers:
         - name: metrics-server
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: /tmp
           command:
-            - /metrics-server
+            - metrics-server
             - --source=kubernetes.summary_api:''
+            - --secure-port=8443

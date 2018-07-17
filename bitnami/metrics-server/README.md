@@ -14,7 +14,7 @@ This chart bootstraps a [Metrics Server](https://github.com/bitnami/bitnami-dock
 
 ## Prerequisites
 
-- Kubernetes 1.7+ with Beta APIs enabled
+- Kubernetes 1.8+ with Beta APIs enabled
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
