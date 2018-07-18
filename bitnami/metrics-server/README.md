@@ -80,10 +80,3 @@ In order to enable Role-based access control for Metrics Servier you can run the
 ```console
 $ helm install --name my-release --set rbac.create bitnami/metrics-server
 ```
-
-## Persistence
-
-The [Bitnami Metrics Server](https://github.com/bitnami/bitnami-docker-metrics-server) image stores the data at the `/bitnami/metrics-server` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
