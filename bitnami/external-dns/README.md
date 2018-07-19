@@ -55,11 +55,11 @@ The following table lists the configurable parameters of the external-dns chart 
 | `sources`                             | List of resource types to be observed for new DNS entries by ExternalDNS                                 | `[service, ingress]`                                     |
 | `provider`                            | DNS provider where the DNS records will be created (mandatory). E.g.: aws, azure, google, ...            | `nil`                                                    |
 | `publishInternalServices`             | Whether to publish DNS records for ClusterIP services or not                                             | `false`                                                  |
-| `policy`                              | Method to synchronise DNS records between sources and providers                                          | `upsert-only`                                            |
-| `registry`                            | Registry type                                                                                            | `txt`                                                    |
+| `policy`                              | Method to synchronise DNS records between sources and providers (accepted values: sync, upsert-only)     | `upsert-only`                                            |
+| `registry`                            | Registry type (accepted values: txt, noop)                                                               | `txt`                                                    |
 | `txtOwnerId`                          | TXT Registry Identifier                                                                                  | `"default"`                                              |
 | `txtPrefix`                           | Prefix to create a TXT record with a name following the pattern prefix.<CNAME record>                    | `nil`                                                    |
-| `logLevel`                            | Verbosity of the ExternalDNS logs                                                                        | `info`                                                   |
+| `logLevel`                            | Verbosity of the ExternalDNS logs (accepted values: panic, debug, info, warn, error, fatal)              | `info`                                                   |
 | `domainFilters`                       | Limit possible target zones by domain suffixes                                                           | `[]`                                                     |
 | `annotationFilter`                    | Filter sources managed by external-dns via annotation using label selector semantics                     | `nil`                                                    |
 | `extraArgs`                           | Extra Arguments to passed to external-dns                                                                | `{}`                                                     |
@@ -68,7 +68,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `aws.secretKey`                       | `AWS_SECRET_ACCESS_KEY` to set (only if provider == 'aws')                                               | `""`                                                     |
 | `aws.region`                          | `AWS_DEFAULT_REGION` to set (only if provider == 'aws')                                                  | `us-east-1`                                              |
 | `aws.roleArn`                         | Use this `role_arn` if role credentials are used (only if provider == 'aws')                             | `""`                                                     |
-| `aws.zoneType`                        | Filter for zones of this type (only if provider == 'aws')                                                | `""`                                                     |
+| `aws.zoneType`                        | Filter for zones of this type (only if provider == 'aws', accepted values: public, private)              | `""`                                                     |
 | `azure.resoureGroup`                  | Azure Resource Group (only if provider == 'azure')                                                       | `""`                                                     |
 | `cloudflare.apiKey`                   | `CF_API_KEY` to set in the environment (only if provider == 'cloudflare')                                | `""`                                                     |
 | `cloudflare.email`                    | `CF_API_EMAIL` to set in the environment (only if provider == 'cloudflare')                              | `""`                                                     |
