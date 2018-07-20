@@ -81,6 +81,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `service.loadBalancerIP`              | loadBalancerIP if ExternalDNS service type is `LoadBalancer`                                             | `nil`                                                    |
 | `rbac.create`                         | Wether to create & use RBAC resources or not                                                             | `false`                                                  |
 | `rbac.serviceAccountName`             | ServiceAccount (ignored if rbac.create == true)                                                          | `default`                                                |
+| `rbac.apiVersion`                         | Version of the RBAC API                                                             | `v1beta1`                                                  |
 | `securityContext.enabled`             | Enable security context                                                                                  | `true`                                                   |
 | `securityContext.fsGroup`             | Group ID for the container                                                                               | `1001`                                                   |
 | `securityContext.runAsUser`           | User ID for the container                                                                                | `1001`                                                   |

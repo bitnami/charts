@@ -116,6 +116,8 @@ rbac:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccountName: default
+  ## RBAC API version
+  apiVersion: v1beta1 
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/

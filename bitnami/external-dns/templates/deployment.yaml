@@ -121,6 +121,10 @@ spec:
         {{- if eq .Values.provider "aws" }}
         - name: AWS_DEFAULT_REGION
           value: {{ .Values.aws.region }}
+        - name: AWS_CONFIG_FILE
+          value: /etc/secrets/aws/config
+        - name: AWS_SHARED_CREDENTIALS_FILE
+          value: /etc/secrets/aws/credentials
         {{- end }}
 
         {{- if eq .Values.provider "cloudflare" }}
@@ -167,7 +171,7 @@ spec:
         volumeMounts:
         {{- if eq .Values.provider "aws" }}
         - name: aws-credentials
-          mountPath: /root/.aws
+          mountPath: /etc/secrets/aws/
           readOnly: true
         {{- end }}
 
