@@ -23,8 +23,6 @@ spec:
         - name: metrics-server
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          workingDir: /tmp
           command:
             - metrics-server
             - --source=kubernetes.summary_api:''
-            - --secure-port=8443
