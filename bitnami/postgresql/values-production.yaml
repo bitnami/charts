@@ -46,8 +46,9 @@ postgresqlUsername: postgres
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
-serviceType: ClusterIP
-port: 5432
+service:
+  type: ClusterIP
+  port: 5432
 
 ## PostgreSQL data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
