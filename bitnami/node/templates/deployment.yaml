@@ -13,7 +13,9 @@ spec:
     metadata:
       labels:
         app: {{ template "node.name" . }}
+        chart: {{ template "node.chart" . }}
         release: {{ .Release.Name | quote }}
+        heritage: "{{ .Release.Service }}"
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -53,7 +55,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ template "node.mongodb.fullname" . }}
-              key: mongodb-password 
+              key: mongodb-password
         - name: DATABASE_NAME
           value: {{ .Values.mongodb.mongodbDatabase | quote }}
         - name: DATABASE_CONNECTION_OPTIONS
@@ -64,7 +66,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.host" $type }} 
+              key: {{ template "externaldb.host" $type }}
         {{- if not .Values.externaldb.broker.serviceInstanceName }}
         - name: DATABASE_NAME
           valueFrom:
@@ -79,17 +81,17 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.port" $type }} 
+              key: {{ template "externaldb.port" $type }}
         - name: DATABASE_USER
           valueFrom:
             secretKeyRef:
               name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.username" $type }} 
+              key: {{ template "externaldb.username" $type }}
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.password" $type }} 
+              key: {{ template "externaldb.password" $type }}
         {{- if .Values.externaldb.ssl }}
         - name: DATABASE_CONNECTION_OPTIONS
           value: "ssl=true"
