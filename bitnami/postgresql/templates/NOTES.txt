@@ -27,7 +27,7 @@ To get the password for "{{ .Values.postgresqlUsername }}" run:
 
 To connect to your database run the following command:
 
-    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --image bitnami/postgresql {{- if .Values.postgresqlPassword }}--env="PGPASSWORD={{ .Values.postgresqlPassword}}"{{- end }} --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresqlUsername }} 
+    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --image bitnami/postgresql --env="PGPASSWORD=$POSTGRESQL_PASSWORD" --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresqlUsername }}
 
 To connect to your database from outside the cluster execute the following commands:
 
