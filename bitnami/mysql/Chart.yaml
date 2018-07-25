@@ -1,6 +1,6 @@
 name: mysql
-version: 2.0.0
-appVersion: 5.7.22-debian-9
+version: 2.0.1
+appVersion: 5.7.22
 description: Chart to create a Highly available MySQL cluster
 keywords:
 - mysql

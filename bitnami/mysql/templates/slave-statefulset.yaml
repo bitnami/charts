@@ -18,8 +18,10 @@ spec:
     metadata:
       labels:
         app: "{{ template "name" . }}"
+        chart: {{ template "mysql.chart" . }}
         component: "slave"
-        release: "{{ .Release.Name }}"
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
     spec:
       {{- if .Values.securityContext.enabled }}
       securityContext:
