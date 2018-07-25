@@ -3,7 +3,7 @@
 ##
 image:
   registry: docker.io
-  repository: bitnami/mariadb
+  repository: bitnami/mysql
   tag: 5.7.22-debian-9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -21,6 +21,14 @@ service:
   ## Kubernetes service type
   type: ClusterIP
   port: 3306
+
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
 
 root:
   ## MySQL admin password
