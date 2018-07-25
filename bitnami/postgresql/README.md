@@ -68,7 +68,9 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `nodeSelector`             | Node labels for pod assignment            | `{}`                                                      |
 | `tolerations`              | Toleration labels for pod assignment      | `[]`                                                      |
 | `resources`                | CPU/Memory resource requests/limits       | Memory: `256Mi`, CPU: `250m`                              |
-| `livenessProbe.enabled`               | would you like a livessProbed to be enabled                                                   |  `true`                                                   |
+| `securityContext.enabled`            | Enable security context                                                                      | `true`                            |
+| `securityContext.fsGroup`            | Group ID for the container                                                                   | `1001`                            |
+| `securityContext.runAsUser`          | User ID for the container                                                                    | `1001`              | `livenessProbe.enabled`               | would you like a livessProbed to be enabled                                                   |  `true`                                                   |
 | `livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                                      |  30                                                       |
 | `livenessProbe.periodSeconds`         | How often to perform the probe                                                                |  10                                                       |
 | `livenessProbe.timeoutSeconds`        | When the probe times out                                                                      |  5                                                        |
