@@ -23,6 +23,14 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
 replication:
   enabled: true
   user: repl_user
