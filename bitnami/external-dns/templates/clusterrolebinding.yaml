@@ -1,0 +1,19 @@
+{{- if .Values.rbac.create }}
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
+metadata:
+  name: {{ template "external-dns.fullname" . }}
+  labels:
+    app: {{ template "external-dns.name" . }}
+    chart: {{ template "external-dns.chart" .  }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "external-dns.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "external-dns.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}
