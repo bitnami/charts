@@ -1,0 +1,45 @@
+{{- if eq .Values.provider "aws" }}
+{{- if or (empty .Values.aws.accessKey) (empty .Values.aws.secretKey) }}
+  ###############################################################################
+  ### ERROR: You chose 'aws' as your DNS provider and you did not set the     ###
+  ### AWS access&secret keys                                                  ###
+  ###############################################################################
+
+Indicate your AWS access&secret keys by installing this chart as shown below:
+
+    $ helm upgrade my-release bitnami/external-dns --set provider='aws',aws.accessKey='YOUR_ACCESS_KEY',aws.secretKey='YOUR_SECRET_KEY'
+{{- end }}
+{{- end }}
+{{- if and (eq .Values.provider "google") (empty .Values.google.project) }}
+  ###############################################################################
+  ### ERROR: You chose 'google' as your DNS provider and you did not set      ###
+  ### the project (--set google.project="YOUR_GOOGLE_PROJECT"                 ###
+  ###############################################################################
+
+Indicate your Google Project by installing this chart as shown below:
+
+    $ helm upgrade my-release bitnami/external-dns --set provider='google',google.project='YOUR_GOOGLE_PROJECT'
+{{- end }}
+{{- if and (eq .Values.provider "cloudflare") (empty .Values.cloudflare.apiKey) }}
+  ###############################################################################
+  ### ERROR: You chose 'cloudflare' as your DNS provider and you did not set  ###
+  ### the ApiKey                                                              ###
+  ###############################################################################
+
+Indicate your ApiKey by installing this chart as shown below:
+
+  $ helm upgrade my-release bitnami/external-dns --set provider='cloudflare',cloudflare.apiKey='YOUR_API_KEY'
+{{- end }}
+{{- if empty .Values.provider }}
+  ##############################################################################
+  ### ERROR: You did not choose any DNS provider.
+  ###############################################################################
+
+Indicate your DNS provider by installing this chart as shown below:
+
+   $ helm upgrade my-release bitnami/external-dns --set provider='YOUR_DNS_PROVIDER'
+
+Replace the placeholder YOUR_DNS_PROVIDER with a valid DNS provider (aws, azure, cloudflare, google, ...)
+{{- end }}
+
+** Please be patient while the chart is being deployed **
