@@ -56,7 +56,9 @@ The following tables lists the configurable parameters of the MySQL chart and th
 | `db.user`                                 | Username of new user to create                      | `nil`                                                             |
 | `db.password`                             | Password for the new user                           | _random 10 character alphanumeric string if `db.user` is defined_ |
 | `db.name`                                 | Name for new database to create                     | `my_database`                                                     |
-| `replication.enabled`                     | MySQL replication enabled                         | `true`                                                            |
+| `securityContext.enabled`            | Enable security context                                                                      | `true`                            |
+| `securityContext.fsGroup`            | Group ID for the container                                                                   | `1001`                            |
+| `securityContext.runAsUser`          | User ID for the container                                                                    | `1001`              | `replication.enabled`                     | MySQL replication enabled                         | `true`                                                            |
 | `replication.user`                        | MySQL replication user                            | `replicator`                                                      |
 | `replication.password`                    | MySQL replication user password                   | _random 10 character alphanumeric string_                         |
 | `master.antiAffinity`                     | Master pod anti-affinity policy                     | `soft`                                                            |
