@@ -110,6 +110,12 @@ $ helm install --name my-release -f values.yaml bitnami/postgresql
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### postgresql.conf file as configMap
+
+Instead of using specific variables for the PostgreSQL configuration, this helm chart also supports to customize the whole configuration file.
+
+Add your custom file to "files/postgresql.conf" in your working directory. This file will be mounted as configMap to the containers and it will be used for configuring the PostgreSQL server.
+
 ## Production and horizontal scaling
 
 The following repo contains the recommended production settings for PostgreSQL server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment
