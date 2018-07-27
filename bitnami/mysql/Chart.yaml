@@ -1,6 +1,6 @@
 name: mysql
 version: 2.0.1
-appVersion: 5.7.22
+appVersion: 5.7.23
 description: Chart to create a Highly available MySQL cluster
 keywords:
 - mysql
