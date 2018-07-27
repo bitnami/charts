@@ -128,6 +128,12 @@ $ helm install --name my-release -f values.yaml bitnami/mysql
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Initialize a fresh instance
+
+The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+
+The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
+
 ## Persistence
 
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
