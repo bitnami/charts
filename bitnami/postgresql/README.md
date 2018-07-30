@@ -116,6 +116,12 @@ Instead of using specific variables for the PostgreSQL configuration, this helm 
 
 Add your custom file to "files/postgresql.conf" in your working directory. This file will be mounted as configMap to the containers and it will be used for configuring the PostgreSQL server.
 
+## Initialize a fresh instance
+
+The [Bitnami PostgreSQL](https://github.com/bitnami/bitnami-docker-postgresql) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+
+The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
+
 ## Production and horizontal scaling
 
 The following repo contains the recommended production settings for PostgreSQL server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment

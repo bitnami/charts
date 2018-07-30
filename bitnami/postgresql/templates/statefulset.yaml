@@ -107,6 +107,8 @@ spec:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
         {{- end }}
         volumeMounts:
+        - name: custom-init-scripts
+          mountPath: /docker-entrypoint-initdb.d
         {{- if .Values.persistence.enabled }}
         - name: data
           mountPath: /bitnami/postgresql
@@ -114,7 +116,7 @@ spec:
         {{ if  (.Files.Glob "files/postgresql.conf") }}
         - name: postgresql-config
           mountPath: /opt/bitnami/postgresql/conf/postgresql.conf
-          subPath: postgresql.conf 
+          subPath: postgresql.conf
         {{ end }}
       volumes:
       {{ if  (.Files.Glob "files/postgresql.conf") }}
@@ -122,6 +124,9 @@ spec:
         configMap:
           name: {{ template "postgresql.fullname" . }}-configuration
       {{ end }}
+      - name: custom-init-scripts
+        configMap:
+          name: {{ template "postgresql.fullname" . }}-init-scripts
 {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
@@ -146,8 +151,8 @@ spec:
       {{- end }}
       {{- end }}
 {{- else }}
-        - name: data
-          emptyDir: {}
+      - name: data
+        emptyDir: {}
 {{- end }}
 
 
