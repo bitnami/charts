@@ -12,11 +12,13 @@ spec:
     matchLabels:
       app: {{ template "metrics-server.name" . }}
       release: {{ .Release.Name | quote }}
+      chart: {{ template "metrics-server.chart" . }}
   template:
     metadata:
       labels:
         app: {{ template "metrics-server.name" . }}
         release: {{ .Release.Name | quote }}
+        chart: {{ template "metrics-server.chart" . }}
     spec:
       serviceAccountName: {{ template "metrics-server.serviceAccountName" . }}
       containers:

@@ -16,6 +16,7 @@ spec:
       labels:
         app: {{ template "elasticsearch.name" . }}
         release: {{ .Release.Name | quote }}
+        chart: {{ template "elasticsearch.chart" . }}
         role: "metrics"
     spec:
       {{- if .Values.image.pullSecrets }}

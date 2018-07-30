@@ -1,5 +1,5 @@
 name: tomcat
-version: 0.4.28
+version: 0.4.29
 appVersion: 8.5.32-debian-9
 description: Chart for Apache Tomcat
 keywords:

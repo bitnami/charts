@@ -13,6 +13,7 @@ spec:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}
       release: {{ .Release.Name | quote }}
+      chart: {{ template "elasticsearch.chart" . }}
       role: "data"
   serviceName: "{{ template "data.fullname" . }}"
   replicas: {{ .Values.data.replicas }}
@@ -20,6 +21,7 @@ spec:
     metadata:
       labels:
         app: {{ template "elasticsearch.name" . }}
+        chart: {{ template "elasticsearch.chart" . }}
         release: {{ .Release.Name | quote }}
         role: "data"
     spec:
