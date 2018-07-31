@@ -1,5 +1,5 @@
 name: nginx
-version: 0.5.3
+version: 0.5.4
 appVersion: 1.14.0
 description: Chart for the nginx server
 keywords:
