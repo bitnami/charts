@@ -4,7 +4,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.14.0-ol-7
+  tag: 1.14.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -25,7 +25,7 @@ serviceType: LoadBalancer
 # vhost: |-
 #   # example PHP-FPM vhost
 #   server {
-#     listen 0.0.0.0:80;
+#     listen 0.0.0.0:8080;
 #     root /app;
 #     location / {
 #       index index.html index.php;
