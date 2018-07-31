@@ -1,6 +1,6 @@
 name: wildfly
 version: 0.4.16
-appVersion: 13.0.0-debian-9
+appVersion: 13.0.0
 description: Chart for Wildfly
 keywords:
 - wildfly
