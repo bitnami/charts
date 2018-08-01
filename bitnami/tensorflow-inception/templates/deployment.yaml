@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: tensorflow-serving
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
     spec:
       {{- if .Values.server.image.pullSecrets }}
       imagePullSecrets:

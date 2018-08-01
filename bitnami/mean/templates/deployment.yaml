@@ -14,6 +14,7 @@ spec:
       labels:
         app: {{ template "mean.name" . }}
         release: {{ .Release.Name | quote }}
+        chart: {{ template "mean.chart" . }}
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
