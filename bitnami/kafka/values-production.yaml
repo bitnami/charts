@@ -93,6 +93,9 @@ logSegmentBytes: _1073741824
 ## A comma separated list of directories under which to store log files.
 logsDirs: /opt/bitnami/kafka/data
 
+## The largest record batch size allowed by Kafka
+maxMessageBytes: 1000012
+
 ## The number of threads doing disk I/O.
 numIoThreads: 8
 
