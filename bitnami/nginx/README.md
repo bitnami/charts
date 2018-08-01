@@ -76,7 +76,7 @@ _custom-vhost.yaml_
 ```yaml
 vhost: |-
   server {
-    listen 0.0.0.0:80;
+    listen 0.0.0.0:8080;
     location / {
       return 200 "hello!";
     }

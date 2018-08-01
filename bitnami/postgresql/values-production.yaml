@@ -23,6 +23,14 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
 replication:
   enabled: true
   user: repl_user
@@ -46,8 +54,9 @@ postgresqlUsername: postgres
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
-serviceType: ClusterIP
-port: 5432
+service:
+  type: ClusterIP
+  port: 5432
 
 ## PostgreSQL data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>

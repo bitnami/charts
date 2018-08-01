@@ -18,9 +18,16 @@ spec:
     metadata:
       labels:
         app: "{{ template "name" . }}"
+        chart: {{ template "mysql.chart" . }}
         component: "slave"
-        release: "{{ .Release.Name }}"
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
     spec:
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
       {{- if eq .Values.slave.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
@@ -77,7 +84,7 @@ spec:
           value: "3306"
         - name: MYSQL_MASTER_USER
           value: "root"
-        - name: MYSQL_MASTER_PASSWORD
+        - name: MYSQL_MASTER_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}

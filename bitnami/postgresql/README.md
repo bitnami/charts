@@ -68,7 +68,9 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `nodeSelector`             | Node labels for pod assignment            | `{}`                                                      |
 | `tolerations`              | Toleration labels for pod assignment      | `[]`                                                      |
 | `resources`                | CPU/Memory resource requests/limits       | Memory: `256Mi`, CPU: `250m`                              |
-| `livenessProbe.enabled`               | would you like a livessProbed to be enabled                                                   |  `true`                                                   |
+| `securityContext.enabled`            | Enable security context                                                                      | `true`                            |
+| `securityContext.fsGroup`            | Group ID for the container                                                                   | `1001`                            |
+| `securityContext.runAsUser`          | User ID for the container                                                                    | `1001`              | `livenessProbe.enabled`               | would you like a livessProbed to be enabled                                                   |  `true`                                                   |
 | `livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                                      |  30                                                       |
 | `livenessProbe.periodSeconds`         | How often to perform the probe                                                                |  10                                                       |
 | `livenessProbe.timeoutSeconds`        | When the probe times out                                                                      |  5                                                        |
@@ -107,6 +109,18 @@ $ helm install --name my-release -f values.yaml bitnami/postgresql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### postgresql.conf file as configMap
+
+Instead of using specific variables for the PostgreSQL configuration, this helm chart also supports to customize the whole configuration file.
+
+Add your custom file to "files/postgresql.conf" in your working directory. This file will be mounted as configMap to the containers and it will be used for configuring the PostgreSQL server.
+
+## Initialize a fresh instance
+
+The [Bitnami PostgreSQL](https://github.com/bitnami/bitnami-docker-postgresql) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+
+The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
 ## Production and horizontal scaling
 

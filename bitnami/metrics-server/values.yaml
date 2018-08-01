@@ -1,0 +1,31 @@
+## Bitnami Metrics Server image version
+## ref: https://hub.docker.com/r/bitnami/metrics-server/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/metrics-server
+  tag: 0.2.1
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+apiService:
+  # Specifies if the v1beta1.metrics.k8s.io API service should be created.
+  #
+  # If you disable API service creation you have to
+  # manage it outside of this chart for e.g horizontal pod autoscaling to
+  # work with this release.
+  create: true
