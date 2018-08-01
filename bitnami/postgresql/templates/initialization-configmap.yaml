@@ -1,3 +1,4 @@
+{{ if (not .Values.config.customInitConfig) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,3 +10,4 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 data:
 {{ (.Files.Glob "files/docker-entrypoint-initdb.d/*").AsConfig | indent 2 }}
+{{ end }}

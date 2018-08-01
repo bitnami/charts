@@ -153,3 +153,9 @@ metrics:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+
+## For use by charts who depend on postrges
+## Allows the depending chart to inject its own init scripts and postgres.conf by overriding the configmaps
+# config:
+#   customInitConfig: false
+#   customConfig: false
