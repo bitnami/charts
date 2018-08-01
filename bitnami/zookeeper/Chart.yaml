@@ -1,6 +1,6 @@
 name: zookeeper
-version: 0.0.3
-appVersion: 3.4.12-debian-9
+version: 0.0.4
+appVersion: 3.4.12
 description: A centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services for distributed applications.
 keywords:
 - zookeeper
