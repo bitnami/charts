@@ -18,11 +18,6 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "master"
     spec:
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-      {{- end }}
       {{- if eq .Values.master.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
@@ -62,6 +57,11 @@ spec:
       containers:
       - name: {{ template "master.fullname" . }}
         image: {{ template "elasticsearch.image" . }}
+        {{- if .Values.securityContext.enabled }}
+        securityContext:
+          fsGroup: {{ .Values.securityContext.fsGroup }}
+          runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- end }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME

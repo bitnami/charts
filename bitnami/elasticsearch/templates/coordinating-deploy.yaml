@@ -17,11 +17,6 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "coordinating-only"
     spec:
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-      {{- end }}
       {{- if eq .Values.coordinating.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
@@ -60,6 +55,11 @@ spec:
           privileged: true
       containers:
       - name: {{ template "coordinating.fullname" . }}
+        {{- if .Values.securityContext.enabled }}
+        securityContext:
+          fsGroup: {{ .Values.securityContext.fsGroup }}
+          runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- end }}
         image: {{ template "elasticsearch.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:

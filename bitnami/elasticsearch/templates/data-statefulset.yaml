@@ -59,6 +59,11 @@ spec:
       - name: {{ template "data.fullname" . }}
         image: {{ template "elasticsearch.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        {{- if .Values.securityContext.enabled }}
+        securityContext:
+          fsGroup: {{ .Values.securityContext.fsGroup }}
+          runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- end }}
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: {{ .Values.name | quote }}
