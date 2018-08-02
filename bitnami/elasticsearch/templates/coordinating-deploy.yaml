@@ -53,7 +53,7 @@ spec:
       {{- end }}
       initContainers:
       - name: sysctl
-        image: {{ template "elasticsearch.image" . }}
+        image: {{ template "sysctl.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
