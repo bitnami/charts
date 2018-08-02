@@ -93,3 +93,12 @@ Return the proper ES exporter image name
 {{- $tag := default "latest" .Values.metrics.image.tag | toString -}}
 {{- printf "%s/%s:%s" $registryName .Values.metrics.image.repository $tag -}}
 {{- end -}}
+
+{{/*
+Return the proper sysctl image name
+*/}}
+{{- define "sysctl.image" -}}
+{{- $registryName :=  default "docker.io" .Values.sysctlImage.registry -}}
+{{- $tag := default "latest" .Values.sysctlImage.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName .Values.sysctlImage.repository $tag -}}
+{{- end -}}

@@ -73,6 +73,9 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.readinessProbe.timeoutSeconds`            | When the probe times out (master-eligible nodes pod)                                                                      | `5`                                                                 |
 | `master.readinessProbe.successThreshold`          | Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)   | `1`                                                                 |
 | `master.readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`                                                                 |
+| `securityContext.enabled`            | Enable security context                                                                      | `true`                            |
+| `securityContext.fsGroup`            | Group ID for the container                                                                   | `1001`                            |
+| `securityContext.runAsUser`          | User ID for the container                                                                    | `1001`        
 | `discovery.name`                                  | Discover node pod name                                                                                                    | `discovery`                                                         |
 | `coordinating.name`                               | Coordinating-only node pod name                                                                                           | `coordinating-only`                                                      |
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                   | `2`                                                                 |
@@ -141,7 +144,10 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.image.pullPolicy`                        | Metrics exporter image pull policy                                                                                        | `Always`                                                            |
 | `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                    | `ClusterIP`                                                         |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                  | `requests: { cpu: "25m" }`                                          |
-
+| `sysctlImage.registry`                          | Kernel settings modifier image registry                                                                                           | `docker.io`                                                         |
+| `sysctlImage.repository`                        | Kernel settings modifier image repository                                                                                         | `busybox`                                    |
+| `sysctlImage.tag`                               |  Kernel settings modifier image tag                                                                                                | `latest`                                                            |
+| `sysctlImage.pullPolicy`                        | Kernel settings modifier image pull policy                                                                                        | `Always`
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
