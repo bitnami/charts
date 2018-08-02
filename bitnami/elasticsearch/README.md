@@ -144,7 +144,11 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.image.pullPolicy`                        | Metrics exporter image pull policy                                                                                        | `Always`                                                            |
 | `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                    | `ClusterIP`                                                         |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                  | `requests: { cpu: "25m" }`                                          |
-
+| `metrics.name`                                    | Metrics pod name                                                                                                          | `metrics`                                                           |
+| `sysctlImage.registry`                          | Kernel settings modifier image registry                                                                                           | `docker.io`                                                         |
+| `sysctlImage.repository`                        | Kernel settings modifier image repository                                                                                         | `busybox`                                    |
+| `sysctlImage.tag`                               |  Kernel settings modifier image tag                                                                                                | `latest`                                                            |
+| `sysctlImage.pullPolicy`                        | Kernel settings modifier image pull policy                                                                                        | `Always`
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
