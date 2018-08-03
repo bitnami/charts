@@ -25,6 +25,10 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "data"
     spec:
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
       {{- if eq .Values.data.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
@@ -61,7 +65,6 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.securityContext.enabled }}
         securityContext:
-          fsGroup: {{ .Values.securityContext.fsGroup }}
           runAsUser: {{ .Values.securityContext.runAsUser }}
         {{- end }}
         env:

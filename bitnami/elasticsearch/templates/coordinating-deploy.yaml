@@ -17,6 +17,10 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "coordinating-only"
     spec:
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
       {{- if eq .Values.coordinating.antiAffinity "hard" }}
       affinity:
         podAntiAffinity:
@@ -57,7 +61,6 @@ spec:
       - name: {{ template "coordinating.fullname" . }}
         {{- if .Values.securityContext.enabled }}
         securityContext:
-          fsGroup: {{ .Values.securityContext.fsGroup }}
           runAsUser: {{ .Values.securityContext.runAsUser }}
         {{- end }}
         image: {{ template "elasticsearch.image" . }}
