@@ -40,14 +40,14 @@ spec:
           containerPort: 8443
         livenessProbe:
           httpGet:
-            path: /
+            path: /login
             port: http
           initialDelaySeconds: 180
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           httpGet:
-            path: /
+            path: /login
             port: http
           initialDelaySeconds: 30
           timeoutSeconds: 3
