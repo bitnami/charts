@@ -47,8 +47,7 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "postgresql.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 5432:5432 &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "postgresql.fullname" . }} 5432:5432 &
     {{ if .Values.postgresqlPassword }}PGPASSWORD={{ .Values.postgresqlPassword}} "{{- end }}psql --host 127.0.0.1 -U {{ .Values.postgresqlUsername }} 
 
 {{- end }}

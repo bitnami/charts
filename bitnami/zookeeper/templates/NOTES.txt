@@ -44,8 +44,7 @@ To connect to your ZooKeeper server from outside the cluster execute the followi
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "zookeeper.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 2181:2181 &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "zookeeper.fullname" . }} 2181:2181 &
     zkCli.sh 127.0.0.1:2181
 
 {{- end }}

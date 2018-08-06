@@ -32,7 +32,6 @@
     curl http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
 {{- else if contains "ClusterIP"  .Values.coordinating.service.type }}
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "elasticsearch.name" . }},release={{ .Release.Name }},role=coordinating-only" -o jsonpath="{.items[0].metadata.name}")
-    kubectl port-forward $POD_NAME {{ .Values.coordinating.service.port }}:9200 &
-    curl http://127.0.0.1:{{ .Values.coordinating.service.port }}/
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "coordinating.fullname" . }} {{ .Values.coordinating.service.port }}:9200 &
+    curl http://127.0.0.1:9200/
 {{- end }}
