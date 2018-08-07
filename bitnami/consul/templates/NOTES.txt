@@ -16,8 +16,7 @@ In order to access to the Consul Web UI:
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "consul.fullname" . }}-ui)
-
-    echo http://$NODE_IP:$NODE_PORT/
+    echo "Consul URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.ui.service.type }}
 
@@ -25,15 +24,12 @@ In order to access to the Consul Web UI:
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "consul.fullname" . }}-ui'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "consul.fullname" . }}-ui -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-
-    echo http://$SERVICE_IP:{{ .Values.httpPort }}/
-
+    echo "Consul URL: http://$SERVICE_IP:{{ .Values.httpPort }}/"
 
 {{- else if contains "ClusterIP"  .Values.ui.service.type }}
 
-    kubectl port-forward {{ template "consul.fullname" . }}-0 --namespace {{ .Release.Namespace }} {{ .Values.httpPort }}:{{ .Values.httpPort }}
-
-    URL : http://127.0.0.1:{{ .Values.httpPort }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "consul.fullname" . }}-ui {{ .Values.httpPort }}:{{ .Values.httpPort }}
+    echo "Consul URL: http://127.0.0.1:{{ .Values.httpPort }}"
 
 {{- end }}
 

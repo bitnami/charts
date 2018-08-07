@@ -37,6 +37,7 @@ To connect to your etcd server from outside the cluster execute the following co
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "etcd.fullname" . }})
+    echo "etcd URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
@@ -44,11 +45,12 @@ To connect to your etcd server from outside the cluster execute the following co
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "etcd.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "etcd.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "etcd URL: http://$SERVICE_IP:2379/"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "etcd.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 2379:2379 &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "etcd.fullname" . }} 2379:2379 &
+    echo "etcd URL: http://127.0.0.1:2379"
 
 {{- end }}
 
