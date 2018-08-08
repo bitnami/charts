@@ -156,6 +156,7 @@ metrics:
 
 ## For use by charts who depend on postrges
 ## Allows the depending chart to inject its own init scripts and postgres.conf by overriding the configmaps
-# config:
-#   customInitConfig: false
-#   customConfig: false
+config:
+  enabled: false
+#   customInitConfigName: my-init-configmap
+#   customConfigName: my-configmap

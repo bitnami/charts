@@ -1,4 +1,4 @@
-{{ if (not .Values.config.customInitConfig) }}
+{{ if (not .Values.config.customInitConfigName) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

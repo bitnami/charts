@@ -112,21 +112,25 @@ spec:
         {{- if .Values.persistence.enabled }}
         - name: data
           mountPath: /bitnami/postgresql
-        {{ end }}
-        {{ if or  (.Files.Glob "files/postgresql.conf") (.Values.config.customConfig) }}
+        {{- end }}
+        {{- if or  (.Files.Glob "files/postgresql.conf") (.Values.config.customConfigName) }}
         - name: postgresql-config
           mountPath: /opt/bitnami/postgresql/conf/postgresql.conf
           subPath: postgresql.conf
-        {{ end }}
+        {{- end }}
       volumes:
-      {{ if or (.Files.Glob "files/postgresql.conf") (.Values.config.customConfig) }}
+      {{- if (.Files.Glob "files/postgresql.conf") }}
       - name: postgresql-config
         configMap:
           name: {{ template "postgresql.fullname" . }}-configuration
-      {{ end }}
+      {{- else if .Values.config.customConfigName }}
+      - name: postgresql-config
+        configMap:
+          name: {{ .Values.config.customConfigName }}
+      {{- end }}
       - name: custom-init-scripts
         configMap:
-          name: {{ template "postgresql.fullname" . }}-init-scripts
+          name: {{ default  (printf "%s-init-scripts"  (include "postgresql.fullname" .)) .Values.config.customInitConfigName }}
 {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
