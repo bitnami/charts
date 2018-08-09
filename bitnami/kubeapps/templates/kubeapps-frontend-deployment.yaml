@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "kubeapps.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "kubeapps.fullname" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/kubeapps-frontend-config.yaml") . | sha256sum }}
+      labels:
+        app: {{ template "kubeapps.fullname" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: nginx
+        image: {{ template "kubeapps.image" .Values.frontend.image }}
+        livenessProbe:
+{{ toYaml .Values.frontend.livenessProbe | indent 10 }}
+        readinessProbe:
+{{ toYaml .Values.frontend.readinessProbe | indent 10 }}
+        volumeMounts:
+        - name: vhost
+          mountPath: /opt/bitnami/nginx/conf/vhosts
+        ports:
+        - name: http
+          containerPort: 8080
+        resources:
+{{ toYaml .Values.frontend.resources | indent 12 }}
+      volumes:
+      - name: vhost
+        configMap:
+          name: {{ template "kubeapps.frontend-config.fullname" . }}
+    {{- with .Values.frontend.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.frontend.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.frontend.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

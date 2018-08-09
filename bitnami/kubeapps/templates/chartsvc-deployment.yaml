@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "kubeapps.chartsvc.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.chartsvc.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "kubeapps.chartsvc.fullname" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "kubeapps.chartsvc.fullname" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: chartsvc
+        image: {{ template "kubeapps.image" .Values.chartsvc.image }}
+        command:
+        - /chartsvc
+        args:
+        - --mongo-user=root
+        - --mongo-url={{ template "kubeapps.mongodb.fullname" . }}
+        env:
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "kubeapps.mongodb.fullname" . }}
+              key: mongodb-root-password
+        ports:
+        - name: http
+          containerPort: {{ .Values.chartsvc.service.port }}
+        resources:
+{{ toYaml .Values.chartsvc.resources | indent 12 }}
+    {{- with .Values.chartsvc.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.chartsvc.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.chartsvc.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

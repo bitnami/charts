@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: hook-succeeded
+    helm.sh/hook-weight: "-10"
+  labels:
+    app: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  apprepositories.yaml: |-
+    {{- range .Values.apprepository.initialRepos }}
+    apiVersion: kubeapps.com/v1alpha1
+    kind: AppRepository
+    metadata:
+      name: {{ .name }}
+      labels:
+        app: {{ template "kubeapps.apprepository.fullname" $ }}
+        chart: {{ template "kubeapps.chart" $ }}
+        release: {{ $.Release.Name }}
+        heritage: {{ $.Release.Service }}
+    spec:
+      type: helm
+      url: {{ .url }}
+    ---
+    {{ end -}}

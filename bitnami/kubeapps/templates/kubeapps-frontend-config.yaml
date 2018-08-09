@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kubeapps.frontend-config.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.frontend-config.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  vhost.conf: |-
+    # Retain the default nginx handling of requests without a "Connection" header
+    map $http_upgrade $connection_upgrade {
+      default upgrade;
+      ''      close;
+    }
+
+    # Allow websocket connections
+    proxy_set_header Upgrade    $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+
+    server {
+      listen 8080;
+      server_name _;
+
+      location /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "healthy\n";
+      }
+
+      location /api/kube {
+        rewrite /api/kube/(.*) /$1 break;
+        rewrite /api/kube / break;
+        proxy_pass https://kubernetes.default;
+        # Disable buffering for log streaming
+        proxy_buffering off;
+        # Hide Www-Authenticate to prevent it triggering a basic auth prompt in
+        # the browser with some clusters
+        proxy_hide_header Www-Authenticate;
+      }
+
+      location /api/chartsvc {
+        rewrite /api/chartsvc/(.*) /$1 break;
+        rewrite /api/chartsvc / break;
+        proxy_pass http://{{ template "kubeapps.chartsvc.fullname" . }}:{{ .Values.chartsvc.service.port }};
+      }
+
+      location /api/tiller-deploy {
+        rewrite /api/tiller-deploy/(.*) /$1 break;
+        rewrite /api/tiller-deploy / break;
+        proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
+      }
+
+      location / {
+        proxy_pass http://{{ template "kubeapps.dashboard.fullname" . }}:{{ .Values.dashboard.service.port }};
+      }
+    }

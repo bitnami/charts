@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kubeapps.dashboard-config.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.dashboard-config.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  vhost.conf: |-
+    server {
+      listen 8080;
+      server_name _;
+
+      gzip on;
+      gzip_static  on;
+
+      location / {
+        try_files $uri /index.html;
+      }
+    }
+  config.json: |-
+    {
+      "namespace": "{{ .Release.Namespace }}"
+    }
