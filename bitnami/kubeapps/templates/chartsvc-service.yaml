@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kubeapps.chartsvc.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.name" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.chartsvc.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: {{ template "kubeapps.chartsvc.fullname" . }}
+    release: {{ .Release.Name }}

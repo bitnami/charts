@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kubeapps.tiller-proxy.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.name" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.tillerProxy.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: {{ template "kubeapps.tiller-proxy.fullname" . }}
+    release: {{ .Release.Name }}

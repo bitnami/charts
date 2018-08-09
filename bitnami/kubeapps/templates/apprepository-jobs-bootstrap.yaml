@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: hook-succeeded
+  labels:
+    app: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: kubectl
+        image: {{ template "kubeapps.image" .Values.apprepository.jobsImage }}
+        command:
+        - kubectl
+        - apply 
+        - -f 
+        - /tmp/apprepositories/apprepositories.yaml
+        volumeMounts:
+        - mountPath: /tmp/apprepositories
+          name: apprepositories-config
+        resources:
+{{ toYaml .Values.apprepository.resources | indent 12 }}
+      volumes:
+      - name: apprepositories-config
+        configMap:
+          name: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
+      restartPolicy: OnFailure
+      serviceAccountName: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
+    {{- with .Values.apprepository.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.apprepository.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.apprepository.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

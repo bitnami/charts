@@ -1,0 +1,19 @@
+apiVersion: v1
+name: kubeapps
+version: 0.1.0
+appVersion: 1.0.0.alpha.4
+description: Kubeapps is a dashboard for your Kubernetes cluster that makes it easy to deploy and manage applications in your cluster using Helm
+icon: https://raw.githubusercontent.com/kubeapps/kubeapps/master/docs/img/logo.png
+keywords:
+- helm
+- dashboard
+- service catalog
+- deployment
+home: https://kubeapps.com
+sources:
+- https://github.com/kubeapps/kubeapps
+maintainers:
+- name: bitnami-bot
+  email: containers@bitnami.com
+- name: prydonius
+  email: adnan@bitnami.com
