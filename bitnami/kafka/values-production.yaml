@@ -94,7 +94,7 @@ logSegmentBytes: _1073741824
 logsDirs: /opt/bitnami/kafka/data
 
 ## The largest record batch size allowed by Kafka
-maxMessageBytes: 1000012
+maxMessageBytes: _1000012
 
 ## The number of threads doing disk I/O.
 numIoThreads: 8
