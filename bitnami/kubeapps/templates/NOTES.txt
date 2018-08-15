@@ -47,4 +47,4 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 {{- end }}
 {{- end }}
 
-2. Open a browser and access Kubeapps browsing to the obtained URL.
+2. Open a browser and access Kubeapps using the obtained URL.
