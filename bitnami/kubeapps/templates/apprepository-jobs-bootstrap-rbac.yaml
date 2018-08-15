@@ -1,3 +1,4 @@
+{{- if .Values.rbac.create -}}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
@@ -42,3 +43,4 @@ subjects:
 - kind: ServiceAccount
   name: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
   namespace: {{ .Release.Namespace }}
+{{- end -}}

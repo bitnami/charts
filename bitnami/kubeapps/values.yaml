@@ -23,6 +23,8 @@ apprepository:
     url: https://kubernetes-charts-incubator.storage.googleapis.com
   - name: svc-cat
     url: https://svc-catalog-charts.storage.googleapis.com
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
   resources: {}
     # limits:
     #  cpu: 100m
@@ -170,3 +172,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# For RBAC support:
+rbac:
+  # Perform creation of RBAC resources
+  create: true
