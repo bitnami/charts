@@ -41,8 +41,8 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 
 {{- else if contains "ClusterIP" .Values.frontend.service.type }}
 
-   echo "Kubeapps URL: http://127.0.0.1:{{ .Values.frontend.service.port }}"
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "kubeapps.fullname" . }} {{ .Values.frontend.service.port }}:{{ .Values.frontend.service.port }}
+   echo "Kubeapps URL: http://127.0.0.1:8080"
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "kubeapps.fullname" . }} 8080:{{ .Values.frontend.service.port }}
 
 {{- end }}
 {{- end }}
