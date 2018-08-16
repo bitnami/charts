@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-tiller-proxy-test"
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+  - name: {{ .Release.Name }}-tiller-proxy-test
+    image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
+    env:
+    - name: TILLER_PROXY_HOST
+      value: {{ template "kubeapps.tiller-proxy.fullname" . }}.{{ .Release.Namespace }}
+    - name: TILLER_PROXY_PORT
+      value: "{{ .Values.tillerProxy.service.port }}"
+    - name: KUBEAPPS_RELEASE
+      value: {{ .Release.Name }}
+    command: 
+    - sh
+    - -c
+    - "curl -ik -H \"Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)\" $TILLER_PROXY_HOST:$TILLER_PROXY_PORT/v1/releases | grep $KUBEAPPS_RELEASE"
+  restartPolicy: Never

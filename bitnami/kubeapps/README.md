@@ -9,7 +9,7 @@
 - Add custom and private chart repositories (supports [ChartMuseum](https://github.com/helm/chartmuseum) and [JFrog Artifactory](https://www.jfrog.com/confluence/display/RTF/Helm+Chart+Repositories))
 - Browse and provision external services from the [Service Catalog](https://github.com/kubernetes-incubator/service-catalog) and available Service Brokers
 - Connect Helm-based applications to external services with Service Catalog Bindings
-- Secure authentication and authorization based on Kubernetes [Role-Based Access Control](docs/user/access-control.md)
+- Secure authentication and authorization based on Kubernetes [Role-Based Access Control](https://github.com/kubeapps/kubeapps/blob/master/docs/user/access-control.md)
 
 ## TL;DR;
 
@@ -40,7 +40,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
 ```
 
-> **IMPORTANT** This assumes an insecure Helm installation, which is not recommended in production. See [the documentation to learn how to secure Helm and Kubeapps in production](securing-kubeapps.md).
+> **IMPORTANT** This assumes an insecure Helm installation, which is not recommended in production. See [the documentation to learn how to secure Helm and Kubeapps in production](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
 
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 

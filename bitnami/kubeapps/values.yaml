@@ -177,3 +177,10 @@ affinity: {}
 rbac:
   # Perform creation of RBAC resources
   create: true
+
+testImage:
+  # Image used for the tests. The only requirement is to include curl
+  registry: docker.io
+  repository: bitnami/nginx
+  tag: 1.14.0-r27
+
