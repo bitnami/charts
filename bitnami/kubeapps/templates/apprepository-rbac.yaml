@@ -1,3 +1,4 @@
+{{- if .Values.rbac.create -}}
 # Need a cluster role because client-go v5.0.1 does not support namespaced
 # informers
 # TODO: remove when we update to client-go v6.0.0
@@ -97,3 +98,4 @@ subjects:
 - kind: ServiceAccount
   name: {{ template "kubeapps.apprepository.fullname" . }}
   namespace: {{ .Release.Namespace }}
+{{- end -}}

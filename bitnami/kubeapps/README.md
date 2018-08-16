@@ -40,6 +40,8 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
 ```
 
+> **IMPORTANT** This assumes an insecure Helm installation, which is not recommended in production. See [the documentation to learn how to secure Helm and Kubeapps in production](securing-kubeapps.md).
+
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
@@ -170,3 +172,19 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 ##### TLS
 
 TLS can be configured using the `ingress.tls` object in the same format that the Kubernetes Ingress requests. Please see [this example](https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tls) for more information.
+
+## Troubleshooting
+
+### Forbidden error while installing the Chart
+
+If during installation you run into an error similar to:
+
+```
+Error: release kubeapps failed: clusterroles.rbac.authorization.k8s.io "kubeapps-apprepository-controller" is forbidden: attempt to grant extra privileges: [{[get] [batch] [cronjobs] [] []...
+```
+
+It is possible that your cluster does not have Role Based Access Control (RBAC) fully configured. In which case you should perform the chart installation by setting `rbac.create=false`:
+
+```console
+$ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps --set rbac.create=false
+```

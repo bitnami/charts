@@ -9,6 +9,7 @@
     heritage: {{ .Release.Service }}
 {{- end }}
 
+{{- if .Values.rbac.create -}}
 # kubeapps-applications-read
 # Gives read-only access to all the elements within a Namespace.
 # Usage:
@@ -150,3 +151,4 @@ rules:
   - secrets
   verbs:
   - create
+{{- end -}}
