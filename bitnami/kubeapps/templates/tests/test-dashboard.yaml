@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-dashboard-test"
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+  - name: {{ .Release.Name }}-dashboard-test
+    image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
+    env:
+    - name: DASHBOARD_HOST
+      value: {{ template "kubeapps.fullname" . }}.{{ .Release.Namespace }}
+    command:
+    - sh
+    - -c
+    - curl $DASHBOARD_HOST | grep 'You need to enable JavaScript to run this app'
+  restartPolicy: Never

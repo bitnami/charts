@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-chartsvc-test"
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+  - name: {{ .Release.Name }}-chartsvc-test
+    image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
+    env:
+    - name: CHARTSVC_HOST
+      value: {{ template "kubeapps.chartsvc.fullname" . }}.{{ .Release.Namespace }}
+    - name: CHARTSVC_PORT
+      value: "{{ .Values.chartsvc.service.port }}"
+    command:
+    - sh
+    - -c
+    - curl $CHARTSVC_HOST:$CHARTSVC_PORT/v1/charts | grep wordpress
+  restartPolicy: Never
