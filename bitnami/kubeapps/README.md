@@ -44,6 +44,8 @@ $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
 
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
+> **Caveat**: Only one Kubeapps installation is supported per namespace
+
 > **Tip**: List all releases using `helm list`
 
 ## Upgrading Kubeapps
@@ -71,9 +73,13 @@ To uninstall/delete the `kubeapps` deployment:
 
 ```console
 $ helm delete --purge kubeapps
+$ # Optional: Only if there are no more instances of Kubeapps
+$ kubectl delete crd apprepositories.kubeapps.com
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+The first command removes most of the Kubernetes components associated with the chart and deletes the release. After that, if there are no more instances of Kubeapps in the cluster you can manually delete the `apprepositories.kubeapps.com` CRD used by Kubeapps that is shared for the entire cluster.
+
+> **NOTE**: If you delete the CRD for `apprepositories.kubeapps.com` it will delete the repositories for **all** the installed instances of `kubeapps`. This will break existing installations of `kubeapps` if they exist.
 
 ## Configuration
 
