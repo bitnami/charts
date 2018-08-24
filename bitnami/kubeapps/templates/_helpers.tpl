@@ -62,6 +62,13 @@ Create name for the apprepository bootstrap job
 {{- end -}}
 
 {{/*
+Create name for the apprepository cleanup job
+*/}}
+{{- define "kubeapps.apprepository-jobs-cleanup.fullname" -}}
+{{ template "kubeapps.fullname" . }}-apprepository-jobs-cleanup
+{{- end -}}
+
+{{/*
 Create name for the chartsvc based on the fullname
 */}}
 {{- define "kubeapps.chartsvc.fullname" -}}
