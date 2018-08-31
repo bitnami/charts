@@ -19,7 +19,6 @@ spec:
         app: {{ template "kubeapps.tiller-proxy.fullname" . }}
         release: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ template "kubeapps.tiller-proxy.fullname" . }}
       containers:
       - name: proxy
         image: {{ template "kubeapps.image" .Values.tillerProxy.image }}
@@ -32,6 +31,9 @@ spec:
         {{- if .Values.tillerProxy.tls.verify }}
         - --tls-verify
         {{- end }}
+        env:
+        - name: HELM_HOME
+          value: /etc/certs
         volumeMounts:
         - name: tiller-certs
           mountPath: /etc/certs
@@ -39,15 +41,6 @@ spec:
         ports:
         - name: http
           containerPort: {{ .Values.chartsvc.service.port }}
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        {{- if .Values.tillerProxy.tls }}
-        - name: HELM_HOME
-          value: /etc/certs
-        {{- end }}
         resources:
 {{ toYaml .Values.tillerProxy.resources | indent 12 }}
       {{- if .Values.tillerProxy.tls }}
