@@ -60,6 +60,7 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `serflanPort`                        | Container serf lan listening port                      | `8301`                                                     |
 | `serverPort`                         | Container server listening port                        | `8300`                                                     |
 | `consulDnsPort`                      | Container dns listening port                           | `8600`                                                     |
+| `uiPort`                             | Consul UI port                                         | `80`                                                       |
 | `datacenterName`                     | Consul datacenter name                                 | `dc1`                                                      |
 | `gossipKey`                          | Gossip key for all members                             | `nil`                                                      |
 | `domain`                             | Consul domain                                          | `consul`                                                   |
