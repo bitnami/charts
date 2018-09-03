@@ -16,4 +16,4 @@
 
 2. Test the server with a sample image.
 
-  docker run --rm -it bitnami/tensorflow-inception inception_client --server=$APP_HOST:$APP_PORT --image=/opt/bitnami/tensorflow-inception/tensorflow/tensorflow/examples/label_image/data/grace_hopper.jpg
+  docker run --rm -it bitnami/tensorflow-inception bash -c "curl -o grace_hopper.jpg https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/label_image/data/grace_hopper.jpg && inception_client --server=$APP_HOST:$APP_PORT --image=grace_hopper.jpg"
