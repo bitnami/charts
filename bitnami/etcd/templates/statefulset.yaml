@@ -121,7 +121,7 @@ spec:
                 etcd > /dev/null 2>&1 &
                 ETCD_PID=$!
                 sleep 5
-                echo "$ETCD_ROOT_PASSWORD" | ${AUTH_OPTIONS} etcdctl user add root
+                echo "$ETCD_ROOT_PASSWORD" | etcdctl ${AUTH_OPTIONS} user add root
                 etcdctl ${AUTH_OPTIONS} auth enable
                 etcdctl ${AUTH_OPTIONS} role revoke guest -path '/*' --readwrite
                 kill $ETCD_PID
