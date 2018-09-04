@@ -1,6 +1,6 @@
 # Nginx Ingress Controller
 
-[nginx-ingress](https://github.com/kubernetes/ingress-nginx) is an Ingress controller that uses ConfigMap to store the Nginx configuration.
+[nginx-ingress](https://github.com/kubernetes/ingress-nginx) is an Ingress controller that uses NGINX to manage external access to HTTP services in a Kubernetes cluster.
 
 ## TL;DR;
 
@@ -51,7 +51,7 @@ Parameter | Description | Default
 `image.repository` | controller container image repository | `bitnami/nginx-ingress-controller`
 `image.tag` | controller container image tag | `0.18.0-debian-9`
 `image.pullPolicy` | controller container image pull policy | `IfNotPresent`
-`config` | nginx ConfigMap entries | none
+`config` | nginx ConfigMap entries | `nil`
 `hostNetwork` | If the nginx deployment / daemonset should run on the host's network namespace. Do not set this when `controller.service.externalIPs` is set and `kube-proxy` is used as there will be a port-conflict for port `80` | false
 `defaultBackendService` | default 404 backend service; required only if `defaultBackend.enabled = false` | `""`
 `electionID` | election ID to use for the status update | `ingress-controller-leader`

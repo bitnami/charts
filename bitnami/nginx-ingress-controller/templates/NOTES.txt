@@ -1,3 +1,5 @@
+** Please be patient while the chart is being deployed **
+
 The nginx-ingress controller has been installed.
 
 {{- if contains "NodePort" .Values.service.type }}

@@ -1,5 +1,5 @@
-## Bitnami NGINX image version
-## ref: https://hub.docker.com/r/bitnami/nginx/tags/
+## Bitnami NGINX Ingress controller image version
+## ref: https://hub.docker.com/r/bitnami/nginx-ingress-controller/tags/
 name: controller
 image:
   registry: docker.io
