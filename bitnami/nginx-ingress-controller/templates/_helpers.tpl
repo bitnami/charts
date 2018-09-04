@@ -20,30 +20,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a default fully qualified controller name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "nginx-ingress.controller.fullname" -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.controller.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.controller.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Construct the path for the publish-service.
 
 By convention this will simply use the <namespace>/<controller-name> to match the name of the
 service generated.
 
-Users can provide an override for an explicit service they want bound via `.Values.controller.publishService.pathOverride`
+Users can provide an override for an explicit service they want bound via `.Values.publishService.pathOverride`
 
 */}}
-{{- define "nginx-ingress.controller.publishServicePath" -}}
-{{- $defServiceName := printf "%s/%s" .Release.Namespace (include "nginx-ingress.controller.fullname" .) -}}
-{{- $servicePath := default $defServiceName .Values.controller.publishService.pathOverride }}
+{{- define "nginx-ingress.publishServicePath" -}}
+{{- $defServiceName := printf "%s/%s" .Release.Namespace (include "nginx-ingress.fullname" .) -}}
+{{- $servicePath := default $defServiceName .Values.publishService.pathOverride }}
 {{- print $servicePath | trimSuffix "-" -}}
 {{- end -}}
 

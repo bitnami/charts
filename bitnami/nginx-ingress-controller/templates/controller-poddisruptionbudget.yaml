@@ -4,14 +4,14 @@ metadata:
   labels:
     app: {{ template "nginx-ingress.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: "{{ .Values.controller.name }}"
+    component: "{{ .Values.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "nginx-ingress.controller.fullname" . }}
+  name: {{ template "nginx-ingress.fullname" . }}
 spec:
   selector:
     matchLabels:
       app: {{ template "nginx-ingress.name" . }}
       release: {{ .Release.Name }}
-      component: "{{ .Values.controller.name }}"
-  minAvailable: {{ .Values.controller.minAvailable }}
+      component: "{{ .Values.name }}"
+  minAvailable: {{ .Values.minAvailable }}

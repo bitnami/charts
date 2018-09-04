@@ -1,4 +1,4 @@
-{{- if and .Values.rbac.create (not .Values.controller.scope.enabled) -}}
+{{- if and .Values.rbac.create (not .Values.scope.enabled) -}}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -20,13 +20,13 @@ rules:
     verbs:
       - list
       - watch
-{{- if and .Values.controller.scope.enabled .Values.controller.scope.namespace }}
+{{- if and .Values.scope.enabled .Values.scope.namespace }}
   - apiGroups:
       - ""
     resources:
       - namespaces
     resourceNames:
-      - "{{ .Values.controller.scope.namespace }}"
+      - "{{ .Values.scope.namespace }}"
     verbs:
       - get
 {{- end }}
