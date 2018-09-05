@@ -63,7 +63,7 @@ The following table lists the configurable parameters of the MEAN chart and thei
 | `replicas`                              | Number of replicas for the application                    | `1`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
 | `service.type`                          | Kubernetes Service type                                   | `ClusterIP`                                               |
-| `serviec.port`                          | Kubernetes Service port                                   | `80`                                                      |
+| `service.port`                          | Kubernetes Service port                                   | `80`                                                      |
 | `service.annotations`                   | Annotations for the Service                               | {}                                                        |
 | `service.loadBalancerIP`                | LoadBalancer IP if Service type is `LoadBalancer`         | `nil`                                                     |
 | `service.nodePort`                      | NodePort if Service type is `LoadBalancer` or `NodePort`  | `nil`                                                     |
