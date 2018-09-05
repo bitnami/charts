@@ -29,7 +29,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 
 {{/*
-Return the proper image name
+Return the proper MySQL image name
 */}}
 {{- define "mysql.image" -}}
 {{- $registryName :=  .Values.image.registry -}}
@@ -39,7 +39,7 @@ Return the proper image name
 {{- end -}}
 
 {{/*
-Return the proper image name
+Return the proper MySQL metrics exporter image name
 */}}
 {{- define "metrics.image" -}}
 {{- $registryName :=  .Values.metrics.image.registry -}}
