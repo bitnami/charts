@@ -39,10 +39,22 @@ replicas: 1
 ##
 applicationPort: 3000
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
-##
-serviceType: ClusterIP
+## Kubernetes Service Configuration
+service:
+  ## For minikube, set this to NodePort, elsewhere use LoadBalancer
+  ##
+  type: ClusterIP
+  port: 80
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+  # loadBalancerIP:
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/

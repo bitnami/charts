@@ -63,7 +63,11 @@ The following table lists the configurable parameters of the Node chart and thei
 | `revision`                              | Revision to checkout                                      | `master`                                                  |
 | `replicas`                              | Number of replicas for the application                    | `1`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
-| `serviceType`                           | Kubernetes Service type                                   | `LoadBalancer`                                            |
+| `service.type`                          | Kubernetes Service type                                   | `ClusterIP`                                               |
+| `service.port`                          | Kubernetes Service port                                   | `80`                                                      |
+| `service.annotations`                   | Annotations for the Service                               | {}                                                        |
+| `service.loadBalancerIP`                | LoadBalancer IP if Service type is `LoadBalancer`         | `nil`                                                     |
+| `service.nodePort`                      | NodePort if Service type is `LoadBalancer` or `NodePort`  | `nil`                                                     |
 | `persistence.enabled`                   | Enable persistence using PVC                              | `false`                                                   |
 | `persistence.path`                      | Path to persisted directory                               | `/app/data`                                               |
 | `persistence.accessMode`                | PVC Access Mode                                           | `ReadWriteOnce`                                           |
@@ -115,7 +119,7 @@ $ helm install stable/nginx-ingress
 Now deploy the node helm chart:
 
 ```
-$ helm install --name my-release bitnami/node --set ingress.enabled=true,ingress.host=example.com,serviceType=ClusterIP
+$ helm install --name my-release bitnami/node --set ingress.enabled=true,ingress.host=example.com,service.type=ClusterIP
 ```
 
 ### Configure TLS termination for your ingress controller
