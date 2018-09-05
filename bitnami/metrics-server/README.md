@@ -43,16 +43,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Metrics Server chart and their default values.
 
-|         Parameter       |                                   Description                               |                Default                 |
-|-------------------------|-----------------------------------------------------------------------------|----------------------------------------|
-| `image.registry`        | Metrics Server image registry                                               | `docker.io`                            |
-| `image.repository`      | Metrics Server image name                                                   | `bitnami/metrics-server`               |
-| `image.tag`             | Metrics Server image tag                                                    | `{VERSION}`                            |
-| `image.pullPolicy`      | Metrics Server image pull policy                                            | `Always`                               |
-| `rbac.create`           | Enable RBAC authentication                                                  | `true`                                 |
-| `serviceAccount.create` | Specifies whether a ServiceAccount should be created                        | `true`                                 |
-| `serviceAccount.name`   | The name of the ServiceAccount to create                                    | Generated using the fullname template  |
-| `apiService.create`     | Specifies whether the v1beta1.metrics.k8s.io API service should be created  | `true`                                 |
+|         Parameter        |                                   Description                               |                Default                 |
+|--------------------------|-----------------------------------------------------------------------------|----------------------------------------|
+| `image.registry`         | Metrics Server image registry                                               | `docker.io`                            |
+| `image.repository`       | Metrics Server image name                                                   | `bitnami/metrics-server`               |
+| `image.tag`              | Metrics Server image tag                                                    | `{VERSION}`                            |
+| `image.pullPolicy`       | Metrics Server image pull policy                                            | `Always`                               |
+| `securePort`             | Port where metrics-server will be running                                   | `8443`                                 |
+| `service.type`           | Kubernetes Service type                                                     | `ClusterIP`                            |
+| `service.port`           | Kubernetes Service port                                                     | `443`                                  |
+| `service.annotations`    | Annotations for the Service                                                 | {}                                     |
+| `service.loadBalancerIP` | LoadBalancer IP if Service type is `LoadBalancer`                           | `nil`                                  |
+| `service.nodePort`       | NodePort if Service type is `LoadBalancer` or `NodePort`                    | `nil`                                  |
+| `rbac.create`            | Enable RBAC authentication                                                  | `true`                                 |
+| `serviceAccount.create`  | Specifies whether a ServiceAccount should be created                        | `true`                                 |
+| `serviceAccount.name`    | The name of the ServiceAccount to create                                    | Generated using the fullname template  |
+| `apiService.create`      | Specifies whether the v1beta1.metrics.k8s.io API service should be created  | `true`                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
