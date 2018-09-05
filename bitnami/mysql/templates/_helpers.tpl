@@ -27,20 +27,24 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end }}
 
-{{/*
-Return the proper MySQL image name
-*/}}
-{{- define "mysql.image" -}}
-{{- $registryName :=  default "docker.io" .Values.image.registry -}}
-{{- $tag := default "latest" .Values.image.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
-{{- end }}
 
 {{/*
-Return the proper MySQL metrics exporter image name
+Return the proper image name
+*/}}
+{{- define "mysql.image" -}}
+{{- $registryName :=  .Values.image.registry -}}
+{{- $repositoryName := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
+{{/*
+Return the proper image name
 */}}
 {{- define "metrics.image" -}}
-{{- $registryName :=  default "docker.io" .Values.metrics.image.registry -}}
-{{- $tag := default "latest" .Values.metrics.image.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName .Values.metrics.image.repository $tag -}}
-{{- end }}
+{{- $registryName :=  .Values.metrics.image.registry -}}
+{{- $repositoryName := .Values.metrics.image.repository -}}
+{{- $tag := .Values.metrics.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
