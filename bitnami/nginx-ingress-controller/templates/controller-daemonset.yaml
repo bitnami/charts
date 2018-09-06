@@ -39,7 +39,7 @@ spec:
 {{- end }}
       containers:
         - name: {{ template "nginx-ingress.name" . }}-{{ .Values.name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ template "nginx-ingress-controller.image" . }}"
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
           {{- if .Values.lifecycle }}
           lifecycle:

@@ -57,3 +57,11 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the proper nginx-ingress-controller image name
+*/}}
+{{- define "nginx-ingress-controller.image" -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- printf "%s/%s:%s" .Values.image.registry .Values.image.repository $tag -}}
+{{- end -}}
