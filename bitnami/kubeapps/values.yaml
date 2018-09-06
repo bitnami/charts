@@ -92,6 +92,7 @@ frontend:
   service:
     port: 80
     type: ClusterIP
+    # annotations: {}
   livenessProbe:
     httpGet:
       path: /healthz
