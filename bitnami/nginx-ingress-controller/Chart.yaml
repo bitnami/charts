@@ -1,0 +1,18 @@
+name: nginx-ingress-controller
+version: 0.0.1
+appVersion: 0.18.0
+description: Chart for the nginx Ingress controller
+keywords:
+- ingress
+- nginx
+- http
+- web
+- www
+- reverse proxy
+home: https://github.com/kubernetes/ingress-nginx
+sources:
+- https://github.com/bitnami/bitnami-docker-nginx-ingress-controller
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
