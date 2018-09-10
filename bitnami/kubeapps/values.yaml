@@ -92,7 +92,7 @@ frontend:
   service:
     port: 80
     type: ClusterIP
-    # annotations: {}
+    annotations: {}
   livenessProbe:
     httpGet:
       path: /healthz
@@ -142,7 +142,7 @@ tillerProxy:
 
 ingress:
   enabled: false
-  # annotations: {}
+  annotations: {}
   path: /
   hosts:
   - kubeapps.local
