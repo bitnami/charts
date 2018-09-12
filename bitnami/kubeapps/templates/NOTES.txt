@@ -41,7 +41,8 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 {{- else if contains "ClusterIP" .Values.frontend.service.type }}
 
    echo "Kubeapps URL: http://127.0.0.1:8080"
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "kubeapps.fullname" . }} 8080:{{ .Values.frontend.service.port }}
+   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kubeapps.fullname" . }}" -o name)
+   kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:8080
 
 {{- end }}
 {{- end }}
