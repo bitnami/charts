@@ -1,6 +1,52 @@
-# Default values for kubeapps.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# The frontend service is the main reverse proxy used to access the Kubeapps UI
+# To expose Kubeapps externally either configure the ingress object below or
+# set frontend.service.type=LoadBalancer in the frontend configuration.
+ingress:
+  enabled: false
+  annotations: {}
+  path: /
+  hosts:
+  - kubeapps.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+frontend:
+  image:
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: 1.14.0-r27
+  service:
+    port: 80
+    type: ClusterIP
+    annotations: {}
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8080
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 0
+    timeoutSeconds: 5
+  resources: {}
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# AppRepository Controller is the controller used to manage the repositories to
+# sync. Set apprepository.initialRepos to configure the initial set of
+# repositories to use when first installing Kubeapps.
 apprepository:
   image:
     registry: docker.io
@@ -35,7 +81,35 @@ apprepository:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  
+
+# Tiller Proxy is a secure REST API on top of Helm's Tiller component used to
+# manage Helm chart releases in the cluster from Kubeapps. Set tillerProxy.host
+# to configure a different Tiller host to use.
+tillerProxy:
+  image:
+    registry: docker.io
+    repository: kubeapps/tiller-proxy
+    tag: v1.0.0-beta.0
+  service:
+    port: 8080
+  host: tiller-deploy.kube-system:44134
+  tls: {}
+    # ca:
+    # cert:
+    # key:
+    # verify: false
+  resources: {}
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Chartsvc is used to serve chart metadata over a REST API.
 chartsvc:
   image:
     registry: docker.io
@@ -54,6 +128,9 @@ chartsvc:
   tolerations: []
   affinity: {}
 
+# Dashboard serves the compiled static React frontend application. This is an
+# internal service used by the main frontend reverse-proxy and should not be
+# accessed directly.
 dashboard:
   image:
     registry: docker.io
@@ -83,73 +160,6 @@ dashboard:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
-frontend:
-  image:
-    registry: docker.io
-    repository: bitnami/nginx
-    tag: 1.14.0-r27
-  service:
-    port: 80
-    type: ClusterIP
-    annotations: {}
-  livenessProbe:
-    httpGet:
-      path: /healthz
-      port: 8080
-    initialDelaySeconds: 60
-    timeoutSeconds: 5
-  readinessProbe:
-    httpGet:
-      path: /
-      port: 8080
-    initialDelaySeconds: 0
-    timeoutSeconds: 5
-  resources: {}
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-    # requests:
-    #  cpu: 100m
-    #  memory: 128Mi
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-
-tillerProxy:
-  image:
-    registry: docker.io
-    repository: kubeapps/tiller-proxy
-    tag: v1.0.0-beta.0
-  service:
-    port: 8080
-  host: tiller-deploy.kube-system:44134
-  tls: {}
-    # ca:
-    # cert:
-    # key:
-    # verify: false
-  resources: {}
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-    # requests:
-    #  cpu: 100m
-    #  memory: 128Mi
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-
-ingress:
-  enabled: false
-  annotations: {}
-  path: /
-  hosts:
-  - kubeapps.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
 
 mongodb:
   # Kubeapps uses MongoDB as a cache and persistence is not required

@@ -51,42 +51,42 @@ Create chart name and version as used by the chart label.
 Create name for the apprepository-controller based on the fullname
 */}}
 {{- define "kubeapps.apprepository.fullname" -}}
-{{ template "kubeapps.fullname" . }}-apprepository-controller
+{{ template "kubeapps.fullname" . }}-internal-apprepository-controller
 {{- end -}}
 
 {{/*
 Create name for the apprepository bootstrap job
 */}}
 {{- define "kubeapps.apprepository-jobs-bootstrap.fullname" -}}
-{{ template "kubeapps.fullname" . }}-apprepository-jobs-bootstrap
+{{ template "kubeapps.fullname" . }}-internal-apprepository-jobs-bootstrap
 {{- end -}}
 
 {{/*
 Create name for the apprepository cleanup job
 */}}
 {{- define "kubeapps.apprepository-jobs-cleanup.fullname" -}}
-{{ template "kubeapps.fullname" . }}-apprepository-jobs-cleanup
+{{ template "kubeapps.fullname" . }}-internal-apprepository-jobs-cleanup
 {{- end -}}
 
 {{/*
 Create name for the chartsvc based on the fullname
 */}}
 {{- define "kubeapps.chartsvc.fullname" -}}
-{{ template "kubeapps.fullname" . }}-chartsvc
+{{ template "kubeapps.fullname" . }}-internal-chartsvc
 {{- end -}}
 
 {{/*
 Create name for the dashboard based on the fullname
 */}}
 {{- define "kubeapps.dashboard.fullname" -}}
-{{ template "kubeapps.fullname" . }}-dashboard
+{{ template "kubeapps.fullname" . }}-internal-dashboard
 {{- end -}}
 
 {{/*
 Create name for the dashboard config based on the fullname
 */}}
 {{- define "kubeapps.dashboard-config.fullname" -}}
-{{ template "kubeapps.fullname" . }}-dashboard-config
+{{ template "kubeapps.fullname" . }}-internal-dashboard-config
 {{- end -}}
 
 {{/*
@@ -100,5 +100,5 @@ Create name for the frontend config based on the fullname
 Create name for the tiller-proxy based on the fullname
 */}}
 {{- define "kubeapps.tiller-proxy.fullname" -}}
-{{ template "kubeapps.fullname" . }}-tiller-proxy
+{{ template "kubeapps.fullname" . }}-internal-tiller-proxy
 {{- end -}}
