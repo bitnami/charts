@@ -93,16 +93,16 @@ spec:
               member_id=$(cat ${DATA_DIR}/member_id)
 
               echo "==> Updating member in existing cluster."
-              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.default.svc.cluster.local:{{ $clientPort }}"
-              etcdctl ${AUTH_OPTIONS} member update ${member_id} {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.default.svc.cluster.local:{{ $peerPort }}
+              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
+              etcdctl ${AUTH_OPTIONS} member update ${member_id} {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }}
 
             ## Adding new member to the cluster
             elif [ "${ID}" -ge {{ $replicaCount }} ]; then
               echo "==> Adding member to existing cluster."
-              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.default.svc.cluster.local:{{ $clientPort }}"
+              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
 
               echo "==> Adding new member"
-              etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.default.svc.cluster.local:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
+              etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
 
               echo "==> Loading env vars of existing cluster"
               source ${DATA_DIR}/new_member_envs
@@ -112,7 +112,7 @@ spec:
             ## Setting up new cluster
             else
               echo "==> There is no data at all. Creating new cluster"
-              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.default.svc.cluster.local:{{ $clientPort }}"
+              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
 
               store_member_id &
 
@@ -175,7 +175,7 @@ spec:
         - name: ETCD_INITIAL_CLUSTER_STATE
           value: "new"
         - name: ETCD_INITIAL_CLUSTER
-          value: {{range $i, $e := until $replicaCount }}{{ $etcdFullname }}-{{ $e }}={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.default.svc.cluster.local:{{ $peerPort }},{{ end }}
+          value: {{range $i, $e := until $replicaCount }}{{ $etcdFullname }}-{{ $e }}={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }},{{ end }}
         {{- end }}
 
         ## RBAC authentication
@@ -244,7 +244,7 @@ spec:
                   AUTH_OPTIONS="{{ template "etcd.authOptions" . }}"
                   DATA_DIR={{ template "etcd.dataDir" . }}
                   MEMBER_ID=$(etcdctl member list | grep name=`hostname -s` | awk {'print $1'} | awk -F ":" {'print $1'})
-                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.default.svc.cluster.local:{{ $clientPort }}"
+                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
                   echo "==> Removing $MEMBER_ID from etcd cluster"
                   etcdctl ${AUTH_OPTIONS} member remove $MEMBER_ID
                   if [ $? -eq 0 ]; then
