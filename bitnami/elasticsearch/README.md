@@ -147,7 +147,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `sysctlImage.registry`                          | Kernel settings modifier image registry                                                                                           | `docker.io`                                                         |
 | `sysctlImage.repository`                        | Kernel settings modifier image repository                                                                                         | `busybox`                                    |
 | `sysctlImage.tag`                               |  Kernel settings modifier image tag                                                                                                | `latest`                                                            |
-| `sysctlImage.pullPolicy`                        | Kernel settings modifier image pull policy                                                                                        | `Always`
+| `sysctlImage.pullPolicy`                        | Kernel settings modifier image pull policy                                                                                        | `Always`                                       |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
