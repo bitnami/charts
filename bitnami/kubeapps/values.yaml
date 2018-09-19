@@ -124,6 +124,18 @@ chartsvc:
     # requests:
     #  cpu: 100m
     #  memory: 128Mi
+  livenessProbe:
+    httpGet:
+      path: /live
+      port: 8080
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8080
+    initialDelaySeconds: 0
+    timeoutSeconds: 5
   nodeSelector: {}
   tolerations: []
   affinity: {}
