@@ -13,6 +13,7 @@ ingress:
   #      - chart-example.local
 
 frontend:
+  replicaCount: 2
   image:
     registry: docker.io
     repository: bitnami/nginx
@@ -48,6 +49,8 @@ frontend:
 # sync. Set apprepository.initialRepos to configure the initial set of
 # repositories to use when first installing Kubeapps.
 apprepository:
+  # Running a single controller replica to avoid sync job duplication
+  replicaCount: 1
   image:
     registry: docker.io
     repository: kubeapps/apprepository-controller
@@ -86,6 +89,7 @@ apprepository:
 # manage Helm chart releases in the cluster from Kubeapps. Set tillerProxy.host
 # to configure a different Tiller host to use.
 tillerProxy:
+  replicaCount: 2
   image:
     registry: docker.io
     repository: kubeapps/tiller-proxy
@@ -111,6 +115,7 @@ tillerProxy:
 
 # Chartsvc is used to serve chart metadata over a REST API.
 chartsvc:
+  replicaCount: 2
   image:
     registry: docker.io
     repository: kubeapps/chartsvc
@@ -144,6 +149,7 @@ chartsvc:
 # internal service used by the main frontend reverse-proxy and should not be
 # accessed directly.
 dashboard:
+  replicaCount: 2
   image:
     registry: docker.io
     repository: kubeapps/dashboard

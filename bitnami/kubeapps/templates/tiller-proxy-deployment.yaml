@@ -8,7 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.tillerProxy.replicaCount }}
   selector:
     matchLabels:
       app: {{ template "kubeapps.tiller-proxy.fullname" . }}
