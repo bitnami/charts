@@ -51,12 +51,12 @@ apprepository:
   image:
     registry: docker.io
     repository: kubeapps/apprepository-controller
-    tag: v1.0.0-beta.0
+    tag: v1.0.0-beta.1
   # Image used to perform chart repository syncs
   syncImage:
     registry: docker.io
     repository: kubeapps/chart-repo
-    tag: v1.0.0-beta.0
+    tag: v1.0.0-beta.1
   # This image is used in a Helm post-install hook to bootstrap the initialRepos below
   jobsImage:
     registry: docker.io
@@ -89,7 +89,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: kubeapps/tiller-proxy
-    tag: v1.0.0-beta.0
+    tag: v1.0.0-beta.1
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -114,7 +114,7 @@ chartsvc:
   image:
     registry: docker.io
     repository: kubeapps/chartsvc
-    tag: v1.0.0-beta.0
+    tag: v1.0.0-beta.1
   service:
     port: 8080
   resources: {}
@@ -147,7 +147,7 @@ dashboard:
   image:
     registry: docker.io
     repository: kubeapps/dashboard
-    tag: v1.0.0-beta.0
+    tag: v1.0.0-beta.1
   service:
     port: 8080
   livenessProbe:
