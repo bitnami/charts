@@ -38,7 +38,7 @@ spec:
         {{- end }}
         ports:
         - name: http
-          containerPort: {{ .Values.chartsvc.service.port }}
+          containerPort: {{ .Values.tillerProxy.service.port }}
         env:
         - name: POD_NAMESPACE
           valueFrom:
