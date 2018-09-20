@@ -1,6 +1,6 @@
 # Kafka
 
-[Kafka](https://www.kafka.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+[Kafka](https://www.kafka.org/) is a distributed streaming platform used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
 
 ## TL;DR;
 
