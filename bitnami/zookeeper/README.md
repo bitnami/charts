@@ -70,7 +70,9 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `jvmFlags`                            | Default JVMFLAGS for the ZooKeeper process                          | `nil`                                                    |
 | `config`                              | Configure ZooKeeper with a custom zoo.conf file                     | `nil`                                                    |
 | `service.type`                        | Kubernetes Service type                                             | `ClusterIP`                                              |
-| `service.port`                        | PostgreSQL port                                                     | `5432`                                                   |
+| `service.port`                        | ZooKeeper port                                                      | `2181`                                                   |
+| `service.followerPort`                | ZooKeeper follower port                                             | `2888`                                                   |
+| `service.electionPort`                | ZooKeeper election port                                             | `3888`                                                   |
 | `securityContext.enabled`             | Enable security context (redis master pod)                          | `true`                                                   |
 | `securityContext.fsGroup`             | Group ID for the container (redis master pod)                       | `1001`                                                   |
 | `securityContext.runAsUser`           | User ID for the container (redis master pod)                        | `1001`                                                   |
