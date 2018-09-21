@@ -156,7 +156,8 @@ master:
     failureThreshold: 3
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 15
+    ## Initializing the database could take some time
+    initialDelaySeconds: 30
     ##
     ## Default Kubernetes values
     periodSeconds: 10
@@ -227,7 +228,8 @@ slave:
     failureThreshold: 3
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 15
+    ## Initializing the database could take some time
+    initialDelaySeconds: 30
     ##
     ## Default Kubernetes values
     periodSeconds: 10
