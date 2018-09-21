@@ -9,6 +9,11 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+      release: "{{ .Release.Name }}"
+      component: "master"
   serviceName: "{{ template "master.fullname" . }}"
   replicas: 1
   updateStrategy:
