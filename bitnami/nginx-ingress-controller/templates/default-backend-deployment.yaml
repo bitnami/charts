@@ -10,6 +10,10 @@ metadata:
     release: {{ .Release.Name }}
   name: {{ template "nginx-ingress.defaultBackend.fullname" . }}
 spec:
+  selector:
+    matchLabels:
+      app: {{ template "nginx-ingress.name" . }}
+      release: "{{ .Release.Name }}"
   replicas: {{ .Values.defaultBackend.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   template:

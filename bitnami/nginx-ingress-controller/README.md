@@ -177,3 +177,18 @@ $ helm install --name my-release -f values.yaml bitnami/nginx-ingress-controller
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Upgrading
+
+### To 1.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is nginx-ingress-controller:
+
+```console
+$ kubectl patch deployment nginx-ingress-controller-default-backend --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+# If using deployments
+$ kubectl patch deployment nginx-ingress-controller --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+# If using daemonsets
+$ kubectl patch daemonset nginx-ingress-controller --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+```
