@@ -213,3 +213,15 @@ Deploying the helm chart enabling the Azure external database makes the followin
   - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog 
+
+## Upgrading
+
+### To 6.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 6.0.0. The following example assumes that the release name is node:
+
+```console
+$ kubectl patch deployment node --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+$ kubectl patch deployment node-mongodb --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+```
