@@ -8,6 +8,10 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
+  selector:
+    matchLabels:
+      app: {{ template "consul.name" . }}
+      release: "{{ .Release.Name }}"
   serviceName: "{{ template "consul.fullname" . }}"
   replicas: {{ default 3 .Values.replicas }}
   updateStrategy:
