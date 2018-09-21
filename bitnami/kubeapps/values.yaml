@@ -34,13 +34,14 @@ frontend:
       port: 8080
     initialDelaySeconds: 0
     timeoutSeconds: 5
-  resources: {}
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-    # requests:
-    #  cpu: 100m
-    #  memory: 128Mi
+  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -74,13 +75,14 @@ apprepository:
     url: https://svc-catalog-charts.storage.googleapis.com
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
-  resources: {}
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-    # requests:
-    #  cpu: 100m
-    #  memory: 128Mi
+  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -102,13 +104,14 @@ tillerProxy:
     # cert:
     # key:
     # verify: false
-  resources: {}
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-    # requests:
-    #  cpu: 100m
-    #  memory: 128Mi
+  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -122,13 +125,14 @@ chartsvc:
     tag: v1.0.0-beta.1
   service:
     port: 8080
-  resources: {}
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-    # requests:
-    #  cpu: 100m
-    #  memory: 128Mi
+  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   livenessProbe:
     httpGet:
       path: /live
@@ -168,13 +172,14 @@ dashboard:
       port: 8080
     initialDelaySeconds: 0
     timeoutSeconds: 5
-  resources: {}
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-    # requests:
-    #  cpu: 100m
-    #  memory: 128Mi
+  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -183,18 +188,14 @@ mongodb:
   # Kubeapps uses MongoDB as a cache and persistence is not required
   persistence:
     enabled: false
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 256Mi
 
 nodeSelector: {}
 
@@ -212,4 +213,3 @@ testImage:
   registry: docker.io
   repository: bitnami/nginx
   tag: 1.14.0-r27
-
