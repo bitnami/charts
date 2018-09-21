@@ -85,9 +85,9 @@ spec:
           value: "slave"
         - name: MYSQL_MASTER_HOST
           value: {{ template "fullname" . }}
-        - name: MYSQL_MASTER_PORT
+        - name: MYSQL_MASTER_PORT_NUMBER
           value: "3306"
-        - name: MYSQL_MASTER_USER
+        - name: MYSQL_MASTER_ROOT_USER
           value: "root"
         - name: MYSQL_MASTER_ROOT_PASSWORD
           valueFrom:
