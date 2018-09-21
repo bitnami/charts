@@ -90,3 +90,14 @@ $ helm install --name my-release -f values.yaml bitnami/tensorflow-inception
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Upgrading
+
+### To 1.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is tensorflow-inception:
+
+```console
+$ kubectl patch deployment tensorflow-inception --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+```
