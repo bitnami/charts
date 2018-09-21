@@ -11,6 +11,10 @@ spec:
   selector:
     matchLabels:
       app: {{ template "metrics-server.name" . }}
+      release: "{{ .Release.Name }}"
+  selector:
+    matchLabels:
+      app: {{ template "metrics-server.name" . }}
       release: {{ .Release.Name | quote }}
       chart: {{ template "metrics-server.chart" . }}
   template:
