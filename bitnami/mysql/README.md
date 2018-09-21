@@ -141,3 +141,15 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
 
 The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can be defined.
+
+## Upgrading
+
+### To 3.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is mysql:
+
+```console
+$ kubectl delete statefulset mysql-master --cascade=false
+$ kubectl delete statefulset mysql-slave --cascade=false
+```
