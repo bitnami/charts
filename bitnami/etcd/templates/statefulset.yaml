@@ -8,6 +8,10 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
+  selector:
+    matchLabels:
+      app: {{ template "etcd.name" . }}
+      release: "{{ .Release.Name }}"
   serviceName: {{ template "etcd.fullname" . }}-headless
   podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
   replicas: {{ .Values.statefulset.replicaCount }}
