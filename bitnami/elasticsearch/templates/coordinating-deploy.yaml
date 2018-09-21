@@ -9,6 +9,11 @@ metadata:
     release: {{ .Release.Name | quote }}
     role: "coordinating-only"
 spec:
+  selector:
+    matchLabels:
+      app: {{ template "elasticsearch.name" . }}
+      release: "{{ .Release.Name }}"
+      role: "coordinating-only"      
   replicas: {{ .Values.coordinating.replicas }}
   template:
     metadata:

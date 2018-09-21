@@ -10,6 +10,11 @@ metadata:
     release: {{ .Release.Name | quote }}
     role: "ingest"
 spec:
+  selector:
+    matchLabels:
+      app: {{ template "elasticsearch.name" . }}
+      release: "{{ .Release.Name }}"
+      role: "ingest"      
   replicas: {{ .Values.ingest.replicas }}
   template:
     metadata:
