@@ -121,3 +121,14 @@ The [Bitnami Zookeeper](https://github.com/bitnami/bitnami-docker-zookeeper) ima
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+## Upgrading
+
+### To 1.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is zookeeper:
+
+```console
+$ kubectl delete statefulset zookeeper --cascade=false
+```
