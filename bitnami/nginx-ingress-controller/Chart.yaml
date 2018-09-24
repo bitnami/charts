@@ -1,5 +1,5 @@
 name: nginx-ingress-controller
-version: 0.0.1
+version: 1.0.0
 appVersion: 0.18.0
 description: Chart for the nginx Ingress controller
 keywords:
