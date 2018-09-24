@@ -15,9 +15,7 @@ spec:
   selector:
     matchLabels:
       app: {{ template "postgresql.name" . }}
-      chart: {{ template "postgresql.chart" . }}
       release: {{ .Release.Name | quote }}
-      heritage: {{ .Release.Service | quote }}
       role: master
   template:
     metadata:
