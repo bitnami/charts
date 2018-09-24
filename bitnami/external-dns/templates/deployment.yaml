@@ -8,6 +8,10 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
+  selector:
+    matchLabels:
+      app: {{ template "external-dns.name" . }}
+      release: "{{ .Release.Name }}"
   replicas: {{ .Values.replicas }}
   template:
     metadata:

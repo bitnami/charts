@@ -123,3 +123,14 @@ $ helm install --name my-release -f values.yaml bitnami/external-dns
 Find information about the requirements for each DNS provider on the link below:
 
  - [ExternalDNS Tutorials](https://github.com/kubernetes-incubator/external-dns/tree/master/docs/tutorials)
+
+## Upgrading
+
+### To 1.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is external-dns:
+
+```console
+$ kubectl patch deployment externaldns --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+```
