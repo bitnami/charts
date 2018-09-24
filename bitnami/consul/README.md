@@ -235,3 +235,14 @@ helm install bitnami/consul --set tlsEncryptionSecretName=consul-tls-encryption
 ## Metrics
 
 The chart can optionally start a metrics exporter endpoint on port `9107` for [prometheus](https://prometheus.io). The data exposed by the endpoint is intended to be consumed by a prometheus chart deployed within the cluster and as such the endpoint is not exposed outside the cluster.
+
+## Upgrading
+
+### To 2.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is consul:
+
+```console
+$ kubectl delete statefulset consul --cascade=false
+```
