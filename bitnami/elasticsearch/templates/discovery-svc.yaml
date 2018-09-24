@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-  name: {{ template "discovery.fullname" . }}
+  name: {{ template "elasticsearch.discovery.fullname" . }}
   labels:
     app: {{ template "elasticsearch.name" . }}
     chart: {{ template "elasticsearch.chart" . |}}

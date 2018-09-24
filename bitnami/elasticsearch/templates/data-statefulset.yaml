@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: {{ template "data.fullname" . }}
+  name: {{ template "elasticsearch.data.fullname" . }}
   labels:
     app: {{ template "elasticsearch.name" . }}
     chart: {{ template "elasticsearch.chart" . }}
@@ -14,7 +14,7 @@ spec:
       app: {{ template "elasticsearch.name" . }}
       release: {{ .Release.Name | quote }}
       role: "data"
-  serviceName: "{{ template "data.fullname" . }}"
+  serviceName: "{{ template "elasticsearch.data.fullname" . }}"
   replicas: {{ .Values.data.replicas }}
   template:
     metadata:
@@ -59,7 +59,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-      - name: {{ template "data.fullname" . }}
+      - name: {{ template "elasticsearch.data.fullname" . }}
         image: {{ template "elasticsearch.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.securityContext.enabled }}

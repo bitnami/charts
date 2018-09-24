@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "coordinating.fullname" . }}
+  name: {{ template "elasticsearch.coordinating.fullname" . }}
   labels:
     app: {{ template "elasticsearch.name" . }}
     chart: {{ template "elasticsearch.chart" . }}
@@ -63,7 +63,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-      - name: {{ template "coordinating.fullname" . }}
+      - name: {{ template "elasticsearch.coordinating.fullname" . }}
         {{- if .Values.securityContext.enabled }}
         securityContext:
           runAsUser: {{ .Values.securityContext.runAsUser }}

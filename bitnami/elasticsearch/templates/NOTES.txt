@@ -14,24 +14,24 @@
 
 ** Please be patient while the chart is being deployed **
 
-  Elasticsearch can be accessed within the cluster on port {{ .Values.coordinating.service.port }} at {{ template "coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  Elasticsearch can be accessed within the cluster on port {{ .Values.coordinating.service.port }} at {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
   To access from outside the cluster execute the following commands:
 
 {{- if contains "NodePort" .Values.coordinating.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "coordinating.fullname" . }})
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "elasticsearch.coordinating.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     curl http://$NODE_IP:$NODE_PORT/
 {{- else if contains "LoadBalancer" .Values.coordinating.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "coordinating.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "elasticsearch.coordinating.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "coordinating.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "elasticsearch.coordinating.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     curl http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
 {{- else if contains "ClusterIP"  .Values.coordinating.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "coordinating.fullname" . }} {{ .Values.coordinating.service.port }}:9200 &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "elasticsearch.coordinating.fullname" . }} {{ .Values.coordinating.service.port }}:9200 &
     curl http://127.0.0.1:9200/
 {{- end }}
