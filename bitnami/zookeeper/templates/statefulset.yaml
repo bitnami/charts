@@ -20,9 +20,7 @@ spec:
   selector:
     matchLabels:
       app: {{ template "zookeeper.name" . }}
-      chart: {{ template "zookeeper.chart" . }}
       release: {{ .Release.Name | quote }}
-      heritage: {{ .Release.Service | quote }}
   template:
     metadata:
       name: "{{ template "zookeeper.fullname" . }}"
