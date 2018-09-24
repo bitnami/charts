@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "ingest.fullname" . }}
+  name: {{ template "elasticsearch.ingest.fullname" . }}
   labels:
     app: {{ template "elasticsearch.name" . }}
     chart: {{ template "elasticsearch.chart" . }}
@@ -64,7 +64,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-      - name: {{ template "ingest.fullname" . }}
+      - name: {{ template "elasticsearch.ingest.fullname" . }}
         image: {{ template "elasticsearch.image" . }}
         {{- if .Values.securityContext.enabled }}
         securityContext:

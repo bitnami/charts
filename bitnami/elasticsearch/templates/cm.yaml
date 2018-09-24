@@ -12,7 +12,7 @@ data:
 
     discovery:
       zen:
-        ping.unicast.hosts: {{ template "discovery.fullname" . }}
+        ping.unicast.hosts: {{ template "elasticsearch.discovery.fullname" . }}
         minimum_master_nodes: 2
 
 {{- if .Values.config }}
