@@ -86,3 +86,13 @@ In order to enable Role-based access control for Metrics Servier you can run the
 ```console
 $ helm install --name my-release --set rbac.create bitnami/metrics-server
 ```
+## Upgrading
+
+### To 2.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is metrics-server:
+
+```console
+$ kubectl patch deployment metrics-server --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+```
