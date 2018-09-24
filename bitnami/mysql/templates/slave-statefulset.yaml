@@ -2,7 +2,7 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: {{ template "slave.fullname" . }}
+  name: {{ template "mysql.slave.fullname" . }}
   labels:
     app: "{{ template "name" . }}"
     chart: {{ template "mysql.chart" . }}
@@ -15,7 +15,7 @@ spec:
       app: {{ template "name" . }}
       release: "{{ .Release.Name }}"
       component: "slave"
-  serviceName: "{{ template "slave.fullname" . }}"
+  serviceName: "{{ template "mysql.slave.fullname" . }}"
   replicas: {{ .Values.slave.replicas }}
   updateStrategy:
     type: RollingUpdate
@@ -167,7 +167,7 @@ spec:
       {{- if .Values.slave.config }}
         - name: config
           configMap:
-            name: {{ template "slave.fullname" . }}
+            name: {{ template "mysql.slave.fullname" . }}
       {{- end }}
 {{- if .Values.slave.persistence.enabled }}
   volumeClaimTemplates:

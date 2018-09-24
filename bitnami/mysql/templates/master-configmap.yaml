@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "master.fullname" . }}
+  name: {{ template "mysql.master.fullname" . }}
   labels:
     app: {{ template "name" . }}
     component: "master"

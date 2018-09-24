@@ -15,11 +15,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end }}
 
-{{- define "master.fullname" -}}
+{{- define "mysql.master.fullname" -}}
 {{- printf "%s-%s" .Release.Name "mysql-master" | trunc 63 | trimSuffix "-" -}}
 {{- end }}
 
-{{- define "slave.fullname" -}}
+{{- define "mysql.slave.fullname" -}}
 {{- printf "%s-%s" .Release.Name "mysql-slave" | trunc 63 | trimSuffix "-" -}}
 {{- end }}
 
