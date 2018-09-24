@@ -61,6 +61,7 @@ spec:
       {{- $clientPort := int .Values.service.port }}
       {{- $peerPort := int .Values.service.peerPort }}
       {{- $etcdFullname := include "etcd.fullname" . }}
+      {{- $releaseNamespace := .Release.Namespace }}
       {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
       {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
       {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
@@ -107,6 +108,7 @@ spec:
 
               echo "==> Adding new member"
               etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
+              sed -ie 's/^/export /' /bitnami/etcd/data/new_member_envs
 
               echo "==> Loading env vars of existing cluster"
               source ${DATA_DIR}/new_member_envs
@@ -164,11 +166,11 @@ spec:
         - name: ETCD_DATA_DIR
           value: {{ template "etcd.dataDir" . }}
         - name: ETCD_ADVERTISE_CLIENT_URLS
-          value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME):{{ .Values.service.port }}"
+          value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}"
         - name: ETCD_LISTEN_CLIENT_URLS
           value: "{{ $etcdClientProtocol }}://0.0.0.0:{{ .Values.service.port }}"
         - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
-          value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME):{{ .Values.service.peerPort }}"
+          value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.peerPort }}"
         - name: ETCD_LISTEN_PEER_URLS
           value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.service.peerPort }}"
 
@@ -179,7 +181,7 @@ spec:
         - name: ETCD_INITIAL_CLUSTER_STATE
           value: "new"
         - name: ETCD_INITIAL_CLUSTER
-          value: {{range $i, $e := until $replicaCount }}{{ $etcdFullname }}-{{ $e }}={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }},{{ end }}
+          value: {{range $i, $e := until $replicaCount }}{{ $etcdFullname }}-{{ $e }}={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $peerPort }},{{ end }}
         {{- end }}
 
         ## RBAC authentication
