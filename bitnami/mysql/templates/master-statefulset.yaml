@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: {{ template "master.fullname" . }}
+  name: {{ template "mysql.master.fullname" . }}
   labels:
     app: "{{ template "name" . }}"
     chart: {{ template "mysql.chart" . }}
@@ -14,7 +14,7 @@ spec:
       app: {{ template "name" . }}
       release: "{{ .Release.Name }}"
       component: "master"
-  serviceName: "{{ template "master.fullname" . }}"
+  serviceName: "{{ template "mysql.master.fullname" . }}"
   replicas: 1
   updateStrategy:
     type: RollingUpdate
@@ -168,11 +168,11 @@ spec:
       {{- if .Values.master.config }}
         - name: config
           configMap:
-            name: {{ template "master.fullname" . }}
+            name: {{ template "mysql.master.fullname" . }}
       {{- end }}
         - name: custom-init-scripts
           configMap:
-            name: {{ template "master.fullname" . }}-init-scripts
+            name: {{ template "mysql.master.fullname" . }}-init-scripts
 {{- if .Values.master.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
