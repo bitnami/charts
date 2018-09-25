@@ -175,7 +175,6 @@ spec:
         name: data
         labels:
           app: "{{ template "name" . }}"
-          chart: {{ template "mysql.chart" . }}
           component: "slave"
           release: {{ .Release.Name | quote }}
           heritage: {{ .Release.Service | quote }}
