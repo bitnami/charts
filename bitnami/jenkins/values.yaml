@@ -15,7 +15,7 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName 
+  #   - myRegistrKeySecretName
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-jenkins#configuration
@@ -27,6 +27,18 @@ jenkinsUser: user
 ## ref: https://github.com/bitnami/bitnami-docker-jenkins#configuration
 ##
 # jenkinsPassword:
+
+## Jenkins home directory
+##
+homeDir: /opt/bitnami/jenkins/jenkins_home
+
+## Allows to disable the initial Bitnami configuration for Jenkins
+##
+disableInitialization: no
+
+## Customize JVM parameters
+##
+# javaOpts:
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer

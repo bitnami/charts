@@ -31,12 +31,20 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: JENKINS_USERNAME
-          value: {{ default "" .Values.jenkinsUser | quote }}
+          value: {{ .Values.jenkinsUser | quote }}
         - name: JENKINS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: jenkins-password
+        - name: JENKINS_HOME
+          value: {{ .Values.jenkinsHome | quote }}
+        - name: DISABLE_JENKINS_INITIALIZATION
+          value: {{ .Values.disableInitialization | quote }}
+        {{- if .Values.javaOpts }}
+        - name: JAVA_OPTS
+          value: {{ .Values.javaOpts | quote }}
+        {{- end }}
         ports:
         - name: http
           containerPort: 8080

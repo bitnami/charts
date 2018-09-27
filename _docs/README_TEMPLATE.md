@@ -22,7 +22,7 @@
 
 > **Sample**
 >
-> This chart bootstraps a MediaWiki deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. The chart depends upon the [MariaDB chart](https://github.com/kubernetes/charts/tree/master/stable/mariadb) for the database requirements of MediaWiki.
+> This chart bootstraps a MediaWiki deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. The chart depends upon the [MariaDB chart](https://github.com/helm/charts/tree/master/stable/mariadb) for the database requirements of MediaWiki.
 >
 > The chart uses the [Bitnami MediaWiki Docker Image](https://hub.docker.com/r/bitnami/mediawiki) for setting up the MediaWiki deployment and is developed, contributed and maintained by [Bitnami](https://bitnami.com).
 

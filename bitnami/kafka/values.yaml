@@ -284,7 +284,7 @@ metrics:
       #   memory: 100Mi
 
     ## Credits to the incubator/kafka chart for the JMX configuration.
-    ## https://github.com/kubernetes/charts/tree/master/incubator/kafka
+    ## https://github.com/helm/charts/tree/master/incubator/kafka
     ##
     ## Rules to apply to the Prometheus JMX Exporter.  Note while lots of stats have been cleaned and exposed,
     ## there are still more stats to clean up and expose, others will never get exposed.  They keep lots of duplicates

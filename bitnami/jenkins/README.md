@@ -52,6 +52,9 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `image.pullSecrets`        | Specify image pull secrets             | `nil` (does not add image pull secrets to deployed pods)  |
 | `jenkinsUser`              | User of the application                | `user`                                                    |
 | `jenkinsPassword`          | Application password                   | _random 10 character alphanumeric string_                 |
+| `jenkinsHome`              | Jenkins home directory                 | `/opt/bitnami/jenkins/jenkins_home`                       |
+| `disableInitialization`    | Allows to disable the initial Bitnami configuration for Jenkins  | `no`                            |
+| `javaOpts`                 | Customize JVM parameters               | `nil`                                                     |
 | `serviceType`              | Kubernetes Service type                | `LoadBalancer`                                            |
 | `persistence.enabled`      | Enable persistence using PVC           | `true`                                                    |
 | `persistence.storageClass` | PVC Storage Class for Jenkins volume   | `nil` (uses alpha storage class annotation)               |

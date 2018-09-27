@@ -9,34 +9,34 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm search bitnami
 ```
 
-## Upstreamed charts (contributed to [kubernetes/charts](https://github.com/kubernetes/charts))
+## Upstreamed charts (contributed to [helm/charts](https://github.com/helm/charts))
 
-- [Dokuwiki](https://github.com/kubernetes/charts/tree/master/stable/dokuwiki)
-- [Drupal](https://github.com/kubernetes/charts/tree/master/stable/drupal)
-- [Ghost](https://github.com/kubernetes/charts/tree/master/stable/ghost)
-- [JasperReports](https://github.com/kubernetes/charts/tree/master/stable/jasperreports)
-- [Joomla!](https://github.com/kubernetes/charts/tree/master/stable/joomla)
-- [Magento](https://github.com/kubernetes/charts/tree/master/stable/magento)
-- [MariaDB](https://github.com/kubernetes/charts/tree/master/stable/mariadb)
-- [MediaWiki](https://github.com/kubernetes/charts/tree/master/stable/mediawiki)
-- [MongoDB](https://github.com/kubernetes/charts/tree/master/stable/mongodb)
-- [Moodle](https://github.com/kubernetes/charts/tree/master/stable/moodle)
-- [Odoo](https://github.com/kubernetes/charts/tree/master/stable/odoo)
-- [OpenCart](https://github.com/kubernetes/charts/tree/master/stable/opencart)
-- [OrangeHRM](https://github.com/kubernetes/charts/tree/master/stable/orangehrm)
-- [Osclass](https://github.com/kubernetes/charts/tree/master/stable/osclass)
-- [OwnCloud](https://github.com/kubernetes/charts/tree/master/stable/owncloud)
-- [Parse](https://github.com/kubernetes/charts/tree/master/stable/parse)
-- [Phabricator](https://github.com/kubernetes/charts/tree/master/stable/phabricator)
-- [phpBB](https://github.com/kubernetes/charts/tree/master/stable/phpbb)
-- [PrestaShop](https://github.com/kubernetes/charts/tree/master/stable/prestashop)
-- [RabbitMQ](https://github.com/kubernetes/charts/tree/master/stable/rabbitmq)
-- [Redis](https://github.com/kubernetes/charts/tree/master/stable/redis)
-- [Redmine](https://github.com/kubernetes/charts/tree/master/stable/redmine)
-- [SugarCRM](https://github.com/kubernetes/charts/tree/master/stable/sugarcrm)
-- [SuiteCRM](https://github.com/kubernetes/charts/tree/master/stable/suitecrm)
-- [TestLink](https://github.com/kubernetes/charts/tree/master/stable/testlink)
-- [WordPress](https://github.com/kubernetes/charts/tree/master/stable/wordpress)
+- [Dokuwiki](https://github.com/helm/charts/tree/master/stable/dokuwiki)
+- [Drupal](https://github.com/helm/charts/tree/master/stable/drupal)
+- [Ghost](https://github.com/helm/charts/tree/master/stable/ghost)
+- [JasperReports](https://github.com/helm/charts/tree/master/stable/jasperreports)
+- [Joomla!](https://github.com/helm/charts/tree/master/stable/joomla)
+- [Magento](https://github.com/helm/charts/tree/master/stable/magento)
+- [MariaDB](https://github.com/helm/charts/tree/master/stable/mariadb)
+- [MediaWiki](https://github.com/helm/charts/tree/master/stable/mediawiki)
+- [MongoDB](https://github.com/helm/charts/tree/master/stable/mongodb)
+- [Moodle](https://github.com/helm/charts/tree/master/stable/moodle)
+- [Odoo](https://github.com/helm/charts/tree/master/stable/odoo)
+- [OpenCart](https://github.com/helm/charts/tree/master/stable/opencart)
+- [OrangeHRM](https://github.com/helm/charts/tree/master/stable/orangehrm)
+- [Osclass](https://github.com/helm/charts/tree/master/stable/osclass)
+- [OwnCloud](https://github.com/helm/charts/tree/master/stable/owncloud)
+- [Parse](https://github.com/helm/charts/tree/master/stable/parse)
+- [Phabricator](https://github.com/helm/charts/tree/master/stable/phabricator)
+- [phpBB](https://github.com/helm/charts/tree/master/stable/phpbb)
+- [PrestaShop](https://github.com/helm/charts/tree/master/stable/prestashop)
+- [RabbitMQ](https://github.com/helm/charts/tree/master/stable/rabbitmq)
+- [Redis](https://github.com/helm/charts/tree/master/stable/redis)
+- [Redmine](https://github.com/helm/charts/tree/master/stable/redmine)
+- [SugarCRM](https://github.com/helm/charts/tree/master/stable/sugarcrm)
+- [SuiteCRM](https://github.com/helm/charts/tree/master/stable/suitecrm)
+- [TestLink](https://github.com/helm/charts/tree/master/stable/testlink)
+- [WordPress](https://github.com/helm/charts/tree/master/stable/wordpress)
 
 ## Bitnami charts
 
@@ -81,7 +81,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/kubernetes
 
 ### Add Repo
 
-The stable charts are contributed to the upstream [kubernetes/charts](https://github.com/kubernetes/charts) repository. The following command allows you to download and install all the charts from this repository, both the bitnami and the upstreamed ones.
+The stable charts are contributed to the upstream [helm/charts](https://github.com/helm/charts) repository. The following command allows you to download and install all the charts from this repository, both the bitnami and the upstreamed ones.
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
