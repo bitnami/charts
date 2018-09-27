@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       labels:
-        app: tensorflow-serving
+        app: {{ template "fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
     spec:
