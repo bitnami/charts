@@ -17,7 +17,7 @@ server:
     ##
     # pullSecrets:
     #   - myRegistrKeySecretName
-  port: 9000
+  port: 8500
 
 ## TensorFlow Inception image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-inception/tags/
