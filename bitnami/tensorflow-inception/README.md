@@ -65,7 +65,7 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 | `server.image.tag`              | TensorFlow Serving Image tag           | `{VERSION}`                                                |
 | `server.image.pullPolicy`       | TensorFlow Serving image pull policy   | `Always` if `imageTag` is `latest`, else `IfNotPresent`    |
 | `server.image.pullSecrets`      | Specify image pull secrets             | `nil` (does not add image pull secrets to deployed pods)   |
-| `server.port`                   | Tensorflow server port                 | `9000`                                                     |
+| `server.port`                   | Tensorflow server port                 | `8500`                                                     |
 | `client.image.registry`         | TensorFlow Inception image registry    | `docker.io`                                                |
 | `client.image.repository`       | TensorFlow Inception Image name        | `bitnami/tensorflow-inception`                             |
 | `client.image.tag`              | TensorFlow Inception Image tag         | `{VERSION}`                                                |
