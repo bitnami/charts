@@ -2,13 +2,13 @@ name: consul
 home: https://www.consul.io/
 sources:
 - https://github.com/bitnami/consul
-version: 2.0.1
+version: 2.0.2
 appVersion: 1.0.6
 description: Highly available and distributed service discovery and key-value store
   designed with support for the modern data center to make distributed systems and
   configuration easy.
 icon: https://raw.githubusercontent.com/hashicorp/consul/bce3809dfca37b883828c3715b84143dd71c0f85/website/source/assets/images/favicons/android-chrome-512x512.png
 maintainers:
-- name: bitnami-bot
+- name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
