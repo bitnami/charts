@@ -1,4 +1,4 @@
-# <img src="https://github.com/kubeapps/kubeapps/raw/master/docs/img/logo.png" width="40" align="left"> Kubeapps
+# Kubeapps
 
 [![Build Status](https://travis-ci.org/kubeapps/kubeapps.svg?branch=master)](https://travis-ci.org/kubeapps/kubeapps)
 
