@@ -128,7 +128,7 @@ spec:
 {{ toYaml .Values.slave.resources | indent 10 }}
         volumeMounts:
         - name: data
-          mountPath: /bitnami/mysql
+          mountPath: {{ .Values.slave.persistence.mountPath }}
 {{- if .Values.slave.config }}
         - name: config
           mountPath: /opt/bitnami/mysql/conf/my.cnf

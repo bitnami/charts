@@ -117,18 +117,18 @@ spec:
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:
+{{- if .Values.master.persistence.existingClaim }}
+        - name: {{ .Values.master.persistence.existingClaim }}
+{{- else }}
         - name: data
-          mountPath: /bitnami/mysql
+{{- end }}
+          mountPath: {{ .Values.master.persistence.mountPath }}
         - name: custom-init-scripts
           mountPath: /docker-entrypoint-initdb.d
 {{- if .Values.master.config }}
         - name: config
           mountPath: /opt/bitnami/mysql/conf/my.cnf
           subPath: my.cnf
-{{- if .Values.master.persistence.existingClaim }}
-        - name: {{ .Values.master.persistence.existingClaim }}
-          mountPath: {{ .Values.master.persistence.mountPath }}
-{{- end }}
 {{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
@@ -173,7 +173,7 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ template "mysql.master.fullname" . }}-init-scripts
-{{- if .Values.master.persistence.enabled }}
+{{- if and .Values.master.persistence.enabled ( not .Values.master.persistence.existingClaim ) }}
   volumeClaimTemplates:
     - metadata:
         name: data
