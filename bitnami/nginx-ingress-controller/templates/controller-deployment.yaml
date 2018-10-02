@@ -28,6 +28,7 @@ spec:
       {{- end }}
       labels:
         app: {{ template "nginx-ingress.name" . }}
+        chart: {{ template "nginx-ingress-controller.chart" . }}
         component: "{{ .Values.name }}"
         release: {{ .Release.Name }}
         {{- if .Values.podLabels }}

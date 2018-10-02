@@ -65,3 +65,10 @@ Return the proper nginx-ingress-controller image name
 {{- $tag := .Values.image.tag | toString -}}
 {{- printf "%s/%s:%s" .Values.image.registry .Values.image.repository $tag -}}
 {{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "nginx-ingress-controller.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
