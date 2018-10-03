@@ -12,7 +12,7 @@ $ helm install bitnami/nginx
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [NGINX](https://github.com/bitnami/bitnami-docker-nginx) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [NGINX Open Source](https://github.com/bitnami/bitnami-docker-nginx) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Installing the Chart
 
@@ -22,7 +22,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release bitnami/nginx
 ```
 
-The command deploys NGINX on the Kubernetes cluster in the default configuration.
+The command deploys NGINX Open Source on the Kubernetes cluster in the default configuration.
 
 > **Tip**: List all releases using `helm list`
 
@@ -38,16 +38,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the NGINX chart and their default values.
+The following tables lists the configurable parameters of the NGINX Open Source chart and their default values.
 
 |          Parameter        |             Description        |                        Default                            |
 | ------------------------- | ------------------------------ | --------------------------------------------------------- |
-| `image.registry`          | Nginx image registry           | `docker.io`                                               |
-| `image.repository`        | Nginx Image name               | `bitnami/nginx`                                           |
-| `image.tag`               | Nginx Image tag                | `{VERSION}`                                               |
-| `image.pullPolicy`        | Nginx image pull policy        | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.registry`          | NGINX image registry           | `docker.io`                                               |
+| `image.repository`        | NGINX Image name               | `bitnami/nginx`                                           |
+| `image.tag`               | NGINX Image tag                | `{VERSION}`                                               |
+| `image.pullPolicy`        | NGINX image pull policy        | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
 | `image.pullSecrets`       | Specify image pull secrets     | `nil` (does not add image pull secrets to deployed pods)  |
-| `vhost`                   | Custom nginx virtual host      | `nil`                                                     |
+| `vhost`                   | Custom NGINX virtual host      | `nil`                                                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -69,7 +69,7 @@ $ helm install --name my-release -f values.yaml bitnami/nginx
 
 ### Providing a custom virtual host
 
-You can use the `vhost` value to provide a custom virtual host for NGINX to use.
+You can use the `vhost` value to provide a custom virtual host for NGINX Open Source to use.
 To do this, create a values files with your virtual host:
 
 _custom-vhost.yaml_
