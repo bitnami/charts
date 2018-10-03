@@ -27,7 +27,7 @@ spec:
       serviceAccountName: {{ template "metrics-server.serviceAccountName" . }}
       containers:
       - name: metrics-server
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: {{ template "metrics-server.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - name: https
