@@ -34,6 +34,5 @@ spec:
           containerPort: {{ .Values.securePort }}
         command:
         - metrics-server
-        - --source=kubernetes.summary_api:''
         - --secure-port={{ .Values.securePort }}
-        
+
