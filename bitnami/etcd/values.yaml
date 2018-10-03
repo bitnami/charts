@@ -57,7 +57,7 @@ allowNoneAuthentication: true
 ##
 auth:
   rbac:
-    enabled: true
+    enabled: false
     ## etcd root user password. The root user is always `root`.
     # rootPassword:
     ## Name of the existing secret containing credentials for the root user.
