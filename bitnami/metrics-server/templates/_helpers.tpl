@@ -32,3 +32,11 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the proper metrics-server image name
+*/}}
+{{- define "metrics-server.image" -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- printf "%s/%s:%s" .Values.image.registry .Values.image.repository $tag -}}
+{{- end -}}
