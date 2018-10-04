@@ -1,0 +1,44 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+  annotations:
+    helm.sh/hook: post-delete
+    helm.sh/hook-delete-policy: hook-succeeded
+    helm.sh/hook-weight: "-10"
+  labels:
+    app: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+  annotations:
+    helm.sh/hook: post-delete
+    helm.sh/hook-delete-policy: hook-succeeded
+    helm.sh/hook-weight: "-10"
+  labels:
+    app: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}

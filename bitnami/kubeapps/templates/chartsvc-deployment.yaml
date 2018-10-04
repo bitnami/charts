@@ -31,7 +31,7 @@ spec:
         - name: MONGO_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "kubeapps.mongodb.fullname" . }}
+              name: {{ .Values.mongodb.existingSecret }}
               key: mongodb-root-password
         ports:
         - name: http

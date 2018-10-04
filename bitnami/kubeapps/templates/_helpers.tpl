@@ -69,6 +69,20 @@ Create name for the apprepository cleanup job
 {{- end -}}
 
 {{/*
+Create name for the mongodb secret bootstrap job
+*/}}
+{{- define "kubeapps.mongodb-jobs-cleanup.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-mongodb-jobs-cleanup
+{{- end -}}
+
+{{/*
+Create name for the kubeapps upgrade job
+*/}}
+{{- define "kubeapps.kubeapps-jobs-upgrade.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-kubeapps-jobs-upgrade
+{{- end -}}
+
+{{/*
 Create name for the chartsvc based on the fullname
 */}}
 {{- define "kubeapps.chartsvc.fullname" -}}

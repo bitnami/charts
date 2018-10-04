@@ -1,0 +1,57 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: {{ template "kubeapps.kubeapps-jobs-upgrade.fullname" . }}
+  annotations:
+    helm.sh/hook: post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+    helm.sh/hook-weight: "-10"
+  labels:
+    app: {{ template "kubeapps.kubeapps-jobs-upgrade.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+- apiGroups:
+  - kubeapps.com
+  resources:
+  - apprepositories
+  verbs:
+  - get
+  - create
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  - pods
+  verbs:
+  - get
+  - list
+  - create
+  - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: {{ template "kubeapps.kubeapps-jobs-upgrade.fullname" . }}
+  annotations:
+    helm.sh/hook: post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+    helm.sh/hook-weight: "-10"
+  labels:
+    app: {{ template "kubeapps.kubeapps-jobs-upgrade.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "kubeapps.kubeapps-jobs-upgrade.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "kubeapps.kubeapps-jobs-upgrade.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}

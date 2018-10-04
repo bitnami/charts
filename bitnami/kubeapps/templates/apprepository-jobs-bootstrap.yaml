@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: kubectl
-        image: {{ template "kubeapps.image" .Values.apprepository.jobsImage }}
+        image: {{ template "kubeapps.image" .Values.hooks.image }}
         command:
         - kubectl
         - apply 
@@ -28,23 +28,21 @@ spec:
         volumeMounts:
         - mountPath: /tmp/apprepositories
           name: apprepositories-config
-        resources:
-{{ toYaml .Values.apprepository.resources | indent 12 }}
       volumes:
       - name: apprepositories-config
         configMap:
           name: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
       restartPolicy: OnFailure
       serviceAccountName: {{ template "kubeapps.apprepository-jobs-bootstrap.fullname" . }}
-    {{- with .Values.apprepository.nodeSelector }}
+    {{- with .Values.hooks.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- with .Values.apprepository.affinity }}
+    {{- with .Values.hooks.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- with .Values.apprepository.tolerations }}
+    {{- with.Values.hooks.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
