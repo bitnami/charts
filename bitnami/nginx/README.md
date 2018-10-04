@@ -69,7 +69,7 @@ $ helm install --name my-release -f values.yaml bitnami/nginx
 
 ### Providing a custom virtual host
 
-You can use the `vhost` value to provide a custom virtual host for NGINX Open Source to use.
+You can use the `vhost` value to provide a custom virtual host for NGINX to use.
 To do this, create a values files with your virtual host:
 
 _custom-vhost.yaml_
