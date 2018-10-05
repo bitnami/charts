@@ -2,7 +2,7 @@ name: consul
 home: https://www.consul.io/
 sources:
 - https://github.com/bitnami/consul
-version: 2.0.3
+version: 2.0.4
 appVersion: 1.2.3
 description: Highly available and distributed service discovery and key-value store
   designed with support for the modern data center to make distributed systems and
