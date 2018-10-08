@@ -72,7 +72,7 @@ spec:
         {{- end }}
         {{- end }}
         {{- range .Values.sources }}
-          - --source={{ . }}
+        - --source={{ . }}
         {{- end }}
         {{- range .Values.domainFilters }}
         - --domain-filter={{ . }}
@@ -153,11 +153,11 @@ spec:
           httpGet:
             path: /healthz
             port: {{ .Values.service.port }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
         {{- end }}
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:

@@ -65,22 +65,6 @@ spec:
         image: {{ template "mysql.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: mysql-root-password
-        {{- if .Values.db.user }}
-        - name: MYSQL_USER
-          value: "{{ .Values.db.user }}"
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: mysql-password
-        {{- end }}
-        - name: MYSQL_DATABASE
-          value: "{{ .Values.db.name }}"
         - name: MYSQL_REPLICATION_MODE
           value: "slave"
         - name: MYSQL_MASTER_HOST
@@ -107,7 +91,7 @@ spec:
         {{- if .Values.slave.livenessProbe.enabled }}
         livenessProbe:
           exec:
-            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MYSQL_ROOT_PASSWORD"]
+            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MYSQL_MASTER_ROOT_PASSWORD"]
           initialDelaySeconds: {{ .Values.slave.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.slave.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.slave.livenessProbe.timeoutSeconds }}
@@ -117,7 +101,7 @@ spec:
         {{- if .Values.slave.readinessProbe.enabled }}
         readinessProbe:
           exec:
-            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MYSQL_ROOT_PASSWORD"]
+            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MYSQL_MASTER_ROOT_PASSWORD"]
           initialDelaySeconds: {{ .Values.slave.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.slave.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.slave.readinessProbe.timeoutSeconds }}
@@ -128,7 +112,7 @@ spec:
 {{ toYaml .Values.slave.resources | indent 10 }}
         volumeMounts:
         - name: data
-          mountPath: /bitnami/mysql
+          mountPath: {{ .Values.slave.persistence.mountPath }}
 {{- if .Values.slave.config }}
         - name: config
           mountPath: /opt/bitnami/mysql/conf/my.cnf
@@ -139,12 +123,12 @@ spec:
         image: {{ template "metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
-        - name: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_MASTER_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: mysql-root-password
-        command: [ 'sh', '-c', 'DATA_SOURCE_NAME="root:$MYSQL_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter' ]
+        command: [ 'sh', '-c', 'DATA_SOURCE_NAME="root:$MYSQL_MASTER_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter' ]
         ports:
         - name: metrics
           containerPort: 9104

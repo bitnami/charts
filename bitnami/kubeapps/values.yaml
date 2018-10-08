@@ -55,17 +55,12 @@ apprepository:
   image:
     registry: docker.io
     repository: kubeapps/apprepository-controller
-    tag: v1.0.0-beta.1
+    tag: v1.0.0-beta.2
   # Image used to perform chart repository syncs
   syncImage:
     registry: docker.io
     repository: kubeapps/chart-repo
-    tag: v1.0.0-beta.1
-  # This image is used in a Helm post-install hook to bootstrap the initialRepos below
-  jobsImage:
-    registry: docker.io
-    repository: lachlanevenson/k8s-kubectl
-    tag: v1.9.9
+    tag: v1.0.0-beta.2
   initialRepos:
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
@@ -87,6 +82,17 @@ apprepository:
   tolerations: []
   affinity: {}
 
+# Hooks are used to perform actions like populating apprepositories
+# or creating required resources during installation or upgrade
+hooks:
+  image:
+    registry: docker.io
+    repository: lachlanevenson/k8s-kubectl
+    tag: v1.9.9
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
 # Tiller Proxy is a secure REST API on top of Helm's Tiller component used to
 # manage Helm chart releases in the cluster from Kubeapps. Set tillerProxy.host
 # to configure a different Tiller host to use.
@@ -95,7 +101,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: kubeapps/tiller-proxy
-    tag: v1.0.0-beta.1
+    tag: v1.0.0-beta.2
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -122,7 +128,7 @@ chartsvc:
   image:
     registry: docker.io
     repository: kubeapps/chartsvc
-    tag: v1.0.0-beta.1
+    tag: v1.0.0-beta.2
   service:
     port: 8080
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
@@ -157,7 +163,7 @@ dashboard:
   image:
     registry: docker.io
     repository: kubeapps/dashboard
-    tag: v1.0.0-beta.1
+    tag: v1.0.0-beta.2
   service:
     port: 8080
   livenessProbe:
@@ -188,6 +194,8 @@ mongodb:
   # Kubeapps uses MongoDB as a cache and persistence is not required
   persistence:
     enabled: false
+  # MongoDB credentials are handled by kubeapps to facilitate upgrades
+  existingSecret: kubeapps-mongodb
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
   resources:
     limits:

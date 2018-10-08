@@ -1,6 +1,6 @@
 # The Bitnami Library for Kubernetes
 
-Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/kubernetes/helm).
+Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
 
 ## TL;DR
 
@@ -9,34 +9,34 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm search bitnami
 ```
 
-## Upstreamed charts (contributed to [kubernetes/charts](https://github.com/kubernetes/charts))
+## Upstreamed charts (contributed to [helm/charts](https://github.com/helm/charts))
 
-- [Dokuwiki](https://github.com/kubernetes/charts/tree/master/stable/dokuwiki)
-- [Drupal](https://github.com/kubernetes/charts/tree/master/stable/drupal)
-- [Ghost](https://github.com/kubernetes/charts/tree/master/stable/ghost)
-- [JasperReports](https://github.com/kubernetes/charts/tree/master/stable/jasperreports)
-- [Joomla!](https://github.com/kubernetes/charts/tree/master/stable/joomla)
-- [Magento](https://github.com/kubernetes/charts/tree/master/stable/magento)
-- [MariaDB](https://github.com/kubernetes/charts/tree/master/stable/mariadb)
-- [MediaWiki](https://github.com/kubernetes/charts/tree/master/stable/mediawiki)
-- [MongoDB](https://github.com/kubernetes/charts/tree/master/stable/mongodb)
-- [Moodle](https://github.com/kubernetes/charts/tree/master/stable/moodle)
-- [Odoo](https://github.com/kubernetes/charts/tree/master/stable/odoo)
-- [OpenCart](https://github.com/kubernetes/charts/tree/master/stable/opencart)
-- [OrangeHRM](https://github.com/kubernetes/charts/tree/master/stable/orangehrm)
-- [Osclass](https://github.com/kubernetes/charts/tree/master/stable/osclass)
-- [OwnCloud](https://github.com/kubernetes/charts/tree/master/stable/owncloud)
-- [Parse](https://github.com/kubernetes/charts/tree/master/stable/parse)
-- [Phabricator](https://github.com/kubernetes/charts/tree/master/stable/phabricator)
-- [phpBB](https://github.com/kubernetes/charts/tree/master/stable/phpbb)
-- [PrestaShop](https://github.com/kubernetes/charts/tree/master/stable/prestashop)
-- [RabbitMQ](https://github.com/kubernetes/charts/tree/master/stable/rabbitmq)
-- [Redis](https://github.com/kubernetes/charts/tree/master/stable/redis)
-- [Redmine](https://github.com/kubernetes/charts/tree/master/stable/redmine)
-- [SugarCRM](https://github.com/kubernetes/charts/tree/master/stable/sugarcrm)
-- [SuiteCRM](https://github.com/kubernetes/charts/tree/master/stable/suitecrm)
-- [TestLink](https://github.com/kubernetes/charts/tree/master/stable/testlink)
-- [WordPress](https://github.com/kubernetes/charts/tree/master/stable/wordpress)
+- [Dokuwiki](https://github.com/helm/charts/tree/master/stable/dokuwiki)
+- [Drupal](https://github.com/helm/charts/tree/master/stable/drupal)
+- [Ghost](https://github.com/helm/charts/tree/master/stable/ghost)
+- [JasperReports](https://github.com/helm/charts/tree/master/stable/jasperreports)
+- [Joomla!](https://github.com/helm/charts/tree/master/stable/joomla)
+- [Magento](https://github.com/helm/charts/tree/master/stable/magento)
+- [MariaDB](https://github.com/helm/charts/tree/master/stable/mariadb)
+- [MediaWiki](https://github.com/helm/charts/tree/master/stable/mediawiki)
+- [MongoDB](https://github.com/helm/charts/tree/master/stable/mongodb)
+- [Moodle](https://github.com/helm/charts/tree/master/stable/moodle)
+- [Odoo](https://github.com/helm/charts/tree/master/stable/odoo)
+- [OpenCart](https://github.com/helm/charts/tree/master/stable/opencart)
+- [OrangeHRM](https://github.com/helm/charts/tree/master/stable/orangehrm)
+- [Osclass](https://github.com/helm/charts/tree/master/stable/osclass)
+- [OwnCloud](https://github.com/helm/charts/tree/master/stable/owncloud)
+- [Parse](https://github.com/helm/charts/tree/master/stable/parse)
+- [Phabricator](https://github.com/helm/charts/tree/master/stable/phabricator)
+- [phpBB](https://github.com/helm/charts/tree/master/stable/phpbb)
+- [PrestaShop](https://github.com/helm/charts/tree/master/stable/prestashop)
+- [RabbitMQ](https://github.com/helm/charts/tree/master/stable/rabbitmq)
+- [Redis](https://github.com/helm/charts/tree/master/stable/redis)
+- [Redmine](https://github.com/helm/charts/tree/master/stable/redmine)
+- [SugarCRM](https://github.com/helm/charts/tree/master/stable/sugarcrm)
+- [SuiteCRM](https://github.com/helm/charts/tree/master/stable/suitecrm)
+- [TestLink](https://github.com/helm/charts/tree/master/stable/testlink)
+- [WordPress](https://github.com/helm/charts/tree/master/stable/wordpress)
 
 ## Bitnami charts
 
@@ -77,11 +77,11 @@ The above command creates a new cluster named `my-cluster`. You can name the clu
 
 Helm is a tool for managing Kubernetes charts. Charts are packages of pre-configured Kubernetes resources.
 
-To install Helm, refer to the [Helm install guide](https://github.com/kubernetes/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
+To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
 
 ### Add Repo
 
-The stable charts are contributed to the upstream [kubernetes/charts](https://github.com/kubernetes/charts) repository. The following command allows you to download and install all the charts from this repository, both the bitnami and the upstreamed ones.
+The stable charts are contributed to the upstream [helm/charts](https://github.com/helm/charts) repository. The following command allows you to download and install all the charts from this repository, both the bitnami and the upstreamed ones.
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -91,7 +91,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 Once you have installed the Helm client and initialized the Tiller server, you can deploy a Bitnami Helm Chart into a Kubernetes cluster.
 
-Please refer to the [Quick Start guide](https://github.com/kubernetes/helm/blob/master/docs/quickstart.md) if you wish to get running in just a few commands, otherwise the [Using Helm Guide](https://github.com/kubernetes/helm/blob/master/docs/using_helm.md) provides detailed instructions on how to use the Helm client to manage packages on your Kubernetes cluster.
+Please refer to the [Quick Start guide](https://github.com/helm/helm/blob/master/docs/quickstart.md) if you wish to get running in just a few commands, otherwise the [Using Helm Guide](https://github.com/helm/helm/blob/master/docs/using_helm.md) provides detailed instructions on how to use the Helm client to manage packages on your Kubernetes cluster.
 
 Useful Helm Client Commands:
 * View available charts: `helm search`

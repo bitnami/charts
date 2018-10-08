@@ -3,7 +3,7 @@
   Consul can be accessed within the cluster on port {{ .Values.serverPort }} at {{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
 {{- if .Values.ui.service.enabled }}
-  
+
 In order to access to the Consul Web UI:
 
 {{- if .Values.ui.ingress.enabled }}
@@ -23,7 +23,8 @@ In order to access to the Consul Web UI:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "consul.fullname" . }}-ui'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "consul.fullname" . }}-ui -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "consul.fullname" . }}-ui --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+
     echo "Consul URL: http://$SERVICE_IP:{{ .Values.uiPort }}/"
 
 {{- else if contains "ClusterIP"  .Values.ui.service.type }}
@@ -33,14 +34,14 @@ In order to access to the Consul Web UI:
 
 {{- end }}
 
-Please take into account that you need to wait until a cluster leader is elected before using the Consul Web UI.  
- 
+Please take into account that you need to wait until a cluster leader is elected before using the Consul Web UI.
+
 In order to check the status of the cluster you can run the following command:
 
     kubectl exec -it {{ template "consul.fullname" . }}-0 -- consul members
 
 Furthermore, to know which Consul node is the cluster leader run this other command:
-    
+
     kubectl exec -it {{ template "consul.fullname" . }}-0 -- consul operator raft list-peers
 
 {{- end }}

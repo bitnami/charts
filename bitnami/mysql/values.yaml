@@ -86,10 +86,10 @@ master:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
     enabled: true
+    mountPath: /bitnami/mysql
     ## Enable persistence using an existing PVC
     ##
     # existingClaim:
-    # mountPath:
     ## Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -172,6 +172,7 @@ slave:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
     enabled: true
+    mountPath: /bitnami/mysql
     # storageClass: "-"
     annotations:
     accessModes:

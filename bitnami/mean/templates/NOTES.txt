@@ -12,7 +12,7 @@
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc -w {{ template "mean.fullname" . }} --namespace {{ .Release.Namespace }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "mean.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "mean.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
   echo "MEAN app URL: http://$SERVICE_IP/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
