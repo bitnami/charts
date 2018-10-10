@@ -120,11 +120,11 @@ spec:
       name: "data"
 {{- if .Values.data.persistence.annotations }}
       annotations:
-{{ toYaml .Values.data.persistence.annotations | indent 6 }}
+{{ toYaml .Values.data.persistence.annotations | indent 8 }}
 {{- end }}
     spec:
       accessModes:
-{{ toYaml .Values.data.persistence.accessModes | indent 6 }}
+{{ toYaml .Values.data.persistence.accessModes | indent 8 }}
 {{- if .Values.data.persistence.storageClass }}
 {{- if (eq "-" .Values.data.persistence.storageClass) }}
       storageClassName: ""
