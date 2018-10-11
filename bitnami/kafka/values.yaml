@@ -1,3 +1,8 @@
+## Global chart image registry
+##
+# global:
+#   registry:
+
 ## Bitnami Kafka image version
 ## ref: https://hub.docker.com/r/bitnami/kafka/tags/
 ##
@@ -319,6 +324,10 @@ metrics:
     - kafka.network:*
     - kafka.log:*
 
+##
+## Zookeeper chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
 zookeeper:
   enabled: true
 
