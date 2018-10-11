@@ -19,7 +19,6 @@ We truncate at 24 chars because some Kubernetes name fields are limited to this 
 Return the proper NGINX image name
 */}}
 {{- define "nginx.image" -}}
-{{- $registryName := .Values.image.registry -}}
 {{- if .Values.global.registry -}}
     {{- $registryName := .Values.global.registry -}}
 {{- else -}}

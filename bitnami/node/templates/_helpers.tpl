@@ -45,7 +45,6 @@ Custom template to get proper service name
 Return the proper Node image name
 */}}
 {{- define "node.image" -}}
-{{- $registryName := .Values.image.registry -}}
 {{- if .Values.global.registry -}}
     {{- $registryName := .Values.global.registry -}}
 {{- else -}}

@@ -26,7 +26,6 @@ Create chart name and version as used by the chart label.
 Return the proper ES image name
 */}}
 {{- define "elasticsearch.image" -}}
-{{- $registryName := .Values.image.registry -}}
 {{- if .Values.global.registry -}}
     {{- $registryName := .Values.global.registry -}}
 {{- else -}}

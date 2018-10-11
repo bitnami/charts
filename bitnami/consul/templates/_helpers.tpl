@@ -26,7 +26,6 @@ Create chart name and version as used by the chart label.
 Return the proper Consul image name
 */}}
 {{- define "consul.image" -}}
-{{- $registryName := .Values.image.registry -}}
 {{- if .Values.global.registry -}}
     {{- $registryName := .Values.global.registry -}}
 {{- else -}}

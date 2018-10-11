@@ -26,7 +26,6 @@ Create chart name and version as used by the chart label.
 Return the proper Zookeeper image name
 */}}
 {{- define "zookeeper.image" -}}
-{{- $registryName := .Values.image.registry -}}
 {{- if .Values.global.registry -}}
     {{- $registryName := .Values.global.registry -}}
 {{- else -}}

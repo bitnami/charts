@@ -19,7 +19,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the proper Jenkins image name
 */}}
 {{- define "jenkins.image" -}}
-{{- $registryName := .Values.image.registry -}}
 {{- if .Values.global.registry -}}
     {{- $registryName := .Values.global.registry -}}
 {{- else -}}

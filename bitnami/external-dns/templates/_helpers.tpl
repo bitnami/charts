@@ -26,7 +26,6 @@ Create chart name and version as used by the chart label.
 Return the proper external-dns image name
 */}}
 {{- define "external-dns.image" -}}
-{{- $registryName := .Values.image.registry -}}
 {{- if .Values.global.registry -}}
     {{- $registryName := .Values.global.registry -}}
 {{- else -}}
