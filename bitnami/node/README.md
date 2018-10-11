@@ -78,10 +78,16 @@ The following table lists the configurable parameters of the Node chart and thei
 | `externaldb.secretName`                 | Secret containing existing database credentials           | `nil`                                                     |
 | `externaldb.type`                       | Type of database that defines the database secret mapping | `osba`                                                    |
 | `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                   | `nil`                                                     |
-| `ingress.enabled`                       | Enable ingress creation                                   | `false`                                                   |
-| `ingress.path`                          | Ingress path                                              | `/`                                                       |
-| `ingress.host`                          | Ingress host                                              | `example.local`                                           |
-| `ingress.tls`                           | TLS configuration for the ingress                         | `{}`                                                      |
+| `ingress.enabled`                       | Enable ingress controller resource                        | `false`                                                   |
+| `ingress.hosts[0].name`                 | Hostname to your Node installation                        | `node.local`                                              |
+| `ingress.hosts[0].path`                 | Path within the url structure                             | `/`                                                       |
+| `ingress.hosts[0].tls`                  | Utilize TLS backend in ingress                            | `false`                                                   |
+| `ingress.hosts[0].certManager`          | Add annotations for cert-manager                          | `false`                                                   |
+| `ingress.hosts[0].tlsSecret`            | TLS Secret (certificates)                                 | `node.local-tls-secret`                                   |
+| `ingress.hosts[0].annotations`          | Annotations for this host's ingress record                | `[]`                                                      |
+| `ingress.secrets[0].name`               | TLS Secret Name                                           | `nil`                                                     |
+| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                    | `nil`                                                     |
+| `ingress.secrets[0].key`                | TLS Secret Key                                            | `nil`                                                     |
 
 The above parameters map to the env variables defined in [bitnami/node](http://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](http://github.com/bitnami/bitnami-docker-node) image documentation.
 
