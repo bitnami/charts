@@ -19,10 +19,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the proper tensorflow-inception server image name
 */}}
 {{- define "tensorflow-inception.server.image" -}}
-{{- if .Values.global.registry -}}
-    {{- $registryName := .Values.global.registry -}}
-{{- else -}}
-    {{- $registryName := .Values.server.image.registry -}}
+{{- $registryName := .Values.server.image.registry -}}
+{{- if .Values.global }}
+    {{- if .Values.global.regristry }}
+        {{- $registryName := .Values.global.registry -}}
+    {{- end -}}
 {{- end -}}
 {{- $repositoryName := .Values.server.image.repository -}}
 {{- $tag := .Values.server.image.tag | toString -}}
@@ -33,10 +34,11 @@ Return the proper tensorflow-inception server image name
 Return the proper tensorflow-inception client image name
 */}}
 {{- define "tensorflow-inception.client.image" -}}
-{{- if .Values.global.registry -}}
-    {{- $registryName := .Values.global.registry -}}
-{{- else -}}
-    {{- $registryName := .Values.client.image.registry -}}
+{{- $registryName := .Values.client.image.registry -}}
+{{- if .Values.global }}
+    {{- if .Values.global.regristry }}
+        {{- $registryName := .Values.global.registry -}}
+    {{- end -}}
 {{- end -}}
 {{- $repositoryName := .Values.client.image.repository -}}
 {{- $tag := .Values.client.image.tag | toString -}}

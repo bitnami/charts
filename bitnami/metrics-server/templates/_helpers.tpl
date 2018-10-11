@@ -37,10 +37,11 @@ Create the name of the service account to use
 Return the proper metrics-server image name
 */}}
 {{- define "metrics-server.image" -}}
-{{- if .Values.global.registry -}}
-    {{- $registryName := .Values.global.registry -}}
-{{- else -}}
-    {{- $registryName := .Values.image.registry -}}
+{{- $registryName := .Values.image.registry -}}
+{{- if .Values.global }}
+    {{- if .Values.global.regristry }}
+        {{- $registryName := .Values.global.registry -}}
+    {{- end -}}
 {{- end -}}
 {{- $repositoryName := .Values.image.repository -}}
 {{- $tag := .Values.image.tag | toString -}}

@@ -45,10 +45,11 @@ Custom template to get proper service name
 Return the proper MEAN image name
 */}}
 {{- define "mean.image" -}}
-{{- if .Values.global.registry -}}
-    {{- $registryName := .Values.global.registry -}}
-{{- else -}}
-    {{- $registryName := .Values.image.registry -}}
+{{- $registryName := .Values.image.registry -}}
+{{- if .Values.global }}
+    {{- if .Values.global.regristry }}
+        {{- $registryName := .Values.global.registry -}}
+    {{- end -}}
 {{- end -}}
 {{- $repositoryName := .Values.image.repository -}}
 {{- $tag := .Values.image.tag | toString -}}

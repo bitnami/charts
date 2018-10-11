@@ -32,10 +32,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the proper MySQL image name
 */}}
 {{- define "mysql.image" -}}
-{{- if .Values.global.registry -}}
-    {{- $registryName := .Values.global.registry -}}
-{{- else -}}
-    {{- $registryName := .Values.image.registry -}}
+{{- $registryName := .Values.image.registry -}}
+{{- if .Values.global }}
+    {{- if .Values.global.regristry }}
+        {{- $registryName := .Values.global.registry -}}
+    {{- end -}}
 {{- end -}}
 {{- $repositoryName := .Values.image.repository -}}
 {{- $tag := .Values.image.tag | toString -}}
