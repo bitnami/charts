@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 
 |          Parameter               |                                                  Description                                               |                                     Default                        |
 |----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------- |
+| `global.registry`                | Global chart image registry                                                                                | `nil`                                                              |
 | `image.registry`                 | Kafka image registry                                                                                       | `docker.io`                                                        |
 | `image.repository`               | Kafka Image name                                                                                           | `bitnami/kafka`                                                    |
 | `image.tag`                      | Kafka Image tag                                                                                            | `{VERSION}`                                                        |
@@ -57,8 +58,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `replicaCount`                   | Number of Kafka nodes                                                                                      | `1`                                                                |
 | `config`                         | Configuration file for Kafka                                                                               | `nil`                                                              |
 | `allowPlaintextListener`         | Allow to use the PLAINTEXT listener                                                                        | `true`                                                             |
-| `listeners`                       | The address the socket server listens on.                                                                  | `nil`                                                              |
-| `advertisedListeners`             | Hostname and port the broker will advertise to producers and consumers.                                    | `nil`                                                              |
+| `listeners`                      | The address the socket server listens on.                                                                  | `nil`                                                              |
+| `advertisedListeners`            | Hostname and port the broker will advertise to producers and consumers.                                    | `nil`                                                              |
 | `brokerId`                       | ID of the Kafka node                                                                                       | `-1`                                                               |
 | `deleteTopicEnable`              | Switch to enable topic deletion or not.                                                                    | `false`                                                            |
 | `heapOpts`                       | Kafka's Java Heap size.                                                                                    | `-Xmx1024m -Xms1024m`                                              |
@@ -69,7 +70,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `logRetentionHours`              | The minimum age of a log file to be eligible for deletion due to age.                                      | `168`                                                              |
 | `logSegmentBytes`                | The maximum size of a log segment file. When this size is reached a new log segment will be created.       | `_1073741824`                                                      |
 | `logsDirs`                       | A comma separated list of directories under which to store log files.                                      | `/opt/bitnami/kafka/data`                                          |
-| `maxMessageBytes`                       | The largest record batch size allowed by Kafka.                                      | `1000012`                                          |
+| `maxMessageBytes`                | The largest record batch size allowed by Kafka.                                                            | `1000012`                                                          |
 | `numIoThreads`                   | The number of threads doing disk I/O.                                                                      | `8`                                                                |
 | `numNetworkThreads`              | The number of threads handling network requests.                                                           | `3`                                                                |
 | `numPartitions`                  | The default number of log partitions per topic.                                                            | `1`                                                                |
