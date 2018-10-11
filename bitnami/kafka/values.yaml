@@ -1,4 +1,5 @@
 ## Global chart image registry
+## Please, note that this registry would be used for all the containers in the chart and dependencies
 ##
 # global:
 #   registry:
