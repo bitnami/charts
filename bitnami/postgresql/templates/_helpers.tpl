@@ -39,9 +39,15 @@ Create chart name and version as used by the chart label.
 Return the proper PostgreSQL image name
 */}}
 {{- define "postgresql.image" -}}
-{{- $registryName :=  default "docker.io" .Values.image.registry -}}
-{{- $tag := default "latest" .Values.image.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
+{{- $registryName := .Values.image.registry -}}
+{{- if .Values.global.registry -}}
+    {{- $registryName := .Values.global.registry -}}
+{{- else -}}
+    {{- $registryName := .Values.image.registry -}}
+{{- end -}}
+{{- $repositoryName := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
 {{/*

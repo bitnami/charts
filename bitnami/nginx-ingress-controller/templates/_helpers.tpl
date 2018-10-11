@@ -62,8 +62,15 @@ Create the name of the service account to use
 Return the proper nginx-ingress-controller image name
 */}}
 {{- define "nginx-ingress-controller.image" -}}
+{{- $registryName := .Values.image.registry -}}
+{{- if .Values.global.registry -}}
+    {{- $registryName := .Values.global.registry -}}
+{{- else -}}
+    {{- $registryName := .Values.image.registry -}}
+{{- end -}}
+{{- $repositoryName := .Values.image.repository -}}
 {{- $tag := .Values.image.tag | toString -}}
-{{- printf "%s/%s:%s" .Values.image.registry .Values.image.repository $tag -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
 {{/*

@@ -29,7 +29,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ template "nginx.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:
         - name: http

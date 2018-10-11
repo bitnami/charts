@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 
 |         Parameter          |              Description               |                               Default                     |
 |----------------------------|----------------------------------------|---------------------------------------------------------- |
+| `global.registry`          | Global chart image registry                                                              | `nil`                                                     |
 | `image.registry`           | Jenkins image registry                 | `docker.io`                                               |
 | `image.repository`         | Jenkins Image name                     | `bitnami/jenkins`                                         |
 | `image.tag`                | Jenkins Image tag                      | `{VERSION}`                                               |

@@ -1,3 +1,9 @@
+## Global chart image registry
+## Please, note that this registry would be used for all the containers in the chart and dependencies
+##
+# global:
+#   registry:
+
 ## Bitnami node image version
 ## ref: https://hub.docker.com/r/bitnami/node/tags/
 ##
@@ -15,14 +21,14 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName 
+  #   - myRegistrKeySecretName
 
 gitImage:
   registry: docker.io
   repository: alpine/git
   tag: latest
   pullPolicy: IfNotPresent
-  
+
 ## Git repository http/https
 ##
 repository:  https://github.com/bitnami/sample-mean.git
@@ -83,6 +89,8 @@ resources: {}
 ##
 ## MongoDB chart configuration
 ##
+## https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
+##
 mongodb:
   ## Whether to deploy a mongodb server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
@@ -92,7 +100,7 @@ mongodb:
   ##
   mongodbUsername: user
   mongodbDatabase: test_db
-  mongodbPassword: secret_password 
+  mongodbPassword: secret_password
 
 ## Provision an external database (Only if mongodb.install is false)
 ## You can:
@@ -110,7 +118,7 @@ externaldb:
   broker:
     serviceInstanceName:
 
-## Configure ingress resource that allow you to access the application. 
+## Configure ingress resource that allow you to access the application.
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:

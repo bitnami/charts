@@ -40,3 +40,18 @@ Custom template to get proper service name
     {{- printf "%s-%s" .Release.Name "mongodb-binding" | trunc 63 | trimSuffix "-" -}}
   {{- end }}
 {{- end -}}
+
+{{/*
+Return the proper MEAN image name
+*/}}
+{{- define "mean.image" -}}
+{{- $registryName := .Values.image.registry -}}
+{{- if .Values.global.registry -}}
+    {{- $registryName := .Values.global.registry -}}
+{{- else -}}
+    {{- $registryName := .Values.image.registry -}}
+{{- end -}}
+{{- $repositoryName := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}

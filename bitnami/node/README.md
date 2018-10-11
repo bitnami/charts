@@ -51,6 +51,7 @@ The following table lists the configurable parameters of the Node chart and thei
 
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
+| `global.registry`                       | Global chart image registry                               | `nil`                                                     |
 | `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
 | `image.repository`                      | NodeJS Image name                                         | `bitnami/node`                                            |
 | `image.tag`                             | NodeJS Image tag                                          | `{VERSION}`                                               |
@@ -153,7 +154,7 @@ ingress:
   ```
   $ kubectl create secret generic my-database-secret --from-literal=host=YOUR_DATABASE_HOST --from-literal=port=YOUR_DATABASE_PORT --from-literal=username=YOUR_DATABASE_USER  --from-literal=password=YOUR_DATABASE_PASSWORD --from-literal=database=YOUR_DATABASE_NAME
   ```
-  
+
   `YOUR_DATABASE_HOST`, `YOUR_DATABASE_PORT`, `YOUR_DATABASE_USER`, `YOUR_DATABASE_PASSWORD`, and `YOUR_DATABASE_NAME` are placeholders that must be replaced with correct values.
 
 2. Deploy the node chart specifying the secret name
@@ -168,7 +169,7 @@ ingress:
 2. Install the Open Service Broker for Azure in your Kubernetes cluster following [this instructions](https://github.com/Azure/open-service-broker-azure/tree/master/contrib/k8s/charts/open-service-broker-azure)
 
 > TIP: you may want to install the osba chart setting the `modules.minStability=EXPERIMENTAL` to see all the available services.
-> 
+>
 >     $ helm install azure/open-service-broker-azure --name osba --namespace osba \
 >            --set azure.subscriptionId=$AZURE_SUBSCRIPTION_ID \
 >            --set azure.tenantId=$AZURE_TENANT_ID \
@@ -196,7 +197,7 @@ ingress:
         -  "0.0.0.0/0"
   ```
 
-  Please update the `YOUR_AZURE_LOCATION` placeholder in the above example. 
+  Please update the `YOUR_AZURE_LOCATION` placeholder in the above example.
 
   ```
   $ kubectl create -f mongodb-service-instance.yml
@@ -214,7 +215,7 @@ Deploying the helm chart enabling the Azure external database makes the followin
   - You would want an Azure CosmosDB MongoDB database
   - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
-You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog 
+You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
 
 ## Upgrading
 

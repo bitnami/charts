@@ -51,6 +51,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 
 |            Parameter                              |                      Description                                                                                          |                               Default                               |
 |---------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
+| `global.registry`                                 | Global chart image registry                                                                                               | `nil`                                                               |
 | `image.registry`                                  | Elasticsearch image registry                                                                                              | `docker.io`                                                         |
 | `image.repository`                                | Elasticsearch image repository                                                                                            | `bitnami/elasticsearch`                                             |
 | `image.tag`                                       | Elasticsearch image tag                                                                                                   | `{VERSION}`                                                         |

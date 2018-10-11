@@ -51,6 +51,7 @@ The following tables lists the configurable parameters of the Consul chart and t
 
 | Parameter                            | Description                                            | Default                                                    |
 | ------------------------------------ | ------------------------------------------------------ | ---------------------------------------------------------- |
+| `global.registry`                    | Global chart image registry                            | `nil`                                                      |
 | `image.registry`                     | Consul image registry                                  | `docker.io`                                                |
 | `image.repository`                   | Consul image name                                      | `bitnami/consul`                                           |
 | `image.tag`                          | Consul image tag                                       | `{VERSION}`                                                |

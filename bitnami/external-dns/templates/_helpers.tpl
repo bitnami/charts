@@ -27,8 +27,14 @@ Return the proper external-dns image name
 */}}
 {{- define "external-dns.image" -}}
 {{- $registryName := .Values.image.registry -}}
+{{- if .Values.global.registry -}}
+    {{- $registryName := .Values.global.registry -}}
+{{- else -}}
+    {{- $registryName := .Values.image.registry -}}
+{{- end -}}
+{{- $repositoryName := .Values.image.repository -}}
 {{- $tag := .Values.image.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
 {{/*

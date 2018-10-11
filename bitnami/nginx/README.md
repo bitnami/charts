@@ -44,6 +44,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 
 |          Parameter        |             Description        |                        Default                            |
 | ------------------------- | ------------------------------ | --------------------------------------------------------- |
+| `global.registry`         | Global chart image registry    | `nil`                                                     |
 | `image.registry`          | NGINX image registry           | `docker.io`                                               |
 | `image.repository`        | NGINX Image name               | `bitnami/nginx`                                           |
 | `image.tag`               | NGINX Image tag                | `{VERSION}`                                               |

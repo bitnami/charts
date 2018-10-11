@@ -27,10 +27,15 @@ Return the proper etcd image name
 */}}
 {{- define "etcd.image" -}}
 {{- $registryName := .Values.image.registry -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName .Values.image.repository $tag -}}
+{{- if .Values.global.registry -}}
+    {{- $registryName := .Values.global.registry -}}
+{{- else -}}
+    {{- $registryName := .Values.image.registry -}}
 {{- end -}}
-{{/*
+{{- $repositoryName := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
 
 {{/*
 Return the proper etcd peer protocol

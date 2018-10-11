@@ -1,3 +1,9 @@
+## Global chart image registry
+## Please, note that this registry would be used for all the containers in the chart and dependencies
+##
+# global:
+#   registry:
+
 ## Bitnami NGINX image version
 ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
 ##
@@ -15,7 +21,7 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName 
+  #   - myRegistrKeySecretName
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer

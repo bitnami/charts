@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 
 |          Parameter               |                                                  Description                                               |                                     Default                        |
 |----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------- |
+| `global.registry`                | Global chart image registry                                                           | `nil`                                                                                          |
 | `image.registry`                 | Kafka image registry                                                                                       | `docker.io`                                                        |
 | `image.repository`               | Kafka Image name                                                                                           | `bitnami/kafka`                                                    |
 | `image.tag`                      | Kafka Image tag                                                                                            | `{VERSION}`                                                        |

@@ -35,7 +35,7 @@ spec:
         - name: app
           mountPath: /app
       - name: npm-install
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ template "mean.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         workingDir: /app
         command: ['/bin/bash', '-c', 'useradd bitnami && chown -R bitnami:bitnami /app && npm install']
@@ -44,7 +44,7 @@ spec:
           mountPath: /app
       containers:
       - name: {{ template "mean.fullname" . }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ template "mean.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         {{- if .Values.mongodb.install }}
