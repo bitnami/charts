@@ -117,20 +117,22 @@ spec:
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:
-{{- if .Values.master.persistence.existingClaim }}
+        {{- if .Values.master.persistence.existingClaim }}
         - name: {{ .Values.master.persistence.existingClaim }}
-{{- else }}
+        {{- else }}
         - name: data
-{{- end }}
+        {{- end }}
           mountPath: {{ .Values.master.persistence.mountPath }}
+        {{- if  (.Files.Glob "files/docker-entrypoint-initdb.d/*[sh|sql|sql.gz]") }}
         - name: custom-init-scripts
           mountPath: /docker-entrypoint-initdb.d
-{{- if .Values.master.config }}
+        {{- end }}
+        {{- if .Values.master.config }}
         - name: config
           mountPath: /opt/bitnami/mysql/conf/my.cnf
           subPath: my.cnf
-{{- end }}
-{{- if .Values.metrics.enabled }}
+        {{- end }}
+      {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
@@ -158,21 +160,23 @@ spec:
           timeoutSeconds: 1
         resources:
 {{ toYaml .Values.metrics.resources | indent 10 }}
-{{- end }}
+      {{- end }}
       volumes:
-      {{- if and .Values.master.persistence.enabled .Values.master.persistence.existingClaim }}
+        {{- if and .Values.master.persistence.enabled .Values.master.persistence.existingClaim }}
         - name: {{ .Values.master.persistence.existingClaim }}
           persistentVolumeClaim:
             claimName: {{ .Values.master.persistence.existingClaim }}
-      {{ end }}
-      {{- if .Values.master.config }}
+        {{ end }}
+        {{- if .Values.master.config }}
         - name: config
           configMap:
             name: {{ template "mysql.master.fullname" . }}
-      {{- end }}
+        {{- end }}
+        {{- if  (.Files.Glob "files/docker-entrypoint-initdb.d/*[sh|sql|sql.gz]") }}
         - name: custom-init-scripts
           configMap:
             name: {{ template "mysql.master.fullname" . }}-init-scripts
+        {{- end }}
 {{- if and .Values.master.persistence.enabled ( not .Values.master.persistence.existingClaim ) }}
   volumeClaimTemplates:
     - metadata:
