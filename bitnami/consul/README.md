@@ -78,17 +78,18 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `maxUnavailable`                     | Pod disruption Budget maxUnavailable                   | `1`                                                        |
 | `nodeAffinity`                       | Consul pod node-affinity setting                       | `nil`                                                      |
 | `antiAffinity`                       | Consul pod anti-affinity setting                       | `soft`                                                     |
-| `ui.service.enabled`                  | Use a service to access Consul Ui                      | `true`                                                     |
-| `ui.service.type`                     | Kubernetes Service Type                                | `ClusterIP`                                                |
-| `ui.ingress.enabled`                  | Enable ingress controller resource                     | `false`                                                    |
-| `ui.ingress.hosts[0].name`            | Hostname to your Consul installation                   | `consul-ui.local`                                          |
-| `ui.ingress.hosts[0].path`            | Path within the url structure                          | `/`                                                        |
-| `ui.ingress.hosts[0].tls`             | Utilize TLS backend in ingress                         | `false`                                                    |
-| `ui.ingress.hosts[0].tlsSecret`       | TLS Secret (certificates)                              | `consul-ui.local-tls`                                      |
-| `ui.ingress.hosts[0].annotations`     | Annotations for this host's ingress record             | `[]`                                                       |
-| `ui.ingress.secrets[0].name`          | TLS Secret Name                                        | `nil`                                                      |
-| `ui.ingress.secrets[0].certificate`   | TLS Secret Certificate                                 | `nil`                                                      |
-| `ui.ingress.secrets[0].key`           | TLS Secret Key                                         | `nil`                                                      |
+| `ui.service.enabled`                 | Use a service to access Consul Ui                      | `true`                                                     |
+| `ui.service.type`                    | Kubernetes Service Type                                | `ClusterIP`                                                |
+| `ui.ingress.enabled`                 | Enable ingress controller resource                     | `false`                                                    |
+| `ui.ingress.hosts[0].name`           | Hostname to your Consul installation                   | `consul-ui.local`                                          |
+| `ui.ingress.hosts[0].path`           | Path within the url structure                          | `/`                                                        |
+| `ui.ingress.hosts[0].tls`            | Utilize TLS backend in ingress                         | `false`                                                    |
+| `ui.ingress.hosts[0].certManager`    | Add annotations for cert-manager                       | `false`                                                    |
+| `ui.ingress.hosts[0].tlsSecret`      | TLS Secret (certificates)                              | `consul-ui.local-tls`                                      |
+| `ui.ingress.hosts[0].annotations`    | Annotations for this host's ingress record             | `[]`                                                       |
+| `ui.ingress.secrets[0].name`         | TLS Secret Name                                        | `nil`                                                      |
+| `ui.ingress.secrets[0].certificate`  | TLS Secret Certificate                                 | `nil`                                                      |
+| `ui.ingress.secrets[0].key`          | TLS Secret Key                                         | `nil`                                                      |
 | `configmap`                          | Consul configuration to be injected as ConfigMap       | `nil`                                                      |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                   | `false`                                                    |
 | `metrics.image`                      | Exporter image                                         | `prom/consul-exporter`                                     |
@@ -100,13 +101,13 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated               | 30                                                         |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                         | 10                                                         |
 | `livenessProbe.timeoutSeconds`       | When the probe times out                               | 5                                                          |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.     |  1 |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.       |  6 |
-| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                        |  5 |
-| `readinessProbe.periodSeconds`       | How often to perform the probe                                                                   | 10 |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                         |  5 |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.     |  1 |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.       |  6 |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.     | 1                |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.       | 6                |
+| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                        | 5                |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                                                                   | 10               |
+| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                         | 5                |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.     | 1                |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.       | 6                |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
