@@ -52,3 +52,32 @@ resources:
   requests:
     memory: 256Mi
     cpu: 250m
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: prom/memcached-exporter
+    tag: v0.4.1
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistrKeySecretName
+   ## Metrics exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  # resources: {}
+   ## Metrics exporter pod Annotation
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9150"
