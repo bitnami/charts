@@ -255,7 +255,7 @@ metrics:
 
   ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
   jmx:
-    enabled: false
+    enabled: true
 
     image:
       registry: docker.io
