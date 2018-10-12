@@ -96,7 +96,7 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `metrics.imageTag`                   | Exporter image tag                                     | `v0.3.0`                                                   |
 | `metrics.imagePullPolicy`            | Exporter image pull policy                             | `IfNotPresent`                                             |
 | `metrics.resources`                  | Exporter resource requests/limit                       | `{}`                                                       |
-| `metricspodAnnotations`                | Exporter annotations                                   | `{}`                                                       |
+| `metrics.podAnnotations`                | Exporter annotations                                   | `{}`                                                       |
 | `nodeSelector`                       | Node labels for pod assignment                         | `{}`                                                       |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated               | 30                                                         |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                         | 10                                                         |
@@ -104,7 +104,7 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.     | 1                |
 | `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.       | 6                |
 | `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
-sProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                        | 5                |
+| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                        | 5                |
 | `readinessProbe.periodSeconds`       | How often to perform the probe                                                                   | 10               |
 | `readinessProbe.timeoutSeconds`      | When the probe times out                                                                         | 5                |
 | `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.     | 1                |
