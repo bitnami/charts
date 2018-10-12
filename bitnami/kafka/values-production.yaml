@@ -224,7 +224,7 @@ readinessProbe:
 metrics:
   ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
   kafka:
-    enabled: false
+    enabled: true
 
     image:
       registry: docker.io
