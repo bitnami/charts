@@ -27,6 +27,15 @@ spec:
         component: "slave"
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+{{- if or .Values.slave.annotations .Values.metrics.enabled }}
+      annotations:
+  {{- if .Values.slave.annotations }}
+{{ toYaml .Values.slave.annotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.metrics.annotations }}
+{{ toYaml .Values.metrics.annotations | indent 8 }}
+  {{- end }}
+{{- end }}
     spec:
       {{- if .Values.securityContext.enabled }}
       securityContext:
