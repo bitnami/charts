@@ -80,6 +80,8 @@ The following tables lists the configurable parameters of the Consul chart and t
 | `antiAffinity`                       | Consul pod anti-affinity setting                       | `soft`                                                     |
 | `ui.service.enabled`                 | Use a service to access Consul Ui                      | `true`                                                     |
 | `ui.service.type`                    | Kubernetes Service Type                                | `ClusterIP`                                                |
+| `ui.service.annotations`             | Annotations for Consul UI service                      | {}                                                         |
+| `ui.service.loadBalancerIP`          | IP if Consul UI service type is `LoadBalancer`         | `nil`                                                      |
 | `ui.ingress.enabled`                 | Enable ingress controller resource                     | `false`                                                    |
 | `ui.ingress.hosts[0].name`           | Hostname to your Consul installation                   | `consul-ui.local`                                          |
 | `ui.ingress.hosts[0].path`           | Path within the url structure                          | `/`                                                        |

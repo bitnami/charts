@@ -9,12 +9,19 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
     component: ui
+{{- with .Values.ui.service.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   ports:
   - name: http
     port: {{ .Values.uiPort }}
     targetPort: http
   type: "{{ .Values.ui.service.type }}"
+  {{- if and (eq .Values.ui.service.type "LoadBalancer") .Values.ui.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.ui.service.loadBalancerIP }}
+  {{- end }}
   selector:
     app: "{{ template "consul.name" . }}"
     chart: {{ template "consul.chart" . }}
