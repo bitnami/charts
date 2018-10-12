@@ -103,6 +103,13 @@ ui:
   service:
     enabled: true
     type: "ClusterIP"
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations:
+    #  kubernetes.io/ingress.class: nginx
+    loadBalancerIP:
 
   ## Configure the ingress resource that allows you to access the
   ## Consul user interface. Set up the URL
