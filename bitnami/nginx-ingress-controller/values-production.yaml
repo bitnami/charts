@@ -235,7 +235,7 @@ extraInitContainers: []
 #   command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
 
 stats:
-  enabled: false
+  enabled: true
 
   service:
     annotations: {}
@@ -254,7 +254,7 @@ stats:
 ## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
 ##
 metrics:
-  enabled: false
+  enabled: true
 
   service:
     annotations:
