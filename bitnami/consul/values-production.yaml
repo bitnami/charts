@@ -1,9 +1,3 @@
-## Global chart image registry
-## Please, note that this registry would be used for all the containers in the chart and dependencies
-##
-# global:
-#   registry:
-
 ## Bitnami Consul image version
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
 ##
@@ -185,14 +179,13 @@ ui:
 #    },
 #    "serf_lan":"0.0.0.0"
 #    }
-
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
 metrics:
-  enabled: false
+  enabled: true
   image:
     registry: docker.io
     repository: prom/consul-exporter
