@@ -148,7 +148,7 @@ resources: {}
 #    cpu: 10m
 
 ## Replica count
-replicas: 1
+replicas: 3
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -168,7 +168,7 @@ readinessProbe:
   successThreshold: 1
 
 metrics:
-  enabled: false
+  enabled: true
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "7979"
