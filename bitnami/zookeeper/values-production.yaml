@@ -39,7 +39,7 @@ podManagementPolicy: Parallel
 
 ## Number of ZooKeeper nodes
 ##
-replicaCount: 1
+replicaCount: 3
 
 ## Basic time unit in milliseconds used by ZooKeeper for heartbeats
 ##
@@ -160,7 +160,7 @@ readinessProbe:
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
 
   image:
     registry: docker.io

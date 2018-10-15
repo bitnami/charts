@@ -29,3 +29,13 @@ Return the proper Zookeeper image name
 {{- $tag := .Values.image.tag | toString -}}
 {{- printf "%s/%s:%s" .Values.image.registry .Values.image.repository $tag -}}
 {{- end -}}
+
+{{/*
+Return the proper image name (for the metrics image)
+*/}}
+{{- define "metrics.image" -}}
+{{- $registryName :=  .Values.metrics.image.registry -}}
+{{- $repositoryName := .Values.metrics.image.repository -}}
+{{- $tag := .Values.metrics.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}

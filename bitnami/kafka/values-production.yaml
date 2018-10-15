@@ -321,6 +321,8 @@ metrics:
 
 zookeeper:
   enabled: true
+  metrics: 
+    enabled: true
 
 externalZookeeper:
   ## This value is only used when zookeeper.enabled is set to false
