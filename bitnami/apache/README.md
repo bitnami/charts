@@ -46,7 +46,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 
 | Parameter                         | Description                           | Default                                                   |
 | --------------------------------- | ------------------------------------- | --------------------------------------------------------- |
-| `global.registry`                 | Global chart image registry           | `nil`                                                     |
+| `global.imageRegistry`            | Global Docker image registry          | `nil`                                                     |
 | `image.registry`                  | Apache image registry                 | `docker.io`                                               |
 | `image.repository`                | Apache Image name                     | `bitnami/apache`                                          |
 | `image.tag`                       | Apache Image tag                      | `{VERSION}`                                               |

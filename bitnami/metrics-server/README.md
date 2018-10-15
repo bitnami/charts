@@ -47,7 +47,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 
 |         Parameter        |                                   Description                               |                Default                 |
 |--------------------------|-----------------------------------------------------------------------------|----------------------------------------|
-| `global.registry`        | Global chart image registry                                                 | `nil`                                  |
+| `global.imageRegistry`   | Global Docker image registry                                                | `nil`                                  |
 | `image.registry`         | Metrics Server image registry                                               | `docker.io`                            |
 | `image.repository`       | Metrics Server image name                                                   | `bitnami/metrics-server`               |
 | `image.tag`              | Metrics Server image tag                                                    | `{VERSION}`                            |

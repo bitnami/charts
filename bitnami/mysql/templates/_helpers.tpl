@@ -35,7 +35,7 @@ Return the proper MySQL image name
 {{- $registryName := .Values.image.registry -}}
 {{- if .Values.global }}
     {{- if .Values.global.regristry }}
-        {{- $registryName := .Values.global.registry -}}
+        {{- $registryName := .Values.global.imageRegistry -}}
     {{- end -}}
 {{- end -}}
 {{- $repositoryName := .Values.image.repository -}}

@@ -1,8 +1,8 @@
-## Global chart image registry
+## Global Docker image registry
 ## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
 ##
 # global:
-#   registry:
+#   imageRegistry:
 
 ## Bitnami NGINX image version
 ## ref: https://hub.docker.com/r/bitnami/nginx/tags/

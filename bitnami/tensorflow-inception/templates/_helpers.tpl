@@ -22,7 +22,7 @@ Return the proper tensorflow-inception server image name
 {{- $registryName := .Values.server.image.registry -}}
 {{- if .Values.global }}
     {{- if .Values.global.regristry }}
-        {{- $registryName := .Values.global.registry -}}
+        {{- $registryName := .Values.global.imageRegistry -}}
     {{- end -}}
 {{- end -}}
 {{- $repositoryName := .Values.server.image.repository -}}
@@ -37,7 +37,7 @@ Return the proper tensorflow-inception client image name
 {{- $registryName := .Values.client.image.registry -}}
 {{- if .Values.global }}
     {{- if .Values.global.regristry }}
-        {{- $registryName := .Values.global.registry -}}
+        {{- $registryName := .Values.global.imageRegistry -}}
     {{- end -}}
 {{- end -}}
 {{- $repositoryName := .Values.client.image.repository -}}

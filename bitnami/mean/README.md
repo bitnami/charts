@@ -51,7 +51,7 @@ The following table lists the configurable parameters of the MEAN chart and thei
 
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
-| `global.registry`                       | Global chart image registry                                                                                              | `nil`                                                     |
+| `global.imageRegistry`                  | Global Docker image registry                              | `nil`                                                     |
 | `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
 | `image.repository`                      | NodeJS Image name                                         | `bitnami/node`                                            |
 | `image.tag`                             | NodeJS Image tag                                          | `{VERSION}`                                               |

@@ -47,7 +47,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 
 |             Parameter                     |                     Description                       |                              Default                              |
 |-------------------------------------------|-------------------------------------------------------|-------------------------------------------------------------------|
-| `global.registry`                         | Global chart image registry                           | `nil`                                                             |
+| `global.imageRegistry`                    | Global Docker image registry                          | `nil`                                                             |
 | `image.registry`                          | MySQL image registry                                  | `docker.io`                                                       |
 | `image.repository`                        | MySQL Image name                                      | `bitnami/mysql`                                                   |
 | `image.tag`                               | MySQL Image tag                                       | `{VERSION}`                                                       |

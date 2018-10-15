@@ -47,7 +47,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 
 |      Parameter              |             Description             |                          Default                          |
 |-----------------------------|-------------------------------------|---------------------------------------------------------- |
-| `global.registry`           | Global chart image registry                                                            | `nil`                                                     |
+| `global.imageRegistry`      | Global Docker image registry        | `nil`                                                     |
 | `image.registry`            | Memcached image registry            | `docker.io`                                               |
 | `image.repository`          | Memcached Image name                | `bitnami/memcached`                                       |
 | `image.tag`                 | Memcached Image tag                 | `{VERSION}`                                               |
