@@ -22,7 +22,7 @@ spec:
       serviceAccountName: {{ template "kubeapps.tiller-proxy.fullname" . }}
       containers:
       - name: proxy
-        image: {{ template "kubeapps.image" .Values.tillerProxy.image }}
+        image: {{ template "kubeapps.image" (list .Values.tillerProxy.image .Values.global) }}
         command:
         - /proxy
         args:
@@ -53,7 +53,7 @@ spec:
       {{- if .Values.tillerProxy.tls }}
       volumes:
       - name: tiller-certs
-        secret: 
+        secret:
           secretName: {{ template "kubeapps.tiller-proxy.fullname" . }}
       {{- end }}
     {{- with .Values.tillerProxy.nodeSelector }}

@@ -115,6 +115,7 @@ apprepository:
 EOF
 $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps -f custom-values.yaml
 ```
+
 ### Configuring connection to a custom namespace Tiller instance
 
 By default, Kubeapps connects to the Tiller Service in the `kube-system` namespace, the default install location for Helm.
