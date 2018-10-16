@@ -28,7 +28,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.server.image.registry }}/{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
+        image: "{{ template "tensorflow-inception.server.image" . }}"
         imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
         readinessProbe:
           tcpSocket:

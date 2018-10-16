@@ -48,6 +48,7 @@ The following table lists the configurable parameters of the external-dns chart 
 
 | Parameter                             | Description                                                                                              | Default                                                  |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `global.imageRegistry`                | Global Docker image registry                                                                             | `nil`                                                    |
 | `image.registry`                      | ExternalDNS image registry                                                                               | `docker.io`                                              |
 | `image.repository`                    | ExternalDNS Image name                                                                                   | `bitnami/external-dns`                                   |
 | `image.tag`                           | ExternalDNS Image tag                                                                                    | `{VERSION}`                                              |

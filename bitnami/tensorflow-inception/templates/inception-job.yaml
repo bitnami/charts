@@ -20,7 +20,7 @@ spec:
       {{- end}}
       {{- end }}
       - name: seed
-        image: "{{ .Values.client.image.registry }}/{{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}"
+        image: "{{ template "tensorflow-inception.client.image" . }}"
         imagePullPolicy: {{ .Values.client.image.pullPolicy | quote }}
         command:
           - "/bin/sh"

@@ -62,6 +62,7 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 
 | Parameter                       | Description                            | Default                                                    |
 | ------------------------------- | -------------------------------------- | ---------------------------------------------------------- |
+| `global.imageRegistry`          | Global Docker image registry           | `nil`                                                      |
 | `server.image.registry`         | TensorFlow Serving image registry      | `docker.io`                                                |
 | `server.image.repository`       | TensorFlow Serving Image name          | `bitnami/tensorflow-serving`                               |
 | `server.image.tag`              | TensorFlow Serving Image tag           | `{VERSION}`                                                |
