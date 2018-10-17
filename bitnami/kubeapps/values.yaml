@@ -1,3 +1,8 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+# global:
+#   imageRegistry:
+
 # The frontend service is the main reverse proxy used to access the Kubeapps UI
 # To expose Kubeapps externally either configure the ingress object below or
 # set frontend.service.type=LoadBalancer in the frontend configuration.
@@ -59,8 +64,8 @@ apprepository:
   # Image used to perform chart repository syncs
   syncImage:
     registry: docker.io
-    repository: kubeapps/chart-repo
-    tag: v1.0.0-beta.2
+    repository: quay.io/helmpack/chart-repo
+    tag: v1.0.0
   initialRepos:
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
@@ -127,8 +132,8 @@ chartsvc:
   replicaCount: 2
   image:
     registry: docker.io
-    repository: kubeapps/chartsvc
-    tag: v1.0.0-beta.2
+    repository: quay.io/helmpack/chartsvc
+    tag: v1.0.0
   service:
     port: 8080
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
@@ -190,6 +195,11 @@ dashboard:
   tolerations: []
   affinity: {}
 
+##
+## MongoDB chart configuration
+##
+## https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
+##
 mongodb:
   # Kubeapps uses MongoDB as a cache and persistence is not required
   persistence:

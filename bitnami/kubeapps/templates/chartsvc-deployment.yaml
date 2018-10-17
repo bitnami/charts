@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: chartsvc
-        image: {{ template "kubeapps.image" .Values.chartsvc.image }}
+        image: {{ template "kubeapps.image" (list .Values.chartsvc.image .Values.global) }}
         command:
         - /chartsvc
         args:

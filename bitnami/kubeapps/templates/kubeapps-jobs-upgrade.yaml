@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: kubectl
-        image: {{ template "kubeapps.image" .Values.hooks.image }}
+        image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}
         command:
         - /bin/sh
         - -c

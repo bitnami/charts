@@ -22,12 +22,12 @@ spec:
       serviceAccountName: {{ template "kubeapps.apprepository.fullname" . }}
       containers:
       - name: controller
-        image: {{ template "kubeapps.image" .Values.apprepository.image }}
+        image: {{ template "kubeapps.image" (list .Values.apprepository.image .Values.global) }}
         command:
         - /apprepository-controller
         args:
         - --logtostderr
-        - --repo-sync-image={{ template "kubeapps.image" .Values.apprepository.syncImage }}
+        - --repo-sync-image={{ template "kubeapps.image" (list .Values.apprepository.syncImage .Values.global) }}
         - --namespace={{ .Release.Namespace }}
         - --mongo-url={{ template "kubeapps.mongodb.fullname" . }}
         - --mongo-secret-name={{ .Values.mongodb.existingSecret }}

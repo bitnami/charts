@@ -19,11 +19,11 @@ spec:
     spec:
       containers:
       - name: kubectl
-        image: {{ template "kubeapps.image" .Values.hooks.image }}
+        image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}
         command:
         - kubectl
-        - apply 
-        - -f 
+        - apply
+        - -f
         - /tmp/apprepositories/apprepositories.yaml
         volumeMounts:
         - mountPath: /tmp/apprepositories
