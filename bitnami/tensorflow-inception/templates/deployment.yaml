@@ -43,16 +43,7 @@ spec:
         volumeMounts:
         - name: seed
           mountPath: "/bitnami/model-data"
-        - name: data
-          mountPath: /bitnami/tensorflow-serving
       volumes:
       - name: seed
         persistentVolumeClaim:
           claimName: {{ template "fullname" . }}-seed-inception
-      - name: data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
-      {{- else }}
-        emptyDir: {}
-      {{- end -}}
