@@ -4,7 +4,7 @@
 # global:
 #   imageRegistry:
 
-## Bitnami Consul image version
+## Bitnami HashiCorp Consul image version
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
 ##
 image:
