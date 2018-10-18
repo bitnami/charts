@@ -60,7 +60,7 @@ apprepository:
   image:
     registry: docker.io
     repository: kubeapps/apprepository-controller
-    tag: v1.0.0-beta.2
+    tag: v1.0.0-beta.3
   # Image used to perform chart repository syncs
   syncImage:
     registry: docker.io
@@ -106,7 +106,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: kubeapps/tiller-proxy
-    tag: v1.0.0-beta.2
+    tag: v1.0.0-beta.3
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -168,7 +168,7 @@ dashboard:
   image:
     registry: docker.io
     repository: kubeapps/dashboard
-    tag: v1.0.0-beta.2
+    tag: v1.0.0-beta.3
   service:
     port: 8080
   livenessProbe:
