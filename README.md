@@ -41,7 +41,7 @@ $ helm search bitnami
 ## Bitnami charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
-- [Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
+- [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
