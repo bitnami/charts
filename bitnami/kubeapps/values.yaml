@@ -95,8 +95,8 @@ apprepository:
     tag: v1.0.0-beta.3
   # Image used to perform chart repository syncs
   syncImage:
-    registry: docker.io
-    repository: quay.io/helmpack/chart-repo
+    registry: quay.io
+    repository: helmpack/chart-repo
     tag: v1.0.0
   initialRepos:
   - name: stable
@@ -163,8 +163,8 @@ tillerProxy:
 chartsvc:
   replicaCount: 2
   image:
-    registry: docker.io
-    repository: quay.io/helmpack/chartsvc
+    registry: quay.io
+    repository: helmpack/chartsvc
     tag: v1.0.0
   service:
     port: 8080
