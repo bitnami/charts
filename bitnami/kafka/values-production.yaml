@@ -1,10 +1,16 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
 ## Bitnami Kafka image version
 ## ref: https://hub.docker.com/r/bitnami/kafka/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.0.0-debian-9
+  tag: 2.0.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -319,6 +325,11 @@ metrics:
     - kafka.network:*
     - kafka.log:*
 
+##
+## Zookeeper chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
+## 
 zookeeper:
   enabled: true
 

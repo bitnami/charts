@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the nginx-ingress-cont
 
 Parameter | Description | Default
 --- | --- | ---
+`global.imageRegistry` | Global Docker image registry | `nil`
 `name` | name of the controller component | `controller`
 `image.registry` | name of the container image registry | `docker.io`
 `image.repository` | controller container image repository | `bitnami/nginx-ingress-controller`

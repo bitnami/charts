@@ -1,6 +1,6 @@
 name: external-dns
-version: 1.0.4
-appVersion: 0.5.7
+version: 1.1.1
+appVersion: 0.5.8
 description: ExternalDNS is a Kubernetes addon that configures public DNS servers with information about exposed Kubernetes services to make them discoverable.
 keywords:
 - external-dns

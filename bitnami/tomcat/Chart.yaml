@@ -1,5 +1,5 @@
 name: tomcat
-version: 1.0.2
+version: 1.1.1
 appVersion: 8.5.34
 description: Chart for Apache Tomcat
 keywords:

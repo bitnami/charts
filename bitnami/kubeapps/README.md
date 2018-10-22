@@ -115,6 +115,7 @@ apprepository:
 EOF
 $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps -f custom-values.yaml
 ```
+
 ### Configuring connection to a custom namespace Tiller instance
 
 By default, Kubeapps connects to the Tiller Service in the `kube-system` namespace, the default install location for Helm.
@@ -170,7 +171,7 @@ To enable ingress integration, please set `ingress.enabled` to `true`
 
 ##### Hosts
 
-Most likely you will only want to have one hostname that maps to this Kubeapps installation, however, it is possible to have more than one host.  To facilitate this, the `ingress.hosts` object is an array.
+Most likely you will only want to have one hostname that maps to this Kubeapps installation, however, it is possible to have more than one host. To facilitate this, the `ingress.hosts` object is an array.
 
 ##### Annotations
 
@@ -178,7 +179,18 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ##### TLS
 
-TLS can be configured using the `ingress.tls` object in the same format that the Kubernetes Ingress requests. Please see [this example](https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tls) for more information.
+TLS can be configured using setting the `ingress.hosts[].tls` boolean of the corresponding hostname to true, then you can choose the TLS secret name setting `ingress.hosts[].tlsSecret`. Please see [this example](https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tls) for more information.
+
+You can provide your own certificates using the `ingress.secrets` object. If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `ingress.hosts[].certManager` boolean to true to enable the corresponding annotations for cert-manager as shown in the example below:
+
+```console
+helm install --name kubeapps --namespace kubeapps bitnami/kubeapps \
+  --set ingress.enabled=true \
+  --set ingress.certManager=true \
+  --set ingress.hosts[0].name=kubeapps.custom.domain \
+  --set ingress.hosts[0].tls=true \
+  --set ingress.hosts[0].tlsSecret=kubeapps-tls
+```
 
 ## Troubleshooting
 

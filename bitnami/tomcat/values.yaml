@@ -1,10 +1,16 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
 ## Bitnami Tomcat image version
 ## ref: https://hub.docker.com/r/bitnami/tomcat/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 8.5.34-debian-9
+  tag: 8.5.34
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

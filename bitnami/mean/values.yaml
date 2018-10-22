@@ -1,3 +1,9 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
 ## Bitnami node image version
 ## ref: https://hub.docker.com/r/bitnami/node/tags/
 ##
@@ -83,6 +89,8 @@ resources: {}
 
 ##
 ## MongoDB chart configuration
+##
+## https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
 ##
 mongodb:
   ## MongoDB admin password

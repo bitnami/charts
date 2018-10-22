@@ -1,6 +1,6 @@
-# Consul Helm Chart
+# HashiCorp Consul Helm Chart
 
-[Consul](https://www.consul.io/) has multiple components, but as a whole, it is a tool for discovering and configuring services in your infrastructure
+[HashiCorp Consul](https://www.consul.io/) has multiple components, but as a whole, it is a tool for discovering and configuring services in your infrastructure
 
 ## TL;DR
 
@@ -11,7 +11,7 @@ $ helm install bitnami/consul
 
 ## Introduction
 
-This chart bootstraps a [Consul](https://github.com/bitnami/bitnami-docker-consul) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -28,7 +28,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release bitnami/consul
 ```
 
-The command deploys Consul on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys HashiCorp Consul on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -47,62 +47,63 @@ $ helm delete --purge my-release
 
 ## Configuration
 
-The following tables lists the configurable parameters of the Consul chart and their default values.
+The following tables lists the configurable parameters of the HashiCorp Consul chart and their default values.
 
-| Parameter                            | Description                                            | Default                                                    |
-| ------------------------------------ | ------------------------------------------------------ | ---------------------------------------------------------- |
-| `image.registry`                     | Consul image registry                                  | `docker.io`                                                |
-| `image.repository`                   | Consul image name                                      | `bitnami/consul`                                           |
-| `image.tag`                          | Consul image tag                                       | `{VERSION}`                                                |
-| `image.pullPolicy`                   | Image pull policy                                      | `Always`                                                   |
-| `image.pullSecrets`                  | Specify image pull secrets                             | `nil`                                                      |
-| `replicas`                           | Number of replicas                                     | `3`                                                        |
-| `httpPort`                           | Consul http listening port                             | `8500`                                                     |
-| `rpcPort`                            | Consul rpc listening port                              | `8400`                                                     |
-| `serflanPort`                        | Container serf lan listening port                      | `8301`                                                     |
-| `serverPort`                         | Container server listening port                        | `8300`                                                     |
-| `consulDnsPort`                      | Container dns listening port                           | `8600`                                                     |
-| `uiPort`                             | Consul UI port                                         | `80`                                                       |
-| `datacenterName`                     | Consul datacenter name                                 | `dc1`                                                      |
-| `gossipKey`                          | Gossip key for all members                             | `nil`                                                      |
-| `domain`                             | Consul domain                                          | `consul`                                                   |
-| `clientAddress`                      | Address in which Consul will bind client interfaces    | `0.0.0.0`                                                  |
-| `serflanAddress`                     | Address used for Serf LAN communications               | `0.0.0.0`                                                  |
-| `raftMultiplier`                     | Multiplier used to scale key Raft timing parameters    | `10Gi`                                                     |
-| `persistence.enabled`                | Use a PVC to persist data                              | `true`                                                     |
-| `persistence.storageClass`           | Storage class of backing PVC                           | `nil` (uses alpha storage class annotation)                |
-| `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                    | `ReadWriteOnce`                                            |
-| `persistence.size`                   | Size of data volume                                    | `8Gi`                                                      |
-| `persistence.annotations`            | Annotations for the persistent volume                  | `nil`                                                      |
-| `resources`                          | Container resource requests and limits                 | `{}`                                                       |
-| `maxUnavailable`                     | Pod disruption Budget maxUnavailable                   | `1`                                                        |
-| `nodeAffinity`                       | Consul pod node-affinity setting                       | `nil`                                                      |
-| `antiAffinity`                       | Consul pod anti-affinity setting                       | `soft`                                                     |
-| `ui.service.enabled`                 | Use a service to access Consul Ui                      | `true`                                                     |
-| `ui.service.type`                    | Kubernetes Service Type                                | `ClusterIP`                                                |
-| `ui.service.annotations`             | Annotations for Consul UI service                      | {}                                                         |
-| `ui.service.loadBalancerIP`          | IP if Consul UI service type is `LoadBalancer`         | `nil`                                                      |
-| `ui.ingress.enabled`                 | Enable ingress controller resource                     | `false`                                                    |
-| `ui.ingress.hosts[0].name`           | Hostname to your Consul installation                   | `consul-ui.local`                                          |
-| `ui.ingress.hosts[0].path`           | Path within the url structure                          | `/`                                                        |
-| `ui.ingress.hosts[0].tls`            | Utilize TLS backend in ingress                         | `false`                                                    |
-| `ui.ingress.hosts[0].certManager`    | Add annotations for cert-manager                       | `false`                                                    |
-| `ui.ingress.hosts[0].tlsSecret`      | TLS Secret (certificates)                              | `consul-ui.local-tls`                                      |
-| `ui.ingress.hosts[0].annotations`    | Annotations for this host's ingress record             | `[]`                                                       |
-| `ui.ingress.secrets[0].name`         | TLS Secret Name                                        | `nil`                                                      |
-| `ui.ingress.secrets[0].certificate`  | TLS Secret Certificate                                 | `nil`                                                      |
-| `ui.ingress.secrets[0].key`          | TLS Secret Key                                         | `nil`                                                      |
-| `configmap`                          | Consul configuration to be injected as ConfigMap       | `nil`                                                      |
-| `metrics.enabled`                    | Start a side-car prometheus exporter                   | `false`                                                    |
-| `metrics.image`                      | Exporter image                                         | `prom/consul-exporter`                                     |
-| `metrics.imageTag`                   | Exporter image tag                                     | `v0.3.0`                                                   |
-| `metrics.imagePullPolicy`            | Exporter image pull policy                             | `IfNotPresent`                                             |
-| `metrics.resources`                  | Exporter resource requests/limit                       | `{}`                                                       |
-| `metrics.podAnnotations`                | Exporter annotations                                   | `{}`                                                       |
-| `nodeSelector`                       | Node labels for pod assignment                         | `{}`                                                       |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated               | 30                                                         |
-| `livenessProbe.periodSeconds`        | How often to perform the probe                         | 10                                                         |
-| `livenessProbe.timeoutSeconds`       | When the probe times out                               | 5                                                          |
+| Parameter                            | Description                                                      | Default                                                    |
+| ------------------------------------ | ---------------------------------------------------------------- | ---------------------------------------------------------- |
+| `global.imageRegistry`               | Global Docker image registry                                     | `nil`                                                      |
+| `image.registry`                     | HashiCorp Consul image registry                                  | `docker.io`                                                |
+| `image.repository`                   | HashiCorp Consul image name                                      | `bitnami/consul`                                           |
+| `image.tag`                          | HashiCorp Consul image tag                                       | `{VERSION}`                                                |
+| `image.pullPolicy`                   | Image pull policy                                                | `Always`                                                   |
+| `image.pullSecrets`                  | Specify image pull secrets                                       | `nil`                                                      |
+| `replicas`                           | Number of replicas                                               | `3`                                                        |
+| `httpPort`                           | HashiCorp Consul http listening port                             | `8500`                                                     |
+| `rpcPort`                            | HashiCorp Consul rpc listening port                              | `8400`                                                     |
+| `serflanPort`                        | Container serf lan listening port                                | `8301`                                                     |
+| `serverPort`                         | Container server listening port                                  | `8300`                                                     |
+| `consulDnsPort`                      | Container dns listening port                                     | `8600`                                                     |
+| `uiPort`                             | HashiCorp Consul UI port                                         | `80`                                                       |
+| `datacenterName`                     | HashiCorp Consul datacenter name                                 | `dc1`                                                      |
+| `gossipKey`                          | Gossip key for all members                                       | `nil`                                                      |
+| `domain`                             | HashiCorp Consul domain                                          | `consul`                                                   |
+| `clientAddress`                      | Address in which HashiCorp Consul will bind client interfaces    | `0.0.0.0`                                                  |
+| `serflanAddress`                     | Address used for Serf LAN communications                         | `0.0.0.0`                                                  |
+| `raftMultiplier`                     | Multiplier used to scale key Raft timing parameters              | `10Gi`                                                     |
+| `persistence.enabled`                | Use a PVC to persist data                                        | `true`                                                     |
+| `persistence.storageClass`           | Storage class of backing PVC                                     | `nil` (uses alpha storage class annotation)                |
+| `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                              | `ReadWriteOnce`                                            |
+| `persistence.size`                   | Size of data volume                                              | `8Gi`                                                      |
+| `persistence.annotations`            | Annotations for the persistent volume                            | `nil`                                                      |
+| `resources`                          | Container resource requests and limits                           | `{}`                                                       |
+| `maxUnavailable`                     | Pod disruption Budget maxUnavailable                             | `1`                                                        |
+| `nodeAffinity`                       | HashiCorp Consul pod node-affinity setting                       | `nil`                                                      |
+| `antiAffinity`                       | HashiCorp Consul pod anti-affinity setting                       | `soft`                                                     |
+| `ui.service.enabled`                 | Use a service to access HashiCorp Consul Ui                      | `true`                                                     |
+| `ui.service.type`                    | Kubernetes Service Type                                          | `ClusterIP`                                                |
+| `ui.service.annotations`             | Annotations for HashiCorp Consul UI service                      | {}                                                         |
+| `ui.service.loadBalancerIP`          | IP if HashiCorp Consul UI service type is `LoadBalancer`         | `nil`                                                      |
+| `ui.ingress.enabled`                 | Enable ingress controller resource                               | `false`                                                    |
+| `ui.ingress.hosts[0].name`           | Hostname to your HashiCorp Consul installation                   | `consul-ui.local`                                          |
+| `ui.ingress.hosts[0].path`           | Path within the url structure                                    | `/`                                                        |
+| `ui.ingress.hosts[0].tls`            | Utilize TLS backend in ingress                                   | `false`                                                    |
+| `ui.ingress.hosts[0].certManager`    | Add annotations for cert-manager                                 | `false`                                                    |
+| `ui.ingress.hosts[0].tlsSecret`      | TLS Secret (certificates)                                        | `consul-ui.local-tls`                                      |
+| `ui.ingress.hosts[0].annotations`    | Annotations for this host's ingress record                       | `[]`                                                       |
+| `ui.ingress.secrets[0].name`         | TLS Secret Name                                                  | `nil`                                                      |
+| `ui.ingress.secrets[0].certificate`  | TLS Secret Certificate                                           | `nil`                                                      |
+| `ui.ingress.secrets[0].key`          | TLS Secret Key                                                   | `nil`                                                      |
+| `configmap`                          | HashiCorp Consul configuration to be injected as ConfigMap       | `nil`                                                      |
+| `metrics.enabled`                    | Start a side-car prometheus exporter                             | `false`                                                    |
+| `metrics.image`                      | Exporter image                                                   | `prom/consul-exporter`                                     |
+| `metrics.imageTag`                   | Exporter image tag                                               | `v0.3.0`                                                   |
+| `metrics.imagePullPolicy`            | Exporter image pull policy                                       | `IfNotPresent`                                             |
+| `metrics.resources`                  | Exporter resource requests/limit                                 | `{}`                                                       |
+| `metrics.podAnnotations`                | Exporter annotations                                          | `{}`                                                       |
+| `nodeSelector`                       | Node labels for pod assignment                                   | `{}`                                                       |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                         | 30                                                         |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                                   | 10                                                         |
+| `livenessProbe.timeoutSeconds`       | When the probe times out                                         | 5                                                          |
 | `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.     | 1                |
 | `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.       | 6                |
 | `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
@@ -117,7 +118,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release --set domain=consul-domain,gossipKey=secretkey bitnami/consul
 ```
-The above command sets the Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
+The above command sets the HashiCorp Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -129,7 +130,7 @@ $ helm install --name my-release -f values.yaml bitnami/consul
 
 ## Persistence
 
-The [Bitnami Consul](https://github.com/bitnami/bitnami-docker-consul) image stores the Consul data at the `/bitnami` path of the container.
+The [Bitnami HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) image stores the HashiCorp Consul data at the `/bitnami` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
@@ -139,20 +140,20 @@ See the [Configuration](#configuration) section to configure the PVC or to disab
 This chart provides support for ingress resources. If you have an
 ingress controller installed on your cluster, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress)
 or [traefik](https://kubeapps.com/charts/stable/traefik) you can utilize
-the ingress controller to service your Consul UI application.
+the ingress controller to service your HashiCorp Consul UI application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`
 
 ### Hosts
 Most likely you will only want to have one hostname that maps to this
-Consul installation, however it is possible to have more than one
+HashiCorp Consul installation, however it is possible to have more than one
 host.  To facilitate this, the `ingress.hosts` object is an array.
 
 For each item, please indicate a `name`, `tls`, `tlsSecret`, and any
 `annotations` that you may want the ingress controller to know about.
 
-Indicating TLS will cause Consul to generate HTTPS urls, and
-Consul will be connected to at port 443.  The actual secret that
+Indicating TLS will cause HashiCorp Consul to generate HTTPS urls, and
+HashiCorp Consul will be connected to at port 443.  The actual secret that
 `tlsSecret` references does not have to be generated by this chart.
 However, please note that if TLS is enabled, the ingress record will not
 work until this secret exists.
@@ -221,7 +222,7 @@ kubectl create secret generic consul-tls-encryption \
 
 > Take into account that you will need to create a config map with the proper configuration.
 
-If the secret is specified, the chart will locate those files at `/opt/bitnami/consul/certs/`, so you will want to use the below snippet to configure Consul TLS encryption in your config map:
+If the secret is specified, the chart will locate those files at `/opt/bitnami/consul/certs/`, so you will want to use the below snippet to configure HashiCorp Consul TLS encryption in your config map:
 
 ```
   "ca_file": "/opt/bitnami/consul/certs/ca.pem",
