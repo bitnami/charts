@@ -4,6 +4,8 @@
 # global:
 #   imageRegistry:
 
+replicaCount: 1
+
 ## TensorFlow Serving server image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-serving/tags/
 ##
