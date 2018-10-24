@@ -12,7 +12,7 @@ spec:
     matchLabels:
       app: {{ template "fullname" . }}
       release: "{{ .Release.Name }}"
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
@@ -26,6 +26,27 @@ spec:
         - name: {{ . }}
       {{- end}}
       {{- end }}
+      initContainers:
+      - name: seed
+        image: "{{ template "tensorflow-inception.client.image" . }}"
+        imagePullPolicy: {{ .Values.client.image.pullPolicy | quote }}
+        command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            if [ -f /seed/.initialized ];then
+              echo "Already initialized. Skipping"
+            else
+              curl -o /seed/inception-v3-2016-03-01.tar.gz http://download.tensorflow.org/models/image/imagenet/inception-v3-2016-03-01.tar.gz
+              cd /seed/ && tar -xzf inception-v3-2016-03-01.tar.gz
+              rm inception-v3-2016-03-01.tar.gz
+              inception_saved_model --checkpoint_dir=/seed/inception-v3 --output_dir=/seed/
+              rm -rf inception-v3
+              touch /seed/.initialized
+            fi
+        volumeMounts:
+        - name: seed
+          mountPath: /seed
       containers:
       - name: {{ template "fullname" . }}
         image: "{{ template "tensorflow-inception.server.image" . }}"
@@ -45,5 +66,4 @@ spec:
           mountPath: "/bitnami/model-data"
       volumes:
       - name: seed
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-seed-inception
+        emptyDir: {}
