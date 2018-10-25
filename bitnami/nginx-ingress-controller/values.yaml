@@ -238,7 +238,7 @@ extraInitContainers: []
 ## Containers, which are run before the app containers are started.
 # - name: init-myservice
 #   image: bitnami/minideb
-#   command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+#   command: ['sh', '-c', 'install_packages dnsutils && until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
 
 stats:
   enabled: false
