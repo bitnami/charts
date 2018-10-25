@@ -14,7 +14,7 @@ spec:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}
       release: "{{ .Release.Name }}"
-      role: "ingest"      
+      role: "ingest"
   replicas: {{ .Values.ingest.replicas }}
   template:
     metadata:
@@ -56,13 +56,16 @@ spec:
         - name: {{ . }}
       {{- end}}
       {{- end }}
+      {{- if .Values.sysctlImage.enabled }}
+      ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
       initContainers:
       - name: sysctl
         image: {{ template "sysctl.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        command: ['sh', '-c', 'install_packages systemd && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
         securityContext:
           privileged: true
+      {{- end }}
       containers:
       - name: {{ template "elasticsearch.ingest.fullname" . }}
         image: {{ template "elasticsearch.image" . }}

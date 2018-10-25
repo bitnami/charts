@@ -4,11 +4,11 @@
  WARNING
 
     By specifying "serviceType=LoadBalancer" and not specifying "postgresqlPassword"
-    you have most  likely exposed the PostgreSQL service externally without any
+    you have most likely exposed the PostgreSQL service externally without any
     authentication mechanism.
 
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
-    "NodePort". As alternative, you can also specify a valid password on the
+    "NodePort". As an alternative, you can also specify a valid password on the
     "postgresqlPassword" parameter.
 
 -------------------------------------------------------------------------------
@@ -27,7 +27,12 @@ To get the password for "{{ .Values.postgresqlUsername }}" run:
 
 To connect to your database run the following command:
 
-    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --image bitnami/postgresql --env="PGPASSWORD=$POSTGRESQL_PASSWORD" --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresqlUsername }}
+    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --image bitnami/postgresql --env="PGPASSWORD=$POSTGRESQL_PASSWORD" {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+   --labels="{{ template "postgresql.fullname" . }}-client=true" {{- end }} --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresqlUsername }}
+
+{{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+Note: Since NetworkPolicy is enabled, only pods with label {{ template "postgresql.fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
+{{- end }}
 
 To connect to your database from outside the cluster execute the following commands:
 
@@ -42,7 +47,7 @@ To connect to your database from outside the cluster execute the following comma
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "postgresql.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "postgresql.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "postgresql.fullname" . }} --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
     {{ if .Values.postgresqlPassword }}PGPASSWORD={{ .Values.postgresqlPassword}} "{{- end }}psql --host $SERVICE_IP --port {{ .Values.service.port }} -U {{ .Values.postgresqlUsername }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}

@@ -29,6 +29,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for networkpolicy.
+*/}}
+{{- define "postgresql.networkPolicy.apiVersion" -}}
+{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
+"extensions/v1beta1"
+{{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
+"networking.k8s.io/v1"
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "postgresql.chart" -}}
@@ -57,6 +68,7 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
+
 
 {{/*
 Return the proper PostgreSQL metrics image name

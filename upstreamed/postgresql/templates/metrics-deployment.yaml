@@ -6,13 +6,13 @@ metadata:
   labels:
     app: {{ template "postgresql.name" . }}
     chart: {{ template "postgresql.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name | quote}}
+    heritage: {{ .Release.Service | quote }}
 spec:
   template:
     metadata:
       labels:
-        release: "{{ .Release.Name }}"
+        release: {{ .Release.Name | quote }}
         app: {{ template "postgresql.name" . }}
         chart: {{ template "postgresql.chart" . }}
         role: metrics
@@ -43,8 +43,15 @@ spec:
         image: {{ template "metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
-        - name: DATA_SOURCE_NAME
-          value: {{ printf "postgresql://%s:%s@%s:%d/?sslmode=disable" (.Values.postgresqlUsername) (.Values.postgresqlPassword) ( include "postgresql.fullname" . ) (int .Values.service.port) | quote }} 
+        - name: DATA_SOURCE_URI
+          value: {{ printf "%s:%d/?sslmode=disable" ( include "postgresql.fullname" . ) (int .Values.service.port) | quote }}
+        - name: DATA_SOURCE_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "postgresql.fullname" . }}
+              key: postgresql-password
+        - name: DATA_SOURCE_USER
+          value: {{ .Values.postgresqlUsername }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
