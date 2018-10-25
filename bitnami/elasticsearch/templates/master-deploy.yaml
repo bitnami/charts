@@ -56,13 +56,14 @@ spec:
         - name: {{ . }}
       {{- end}}
       {{- end }}
-      initContainers:
-      - name: sysctl
-        image: {{ template "sysctl.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        command: ['sh', '-c', 'install_packages systemd && sysctl -w vm.max_map_count=262144']
-        securityContext:
-          privileged: true
+      ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
+      # initContainers:
+      # - name: sysctl
+      #   image: {{ template "sysctl.image" . }}
+      #   imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+      #   command: ['sh', '-c', 'install_packages systemd && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
+      #   securityContext:
+      #     privileged: true
       containers:
       - name: {{ template "elasticsearch.master.fullname" . }}
         image: {{ template "elasticsearch.image" . }}
