@@ -147,6 +147,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.image.pullPolicy`                        | Metrics exporter image pull policy                                                                                        | `Always`                                                |
 | `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                    | `ClusterIP`                                             |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                  | `requests: { cpu: "25m" }`                              |
+| `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                     | `false`                                                 |
 | `sysctlImage.registry`                            | Kernel settings modifier image registry                                                                                   | `docker.io`                                             |
 | `sysctlImage.repository`                          | Kernel settings modifier image repository                                                                                 | `bitnami/minideb`                                       |
 | `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                        | `latest`                                                |
@@ -184,10 +185,7 @@ You can use the initContainer created to set those parameters
 
 ```console
 $ helm install --name my-release \
-  --set sysctlImage.registry=docker.io \
-  --set sysctlImage.repository=bitnami/minideb \
-  --set sysctlImage.tag=latest \
-  --set sysctlImage.pullPolicy=Always \
+  --set sysctlImage.enabled=true \
   bitnami/elasticsearch
 ```
 
