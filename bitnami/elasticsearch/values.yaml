@@ -24,9 +24,11 @@ image:
   #   - myRegistrKeySecretName
 
 ## Image that performs the sysctl operation
+##
 sysctlImage:
+  enabled: false
   registry: docker.io
-  repository: busybox
+  repository: bitnami/minideb
   tag: latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
