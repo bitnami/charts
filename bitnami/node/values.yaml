@@ -23,9 +23,9 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
-gitImage:
+git:
   registry: docker.io
-  repository: alpine/git
+  repository: bitnami/git
   tag: latest
   pullPolicy: IfNotPresent
 
