@@ -52,6 +52,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `image.tag`                       | Apache Image tag                      | `{VERSION}`                                               |
 | `image.pullPolicy`                | Apache image pull policy              | `Always`                                                  |
 | `image.pullSecrets`               | Specify image pull secrets            | `nil` (does not add image pull secrets to deployed pods)  |
+| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`                                          |
 | `metrics.image.repository`                 | Apache exporter image name                                                                                      | `lusotycoon/apache-exporter`                           |
