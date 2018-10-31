@@ -64,6 +64,16 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `persistence.accessMode`   | PVC Access Mode for Jenkins volume     | `ReadWriteOnce`                                           |
 | `persistence.size`         | PVC Storage Request for Jenkins volume | `8Gi`                                                     |
 | `resources`                | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                              |
+| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
+| `metrics.enabled`                          | Start a side-car Jenkins prometheus exporter                                                                           | `false`                                              |
+| `metrics.image.registry`                   | Jenkins exporter image registry                                                                                  | `docker.io`                                          |
+| `metrics.image.repository`                 | Jenkins exporter image name                                                                                      | `tolleiv/jenkins_exporter`                           |
+| `metrics.image.tag`                        | Jenkins exporter image tag                                                                                       | `latest`                                            |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `nil`                                                |
+| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}`                                                   |
+| `metrics.resources`                        | Exporter resource requests/limit                                                                               | Memory: `256Mi`, CPU: `100m`                         |
+
 
 The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.
 
