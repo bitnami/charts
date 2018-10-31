@@ -202,7 +202,15 @@ If during installation you run into an error similar to:
 Error: release kubeapps failed: clusterroles.rbac.authorization.k8s.io "kubeapps-apprepository-controller" is forbidden: attempt to grant extra privileges: [{[get] [batch] [cronjobs] [] []...
 ```
 
-It is possible that your cluster does not have Role Based Access Control (RBAC) fully configured. In which case you should perform the chart installation by setting `rbac.create=false`:
+This usually is an indication that Tiller was not installed with enough permissions to create the resources by Kubeapps. In order to install Kubeapps, you will need to install Tiller with elevated permissions (e.g. as a cluster-admin). For example:
+
+```
+kubectl -n kube-system create sa tiller
+kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+helm init --service-account tiller
+```
+
+It is also possible, though less common, that your cluster does not have Role Based Access Control (RBAC) enabled. If this is the case you should perform the chart installation by setting `rbac.create=false`:
 
 ```console
 $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps --set rbac.create=false
