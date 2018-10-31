@@ -218,7 +218,7 @@ ingress:
 4. Deploy the helm chart:
 
     ```
-    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance bitnami/mean
+    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance,externaldb.ssl=true bitnami/mean
     ```
 
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.
