@@ -67,7 +67,7 @@ spec:
           privileged: true
       {{- end }}
       containers:
-      - name: {{ template "elasticsearch.master.fullname" . }}
+      - name: "elasticsearch"
         image: {{ template "elasticsearch.image" . }}
         {{- if .Values.securityContext.enabled }}
         securityContext:
