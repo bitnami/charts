@@ -297,6 +297,7 @@ defaultBackend:
 
   name: default-backend
   image:
+    registry: docker.io
     repository: bitnami/nginx
     tag: latest
     pullPolicy: Always
