@@ -27,7 +27,7 @@
         pods -l app={{ template "elasticsearch.name" . }},role=master -o jsonpath='{.items[0].metadata.name}') \
 	elasticsearch
 
-    You can adapt the Kernel paramters on you cluster as described in the
+    You can adapt the Kernel parameters on you cluster as described in the
     official documentation:
 
       https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster
