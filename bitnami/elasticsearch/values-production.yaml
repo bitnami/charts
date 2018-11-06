@@ -39,6 +39,23 @@ master:
   replicas: 3
   heapSize: 128m
   antiAffinity: "soft"
+  service:
+    ## master-eligible service type
+    type: ClusterIP
+    ## Elasticsearch transport port
+    port: 9300
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    # loadBalancerIP:
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -103,9 +120,22 @@ coordinating:
   heapSize: 128m
   antiAffinity: "soft"
   service:
+    ## coordinating-only service type
     type: ClusterIP
-    ## Externally accessible elasticsearch REST API port
+    ## Elasticsearch REST API port
     port: 9200
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    # loadBalancerIP:
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -197,6 +227,23 @@ ingest:
   replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
+  service:
+    ## ingest service type
+    type: ClusterIP
+    ## Elasticsearch transport port
+    port: 9300
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    # loadBalancerIP:
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
