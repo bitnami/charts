@@ -62,7 +62,7 @@ spec:
           privileged: true
       {{- end }}
       containers:
-      - name: {{ template "elasticsearch.data.fullname" . }}
+      - name: "elasticsearch"
         image: {{ template "elasticsearch.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.securityContext.enabled }}

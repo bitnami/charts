@@ -179,9 +179,12 @@ By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/use
 
 ## Troubleshooting
 
-Currently, Elasticsearch 5 requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages.
+Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
 
-You can use the initContainer created to set those parameters
+- [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
+- [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
+
+You can use a **privileged** initContainer to changes those settings in the Kernel by enabling the `sysctlImage.enabled`:
 
 ```console
 $ helm install --name my-release \
