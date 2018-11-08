@@ -1,0 +1,59 @@
+** Please be patient while the chart is being deployed **
+
+Cassandra can be accessed through the following urls from within the cluster:
+
+  - CQL: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.cqlPort }}
+  - Thrift: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.thriftPort }}
+
+To get your password run:
+
+    export CASSANDRA_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "cassandra.fullname" . }} -o jsonpath="{.data.cassandra-password}" | base64 --decode)
+
+Check the cluster status by running:
+
+    kubectl exec -it --namespace {{ .Release.Namespace }} $(kubectl get pods --namespace {{ .Release.Namespace }} -l app={{ template "cassandra.name" . }},release={{ .Release.Name }} -o jsonpath='{.items[0].metadata.name}') nodetool status
+
+To connect to your Cassandra cluster using CQL:
+
+1. Run a Cassandra pod that you can use as a client:
+
+   kubectl run --namespace {{ .Release.Namespace }} {{ template "cassandra.fullname" . }}-client --rm --tty -i \
+   --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD \
+   {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "cassandra.name" . }}-client=true" \{{- end }} \
+   --image {{ template "cassandra.image" . }} -- bash
+
+2. Connect using the cqlsh client:
+
+   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD {{ template "cassandra.fullname" . }}
+
+{{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+Note: Since NetworkPolicy is enabled, only pods with label
+{{ template "cassandra.fullname" . }}-client=true"
+will be able to connect to Cassandra.
+{{- else -}}
+
+To connect to your database from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "cassandra.fullname" . }})
+   
+   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $NODE_IP $NODE_PORT
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "redis.fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "redis.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $SERVICE_IP
+
+{{- else if contains "ClusterIP" .Values.service.type }}
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "cassandra.fullname" . }} {{ .Values.service.cqlPort }}:{{ .Values.service.cqlPort }} &
+      cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.cqlPort }}
+
+{{- end }}
+{{- end }}
+
