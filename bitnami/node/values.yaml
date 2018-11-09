@@ -23,6 +23,9 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
+## Bitnami git image version
+## ref: https://hub.docker.com/r/bitnami/git/tags/
+##
 git:
   registry: docker.io
   repository: bitnami/git
@@ -41,7 +44,7 @@ revision: master
 ##
 replicas: 1
 
-## Specify the port where your applucation will be running
+## Specify the port where your application will be running
 ##
 applicationPort: 3000
 
