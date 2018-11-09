@@ -165,7 +165,7 @@ metrics:
   image:
     registry: docker.io
     pullPolicy: IfNotPresent
-    repository: criteo/cassandra_exporter
+    repository: criteord/cassandra_exporter
     tag: 2.0.4
     # pullSecrets: 
   resources: {}
