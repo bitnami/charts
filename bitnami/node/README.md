@@ -58,13 +58,14 @@ The following table lists the configurable parameters of the Node chart and thei
 | `image.pullPolicy`                      | NodeJS image pull policy                                  | `IfNotPresent`                                            |
 | `image.pullSecrets`                     | Specify image pull secrets                                | `nil` (does not add image pull secrets to deployed pods)  |
 | `git.registry`                          | Git image registry                                        | `docker.io`                                               |
-| `git.repository`                        | Git image name                                            | `bitnami/git`                                              |
+| `git.repository`                        | Git image name                                            | `bitnami/git`                                             |
 | `git.tag`                               | Git image tag                                             | `latest`                                                  |
 | `git.pullPolicy`                        | Git image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
 | `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
 | `revision`                              | Revision to checkout                                      | `master`                                                  |
 | `replicas`                              | Number of replicas for the application                    | `1`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
+| `extraEnv`                              | Any extra environment variables to be pass to the pods    | `{}`                                                      |
 | `service.type`                          | Kubernetes Service type                                   | `ClusterIP`                                               |
 | `service.port`                          | Kubernetes Service port                                   | `80`                                                      |
 | `service.annotations`                   | Annotations for the Service                               | {}                                                        |

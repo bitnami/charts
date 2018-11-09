@@ -106,6 +106,9 @@ spec:
         {{- end }}
         - name: DATA_FOLDER
           value: "/app"
+{{- if .Values.extraEnv }}
+{{ toYaml .Values.extraEnv | indent 8 }}
+{{- end }}
         workingDir: /app
         command: ['/bin/bash', '-c', 'useradd bitnami && su bitnami -c "PATH=/opt/bitnami/node/bin:$PATH npm start"']
         ports:
