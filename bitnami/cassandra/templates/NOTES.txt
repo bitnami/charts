@@ -28,7 +28,7 @@ To connect to your Cassandra cluster using CQL:
 
 {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 Note: Since NetworkPolicy is enabled, only pods with label
-{{ template "cassandra.fullname" . }}-client=true"
+"{{ template "cassandra.fullname" . }}-client=true"
 will be able to connect to Cassandra.
 {{- else -}}
 
