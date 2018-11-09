@@ -5,7 +5,8 @@
 ## TL;DR;
 
 ```console
-$ helm install .
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm install bitnami/cassandra
 ```
 
 ## Introduction
@@ -24,7 +25,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release ./cassandra
+$ helm install --name my-release bitnami/cassandra
 ```
 
 The command deploys one node with Cassandra on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -33,7 +34,7 @@ The command deploys one node with Cassandra on the Kubernetes cluster in the def
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` petset:
+To uninstall/delete the `my-release` release:
 
 ```console
 $ helm delete my-release
@@ -47,29 +48,29 @@ The following tables lists the configurable parameters of the cassandra chart an
 
 | Parameter                                  | Description                                                                                                    | Default                                              |
 |--------------------------------------------|----------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| `global.imageRegistry`                     | Global Docker image registry                                                                                   | `nil`                                                |
+| `global.imageRegistry`                     | Global Docker Image registry                                                                                   | `nil`                                                |
 | `image.registry`                           | Cassandra Image registry                                                                                           | `docker.io`                                          |
 | `image.repository`                         | Cassandra Image name                                                                                               | `bitnami/cassandra`                                      |
-| `image.tag`                                | Cassandra Image tag                                                                                                | `3.11.3`                                          |
+| `image.tag`                                | Cassandra Image tag                                                                                                | `{VERSION}`                                          |
 | `image.pullPolicy`                         | Image pull policy                                                                                              | `Always`                                             |
-| `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                               | `nil`                                                |
+| `image.pullSecrets`                        | Specify `docker-registry` secret names as an array                                                               | `nil`                                                |
 | `service.type`                       | Kubernetes Service type                                                                          | `ClusterIP`                                          |
 | `service.nodePort`                   | Kubernetes Service nodePort                                                                      | `nil`                                                |
 | `service.loadBalancerIP`             | LoadBalancerIP if service type is `LoadBalancer`                                                   | `nil`                            | 
 | `service.annotations`                | Annotations for the service                                                                            | {}                                                   |
 | `persistence.enabled`               | Use PVCs to persist data                                                                        | `true`                                               |
-| `persistence.storageClass`          | Storage class of backing PVC                                                                                   | `generic`                                            |
-| `persistence.annotations`                | Annotations for the PVC                                                                            | {}                                                   |
+| `persistence.storageClass`          | Persistent Volume Storage Class                                                                                    | `generic`                                            |
+| `persistence.annotations`                | Persistent Volume Claim annotations Annotations                                                                            | {}                                                   |
 | `persistence.accessModes`           | Persistent Volume Access Modes                                                                                 | `[ReadWriteOnce]`                                    |
-| `persistence.size`                  | Size of data volume                                                                                            | `8Gi`                                                |
+| `persistence.size`                  | Persistent Volume Size                                                                                             | `8Gi`                                                |
 | `resources`                         | CPU/Memory resource requests/limits                                                               |  `{}`                         |
 | `cluster.name`                         | Cassandra cluster name                                                               |  `cassandra`                         |
-| `cluster.replicaCount`                         | Number of cassandra nodes                                                               |  `1`                         |
+| `cluster.replicaCount`                         | Number of Cassandra nodes                                                               |  `1`                         |
 | `cluster.seedCount`                           | Number of seed nodes (note: must be greater or equal than 1 and less or equal to `cluster.replicaCount`)                                                   | `1`                                                |
 | `dbUser.user`                           | Cassandra admin user                                                   | `cassandra`                                                |
 | `dbUser.forcePassword`                           | Force the user to provide a non-empty password for `dbUser.user`                                                   | `false`                                                |
 | `dbUser.password`                              | Password for `dbUser.user`. Randomly generated if empty                                                                                                   | (Random generated)                                               |
-| `dbUser.existingSecret`                                 | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                                                                 | ``                                   |
+| `dbUser.existingSecret`                                 | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                                                                 | `nil`                                   |
 | `livenessProbe.enabled`             | Turn on and off liveness probe                                                             | `true`                                               |
 | `livenessProbe.initialDelaySeconds` | Delay before liveness probe is initiated                                                    | `30`                                                 |
 | `livenessProbe.periodSeconds`       | How often to perform the probe                                                             | `30`                                                 |
@@ -85,7 +86,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `podAnnotations`                     | Additional pod annotations                                                                     | `{}`                              |
 | `podLabels`                         | Additional pod labels                                                                         | `{}`                                                   |
 | `statefulset.updateStrategy`        | Update strategy for StatefulSet                                                                                | onDelete                                             |
-| `statefulset.rollingUpdatePartition`        | Partition update strategy                                                                                | ``                                             |
+| `statefulset.rollingUpdatePartition`        | Partition update strategy                                                                                | `nil`                                             |
 | `securityContext.enabled`           | Enable security context                                                                     | `true`                                               |
 | `securityContext.fsGroup`           | Group ID for the container                                                                  | `1001`                                               |
 | `securityContext.runAsUser`         | User ID for the container                                                                   | `1001`                                               |
@@ -94,11 +95,11 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                           | `false`                                              |
 | `networkPolicy.allowExternal`              | Don't require client label for connections                                                                     | `true`                                | 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
-| `metrics.image.registry`                   | Cassandra exporter image registry                                                                                  | `docker.io`                                          |
-| `metrics.image.repository`                 | Cassandra exporter image name                                                                                      | `criteo/cassandra_exporter`                           |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                                       | `2.0.4`                                            |
+| `metrics.image.registry`                   | Cassandra exporter Image registry                                                                                  | `docker.io`                                          |
+| `metrics.image.repository`                 | Cassandra exporter Image name                                                                                      | `criteo/cassandra_exporter`                           |
+| `metrics.image.tag`                        | Cassandra exporter Image tag                                                                                       | `2.0.4`                                            |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `nil`                                                |
+| `metrics.image.pullSecrets`                | Specify `docker-registry` secret names as an array                                                               | `nil`                                                |
 | `metrics.podAnnotations`                   | Additional annotations for Metrics exporter                                                                 | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}`                                                   |
 | `metrics.resources`                        | Exporter resource requests/limit                                                                               | `{}`                         |
 
@@ -108,15 +109,14 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set cassandraUser=admin,cassandraPassword=password\
-    ./cassandra
+  --set dbUser.user=admin,dbUser.password=password\
+    bitnami/cassandra
 ```
-
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml ./cassandra
+$ helm install --name my-release -f values.yaml bitnami/cassandra
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
