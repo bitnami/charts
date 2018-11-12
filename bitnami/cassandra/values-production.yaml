@@ -91,6 +91,21 @@ cluster:
   name: cassandra
   replicaCount: 3
   seedCount: 2
+  numTokens: 256
+  endpointSnitch: SimpleSnitch
+  datacenter: dc1
+  rack: rack1
+
+jvm:
+  ## Extra JVM Settings
+  ##
+  # extraOpts:
+
+  ## Memory settings: These are calculated automatically 
+  ## unless specified otherwise
+  ##
+  # maxHeapSize: 4G
+  # newHeapSize: 800M
 
 ## Database credentials
 ##
@@ -99,6 +114,11 @@ dbUser:
   forcePassword: true
   # password:
   # existingSecret: 
+
+## Startup CQL commands. Useful for creating a keyspace
+## and pre-populating data
+##
+# startupCQL: "CREATE KEYSPACE IF NOT EXISTS example_keyspace WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};"
 
 ## Liveness and Readiness probe values.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
