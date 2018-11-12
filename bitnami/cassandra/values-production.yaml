@@ -95,6 +95,7 @@ cluster:
   endpointSnitch: SimpleSnitch
   datacenter: dc1
   rack: rack1
+  enableRPC: true
 
 jvm:
   ## Extra JVM Settings

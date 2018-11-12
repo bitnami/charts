@@ -111,6 +111,8 @@ spec:
         - name: CASSANDRA_STARTUP_CQL
           value: {{ .Values.startupCQL }}
         {{- end }}
+        - name: CASSANDRA_ENABLE_RPC
+          value: {{ .Values.cluster.enableRPC }}
 {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
