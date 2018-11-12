@@ -95,11 +95,12 @@ cluster:
   datacenter: dc1
   rack: rack1
   enableRPC: true
+  endpointSnitch: SimpleSnitch
 
 jvm:
   ## Extra JVM Settings
   ##
-  # extraOpts:
+  extraOpts:
 
   ## Memory settings: These are calculated automatically 
   ## unless specified otherwise

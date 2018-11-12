@@ -88,7 +88,7 @@ spec:
             fieldRef:
               fieldPath: status.podIP
         - name: CASSANDRA_NUM_TOKENS
-          value: {{ .Values.cluster.numTokens }}
+          value: {{ .Values.cluster.numTokens | quote }}
         - name: CASSANDRA_DATACENTER
           value: {{ .Values.cluster.datacenter }}
         - name: CASSANDRA_ENDPOINT_SNITCH
@@ -97,22 +97,22 @@ spec:
           value: {{ .Values.cluster.rack }}
         {{- if .Values.jvm.maxHeapSize }}
         - name: MAX_HEAP_SIZE
-          value: {{ .Values.jvm.maxHeapSize }}
+          value: {{ .Values.jvm.maxHeapSize | quote }}
         {{- end }}
         {{- if .Values.jvm.newHeapSize }}
         - name: HEAP_NEWSIZE
-          value: {{ .Values.jvm.newHeapSize }}
+          value: {{ .Values.jvm.newHeapSize | quote }}
         {{- end }}
         {{- if .Values.jvm.extraOpts }}
         - name: JVM_EXTRA_OPTS
-          value: {{ .Values.jvm.extraOpts }}
+          value: {{ .Values.jvm.extraOpts | quote }}
         {{- end }}
         {{- if .Values.startupCQL }}
         - name: CASSANDRA_STARTUP_CQL
-          value: {{ .Values.startupCQL }}
+          value: {{ .Values.startupCQL | quote }}
         {{- end }}
         - name: CASSANDRA_ENABLE_RPC
-          value: {{ .Values.cluster.enableRPC }}
+          value: {{ .Values.cluster.enableRPC | quote }}
 {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
