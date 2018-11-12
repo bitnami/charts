@@ -19,9 +19,11 @@ spec:
   - name: cql
     port: {{ .Values.service.cqlPort }}
     targetPort: cql
+{{- if .Values.cluster.enableRPC }}
   - name: thrift
     port: {{ .Values.service.thriftPort }}
     targetPort: thrift
+{{- end }}
   selector:
     app: {{ template "cassandra.name" . }}
     release: {{ .Release.Name }}

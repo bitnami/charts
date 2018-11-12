@@ -87,6 +87,32 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
+        - name: CASSANDRA_NUM_TOKENS
+          value: {{ .Values.cluster.numTokens | quote }}
+        - name: CASSANDRA_DATACENTER
+          value: {{ .Values.cluster.datacenter }}
+        - name: CASSANDRA_ENDPOINT_SNITCH
+          value: {{ .Values.cluster.endpointSnitch }}
+        - name: CASSANDRA_RACK
+          value: {{ .Values.cluster.rack }}
+        {{- if .Values.jvm.maxHeapSize }}
+        - name: MAX_HEAP_SIZE
+          value: {{ .Values.jvm.maxHeapSize | quote }}
+        {{- end }}
+        {{- if .Values.jvm.newHeapSize }}
+        - name: HEAP_NEWSIZE
+          value: {{ .Values.jvm.newHeapSize | quote }}
+        {{- end }}
+        {{- if .Values.jvm.extraOpts }}
+        - name: JVM_EXTRA_OPTS
+          value: {{ .Values.jvm.extraOpts | quote }}
+        {{- end }}
+        {{- if .Values.startupCQL }}
+        - name: CASSANDRA_STARTUP_CQL
+          value: {{ .Values.startupCQL | quote }}
+        {{- end }}
+        - name: CASSANDRA_ENABLE_RPC
+          value: {{ .Values.cluster.enableRPC | quote }}
 {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
@@ -116,8 +142,10 @@ spec:
           containerPort: 7199
         - name: cql
           containerPort: 9042
+{{- if .Values.cluster.enableRPC }}
         - name: thrift
           containerPort: 9160
+{{- end }}
         volumeMounts:
         - name: data
           mountPath: /bitnami/cassandra
