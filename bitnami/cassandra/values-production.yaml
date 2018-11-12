@@ -100,7 +100,7 @@ cluster:
 jvm:
   ## Extra JVM Settings
   ##
-  # extraOpts:
+  extraOpts:
 
   ## Memory settings: These are calculated automatically 
   ## unless specified otherwise
