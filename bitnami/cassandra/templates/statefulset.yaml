@@ -142,8 +142,10 @@ spec:
           containerPort: 7199
         - name: cql
           containerPort: 9042
+{{- if .Values.cluster.enableRPC }}
         - name: thrift
           containerPort: 9160
+{{- end }}
         volumeMounts:
         - name: data
           mountPath: /bitnami/cassandra
