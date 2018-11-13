@@ -1,4 +1,44 @@
 {{- if .Values.rbac.create -}}
+# Need a cluster role because client-go v5.0.1 does not support namespaced
+# informers
+# TODO: remove when we update to client-go v6.0.0
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: {{ template "kubeapps.apprepository.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.apprepository.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+- apiGroups:
+  - batch
+  resources:
+  - cronjobs
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "kubeapps.apprepository.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.apprepository.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "kubeapps.apprepository.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "kubeapps.apprepository.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
