@@ -27,7 +27,7 @@ It also packages the [Bitnami MongoDB chart](https://github.com/helm/charts/tree
 ## Prerequisites
 
 - Kubernetes 1.8+ (tested with Azure Kubernetes Service, Google Kubernetes Engine, minikube and Docker for Desktop Kubernetes)
-- Helm 2.9.1+
+- Helm 2.10.0+
 - PV provisioner support in the underlying infrastructure
 - Administrative access to the cluster to create and update RBAC ClusterRoles
 
