@@ -125,7 +125,23 @@ $ helm install --name my-release -f values.yaml bitnami/external-dns
 
 Find information about the requirements for each DNS provider on the link below:
 
- - [ExternalDNS Tutorials](https://github.com/kubernetes-incubator/external-dns/tree/master/docs/tutorials)
+- [ExternalDNS Tutorials](https://github.com/kubernetes-incubator/external-dns/tree/master/docs/tutorials)
+
+For instance, to install ExternalDNS on AWS, you need to:
+
+- Provide the K8s worker node which runs the cluster autoscaler with a minimum IAM policy (check [IAM permissions docs](https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#iam-permissions) for more information).
+- Setup a hosted zone on Route53 and annotate the Hosted Zone ID and its associated "nameservers" as described on [these docs](https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone).
+- Install ExternalDNS chart using the command below:
+
+> Note: replace the placeholder HOSTED_ZONE_NAME with your hosted zoned name.
+
+```bash
+$ helm install --name my-release \
+  --set provider=aws \
+  --set aws.zoneType=public \
+  --set domainFilters=HOSTED_ZONE_NAME \
+  bitnami/external-dns
+```
 
 ## Upgrading
 
