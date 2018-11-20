@@ -17,6 +17,10 @@ image:
   ##
   pullPolicy: Always
 
+  # For supporting pulling from private registries
+  imagePullSecrets: []
+  # - name: "image-pull-secret"
+
 rbac:
   # Specifies whether RBAC resources should be created
   create: true

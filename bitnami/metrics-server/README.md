@@ -52,6 +52,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `image.repository`       | Metrics Server image name                                                   | `bitnami/metrics-server`               |
 | `image.tag`              | Metrics Server image tag                                                    | `{VERSION}`                            |
 | `image.pullPolicy`       | Metrics Server image pull policy                                            | `Always`                               |
+| `image.imagePullSecrets` | Reference to secrets to be used when pulling images                         | []                                 |
 | `securePort`             | Port where metrics-server will be running                                   | `8443`                                 |
 | `service.type`           | Kubernetes Service type                                                     | `ClusterIP`                            |
 | `service.port`           | Kubernetes Service port                                                     | `443`                                  |
