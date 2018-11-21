@@ -28,7 +28,7 @@ spec:
 {{- end }}
   ports:
     - name: http
-      port: {{ .Values.defaultBackend.service.servicePort }}
+      port: {{ .Values.defaultBackend.service.port }}
       protocol: TCP
       targetPort: http
   selector:
