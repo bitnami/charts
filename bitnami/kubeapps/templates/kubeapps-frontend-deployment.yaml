@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: {{ template "kubeapps.image" .Values.frontend.image }}
+        image: {{ template "kubeapps.image" (list .Values.frontend.image .Values.global) }}
         livenessProbe:
 {{ toYaml .Values.frontend.livenessProbe | indent 10 }}
         readinessProbe:

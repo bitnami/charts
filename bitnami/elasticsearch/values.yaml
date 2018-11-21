@@ -1,10 +1,16 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
 ## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 6.4.2-debian-9
+  tag: 6.5.1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -18,9 +24,11 @@ image:
   #   - myRegistrKeySecretName
 
 ## Image that performs the sysctl operation
+##
 sysctlImage:
+  enabled: false
   registry: docker.io
-  repository: busybox
+  repository: bitnami/minideb
   tag: latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -50,6 +58,26 @@ master:
   replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
+  service:
+    ## master-eligible service type
+    type: ClusterIP
+    ## Elasticsearch transport port
+    port: 9300
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    # loadBalancerIP:
+
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -95,9 +123,22 @@ coordinating:
   heapSize: 128m
   antiAffinity: "soft"
   service:
+    ## coordinating-only service type
     type: ClusterIP
-    ## Externally accessible elasticsearch REST API port
+    ## Elasticsearch REST API port
     port: 9200
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    # loadBalancerIP:
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -189,6 +230,23 @@ ingest:
   replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
+  service:
+    ## ingest service type
+    type: ClusterIP
+    ## Elasticsearch transport port
+    port: 9300
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    # loadBalancerIP:
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -219,7 +277,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: latest
+    tag: 1.0.2
     pullPolicy: Always
   annotations:
     prometheus.io/scrape: "true"
