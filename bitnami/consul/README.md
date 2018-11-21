@@ -58,12 +58,12 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `image.pullPolicy`                   | Image pull policy                                                | `Always`                                                   |
 | `image.pullSecrets`                  | Specify image pull secrets                                       | `nil`                                                      |
 | `replicas`                           | Number of replicas                                               | `3`                                                        |
-| `httpPort`                           | HashiCorp Consul http listening port                             | `8500`                                                     |
-| `rpcPort`                            | HashiCorp Consul rpc listening port                              | `8400`                                                     |
-| `serflanPort`                        | Container serf lan listening port                                | `8301`                                                     |
-| `serverPort`                         | Container server listening port                                  | `8300`                                                     |
-| `consulDnsPort`                      | Container dns listening port                                     | `8600`                                                     |
-| `uiPort`                             | HashiCorp Consul UI port                                         | `80`                                                       |
+| `port`                           | HashiCorp Consul http listening port                             | `8500`                                                     |
+| `service.rpcPort`                            | HashiCorp Consul rpc listening port                              | `8400`                                                     |
+| `service.serflanPort`                        | Container serf lan listening port                                | `8301`                                                     |
+| `service.serverPort`                         | Container server listening port                                  | `8300`                                                     |
+| `service.consulDnsPort`                      | Container dns listening port                                     | `8600`                                                     |
+| `service.uiPort`                             | HashiCorp Consul UI port                                         | `80`                                                       |
 | `datacenterName`                     | HashiCorp Consul datacenter name                                 | `dc1`                                                      |
 | `gossipKey`                          | Gossip key for all members                                       | `nil`                                                      |
 | `domain`                             | HashiCorp Consul domain                                          | `consul`                                                   |
