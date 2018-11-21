@@ -237,8 +237,8 @@ extraVolumes: []
 extraInitContainers: []
 ## Containers, which are run before the app containers are started.
 # - name: init-myservice
-#   image: busybox
-#   command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+#   image: bitnami/minideb
+#   command: ['sh', '-c', 'install_packages dnsutils && until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
 
 stats:
   enabled: false
@@ -297,9 +297,10 @@ defaultBackend:
 
   name: default-backend
   image:
-    repository: k8s.gcr.io/defaultbackend
-    tag: "1.4"
-    pullPolicy: IfNotPresent
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: latest
+    pullPolicy: Always
 
   extraArgs: {}
 

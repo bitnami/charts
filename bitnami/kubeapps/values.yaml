@@ -92,12 +92,12 @@ apprepository:
   image:
     registry: docker.io
     repository: kubeapps/apprepository-controller
-    tag: v1.0.0-beta.3
+    tag: v1.0.0
   # Image used to perform chart repository syncs
   syncImage:
     registry: quay.io
     repository: helmpack/chart-repo
-    tag: v1.0.0
+    tag: v1.0.2
   initialRepos:
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
@@ -138,7 +138,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: kubeapps/tiller-proxy
-    tag: v1.0.0-beta.3
+    tag: v1.0.0
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -165,7 +165,7 @@ chartsvc:
   image:
     registry: quay.io
     repository: helmpack/chartsvc
-    tag: v1.0.0
+    tag: v1.0.2
   service:
     port: 8080
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
@@ -200,7 +200,7 @@ dashboard:
   image:
     registry: docker.io
     repository: kubeapps/dashboard
-    tag: v1.0.0-beta.3
+    tag: v1.0.0
   service:
     port: 8080
   livenessProbe:

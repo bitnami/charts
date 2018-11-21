@@ -29,8 +29,8 @@ spec:
       {{- end }}
       initContainers:
       - name: git-clone-repository
-        image: "{{ .Values.gitImage.registry }}/{{ .Values.gitImage.repository }}:{{ .Values.gitImage.tag }}"
-        imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
+        image: "{{ template "git.image" . }}"
+        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
         command: [ '/bin/sh', '-c' , 'git clone {{ .Values.repository }} /app && cd /app && git checkout {{ .Values.revision }}']
         volumeMounts:
         - name: app
@@ -106,6 +106,9 @@ spec:
         {{- end }}
         - name: DATA_FOLDER
           value: "/app"
+{{- if .Values.extraEnv }}
+{{ toYaml .Values.extraEnv | indent 8 }}
+{{- end }}
         workingDir: /app
         command: ['/bin/bash', '-c', 'useradd bitnami && su bitnami -c "PATH=/opt/bitnami/node/bin:$PATH npm start"']
         ports:
