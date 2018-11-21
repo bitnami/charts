@@ -8,12 +8,22 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     role: "coordinating-only"
+{{- with .Values.coordinating.service.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   type: {{ .Values.coordinating.service.type | quote }}
+  {{- if and (eq .Values.coordinating.service.type "LoadBalancer") .Values.coordinating.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.coordinating.service.loadBalancerIP }}
+  {{- end }}
   ports:
   - name: http
     port: {{ .Values.coordinating.service.port }}
     targetPort: http
+    {{- if .Values.coordinating.service.nodePort }}
+    nodePort: {{ .Values.coordinating.service.nodePort }}
+    {{- end }}
   selector:
     app: {{ template "elasticsearch.name" . }}
     release: {{ .Release.Name | quote }}

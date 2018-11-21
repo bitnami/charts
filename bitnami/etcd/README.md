@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 
 |          Parameter                    |                                                  Description                                             |                                     Default                        |
 |---------------------------------------|----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------- |
+| `global.imageRegistry`                | Global Docker image registry                                                                             | `nil`                                                              |
 | `image.registry`                      | etcd image registry                                                                                      | `docker.io`                                                        |
 | `image.repository`                    | etcd Image name                                                                                          | `bitnami/etcd`                                                     |
 | `image.tag`                           | etcd Image tag                                                                                           | `{VERSION}`                                                        |

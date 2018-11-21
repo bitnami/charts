@@ -6,7 +6,7 @@ kind: CustomResourceDefinition
 metadata:
   name: apprepositories.kubeapps.com
   annotations:
-    "helm.sh/resource-policy": keep
+    "helm.sh/hook": crd-install
   labels:
     app: {{ template "kubeapps.apprepository.fullname" . }}
     chart: {{ template "kubeapps.chart" . }}

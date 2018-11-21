@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 
 |          Parameter               |                                                  Description                                               |                                     Default                        |
 |----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------- |
+| `global.imageRegistry`           | Global Docker image registry                                                                               | `nil`                                                              |
 | `image.registry`                 | Kafka image registry                                                                                       | `docker.io`                                                        |
 | `image.repository`               | Kafka Image name                                                                                           | `bitnami/kafka`                                                    |
 | `image.tag`                      | Kafka Image tag                                                                                            | `{VERSION}`                                                        |
@@ -57,8 +58,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `replicaCount`                   | Number of Kafka nodes                                                                                      | `1`                                                                |
 | `config`                         | Configuration file for Kafka                                                                               | `nil`                                                              |
 | `allowPlaintextListener`         | Allow to use the PLAINTEXT listener                                                                        | `true`                                                             |
-| `listeners`                       | The address the socket server listens on.                                                                  | `nil`                                                              |
-| `advertisedListeners`             | Hostname and port the broker will advertise to producers and consumers.                                    | `nil`                                                              |
+| `listeners`                      | The address the socket server listens on.                                                                  | `nil`                                                              |
+| `advertisedListeners`            | Hostname and port the broker will advertise to producers and consumers.                                    | `nil`                                                              |
 | `brokerId`                       | ID of the Kafka node                                                                                       | `-1`                                                               |
 | `deleteTopicEnable`              | Switch to enable topic deletion or not.                                                                    | `false`                                                            |
 | `heapOpts`                       | Kafka's Java Heap size.                                                                                    | `-Xmx1024m -Xms1024m`                                              |
