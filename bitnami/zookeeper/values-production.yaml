@@ -1,16 +1,10 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
-##
-# global:
-#   imageRegistry:
-
 ## Bitnami Zookeeper image version
 ## ref: https://hub.docker.com/r/bitnami/zookeeper/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.4.12
+  tag: 3.4.12-debian-9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -45,7 +39,7 @@ podManagementPolicy: Parallel
 
 ## Number of ZooKeeper nodes
 ##
-replicaCount: 1
+replicaCount: 3
 
 ## Basic time unit in milliseconds used by ZooKeeper for heartbeats
 ##
@@ -166,7 +160,7 @@ readinessProbe:
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
 
   image:
     registry: docker.io

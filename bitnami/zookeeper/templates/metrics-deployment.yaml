@@ -1,0 +1,49 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "zookeeper.fullname" . }}-exporter
+  labels:
+    app: {{ template "zookeeper.name" . }}
+    chart: {{ template "zookeeper.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "zookeeper.name" . }}
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      annotations:
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+      labels:
+        app: {{ template "zookeeper.name" . }}
+        release: "{{ .Release.Name }}"
+    spec:
+      {{- if .Values.metrics.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.metrics.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
+      containers:
+      - image: {{ template  "metrics.image" . }}
+        name: zookeeper-exporter
+        command:
+          - /usr/local/bin/zookeeper-exporter
+          - -zk-list 
+          {{- $replicaCount := int .Values.replicaCount }}
+          {{- $followerPort := int .Values.service.followerPort }}
+          {{- $electionPort := int .Values.service.electionPort }}
+          {{- $servicePort := int .Values.service.port }}
+          {{- $releaseNamespace := .Release.Namespace }}
+          {{- $zookeeperFullname := include "zookeeper.fullname" . }}
+          {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
+          - {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $servicePort }}{{- if (lt $e ( sub $replicaCount 1)) -}},{{- end -}}{{ end }}
+        ports:
+          - containerPort: 8080
+        resources:
+{{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}
