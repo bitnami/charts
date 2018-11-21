@@ -10,7 +10,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 10.7.0-prod
+  tag: 8.13.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -23,9 +23,12 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
-gitImage:
+## Bitnami git image version
+## ref: https://hub.docker.com/r/bitnami/git/tags/
+##
+git:
   registry: docker.io
-  repository: alpine/git
+  repository: bitnami/git
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -41,9 +44,12 @@ revision: master
 ##
 replicas: 1
 
-## Specify the port where your applucation will be running
+## Specify the port where your application will be running
 ##
 applicationPort: 3000
+
+# Define custom environment variables to pass to the image here
+extraEnv: {}
 
 ## Kubernetes Service Configuration
 service:

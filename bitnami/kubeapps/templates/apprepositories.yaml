@@ -1,0 +1,17 @@
+{{- range .Values.apprepository.initialRepos }}
+apiVersion: kubeapps.com/v1alpha1
+kind: AppRepository
+metadata:
+  name: {{ .name }}
+  labels:
+    app: {{ template "kubeapps.apprepository.fullname" $ }}
+    chart: {{ template "kubeapps.chart" $ }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+annotations:
+  helm.sh/hook: pre-install
+spec:
+  type: helm
+  url: {{ .url }}
+---
+{{ end -}}

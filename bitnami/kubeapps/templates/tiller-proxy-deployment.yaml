@@ -27,6 +27,7 @@ spec:
         - /proxy
         args:
         - --host={{ .Values.tillerProxy.host }}
+        - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
         {{- if .Values.tillerProxy.tls }}
         - --tls
         {{- if .Values.tillerProxy.tls.verify }}
