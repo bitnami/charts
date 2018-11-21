@@ -1,6 +1,6 @@
   ** Please be patient while the chart is being deployed **
 
-  Consul can be accessed within the cluster on port {{ .Values.serverPort }} at {{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  Consul can be accessed within the cluster on port {{ .Values.service.serverPort }} at {{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
 {{- if .Values.ui.service.enabled }}
 
@@ -25,12 +25,12 @@ In order to access to the Consul Web UI:
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "consul.fullname" . }}-ui --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
-    echo "Consul URL: http://$SERVICE_IP:{{ .Values.uiPort }}/"
+    echo "Consul URL: http://$SERVICE_IP:{{ .Values.service.uiPort }}/"
 
 {{- else if contains "ClusterIP"  .Values.ui.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "consul.fullname" . }}-ui {{ .Values.uiPort }}:{{ .Values.uiPort }}
-    echo "Consul URL: http://127.0.0.1:{{ .Values.uiPort }}"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "consul.fullname" . }}-ui {{ .Values.service.uiPort }}:{{ .Values.service.uiPort }}
+    echo "Consul URL: http://127.0.0.1:{{ .Values.service.uiPort }}"
 
 {{- end }}
 

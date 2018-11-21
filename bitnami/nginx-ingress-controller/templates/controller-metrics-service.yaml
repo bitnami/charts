@@ -28,7 +28,7 @@ spec:
 {{- end }}
   ports:
     - name: metrics
-      port: {{ .Values.metrics.service.servicePort }}
+      port: {{ .Values.metrics.service.port }}
       targetPort: metrics
   selector:
     app: {{ template "nginx-ingress.name" . }}
