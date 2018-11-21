@@ -1,10 +1,16 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
 ## Bitnami external-dns image version
 ## ref: https://hub.docker.com/r/bitnami/external-dns/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.5.7-debian-9
+  tag: 0.5.8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -117,7 +123,7 @@ rbac:
   ##
   serviceAccountName: default
   ## RBAC API version
-  apiVersion: v1beta1 
+  apiVersion: v1beta1
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/

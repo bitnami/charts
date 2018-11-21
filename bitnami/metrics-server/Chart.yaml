@@ -1,5 +1,5 @@
 name: metrics-server
-version: 2.0.5
+version: 2.1.1
 appVersion: 0.3.1
 description: Metrics Server is a cluster-wide aggregator of resource usage data. Metrics Server collects metrics from the Summary API, exposed by Kubelet on each node.
 keywords:

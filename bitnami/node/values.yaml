@@ -1,10 +1,16 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
 ## Bitnami node image version
 ## ref: https://hub.docker.com/r/bitnami/node/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 10.7.0-prod
+  tag: 8.13.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -15,14 +21,17 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName 
+  #   - myRegistrKeySecretName
 
-gitImage:
+## Bitnami git image version
+## ref: https://hub.docker.com/r/bitnami/git/tags/
+##
+git:
   registry: docker.io
-  repository: alpine/git
+  repository: bitnami/git
   tag: latest
   pullPolicy: IfNotPresent
-  
+
 ## Git repository http/https
 ##
 repository:  https://github.com/bitnami/sample-mean.git
@@ -35,9 +44,12 @@ revision: master
 ##
 replicas: 1
 
-## Specify the port where your applucation will be running
+## Specify the port where your application will be running
 ##
 applicationPort: 3000
+
+# Define custom environment variables to pass to the image here
+extraEnv: {}
 
 ## Kubernetes Service Configuration
 service:
@@ -83,6 +95,8 @@ resources: {}
 ##
 ## MongoDB chart configuration
 ##
+## https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
+##
 mongodb:
   ## Whether to deploy a mongodb server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
@@ -92,7 +106,7 @@ mongodb:
   ##
   mongodbUsername: user
   mongodbDatabase: test_db
-  mongodbPassword: secret_password 
+  mongodbPassword: secret_password
 
 ## Provision an external database (Only if mongodb.install is false)
 ## You can:
@@ -110,6 +124,9 @@ externaldb:
   broker:
     serviceInstanceName:
 
+## Configure ingress resource that allow you to access the application.
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
 ingress:
   ## Set to true to enable ingress record generation
   enabled: false

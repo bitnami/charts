@@ -21,12 +21,6 @@ spec:
     rollingUpdate:
       partition: {{ .Values.statefulset.rollingUpdatePartition }}
     {{- end }}
-  selector:
-    matchLabels:
-      app: {{ template "etcd.name" . }}
-      chart: {{ template "etcd.chart" . }}
-      release: {{ .Release.Name | quote }}
-      heritage: {{ .Release.Service | quote }}
   template:
     metadata:
       name: "{{ template "etcd.fullname" . }}"
@@ -35,6 +29,15 @@ spec:
         chart: {{ template "etcd.chart" . }}
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      annotations:
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+{{- if .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+{{- end }}
+{{- end }}
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
