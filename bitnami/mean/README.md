@@ -51,15 +51,16 @@ The following table lists the configurable parameters of the MEAN chart and thei
 
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
+| `global.imageRegistry`                  | Global Docker image registry                              | `nil`                                                     |
 | `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
-| `image.repository`                      | NodeJS Image name                                         | `bitnami/node`                                            |
-| `image.tag`                             | NodeJS Image tag                                          | `{VERSION}`                                               |
+| `image.repository`                      | NodeJS image name                                         | `bitnami/node`                                            |
+| `image.tag`                             | NodeJS image tag                                          | `{VERSION}`                                               |
 | `image.pullPolicy`                      | NodeJS image pull policy                                  | `IfNotPresent`                                            |
 | `image.pullSecrets`                     | Specify image pull secrets                                | `nil` (does not add image pull secrets to deployed pods)  |
-| `gitImage.registry`                     | Git image registry                                        | `docker.io`                                               |
-| `gitImage.repository`                   | Git Image name                                            | `alpine/git`                                              |
-| `gitImage.tag`                          | Git Image tag                                             | `latest`                                                  |
-| `gitImage.pullPolicy`                   | Git image pull policy                                     | IfNotPresent`                                             |
+| `git.registry`                          | Git image registry                                        | `docker.io`                                               |
+| `git.repository`                        | Git image name                                            | `bitnami/git`                                              |
+| `git.tag`                               | Git image tag                                             | `latest`                                                  |
+| `git.pullPolicy`                        | Git image pull policy                                     | IfNotPresent`                                             |
 | `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
 | `revision`                              | Revision to checkout                                      | `master`                                                  |
 | `replicas`                              | Number of replicas for the application                    | `1`                                                       |
@@ -217,7 +218,7 @@ ingress:
 4. Deploy the helm chart:
 
     ```
-    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance bitnami/mean
+    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance,externaldb.ssl=true bitnami/mean
     ```
 
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.

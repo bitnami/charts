@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 
 |           Parameter           |                 Description                  |                           Default                         |
 |-------------------------------|----------------------------------------------|---------------------------------------------------------- |
+| `global.imageRegistry`        | Global Docker image registry                 | `nil`                                                     |
 | `image.registry`              | Tomcat image registry                        | `docker.io`                                               |
 | `image.repository`            | Tomcat Image name                            | `bitnami/tomcat`                                          |
 | `image.tag`                   | Tomcat Image tag                             | `{VERSION}`                                               |

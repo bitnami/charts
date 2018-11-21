@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 
 |         Parameter          |              Description               |                           Default                          |
 |----------------------------|----------------------------------------|------------------------------------------------------------|
+| `global.imageRegistry`     | Global Docker image registry           | `nil`                                                      |
 | `image.registry`           | WildFly image registry                 | `docker.io`                                                |
 | `image.repository`         | WildFly Image name                     | `bitnami/wildfly`                                          |
 | `image.tag`                | WildFly Image tag                      | `{VERSION}`                                                |

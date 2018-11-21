@@ -11,6 +11,34 @@
     suggest that you switch to "ClusterIP" or "NodePort".
 -------------------------------------------------------------------------------
 {{- end }}
+{{- if not .Values.sysctlImage.enabled }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    Elasticsearch requires some changes in the kernel of the host machine to
+    work as expected. If those values are not set in the underlying operating
+    system, the ES containers fail to boot with ERROR messages.
+
+    To check whether the host machine meets the requirements, run the command
+    below:
+
+      kubectl logs --namespace {{ .Release.Namespace }} $(kubectl get --namespace {{ .Release.Namespace }} \
+        pods -l app={{ template "elasticsearch.name" . }},role=master -o jsonpath='{.items[0].metadata.name}') \
+	elasticsearch
+
+    You can adapt the Kernel parameters on you cluster as described in the
+    official documentation:
+
+      https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster
+
+    As an alternative, you can specify "sysctlImage.enabled=true" to use a
+    privileged initContainer to change those settings in the Kernel:
+
+      helm upgrade {{ .Release.Name }} bitnami/elasticsearch \
+        --set sysctlImage.enabled=true
+
+{{- end }}
 
 ** Please be patient while the chart is being deployed **
 
