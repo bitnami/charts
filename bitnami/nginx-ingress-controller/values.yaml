@@ -1,10 +1,16 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
 ## Bitnami NGINX Ingress controller image version
 ## ref: https://hub.docker.com/r/bitnami/nginx-ingress-controller/tags/
 name: controller
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.20.0-debian-9
+  tag: 0.20.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -231,8 +237,8 @@ extraVolumes: []
 extraInitContainers: []
 ## Containers, which are run before the app containers are started.
 # - name: init-myservice
-#   image: busybox
-#   command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+#   image: bitnami/minideb
+#   command: ['sh', '-c', 'install_packages dnsutils && until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
 
 stats:
   enabled: false
@@ -248,7 +254,7 @@ stats:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 18080
+    port: 18080
     type: ClusterIP
 
 ## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
@@ -270,7 +276,7 @@ metrics:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 9913
+    port: 9913
     type: ClusterIP
 
 lifecycle: {}
@@ -291,9 +297,10 @@ defaultBackend:
 
   name: default-backend
   image:
-    repository: k8s.gcr.io/defaultbackend
-    tag: "1.4"
-    pullPolicy: IfNotPresent
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: latest
+    pullPolicy: Always
 
   extraArgs: {}
 
@@ -346,7 +353,7 @@ defaultBackend:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 80
+    port: 80
     type: ClusterIP
 
   priorityClassName: ""

@@ -46,11 +46,20 @@ The following tables lists the configurable parameters of the Apache chart and t
 
 | Parameter                         | Description                           | Default                                                   |
 | --------------------------------- | ------------------------------------- | --------------------------------------------------------- |
+| `global.imageRegistry`            | Global Docker image registry          | `nil`                                                     |
 | `image.registry`                  | Apache image registry                 | `docker.io`                                               |
 | `image.repository`                | Apache Image name                     | `bitnami/apache`                                          |
 | `image.tag`                       | Apache Image tag                      | `{VERSION}`                                               |
 | `image.pullPolicy`                | Apache image pull policy              | `Always`                                                  |
 | `image.pullSecrets`               | Specify image pull secrets            | `nil` (does not add image pull secrets to deployed pods)  |
+| `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
+| `service.port`                    | Service HTTP port                  | `80`                                          |
+| `service.httpsPort`                    | Service HTTPS port                   | `443`                                          |
+| `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
+| `service.nodePorts.https`                | Kubernetes https node port                 | `""`                                                    |
+| `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
+| `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

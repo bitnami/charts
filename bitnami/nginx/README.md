@@ -44,12 +44,18 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 
 |          Parameter        |             Description        |                        Default                            |
 | ------------------------- | ------------------------------ | --------------------------------------------------------- |
+| `global.imageRegistry`    | Global Docker image registry   | `nil`                                                     |
 | `image.registry`          | NGINX image registry           | `docker.io`                                               |
 | `image.repository`        | NGINX Image name               | `bitnami/nginx`                                           |
 | `image.tag`               | NGINX Image tag                | `{VERSION}`                                               |
 | `image.pullPolicy`        | NGINX image pull policy        | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
 | `image.pullSecrets`       | Specify image pull secrets     | `nil` (does not add image pull secrets to deployed pods)  |
 | `vhost`                   | Custom NGINX virtual host      | `nil`                                                     |
+| `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
+| `service.port`                    | Service HTTP port                  | `80`                                          |
+| `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
+| `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
+| `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 
 |         Parameter          |              Description               |                               Default                     |
 |----------------------------|----------------------------------------|---------------------------------------------------------- |
+| `global.imageRegistry`     | Global Docker image registry           | `nil`                                                     |
 | `image.registry`           | Jenkins image registry                 | `docker.io`                                               |
 | `image.repository`         | Jenkins Image name                     | `bitnami/jenkins`                                         |
 | `image.tag`                | Jenkins Image tag                      | `{VERSION}`                                               |
@@ -57,7 +58,13 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `jenkinsHome`              | Jenkins home directory                 | `/opt/bitnami/jenkins/jenkins_home`                       |
 | `disableInitialization`    | Allows to disable the initial Bitnami configuration for Jenkins  | `no`                            |
 | `javaOpts`                 | Customize JVM parameters               | `nil`                                                     |
-| `serviceType`              | Kubernetes Service type                | `LoadBalancer`                                            |
+| `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
+| `service.port`                    | Service HTTP port                  | `80`                                          |
+| `service.httpsPort`                    | Service HTTPS port                   | `443`                                          |
+| `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
+| `service.nodePorts.https`                | Kubernetes https node port                 | `""`                                                    |
+| `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
+| `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
 | `persistence.enabled`      | Enable persistence using PVC           | `true`                                                    |
 | `persistence.storageClass` | PVC Storage Class for Jenkins volume   | `nil` (uses alpha storage class annotation)               |
 | `persistence.accessMode`   | PVC Access Mode for Jenkins volume     | `ReadWriteOnce`                                           |

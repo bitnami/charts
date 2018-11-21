@@ -62,6 +62,8 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 
 | Parameter                       | Description                            | Default                                                    |
 | ------------------------------- | -------------------------------------- | ---------------------------------------------------------- |
+| `global.imageRegistry`          | Global Docker image registry           | `nil`                                                      |
+| `replicaCount`                           | desired number of pods               | `1`                               |
 | `server.image.registry`         | TensorFlow Serving image registry      | `docker.io`                                                |
 | `server.image.repository`       | TensorFlow Serving Image name          | `bitnami/tensorflow-serving`                               |
 | `server.image.tag`              | TensorFlow Serving Image tag           | `{VERSION}`                                                |
@@ -74,10 +76,15 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 | `client.image.pullPolicy`       | TensorFlow Inception image pull policy | `Always` if `imageTag` is `latest`, else `IfNotPresent`    |
 | `client.image.pullSecrets`      | Specify image pull secrets             | `nil` (does not add image pull secrets to deployed pods)   |
 | `imagePullPolicy`               | Image pull policy                      | `Always` if `image` tag is `latest`, else `IfNotPresent`   |
-| `persistence.enabled`           | Use a PVC to persist data              | `true`                                                     |
-| `persistence.storageClass`      | Storage class of backing PVC           | `nil` (uses alpha storage class annotation)                |
-| `persistence.accessMode`        | Use volume as ReadOnly or ReadWrite    | `ReadWriteOnce`                                            |
-| `persistence.size`              | Size of data volume                    | `500Mi`                                                    |
+| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
+| `metrics.enabled`                          | Start a side-car Tensorflow prometheus exporter                                                                           | `false`                                              |
+| `metrics.image.registry`                   | Tensorflow exporter image registry                                                                                  | `docker.io`                                          |
+| `metrics.image.repository`                 | Tensorflow exporter image name                                                                                      | `ynqa/tensorflow-serving-exporter`                           |
+| `metrics.image.tag`                        | Tensorflow exporter image tag                                                                                       | `latest`                                            |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `nil`                                                |
+| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}`                                                   |
+| `metrics.resources`                        | Exporter resource requests/limit                                                                               | Memory: `256Mi`, CPU: `100m`                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
