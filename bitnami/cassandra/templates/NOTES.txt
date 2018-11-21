@@ -2,7 +2,7 @@
 
 Cassandra can be accessed through the following URLs from within the cluster:
 
-  - CQL: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.cqlPort }}
+  - CQL: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
   - Thrift: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.thriftPort }}
 
 To get your password run:
@@ -51,8 +51,8 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "cassandra.fullname" . }} {{ .Values.service.cqlPort }}:{{ .Values.service.cqlPort }} &
-   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.cqlPort }}
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "cassandra.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.port }}
 
 {{- end }}
 {{- end }}
