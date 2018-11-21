@@ -53,19 +53,19 @@ The following table lists the configurable parameters of the Node chart and thei
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                              | `nil`                                                     |
 | `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
-| `image.repository`                      | NodeJS Image name                                         | `bitnami/node`                                            |
-| `image.tag`                             | NodeJS Image tag                                          | `{VERSION}`                                               |
+| `image.repository`                      | NodeJS image name                                         | `bitnami/node`                                            |
+| `image.tag`                             | NodeJS image tag                                          | `{VERSION}`                                               |
 | `image.pullPolicy`                      | NodeJS image pull policy                                  | `IfNotPresent`                                            |
 | `image.pullSecrets`                     | Specify image pull secrets                                | `nil` (does not add image pull secrets to deployed pods)  |
-| `gitImage.registry`                     | Git image registry                                        | `docker.io`                                               |
-| `gitImage.repository`                   | Git Image name                                            | `alpine/git`                                              |
-| `gitImage.tag`                          | Git Image tag                                             | `latest`                                                  |
-| `gitImage.pullPolicy`                   | Git image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
-| `gitImage`                              | Image used for initContainers                             | `alpine/git`                                              |
+| `git.registry`                          | Git image registry                                        | `docker.io`                                               |
+| `git.repository`                        | Git image name                                            | `bitnami/git`                                             |
+| `git.tag`                               | Git image tag                                             | `latest`                                                  |
+| `git.pullPolicy`                        | Git image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
 | `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
 | `revision`                              | Revision to checkout                                      | `master`                                                  |
 | `replicas`                              | Number of replicas for the application                    | `1`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
+| `extraEnv`                              | Any extra environment variables to be pass to the pods    | `{}`                                                      |
 | `service.type`                          | Kubernetes Service type                                   | `ClusterIP`                                               |
 | `service.port`                          | Kubernetes Service port                                   | `80`                                                      |
 | `service.annotations`                   | Annotations for the Service                               | {}                                                        |
@@ -212,7 +212,7 @@ ingress:
 4. Deploy the helm chart:
 
     ```
-    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance bitnami/node
+    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance,externaldb.ssl=true bitnami/node
     ```
 
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.

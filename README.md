@@ -34,7 +34,6 @@ $ helm search bitnami
 - [RabbitMQ](https://github.com/helm/charts/tree/master/stable/rabbitmq)
 - [Redis](https://github.com/helm/charts/tree/master/stable/redis)
 - [Redmine](https://github.com/helm/charts/tree/master/stable/redmine)
-- [SugarCRM](https://github.com/helm/charts/tree/master/stable/sugarcrm)
 - [SuiteCRM](https://github.com/helm/charts/tree/master/stable/suitecrm)
 - [TestLink](https://github.com/helm/charts/tree/master/stable/testlink)
 - [WordPress](https://github.com/helm/charts/tree/master/stable/wordpress)
