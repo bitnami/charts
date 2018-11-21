@@ -1,0 +1,174 @@
+## Bitnami external-dns image version
+## ref: https://hub.docker.com/r/bitnami/external-dns/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/external-dns
+  tag: 0.5.7-debian-9
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistrKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+## K8s resources type to be observed for new DNS entries by ExternalDNS
+sources:
+  - service
+  - ingress
+
+## DNS provider where the DNS records will be created. Available providers are:
+## - aws, azure, cloudflare, google
+# provider: aws
+
+# Whether to publish DNS records for ClusterIP services or not (optional)
+publishInternalServices: false
+
+## Method to syncrhonise DNS records between sources and providers. Available methos are:
+## - sync, upsert-only
+policy: upsert-only
+
+## Registry Type. Available types are: txt, noop
+## ref: https://github.com/kubernetes-incubator/external-dns/blob/master/docs/proposal/registry.md
+registry: "txt"
+
+## TXT Registry Identifier
+txtOwnerId: "default"
+## Prefix to create a TXT record with a name following the pattern prefix.<CNAME record>
+# txtPrefix: ""
+
+## Verbosity of the ExternalDNS logs. Available values are:
+## - panic, debug, info, warn, error, fatal
+logLevel: info
+
+## Limit possible target zones by domain suffixes (optional)
+domainFilters: []
+## Filter sources managed by external-dns via annotation using label selector semantics (optional)
+# annotationFilter: ""
+
+## Extra Arguments to passed to external-dns
+extraArgs: {}
+## Extra env. variable to set on external-dns container
+extraEnv: {}
+
+# AWS credentials to be set via arguments/env. variables
+aws:
+  secretKey: ""
+  accessKey: ""
+  roleArn: ""
+  region: "us-east-1"
+  # Zone Filter. Available values are: public, private
+  zoneType: ""
+
+# Azure credentials to be set via arguments/env. variables
+azure:
+  resoureGroup: ""
+
+# Cloudflare credentials to be set via env. variables
+cloudflare:
+  apiKey: ""
+  email: ""
+
+# GCE credentials to be set via arguments/env. variables
+google:
+  project: ""
+  serviceAccountSecret: ""
+
+
+## Kubernetes svc configutarion
+##
+service:
+  ## Kubernetes svc type
+  ##
+  type: ClusterIP
+  port: 7979
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types for the client port
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+  ## Use loadBalancerIP to request a specific static IP,
+  ## otherwise leave blank
+  ##
+  # loadBalancerIP:
+
+## RBAC parameteres
+## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+##
+rbac:
+  create: false
+  ## Service Account for pods
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
+  serviceAccountName: default
+  ## RBAC API version
+  apiVersion: v1beta1 
+
+## Kubernetes Security Context
+## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
+## Node labels and tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+nodeSelector: {}
+tolerations: []
+
+## Annotations for external-dns pods
+podAnnotations: {}
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}
+#  limits:
+#    cpu: 50m
+#    memory: 100Mi
+#  requests:
+#    memory: 50Mi
+#    cpu: 10m
+
+## Replica count
+replicas: 3
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 2
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+metrics:
+  enabled: true
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "7979"

@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "cassandra.fullname" . }}-headless
+  labels:
+    app: {{ template "cassandra.name" . }}
+    chart: {{ template "cassandra.chart" .  }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+  - name: intra
+    port: 7000
+    targetPort: intra
+  - name: tls
+    port: 7001
+    targetPort: tls
+  - name: jmx
+    port: 7199
+    targetPort: jmx
+  - name: cql
+    port: {{ .Values.service.port }}
+    targetPort: cql
+{{- if .Values.cluster.enableRPC }}
+  - name: thrift
+    port: {{ .Values.service.thriftPort }}
+    targetPort: thrift
+{{- end }}
+  selector:
+    app: {{ template "cassandra.name" . }}
+    release: {{ .Release.Name }}

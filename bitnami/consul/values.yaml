@@ -1,10 +1,16 @@
-## Bitnami Consul image version
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
+## Bitnami HashiCorp Consul image version
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.2.3-debian-9
+  tag: 1.4.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -20,13 +26,14 @@ image:
 ## Consul replicas
 replicas: 3
 
-## Consul service ports
-httpPort: 8500
-rpcPort: 8400
-serflanPort: 8301
-serverPort: 8300
-consulDnsPort: 8600
-uiPort: 80
+service:
+  ## Consul service ports
+  port: 8500
+  rpcPort: 8400
+  serflanPort: 8301
+  serverPort: 8300
+  consulDnsPort: 8600
+  uiPort: 80
 
 ## Datacenter name for consul. If not supplied, will use the consul
 ## default 'dc1'
@@ -103,6 +110,15 @@ ui:
   service:
     enabled: true
     type: "ClusterIP"
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    #  cloud.google.com/load-balancer-type: "Internal"
+    #  service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+    #  service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    loadBalancerIP:
 
   ## Configure the ingress resource that allows you to access the
   ## Consul user interface. Set up the URL
@@ -121,27 +137,27 @@ ui:
       ## A side effect of this will be that the backend consul service will be connected at port 443
       tls: false
 
+      ## Set this to true in order to add the corresponding annotations for cert-manager
+      certManager: false
+
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       tlsSecret: consul-ui.local-tls
 
       ## Ingress annotations done as key:value pairs
-      ## If you're using kube-lego, you will want to add:
-      ## kubernetes.io/tls-acme: true
-      ##
       ## For a full list of possible ingress annotations, please see
       ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
       ##
       ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+      ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
       annotations:
       #  kubernetes.io/ingress.class: nginx
-      #  kubernetes.io/tls-acme: true
     secrets:
     ## If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
     ##
     ## name should line up with a tlsSecret set further up
-    ## If you're using kube-lego, this is unneeded, as it will create the secret for you if it is not set
+    ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
     ##
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
@@ -171,6 +187,11 @@ ui:
 #    "serf_lan":"0.0.0.0"
 #    }
 
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
 metrics:
   enabled: false
   image:
@@ -179,7 +200,9 @@ metrics:
     tag: v0.3.0
     pullPolicy: IfNotPresent
   resources: {}
-  annotations: {}
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9107"
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector

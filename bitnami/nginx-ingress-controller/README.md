@@ -14,6 +14,8 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [nginx-ingress](https://github.com/kubernetes/ingress-nginx) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+
 ## Prerequisites
 
 - Kubernetes 1.6+
@@ -46,6 +48,7 @@ The following tables lists the configurable parameters of the nginx-ingress-cont
 
 Parameter | Description | Default
 --- | --- | ---
+`global.imageRegistry` | Global Docker image registry | `nil`
 `name` | name of the controller component | `controller`
 `image.registry` | name of the container image registry | `docker.io`
 `image.repository` | controller container image repository | `bitnami/nginx-ingress-controller`
@@ -121,7 +124,7 @@ Parameter | Description | Default
 `metrics.service.externalIPs` | Prometheus metrics service external IP addresses | `[]`
 `metrics.service.loadBalancerIP` | IP address to assign to load balancer (if supported) | `""`
 `metrics.service.loadBalancerSourceRanges` | list of IP CIDRs allowed access to load balancer (if supported) | `[]`
-`metrics.service.servicePort` | Prometheus metrics service port | `9913`
+`metrics.service.port` | Prometheus metrics service port | `9913`
 `metrics.service.type` | type of Prometheus metrics service to create | `ClusterIP`
 `customTemplate.configMapName` | configMap containing a custom nginx template | `""`
 `customTemplate.configMapKey` | configMap key containing the nginx template | `""`

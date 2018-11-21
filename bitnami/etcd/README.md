@@ -12,6 +12,8 @@ $ helm install bitnami/etcd
 
 This chart bootstraps a [etcd](https://github.com/bitnami/bitnami-docker-etcd) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+
 ## Prerequisites
 
 - Kubernetes 1.4+ with Beta APIs enabled
@@ -45,6 +47,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 
 |          Parameter                    |                                                  Description                                             |                                     Default                        |
 |---------------------------------------|----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------- |
+| `global.imageRegistry`                | Global Docker image registry                                                                             | `nil`                                                              |
 | `image.registry`                      | etcd image registry                                                                                      | `docker.io`                                                        |
 | `image.repository`                    | etcd Image name                                                                                          | `bitnami/etcd`                                                     |
 | `image.tag`                           | etcd Image tag                                                                                           | `{VERSION}`                                                        |
@@ -83,6 +86,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `persistence.accessMode`              | PVC Access Mode for etcd volume                                                                          | `ReadWriteOnce`                                                    |
 | `persistence.size`                    | PVC Storage Request for etcd volume                                                                      | `8Gi`                                                              |
 | `persistence.annotations`             | Annotations for the PVC                                                                                  | `{}`                                                               |
+| `affinity`                            | Affinity and AntiAffinity rules for pod assignment                                                       | `{}`                                                               |
 | `nodeSelector`                        | Node labels for pod assignment                                                                           | `{}`                                                               |
 | `tolerations`                         | Toleration labels for pod assignment                                                                     | `[]`                                                               |
 | `resources`                           | CPU/Memory resource requests/limits                                                                      | Memory: `256Mi`, CPU: `250m`                                       |
@@ -98,6 +102,10 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                                                                 |  5                                                                 |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.               |  6                                                                 |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed              |  1                                                                 |
+| `podAnnotations`                     | Annotations to be added to pods                                                              | {}                                |
+| `metrics.enabled`                          | Enable prometheus to access etcd metrics endpoint                                                                           | `false`                                              |
+| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                                               | {`prometheus.io/scrape: "true",prometheus.io/port: "2379"`}                                                   |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+  annotations:
+    helm.sh/hook: post-delete
+    helm.sh/hook-delete-policy: hook-succeeded
+  labels:
+    app: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: kubectl
+        image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}
+        command:
+        - /bin/sh
+        args:
+        - -c
+        - "kubectl delete secret -n {{ .Release.Namespace }} {{ .Values.mongodb.existingSecret }} || true"
+      restartPolicy: OnFailure
+      serviceAccountName: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+    {{- with .Values.hooks.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.hooks.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.hooks.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

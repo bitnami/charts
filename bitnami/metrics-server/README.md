@@ -12,6 +12,8 @@ $ helm install bitnami/metrics-server
 
 This chart bootstraps a [Metrics Server](https://github.com/bitnami/bitnami-docker-metrics-server) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+
 ## Prerequisites
 
 - Kubernetes 1.8+ with Beta APIs enabled
@@ -45,6 +47,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 
 |         Parameter        |                                   Description                               |                Default                 |
 |--------------------------|-----------------------------------------------------------------------------|----------------------------------------|
+| `global.imageRegistry`   | Global Docker image registry                                                | `nil`                                  |
 | `image.registry`         | Metrics Server image registry                                               | `docker.io`                            |
 | `image.repository`       | Metrics Server image name                                                   | `bitnami/metrics-server`               |
 | `image.tag`              | Metrics Server image tag                                                    | `{VERSION}`                            |

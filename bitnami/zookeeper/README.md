@@ -12,6 +12,8 @@ $ helm install bitnami/zookeeper
 
 This chart bootstraps a [Zookeeper](https://github.com/bitnami/bitnami-docker-zookeeper) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+
 ## Prerequisites
 
 - Kubernetes 1.4+ with Beta APIs enabled
@@ -45,6 +47,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 
 |              Parameter                |                              Description                            |                            Default                       |
 |---------------------------------------|---------------------------------------------------------------------|----------------------------------------------------------|
+| `global.imageRegistry`                | Global Docker image registry                                        | `nil`                                                    |
 | `image.registry`                      | Zookeeper image registry                                            | `docker.io`                                              |
 | `image.repository`                    | Zookeeper Image name                                                | `bitnami/zookeeper`                                      |
 | `image.tag`                           | Zookeeper Image tag                                                 | `{VERSION}`                                              |

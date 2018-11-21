@@ -1,6 +1,6 @@
 # The Bitnami Library for Kubernetes
 
-Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/kubernetes/helm).
+Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
 
 ## TL;DR
 
@@ -29,11 +29,11 @@ $ helm search bitnami
 - [Parse](https://github.com/helm/charts/tree/master/stable/parse)
 - [Phabricator](https://github.com/helm/charts/tree/master/stable/phabricator)
 - [phpBB](https://github.com/helm/charts/tree/master/stable/phpbb)
+- [PostgreSQL](https://github.com/helm/charts/tree/master/stable/postgresql)
 - [PrestaShop](https://github.com/helm/charts/tree/master/stable/prestashop)
 - [RabbitMQ](https://github.com/helm/charts/tree/master/stable/rabbitmq)
 - [Redis](https://github.com/helm/charts/tree/master/stable/redis)
 - [Redmine](https://github.com/helm/charts/tree/master/stable/redmine)
-- [SugarCRM](https://github.com/helm/charts/tree/master/stable/sugarcrm)
 - [SuiteCRM](https://github.com/helm/charts/tree/master/stable/suitecrm)
 - [TestLink](https://github.com/helm/charts/tree/master/stable/testlink)
 - [WordPress](https://github.com/helm/charts/tree/master/stable/wordpress)
@@ -41,7 +41,7 @@ $ helm search bitnami
 ## Bitnami charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
-- [Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
+- [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
@@ -51,7 +51,6 @@ $ helm search bitnami
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
 - [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
 - [NodeJS](https://github.com/bitnami/charts/tree/master/bitnami/node)
-- [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
 - [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-inception)
 - [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
 - [WildFly](https://github.com/bitnami/charts/tree/master/bitnami/wildfly)
@@ -77,7 +76,7 @@ The above command creates a new cluster named `my-cluster`. You can name the clu
 
 Helm is a tool for managing Kubernetes charts. Charts are packages of pre-configured Kubernetes resources.
 
-To install Helm, refer to the [Helm install guide](https://github.com/kubernetes/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
+To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
 
 ### Add Repo
 
@@ -91,7 +90,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 Once you have installed the Helm client and initialized the Tiller server, you can deploy a Bitnami Helm Chart into a Kubernetes cluster.
 
-Please refer to the [Quick Start guide](https://github.com/kubernetes/helm/blob/master/docs/quickstart.md) if you wish to get running in just a few commands, otherwise the [Using Helm Guide](https://github.com/kubernetes/helm/blob/master/docs/using_helm.md) provides detailed instructions on how to use the Helm client to manage packages on your Kubernetes cluster.
+Please refer to the [Quick Start guide](https://github.com/helm/helm/blob/master/docs/quickstart.md) if you wish to get running in just a few commands, otherwise the [Using Helm Guide](https://github.com/helm/helm/blob/master/docs/using_helm.md) provides detailed instructions on how to use the Helm client to manage packages on your Kubernetes cluster.
 
 Useful Helm Client Commands:
 * View available charts: `helm search`

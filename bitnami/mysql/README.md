@@ -12,6 +12,8 @@ $ helm install bitnami/mysql
 
 This chart bootstraps a [MySQL](https://github.com/bitnami/bitnami-docker-mysql) replication cluster deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+
 ## Prerequisites
 
 - Kubernetes 1.4+ with Beta APIs enabled
@@ -45,6 +47,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 
 |             Parameter                     |                     Description                       |                              Default                              |
 |-------------------------------------------|-------------------------------------------------------|-------------------------------------------------------------------|
+| `global.imageRegistry`                    | Global Docker image registry                          | `nil`                                                             |
 | `image.registry`                          | MySQL image registry                                  | `docker.io`                                                       |
 | `image.repository`                        | MySQL Image name                                      | `bitnami/mysql`                                                   |
 | `image.tag`                               | MySQL Image tag                                       | `{VERSION}`                                                       |

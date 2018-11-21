@@ -27,7 +27,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "fullname" . }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ template "wildfly.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: WILDFLY_USERNAME
