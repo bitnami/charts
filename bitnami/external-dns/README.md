@@ -48,6 +48,7 @@ The following table lists the configurable parameters of the external-dns chart 
 
 | Parameter                             | Description                                                                                              | Default                                                  |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `global.imageRegistry`                | Global Docker image registry                                                                             | `nil`                                                    |
 | `image.registry`                      | ExternalDNS image registry                                                                               | `docker.io`                                              |
 | `image.repository`                    | ExternalDNS Image name                                                                                   | `bitnami/external-dns`                                   |
 | `image.tag`                           | ExternalDNS Image tag                                                                                    | `{VERSION}`                                              |
@@ -104,6 +105,8 @@ The following table lists the configurable parameters of the external-dns chart 
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                                                                 | 5                                                        |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.               | 6                                                        |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed              | 1                                                        |
+| `metrics.enabled`                          | Enable prometheus to access external-dns metrics endpoint                                                                           | `false`                                              |
+| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                                               | {`prometheus.io/scrape: "true",prometheus.io/port: "7979"`}                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -124,7 +127,23 @@ $ helm install --name my-release -f values.yaml bitnami/external-dns
 
 Find information about the requirements for each DNS provider on the link below:
 
- - [ExternalDNS Tutorials](https://github.com/kubernetes-incubator/external-dns/tree/master/docs/tutorials)
+- [ExternalDNS Tutorials](https://github.com/kubernetes-incubator/external-dns/tree/master/docs/tutorials)
+
+For instance, to install ExternalDNS on AWS, you need to:
+
+- Provide the K8s worker node which runs the cluster autoscaler with a minimum IAM policy (check [IAM permissions docs](https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#iam-permissions) for more information).
+- Setup a hosted zone on Route53 and annotate the Hosted Zone ID and its associated "nameservers" as described on [these docs](https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone).
+- Install ExternalDNS chart using the command below:
+
+> Note: replace the placeholder HOSTED_ZONE_NAME with your hosted zoned name.
+
+```bash
+$ helm install --name my-release \
+  --set provider=aws \
+  --set aws.zoneType=public \
+  --set domainFilters=HOSTED_ZONE_NAME \
+  bitnami/external-dns
+```
 
 ## Upgrading
 

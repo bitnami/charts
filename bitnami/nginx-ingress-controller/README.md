@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the nginx-ingress-cont
 
 Parameter | Description | Default
 --- | --- | ---
+`global.imageRegistry` | Global Docker image registry | `nil`
 `name` | name of the controller component | `controller`
 `image.registry` | name of the container image registry | `docker.io`
 `image.repository` | controller container image repository | `bitnami/nginx-ingress-controller`
@@ -123,7 +124,7 @@ Parameter | Description | Default
 `metrics.service.externalIPs` | Prometheus metrics service external IP addresses | `[]`
 `metrics.service.loadBalancerIP` | IP address to assign to load balancer (if supported) | `""`
 `metrics.service.loadBalancerSourceRanges` | list of IP CIDRs allowed access to load balancer (if supported) | `[]`
-`metrics.service.servicePort` | Prometheus metrics service port | `9913`
+`metrics.service.port` | Prometheus metrics service port | `9913`
 `metrics.service.type` | type of Prometheus metrics service to create | `ClusterIP`
 `customTemplate.configMapName` | configMap containing a custom nginx template | `""`
 `customTemplate.configMapKey` | configMap key containing the nginx template | `""`

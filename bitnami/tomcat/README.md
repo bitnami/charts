@@ -47,6 +47,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 
 |           Parameter           |                 Description                  |                           Default                         |
 |-------------------------------|----------------------------------------------|---------------------------------------------------------- |
+| `global.imageRegistry`        | Global Docker image registry                 | `nil`                                                     |
 | `image.registry`              | Tomcat image registry                        | `docker.io`                                               |
 | `image.repository`            | Tomcat Image name                            | `bitnami/tomcat`                                          |
 | `image.tag`                   | Tomcat Image tag                             | `{VERSION}`                                               |
@@ -55,7 +56,11 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `tomcatUsername`              | Tomcat admin user                            | `user`                                                    |
 | `tomcatPassword`              | Tomcat admin password                        | _random 10 character alphanumeric string_                 |
 | `tomcatAllowRemoteManagement` | Enable remote access to management interface | `0` (disabled)                                            |
-| `serviceType`                 | Kubernetes Service type                      | `LoadBalancer`                                            |
+| `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
+| `service.port`                    | Service HTTP port                  | `80`                                          |
+| `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
+| `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
+| `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
 | `persistence.enabled`         | Enable persistence using PVC                 | `true`                                                    |
 | `persistence.storageClass`    | PVC Storage Class for Tomcat volume          | `nil` (uses alpha storage class annotation)               |
 | `persistence.accessMode`      | PVC Access Mode for Tomcat volume            | `ReadWriteOnce`                                           |

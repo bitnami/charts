@@ -1,0 +1,35 @@
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ template "networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "cassandra.fullname" . }}
+  labels:
+    app: {{ template "cassandra.name" . }}
+    chart: {{ template "cassandra.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ template "cassandra.name" . }}
+      release: {{ .Release.Name }}
+  ingress:
+    # Allow inbound connections
+    - ports:
+      - port: {{ .Values.service.port }}
+      {{- if not .Values.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels:
+              {{ template "cassandra.fullname" . }}-client: "true"
+      {{- end }}
+        - podSelector:
+            matchLabels:
+              app: {{ template "cassandra.name" . }}
+              release: {{ .Release.Name }}
+    {{- if .Values.metrics.enabled }}
+    # Allow prometheus scrapes for metrics
+    - ports:
+      - port: 8080
+    {{- end }}
+{{- end }}

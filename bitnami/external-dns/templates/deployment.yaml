@@ -21,10 +21,15 @@ spec:
        chart: {{ template "external-dns.chart" .  }}
        release: {{ .Release.Name | quote }}
        heritage: {{ .Release.Service | quote }}
-      {{- if .Values.podAnnotations }}
-      annotations:
-{{ toYaml .Values.podAnnotations | indent 8}}
-      {{- end }}
+{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+     annotations:
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+{{- if .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+{{- end }}
+{{- end }}
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -57,7 +62,7 @@ spec:
         args:
         # Generic arguments
         - --policy={{ .Values.policy }}
-        - --provider={{ .Values.provider }}
+        - --provider={{ required "A provider is required to deploy the chart" .Values.provider }}
         - --registry={{ .Values.registry }}
         {{- if .Values.logLevel }}
         - --log-level={{ .Values.logLevel }}
