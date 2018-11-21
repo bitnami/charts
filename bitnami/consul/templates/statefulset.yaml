@@ -79,22 +79,22 @@ spec:
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         ports:
         - name: http
-          containerPort: {{ .Values.httpPort }}
+          containerPort: {{ .Values.service.port }}
         - name: rpc
-          containerPort: {{ .Values.rpcPort }}
+          containerPort: {{ .Values.service.rpcPort }}
         - name: serflan-tcp
           protocol: "TCP"
-          containerPort: {{ .Values.serflanPort }}
+          containerPort: {{ .Values.service.serflanPort }}
         - name: serflan-udp
           protocol: "UDP"
-          containerPort: {{ .Values.serflanPort }}
+          containerPort: {{ .Values.service.serflanPort }}
         - name: server
-          containerPort: {{ .Values.serverPort }}
+          containerPort: {{ .Values.service.serverPort }}
         - name: consuldns-tcp
-          containerPort: {{ .Values.consulDnsPort }}
+          containerPort: {{ .Values.service.consulDnsPort }}
         - name: consuldns-udp
           protocol: "UDP"
-          containerPort: {{ .Values.consulDnsPort }}
+          containerPort: {{ .Values.service.consulDnsPort }}
         resources:
 {{ toYaml .Values.Resources | indent 10 }}
         env:
@@ -127,13 +127,13 @@ spec:
         - name: CONSUL_UI
           value: "{{ .Values.ui.service.enabled }}"
         - name: CONSUL_HTTP_PORT_NUMBER
-          value: {{ .Values.httpPort | quote}}
+          value: {{ .Values.port | quote}}
         - name: CONSUL_DNS_PORT_NUMBER
-          value: {{ .Values.consulDnsPort | quote }}
+          value: {{ .Values.service.consulDnsPort | quote }}
         - name: CONSUL_RPC_PORT_NUMBER
-          value: {{ .Values.serverPort | quote }}
+          value: {{ .Values.service.serverPort | quote }}
         - name: CONSUL_SERF_LAN_PORT_NUMBER
-          value: {{ .Values.serflanPort | quote }}
+          value: {{ .Values.service.serflanPort | quote }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
@@ -189,7 +189,7 @@ spec:
         image: "{{ .Values.metrics.image.registry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
-        command: [ '/bin/consul_exporter' , '--consul.server={{ template "consul.fullname" . }}:{{ .Values.httpPort }}']
+        command: [ '/bin/consul_exporter' , '--consul.server={{ template "consul.fullname" . }}:{{ .Values.port }}']
         ports:
         - name: metrics
           containerPort: 9107

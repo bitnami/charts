@@ -16,7 +16,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: {{ .Values.uiPort }}
+    port: {{ .Values.service.uiPort }}
     targetPort: http
   type: "{{ .Values.ui.service.type }}"
   {{- if and (eq .Values.ui.service.type "LoadBalancer") .Values.ui.service.loadBalancerIP }}
