@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: dashboard
-        image: {{ template "kubeapps.image" .Values.dashboard.image }}
+        image: {{ template "kubeapps.image" (list .Values.dashboard.image .Values.global) }}
         livenessProbe:
 {{ toYaml .Values.dashboard.livenessProbe | indent 10 }}
         readinessProbe:

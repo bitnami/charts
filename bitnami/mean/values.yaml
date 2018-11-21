@@ -1,10 +1,16 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
 ## Bitnami node image version
 ## ref: https://hub.docker.com/r/bitnami/node/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 9.11.1-prod
+  tag: 8.12.0-prod
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -17,9 +23,9 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
-gitImage:
+git:
   registry: docker.io
-  repository: alpine/git
+  repository: bitnami/git
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -83,6 +89,8 @@ resources: {}
 
 ##
 ## MongoDB chart configuration
+##
+## https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
 ##
 mongodb:
   ## MongoDB admin password

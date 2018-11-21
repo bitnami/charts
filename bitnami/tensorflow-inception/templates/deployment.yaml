@@ -12,13 +12,22 @@ spec:
     matchLabels:
       app: {{ template "fullname" . }}
       release: "{{ .Release.Name }}"
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
+{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      annotations:
+  {{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+  {{- end }}
+{{- end }}
     spec:
       {{- if .Values.server.image.pullSecrets }}
       imagePullSecrets:
@@ -26,9 +35,30 @@ spec:
         - name: {{ . }}
       {{- end}}
       {{- end }}
+      initContainers:
+      - name: seed
+        image: "{{ template "tensorflow-inception.client.image" . }}"
+        imagePullPolicy: {{ .Values.client.image.pullPolicy | quote }}
+        command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            if [ -f /seed/.initialized ];then
+              echo "Already initialized. Skipping"
+            else
+              curl -o /seed/inception-v3-2016-03-01.tar.gz http://download.tensorflow.org/models/image/imagenet/inception-v3-2016-03-01.tar.gz
+              cd /seed/ && tar -xzf inception-v3-2016-03-01.tar.gz
+              rm inception-v3-2016-03-01.tar.gz
+              inception_saved_model --checkpoint_dir=/seed/inception-v3 --output_dir=/seed/
+              rm -rf inception-v3
+              touch /seed/.initialized
+            fi
+        volumeMounts:
+        - name: seed
+          mountPath: /seed
       containers:
-      - name: {{ template "fullname" . }}
-        image: "{{ .Values.server.image.registry }}/{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
+      - name: serving
+        image: "{{ template "tensorflow-inception.server.image" . }}"
         imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
         readinessProbe:
           tcpSocket:
@@ -43,16 +73,29 @@ spec:
         volumeMounts:
         - name: seed
           mountPath: "/bitnami/model-data"
-        - name: data
-          mountPath: /bitnami/tensorflow-serving
+{{- if .Values.metrics.enabled }}
+      - name: metrics
+        image: {{ template "metrics.image" . }}
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+        command: ['python', 'tf_serving_exporter.py', '--tf_port', '{{ .Values.server.port }}', '--port', '9118', '--model_name', 'inception-v3']
+        ports:
+        - name: metrics
+          containerPort: 9118
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+  {{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}
       volumes:
       - name: seed
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}-seed-inception
-      - name: data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
-      {{- else }}
         emptyDir: {}
-      {{- end -}}
