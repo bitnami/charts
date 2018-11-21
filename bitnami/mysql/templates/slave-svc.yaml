@@ -9,10 +9,6 @@ metadata:
     component: "slave"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
-{{- if .Values.metrics.enabled }}
-  annotations:
-{{ toYaml .Values.metrics.annotations | indent 4 }}
-{{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
