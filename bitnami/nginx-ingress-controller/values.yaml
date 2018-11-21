@@ -254,7 +254,7 @@ stats:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 18080
+    port: 18080
     type: ClusterIP
 
 ## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
@@ -276,7 +276,7 @@ metrics:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 9913
+    port: 9913
     type: ClusterIP
 
 lifecycle: {}
@@ -353,7 +353,7 @@ defaultBackend:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 80
+    port: 80
     type: ClusterIP
 
   priorityClassName: ""

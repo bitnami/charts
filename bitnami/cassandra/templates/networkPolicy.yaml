@@ -16,7 +16,7 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-      - port: {{ .Values.service.cqlPort }}
+      - port: {{ .Values.service.port }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

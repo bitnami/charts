@@ -17,7 +17,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
   - name: cql
-    port: {{ .Values.service.cqlPort }}
+    port: {{ .Values.service.port }}
     targetPort: cql
 {{- if .Values.cluster.enableRPC }}
   - name: thrift

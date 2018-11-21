@@ -12,22 +12,22 @@ metadata:
 spec:
   ports:
   - name: http
-    port: {{ .Values.httpPort }}
+    port: {{ .Values.service.port }}
   - name: rpc
-    port: {{ .Values.rpcPort }}
+    port: {{ .Values.service.rpcPort }}
   - name: serflan-tcp
     protocol: "TCP"
-    port: {{ .Values.serflanPort }}
+    port: {{ .Values.service.serflanPort }}
   - name: serflan-udp
     protocol: "UDP"
-    port: {{ .Values.serflanPort }}
+    port: {{ .Values.service.serflanPort }}
   - name: server
-    port: {{.Values.serverPort}}
+    port: {{.Values.service.serverPort}}
   - name: consuldns-tcp
-    port: {{.Values.consulDnsPort}}
+    port: {{.Values.service.consulDnsPort}}
   - name: consuldns-udp
     protocol: "UDP"
-    port: {{.Values.consulDnsPort}}
+    port: {{.Values.service.consulDnsPort}}
   clusterIP: None
   selector:
     app: "{{ template "consul.name" . }}"
