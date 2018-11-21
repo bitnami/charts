@@ -51,6 +51,15 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `image.pullPolicy`        | NGINX image pull policy        | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
 | `image.pullSecrets`       | Specify image pull secrets     | `nil` (does not add image pull secrets to deployed pods)  |
 | `vhost`                   | Custom NGINX virtual host      | `nil`                                                     |
+| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
+| `metrics.image.registry`                   | Promethus exporter image registry                                                                                  | `docker.io`                                          |
+| `metrics.image.repository`                 | Promethus exporter image name                                                                                      | `lusotycoon/apache-exporter`                           |
+| `metrics.image.tag`                        | Promethus exporter image tag                                                                                       | `v0.5.0`                                            |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `nil`                                                |
+| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}`                                                   |
+| `metrics.resources`                        | Exporter resource requests/limit                                                                               | {}                        |
 | `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
 | `service.port`                    | Service HTTP port                  | `80`                                          |
 | `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
