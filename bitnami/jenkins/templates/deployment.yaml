@@ -18,6 +18,15 @@ spec:
         app: {{ template "fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
+{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      annotations:
+  {{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+  {{- end }}
+{{- end }}
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -26,7 +35,7 @@ spec:
       {{- end}}
       {{- end }}
       containers:
-      - name: {{ template "fullname" . }}
+      - name: jenkins
         image: "{{ template "jenkins.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
@@ -69,6 +78,37 @@ spec:
         volumeMounts:
         - name: jenkins-data
           mountPath: /bitnami/jenkins
+{{- if .Values.metrics.enabled }}
+      - name: metrics
+        image: {{ template "metrics.image" . }}
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+        command: ['sh', '-c', 'python -u ./jenkins_exporter.py -j http://127.0.0.1:8080 --user $JENKINS_USERNAME --password $JENKINS_PASSWORD']
+        env:
+        - name: JENKINS_USERNAME
+          value: {{ .Values.jenkinsUser | quote }}
+        - name: JENKINS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: jenkins-password
+        ports:
+        - name: metrics
+          containerPort: 9118
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+  {{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}
       volumes:
       - name: jenkins-data
       {{- if .Values.persistence.enabled }}
