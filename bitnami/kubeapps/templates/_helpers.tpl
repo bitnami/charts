@@ -28,7 +28,22 @@ If release name contains chart name it will be used as a full name.
 Render image reference
 */}}
 {{- define "kubeapps.image" -}}
-{{ .registry }}/{{ .repository }}:{{ .tag }}
+{{- $image := index . 0 -}}
+{{- $global := index . 1 -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if $global -}}
+    {{- if $global.imageRegistry -}}
+        {{ $global.imageRegistry }}/{{ $image.repository }}:{{ $image.tag }}
+    {{- else -}}
+        {{ $image.registry }}/{{ $image.repository }}:{{ $image.tag }}
+    {{- end -}}
+{{- else -}}
+    {{ $image.registry }}/{{ $image.repository }}:{{ $image.tag }}
+{{- end -}}
 {{- end -}}
 
 {{/*

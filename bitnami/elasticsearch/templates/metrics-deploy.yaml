@@ -34,7 +34,7 @@ spec:
       - name: {{ template "elasticsearch.metrics.fullname" . }}
         image:  {{ template "metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        args: [ "-es.uri=http://{{ template "coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
+        args: [ "-es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
         ports:
         - name: metrics
           containerPort: 9108
