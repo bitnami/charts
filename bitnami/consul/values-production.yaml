@@ -35,6 +35,14 @@ service:
   consulDnsPort: 8600
   uiPort: 80
 
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
 ## Datacenter name for consul. If not supplied, will use the consul
 ## default 'dc1'
 datacenterName: dc1
