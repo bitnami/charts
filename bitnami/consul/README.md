@@ -248,6 +248,20 @@ The chart can optionally start a metrics exporter endpoint on port `9107` for [p
 
 ## Upgrading
 
+### To 3.1.0
+
+Consul container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
+
+```
+$ helm upgrade my-release stable/consul
+```
+
+If you use a previous container image (previous to **1.4.0-r**) disable the `securityContext` by running the command below:
+
+```
+$ helm upgrade my-release stable/consul --set securityContext.enabled=fase,image.tag=XXX
+```
+
 ### To 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
