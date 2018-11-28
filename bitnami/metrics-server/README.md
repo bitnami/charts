@@ -61,7 +61,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `rbac.create`            | Enable RBAC authentication                                                  | `true`                                 |
 | `serviceAccount.create`  | Specifies whether a ServiceAccount should be created                        | `true`                                 |
 | `serviceAccount.name`    | The name of the ServiceAccount to create                                    | Generated using the fullname template  |
-| `apiService.create`      | Specifies whether the v1beta1.metrics.k8s.io API service should be created  | `true`                                 |
+| `apiService.create`      | Specifies whether the v1beta1.metrics.k8s.io API service should be created (This should not be necessary in k8s version >= 1.8)  | `false`                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

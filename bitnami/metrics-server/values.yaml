@@ -30,11 +30,11 @@ serviceAccount:
 
 apiService:
   # Specifies if the v1beta1.metrics.k8s.io API service should be created.
-  #
+  # This should not be necessary in k8s version >= 1.8
   # If you disable API service creation you have to
   # manage it outside of this chart for e.g horizontal pod autoscaling to
   # work with this release.
-  create: true
+  create: false
 
 ## Specify the secure port where metrics-server will be running
 ##
