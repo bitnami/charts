@@ -52,6 +52,7 @@ $ helm search bitnami
 - [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
 - [NodeJS](https://github.com/bitnami/charts/tree/master/bitnami/node)
 - [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-inception)
+- [TensorFlow ResNet](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet)
 - [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
 - [WildFly](https://github.com/bitnami/charts/tree/master/bitnami/wildfly)
 - [ZooKeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper)
