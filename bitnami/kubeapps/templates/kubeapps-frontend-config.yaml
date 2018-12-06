@@ -53,6 +53,9 @@ data:
       }
 
       location /api/tiller-deploy {
+        # Keep the connection open with the API server even if idle (the default is 60 seconds)
+        # Setting it to 10 minutes which should be enough for our current use case of deploying/upgrading/deleting apps
+        proxy_read_timeout 10m;
         rewrite /api/tiller-deploy/(.*) /$1 break;
         rewrite /api/tiller-deploy / break;
         proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};

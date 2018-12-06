@@ -1,6 +1,6 @@
 # Kubeapps
 
-[![Build Status](https://travis-ci.org/kubeapps/kubeapps.svg?branch=master)](https://travis-ci.org/kubeapps/kubeapps)
+[![CircleCI](https://circleci.com/gh/kubeapps/kubeapps/tree/master.svg?style=svg)](https://circleci.com/gh/kubeapps/kubeapps/tree/master)
 
 [Kubeapps](https://kubeapps.com) is a web-based UI for deploying and managing applications in Kubernetes clusters. Kubeapps allows you to:
 
@@ -28,7 +28,6 @@ It also packages the [Bitnami MongoDB chart](https://github.com/helm/charts/tree
 
 - Kubernetes 1.8+ (tested with Azure Kubernetes Service, Google Kubernetes Engine, minikube and Docker for Desktop Kubernetes)
 - Helm 2.10.0+
-- PV provisioner support in the underlying infrastructure
 - Administrative access to the cluster to create and update RBAC ClusterRoles
 
 ## Installing the Chart
@@ -48,6 +47,8 @@ The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespa
 
 > **Tip**: List all releases using `helm list`
 
+Once you have installed Kubeapps follow the [Getting Started Guide](https://github.com/kubeapps/kubeapps/blob/master/docs/user/getting-started.md) for additional information on how to access and use Kubeapps.
+
 ## Upgrading Kubeapps
 
 You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace in which Kubeapps is installed (`kubeapps` if you followed the instructions in this guide) and click on the "Upgrade" button. Select the new version and confirm.
@@ -64,9 +65,10 @@ Now upgrade Kubeapps:
 
 ```console
 $ export RELEASE_NAME=kubeapps
-$ export NAMESPACE=kubeapps
 $ helm upgrade $RELEASE_NAME bitnami/kubeapps
 ```
+
+If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
 
 ## Uninstalling Kubeapps
 
@@ -81,6 +83,12 @@ $ kubectl delete crd apprepositories.kubeapps.com
 The first command removes most of the Kubernetes components associated with the chart and deletes the release. After that, if there are no more instances of Kubeapps in the cluster you can manually delete the `apprepositories.kubeapps.com` CRD used by Kubeapps that is shared for the entire cluster.
 
 > **NOTE**: If you delete the CRD for `apprepositories.kubeapps.com` it will delete the repositories for **all** the installed instances of `kubeapps`. This will break existing installations of `kubeapps` if they exist.
+
+If you have dedicated a namespace only for Kubeapps you can completely clean remaining completed/failed jobs or any stale resources by deleting the namespace
+
+```console
+$ kubectl delete namespace kubeapps
+```
 
 ## Configuration
 
@@ -146,7 +154,6 @@ helm install \
 
 Learn more about how to secure your Kubeapps installation [here](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
 
-
 ### Exposing Externally
 
 #### LoadBalancer Service
@@ -202,6 +209,12 @@ If during installation you run into an error similar to:
 Error: release kubeapps failed: clusterroles.rbac.authorization.k8s.io "kubeapps-apprepository-controller" is forbidden: attempt to grant extra privileges: [{[get] [batch] [cronjobs] [] []...
 ```
 
+Or:
+
+```
+Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-system:default" cannot get namespaces in the namespace "kubeapps"
+```
+
 This usually is an indication that Tiller was not installed with enough permissions to create the resources by Kubeapps. In order to install Kubeapps, you will need to install Tiller with elevated permissions (e.g. as a cluster-admin). For example:
 
 ```
@@ -210,8 +223,63 @@ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceac
 helm init --service-account tiller
 ```
 
-It is also possible, though less common, that your cluster does not have Role Based Access Control (RBAC) enabled. If this is the case you should perform the chart installation by setting `rbac.create=false`:
+It is also possible, though less common, that your cluster does not have Role Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
+
+```console
+$ kubectl api-versions
+```
+
+If the above command does not include entries for `rbac.authorization.k8s.io` you should perform the chart installation by setting `rbac.create=false`:
 
 ```console
 $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps --set rbac.create=false
 ```
+
+### Error while upgrading the Chart
+
+It is possible that when upgrading Kubeapps an error appears. That can be caused by a breaking change in the new chart or because the current chart installation is in an inconsistent state. If you find issues upgrading Kubeapps you can follow these steps:
+
+> Note: This steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
+
+1.  (Optional) Backup your personal repositories (if you have any):
+
+```console
+kubectl get apprepository --namespace kubeapps -o yaml <repo name> > <repo name>.yaml
+```
+
+2.  Delete Kubeapps:
+
+```console
+helm del --purge kubeapps
+```
+
+3.  (Optional) Delete the App Repositories CRD:
+
+> **Warning**: Don't execute this step if you have more than one Kubeapps installation in your cluster.
+
+```console
+kubectl delete crd apprepositories.kubeapps.com
+```
+
+4.  (Optional) Clean the Kubeapps namespace:
+
+> **Warning**: Don't execute this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
+
+```console
+kubectl delete namespace kubeapps
+```
+
+5.  Install the latest version of Kubeapps (using any custom modifications you need):
+
+```console
+helm repo update
+helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
+```
+
+6.  (Optional) Restore any repositories you backed up in the first step:
+
+```console
+kubectl apply -f <repo name>.yaml
+```
+
+After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/kubeapps/kubeapps/issues/new).
