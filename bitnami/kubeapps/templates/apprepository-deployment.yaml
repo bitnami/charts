@@ -42,6 +42,11 @@ spec:
       affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
     {{- with .Values.apprepository.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}

@@ -26,6 +26,15 @@ spec:
         component: "master"
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+{{- if or .Values.master.annotations .Values.metrics.enabled }}
+      annotations:
+  {{- if .Values.master.annotations }}
+{{ toYaml .Values.master.annotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.metrics.annotations }}
+{{ toYaml .Values.metrics.annotations | indent 8 }}
+  {{- end }}
+{{- end }}
     spec:
       {{- if .Values.securityContext.enabled }}
       securityContext:

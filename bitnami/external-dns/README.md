@@ -105,6 +105,8 @@ The following table lists the configurable parameters of the external-dns chart 
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                                                                 | 5                                                        |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.               | 6                                                        |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed              | 1                                                        |
+| `metrics.enabled`                          | Enable prometheus to access external-dns metrics endpoint                                                                           | `false`                                              |
+| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                                               | {`prometheus.io/scrape: "true",prometheus.io/port: "7979"`}                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

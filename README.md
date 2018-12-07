@@ -16,11 +16,13 @@ $ helm search bitnami
 - [Ghost](https://github.com/helm/charts/tree/master/stable/ghost)
 - [JasperReports](https://github.com/helm/charts/tree/master/stable/jasperreports)
 - [Joomla!](https://github.com/helm/charts/tree/master/stable/joomla)
+- [Kubewatch](https://github.com/helm/charts/tree/master/stable/kubewatch)
 - [Magento](https://github.com/helm/charts/tree/master/stable/magento)
 - [MariaDB](https://github.com/helm/charts/tree/master/stable/mariadb)
 - [MediaWiki](https://github.com/helm/charts/tree/master/stable/mediawiki)
 - [MongoDB](https://github.com/helm/charts/tree/master/stable/mongodb)
 - [Moodle](https://github.com/helm/charts/tree/master/stable/moodle)
+- [NATS](https://github.com/helm/charts/tree/master/stable/nats)
 - [Odoo](https://github.com/helm/charts/tree/master/stable/odoo)
 - [OpenCart](https://github.com/helm/charts/tree/master/stable/opencart)
 - [OrangeHRM](https://github.com/helm/charts/tree/master/stable/orangehrm)
@@ -29,12 +31,12 @@ $ helm search bitnami
 - [Parse](https://github.com/helm/charts/tree/master/stable/parse)
 - [Phabricator](https://github.com/helm/charts/tree/master/stable/phabricator)
 - [phpBB](https://github.com/helm/charts/tree/master/stable/phpbb)
+- [phpMyAdmin](https://github.com/helm/charts/tree/master/stable/phpmyadmin)
 - [PostgreSQL](https://github.com/helm/charts/tree/master/stable/postgresql)
 - [PrestaShop](https://github.com/helm/charts/tree/master/stable/prestashop)
 - [RabbitMQ](https://github.com/helm/charts/tree/master/stable/rabbitmq)
 - [Redis](https://github.com/helm/charts/tree/master/stable/redis)
 - [Redmine](https://github.com/helm/charts/tree/master/stable/redmine)
-- [SugarCRM](https://github.com/helm/charts/tree/master/stable/sugarcrm)
 - [SuiteCRM](https://github.com/helm/charts/tree/master/stable/suitecrm)
 - [TestLink](https://github.com/helm/charts/tree/master/stable/testlink)
 - [WordPress](https://github.com/helm/charts/tree/master/stable/wordpress)
@@ -42,15 +44,20 @@ $ helm search bitnami
 ## Bitnami charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
-- [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
+- [Cassandra](https://github.com/bitnami/charts/tree/master/bitnami/cassandra)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
+- [ExternalDNS](https://github.com/bitnami/charts/tree/master/bitnami/external-dns)
 - [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
+- [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
+- [Kubeapps](https://github.com/bitnami/charts/tree/master/bitnami/kubeapps)
 - [Mean](https://github.com/bitnami/charts/tree/master/bitnami/mean)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
+- [Metrics Server](https://github.com/bitnami/charts/tree/master/bitnami/metrics-server)
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
 - [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
+- [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller)
 - [NodeJS](https://github.com/bitnami/charts/tree/master/bitnami/node)
 - [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-inception)
 - [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
@@ -61,17 +68,7 @@ $ helm search bitnami
 
 ### Setup a Kubernetes Cluster
 
-The quickest way to setup a Kubernetes cluster is with [Google Container Engine](https://cloud.google.com/container-engine/) (GKE) using [these instructions](https://cloud.google.com/container-engine/docs/before-you-begin).
-
-Finish up by creating a cluster:
-
-```bash
-$ gcloud container clusters create my-cluster
-```
-
-The above command creates a new cluster named `my-cluster`. You can name the cluster according to your preferences.
-
-> For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](http://kubernetes.io/docs/getting-started-guides/).
+The quickest way to setup a Kubernetes cluster is with [Azure Kubernetes Service](https://azure.microsoft.com/en-us/services/kubernetes-service/), [AWS Elastic Container Service](https://aws.amazon.com/eks/) or [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/) using their respective quick-start guides. For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](http://kubernetes.io/docs/getting-started-guides/).
 
 ### Install Helm
 

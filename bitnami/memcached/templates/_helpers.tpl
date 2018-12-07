@@ -16,6 +16,16 @@ We truncate at 24 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Return the proper image name (for the metrics image)
+*/}}
+{{- define "metrics.image" -}}
+{{- $registryName :=  .Values.metrics.image.registry -}}
+{{- $repositoryName := .Values.metrics.image.repository -}}
+{{- $tag := .Values.metrics.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
+{{/*
 Return the proper Memcached image name
 */}}
 {{- define "memcached.image" -}}

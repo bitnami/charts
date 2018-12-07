@@ -60,9 +60,9 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `statefulset.replicaCount`            | Number of etcd nodes                                                                                     | `1`                                                                |
 | `useConfigmap`                        | Switch to use the config map for etcd                                                                    | `false`                                                            |
 | `allowNoneAuthentication`             | Allow to use etcd without configuring RBAC authentication                                                | `true`                                                             |
-| `auth.rbac.enabled`                   | Switch to enable the etcd authentication.                                                                | `false`                                                            |
-| `auth.rbac.rootPassword`              | Password for the root user                                                                               | `false`                                                            |
-| `auth.rbac.existingSecret`            | Name of the existing secret containing the root password                                                 | `false`                                                            |
+| `auth.rbac.enabled`                   | Switch to enable the etcd authentication.                                                                | `true`                                                            |
+| `auth.rbac.rootPassword`              | Password for the root user                                                                               | `nil`                                                            |
+| `auth.rbac.existingSecret`            | Name of the existing secret containing the root password                                                 | `nil`                                                            |
 | `auth.client.secureTransport`         | Switch to encrypt client communication using TLS certificates                                            | `false`                                                            |
 | `auth.client.useAutoTLS`              | Switch to automatically create the TLS certificates                                                      | `false`                                                            |
 | `auth.client.enableAuthentication`    | Switch to enable host authentication using TLS certificates. Requires existing secret.                   | `secret`                                                           |
@@ -102,6 +102,10 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                                                                 |  5                                                                 |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.               |  6                                                                 |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed              |  1                                                                 |
+| `podAnnotations`                     | Annotations to be added to pods                                                              | {}                                |
+| `metrics.enabled`                          | Enable prometheus to access etcd metrics endpoint                                                                           | `false`                                              |
+| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                                               | {`prometheus.io/scrape: "true",prometheus.io/port: "2379"`}                                                   |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

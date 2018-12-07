@@ -10,7 +10,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.0.1
+  tag: 2.1.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -230,7 +230,7 @@ readinessProbe:
 metrics:
   ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
   kafka:
-    enabled: false
+    enabled: true
 
     image:
       registry: docker.io
@@ -261,7 +261,7 @@ metrics:
 
   ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
   jmx:
-    enabled: false
+    enabled: true
 
     image:
       registry: docker.io
@@ -332,6 +332,8 @@ metrics:
 ## 
 zookeeper:
   enabled: true
+  metrics: 
+    enabled: true
 
 externalZookeeper:
   ## This value is only used when zookeeper.enabled is set to false

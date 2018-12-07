@@ -20,6 +20,9 @@ spec:
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "kubeapps.tiller-proxy.fullname" . }}
+      # Increase termination timeout to let remaining operations to finish before killing the pods
+      # This is because new releases/upgrades/deletions are synchronous operations
+      terminationGracePeriodSeconds: 300
       containers:
       - name: proxy
         image: {{ template "kubeapps.image" (list .Values.tillerProxy.image .Values.global) }}
@@ -61,6 +64,11 @@ spec:
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
     {{- with .Values.tillerProxy.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}

@@ -1,0 +1,192 @@
+## Bitnami Zookeeper image version
+## ref: https://hub.docker.com/r/bitnami/zookeeper/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/zookeeper
+  tag: 3.4.12-debian-9
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistrKeySecretName
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
+  debug: false
+
+## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+##
+updateStrategy: RollingUpdate
+
+## Partition update strategy
+## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+##
+# rollingUpdatePartition:
+
+## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: Parallel
+
+## Number of ZooKeeper nodes
+##
+replicaCount: 3
+
+## Basic time unit in milliseconds used by ZooKeeper for heartbeats
+##
+tickTime: 2000
+
+## ZooKeeper uses to limit the length of time the ZooKeeper servers in quorum have to connect to a leader
+##
+initLimit: 10
+
+## How far out of date a server can be from a leader
+##
+syncLimit: 5
+
+## Limits the number of concurrent connections that a single client may make to a single member of the ZooKeeper ensemble
+##
+maxClientCnxns: 60
+
+## Allow to accept connections from unauthenticated users
+##
+allowAnonymousLogin: true
+
+auth:
+  ## Use existing secret (ignores previous password)
+  ##
+  # existingSecret:
+  ## Enable Zookeeper auth. It uses SASL/Digest-MD5
+  ##
+  enabled: false
+  ## User that will use Zookeeper clients to auth
+  ##
+  # clientUser:
+  ## Password that will use Zookeeper clients to auth
+  ##
+  # clientPassword:
+  ## Comma, semicolon or whitespace separated list of user to be created. Example: user1,user2,admin
+  ##
+  # serverUsers: []
+  ## Comma, semicolon or whitespace separated list of passwords to assign to users when created. Example: pass4user1, pass4user2, pass4admin
+  ##
+  # serverPasswords: []
+
+## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
+##
+heapSize: 1024
+
+## Default JVMFLAGS for the ZooKeeper process
+##
+# jvmFlags:
+
+## Configure ZooKeeper with a custom zoo.cfg file
+##
+# config:
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+service:
+  type: ClusterIP
+  port: 2181
+  followerPort: 2888
+  electionPort: 3888
+
+## Zookeeper Pod Security Context
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
+## Zookeeper data Persistent Volume Storage Class
+## If defined, storageClassName: <storageClass>
+## If set to "-", storageClassName: "", which disables dynamic provisioning
+## If undefined (the default) or set to null, no storageClassName spec is
+##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+##   GKE, AWS & OpenStack)
+##
+persistence:
+  enabled: true
+  # storageClass: "-"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+  annotations: {}
+
+## Node labels and tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+##
+nodeSelector: {}
+tolerations: []
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  enabled: true
+
+  image:
+    registry: docker.io
+    repository: javsalgar/zookeeper-exporter
+    tag: latest
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistrKeySecretName
+
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+
+  ## Metrics exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  # resources: {}
+
+  ## Metrics exporter labels and tolerations for pod assignment
+  # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
+  # tolerations: []
+
+  ## Metrics exporter pod Annotation and Labels
+  # podAnnotations: {}
+  # podLabels: {}
