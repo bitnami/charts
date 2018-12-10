@@ -58,18 +58,21 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `image.pullPolicy`                   | Image pull policy                                                | `Always`                                                   |
 | `image.pullSecrets`                  | Specify image pull secrets                                       | `nil`                                                      |
 | `replicas`                           | Number of replicas                                               | `3`                                                        |
-| `port`                           | HashiCorp Consul http listening port                             | `8500`                                                     |
-| `service.rpcPort`                            | HashiCorp Consul rpc listening port                              | `8400`                                                     |
-| `service.serflanPort`                        | Container serf lan listening port                                | `8301`                                                     |
-| `service.serverPort`                         | Container server listening port                                  | `8300`                                                     |
-| `service.consulDnsPort`                      | Container dns listening port                                     | `8600`                                                     |
-| `service.uiPort`                             | HashiCorp Consul UI port                                         | `80`                                                       |
+| `port`                               | HashiCorp Consul http listening port                             | `8500`                                                     |
+| `service.rpcPort`                    | HashiCorp Consul rpc listening port                              | `8400`                                                     |
+| `service.serflanPort`                | Container serf lan listening port                                | `8301`                                                     |
+| `service.serverPort`                 | Container server listening port                                  | `8300`                                                     |
+| `service.consulDnsPort`              | Container dns listening port                                     | `8600`                                                     |
+| `service.uiPort`                     | HashiCorp Consul UI port                                         | `80`                                                       |
 | `datacenterName`                     | HashiCorp Consul datacenter name                                 | `dc1`                                                      |
 | `gossipKey`                          | Gossip key for all members                                       | `nil`                                                      |
 | `domain`                             | HashiCorp Consul domain                                          | `consul`                                                   |
 | `clientAddress`                      | Address in which HashiCorp Consul will bind client interfaces    | `0.0.0.0`                                                  |
 | `serflanAddress`                     | Address used for Serf LAN communications                         | `0.0.0.0`                                                  |
 | `raftMultiplier`                     | Multiplier used to scale key Raft timing parameters              | `10Gi`                                                     |
+| `securityContext.enabled`            | Enable security context                                          | `true`                                                     |
+| `securityContext.fsGroup`            | Group ID for the container                                       | `1001`                                                     |
+| `securityContext.runAsUser`          | User ID for the container                                        | `1001`                                                     |
 | `persistence.enabled`                | Use a PVC to persist data                                        | `true`                                                     |
 | `persistence.storageClass`           | Storage class of backing PVC                                     | `nil` (uses alpha storage class annotation)                |
 | `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                              | `ReadWriteOnce`                                            |
@@ -99,19 +102,19 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `metrics.imageTag`                   | Exporter image tag                                               | `v0.3.0`                                                   |
 | `metrics.imagePullPolicy`            | Exporter image pull policy                                       | `IfNotPresent`                                             |
 | `metrics.resources`                  | Exporter resource requests/limit                                 | `{}`                                                       |
-| `metrics.podAnnotations`                | Exporter annotations                                          | `{}`                                                       |
+| `metrics.podAnnotations`             | Exporter annotations                                             | `{}`                                                       |
 | `nodeSelector`                       | Node labels for pod assignment                                   | `{}`                                                       |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                         | 30                                                         |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                   | 10                                                         |
 | `livenessProbe.timeoutSeconds`       | When the probe times out                                         | 5                                                          |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.     | 1                |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.       | 6                |
-| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
-| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                        | 5                |
-| `readinessProbe.periodSeconds`       | How often to perform the probe                                                                   | 10               |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                         | 5                |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.     | 1                |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.       | 6                |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed. | 1                              |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | 6                              |
+| `podAnnotations`                     | Pod annotations                                                  | `{}`                                                       |
+| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                        | 5                                                          |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                                   | 10                                                         |
+| `readinessProbe.timeoutSeconds`      | When the probe times out                                         | 5                                                          |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed. | 1                              |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded. | 6                                |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -244,6 +247,20 @@ helm install bitnami/consul --set tlsEncryptionSecretName=consul-tls-encryption
 The chart can optionally start a metrics exporter endpoint on port `9107` for [prometheus](https://prometheus.io). The data exposed by the endpoint is intended to be consumed by a prometheus chart deployed within the cluster and as such the endpoint is not exposed outside the cluster.
 
 ## Upgrading
+
+### To 3.1.0
+
+Consul container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
+
+```
+$ helm upgrade my-release stable/consul
+```
+
+If you use a previous container image (previous to **1.4.0-r16**) disable the `securityContext` by running the command below:
+
+```
+$ helm upgrade my-release stable/consul --set securityContext.enabled=fase,image.tag=XXX
+```
 
 ### To 2.0.0
 
