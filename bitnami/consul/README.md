@@ -256,7 +256,7 @@ Consul container was moved to a non-root approach. There shouldn't be any issue 
 $ helm upgrade my-release stable/consul
 ```
 
-If you use a previous container image (previous to **1.4.0-r**) disable the `securityContext` by running the command below:
+If you use a previous container image (previous to **1.4.0-r16**) disable the `securityContext` by running the command below:
 
 ```
 $ helm upgrade my-release stable/consul --set securityContext.enabled=fase,image.tag=XXX
