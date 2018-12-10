@@ -5,7 +5,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add bitnami https://charts.bitnami.com
 $ helm search bitnami
 ```
 
@@ -81,7 +81,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#
 The stable charts are contributed to the upstream [helm/charts](https://github.com/helm/charts) repository. The following command allows you to download and install all the charts from this repository, both the bitnami and the upstreamed ones.
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add bitnami https://charts.bitnami.com
 ```
 
 ### Using Helm
