@@ -108,7 +108,7 @@ WildFly container was moved to a non-root approach. There shouldn't be any issue
 $ helm upgrade my-release stable/wildfly
 ```
 
-If you use a previous container image (previous to **14.0.1-r**) disable the `securityContext` by running the command below:
+If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
 ```
 $ helm upgrade my-release stable/wildfly --set securityContext.enabled=fase,image.tag=XXX
