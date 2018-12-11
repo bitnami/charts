@@ -106,7 +106,7 @@ Tomcat container was moved to a non-root approach. There shouldn't be any issue 
 $ helm upgrade my-release stable/tomcat
 ```
 
-If you use a previous container image (previous to **8.5.35-r**) disable the `securityContext` by running the command below:
+If you use a previous container image (previous to **8.5.35-r26**) disable the `securityContext` by running the command below:
 
 ```
 $ helm upgrade my-release stable/tomcat --set securityContext.enabled=fase,image.tag=XXX
