@@ -77,7 +77,9 @@ spec:
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: {{ .Values.name | quote }}
+        {{- if .Values.plugins }}
         - name: ELASTICSEARCH_PLUGINS
+        {{- end }}
           value: {{ .Values.plugins | quote }}
         - name: ELASTICSEARCH_HEAP_SIZE
           value: {{ .Values.master.heapSize | quote }}
