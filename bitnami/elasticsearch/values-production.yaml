@@ -35,7 +35,7 @@ name: elastic
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
-config:
+# config:
 
 ## Elasticsearch master-eligible node parameters
 ##
