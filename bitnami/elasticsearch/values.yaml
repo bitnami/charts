@@ -46,6 +46,11 @@ sysctlImage:
 ##
 name: elastic
 
+## Comma, semi-colon or space separated list of plugins to install at initialization
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+# plugins:
+
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
