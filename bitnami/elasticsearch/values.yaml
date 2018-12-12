@@ -50,6 +50,7 @@ name: elastic
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
 config:
+  plugins: ""
 
 ## Elasticsearch master-eligible node parameters
 ##
