@@ -1,5 +1,5 @@
 name: apache
-version: 4.0.0
+version: 4.0.1
 appVersion: 2.4.37
 description: Chart for Apache HTTP Server
 keywords:
@@ -10,6 +10,7 @@ keywords:
 - web
 - reverse proxy
 home: https://httpd.apache.org
+icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
 sources:
 - https://github.com/bitnami/bitnami-docker-apache
 maintainers:

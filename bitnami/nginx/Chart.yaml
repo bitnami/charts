@@ -1,5 +1,5 @@
 name: nginx
-version: 2.1.1
+version: 2.1.2
 appVersion: 1.14.2
 description: Chart for the nginx server
 keywords:
@@ -9,6 +9,7 @@ keywords:
 - www
 - reverse proxy
 home: http://www.nginx.org
+icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
 sources:
 - https://github.com/bitnami/bitnami-docker-nginx
 maintainers:
