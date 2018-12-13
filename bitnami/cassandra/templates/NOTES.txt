@@ -17,7 +17,7 @@ To connect to your Cassandra cluster using CQL:
 
 1. Run a Cassandra pod that you can use as a client:
 
-   kubectl run --namespace {{ .Release.Namespace }} {{ template "cassandra.fullname" . }}-client --rm --tty -i \
+   kubectl run --namespace {{ .Release.Namespace }} {{ template "cassandra.fullname" . }}-client --rm --tty -i --restart='Never' \
    --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD \
    {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "cassandra.name" . }}-client=true"{{ end }} \
    --image {{ template "cassandra.image" . }} -- bash
