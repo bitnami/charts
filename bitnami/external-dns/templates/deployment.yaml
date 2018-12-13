@@ -87,9 +87,9 @@ spec:
         {{- end }}
         {{- range $key, $value := .Values.extraArgs }}
           {{- if $value }}
-          - --{{ $key }}={{ $value }}
+        - --{{ $key }}={{ $value }}
           {{- else }}
-          - --{{ $key }}
+        - --{{ $key }}
           {{- end }}
         {{- end }}
 
