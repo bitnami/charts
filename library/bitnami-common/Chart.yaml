@@ -1,7 +1,8 @@
 name: bitnami-common
-version: 0.0.3
+version: 0.0.4
 appVersion: 0.0.1
 description: Chart with custom tempaltes used in Bitnami charts.
+icon: https://bitnami.com/downloads/logos/bitnami-mark.png
 keywords:
 - helper
 - template
