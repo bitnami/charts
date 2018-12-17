@@ -119,8 +119,10 @@ spec:
         {{- else }}
           value: "no"
         {{- end }}
+        {{- if .Values.jvmFlags }}
         - name: JVMFLAGS
           value: {{ .Values.jvmFlags | quote }}
+        {{- end }}
         ports:
         - name: client
           containerPort: {{ .Values.service.port }}
