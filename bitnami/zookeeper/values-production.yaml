@@ -87,7 +87,7 @@ heapSize: 1024
 
 ## Default JVMFLAGS for the ZooKeeper process
 ##
-# jvmFlags:
+jvmFlags: ""
 
 ## Configure ZooKeeper with a custom zoo.cfg file
 ##
