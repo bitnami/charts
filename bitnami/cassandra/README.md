@@ -64,6 +64,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `persistence.accessModes`           | Persistent Volume Access Modes                                                                                 | `[ReadWriteOnce]`                                    |
 | `persistence.size`                  | Persistent Volume Size                                                                                             | `8Gi`                                                |
 | `resources`                         | CPU/Memory resource requests/limits                                                               |  `{}`                         |
+| `existingConfiguration`             | Pointer to a configMap that contains custom Cassandra configuration files. This will override any Cassandra configuration variable set in the chart        |  `{}`                         |
 | `cluster.name`                         | Cassandra cluster name                                                               |  `cassandra`                         |
 | `cluster.replicaCount`                         | Number of Cassandra nodes                                                               |  `1`                         |
 | `cluster.seedCount`                           | Number of seed nodes (note: must be greater or equal than 1 and less or equal to `cluster.replicaCount`)                                                   | `1`                                                |
