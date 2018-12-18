@@ -97,6 +97,7 @@ cluster:
   rack: rack1
   enableRPC: true
   endpointSnitch: SimpleSnitch
+  minimumAvailable: 1
 
 jvm:
   ## Extra JVM Settings

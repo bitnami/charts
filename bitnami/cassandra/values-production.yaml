@@ -97,6 +97,7 @@ cluster:
   datacenter: dc1
   rack: rack1
   enableRPC: true
+  minimumAvailable: 2 
 
 jvm:
   ## Extra JVM Settings

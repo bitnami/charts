@@ -133,6 +133,12 @@ spec:
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
 {{- end }}
+{{- if not .Values.persistence.enabled }}
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "nodetool decommission"]
+{{- end }}
         ports:
         - name: intra
           containerPort: 7000
