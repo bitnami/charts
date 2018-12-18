@@ -1,5 +1,5 @@
 name: cassandra
-version: 1.0.3
+version: 1.1.0
 appVersion: 3.11.3
 description: Apache Cassandra is a free and open-source distributed database management system designed to handle large amounts of data across many commodity servers, providing high availability with no single point of failure. Cassandra offers robust support for clusters spanning multiple datacenters, with asynchronous masterless replication allowing low latency operations for all clients.
 icon: https://bitnami.com/assets/stacks/cassandra/img/cassandra-stack-220x234.png
