@@ -1,6 +1,6 @@
 # Node
 
-[Node](https://www.nodejs.org) Event-driven I/O server-side JavaScript environment based on V8
+[Node](https://www.nodejs.org) Event-driven I/O server-side JavaScript environment based on V8.
 
 ## TL;DR
 
@@ -8,6 +8,7 @@
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/node
 ```
+
 ## Introduction
 
 This chart bootstraps a [Node](https://github.com/bitnami/bitnami-docker-node) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
@@ -121,13 +122,13 @@ See the [Configuration](#configuration) section to configure the PVC or to disab
 
 First install the nginx-ingress controller via helm:
 
-```
+```console
 $ helm install stable/nginx-ingress
 ```
 
 Now deploy the node helm chart:
 
-```
+```console
 $ helm install --name my-release bitnami/node --set ingress.enabled=true,ingress.host=example.com,service.type=ClusterIP
 ```
 
@@ -135,13 +136,13 @@ $ helm install --name my-release bitnami/node --set ingress.enabled=true,ingress
 
 You must manually create a secret containing the certificate and key for your domain. You can do it with this command:
 
-```
+```console
 $ kubectl create secret tls my-tls-secret --cert=path/to/file.cert --key=path/to/file.key
 ```
 
 Then ensure you deploy the Helm chart with the following ingress configuration:
 
-```
+```yaml
 ingress:
   enabled: false
   path: /
@@ -157,7 +158,7 @@ ingress:
 
 1. Create a secret containing your database credentials:
 
-  ```
+  ```console
   $ kubectl create secret generic my-database-secret --from-literal=host=YOUR_DATABASE_HOST --from-literal=port=YOUR_DATABASE_PORT --from-literal=username=YOUR_DATABASE_USER  --from-literal=password=YOUR_DATABASE_PASSWORD --from-literal=database=YOUR_DATABASE_NAME
   ```
 
@@ -165,7 +166,7 @@ ingress:
 
 2. Deploy the node chart specifying the secret name
 
-  ```
+  ```console
   $ helm install --name node-app --set mongodb.install=false,externaldb.secretName=my-database-secret bitnami/node
   ```
 
@@ -185,7 +186,7 @@ ingress:
 
 3. Create and deploy a ServiceInstance to provision a database server in Azure cloud.
 
-  ```
+  ```yaml
   apiVersion: servicecatalog.k8s.io/v1beta1
   kind: ServiceInstance
   metadata:
@@ -205,21 +206,22 @@ ingress:
 
   Please update the `YOUR_AZURE_LOCATION` placeholder in the above example.
 
-  ```
+  ```command
   $ kubectl create -f mongodb-service-instance.yml
   ```
 
 4. Deploy the helm chart:
 
-    ```
+    ```command
     $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance,externaldb.ssl=true bitnami/node
     ```
 
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.
 
 Deploying the helm chart enabling the Azure external database makes the following assumptions:
-  - You would want an Azure CosmosDB MongoDB database
-  - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
+
+- You would want an Azure CosmosDB MongoDB database
+- Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
 
