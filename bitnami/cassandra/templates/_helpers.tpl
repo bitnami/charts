@@ -86,3 +86,14 @@ Return the proper metrics image name
  {{- printf "%s-init-scripts" (include "cassandra.fullname" .) -}}
  {{- end -}}
  {{- end -}}
+
+{{/*
+Get the configuration configmap.
+*/}}
+{{- define "cassandra.configurationCM" -}}
+{{- if .Values.existingConfiguration -}}
+{{- printf "%s" .Values.existingConfiguration -}}
+{{- else -}}
+{{- printf "%s-configuration" (include "cassandra.fullname" .) -}}
+{{- end -}}
+{{- end -}}

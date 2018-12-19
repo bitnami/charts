@@ -153,10 +153,14 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /bitnami/cassandra
-{{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*") (.Values.initDBConfigMap) }}
+      {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*") (.Values.initDBConfigMap) }}
         - name: init-db
           mountPath: /docker-entrypoint-initdb.d
-{{- end }}
+      {{- end }}
+      {{ if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
+        - name: configurations
+          mountPath: /bitnami/cassandra/conf
+      {{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecrets }}
@@ -186,6 +190,11 @@ spec:
           timeoutSeconds: 45
 {{- end }}
       volumes:
+{{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
+      - name: configurations
+        configMap:
+          name: {{ template "cassandra.configurationCM" . }}
+{{- end }}
 {{- if not .Values.persistence.enabled }}
       - name: data
         emptyDir: {}

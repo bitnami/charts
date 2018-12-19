@@ -44,9 +44,9 @@ To connect to your database from outside the cluster execute the following comma
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
    NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "redis.fullname" . }}'
+         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "cassandra.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "redis.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "cassandra.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $SERVICE_IP
 
 {{- else if contains "ClusterIP" .Values.service.type }}
