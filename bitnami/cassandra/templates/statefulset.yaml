@@ -93,6 +93,24 @@ spec:
           value: {{ .Values.cluster.datacenter }}
         - name: CASSANDRA_ENDPOINT_SNITCH
           value: {{ .Values.cluster.endpointSnitch }}
+{{- if .Values.tlsEncryptionSecretName }}
+        - name: CASSANDRA_INTERNODE_ENCRYPTION
+          value: {{ .Values.cluster.internodeEncryption }}
+        - name: CASSANDRA_CLIENT_ENCRYPTION
+          value: {{ .Values.cluster.clientEncryption }}
+        - name: CASSANDRA_TRUSTSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.tlsEncryptionSecretName }}
+              key: truststore-password
+        - name: CASSANDRA_KEYSTORE_PASSWARD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.tlsEncryptionSecretName }}
+              key: keystore-password
+{{- end }}
+        - name: CASSANDRA_ENDPOINT_SNITCH
+          value: {{ .Values.cluster.endpointSnitch }}
         - name: CASSANDRA_RACK
           value: {{ .Values.cluster.rack }}
         {{- if .Values.jvm.maxHeapSize }}
@@ -155,6 +173,10 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /bitnami/cassandra
+{{- if .Values.tlsEncryptionSecretName }}
+        - name: encryption-secrets
+          mountPath: /bitnami/cassandra/secrets
+{{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecrets }}
@@ -183,8 +205,18 @@ spec:
           initialDelaySeconds: 20
           timeoutSeconds: 45
 {{- end }}
-{{- if not .Values.persistence.enabled }}
       volumes:
+{{- if .Values.tlsEncryptionSecretName }}
+        - name: encryption-secrets
+          secret:
+            secretName: {{ .Values.tlsEncryptionSecretName }}
+            items:
+            - key: keystore
+              path: keystore
+            - key: truststore
+              path: truststore
+{{- end }}
+{{- if not .Values.persistence.enabled }}
       - name: data
         emptyDir: {}
 {{- else }}

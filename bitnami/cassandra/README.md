@@ -63,6 +63,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `persistence.annotations`                | Persistent Volume Claim annotations Annotations                                                                            | {}                                                   |
 | `persistence.accessModes`           | Persistent Volume Access Modes                                                                                 | `[ReadWriteOnce]`                                    |
 | `persistence.size`                  | Persistent Volume Size                                                                                             | `8Gi`                                                |
+| `tlsEncryptionSecretName`                         | Secret with keystore, keystore password, truststore and truststore password                                                               |  `{}`                         |
 | `resources`                         | CPU/Memory resource requests/limits                                                               |  `{}`                         |
 | `cluster.name`                         | Cassandra cluster name                                                               |  `cassandra`                         |
 | `cluster.replicaCount`                         | Number of Cassandra nodes                                                               |  `1`                         |
@@ -72,6 +73,8 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `cluster.rack`                           | Rack name                                                   | `rack1`                                                |
 | `cluster.enableRPC`                           | Enable Thrift RPC endpoint                                    | `true`                  |
 | `cluster.minimumAvailable`                           | Minimum nuber of instances that must be available in the cluster (used of PodDisruptionBudget)                                    | `1`                                                |
+| `cluster.internodeEncryption`                           | Set internode encryption. NOTE: A value different from 'none' requires setting `tlsEncryptionSecretName`                                   | `none`                                                |
+| `cluster.clientEncryption`                           | Set client-server encryption. NOTE: A value different from 'false' requires setting `tlsEncryptionSecretName`                                 | `false`                                                |
 | `cluster.jvm.extraOpts`                           | Set the value for Java Virtual Machine extra optinos (JVM_EXTRA_OPTS)                                                   | `nil`                                                |
 | `cluster.jvm.maxHeapSize`                           | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                                                 | `nil`                                                |
 | `cluster.jvm.newHeapSize`                           | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                                                 | `nil`                                                |
