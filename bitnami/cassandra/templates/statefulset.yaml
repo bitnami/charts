@@ -103,7 +103,7 @@ spec:
             secretKeyRef:
               name: {{ .Values.tlsEncryptionSecretName }}
               key: truststore-password
-        - name: CASSANDRA_KEYSTORE_PASSWARD
+        - name: CASSANDRA_KEYSTORE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ .Values.tlsEncryptionSecretName }}
