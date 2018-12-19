@@ -64,9 +64,11 @@ spec:
               if [[ $HOSTNAME =~ (.*)-0$ ]]; then
                 echo "Setting node as password seeder"
                 export CASSANDRA_PASSWORD_SEEDER=yes
+              else 
+                # Only node 0 will execute the startup initdb scripts
+                export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
               /app-entrypoint.sh /run.sh
-
         image: {{ template "cassandra.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         resources:
@@ -106,10 +108,6 @@ spec:
         {{- if .Values.jvm.extraOpts }}
         - name: JVM_EXTRA_OPTS
           value: {{ .Values.jvm.extraOpts | quote }}
-        {{- end }}
-        {{- if .Values.startupCQL }}
-        - name: CASSANDRA_STARTUP_CQL
-          value: {{ .Values.startupCQL | quote }}
         {{- end }}
         - name: CASSANDRA_ENABLE_RPC
           value: {{ .Values.cluster.enableRPC | quote }}
@@ -155,6 +153,10 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /bitnami/cassandra
+{{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*") (.Values.initDBConfigMap) }}
+        - name: init-db
+          mountPath: /docker-entrypoint-initdb.d
+{{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecrets }}
@@ -183,11 +185,16 @@ spec:
           initialDelaySeconds: 20
           timeoutSeconds: 45
 {{- end }}
-{{- if not .Values.persistence.enabled }}
       volumes:
+{{- if not .Values.persistence.enabled }}
       - name: data
         emptyDir: {}
 {{- else }}
+{{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*") (.Values.initDBConfigMap) }}
+      - name: init-db
+        configMap:
+          name: {{ template "cassandra.initDbCM" . }}
+{{- end }}
   volumeClaimTemplates:
   - metadata:
       name: data
