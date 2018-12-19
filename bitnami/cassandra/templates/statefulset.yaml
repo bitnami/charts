@@ -25,6 +25,7 @@ spec:
       labels:
         app: {{ template "cassandra.name" . }}
         release: {{ .Release.Name }}
+        chart: {{ template "cassandra.chart" . }}
 {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
 {{- end }}
