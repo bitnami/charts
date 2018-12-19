@@ -138,3 +138,22 @@ The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) ima
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+## Initializing the database
+
+The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image allows having initialization scripts mounted in `/docker-entrypoint.initdb`. This is done in the chart by adding files in the `files/docker-entrypoint-initdb.d` folder (in order to do so, clone this chart) or by setting the `initDBConfigMap` value with a `ConfigMap` that includes the necessary `sh` or `cql` scripts:
+
+```bash
+kubectl create configmap init-db --from-file=path/to/scripts
+helm install bitnami/cassandra --set initDBConfigMap=init-db
+```
+
+## Upgrade
+
+### 2.0.0
+
+This releases make it possible to specify custom initialization scripts in both cql and sh files.
+
+#### Breaking changes
+
+- `startupCQL` has been removed. Instead, for initializing the database, see [this section](#initializing-the-database).
