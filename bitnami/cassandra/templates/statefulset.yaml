@@ -188,11 +188,11 @@ spec:
           timeoutSeconds: 45
 {{- end }}
       volumes:
-    {{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
+{{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
       - name: configurations
         configMap:
           name: {{ template "cassandra.configurationCM" . }}
-    {{- end }}
+{{- end }}
 {{- if not .Values.persistence.enabled }}
       - name: data
         emptyDir: {}
