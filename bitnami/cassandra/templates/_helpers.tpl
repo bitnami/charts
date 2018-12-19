@@ -76,6 +76,17 @@ Return the proper metrics image name
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
+ {{/*
+ Get the init db configmap.
+ */}}
+ {{- define "cassandra.initDbCM" -}}
+ {{- if .Values.initDBConfigMap -}}
+ {{- printf "%s" .Values.initDBConfigMap -}}
+ {{- else -}}
+ {{- printf "%s-init-scripts" (include "cassandra.fullname" .) -}}
+ {{- end -}}
+ {{- end -}}
+
 {{/*
 Get the configuration configmap.
 */}}
