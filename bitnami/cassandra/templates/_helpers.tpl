@@ -75,3 +75,14 @@ Return the proper metrics image name
 {{- $tag := .Values.metrics.image.tag | toString -}}
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
+
+{{/*
+Get the configuration configmap.
+*/}}
+{{- define "cassandra.configurationCM" -}}
+{{- if .Values.existingConfiguration -}}
+{{- printf "%s" .Values.existingConfiguration -}}
+{{- else -}}
+{{- printf "%s-configuration" (include "cassandra.fullname" .) -}}
+{{- end -}}
+{{- end -}}

@@ -155,6 +155,10 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /bitnami/cassandra
+      {{ if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
+        - name: configurations
+          mountPath: /bitnami/cassandra/conf
+      {{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecrets }}
@@ -183,8 +187,13 @@ spec:
           initialDelaySeconds: 20
           timeoutSeconds: 45
 {{- end }}
-{{- if not .Values.persistence.enabled }}
       volumes:
+{{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
+      - name: configurations
+        configMap:
+          name: {{ template "cassandra.configurationCM" . }}
+{{- end }}
+{{- if not .Values.persistence.enabled }}
       - name: data
         emptyDir: {}
 {{- else }}
