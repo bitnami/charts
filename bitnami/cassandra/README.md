@@ -141,3 +141,25 @@ The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) ima
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+## Enable TLS for Cassandra
+
+You can enable TLS between client and server and between nodes. In order to do so, you need to set the following values:
+
+ * For internode cluster encryption, set `cluster.internodeEncryption` to a value different from `none`. Available values are `all`, `dc` or `rack`.
+ * For client-server encryption, set `cluster.clientEncryption` to true.
+
+In addition to this, you **must** create a secret containing the *keystore* and *truststore* certificates and their corresponding protection passwords. Then, set the `tlsEncryptionSecretName`  when deploying the chart.
+
+You can create the secret with this command assuming you have your certificates in your working directory (replace the PUT_YOUR_KEYSTORE_PASSWORD and PUT_YOUR_TRUSTSTORE_PASSWORD placeholders):
+
+```console
+kubectl create secret generic casssandra-tls --from-file=./keystore --from-file=./truststore --from-literal=keystore-password=PUT_YOUR_KEYSTORE_PASSWORD --from-literal=truststore-password=PUT_YOUR_TRUSTSTORE_PASSWORD
+```
+
+As an example of Cassandra installed with TLS you can use this command:
+
+```console
+helm install --name my-release bitnami/cassandra --set cluster.internodeEncryption=all \
+             --set cluster.clientEncryption=true --set tlsEncryptionSecretName=cassandra-tls \
+```
