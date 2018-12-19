@@ -12,7 +12,6 @@ spec:
     matchLabels:
       app: {{ template "cassandra.name" . }}
       release: {{ .Release.Name }}
-      chart: {{ template "cassandra.chart" . }}
   serviceName: {{ template "cassandra.fullname" . }}-headless
   replicas: {{ .Values.cluster.replicaCount }}
   updateStrategy:
@@ -26,6 +25,7 @@ spec:
       labels:
         app: {{ template "cassandra.name" . }}
         release: {{ .Release.Name }}
+        chart: {{ template "cassandra.chart" . }}
 {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
 {{- end }}
