@@ -86,16 +86,16 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `ui.service.type`                    | Kubernetes Service Type                                          | `ClusterIP`                                                |
 | `ui.service.annotations`             | Annotations for HashiCorp Consul UI service                      | {}                                                         |
 | `ui.service.loadBalancerIP`          | IP if HashiCorp Consul UI service type is `LoadBalancer`         | `nil`                                                      |
-| `ui.ingress.enabled`                 | Enable ingress controller resource                               | `false`                                                    |
-| `ui.ingress.hosts[0].name`           | Hostname to your HashiCorp Consul installation                   | `consul-ui.local`                                          |
-| `ui.ingress.hosts[0].path`           | Path within the url structure                                    | `/`                                                        |
-| `ui.ingress.hosts[0].tls`            | Utilize TLS backend in ingress                                   | `false`                                                    |
-| `ui.ingress.hosts[0].certManager`    | Add annotations for cert-manager                                 | `false`                                                    |
-| `ui.ingress.hosts[0].tlsSecret`      | TLS Secret (certificates)                                        | `consul-ui.local-tls`                                      |
-| `ui.ingress.hosts[0].annotations`    | Annotations for this host's ingress record                       | `[]`                                                       |
-| `ui.ingress.secrets[0].name`         | TLS Secret Name                                                  | `nil`                                                      |
-| `ui.ingress.secrets[0].certificate`  | TLS Secret Certificate                                           | `nil`                                                      |
-| `ui.ingress.secrets[0].key`          | TLS Secret Key                                                   | `nil`                                                      |
+| `ingress.enabled`                    | Enable ingress controller resource                               | `false`                                                    |
+| `ingress.certManager`                | Add annotations for cert-manager                                 | `false`                                                    |
+| `ingress.annotations`                | Ingress annotations                                              | `[]`                                                       |
+| `ingress.hosts[0].name`              | Hostname to your HashiCorp Consul installation                   | `consul-ui.local`                                          |
+| `ingress.hosts[0].path`              | Path within the url structure                                    | `/`                                                        |
+| `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                   | `false`                                                    |
+| `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                        | `consul-ui.local-tls`                                      |
+| `ingress.secrets[0].name`            | TLS Secret Name                                                  | `nil`                                                      |
+| `ingress.secrets[0].certificate`     | TLS Secret Certificate                                           | `nil`                                                      |
+| `ingress.secrets[0].key`             | TLS Secret Key                                                   | `nil`                                                      |
 | `configmap`                          | HashiCorp Consul configuration to be injected as ConfigMap       | `nil`                                                      |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                             | `false`                                                    |
 | `metrics.image`                      | Exporter image                                                   | `prom/consul-exporter`                                     |
