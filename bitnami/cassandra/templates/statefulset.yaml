@@ -222,20 +222,21 @@ spec:
               path: keystore
             - key: truststore
               path: truststore
+{{- end }}
 {{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
       - name: configurations
         configMap:
           name: {{ template "cassandra.configurationCM" . }}
 {{- end }}
-{{- if not .Values.persistence.enabled }}
-      - name: data
-        emptyDir: {}
-{{- else }}
 {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*") (.Values.initDBConfigMap) }}
       - name: init-db
         configMap:
           name: {{ template "cassandra.initDbCM" . }}
 {{- end }}
+{{- if not .Values.persistence.enabled }}
+      - name: data
+        emptyDir: {}
+{{- else }}
   volumeClaimTemplates:
   - metadata:
       name: data
