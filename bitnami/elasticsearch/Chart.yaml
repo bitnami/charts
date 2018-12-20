@@ -1,6 +1,6 @@
 name: elasticsearch
-version: 4.2.7
-appVersion: 6.5.3
+version: 4.2.8
+appVersion: 6.5.4
 description: A highly scalable open-source full-text search and analytics engine
 keywords:
 - elasticsearch
