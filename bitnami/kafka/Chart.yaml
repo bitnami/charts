@@ -1,5 +1,5 @@
 name: kafka
-version: 1.2.3
+version: 1.2.4
 appVersion: 2.1.0
 description: Apache Kafka is a distributed streaming platform.
 keywords:
