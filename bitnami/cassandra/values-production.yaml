@@ -88,6 +88,8 @@ resources: {}
 
 ## Secret with keystore, keystore password, truststore, truststore password
 # tlsEncryptionSecretName:
+## ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
+# existingConfiguration: 
 
 ## Cluster parameters
 ##
@@ -124,10 +126,10 @@ dbUser:
   # password:
   # existingSecret: 
 
-## Startup CQL commands. Useful for creating a keyspace
+## ConfigMap with cql scripts. Useful for creating a keyspace
 ## and pre-populating data
 ##
-# startupCQL: "CREATE KEYSPACE IF NOT EXISTS example_keyspace WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};"
+# initDBConfigMap: 
 
 ## Liveness and Readiness probe values.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/

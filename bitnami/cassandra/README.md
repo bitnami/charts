@@ -65,6 +65,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `persistence.size`                  | Persistent Volume Size                                                                                             | `8Gi`                                                |
 | `tlsEncryptionSecretName`                         | Secret with keystore, keystore password, truststore and truststore password                                                               |  `{}`                         |
 | `resources`                         | CPU/Memory resource requests/limits                                                               |  `{}`                         |
+| `existingConfiguration`             | Pointer to a configMap that contains custom Cassandra configuration files. This will override any Cassandra configuration variable set in the chart        |  `{}`                         |
 | `cluster.name`                         | Cassandra cluster name                                                               |  `cassandra`                         |
 | `cluster.replicaCount`                         | Number of Cassandra nodes                                                               |  `1`                         |
 | `cluster.seedCount`                           | Number of seed nodes (note: must be greater or equal than 1 and less or equal to `cluster.replicaCount`)                                                   | `1`                                                |
@@ -84,7 +85,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `dbUser.forcePassword`                           | Force the user to provide a non-empty password for `dbUser.user`                                                   | `false`                                                |
 | `dbUser.password`                              | Password for `dbUser.user`. Randomly generated if empty                                                                                                   | (Random generated)                                               |
 | `dbUser.existingSecret`                                 | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                                                                 | `nil`                                   |
-| `startupCQL`                                 | Startup CQL commands (done in the first node). Useful for creating keyspaces at startup, for instance                                                                 | `nil`                                   |
+| `initDBConfigMap`                                 | Configmap for initialization CQL commands (done in the first node). Useful for creating keyspaces at startup, for instance                                                                 | `nil`                                   |
 | `livenessProbe.enabled`             | Turn on and off liveness probe                                                             | `true`                                               |
 | `livenessProbe.initialDelaySeconds` | Delay before liveness probe is initiated                                                    | `30`                                                 |
 | `livenessProbe.periodSeconds`       | How often to perform the probe                                                             | `30`                                                 |
@@ -163,3 +164,22 @@ As an example of Cassandra installed with TLS you can use this command:
 helm install --name my-release bitnami/cassandra --set cluster.internodeEncryption=all \
              --set cluster.clientEncryption=true --set tlsEncryptionSecretName=cassandra-tls \
 ```
+
+## Initializing the database
+
+The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image allows having initialization scripts mounted in `/docker-entrypoint.initdb`. This is done in the chart by adding files in the `files/docker-entrypoint-initdb.d` folder (in order to do so, clone this chart) or by setting the `initDBConfigMap` value with a `ConfigMap` that includes the necessary `sh` or `cql` scripts:
+
+```bash
+kubectl create configmap init-db --from-file=path/to/scripts
+helm install bitnami/cassandra --set initDBConfigMap=init-db
+```
+
+## Upgrade
+
+### 2.0.0
+
+This releases make it possible to specify custom initialization scripts in both cql and sh files.
+
+#### Breaking changes
+
+- `startupCQL` has been removed. Instead, for initializing the database, see [this section](#initializing-the-database).
