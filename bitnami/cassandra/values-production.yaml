@@ -86,6 +86,8 @@ resources: {}
   #   memory: 4Gi
   #   cpu: 2
 
+## Secret with keystore, keystore password, truststore, truststore password
+# tlsEncryptionSecretName:
 ## ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
 # existingConfiguration: 
 
@@ -101,6 +103,9 @@ cluster:
   rack: rack1
   enableRPC: true
   minimumAvailable: 2 
+  ## Encryption values. NOTE: They require tlsEncryptionSecretName
+  internodeEncryption: none
+  clientEncryption: false
 
 jvm:
   ## Extra JVM Settings

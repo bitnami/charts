@@ -96,6 +96,24 @@ spec:
           value: {{ .Values.cluster.datacenter }}
         - name: CASSANDRA_ENDPOINT_SNITCH
           value: {{ .Values.cluster.endpointSnitch }}
+{{- if .Values.tlsEncryptionSecretName }}
+        - name: CASSANDRA_INTERNODE_ENCRYPTION
+          value: {{ .Values.cluster.internodeEncryption }}
+        - name: CASSANDRA_CLIENT_ENCRYPTION
+          value: {{ .Values.cluster.clientEncryption }}
+        - name: CASSANDRA_TRUSTSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.tlsEncryptionSecretName }}
+              key: truststore-password
+        - name: CASSANDRA_KEYSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.tlsEncryptionSecretName }}
+              key: keystore-password
+{{- end }}
+        - name: CASSANDRA_ENDPOINT_SNITCH
+          value: {{ .Values.cluster.endpointSnitch }}
         - name: CASSANDRA_RACK
           value: {{ .Values.cluster.rack }}
         {{- if .Values.jvm.maxHeapSize }}
@@ -154,6 +172,10 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /bitnami/cassandra
+{{- if .Values.tlsEncryptionSecretName }}
+        - name: encryption-secrets
+          mountPath: /bitnami/cassandra/secrets
+{{- end }}
       {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*") (.Values.initDBConfigMap) }}
         - name: init-db
           mountPath: /docker-entrypoint-initdb.d
@@ -191,6 +213,15 @@ spec:
           timeoutSeconds: 45
 {{- end }}
       volumes:
+{{- if .Values.tlsEncryptionSecretName }}
+        - name: encryption-secrets
+          secret:
+            secretName: {{ .Values.tlsEncryptionSecretName }}
+            items:
+            - key: keystore
+              path: keystore
+            - key: truststore
+              path: truststore
 {{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
       - name: configurations
         configMap:

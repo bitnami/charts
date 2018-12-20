@@ -63,6 +63,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `persistence.annotations`                | Persistent Volume Claim annotations Annotations                                                                            | {}                                                   |
 | `persistence.accessModes`           | Persistent Volume Access Modes                                                                                 | `[ReadWriteOnce]`                                    |
 | `persistence.size`                  | Persistent Volume Size                                                                                             | `8Gi`                                                |
+| `tlsEncryptionSecretName`                         | Secret with keystore, keystore password, truststore and truststore password                                                               |  `{}`                         |
 | `resources`                         | CPU/Memory resource requests/limits                                                               |  `{}`                         |
 | `existingConfiguration`             | Pointer to a configMap that contains custom Cassandra configuration files. This will override any Cassandra configuration variable set in the chart        |  `{}`                         |
 | `cluster.name`                         | Cassandra cluster name                                                               |  `cassandra`                         |
@@ -73,6 +74,8 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `cluster.rack`                           | Rack name                                                   | `rack1`                                                |
 | `cluster.enableRPC`                           | Enable Thrift RPC endpoint                                    | `true`                  |
 | `cluster.minimumAvailable`                           | Minimum nuber of instances that must be available in the cluster (used of PodDisruptionBudget)                                    | `1`                                                |
+| `cluster.internodeEncryption`                           | Set internode encryption. NOTE: A value different from 'none' requires setting `tlsEncryptionSecretName`                                   | `none`                                                |
+| `cluster.clientEncryption`                           | Set client-server encryption. NOTE: A value different from 'false' requires setting `tlsEncryptionSecretName`                                 | `false`                                                |
 | `cluster.jvm.extraOpts`                           | Set the value for Java Virtual Machine extra optinos (JVM_EXTRA_OPTS)                                                   | `nil`                                                |
 | `cluster.jvm.maxHeapSize`                           | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                                                 | `nil`                                                |
 | `cluster.jvm.newHeapSize`                           | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                                                 | `nil`                                                |
@@ -139,6 +142,28 @@ The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) ima
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+## Enable TLS for Cassandra
+
+You can enable TLS between client and server and between nodes. In order to do so, you need to set the following values:
+
+ * For internode cluster encryption, set `cluster.internodeEncryption` to a value different from `none`. Available values are `all`, `dc` or `rack`.
+ * For client-server encryption, set `cluster.clientEncryption` to true.
+
+In addition to this, you **must** create a secret containing the *keystore* and *truststore* certificates and their corresponding protection passwords. Then, set the `tlsEncryptionSecretName`  when deploying the chart.
+
+You can create the secret with this command assuming you have your certificates in your working directory (replace the PUT_YOUR_KEYSTORE_PASSWORD and PUT_YOUR_TRUSTSTORE_PASSWORD placeholders):
+
+```console
+kubectl create secret generic casssandra-tls --from-file=./keystore --from-file=./truststore --from-literal=keystore-password=PUT_YOUR_KEYSTORE_PASSWORD --from-literal=truststore-password=PUT_YOUR_TRUSTSTORE_PASSWORD
+```
+
+As an example of Cassandra installed with TLS you can use this command:
+
+```console
+helm install --name my-release bitnami/cassandra --set cluster.internodeEncryption=all \
+             --set cluster.clientEncryption=true --set tlsEncryptionSecretName=cassandra-tls \
+```
 
 ## Initializing the database
 
