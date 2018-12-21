@@ -6,7 +6,7 @@
 
 In order to access to the Consul Web UI:
 
-{{- if .Values.ui.ingress.enabled }}
+{{- if .Values.ingress.enabled }}
 
   {{- range .Values.ingress.hosts }}
   {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}/admin
