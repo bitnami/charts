@@ -1,0 +1,19 @@
+name: tensorflow-resnet
+version: 0.0.1
+appVersion: 1.12.0
+description: Open-source software library serving the ResNet machine learning model.
+keywords:
+- tensorflow
+- serving
+- resnet
+- machine
+- learning
+- library
+home: https://tensorflow.github.io/serving/
+sources:
+- https://github.com/bitnami/bitnami-docker-tensorflow-serving
+- https://github.com/bitnami/bitnami-docker-tensorflow-resnet
+maintainers:
+- email: containers@bitnami.com
+  name: Bitnami
+engine: gotpl

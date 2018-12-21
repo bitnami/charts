@@ -1,0 +1,125 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+      release: "{{ .Release.Name }}"
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      annotations:
+  {{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+  {{- end }}
+{{- end }}
+    spec:
+      {{- if .Values.server.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.server.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
+      initContainers:
+      - name: seed
+        image: "{{ template "tensorflow-resnet.client.image" . }}"
+        imagePullPolicy: {{ .Values.client.image.pullPolicy | quote }}
+        command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            if [ -f /seed/.initialized ];then
+              echo "Already initialized. Skipping"
+            else
+              curl -o /seed/resnet_v2_fp32_savedmodel_NHWC_jpg.tar.gz http://download.tensorflow.org/models/official/20181001_resnet/savedmodels/resnet_v2_fp32_savedmodel_NHWC_jpg.tar.gz
+              cd /seed/ && tar -xzf resnet_v2_fp32_savedmodel_NHWC_jpg.tar.gz --strip-components=2
+              rm resnet_v2_fp32_savedmodel_NHWC_jpg.tar.gz
+              touch /seed/.initialized
+            fi
+        volumeMounts:
+        - name: seed
+          mountPath: /seed
+      containers:
+      - name: serving
+        image: "{{ template "tensorflow-resnet.server.image" . }}"
+        imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
+        ports:
+        - name: tf-serving
+          containerPort: {{ .Values.server.port }}
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          tcpSocket:
+            port: tf-serving
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          tcpSocket:
+            port: tf-serving
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        env:
+        - name: TENSORFLOW_SERVING_MODEL_NAME
+          value: "resnet"
+        volumeMounts:
+        - name: seed
+          mountPath: "/bitnami/model-data"
+{{- if .Values.metrics.enabled }}
+      - name: metrics
+        image: {{ template "metrics.image" . }}
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+        command: ['python', 'tf_serving_exporter.py', '--tf_port', '{{ .Values.server.port }}', '--port', {{ .Values.metrics.port }}, '--model_name', 'resnet']
+        ports:
+        - name: metrics
+          containerPort: {{ .Values.metrics.port }}
+        {{- if .Values.metrics.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.metrics.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+        {{- end }}
+        resources:
+  {{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}
+      volumes:
+      - name: seed
+        emptyDir: {}

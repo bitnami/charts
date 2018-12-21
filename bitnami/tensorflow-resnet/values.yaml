@@ -1,0 +1,124 @@
+## Global Docker image registry
+## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+##
+# global:
+#   imageRegistry:
+
+replicaCount: 1
+
+## TensorFlow Serving server image version
+## ref: https://hub.docker.com/r/bitnami/tensorflow-serving/tags/
+##
+server:
+  image:
+    registry: docker.io
+    repository: bitnami/tensorflow-serving
+    tag: 1.12.0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistrKeySecretName
+  port: 8500
+
+## TensorFlow ResNet image version
+## ref: https://hub.docker.com/r/bitnami/tensorflow-resnet/tags/
+##
+client:
+  image:
+    registry: docker.io
+    repository: bitnami/tensorflow-resnet
+    tag: 1.12.0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistrKeySecretName
+
+## Specify a imagePullPolicy
+## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+imagePullPolicy: IfNotPresent
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+serviceType: LoadBalancer
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 15
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: ynqa/tensorflow-serving-exporter
+    tag: latest
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistrKeySecretName
+  port: 9118
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 2
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 6
+    successThreshold: 1
+  ## Metrics exporter pod Annotation and Labels
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9118"
+    ## Metrics exporter resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+  # resources: {}

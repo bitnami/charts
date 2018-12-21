@@ -1,0 +1,30 @@
+*******************************************************************
+***     Please be patient while the chart is being deployed.    ***
+*******************************************************************
+
+1. Get the TensorFlow Serving URL by running:
+
+  {{- if contains "NodePort" .Values.serviceType }}
+
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+
+  {{- else if contains "LoadBalancer" .Values.serviceType }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.spec.ports[0].port}")
+
+  {{- else if contains "ClusterIP" .Values.serviceType }}
+
+    export APP_HOST=127.0.0.1
+    export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.spec.ports[0].port}")
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "tensorflow-resnet.fullname" . }} $APP_PORT:$APP_PORT &
+
+  {{- end }}
+
+2. Test the server with a sample image.
+
+  docker run --rm -it bitnami/tensorflow-resnet bash -c "curl -Lo /tmp/cat.jpg https://tensorflow.org/images/blogs/serving/cat.jpg && resnet_client_cc --server_port=$APP_HOST:$APP_PORT --image_file=/tmp/cat.jpg"
