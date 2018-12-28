@@ -131,7 +131,7 @@ spec:
 
               if [ ! -z "$ETCD_ROOT_PASSWORD" ] && [ `hostname -s` == '{{ $etcdFullname }}-0' ]; then
                 echo "==> Configuring RBAC authentication!"
-                etcd > /dev/null 2>&1 &
+                etcd --initial-cluster "default={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $peerPort }}" > /dev/null 2>&1 &
                 ETCD_PID=$!
                 sleep 5
                 echo "$ETCD_ROOT_PASSWORD" | etcdctl ${AUTH_OPTIONS} user add root
@@ -347,5 +347,3 @@ spec:
       - name: data
         emptyDir: {}
 {{- end }}
-
-
