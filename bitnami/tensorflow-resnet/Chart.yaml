@@ -1,5 +1,5 @@
 name: tensorflow-resnet
-version: 0.0.1
+version: 0.0.2
 appVersion: 1.12.0
 description: Open-source software library serving the ResNet machine learning model.
 keywords:
@@ -9,7 +9,8 @@ keywords:
 - machine
 - learning
 - library
-home: https://tensorflow.github.io/serving/
+home: https://www.tensorflow.org/serving/
+icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
 sources:
 - https://github.com/bitnami/bitnami-docker-tensorflow-serving
 - https://github.com/bitnami/bitnami-docker-tensorflow-resnet
