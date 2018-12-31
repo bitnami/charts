@@ -1,5 +1,5 @@
 name: tensorflow-inception
-version: 3.2.4
+version: 3.2.5
 appVersion: 1.12.0
 description: Open-source software library for serving machine learning models
 keywords:
@@ -9,11 +9,12 @@ keywords:
 - machine
 - learning
 - library
-home: https://tensorflow.github.io/serving/
+home: https://www.tensorflow.org/serving/
 icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
 sources:
 - https://github.com/bitnami/bitnami-docker-tensorflow-serving
 - https://github.com/bitnami/bitnami-docker-tensorflow-inception
+- https://github.com/bitnami/bitnami-docker-tensorflow-resnet
 maintainers:
 - email: containers@bitnami.com
   name: Bitnami
