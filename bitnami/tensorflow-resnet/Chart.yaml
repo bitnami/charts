@@ -13,6 +13,7 @@ home: https://www.tensorflow.org/serving/
 icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
 sources:
 - https://github.com/bitnami/bitnami-docker-tensorflow-serving
+- https://github.com/bitnami/bitnami-docker-tensorflow-inception
 - https://github.com/bitnami/bitnami-docker-tensorflow-resnet
 maintainers:
 - email: containers@bitnami.com
