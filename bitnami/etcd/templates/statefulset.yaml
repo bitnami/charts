@@ -94,51 +94,46 @@ spec:
             }
 
             ## Create data dir if not exists
-            if [ ! -d '${DATA_DIR}' ]; then
+            if [ ! -d "${DATA_DIR}" ]; then
               echo "==> Creating data dir..."
-              mkdir -p ${DATA_DIR}
-            fi
-
-            ## Re-joining failed node
-            if [ -d '${DATA_DIR}/member/' ]; then
-              echo "==> Data exists. Re-joining etcd member"
-              member_id=$(cat ${DATA_DIR}/member_id)
-
-              echo "==> Updating member in existing cluster."
-              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
-              etcdctl ${AUTH_OPTIONS} member update ${member_id} {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }}
-
-            ## Adding new member to the cluster
-            elif [ "${ID}" -ge {{ $replicaCount }} ]; then
-              echo "==> Adding member to existing cluster."
-              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
-
-              echo "==> Adding new member"
-              etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
-              sed -ie 's/^/export /' /bitnami/etcd/data/new_member_envs
-
-              echo "==> Loading env vars of existing cluster"
-              source ${DATA_DIR}/new_member_envs
-
-              store_member_id &
-
-            ## Setting up new cluster
-            else
+              mkdir -p "${DATA_DIR}"
+              ## Setting up new cluster
               echo "==> There is no data at all. Creating new cluster"
               export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
-
               store_member_id &
-
-              if [ ! -z "$ETCD_ROOT_PASSWORD" ] && [ `hostname -s` == '{{ $etcdFullname }}-0' ]; then
+              if [ -n "${ETCD_ROOT_PASSWORD}" ] && [ "${HOSTNAME}" == "{{ $etcdFullname }}-0" ]; then
                 echo "==> Configuring RBAC authentication!"
                 etcd > /dev/null 2>&1 &
                 ETCD_PID=$!
                 sleep 5
-                echo "$ETCD_ROOT_PASSWORD" | etcdctl ${AUTH_OPTIONS} user add root
-                etcdctl ${AUTH_OPTIONS} auth enable
+                echo "${ETCD_ROOT_PASSWORD}" | etcdctl user add root
+                etcdctl auth enable
                 etcdctl ${AUTH_OPTIONS} role revoke guest -path '/*' --readwrite
-                kill $ETCD_PID
+                kill "${ETCD_PID}"
                 sleep 5
+              fi
+            else
+              ## Re-joining failed node
+              if [ -d "${DATA_DIR}/member/snap" ]; then
+                echo "==> Data exists. Re-joining etcd member"
+                member_id=$(cat "${DATA_DIR}/member_id")
+                if [ "${HOSTNAME}" != "{{ $etcdFullname }}-0" ]; then
+                  echo "==> Updating member in existing cluster."
+                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
+                  etcdctl ${AUTH_OPTIONS} member update ${member_id} {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }}
+                fi
+              ## Adding new member to the cluster
+              else
+                echo "==> Adding member to existing cluster."
+                export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
+
+                etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
+                sed -ie 's/^/export /' /bitnami/etcd/data/new_member_envs
+
+                echo "==> Loading env vars of existing cluster"
+                source "${DATA_DIR}/new_member_envs"
+
+                store_member_id &
               fi
             fi
 
