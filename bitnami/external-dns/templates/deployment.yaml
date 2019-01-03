@@ -106,7 +106,9 @@ spec:
         {{- end }}
 
         {{- if eq .Values.provider "google" }}
+        {{- if .Values.google.project }}
         - --google-project={{ .Values.google.project }}
+        {{- end }}
         {{- end }}
 
         env:
@@ -147,8 +149,10 @@ spec:
         {{- end }}
 
         {{- if eq .Values.provider "google" }}
+        {{- if .Values.google.serviceAccountSecret }}
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /etc/secrets/service-account/credentials.json
+        {{- end }}
         {{- end }}
 
         ports:
@@ -191,8 +195,10 @@ spec:
         {{- end }}
 
         {{- if eq .Values.provider "google" }}
+        {{- if .Values.google.serviceAccountSecret }}
         - name: google-service-account
           mountPath: /etc/secrets/service-account/
+        {{- end }}
         {{- end }}
 
       volumes:
@@ -210,7 +216,9 @@ spec:
       {{- end }}
 
       {{- if eq .Values.provider "google" }}
+      {{- if .Values.google.serviceAccountSecret }}
       - name: google-service-account
         secret:
           secretName: {{ .Values.google.serviceAccountSecret | quote }}
+      {{- end}}
       {{- end}}

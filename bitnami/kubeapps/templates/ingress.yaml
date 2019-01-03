@@ -9,6 +9,11 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
+    {{- $rewrites := include "kubeapps.ingressRewrites" . -}}
+    {{- if ne $rewrites ""}}
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      {{ template "kubeapps.ingressRewrites" $ }}
+    {{- end -}}
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}

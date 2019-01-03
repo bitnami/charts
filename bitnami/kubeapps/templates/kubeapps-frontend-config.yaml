@@ -29,7 +29,9 @@ data:
         return 200 "healthy\n";
       }
 
-      location /api/kube {
+      # Using regexp match instead of prefix one because the application can be
+      # deployed under a specific path i.e /kubeapps
+      location ~* /api/kube {
         rewrite /api/kube/(.*) /$1 break;
         rewrite /api/kube / break;
         proxy_pass https://kubernetes.default;
@@ -46,13 +48,13 @@ data:
         proxy_read_timeout 1h;
       }
 
-      location /api/chartsvc {
+      location ~* /api/chartsvc {
         rewrite /api/chartsvc/(.*) /$1 break;
         rewrite /api/chartsvc / break;
         proxy_pass http://{{ template "kubeapps.chartsvc.fullname" . }}:{{ .Values.chartsvc.service.port }};
       }
 
-      location /api/tiller-deploy {
+      location ~* /api/tiller-deploy {
         # Keep the connection open with the API server even if idle (the default is 60 seconds)
         # Setting it to 10 minutes which should be enough for our current use case of deploying/upgrading/deleting apps
         proxy_read_timeout 10m;
