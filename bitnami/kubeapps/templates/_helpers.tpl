@@ -132,15 +132,3 @@ Create name for the tiller-proxy based on the fullname
 {{ template "kubeapps.fullname" . }}-internal-tiller-proxy
 {{- end -}}
 
-{{/*
-Nginx rewrite rules that will add trailing slash to the provided custom ingress paths
-Trailing / is required for the react app to work
-*/}}
-{{- define "kubeapps.ingressRewrites" -}}
-{{ range .Values.ingress.hosts -}}
-{{- if (.path) and ne .path "/" -}}
-      rewrite ^({{ .path }})$ $1/ permanent;
-{{- end -}}
-{{- end }}
-{{- end -}}
-

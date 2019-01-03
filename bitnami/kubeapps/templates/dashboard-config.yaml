@@ -17,6 +17,14 @@ data:
       gzip_static  on;
 
       location / {
+        # Redirects are required to be relative otherwise the internal hostname will be exposed
+        absolute_redirect off;
+
+        # Trailing / is required in the path for the React app to be loaded correctly
+        # The rewrite rule adds a trailing "/" to any path that does not contain "." neither "/".
+        # i.e kubeapps => kubeapps/
+        rewrite ^([^.]*[^/])$ $1/ permanent;
+
         # Support for ingress prefixes maintaining compatibility with the default /
         # 1 - Exactly two fragment URLs for files existing inside of the public/ dir
         # i.e /[prefix]/config.json => /config.json
