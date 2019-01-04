@@ -73,7 +73,7 @@ allowPlaintextListener: true
 brokerId: -1
 
 ## Switch to enable topic deletion or not.
-deteleTopicEnable: false
+deleteTopicEnable: false
 
 ## Kafka's Java Heap size.
 heapOpts: -Xmx1024m -Xms1024m
