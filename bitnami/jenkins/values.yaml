@@ -36,7 +36,7 @@ jenkinsUser: user
 
 ## Jenkins home directory
 ##
-homeDir: /opt/bitnami/jenkins/jenkins_home
+jenkinsHome: /opt/bitnami/jenkins/jenkins_home
 
 ## Allows to disable the initial Bitnami configuration for Jenkins
 ##
