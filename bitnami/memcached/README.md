@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `image.repository`          | Memcached Image name                | `bitnami/memcached`                                       |
 | `image.tag`                 | Memcached Image tag                 | `{VERSION}`                                               |
 | `image.pullPolicy`          | Memcached image pull policy         | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
-| `image.pullSecrets`         | Specify image pull secrets          | `nil` (does not add image pull secrets to deployed pods)  |
+| `image.pullSecrets`         | Specify docker-registry secret names as an array          | `[]` (does not add image pull secrets to deployed pods)  |
 | `securityContext.enabled`   | Enable security context             | `true`                                                    |
 | `securityContext.fsGroup`   | Group ID for the container          | `1001`                                                    |
 | `securityContext.runAsUser` | User ID for the container           | `1001`                                                    |
@@ -65,7 +65,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `metrics.image.repository`                 | MongoDB exporter image name                                                                                      | `prom/memcached-exporter`                           |
 | `metrics.image.tag`                        | MongoDB exporter image tag                                                                                       | `v0.4.1`                                            |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `nil`                                                |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `[]` (does not add image pull secrets to deployed pods)  |
 | `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | {}                                                   |
 | `metrics.resources`                        | Exporter resource requests/limit                                                                               | Memory: `256Mi`, CPU: `100m`                         |
 

@@ -53,10 +53,10 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `image.repository`                         | Cassandra Image name                                                                                               | `bitnami/cassandra`                                      |
 | `image.tag`                                | Cassandra Image tag                                                                                                | `{VERSION}`                                          |
 | `image.pullPolicy`                         | Image pull policy                                                                                              | `Always`                                             |
-| `image.pullSecrets`                        | Specify `docker-registry` secret names as an array                                                               | `nil`                                                |
+| `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                               | `[]` (does not add image pull secrets to deployed pods) |
 | `service.type`                       | Kubernetes Service type                                                                          | `ClusterIP`                                          |
 | `service.nodePort`                   | Kubernetes Service nodePort                                                                      | `nil`                                                |
-| `service.loadBalancerIP`             | LoadBalancerIP if service type is `LoadBalancer`                                                   | `nil`                            | 
+| `service.loadBalancerIP`             | LoadBalancerIP if service type is `LoadBalancer`                                                   | `nil`                            |
 | `service.annotations`                | Annotations for the service                                                                            | {}                                                   |
 | `persistence.enabled`               | Use PVCs to persist data                                                                        | `true`                                               |
 | `persistence.storageClass`          | Persistent Volume Storage Class                                                                                    | `generic`                                            |
@@ -108,13 +108,13 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `affinity`                          | Enable node/pod affinity                                                                 | {}                                   |
 | `tolerations`                       | Toleration labels for pod assignment                                                              | []                                                   |
 | `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                           | `false`                                              |
-| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                     | `true`                                | 
+| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                     | `true`                                |
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
 | `metrics.image.registry`                   | Cassandra exporter Image registry                                                                                  | `docker.io`                                          |
 | `metrics.image.repository`                 | Cassandra exporter Image name                                                                                      | `criteo/cassandra_exporter`                           |
 | `metrics.image.tag`                        | Cassandra exporter Image tag                                                                                       | `2.0.4`                                            |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify `docker-registry` secret names as an array                                                               | `nil`                                                |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                              | `[]` (does not add image pull secrets to deployed pods)                             |
 | `metrics.podAnnotations`                   | Additional annotations for Metrics exporter                                                                 | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}`                                                   |
 | `metrics.resources`                        | Exporter resource requests/limit                                                                               | `{}`                         |
 

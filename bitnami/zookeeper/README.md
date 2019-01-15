@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `image.repository`                    | Zookeeper Image name                                                | `bitnami/zookeeper`                                      |
 | `image.tag`                           | Zookeeper Image tag                                                 | `{VERSION}`                                              |
 | `image.pullPolicy`                    | Zookeeper image pull policy                                         | `Always`                                                 |
-| `image.pullSecrets`                   | Specify image pull secrets                                          | `nil` (does not add image pull secrets to deployed pods) |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                    | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
 | `updateStrategy`                      | Update strategies                                                   | `RollingUpdate`                                          |
 | `rollingUpdatePartition`              | Partition update strategy                                           | `nil`                                                    |

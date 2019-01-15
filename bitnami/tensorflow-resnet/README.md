@@ -67,14 +67,14 @@ The following tables lists the configurable parameters of the TensorFlow ResNet 
 | `server.image.repository`                     | TensorFlow Serving Image name                        | `bitnami/tensorflow-serving`                                 |
 | `server.image.tag`                            | TensorFlow Serving Image tag                         | `{VERSION}`                                                  |
 | `server.image.pullPolicy`                     | TensorFlow Serving image pull policy                 | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
-| `server.image.pullSecrets`                    | Specify image pull secrets                           | `nil` (does not add image pull secrets to deployed pods)     |
+| `server.image.pullSecrets`                    | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)      |
 | `replicaCount`                                | Desired number of pods                               | `1`                                                          |
 | `server.port`                                 | Tensorflow server port                               | `8500`                                                       |
 | `client.image.registry`                       | TensorFlow ResNet image registry                     | `docker.io`                                                  |
 | `client.image.repository`                     | TensorFlow ResNet Image name                         | `bitnami/tensorflow-resnet`                                  |
 | `client.image.tag`                            | TensorFlow ResNet Image tag                          | `{VERSION}`                                                  |
 | `client.image.pullPolicy`                     | TensorFlow ResNet image pull policy                  | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
-| `client.image.pullSecrets`                    | Specify image pull secrets                           | `nil` (does not add image pull secrets to deployed pods)     |
+| `client.image.pullSecrets`                    | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)      |
 | `imagePullPolicy`                             | Image pull policy                                    | `Always` if `image` tag is `latest`, else `IfNotPresent`     |
 | `podAnnotations`                              | Pod annotations                                      | `{}`                                                         |
 | `livenessProbe.enabled`                       | Would you like a livessProbed to be enabled                                                       |  `true`         |
@@ -94,7 +94,7 @@ The following tables lists the configurable parameters of the TensorFlow ResNet 
 | `metrics.image.repository`                    | Tensorflow exporter image name                       | `ynqa/tensorflow-serving-exporter`                           |
 | `metrics.image.tag`                           | Tensorflow exporter image tag                        | `latest`                                                     |
 | `metrics.image.pullPolicy`                    | Image pull policy                                    | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array     | `nil`                                                        |
+| `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.port`                                | TensorFlow Exporter port                             | `9118`                                                       |
 | `metrics.livenessProbe.enabled`               | Would you like a livessProbed to be enabled (metrics)                                                       |  `true`     |
 | `metrics.livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated (metrics)                                                          |  30         |

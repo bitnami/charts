@@ -68,13 +68,13 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 | `server.image.repository`       | TensorFlow Serving Image name                    | `bitnami/tensorflow-serving`                                 |
 | `server.image.tag`              | TensorFlow Serving Image tag                     | `{VERSION}`                                                  |
 | `server.image.pullPolicy`       | TensorFlow Serving image pull policy             | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
-| `server.image.pullSecrets`      | Specify image pull secrets                       | `nil` (does not add image pull secrets to deployed pods)     |
+| `server.image.pullSecrets`      | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `server.port`                   | Tensorflow server port                           | `8500`                                                       |
 | `client.image.registry`         | TensorFlow Inception image registry              | `docker.io`                                                  |
 | `client.image.repository`       | TensorFlow Inception Image name                  | `bitnami/tensorflow-inception`                               |
 | `client.image.tag`              | TensorFlow Inception Image tag                   | `{VERSION}`                                                  |
 | `client.image.pullPolicy`       | TensorFlow Inception image pull policy           | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
-| `client.image.pullSecrets`      | Specify image pull secrets                       | `nil` (does not add image pull secrets to deployed pods)     |
+| `client.image.pullSecrets`      | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `securityContext.enabled`       | Enable security context for TensorFlow Serving   | `true`                                                       |
 | `securityContext.fsGroup`       | Group ID for TensorFlow Serving container        | `1001`                                                       |
 | `securityContext.runAsUser`     | User ID for TensorFlow Serving container         | `1001`                                                       |
@@ -85,7 +85,7 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 | `metrics.image.repository`      | Tensorflow exporter image name                   | `ynqa/tensorflow-serving-exporter`                           |
 | `metrics.image.tag`             | Tensorflow exporter image tag                    | `latest`                                                     |
 | `metrics.image.pullPolicy`      | Image pull policy                                | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`     | Specify docker-registry secret names as an array | `nil`                                                        |
+| `metrics.image.pullSecrets`     | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`        | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}` |
 | `metrics.resources`             | Exporter resource requests/limit                 | Memory: `256Mi`, CPU: `100m`                                 |
 
