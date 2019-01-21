@@ -94,6 +94,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `securityContext.runAsUser`      | User ID for the container                                                                                  | `1001`                                                             |
 | `service.type`                   | Kubernetes Service type                                                                                    | `ClusterIP`                                                        |
 | `service.port`                   | Kafka port                                                                                                 | `9092`                                                             |
+| `service.annotations`            | Service annotations                          | ``                                                       |
 | `persistence.enabled`            | Enable persistence using PVC                                                                               | `true`                                                             |
 | `persistence.storageClass`       | PVC Storage Class for Kafka volume                                                                         | `nil`                                                              |
 | `persistence.accessMode`         | PVC Access Mode for Kafka volume                                                                           | `ReadWriteOnce`                                                    |
