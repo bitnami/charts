@@ -11,7 +11,10 @@ image:
   ##
   pullPolicy: IfNotPresent
 
-config: {}
+config:
+  use-geoip: "false"
+  use-geoip2: "true"
+
 # Will add custom header to Nginx https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers
 headers: {}
 
