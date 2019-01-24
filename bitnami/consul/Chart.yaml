@@ -1,9 +1,7 @@
 name: consul
-version: 4.0.0
-appVersion: 1.4.0
-description: Highly available and distributed service discovery and key-value store
-  designed with support for the modern data center to make distributed systems and
-  configuration easy.
+version: 4.0.1
+appVersion: 1.4.1
+description: Highly available and distributed service discovery and key-value store designed with support for the modern data center to make distributed systems and configuration easy.
 home: https://www.consul.io/
 sources:
 - https://github.com/bitnami/bitnami-docker-consul
