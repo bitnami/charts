@@ -102,6 +102,7 @@ securityContext:
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
+  dnsBase: svc.cluster.local
   type: ClusterIP
   port: 2379
   ## Specify the nodePort value for the LoadBalancer and NodePort service types for the client port
