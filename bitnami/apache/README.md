@@ -51,7 +51,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `image.repository`                | Apache Image name                     | `bitnami/apache`                                          |
 | `image.tag`                       | Apache Image tag                      | `{VERSION}`                                               |
 | `image.pullPolicy`                | Apache image pull policy              | `Always`                                                  |
-| `image.pullSecrets`               | Specify image pull secrets            | `nil` (does not add image pull secrets to deployed pods)  |
+| `image.pullSecrets`               | Specify docker-registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods)  |
 | `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`                                          |

@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `image.repository`              | Tomcat Image name                            | `bitnami/tomcat`                                          |
 | `image.tag`                     | Tomcat Image tag                             | `{VERSION}`                                               |
 | `image.pullPolicy`              | Tomcat image pull policy                     | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
-| `image.pullSecrets`             | Specify image pull secrets                   | `nil` (does not add image pull secrets to deployed pods)  |
+| `image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)  |
 | `tomcatUsername`                | Tomcat admin user                            | `user`                                                    |
 | `tomcatPassword`                | Tomcat admin password                        | _random 10 character alphanumeric string_                 |
 | `tomcatAllowRemoteManagement`   | Enable remote access to management interface | `0` (disabled)                                            |
