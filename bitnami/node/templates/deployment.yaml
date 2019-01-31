@@ -110,7 +110,7 @@ spec:
 {{ toYaml .Values.extraEnv | indent 8 }}
 {{- end }}
         workingDir: /app
-        command: ['/bin/bash', '-c', 'useradd bitnami && su bitnami -c "PATH=/opt/bitnami/node/bin:$PATH npm start"']
+        command: ['/bin/bash', '-c', '(getent passwd | grep '^bitnami:' -q || useradd bitnami) && su bitnami -c "PATH=/opt/bitnami/node/bin:$PATH npm start"']
         ports:
         - name: http
           containerPort: {{ .Values.applicationPort }}
