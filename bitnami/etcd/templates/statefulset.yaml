@@ -200,7 +200,7 @@ spec:
         - name: ETCD_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "etcd.fullname" . }}{{ end }}
+              name: {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "etcd.fullname" . }}{{ end }}
               key: etcd-root-password
         {{- end }}
 
