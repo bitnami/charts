@@ -100,7 +100,7 @@ spec:
               mkdir -p "${DATA_DIR}"
               ## Setting up new cluster
               echo "==> There is no data at all. Creating new cluster"
-              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
+              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
               store_member_id &
               if [ -n "${ETCD_ROOT_PASSWORD}" ] && [ "${HOSTNAME}" == "{{ $etcdFullname }}-0" ]; then
                 echo "==> Configuring RBAC authentication!"
