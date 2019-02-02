@@ -70,7 +70,7 @@ spec:
       {{- $etcdFullname := include "etcd.fullname" . }}
       {{- $releaseNamespace := .Release.Namespace }}
       {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
-      {{- $dnsBase := .Values.dnsBase }}
+      {{- $dnsBase := .Values.service.dnsBase }}
       {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
       {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
       - name: "{{ template "etcd.fullname" . }}"
