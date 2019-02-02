@@ -104,11 +104,7 @@ spec:
               store_member_id &
               if [ -n "${ETCD_ROOT_PASSWORD}" ] && [ "${HOSTNAME}" == "{{ $etcdFullname }}-0" ]; then
                 echo "==> Configuring RBAC authentication!"
-                {{- if gt $replicaCount 1 }}
-                etcd --initial-cluster "default={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $peerPort }}" > /dev/null 2>&1 &
-                {{- else }}
                 etcd > /dev/null 2>&1 &
-                {{- end }}
                 ETCD_PID=$!
                 sleep 5
                 echo "${ETCD_ROOT_PASSWORD}" | etcdctl user add root
