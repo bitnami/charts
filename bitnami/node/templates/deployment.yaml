@@ -21,6 +21,11 @@ spec:
         release: {{ .Release.Name | quote }}
         heritage: "{{ .Release.Service }}"
     spec:
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.image.pullSecrets }}
@@ -39,7 +44,10 @@ spec:
         image: "{{ template "node.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         workingDir: /app
-        command: ['/bin/bash', '-c', '(getent passwd | grep "^bitnami:" -q || useradd bitnami) && chown -R bitnami:bitnami /app && npm install']
+        command: ['/bin/bash', '-c', 'npm install']
+        env:
+        - name: HOME
+          value: /tmp
         volumeMounts:
         - name: app
           mountPath: /app
@@ -110,7 +118,7 @@ spec:
 {{ toYaml .Values.extraEnv | indent 8 }}
 {{- end }}
         workingDir: /app
-        command: ['/bin/bash', '-c', '(getent passwd | grep "^bitnami:" -q || useradd bitnami) && su bitnami -c "PATH=/opt/bitnami/node/bin:$PATH npm start"']
+        command: ['/bin/bash', '-c', 'npm start']
         ports:
         - name: http
           containerPort: {{ .Values.applicationPort }}
