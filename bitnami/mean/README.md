@@ -85,6 +85,9 @@ The following table lists the configurable parameters of the MEAN chart and thei
 | `externaldb.secretName`                 | Secret containing existing database credentials           | `nil`                                                     |
 | `externaldb.type`                       | Type of database that defines the database secret mapping | `osba`                                                    |
 | `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                   | `nil`                                                     |
+| `securityContext.enabled`                     | Enable security context                                                                                                | `true`                                                   |
+| `securityContext.fsGroup`                     | Group ID for the container                                                                                             | `1001`                                                   |
+| `securityContext.runAsUser`                   | User ID for the container                                                                                              | `1001`                                                   |
 | `ingress.enabled`                       | Enable ingress controller resource                        | `false`                                                   |
 | `ingress.hosts[0].name`                 | Hostname to your MEAN installation                        | `mean.local`                                              |
 | `ingress.hosts[0].path`                 | Path within the url structure                             | `/`                                                       |
@@ -228,6 +231,12 @@ Deploying the helm chart enabling the Azure external database makes the followin
   - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
+
+## Notable changes
+
+### 5.0.0
+
+This release includes security contexts, so the containers in the chart are run as non-root. More information in [this link](https://github.com/bitnami/bitnami-docker-node#484-r1-6112-r1-7101-r1-and-830-r1).
 
 ## Upgrading
 
