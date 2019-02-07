@@ -1,6 +1,6 @@
 name: apache
-version: 4.0.3
-appVersion: 2.4.39
+version: 4.0.4
+appVersion: 2.4.38
 description: Chart for Apache HTTP Server
 keywords:
 - apache
