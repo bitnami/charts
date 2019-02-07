@@ -27,8 +27,8 @@ spec:
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
-      {{- if eq .Values.master.antiAffinity "hard" }}
       affinity:
+      {{- if eq .Values.master.antiAffinity "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: "kubernetes.io/hostname"
@@ -38,7 +38,6 @@ spec:
                   release: {{ .Release.Name | quote }}
                   role: "master"
       {{- else if eq .Values.master.antiAffinity "soft" }}
-      affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
@@ -49,6 +48,9 @@ spec:
                   app: {{ template "elasticsearch.name" . }}
                   release: {{ .Release.Name | quote }}
                   role: "master"
+      {{- end }}
+      {{- if .Values.master.nodeAffinity }}
+{{ toYaml .Values.master.nodeAffinity | indent 8 }}
       {{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:

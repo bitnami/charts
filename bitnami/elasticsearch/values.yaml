@@ -63,6 +63,8 @@ master:
   replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
+  ## node affinity
+  # nodeAffinity:
   service:
     ## master-eligible service type
     type: ClusterIP
@@ -127,6 +129,8 @@ coordinating:
   replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
+  ## node affinity
+  # nodeAffinity:
   service:
     ## coordinating-only service type
     type: ClusterIP
@@ -175,6 +179,8 @@ data:
   replicas: 2
   heapSize: 1024m
   antiAffinity: "soft"
+  ## node affinity
+  # nodeAffinity:
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -235,6 +241,8 @@ ingest:
   replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
+  ## node affinity
+  # nodeAffinity:
   service:
     ## ingest service type
     type: ClusterIP
