@@ -22,12 +22,12 @@ spec:
       - name: kubectl
         image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}
         command:
-        - kubectl
-        - delete
-        - apprepositories.kubeapps.com
-        - -n
-        - {{ .Release.Namespace }}
-        - --all
+        - /bin/sh
+        args:
+        - -ec
+        - |
+          kubectl delete apprepositories.kubeapps.com -n {{ .Release.Namespace }} --all
+          kubectl delete secrets -n {{ .Release.Namespace }} -l app={{ template "kubeapps.name" $ }},release={{ $.Release.Name }}
       restartPolicy: OnFailure
       serviceAccountName: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
     {{- with .Values.hooks.nodeSelector }}

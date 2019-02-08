@@ -132,3 +132,20 @@ Create name for the tiller-proxy based on the fullname
 {{ template "kubeapps.fullname" . }}-internal-tiller-proxy
 {{- end -}}
 
+{{/*
+Create name for the secrets related to an app repository
+*/}}
+{{- define "kubeapps.apprepository-secret.name" -}}
+apprepo-{{ .name }}-secrets
+{{- end -}}
+
+{{/*
+Repositories that include a caCert or an authorizationHeader
+*/}}
+{{- define "kubeapps.repos-with-orphan-secrets" -}}
+{{- range .Values.apprepository.initialRepos }}
+{{- if or .caCert .authorizationHeader }}
+.name
+{{- end }}
+{{- end }}
+{{- end -}}

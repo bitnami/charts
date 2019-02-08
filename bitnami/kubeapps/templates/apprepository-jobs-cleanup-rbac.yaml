@@ -20,6 +20,13 @@ rules:
   verbs:
   - list
   - delete
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - list
+  - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
