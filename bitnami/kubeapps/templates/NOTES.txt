@@ -8,6 +8,16 @@ Kubeapps can be accessed via port {{ .Values.frontend.service.port }} on the fol
 
    {{ template "kubeapps.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
+{{- $reposWithOrphanSecrets := include "kubeapps.repos-with-orphan-secrets" . }}
+{{- if ne $reposWithOrphanSecrets "" }}
+
+CAVEAT:
+  Some App Repositories have been installed with a custom CA or authorization header.
+  This generates secrets that won't be cleaned up if the repository is deleted through the Web application.
+  You can delete them manually or when uninstalling this chart.
+
+{{- end }}
+
 To access Kubeapps from outside your K8s cluster, follow the steps below:
 
 {{- if .Values.ingress.enabled }}

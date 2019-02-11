@@ -1,6 +1,6 @@
 name: zookeeper
-version: 1.2.2
-appVersion: 3.4.14
+version: 1.2.3
+appVersion: 3.4.13
 description: A centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services for distributed applications.
 keywords:
 - zookeeper
