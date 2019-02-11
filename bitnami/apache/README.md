@@ -17,6 +17,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 This chart bootstraps a [Apache](https://github.com/bitnami/bitnami-docker-apache) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Get production-level infrastructure services for your cluster: logging, monitoring, and HTTP ingress deploying the Bitnami chart on [Bitnami Kubernetes Runtime Production](https://kubeprod.io/).
 
 ## Installing the Chart
 
