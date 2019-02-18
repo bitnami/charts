@@ -70,6 +70,7 @@ spec:
       {{- $etcdFullname := include "etcd.fullname" . }}
       {{- $releaseNamespace := .Release.Namespace }}
       {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+      {{- $dnsBase := .Values.service.dnsBase }}
       {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
       {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
       - name: "{{ template "etcd.fullname" . }}"
@@ -99,13 +100,13 @@ spec:
               mkdir -p "${DATA_DIR}"
               ## Setting up new cluster
               echo "==> There is no data at all. Creating new cluster"
-              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
+              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
               store_member_id &
               if [ -n "${ETCD_ROOT_PASSWORD}" ] && [ "${HOSTNAME}" == "{{ $etcdFullname }}-0" ]; then
                 echo "==> Configuring RBAC authentication!"
-                etcd --initial-cluster "default={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $peerPort }}" > /dev/null 2>&1 &
+                etcd > /dev/null 2>&1 &
                 ETCD_PID=$!
-                sleep 5
+                while ! etcdctl member list &>/dev/null; do sleep 1; done
                 echo "${ETCD_ROOT_PASSWORD}" | etcdctl user add root
                 etcdctl auth enable
                 etcdctl ${AUTH_OPTIONS} role revoke guest -path '/*' --readwrite
@@ -119,15 +120,15 @@ spec:
                 member_id=$(cat "${DATA_DIR}/member_id")
                 if [ "${HOSTNAME}" != "{{ $etcdFullname }}-0" ]; then
                   echo "==> Updating member in existing cluster."
-                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
-                  etcdctl ${AUTH_OPTIONS} member update ${member_id} {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }}
+                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
+                  etcdctl ${AUTH_OPTIONS} member update ${member_id} {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}
                 fi
               ## Adding new member to the cluster
               else
                 echo "==> Adding member to existing cluster."
-                export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
+                export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
 
-                etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
+                etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
                 sed -ie 's/^/export /' /bitnami/etcd/data/new_member_envs
 
                 echo "==> Loading env vars of existing cluster"
@@ -168,11 +169,11 @@ spec:
         - name: ETCD_DATA_DIR
           value: {{ template "etcd.dataDir" . }}
         - name: ETCD_ADVERTISE_CLIENT_URLS
-          value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}"
+          value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ .Values.service.port }}"
         - name: ETCD_LISTEN_CLIENT_URLS
           value: "{{ $etcdClientProtocol }}://0.0.0.0:{{ .Values.service.port }}"
         - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
-          value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.peerPort }}"
+          value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ .Values.service.peerPort }}"
         - name: ETCD_LISTEN_PEER_URLS
           value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.service.peerPort }}"
 
@@ -183,7 +184,7 @@ spec:
         - name: ETCD_INITIAL_CLUSTER_STATE
           value: "new"
         - name: ETCD_INITIAL_CLUSTER
-          value: {{range $i, $e := until $replicaCount }}{{ $etcdFullname }}-{{ $e }}={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $peerPort }},{{ end }}
+          value: {{range $i, $e := until $replicaCount }}{{ $etcdFullname }}-{{ $e }}={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $peerPort }},{{ end }}
         {{- end }}
 
         ## RBAC authentication
@@ -199,7 +200,7 @@ spec:
         - name: ETCD_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "etcd.fullname" . }}{{ end }}
+              name: {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "etcd.fullname" . }}{{ end }}
               key: etcd-root-password
         {{- end }}
 
@@ -252,7 +253,7 @@ spec:
                   AUTH_OPTIONS="{{ template "etcd.authOptions" . }}"
                   DATA_DIR={{ template "etcd.dataDir" . }}
                   MEMBER_ID=$(etcdctl member list | grep name=`hostname -s` | awk {'print $1'} | awk -F ":" {'print $1'})
-                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local:{{ $clientPort }}"
+                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
                   echo "==> Removing $MEMBER_ID from etcd cluster"
                   etcdctl ${AUTH_OPTIONS} member remove $MEMBER_ID
                   if [ $? -eq 0 ]; then

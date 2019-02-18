@@ -11,9 +11,9 @@ spec:
 {{- if .Values.service.nodePort }}
   nodePort: {{ .Values.service.nodePort }}
 {{- end }}
-{{ if eq .Values.service.type "LoadBalancer" -}} {{ if .Values.service.loadBalancerIP -}}
+{{- if eq .Values.service.type "LoadBalancer" }} {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
-{{- end -}} {{- end }}
+{{- end }} {{- end }}
   type: {{ .Values.service.type }}
   ports:
   - name: cql

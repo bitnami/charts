@@ -10,7 +10,7 @@
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.3.10
+  tag: 3.3.12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -102,6 +102,7 @@ securityContext:
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
+  dnsBase: svc.cluster.local
   type: ClusterIP
   port: 2379
   ## Specify the nodePort value for the LoadBalancer and NodePort service types for the client port

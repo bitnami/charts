@@ -57,7 +57,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `image.repository`                      | NodeJS image name                                         | `bitnami/node`                                            |
 | `image.tag`                             | NodeJS image tag                                          | `{VERSION}`                                               |
 | `image.pullPolicy`                      | NodeJS image pull policy                                  | `IfNotPresent`                                            |
-| `image.pullSecrets`                     | Specify image pull secrets                                | `nil` (does not add image pull secrets to deployed pods)  |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array          | `[]` (does not add image pull secrets to deployed pods)   |
 | `git.registry`                          | Git image registry                                        | `docker.io`                                               |
 | `git.repository`                        | Git image name                                            | `bitnami/git`                                             |
 | `git.tag`                               | Git image tag                                             | `latest`                                                  |
@@ -67,6 +67,9 @@ The following table lists the configurable parameters of the Node chart and thei
 | `replicas`                              | Number of replicas for the application                    | `1`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
 | `extraEnv`                              | Any extra environment variables to be pass to the pods    | `{}`                                                      |
+| `securityContext.enabled`                     | Enable security context                                                                                                | `true`                                                   |
+| `securityContext.fsGroup`                     | Group ID for the container                                                                                             | `1001`                                                   |
+| `securityContext.runAsUser`                   | User ID for the container                                                                                              | `1001`                                                   |
 | `service.type`                          | Kubernetes Service type                                   | `ClusterIP`                                               |
 | `service.port`                          | Kubernetes Service port                                   | `80`                                                      |
 | `service.annotations`                   | Annotations for the Service                               | {}                                                        |
@@ -224,6 +227,12 @@ Deploying the helm chart enabling the Azure external database makes the followin
 - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
+
+## Notable changes
+
+### 7.0.0
+
+This release includes security contexts, so the containers in the chart are run as non-root. More information in [this link](https://github.com/bitnami/bitnami-docker-node#484-r1-6112-r1-7101-r1-and-830-r1).
 
 ## Upgrading
 

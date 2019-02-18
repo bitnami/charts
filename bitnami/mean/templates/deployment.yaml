@@ -20,6 +20,11 @@ spec:
         release: {{ .Release.Name | quote }}
         chart: {{ template "mean.chart" . }}
     spec:
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.image.pullSecrets }}
@@ -38,7 +43,10 @@ spec:
         image: "{{ template "mean.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         workingDir: /app
-        command: ['/bin/bash', '-c', 'useradd bitnami && chown -R bitnami:bitnami /app && npm install']
+        command: ['/bin/bash', '-c', 'npm install']
+        env:
+        - name: HOME
+          value: /tmp
         volumeMounts:
         - name: app
           mountPath: /app
@@ -106,7 +114,7 @@ spec:
         - name: DATA_FOLDER
           value: "/app"
         workingDir: /app
-        command: ['/bin/bash', '-c', 'useradd bitnami && su bitnami -c "PATH=/opt/bitnami/node/bin:$PATH npm start"']
+        command: ['/bin/bash', '-c', 'npm start']
         ports:
         - name: http
           containerPort: {{ .Values.applicationPort }}

@@ -70,6 +70,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: KAFKA_ZOOKEEPER_CONNECT
           {{- if .Values.zookeeper.enabled }}
           value: {{ template "kafka.zookeeper.fullname" . }}
@@ -90,9 +94,9 @@ spec:
           {{- if .Values.advertisedListeners }}
           value: {{ .Values.advertisedListeners }}
           {{- else if .Values.auth.enabled  }}
-          value: 'SASL_SSL://{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}:$(KAFKA_PORT_NUMBER)'
+          value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}:$(KAFKA_PORT_NUMBER)'
           {{- else }}
-          value: 'PLAINTEXT://{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}:$(KAFKA_PORT_NUMBER)'
+          value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}:$(KAFKA_PORT_NUMBER)'
           {{- end }}
         {{- if .Values.auth.enabled }}
         - name: KAFKA_OPTS

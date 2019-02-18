@@ -95,7 +95,7 @@ apprepository:
   image:
     registry: docker.io
     repository: kubeapps/apprepository-controller
-    tag: v1.1.0
+    tag: v1.2.0
   # Image used to perform chart repository syncs
   syncImage:
     registry: quay.io
@@ -111,6 +111,15 @@ apprepository:
     url: https://svc-catalog-charts.storage.googleapis.com
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
+  # Additional repositories
+  # - name: chartmuseum
+  #   url: https://chartmuseum.default:8080
+  #   # Specify an Authorization Header if you are using an authentication method.
+  #   authorizationHeader: "Bearer xrxNC..."
+  #   # If you're providing your own certificates, please use this to add the certificates as secrets.
+  #   # It should start with -----BEGIN CERTIFICATE----- or
+  #   # -----BEGIN RSA PRIVATE KEY-----
+  #   caCert:
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
   resources:
     limits:
@@ -142,7 +151,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: kubeapps/tiller-proxy
-    tag: v1.1.0
+    tag: v1.2.0
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -169,7 +178,7 @@ chartsvc:
   image:
     registry: quay.io
     repository: helmpack/chartsvc
-    tag: v1.2.0
+    tag: v1.3.0
   service:
     port: 8080
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
@@ -204,7 +213,7 @@ dashboard:
   image:
     registry: docker.io
     repository: kubeapps/dashboard
-    tag: v1.1.0
+    tag: v1.2.0
   service:
     port: 8080
   livenessProbe:

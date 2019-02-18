@@ -56,9 +56,9 @@ The following table lists the configurable parameters of the MEAN chart and thei
 | `image.repository`                      | NodeJS image name                                         | `bitnami/node`                                            |
 | `image.tag`                             | NodeJS image tag                                          | `{VERSION}`                                               |
 | `image.pullPolicy`                      | NodeJS image pull policy                                  | `IfNotPresent`                                            |
-| `image.pullSecrets`                     | Specify image pull secrets                                | `nil` (does not add image pull secrets to deployed pods)  |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array          | `[]` (does not add image pull secrets to deployed pods)   |
 | `git.registry`                          | Git image registry                                        | `docker.io`                                               |
-| `git.repository`                        | Git image name                                            | `bitnami/git`                                              |
+| `git.repository`                        | Git image name                                            | `bitnami/git`                                             |
 | `git.tag`                               | Git image tag                                             | `latest`                                                  |
 | `git.pullPolicy`                        | Git image pull policy                                     | IfNotPresent`                                             |
 | `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
@@ -85,6 +85,9 @@ The following table lists the configurable parameters of the MEAN chart and thei
 | `externaldb.secretName`                 | Secret containing existing database credentials           | `nil`                                                     |
 | `externaldb.type`                       | Type of database that defines the database secret mapping | `osba`                                                    |
 | `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                   | `nil`                                                     |
+| `securityContext.enabled`                     | Enable security context                                                                                                | `true`                                                   |
+| `securityContext.fsGroup`                     | Group ID for the container                                                                                             | `1001`                                                   |
+| `securityContext.runAsUser`                   | User ID for the container                                                                                              | `1001`                                                   |
 | `ingress.enabled`                       | Enable ingress controller resource                        | `false`                                                   |
 | `ingress.hosts[0].name`                 | Hostname to your MEAN installation                        | `mean.local`                                              |
 | `ingress.hosts[0].path`                 | Path within the url structure                             | `/`                                                       |
@@ -228,6 +231,12 @@ Deploying the helm chart enabling the Azure external database makes the followin
   - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
+
+## Notable changes
+
+### 5.0.0
+
+This release includes security contexts, so the containers in the chart are run as non-root. More information in [this link](https://github.com/bitnami/bitnami-docker-node#484-r1-6112-r1-7101-r1-and-830-r1).
 
 ## Upgrading
 

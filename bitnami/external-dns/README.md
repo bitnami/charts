@@ -53,7 +53,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `image.repository`                    | ExternalDNS Image name                                                                                   | `bitnami/external-dns`                                   |
 | `image.tag`                           | ExternalDNS Image tag                                                                                    | `{VERSION}`                                              |
 | `image.pullPolicy`                    | ExternalDNS image pull policy                                                                            | `Always`                                                 |
-| `image.pullSecrets`                   | Specify image pull secrets                                                                               | `nil` (does not add image pull secrets to deployed pods) |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                         | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                                                                    | `false`                                                  |
 | `sources`                             | List of resource types to be observed for new DNS entries by ExternalDNS                                 | `[service, ingress]`                                     |
 | `provider`                            | DNS provider where the DNS records will be created (mandatory). E.g.: aws, azure, google, ...            | `nil`                                                    |

@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `image.repository`         | Jenkins Image name                     | `bitnami/jenkins`                                         |
 | `image.tag`                | Jenkins Image tag                      | `{VERSION}`                                               |
 | `image.pullPolicy`         | Jenkins image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
-| `image.pullSecrets`        | Specify image pull secrets             | `nil` (does not add image pull secrets to deployed pods)  |
+| `image.pullSecrets`        | Specify docker-registry secret names as an array             | `[]` (does not add image pull secrets to deployed pods)  |
 | `jenkinsUser`              | User of the application                | `user`                                                    |
 | `jenkinsPassword`          | Application password                   | _random 10 character alphanumeric string_                 |
 | `jenkinsHome`              | Jenkins home directory                 | `/opt/bitnami/jenkins/jenkins_home`                       |
@@ -76,7 +76,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `metrics.image.repository`                 | Jenkins exporter image name                                                                                      | `tolleiv/jenkins_exporter`                           |
 | `metrics.image.tag`                        | Jenkins exporter image tag                                                                                       | `latest`                                            |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `nil`                                                |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array        | `[]` (does not add image pull secrets to deployed pods)                                        |
 | `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}`                                                   |
 | `metrics.resources`                        | Exporter resource requests/limit                                                                               | Memory: `256Mi`, CPU: `100m`                         |
 

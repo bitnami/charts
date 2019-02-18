@@ -124,6 +124,14 @@ externaldb:
   broker:
     serviceInstanceName:
 
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
 ## Configure ingress resource that allow you to access the application.
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
