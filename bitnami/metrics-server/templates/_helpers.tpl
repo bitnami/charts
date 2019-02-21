@@ -4,12 +4,12 @@ Expand the name of the chart.
 */}}
 {{- define "metrics-server.name" -}}
 {{- $name := default .Chart.Name .Values.nameOverride | replace "-" "" -}}
-{{- default $name | trunc 24 -}}
+{{- default $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name.
-We truncate at 24 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "metrics-server.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride | replace "-" "" -}}
