@@ -1,6 +1,6 @@
 name: jenkins
-version: 2.1.5
-appVersion: 2.150.2
+version: 2.1.6
+appVersion: 2.150.3
 description: The leading open source automation server
 keywords:
 - jenkins
