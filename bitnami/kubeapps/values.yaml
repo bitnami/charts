@@ -99,9 +99,8 @@ apprepository:
   # Image used to perform chart repository syncs
   syncImage:
     registry: quay.io
-    # TODO: Update tag when a new release is available
     repository: helmpack/chart-repo
-    tag: v1.2.0
+    tag: v1.4.0
   initialRepos:
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
@@ -178,7 +177,7 @@ chartsvc:
   image:
     registry: quay.io
     repository: helmpack/chartsvc
-    tag: v1.3.0
+    tag: v1.4.0
   service:
     port: 8080
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
