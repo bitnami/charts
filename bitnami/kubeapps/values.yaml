@@ -95,7 +95,7 @@ apprepository:
   image:
     registry: docker.io
     repository: kubeapps/apprepository-controller
-    tag: v1.2.0
+    tag: v1.3.0
   # Image used to perform chart repository syncs
   syncImage:
     registry: quay.io
@@ -150,7 +150,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: kubeapps/tiller-proxy
-    tag: v1.2.0
+    tag: v1.3.0
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -212,7 +212,7 @@ dashboard:
   image:
     registry: docker.io
     repository: kubeapps/dashboard
-    tag: v1.2.0
+    tag: v1.3.0
   service:
     port: 8080
   livenessProbe:
@@ -283,3 +283,30 @@ testImage:
   registry: docker.io
   repository: bitnami/nginx
   tag: 1.14.0-r27
+
+# Auth Proxy for OIDC support
+# ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
+authProxy:
+  # Set to true to enable the OIDC proxy
+  enabled: false
+  # Image used for the proxy
+  image:
+    registry: docker.io
+    repository: keycloak/keycloak-gatekeeper
+    tag: 4.6.0.Final
+  # Mandatory parametes
+  discoveryURL:
+  clientID:
+  clientSecret:
+  # Additional flags for Keycloak-Gatekeeper
+  additionalFlags:
+    # - --skip-openid-provider-tls-verify
+    # - --secure-cookie=false
+  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi

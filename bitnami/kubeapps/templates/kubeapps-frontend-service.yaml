@@ -15,7 +15,11 @@ spec:
   type: {{ .Values.frontend.service.type }}
   ports:
   - port: {{ .Values.frontend.service.port }}
+  {{- if .Values.authProxy.enabled }}
+    targetPort: proxy
+  {{- else }}
     targetPort: http
+  {{- end }}
     protocol: TCP
     name: http
   selector:

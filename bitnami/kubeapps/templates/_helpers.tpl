@@ -149,3 +149,14 @@ Repositories that include a caCert or an authorizationHeader
 {{- end }}
 {{- end }}
 {{- end -}}
+
+{{/*
+Frontend service port number
+*/}}
+{{- define "kubeapps.frontend-port-number" -}}
+{{- if .Values.authProxy.enabled -}}
+3000
+{{- else -}}
+8080
+{{- end -}}
+{{- end -}}
