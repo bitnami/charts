@@ -58,4 +58,40 @@ subjects:
 - kind: ServiceAccount
   name: {{ template "kubeapps.apprepository.fullname" . }}
   namespace: {{ .Release.Namespace }}
+---
+# Define role, but no binding, so users can be bound to this role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: {{ template "kubeapps.apprepository.fullname" . }}-repositories-read
+rules:
+- apiGroups:
+  - kubeapps.com
+  resources:
+  - apprepositories
+  verbs:
+  - list
+  - get
 {{- end -}}
+---
+# Define role, but no binding, so users can be bound to this role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: {{ template "kubeapps.apprepository.fullname" . }}-repositories-write
+rules:
+- apiGroups:
+  - kubeapps.com
+  resources:
+  - apprepositories
+  verbs:
+  - get
+  - create
+  - update
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create

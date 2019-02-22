@@ -142,7 +142,7 @@ spec:
         - name: KAFKA_BROKER_ID
           value: {{ .Values.brokerId | quote }}
         - name: KAFKA_DELETE_TOPIC_ENABLE
-          value: {{ .Values.deteleTopicEnable | quote }}
+          value: {{ .Values.deleteTopicEnable | quote }}
         - name: KAFKA_HEAP_OPTS
           value: {{ .Values.heapOpts | quote }}
         - name: KAFKA_LOG_FLUSH_INTERVAL_MESSAGES

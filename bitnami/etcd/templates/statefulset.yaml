@@ -106,7 +106,7 @@ spec:
                 echo "==> Configuring RBAC authentication!"
                 etcd > /dev/null 2>&1 &
                 ETCD_PID=$!
-                sleep 5
+                while ! etcdctl member list &>/dev/null; do sleep 1; done
                 echo "${ETCD_ROOT_PASSWORD}" | etcdctl user add root
                 etcdctl auth enable
                 etcdctl ${AUTH_OPTIONS} role revoke guest -path '/*' --readwrite

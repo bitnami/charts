@@ -3,15 +3,34 @@ apiVersion: kubeapps.com/v1alpha1
 kind: AppRepository
 metadata:
   name: {{ .name }}
+  annotations:
+    # Using the hook crd-install to avoid issue w/Helm v1.11
+    # https://github.com/kubeapps/kubeapps/pull/955#pullrequestreview-200764260
+    "helm.sh/hook": crd-install
+    # Make sure this runs after the AppRepository CRD install
+    "helm.sh/hook-weight": "10"
   labels:
     app: {{ template "kubeapps.apprepository.fullname" $ }}
     chart: {{ template "kubeapps.chart" $ }}
     release: {{ $.Release.Name }}
     heritage: {{ $.Release.Service }}
-annotations:
-  helm.sh/hook: pre-install
 spec:
   type: helm
   url: {{ .url }}
+  {{- if or .caCert .authorizationHeader }}
+  auth:
+    {{- if .caCert }}
+    customCA:
+      secretKeyRef:
+        key: ca.crt
+        name: {{ template "kubeapps.apprepository-secret.name" . }}
+    {{- end }}
+    {{- if .authorizationHeader }}
+    header:
+      secretKeyRef:
+        key: authorizationHeader
+        name: {{ template "kubeapps.apprepository-secret.name" . }}
+    {{- end }}
+  {{- end }}
 ---
 {{ end -}}
