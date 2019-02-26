@@ -161,6 +161,8 @@ spec:
           value: {{ .Values.logSegmentBytes | replace "_" "" | quote }}
         - name: KAFKA_LOGS_DIRS
           value: {{ .Values.logsDirs }}
+        - name: KAFKA_DEFAULT_REPLICATION_FACTOR
+          value: {{ .Values.defaultReplicationFactor | quote }}
         - name: KAFKA_NUM_IO_THREADS
           value: {{ .Values.numIoThreads | quote }}
         - name: KAFKA_NUM_NETWORK_THREADS
