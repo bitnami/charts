@@ -102,6 +102,9 @@ logsDirs: /opt/bitnami/kafka/data
 ## The largest record batch size allowed by Kafka
 maxMessageBytes: _1000012
 
+## Default replication factors for automatically created topics
+defaultReplicationFactor: 1
+
 ## The number of threads doing disk I/O.
 numIoThreads: 8
 
@@ -331,7 +334,7 @@ metrics:
 ## Zookeeper chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
-## 
+##
 zookeeper:
   enabled: true
 
