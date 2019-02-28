@@ -1,6 +1,6 @@
-name: apache
 apiVersion: v1
-version: 4.0.6
+name: apache
+version: 4.0.7
 appVersion: 2.4.38
 description: Chart for Apache HTTP Server
 keywords:
