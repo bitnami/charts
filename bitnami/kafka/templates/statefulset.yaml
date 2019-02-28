@@ -155,6 +155,8 @@ spec:
           value: {{ .Values.logRetentionCheckIntervalMs | quote }}
         - name: KAFKA_LOG_RETENTION_HOURS
           value: {{ .Values.logRetentionHours | quote }}
+        - name: KAFKA_LOG_MESSAGE_FORMAT_VERSION
+          value: {{ .Values.logMessageFormatVersion | quote }}
         - name: KAFKA_MAX_MESSAGE_BYTES
           value: {{ .Values.maxMessageBytes | replace "_" "" | quote }}
         - name: KAFKA_SEGMENT_BYTES
