@@ -73,7 +73,7 @@ spec:
             nami_initialize zookeeper
             exec tini -- /run.sh
         resources:
-{{ toYaml .Values.Resources | indent 10 }}
+{{ toYaml .Values.resources | indent 10 }}
         env:
         - name: ZOO_PORT_NUMBER
           value: {{ .Values.service.port | quote }}
