@@ -10,7 +10,7 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
   - name: metrics
     port: 8080
