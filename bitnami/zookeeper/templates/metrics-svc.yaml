@@ -1,0 +1,22 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "zookeeper.fullname" . }}-exporter
+  labels:
+    app: {{ template "zookeeper.name" . }}
+    chart: {{ template "zookeeper.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: metrics
+    port: 8080
+    targetPort: metrics
+  selector:
+    app: {{ template "zookeeper.name" . }}
+    release: {{ .Release.Name | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+{{- end }}
