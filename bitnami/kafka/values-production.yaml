@@ -96,6 +96,9 @@ logRetentionHours: 168
 ## The maximum size of a log segment file. When this size is reached a new log segment will be created.
 logSegmentBytes: _1073741824
 
+## Log message format version
+logMessageFormatVersion: ""
+
 ## A comma separated list of directories under which to store log files.
 logsDirs: /opt/bitnami/kafka/data
 

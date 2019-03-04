@@ -95,3 +95,17 @@ Return the proper etcdctl authentication options
 {{- printf "%s" $caOption -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the etcd env vars ConfigMap name
+*/}}
+{{- define "etcd.envVarsCM" -}}
+{{- printf "%s" .Values.envVarsConfigMap -}}
+{{- end -}}
+
+{{/*
+Return the etcd env vars ConfigMap name
+*/}}
+{{- define "etcd.configFileCM" -}}
+{{- printf "%s" .Values.configFileConfigMap -}}
+{{- end -}}
