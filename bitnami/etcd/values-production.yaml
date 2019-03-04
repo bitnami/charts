@@ -48,11 +48,11 @@ statefulset:
 
 ## ConfigMap that includes the etcd.conf.yml file
 ##
-configFileConfigMap:
+# configFileConfigMap:
 
 ## ConfigMap that includes extra environment variables
 ##
-envVarsConfigMap:
+# envVarsConfigMap:
 
 ## etcd docker image available customizations
 ## https://github.com/bitnami/bitnami-docker-etcd#configuration
