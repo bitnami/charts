@@ -46,10 +46,13 @@ statefulset:
   ##
   replicaCount: 1
 
-## Take into account that if you use a config map you need to provide the whole configuration
-## as the env vars defined in the statefulset.yaml will not be applied
+## ConfigMap that includes the etcd.conf.yml file
 ##
-useConfigmap: false
+configFileConfigMap:
+
+## ConfigMap that includes extra environment variables
+##
+envVarsConfigMap:
 
 ## etcd docker image available customizations
 ## https://github.com/bitnami/bitnami-docker-etcd#configuration

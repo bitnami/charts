@@ -145,6 +145,11 @@ spec:
             {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+        {{- if .Values.envVarsConfigMap }}
+        envFrom:
+        - configMapRef:
+            name: {{ template "etcd.envVarsCM" . }}
+        {{- end }}
         env:
         {{- if .Values.image.debug }}
         - name: BASH_DEBUG
@@ -284,7 +289,7 @@ spec:
         - name: data
           mountPath: /bitnami/etcd
         {{ end }}
-        {{ if .Values.useConfigmap }}
+        {{ if .Values.configFileConfigMap }}
         - name: etcd-config
           mountPath: /opt/bitnami/etcd/conf/
         {{ end }}
@@ -299,10 +304,10 @@ spec:
           readOnly: true
         {{ end }}
       volumes:
-      {{ if .Values.useConfigmap }}
+      {{ if .Values.configFileConfigMap }}
       - name: etcd-config
         configMap:
-          name: {{ template "etcd.fullname" . }}-configuration
+          name: {{ template "etcd.configFileCM" . }}
       {{ end }}
       {{ if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS ) ) }}
       - name: etcd-client-certs
