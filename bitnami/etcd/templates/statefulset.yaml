@@ -138,7 +138,7 @@ spec:
               fi
             fi
 
-            {{- if .Values.useConfigmap }}
+            {{- if .Values.configFileConfigMap }}
             exec /opt/bitnami/etcd/bin/etcd --config-file /opt/bitnami/etcd/conf/etcd.conf.yml
             {{ else }}
             exec /opt/bitnami/etcd/bin/etcd
