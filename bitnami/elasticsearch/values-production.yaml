@@ -44,7 +44,7 @@ master:
   replicas: 3
   heapSize: 128m
   antiAffinity: "soft"
-  ## node affinity
+  ## Node Affinity
   # nodeAffinity:
   service:
     ## master-eligible service type
