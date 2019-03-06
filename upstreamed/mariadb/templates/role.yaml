@@ -1,15 +1,18 @@
-{{- if .Values.master.config }}
-apiVersion: v1
-kind: ConfigMap
+{{- if and .Values.serviceAccount.create  .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
   name: {{ template "master.fullname" . }}
   labels:
     app: "{{ template "mariadb.name" . }}"
-    component: "master"
     chart: "{{ template "mariadb.chart" . }}"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
-data:
-  my.cnf: |-
-{{ .Values.master.config | indent 4 }}
-{{- end -}}
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - endpoints
+  verbs:
+    - get
+{{- end }}

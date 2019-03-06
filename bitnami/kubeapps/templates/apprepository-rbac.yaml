@@ -63,7 +63,7 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: {{ template "kubeapps.apprepository.fullname" . }}-repositories-read
+  name: {{ .Release.Name }}-repositories-read
 rules:
 - apiGroups:
   - kubeapps.com
@@ -72,13 +72,12 @@ rules:
   verbs:
   - list
   - get
-{{- end -}}
 ---
 # Define role, but no binding, so users can be bound to this role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: {{ template "kubeapps.apprepository.fullname" . }}-repositories-write
+  name: {{ .Release.Name }}-repositories-write
 rules:
 - apiGroups:
   - kubeapps.com
@@ -95,3 +94,4 @@ rules:
   - secrets
   verbs:
   - create
+{{- end -}}

@@ -96,11 +96,17 @@ logRetentionHours: 168
 ## The maximum size of a log segment file. When this size is reached a new log segment will be created.
 logSegmentBytes: _1073741824
 
+## Log message format version
+logMessageFormatVersion: ""
+
 ## A comma separated list of directories under which to store log files.
 logsDirs: /opt/bitnami/kafka/data
 
 ## The largest record batch size allowed by Kafka
 maxMessageBytes: _1000012
+
+## Default replication factors for automatically created topics
+defaultReplicationFactor: 1
 
 ## The number of threads doing disk I/O.
 numIoThreads: 8
@@ -331,10 +337,10 @@ metrics:
 ## Zookeeper chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
-## 
+##
 zookeeper:
   enabled: true
-  metrics: 
+  metrics:
     enabled: true
 
 externalZookeeper:

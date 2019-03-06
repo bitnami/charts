@@ -8,6 +8,7 @@ metadata:
     chart: {{ template "zookeeper.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
 spec:
   replicas: 1
   selector:
@@ -21,6 +22,7 @@ spec:
       labels:
         app: {{ template "zookeeper.name" . }}
         release: "{{ .Release.Name }}"
+        app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
     spec:
       {{- if .Values.metrics.image.pullSecrets }}
       imagePullSecrets:
@@ -43,7 +45,8 @@ spec:
           {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
           - {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $servicePort }}{{- if (lt $e ( sub $replicaCount 1)) -}},{{- end -}}{{ end }}
         ports:
-          - containerPort: 8080
+          - name: metrics
+            containerPort: 8080
         resources:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}

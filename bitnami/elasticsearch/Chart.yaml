@@ -1,3 +1,4 @@
+apiVersion: v1
 name: elasticsearch
 version: 4.3.0
 appVersion: 6.6.1
