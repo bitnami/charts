@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagepullSecrets
 ##
 # global:
 #   imageRegistry:
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami Apache image version
 ## ref: https://hub.docker.com/r/bitnami/apache/tags/
@@ -20,7 +23,7 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -40,8 +43,10 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
     # pullSecrets:
-    #   - myRegistrKeySecretName
-     ## Metrics exporter pod Annotation and Labels
+    #   - myRegistryKeySecretName
+  ## Metrics exporter pod Annotation and Labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
