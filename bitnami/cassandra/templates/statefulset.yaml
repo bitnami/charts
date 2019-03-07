@@ -98,9 +98,9 @@ spec:
           value: {{ .Values.cluster.endpointSnitch }}
 {{- if .Values.tlsEncryptionSecretName }}
         - name: CASSANDRA_INTERNODE_ENCRYPTION
-          value: {{ .Values.cluster.internodeEncryption }}
+          value: {{ .Values.cluster.internodeEncryption | quote }}
         - name: CASSANDRA_CLIENT_ENCRYPTION
-          value: {{ .Values.cluster.clientEncryption }}
+          value: {{ .Values.cluster.clientEncryption | quote }}
         - name: CASSANDRA_TRUSTSTORE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -214,14 +214,14 @@ spec:
 {{- end }}
       volumes:
 {{- if .Values.tlsEncryptionSecretName }}
-        - name: encryption-secrets
-          secret:
-            secretName: {{ .Values.tlsEncryptionSecretName }}
-            items:
-            - key: keystore
-              path: keystore
-            - key: truststore
-              path: truststore
+      - name: encryption-secrets
+        secret:
+          secretName: {{ .Values.tlsEncryptionSecretName }}
+          items:
+          - key: keystore
+            path: keystore
+          - key: truststore
+            path: truststore
 {{- end }}
 {{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
       - name: configurations
