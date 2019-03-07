@@ -3,7 +3,7 @@
 ## Current available global Docker image parameters: imageRegistry and imagepullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryMame
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
