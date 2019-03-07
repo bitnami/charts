@@ -100,7 +100,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-chart-repo
-    tag: 1.4.0
+    tag: 1.4.0-r1
   initialRepos:
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
