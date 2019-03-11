@@ -50,8 +50,7 @@ Also, we can not use a single if because lazy evaluation is not an option
 {{- if .Values.global }}
 {{- if .Values.global.imagePullSecrets }}
 imagePullSecrets:
-{{- range
-.Values.global.imagePullSecrets }}
+{{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- else if .Values.image.pullSecrets }}
