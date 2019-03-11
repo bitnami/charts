@@ -25,6 +25,7 @@ spec:
         chart: {{ template "metrics-server.chart" . }}
     spec:
       serviceAccountName: {{ template "metrics-server.serviceAccountName" . }}
+{{- include "metrics-server.imagePullSecrets" . | indent 6 }}
       containers:
       - name: metrics-server
         image: {{ template "metrics-server.image" . }}
@@ -35,4 +36,3 @@ spec:
         command:
         - metrics-server
         - --secure-port={{ .Values.securePort }}
-
