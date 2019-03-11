@@ -39,12 +39,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "consul.imagePullSecrets" . | indent 6 }}
       {{- if eq .Values.antiAffinity "hard" }}
       affinity:
         {{- if .Values.nodeAffinity }}
@@ -168,8 +163,8 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command:              
-              - consul 
+              command:
+              - consul
               - leave
         volumeMounts:
         {{ if .Values.tlsEncryptionSecretName }}
@@ -184,10 +179,10 @@ spec:
         {{ if .Values.configmap }}
         - name: consul-config
           mountPath: /opt/bitnami/consul/conf/config.json
-          subPath: config.json 
+          subPath: config.json
         - name: consul-config
           mountPath: /opt/bitnami/consul/conf/connection.json
-          subPath: connection.json 
+          subPath: connection.json
         {{ end }}
       {{- if .Values.metrics.enabled }}
       - name: metrics
@@ -258,5 +253,3 @@ spec:
         - name: data
           emptyDir: {}
 {{- end }}
-
-
