@@ -63,6 +63,7 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 | Parameter                       | Description                                      | Default                                                      |
 | ------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
 | `global.imageRegistry`          | Global Docker image registry                     | `nil`                                                        |
+| `global.imagePullSecrets`       | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
 | `replicaCount`                  | desired number of pods                           | `1`                                                          |
 | `server.image.registry`         | TensorFlow Serving image registry                | `docker.io`                                                  |
 | `server.image.repository`       | TensorFlow Serving Image name                    | `bitnami/tensorflow-serving`                                 |
