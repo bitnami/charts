@@ -20,6 +20,13 @@ image:
   ##
   pullPolicy: Always
 
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
 rbac:
   # Specifies whether RBAC resources should be created
   create: true
