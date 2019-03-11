@@ -57,7 +57,7 @@ spec:
       {{- end }}
       containers:
       - name: cassandra
-        command: 
+        command:
           - bash
           - -ec
           # Node 0 is the password seeder
@@ -65,7 +65,7 @@ spec:
               if [[ $HOSTNAME =~ (.*)-0$ ]]; then
                 echo "Setting node as password seeder"
                 export CASSANDRA_PASSWORD_SEEDER=yes
-              else 
+              else
                 # Only node 0 will execute the startup initdb scripts
                 export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
@@ -184,18 +184,12 @@ spec:
         - name: configurations
           mountPath: /bitnami/cassandra/conf
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Values.image.pullSecrets }}
-      {{- end }}
+{{- include "cassandra.imagePullSecrets" . | indent 6 }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "cassandra.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        {{- if .Values.metrics.image.pullSecrets }}
-        imagePullSecrets:
-          - name: {{ .Values.metrics.image.pullSecrets }}
-        {{- end }}
+{{- include "cassandra.imagePullSecrets" . | indent 8 }}
         ports:
           - name: metrics
             containerPort: 8080
