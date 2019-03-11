@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 |          Parameter                    |                                                  Description                                             |                                     Default                        |
 |---------------------------------------|----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------- |
 | `global.imageRegistry`                | Global Docker image registry                                                                             | `nil`                                                              |
+| `global.imagePullSecrets`             | Global Docker registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)            |
 | `image.registry`                      | etcd image registry                                                                                      | `docker.io`                                                        |
 | `image.repository`                    | etcd Image name                                                                                          | `bitnami/etcd`                                                     |
 | `image.tag`                           | etcd Image tag                                                                                           | `{VERSION}`                                                        |
@@ -152,7 +153,7 @@ $ helm install bitnami/etcd --set envVarsConfigMap=etcd-env-vars
   - Using a custom etcd.conf.yml: The etcd chart allows mounting a custom etcd.conf.yml file using the `configFileConfigMap` value. Example:
 
 ```console
-$ kubectl create configmap etcd-conf --from-file=etcd.conf.yml 
+$ kubectl create configmap etcd-conf --from-file=etcd.conf.yml
 
 $ helm install bitnami/etcd --set configFileConfigMap=etcd-conf
 ```
