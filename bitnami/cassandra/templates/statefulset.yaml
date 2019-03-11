@@ -55,6 +55,7 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
       {{- end }}
+{{- include "cassandra.imagePullSecrets" . | indent 6 }}
       containers:
       - name: cassandra
         command:
@@ -184,12 +185,10 @@ spec:
         - name: configurations
           mountPath: /bitnami/cassandra/conf
       {{- end }}
-{{- include "cassandra.imagePullSecrets" . | indent 6 }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "cassandra.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-{{- include "cassandra.imagePullSecrets" . | indent 8 }}
         ports:
           - name: metrics
             containerPort: 8080
