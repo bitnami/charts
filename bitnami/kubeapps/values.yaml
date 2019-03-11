@@ -292,8 +292,8 @@ authProxy:
   # Image used for the proxy
   image:
     registry: docker.io
-    repository: keycloak/keycloak-gatekeeper
-    tag: 4.6.0.Final
+    repository: bitnami/keycloak-gatekeeper
+    tag: 2.3.0-r1
   # Mandatory parametes
   discoveryURL:
   clientID:

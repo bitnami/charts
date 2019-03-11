@@ -39,6 +39,7 @@ spec:
     {{- if .Values.authProxy.enabled }}
       - name: auth-proxy
         args:
+        - /keycloak-proxy
         - --client-id={{ required "You must fill \".Values.authProxy.clientID\" with the Client ID of the OIDC provider" .Values.authProxy.clientID }}
         - --client-secret={{ required "You must fill \".Values.authProxy.clientSecret\" with the Client Secret of the OIDC provider" .Values.authProxy.clientSecret }}
         - --discovery-url={{ required "You must fill \".Values.authProxy.discoveryURL\" with the OIDC provider URL" .Values.authProxy.discoveryURL }}
