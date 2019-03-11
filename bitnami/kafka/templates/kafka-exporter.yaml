@@ -25,12 +25,7 @@ spec:
         app: {{ template "kafka.name" . }}
         release: "{{ .Release.Name }}"
     spec:
-      {{- if .Values.metrics.kafka.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.metrics.kafka.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "kafka.imagePullSecrets" . | indent 6 }}
       containers:
       - image: {{ template  "kafka.metrics.kafka.image" . }}
         name: kafka-exporter
