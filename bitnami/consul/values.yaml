@@ -211,6 +211,12 @@ metrics:
     repository: prom/consul-exporter
     tag: v0.3.0
     pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
   resources: {}
   podAnnotations:
     prometheus.io/scrape: "true"
