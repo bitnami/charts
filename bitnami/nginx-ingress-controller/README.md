@@ -49,6 +49,7 @@ The following tables lists the configurable parameters of the nginx-ingress-cont
 Parameter | Description | Default
 --- | --- | ---
 `global.imageRegistry` | Global Docker image registry | `nil`
+`global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)
 `name` | name of the controller component | `controller`
 `image.registry` | name of the container image registry | `docker.io`
 `image.repository` | controller container image repository | `bitnami/nginx-ingress-controller`
