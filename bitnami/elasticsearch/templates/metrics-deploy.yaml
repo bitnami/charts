@@ -14,7 +14,7 @@ spec:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}
       release: "{{ .Release.Name }}"
-      role: "metrics"      
+      role: "metrics"
   replicas: 1
   template:
     metadata:
@@ -24,12 +24,7 @@ spec:
         chart: {{ template "elasticsearch.chart" . }}
         role: "metrics"
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
       containers:
       - name: {{ template "elasticsearch.metrics.fullname" . }}
         image:  {{ template "metrics.image" . }}
