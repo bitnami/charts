@@ -29,12 +29,7 @@ spec:
   {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.server.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.server.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "tensorflow-resnet.imagePullSecrets" . | indent 6 }}
       initContainers:
       - name: seed
         image: "{{ template "tensorflow-resnet.client.image" . }}"

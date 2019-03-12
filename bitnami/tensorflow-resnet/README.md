@@ -63,6 +63,7 @@ The following tables lists the configurable parameters of the TensorFlow ResNet 
 | Parameter                                     | Description                                          | Default                                                      |
 | ------------------------------------------    | -----------------------------------------------------| -------------------------------------------------------------|
 | `global.imageRegistry`                        | Global Docker image registry                         | `nil`                                                        |
+| `global.imagePullSecrets`                     | Global Docker registry secret names as an array      | `[]` (does not add image pull secrets to deployed pods)      |
 | `server.image.registry`                       | TensorFlow Serving image registry                    | `docker.io`                                                  |
 | `server.image.repository`                     | TensorFlow Serving Image name                        | `bitnami/tensorflow-serving`                                 |
 | `server.image.tag`                            | TensorFlow Serving Image tag                         | `{VERSION}`                                                  |
