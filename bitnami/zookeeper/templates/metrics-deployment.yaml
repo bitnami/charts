@@ -24,18 +24,13 @@ spec:
         release: "{{ .Release.Name }}"
         app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
     spec:
-      {{- if .Values.metrics.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.metrics.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "zookeeper.imagePullSecrets" . | indent 6 }}
       containers:
       - image: {{ template  "metrics.image" . }}
         name: zookeeper-exporter
         command:
           - /usr/local/bin/zookeeper-exporter
-          - -zk-list 
+          - -zk-list
           {{- $replicaCount := int .Values.replicaCount }}
           {{- $followerPort := int .Values.service.followerPort }}
           {{- $electionPort := int .Values.service.electionPort }}

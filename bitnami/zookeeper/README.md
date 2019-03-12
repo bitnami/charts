@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 |              Parameter                |                              Description                            |                            Default                       |
 |---------------------------------------|---------------------------------------------------------------------|----------------------------------------------------------|
 | `global.imageRegistry`                | Global Docker image registry                                        | `nil`                                                    |
+| `global.imagePullSecrets`             | Global Docker registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.registry`                      | Zookeeper image registry                                            | `docker.io`                                              |
 | `image.repository`                    | Zookeeper Image name                                                | `bitnami/zookeeper`                                      |
 | `image.tag`                           | Zookeeper Image tag                                                 | `{VERSION}`                                              |
