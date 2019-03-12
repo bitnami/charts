@@ -52,6 +52,7 @@ The following table lists the configurable parameters of the MEAN chart and thei
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                              | `nil`                                                     |
+| `global.imagePullSecrets`               | Global Docker registry secret names as an array           | `[]` (does not add image pull secrets to deployed pods)   |
 | `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
 | `image.repository`                      | NodeJS image name                                         | `bitnami/node`                                            |
 | `image.tag`                             | NodeJS image tag                                          | `{VERSION}`                                               |
