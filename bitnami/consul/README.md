@@ -52,6 +52,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | Parameter                            | Description                                                      | Default                                                    |
 | ------------------------------------ | ---------------------------------------------------------------- | ---------------------------------------------------------- |
 | `global.imageRegistry`               | Global Docker image registry                                     | `nil`                                                      |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                  | `[]` (does not add image pull secrets to deployed pods)    |
 | `image.registry`                     | HashiCorp Consul image registry                                  | `docker.io`                                                |
 | `image.repository`                   | HashiCorp Consul image name                                      | `bitnami/consul`                                           |
 | `image.tag`                          | HashiCorp Consul image tag                                       | `{VERSION}`                                                |
