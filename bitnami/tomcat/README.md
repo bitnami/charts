@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 |           Parameter             |                 Description                  |                           Default                         |
 |---------------------------------|----------------------------------------------|---------------------------------------------------------- |
 | `global.imageRegistry`          | Global Docker image registry                 | `nil`                                                     |
+| `global.imagePullSecrets`       | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)|
 | `image.registry`                | Tomcat image registry                        | `docker.io`                                               |
 | `image.repository`              | Tomcat Image name                            | `bitnami/tomcat`                                          |
 | `image.tag`                     | Tomcat Image tag                             | `{VERSION}`                                               |
