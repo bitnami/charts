@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 |             Parameter                     |                     Description                       |                              Default                              |
 |-------------------------------------------|-------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`                    | Global Docker image registry                          | `nil`                                                             |
+| `global.imagePullSecrets`                 | Global Docker registry secret names as an array       | `[]` (does not add image pull secrets to deployed pods)           |
 | `image.registry`                          | MySQL image registry                                  | `docker.io`                                                       |
 | `image.repository`                        | MySQL Image name                                      | `bitnami/mysql`                                                   |
 | `image.tag`                               | MySQL Image tag                                       | `{VERSION}`                                                       |
