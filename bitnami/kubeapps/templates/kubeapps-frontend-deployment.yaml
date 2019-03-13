@@ -21,6 +21,7 @@ spec:
         app: {{ template "kubeapps.fullname" . }}
         release: {{ .Release.Name }}
     spec:
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       containers:
       - name: nginx
         image: {{ template "kubeapps.image" (list .Values.frontend.image .Values.global) }}
