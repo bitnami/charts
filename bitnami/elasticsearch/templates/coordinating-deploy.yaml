@@ -73,6 +73,8 @@ spec:
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: {{ .Values.name | quote }}
+        - name: ELASTICSEARCH_CLUSTER_HOSTS
+          value: {{ template "elasticsearch.discovery.fullname" . }}
         {{- if .Values.plugins }}
         - name: ELASTICSEARCH_PLUGINS
           value: {{ .Values.plugins | quote }}
@@ -113,9 +115,9 @@ spec:
         resources:
 {{ toYaml .Values.coordinating.resources | indent 10 }}
         volumeMounts:
-        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch_custom.yml
+        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
           name: "config"
-          subPath: elasticsearch_custom.yml
+          subPath: elasticsearch.yml
         - name: "data"
           mountPath: "/bitnami/elasticsearch/data/"
       volumes:
