@@ -114,9 +114,11 @@ spec:
         resources:
 {{ toYaml .Values.data.resources | indent 10 }}
         volumeMounts:
+        {{- if .Values.config }}
         - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
           name: "config"
           subPath: elasticsearch.yml
+        {{- end }}
         - name: "data"
           mountPath: "/bitnami/elasticsearch/data"
       volumes:
