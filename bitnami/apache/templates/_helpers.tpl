@@ -76,7 +76,7 @@ imagePullSecrets:
 {{/*
 Return the proper image name (for the metrics image)
 */}}
-{{- define "metrics.image" -}}
+{{- define "apache.metrics.image" -}}
 {{- $registryName := .Values.metrics.image.registry -}}
 {{- $repositoryName := .Values.metrics.image.repository -}}
 {{- $tag := .Values.metrics.image.tag | toString -}}

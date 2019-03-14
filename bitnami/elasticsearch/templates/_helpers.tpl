@@ -102,7 +102,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*
 Return the proper ES exporter image name
 */}}
-{{- define "metrics.image" -}}
+{{- define "elasticsearch.metrics.image" -}}
 {{- $registryName := .Values.metrics.image.registry -}}
 {{- $repositoryName := .Values.metrics.image.repository -}}
 {{- $tag := .Values.metrics.image.tag | toString -}}

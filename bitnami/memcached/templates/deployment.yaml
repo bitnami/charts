@@ -65,7 +65,7 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "memcached.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         ports:
         - name: metrics

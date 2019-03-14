@@ -48,7 +48,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{/*
 Return the proper metrics image name
 */}}
-{{- define "metrics.image" -}}
+{{- define "consul.metrics.image" -}}
 {{- $registryName := .Values.metrics.image.registry -}}
 {{- $repositoryName := .Values.metrics.image.repository -}}
 {{- $tag := .Values.metrics.image.tag | toString -}}

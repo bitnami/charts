@@ -63,7 +63,7 @@ spec:
           mountPath: /bitnami/apache
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "apache.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: [ '/bin/apache_exporter', '-scrape_uri', 'http://status.localhost:8080/server-status/?auto']
         ports:

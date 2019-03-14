@@ -27,7 +27,7 @@ spec:
 {{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
       containers:
       - name: {{ template "elasticsearch.metrics.fullname" . }}
-        image:  {{ template "metrics.image" . }}
+        image:  {{ template "elasticsearch.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         args: [ "-es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
         ports:

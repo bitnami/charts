@@ -26,7 +26,7 @@ spec:
     spec:
 {{- include "zookeeper.imagePullSecrets" . | indent 6 }}
       containers:
-      - image: {{ template  "metrics.image" . }}
+      - image: {{ template "zookeeper.metrics.image" . }}
         name: zookeeper-exporter
         command:
           - /usr/local/bin/zookeeper-exporter
