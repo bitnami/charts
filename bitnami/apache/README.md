@@ -44,30 +44,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Apache chart and their default values.
 
-| Parameter                         | Description                           | Default                                                   |
-| --------------------------------- | ------------------------------------- | --------------------------------------------------------- |
-| `global.imageRegistry`            | Global Docker image registry          | `nil`                                                     |
-| `image.registry`                  | Apache image registry                 | `docker.io`                                               |
-| `image.repository`                | Apache Image name                     | `bitnami/apache`                                          |
-| `image.tag`                       | Apache Image tag                      | `{VERSION}`                                               |
-| `image.pullPolicy`                | Apache image pull policy              | `Always`                                                  |
-| `image.pullSecrets`               | Specify docker-registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods)  |
-| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
-| `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`                                          |
-| `metrics.image.repository`                 | Apache exporter image name                                                                                      | `lusotycoon/apache-exporter`                           |
-| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `v0.5.0`                                            |
-| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `nil`                                                |
-| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}`                                                   |
-| `metrics.resources`                        | Exporter resource requests/limit                                                                               | {}                        |
-| `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
-| `service.port`                    | Service HTTP port                  | `80`                                          |
-| `service.httpsPort`                    | Service HTTPS port                   | `443`                                          |
-| `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
-| `service.nodePorts.https`                | Kubernetes https node port                 | `""`                                                    |
-| `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
-| `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
+| Parameter                         | Description                                       | Default                                                      |
+| --------------------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
+| `global.imageRegistry`            | Global Docker image registry                      | `nil`                                                        |
+| `global.imagePullSecrets`         | Global Docker registry secret names as an array   | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.registry`                  | Apache Docker image registry                      | `docker.io`                                                  |
+| `image.repository`                | Apache Docker image name                          | `bitnami/apache`                                             |
+| `image.tag`                       | Apache Docker image tag                           | `{VERSION}`                                                  |
+| `image.pullPolicy`                | Apache Docker image pull policy                   | `Always`                                                     |
+| `image.pullSecrets`               | Specify Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
+| `podAnnotations`                  | Pod annotations                                   | `{}`                                                         |
+| `metrics.enabled`                 | Start a side-car prometheus exporter              | `false`                                                      |
+| `metrics.image.registry`          | Apache exporter image registry                    | `docker.io`                                                  |
+| `metrics.image.repository`        | Apache exporter image name                        | `lusotycoon/apache-exporter`                                 |
+| `metrics.image.tag`               | Apache exporter image tag                         | `v0.5.0`                                                     |
+| `metrics.image.pullPolicy`        | Apache exporter image pull policy                 | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`       | Specify Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`          | Additional annotations for Metrics exporter pod   | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`               | Exporter resource requests/limit                  | {}                                                           |
+| `service.type`                    | Kubernetes Service type                           | `LoadBalancer`                                               |
+| `service.port`                    | Service HTTP port                                 | `80`                                                         |
+| `service.httpsPort`               | Service HTTPS port                                | `443`                                                        |
+| `service.nodePorts.http`          | Kubernetes http node port                         | `""`                                                         |
+| `service.nodePorts.https`         | Kubernetes https node port                        | `""`                                                         |
+| `service.externalTrafficPolicy`   | Enable client source IP preservation              | `Cluster`                                                    |
+| `service.loadBalancerIP`          | LoadBalancer service IP address                   | `""`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

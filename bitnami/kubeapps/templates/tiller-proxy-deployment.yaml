@@ -23,6 +23,7 @@ spec:
       # Increase termination timeout to let remaining operations to finish before killing the pods
       # This is because new releases/upgrades/deletions are synchronous operations
       terminationGracePeriodSeconds: 300
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       containers:
       - name: proxy
         image: {{ template "kubeapps.image" (list .Values.tillerProxy.image .Values.global) }}

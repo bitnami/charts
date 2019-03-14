@@ -34,12 +34,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.server.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.server.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "tensorflow-inception.imagePullSecrets" . | indent 6 }}
       initContainers:
       - name: seed
         image: "{{ template "tensorflow-inception.client.image" . }}"

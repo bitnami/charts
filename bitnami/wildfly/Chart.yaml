@@ -1,7 +1,7 @@
 apiVersion: v1
 name: wildfly
-version: 2.1.6
-appVersion: 15.0.1
+version: 2.2.1
+appVersion: 16.0.0
 description: Chart for Wildfly
 keywords:
 - wildfly

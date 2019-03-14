@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 |         Parameter          |              Description               |                               Default                     |
 |----------------------------|----------------------------------------|---------------------------------------------------------- |
 | `global.imageRegistry`     | Global Docker image registry           | `nil`                                                     |
+| `global.imagePullSecrets`  | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`           | Jenkins image registry                 | `docker.io`                                               |
 | `image.repository`         | Jenkins Image name                     | `bitnami/jenkins`                                         |
 | `image.tag`                | Jenkins Image tag                      | `{VERSION}`                                               |

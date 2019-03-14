@@ -160,3 +160,20 @@ Frontend service port number
 8080
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "kubeapps.imagePullSecrets" -}}
+{{/*
+We can not use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+{{- if .Values.global.imagePullSecrets }}
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+{{- end -}}

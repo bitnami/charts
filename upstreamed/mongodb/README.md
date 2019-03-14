@@ -48,6 +48,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | Parameter                                          | Description                                                                                  | Default                                                 |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`                             | Global Docker image registry                                                                 | `nil`                                                   |
+| `global.imagePullSecrets`                          | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`                                   | MongoDB image registry                                                                       | `docker.io`                                             |
 | `image.repository`                                 | MongoDB Image name                                                                           | `bitnami/mongodb`                                       |
 | `image.tag`                                        | MongoDB Image tag                                                                            | `{VERSION}`                                             |
@@ -95,7 +96,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `persistence.accessMode`                           | Use volume as ReadOnly or ReadWrite                                                          | `ReadWriteOnce`                                         |
 | `persistence.size`                                 | Size of data volume                                                                          | `8Gi`                                                   |
 | `persistence.annotations`                          | Persistent Volume annotations                                                                | `{}`                                                    |
-| `persistence.existingClaim`                        | Name of an existing PVC to use (avoids creating one if this is given)                        | `nil`                                                   |
+| `persistence.existingClaim`                        | Name of an existing PVC to use (avoids creating one if this is given)                       | `nil`                                                   |
+| `extraInitContainers`                     | Additional init containers as a string to be passed to the `tpl` function                          | `{}`   |                                                |
 | `livenessProbe.enabled`                            | Enable/disable the Liveness probe                                                            | `true`                                                  |
 | `livenessProbe.initialDelaySeconds`                | Delay before liveness probe is initiated                                                     | `30`                                                    |
 | `livenessProbe.periodSeconds`                      | How often to perform the probe                                                               | `10`                                                    |

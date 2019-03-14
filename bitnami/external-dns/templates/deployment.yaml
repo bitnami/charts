@@ -31,12 +31,7 @@ spec:
 {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range $sec := .Values.image.pullSecrets }}
-        - name: {{$sec | quote }}
-      {{- end }}
-      {{- end }}
+{{- include "external-dns.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}

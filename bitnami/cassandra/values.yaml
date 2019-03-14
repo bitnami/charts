@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami Cassandra image version
 ## ref: https://hub.docker.com/r/bitnami/cassandra/tags/
@@ -24,7 +27,7 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
 
 ## Specify a service type
 ## ref: http://kubernetes.io/docs/user-guide/services/
@@ -89,7 +92,7 @@ resources: {}
 ## Secret with keystore, keystore password, truststore, truststore password
 # tlsEncryptionSecretName:
 ## ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
-# existingConfiguration: 
+# existingConfiguration:
 
 ## Cluster parameters
 ##
@@ -112,7 +115,7 @@ jvm:
   ##
   extraOpts:
 
-  ## Memory settings: These are calculated automatically 
+  ## Memory settings: These are calculated automatically
   ## unless specified otherwise
   ##
   # maxHeapSize: 4G
@@ -124,12 +127,12 @@ dbUser:
   user: cassandra
   forcePassword: false
   # password:
-  # existingSecret: 
+  # existingSecret:
 
 ## ConfigMap with cql scripts. Useful for creating a keyspace
 ## and pre-populating data
 ##
-# initDBConfigMap: 
+# initDBConfigMap:
 
 ## Liveness and Readiness probe values.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
@@ -208,7 +211,12 @@ metrics:
     pullPolicy: IfNotPresent
     repository: criteord/cassandra_exporter
     tag: 2.0.4
-    # pullSecrets: 
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
   resources: {}
   podAnnotations:
     prometheus.io/scrape: "true"

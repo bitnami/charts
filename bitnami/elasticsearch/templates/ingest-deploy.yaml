@@ -27,8 +27,8 @@ spec:
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
-      {{- if eq .Values.ingest.antiAffinity "hard" }}
       affinity:
+      {{- if eq .Values.ingest.antiAffinity "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: "kubernetes.io/hostname"
@@ -38,7 +38,6 @@ spec:
                   release: {{ .Release.Name | quote }}
                   role: "ingest"
       {{- else if eq .Values.ingest.antiAffinity "soft" }}
-      affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
@@ -50,12 +49,10 @@ spec:
                   release: {{ .Release.Name | quote }}
                   role: "ingest"
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
+      {{- if .Values.ingest.nodeAffinity }}
+{{ toYaml .Values.ingest.nodeAffinity | indent 8 }}
       {{- end }}
+{{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
       {{- if .Values.sysctlImage.enabled }}
       ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
       initContainers:
