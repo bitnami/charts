@@ -103,18 +103,46 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the proper ES exporter image name
 */}}
 {{- define "metrics.image" -}}
-{{- $registryName :=  default "docker.io" .Values.metrics.image.registry -}}
-{{- $tag := default "latest" .Values.metrics.image.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName .Values.metrics.image.repository $tag -}}
+{{- $registryName := .Values.metrics.image.registry -}}
+{{- $repositoryName := .Values.metrics.image.repository -}}
+{{- $tag := .Values.metrics.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Return the proper sysctl image name
 */}}
 {{- define "sysctl.image" -}}
-{{- $registryName :=  default "docker.io" .Values.sysctlImage.registry -}}
-{{- $tag := default "latest" .Values.sysctlImage.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName .Values.sysctlImage.repository $tag -}}
+{{- $registryName := .Values.sysctlImage.image.registry -}}
+{{- $repositoryName := .Values.sysctlImage.image.repository -}}
+{{- $tag := .Values.sysctlImage.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

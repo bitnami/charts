@@ -186,7 +186,7 @@ spec:
         {{ end }}
       {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: "{{ .Values.metrics.image.registry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+        image: "{{ template "metrics.image" . }}"
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
         command: [ '/bin/consul_exporter' , '--consul.server={{ template "consul.fullname" . }}:{{ .Values.port }}']

@@ -187,7 +187,7 @@ spec:
       {{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "cassandra.metrics.image" . }}
+        image: {{ template "metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         ports:
           - name: metrics
