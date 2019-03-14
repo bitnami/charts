@@ -122,9 +122,11 @@ spec:
         - name: "data"
           mountPath: "/bitnami/elasticsearch/data"
       volumes:
+      {{- if .Values.config }}
       - name: "config"
         configMap:
           name: {{ template "elasticsearch.fullname" . }}
+      {{- end }}
 {{- if .Values.data.persistence.enabled }}
   volumeClaimTemplates:
   - metadata:
