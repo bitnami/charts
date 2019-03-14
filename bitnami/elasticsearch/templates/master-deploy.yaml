@@ -122,8 +122,10 @@ spec:
         - name: "data"
           mountPath: "/bitnami/elasticsearch/data"
       volumes:
+      {{- if .Values.config }}
       - name: "config"
         configMap:
           name: {{ template "elasticsearch.fullname" . }}
+      {{- end }}
       - name: "data"
         emptyDir: {}
