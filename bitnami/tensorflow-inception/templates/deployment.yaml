@@ -75,7 +75,7 @@ spec:
           mountPath: "/bitnami/model-data"
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "tensorflow-inception.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: ['python', 'tf_serving_exporter.py', '--tf_port', '{{ .Values.server.port }}', '--port', '9118', '--model_name', 'inception-v3']
         ports:

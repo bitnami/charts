@@ -84,7 +84,7 @@ spec:
           mountPath: "/bitnami/model-data"
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "tensorflow-resnet.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: ['python', 'tf_serving_exporter.py', '--tf_port', '{{ .Values.server.port }}', '--port', {{ .Values.metrics.port }}, '--model_name', 'resnet']
         ports:
