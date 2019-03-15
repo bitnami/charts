@@ -125,7 +125,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{/*
 Return the proper sysctl image name
 */}}
-{{- define "sysctl.image" -}}
+{{- define "elasticsearch.sysctl.image" -}}
 {{- $registryName := .Values.sysctlImage.image.registry -}}
 {{- $repositoryName := .Values.sysctlImage.image.repository -}}
 {{- $tag := .Values.sysctlImage.image.tag | toString -}}
