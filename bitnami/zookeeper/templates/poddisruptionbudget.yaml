@@ -1,0 +1,20 @@
+{{- if gt .Values.replicaCount 1.0 -}}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "zookeeper.fullname" . }}
+  labels:
+    app: {{ template "zookeeper.name" . }}
+    chart: {{ template "zookeeper.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "zookeeper.name" . }}
+      release: {{ .Release.Name | quote }}
+      app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+{{ toYaml .Values.podDisruptionBudget | indent 2 }}
+{{- end }}
