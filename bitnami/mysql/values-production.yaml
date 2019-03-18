@@ -87,6 +87,10 @@ replication:
 
 master:
   antiAffinity: soft
+  ## updateStrategy for MySQL Master StatefulSet
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  updateStrategy:
+    type: RollingUpdate
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -176,6 +180,10 @@ master:
 slave:
   replicas: 2
   antiAffinity: soft
+  ## updateStrategy for MySQL Slave StatefulSet
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  updateStrategy:
+    type: RollingUpdate
   persistence:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##

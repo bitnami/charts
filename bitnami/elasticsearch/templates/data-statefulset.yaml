@@ -9,6 +9,14 @@ metadata:
     release: {{ .Release.Name | quote }}
     role: "data"
 spec:
+  updateStrategy:
+    type: {{ .Values.data.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.data.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else if .Values.data.updateStrategy.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.data.updateStrategy.rollingUpdatePartition }}
+    {{- end }}
   selector:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}

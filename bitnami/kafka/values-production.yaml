@@ -31,7 +31,16 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+##
 updateStrategy: RollingUpdate
+
+## Partition update strategy
+## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+##
+# rollingUpdatePartition:
+
 replicaCount: 3
 
 config: |-

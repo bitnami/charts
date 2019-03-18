@@ -74,6 +74,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `securityContext.enabled`            | Enable security context                                          | `true`                                                     |
 | `securityContext.fsGroup`            | Group ID for the container                                       | `1001`                                                     |
 | `securityContext.runAsUser`          | User ID for the container                                        | `1001`                                                     |
+| `updateStrategy.type`                | Statefulset update strategy policy                               | `RollingUpdate`                                            |
 | `persistence.enabled`                | Use a PVC to persist data                                        | `true`                                                     |
 | `persistence.storageClass`           | Storage class of backing PVC                                     | `nil` (uses alpha storage class annotation)                |
 | `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                              | `ReadWriteOnce`                                            |

@@ -67,6 +67,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 | `replication.user`                        | MySQL replication user                                | `replicator`                                                      |
 | `replication.password`                    | MySQL replication user password                       | _random 10 character alphanumeric string_                         |
 | `master.antiAffinity`                     | Master pod anti-affinity policy                       | `soft`                                                            |
+| `master.updateStrategy.type`              | Master statefulset update strategy policy             | `RollingUpdate`                                                   |
 | `master.persistence.enabled`              | Enable persistence using a `PersistentVolumeClaim`    | `true`                                                            |
 | `master.persistence.existingClaim`        | Provide an existing `PersistentVolumeClaim`           | `nil`                                                             |
 | `master.persistence.mountPath`            | Configure `PersistentVolumeClaim` mount path          | `/bitnami/mysql`                                                  |
@@ -90,6 +91,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 | `master.readinessProbe.failureThreshold`  | Minimum consecutive failures for the probe (master)   | `3`                                                               |
 | `slave.replicas`                          | Desired number of slave replicas                      | `1`                                                               |
 | `slave.antiAffinity`                      | Slave pod anti-affinity policy                        | `soft`                                                            |
+| `slave.updateStrategy.type`               | Slave statefulset update strategy policy              | `RollingUpdate`                                                   |
 | `slave.persistence.enabled`               | Enable persistence using a `PersistentVolumeClaim`    | `true`                                                            |
 | `slave.persistence.mountPath`             | Configure `PersistentVolumeClaim` mount path          | `/bitnami/mysql`                                                  |
 | `slave.persistence.annotations`           | Persistent Volume Claim annotations                   | `{}`                                                              |

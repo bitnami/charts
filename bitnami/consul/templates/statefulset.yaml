@@ -15,7 +15,10 @@ spec:
   serviceName: "{{ template "consul.fullname" . }}"
   replicas: {{ default 3 .Values.replicas }}
   updateStrategy:
-    type: RollingUpdate
+    type: {{ .Values.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
   template:
     metadata:
       name: "{{ template "consul.fullname" . }}"

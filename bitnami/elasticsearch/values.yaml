@@ -180,6 +180,11 @@ coordinating:
 data:
   name: data
   replicas: 2
+  ## updateStrategy for ElasticSearch Data statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  updateStrategy:
+    type: RollingUpdate
+    # rollingUpdatePartition
   heapSize: 1024m
   antiAffinity: "soft"
   ## node affinity

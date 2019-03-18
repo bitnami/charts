@@ -16,7 +16,13 @@ spec:
   podManagementPolicy: "Parallel"
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
-    type: {{ .Values.updateStratey }}
+    type: {{ .Values.updateStrategy | quote }}
+    {{- if (eq "Recreate" .Values.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.rollingUpdatePartition }}
+    {{- end }}
   selector:
     matchLabels:
       app: {{ template "kafka.name" . }}
