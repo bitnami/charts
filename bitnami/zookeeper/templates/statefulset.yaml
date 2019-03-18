@@ -13,7 +13,9 @@ spec:
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   updateStrategy:
     type: {{ .Values.updateStrategy | quote }}
-    {{- if .Values.rollingUpdatePartition }}
+    {{- if (eq "Recreate" .Values.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.rollingUpdatePartition }}
     rollingUpdate:
       partition: {{ .Values.rollingUpdatePartition }}
     {{- end }}

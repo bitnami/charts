@@ -70,6 +70,11 @@ domain: consul
 ## Consul raft multiplier.
 raftMultiplier: '1'
 
+## updateStrategy for Consul statefulset
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+updateStrategy:
+  type: RollingUpdate
+
 ## Consul data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
 ## If set to "-", storageClassName: "", which disables dynamic provisioning

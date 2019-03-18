@@ -16,7 +16,9 @@ spec:
   replicas: {{ .Values.cluster.replicaCount }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStrategy }}
-    {{- if .Values.statefulset.rollingUpdatePartition }}
+    {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.statefulset.rollingUpdatePartition }}
     rollingUpdate:
       partition: {{ .Values.statefulset.rollingUpdatePartition }}
     {{- end }}
