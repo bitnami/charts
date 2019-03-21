@@ -191,6 +191,15 @@ securityContext:
 service:
   type: ClusterIP
   port: 9092
+
+  ## Specify the NodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+
+  ## Use loadBalancerIP to request a specific static IP,
+  # loadBalancerIP:
+
   ## Service annotations done as key:value pairs
   annotations:
 
