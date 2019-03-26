@@ -18,7 +18,7 @@ spec:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
     rollingUpdate: null
-    {{- else }}
+    {{- end }}
   template:
     metadata:
       name: "{{ template "consul.fullname" . }}"
