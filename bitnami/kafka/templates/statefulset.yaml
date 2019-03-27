@@ -116,11 +116,6 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-inter-broker-password
-        {{- end }}
-        {{- if .Values.auth.certificatesPassword }}
-        - name: KAFKA_CERTIFICATE_PASSWORD
-          value: {{ .Values.auth.certificatesPassword | quote }}
-        {{- end }}
         {{- if .Values.auth.zookeeperUser }}
         - name: KAFKA_ZOOKEEPER_USER
           value: {{ .Values.auth.zookeeperUser | quote }}
@@ -131,6 +126,11 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-zookeeper-password
+        {{- end }}
+        {{- end }}
+        {{- if .Values.auth.certificatesPassword }}
+        - name: KAFKA_CERTIFICATE_PASSWORD
+          value: {{ .Values.auth.certificatesPassword | quote }}
         {{- end }}
         - name: ALLOW_PLAINTEXT_LISTENER
           {{- if .Values.auth.enabled }}
