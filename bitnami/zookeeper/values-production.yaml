@@ -38,11 +38,12 @@ updateStrategy: RollingUpdate
 
 
 ## Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
+## The PDB will only be created if replicaCount is greater than 1
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
 ##
 podDisruptionBudget:
   maxUnavailable: 1  
-
+  
 
 ## Partition update strategy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
