@@ -119,6 +119,15 @@ maxMessageBytes: _1000012
 ## Default replication factors for automatically created topics
 defaultReplicationFactor: 1
 
+## The replication factor for the offsets topic
+offsetsTopicReplicationFactor: 1
+
+## The replication factor for the transaction topic
+transactionStateLogReplicationFactor: 1
+
+## Overridden min.insync.replicas config for the transaction topic
+transactionStateLogMinIsr: 1
+
 ## The number of threads doing disk I/O.
 numIoThreads: 8
 

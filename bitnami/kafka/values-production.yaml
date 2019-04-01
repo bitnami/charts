@@ -117,7 +117,16 @@ logsDirs: /opt/bitnami/kafka/data
 maxMessageBytes: _1000012
 
 ## Default replication factors for automatically created topics
-defaultReplicationFactor: 1
+defaultReplicationFactor: 3
+
+## The replication factor for the offsets topic
+offsetsTopicReplicationFactor: 3
+
+## The replication factor for the transaction topic
+transactionStateLogReplicationFactor: 3
+
+## Overridden min.insync.replicas config for the transaction topic
+transactionStateLogMinIsr: 3
 
 ## The number of threads doing disk I/O.
 numIoThreads: 8

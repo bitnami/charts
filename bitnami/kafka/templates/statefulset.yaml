@@ -166,6 +166,12 @@ spec:
           value: {{ .Values.logsDirs }}
         - name: KAFKA_DEFAULT_REPLICATION_FACTOR
           value: {{ .Values.defaultReplicationFactor | quote }}
+        - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+          value: {{ .Values.offsetsTopicReplicationFactor | quote }}
+        - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+          value: {{ .Values.transactionStateLogReplicationFactor | quote }}
+        - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+          value: {{ .Values.transactionStateLogMinIsr | quote }}
         - name: KAFKA_NUM_IO_THREADS
           value: {{ .Values.numIoThreads | quote }}
         - name: KAFKA_NUM_NETWORK_THREADS
