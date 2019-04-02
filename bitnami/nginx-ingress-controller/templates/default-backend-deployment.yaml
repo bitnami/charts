@@ -48,7 +48,7 @@ spec:
           {{- end }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /
               port: {{ .Values.defaultBackend.port }}
               scheme: HTTP
             initialDelaySeconds: 30
