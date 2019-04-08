@@ -52,6 +52,10 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
       {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
       containers:
       - name: "{{ template "kafka.fullname" . }}"
         image: "{{ template "kafka.image" . }}"
@@ -170,6 +174,8 @@ spec:
           value: {{ .Values.offsetsTopicReplicationFactor | quote }}
         - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
           value: {{ .Values.transactionStateLogReplicationFactor | quote }}
+        - name: KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
+          value: {{ .Values.sslEndpointIdentificationAlgorithm | quote }}
         - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
           value: {{ .Values.transactionStateLogMinIsr | quote }}
         - name: KAFKA_NUM_IO_THREADS

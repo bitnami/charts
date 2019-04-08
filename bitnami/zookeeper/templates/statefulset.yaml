@@ -46,6 +46,10 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
       {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
       containers:
       - name: "{{ template "zookeeper.fullname" . }}"
         image: "{{ template "zookeeper.image" . }}"
