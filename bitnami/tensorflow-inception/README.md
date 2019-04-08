@@ -1,6 +1,6 @@
 # Deprecation Notice
 
-The Bitnami TensorFlow Serving Inception v3 chart is deprecated. Consider using [TensorFlow Serving ResNet](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet) instead. This repository will be archived in 30 days.
+The Bitnami TensorFlow Serving Inception v3 chart is deprecated. Consider using [TensorFlow Serving ResNet](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet) instead. This repository will be archived in 15 days.
 
 # TensorFlow Serving Inception v3
 
