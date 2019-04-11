@@ -52,6 +52,10 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
       {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
       containers:
       - name: "{{ template "kafka.fullname" . }}"
         image: "{{ template "kafka.image" . }}"
@@ -116,11 +120,6 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-inter-broker-password
-        {{- end }}
-        {{- if .Values.auth.certificatesPassword }}
-        - name: KAFKA_CERTIFICATE_PASSWORD
-          value: {{ .Values.auth.certificatesPassword | quote }}
-        {{- end }}
         {{- if .Values.auth.zookeeperUser }}
         - name: KAFKA_ZOOKEEPER_USER
           value: {{ .Values.auth.zookeeperUser | quote }}
@@ -131,6 +130,11 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-zookeeper-password
+        {{- end }}
+        {{- end }}
+        {{- if .Values.auth.certificatesPassword }}
+        - name: KAFKA_CERTIFICATE_PASSWORD
+          value: {{ .Values.auth.certificatesPassword | quote }}
         {{- end }}
         - name: ALLOW_PLAINTEXT_LISTENER
           {{- if .Values.auth.enabled }}
@@ -166,6 +170,14 @@ spec:
           value: {{ .Values.logsDirs }}
         - name: KAFKA_DEFAULT_REPLICATION_FACTOR
           value: {{ .Values.defaultReplicationFactor | quote }}
+        - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+          value: {{ .Values.offsetsTopicReplicationFactor | quote }}
+        - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+          value: {{ .Values.transactionStateLogReplicationFactor | quote }}
+        - name: KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
+          value: {{ .Values.sslEndpointIdentificationAlgorithm | quote }}
+        - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+          value: {{ .Values.transactionStateLogMinIsr | quote }}
         - name: KAFKA_NUM_IO_THREADS
           value: {{ .Values.numIoThreads | quote }}
         - name: KAFKA_NUM_NETWORK_THREADS

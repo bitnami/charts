@@ -87,6 +87,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `persistence.annotations`             | Annotations for the PVC                                             | `{}`                                                     |
 | `nodeSelector`                        | Node labels for pod assignment                                      | `{}`                                                     |
 | `tolerations`                         | Toleration labels for pod assignment                                | `[]`                                                     |
+| `affinity`                            | Map of node/pod affinities                                          | `{}`                                                     |
 | `resources`                           | CPU/Memory resource requests/limits                                 | Memory: `256Mi`, CPU: `250m`                             |
 | `livenessProbe.enabled`               | would you like a livessProbed to be enabled                         | `true`                                                   |
 | `livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                            | 30                                                       |
