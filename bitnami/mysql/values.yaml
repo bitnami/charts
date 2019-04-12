@@ -55,6 +55,7 @@ root:
 db:
   ## MySQL username and password
   ## ref: https://github.com/bitnami/bitnami-docker-mysql#creating-a-database-user-on-first-run
+  ## Note that this user should be different from the MySQL replication user (replication.user)
   ##
   user:
   password:
@@ -74,6 +75,7 @@ replication:
   ##
   ## MySQL replication user
   ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-up-a-replication-cluster
+  ## Note that this user should be different from the MySQL user (db.user)
   ##
   user: replicator
   ## MySQL replication user password
