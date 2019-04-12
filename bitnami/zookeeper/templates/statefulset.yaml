@@ -7,6 +7,7 @@ metadata:
     chart: {{ template "zookeeper.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
@@ -31,6 +32,7 @@ spec:
         chart: {{ template "zookeeper.chart" . }}
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
     spec:
 {{- include "zookeeper.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}

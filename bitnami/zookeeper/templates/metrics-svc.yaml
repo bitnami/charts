@@ -9,6 +9,7 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
     app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
 spec:
   type: ClusterIP
   ports:
