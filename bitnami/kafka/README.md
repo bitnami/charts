@@ -202,12 +202,12 @@ helm install --name my-release bitnami/kafka --set auth.enabled=true \
              --set auth.brokerUser=brokerUser --set auth.brokerPassword=brokerPassword \
              --set auth.interBrokerUser=interBrokerUser --set auth.interBrokerPassword=interBrokerPassword \
              --set auth.zookeeperUser=zookeeperUser --set auth.zookeeperPassword=zookeeperPassword \
-             --set zookeeper.auth.enabled=-true --set zookeeper.auth.serverUser=zookeeperUser --set zookeeper.auth.serverPassword=zookeeperPassword \
+             --set zookeeper.auth.enabled=true --set zookeeper.auth.serverUsers=zookeeperUser --set zookeeper.auth.serverPasswords=zookeeperPassword \
              --set zookeeper.auth.clientUser=zookeeperUser --set zookeeper.auth.clientPassword=zookeeperPassword \
              --set auth.certificatesSecret=kafka-certificates
 ```
 
-> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `--auth.certificatesPassword` option to provide your password.
+> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `--set auth.certificatesPassword` option to provide your password.
 
 ## Persistence
 
