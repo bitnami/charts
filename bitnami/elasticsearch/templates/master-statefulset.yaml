@@ -1,5 +1,5 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta2
+kind: StatefulSet
 metadata:
   name: {{ template "elasticsearch.master.fullname" . }}
   labels:
@@ -12,8 +12,9 @@ spec:
   selector:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}
-      release: "{{ .Release.Name }}"
+      release: {{ .Release.Name | quote }}
       role: "master"
+  serviceName: "{{ template "elasticsearch.master.fullname" . }}"
   replicas: {{ .Values.master.replicas }}
   template:
     metadata:
@@ -52,7 +53,6 @@ spec:
       {{- if .Values.master.nodeAffinity }}
 {{ toYaml .Values.master.nodeAffinity | indent 8 }}
       {{- end }}
-{{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
       {{- if .Values.sysctlImage.enabled }}
       ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
       initContainers:
@@ -66,16 +66,20 @@ spec:
       containers:
       - name: "elasticsearch"
         image: {{ template "elasticsearch.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.securityContext.enabled }}
         securityContext:
           runAsUser: {{ .Values.securityContext.runAsUser }}
         {{- end }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: {{ .Values.name | quote }}
         - name: ELASTICSEARCH_CLUSTER_HOSTS
           value: {{ template "elasticsearch.discovery.fullname" . }}
+        - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
+          {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
+          {{- $replicas := int .Values.master.replicas }}
+          value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
         {{- if .Values.plugins }}
         - name: ELASTICSEARCH_PLUGINS
           value: {{ .Values.plugins | quote }}
@@ -110,7 +114,7 @@ spec:
           httpGet:
             path: /_cluster/health?local=true
             port: 9200
-      {{- end }}
+        {{- end }}
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:
