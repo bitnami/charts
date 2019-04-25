@@ -157,10 +157,8 @@ spec:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
         {{- end }}
         volumeMounts:
-        {{- if .Values.persistence.enabled }}
         - name: data
           mountPath: /bitnami/zookeeper
-        {{ end }}
         {{- if .Values.config }}
         - name: config
           mountPath: /opt/bitnami/zookeeper/conf/zoo.cfg
