@@ -66,6 +66,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
 | `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
 | `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
+| `service.annotations`   | 	Service annotations       | `{}`                                               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
