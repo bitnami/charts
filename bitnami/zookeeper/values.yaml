@@ -205,6 +205,8 @@ metrics:
     prometheus.io/port: "9141"
   podLabels: {}
 
+  timeoutSeconds: 3
+
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
