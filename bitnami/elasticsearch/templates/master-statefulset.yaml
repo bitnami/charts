@@ -14,7 +14,7 @@ spec:
       app: {{ template "elasticsearch.name" . }}
       release: {{ .Release.Name | quote }}
       role: "master"
-  serviceName: "{{ template "elasticsearch.master.fullname" . }}"
+  serviceName: {{ template "elasticsearch.master.fullname" . }}
   replicas: {{ .Values.master.replicas }}
   template:
     metadata:
@@ -24,6 +24,7 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "master"
     spec:
+      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
