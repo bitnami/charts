@@ -32,6 +32,7 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "data"
     spec:
+      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
