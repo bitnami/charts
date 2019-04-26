@@ -189,8 +189,8 @@ metrics:
 
   image:
     registry: docker.io
-    repository: javsalgar/zookeeper-exporter
-    tag: latest
+    repository: dabealu/zookeeper-exporter
+    tag: v0.1.0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
