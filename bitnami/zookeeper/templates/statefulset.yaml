@@ -7,6 +7,7 @@ metadata:
     chart: {{ template "zookeeper.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
@@ -24,6 +25,7 @@ spec:
     matchLabels:
       app: {{ template "zookeeper.name" . }}
       release: {{ .Release.Name | quote }}
+      app.kubernetes.io/component: {{ template "zookeeper.name" . }}
   template:
     metadata:
       name: "{{ template "zookeeper.fullname" . }}"
@@ -32,6 +34,7 @@ spec:
         chart: {{ template "zookeeper.chart" . }}
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+        app.kubernetes.io/component: {{ template "zookeeper.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name | quote }}
     spec:
 {{- include "zookeeper.imagePullSecrets" . | indent 6 }}
