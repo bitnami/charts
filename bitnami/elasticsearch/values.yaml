@@ -85,6 +85,9 @@ master:
     annotations: {}
     # loadBalancerIP:
 
+  ## Provide annotations for the master pods.
+  podAnnotations: {}
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -151,6 +154,9 @@ coordinating:
     annotations: {}
     # loadBalancerIP:
 
+  ## Provide annotations for the coordinating pods.
+  podAnnotations: {}
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -189,6 +195,8 @@ data:
   antiAffinity: "soft"
   ## node affinity
   # nodeAffinity:
+  ## Provide annotations for the data pods.
+  podAnnotations: {}
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -268,6 +276,9 @@ ingest:
     annotations: {}
     # loadBalancerIP:
 
+  ## Provide annotations for the ingest pods.
+  podAnnotations: {}
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -306,6 +317,8 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+  ## Provide annotations for the metrics pods.
+  podAnnotations: {}
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9108"
