@@ -61,6 +61,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `mode`                               | MinIO server mode (`standalone` or `distributed`)                                            | `standalone`                                            |
 | `statefulset.replicaCount`           | Number of pods (only for Minio distributed mode). Should be 4 <= x <= 32                     | `4`                                                     |
 | `statefulset.updateStrategy`         | Statefulset update strategy policy                                                           | `RollingUpdate`                                         |
+| `statefulset.podManagementpolicy`    | Statefulset pods management policy                                                           | `Parallel`                                              |
 | `existingSecret`                     | Existing secret with MinIO credentials                                                       | `nil`                                                   |
 | `accessKey.password`                 | MinIO Access Key. Ignored if existing secret is provided.                                    | _random 10 character alphanumeric string_               |
 | `accessKey.forcePassword`            | Force users to specify an Access Key                                                         | `false`                                                 |
