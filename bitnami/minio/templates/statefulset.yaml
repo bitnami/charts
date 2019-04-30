@@ -17,7 +17,7 @@ spec:
       app.kubernetes.io/instance: {{ .Release.Name }}
   serviceName: {{ include "minio.fullname" . }}-headless
   replicas: {{ .Values.statefulset.replicaCount }}
-  podManagementPolicy: {{ .Values.statefulset.podManagementPolicy | quote }}
+  podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStrategy }}
     {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}

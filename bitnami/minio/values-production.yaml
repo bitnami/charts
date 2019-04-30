@@ -198,7 +198,10 @@ service:
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  annotations: {}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/minio/prometheus/metrics"
+    prometheus.io/port: "9000"
 
   ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer

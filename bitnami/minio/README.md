@@ -147,6 +147,22 @@ $ helm install --name my-release bitnami/minio --set mode=distributed --set stat
 
 > Note: that the number of replicas must even, greater than 4 and lower than 32
 
+## Prometheus exporter
+
+MinIO exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Prometheus collecting your MinIO metrics, modify the `values.yaml` adding the corresponding annotations:
+
+```diff
+service:
+  ...
+-  annotations: {}
++  annotations:
++    prometheus.io/scrape: "true"
++    prometheus.io/path: "/minio/prometheus/metrics"
++    prometheus.io/port: "9000"
+```
+
+> Find more information about MinIO metrics at https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html
+
 ## Production settings
 
 The [values-production.yaml](values-production.yaml) file consists a configuration to deploy a high-available MinIO deployment distributed mode for production environments. We recommend that you base your production configuration on this template and adjust the parameters appropriately.
