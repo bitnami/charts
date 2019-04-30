@@ -95,7 +95,10 @@ extraEnv: {}
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
-podAnnotations: {}
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/minio/prometheus/metrics"
+  prometheus.io/port: "9000"
 
 ## Pods anti-affinity
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -198,10 +201,7 @@ service:
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/minio/prometheus/metrics"
-    prometheus.io/port: "9000"
+  annotations: {}
 
   ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer

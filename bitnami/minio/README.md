@@ -152,13 +152,11 @@ $ helm install --name my-release bitnami/minio --set mode=distributed --set stat
 MinIO exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Prometheus collecting your MinIO metrics, modify the `values.yaml` adding the corresponding annotations:
 
 ```diff
-service:
-  ...
--  annotations: {}
-+  annotations:
-+    prometheus.io/scrape: "true"
-+    prometheus.io/path: "/minio/prometheus/metrics"
-+    prometheus.io/port: "9000"
+- podAnnotations: {}
++ podAnnotations:
++   prometheus.io/scrape: "true"
++   prometheus.io/path: "/minio/prometheus/metrics"
++   prometheus.io/port: "9000"
 ```
 
 > Find more information about MinIO metrics at https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html
