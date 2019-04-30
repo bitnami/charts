@@ -11,6 +11,7 @@ metadata:
 spec:
   type: ClusterIP
   clusterIP: None
+  publishNotReadyAddresses: {{ .Values.service.publishNotReadyAddresses }}
   ports:
   - name: client
     port: 2181

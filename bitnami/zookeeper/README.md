@@ -78,6 +78,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `service.port`                        | ZooKeeper port                                                      | `2181`                                                   |
 | `service.followerPort`                | ZooKeeper follower port                                             | `2888`                                                   |
 | `service.electionPort`                | ZooKeeper election port                                             | `3888`                                                   |
+| `service.publishNotReadyAddresses`    | If the ZooKeeper headless service should publish DNS records for not ready pods | `true`                                      |
 | `securityContext.enabled`             | Enable security context (ZooKeeper master pod)                      | `true`                                                   |
 | `securityContext.fsGroup`             | Group ID for the container (ZooKeeper master pod)                   | `1001`                                                   |
 | `securityContext.runAsUser`           | User ID for the container (ZooKeeper master pod)                    | `1001`                                                   |

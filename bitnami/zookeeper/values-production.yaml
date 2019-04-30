@@ -117,6 +117,7 @@ service:
   port: 2181
   followerPort: 2888
   electionPort: 3888
+  publishNotReadyAddresses: true
 
 ## Zookeeper Pod Security Context
 securityContext:
