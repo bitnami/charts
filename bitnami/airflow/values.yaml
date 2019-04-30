@@ -1,0 +1,315 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+
+## Bitnami Airflow image version
+## ref: https://hub.docker.com/r/bitnami/airflow/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/airflow
+  tag: 1.10.3
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+## Bitnami Airflow Scheduler image version
+## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
+##
+schedulerImage:
+  registry: docker.io
+  repository: bitnami/airflow-scheduler
+  tag: 1.10.3
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+## Bitnami Airflow Worker image version
+## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
+##
+workerImage:
+  registry: docker.io
+  repository: bitnami/airflow-worker
+  tag: 1.10.3
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+## Bitnami git image version
+## ref: https://hub.docker.com/r/bitnami/git/tags/
+##
+git:
+  registry: docker.io
+  repository: bitnami/git
+  tag: latest
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+##
+updateStrategy: RollingUpdate
+
+## Partition update strategy
+## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+##
+# rollingUpdatePartition:
+
+## Airflow Components configuration
+##
+airflow:
+  ## Name of an existing config map containing the Airflow config file
+  ##
+  # airflowConfigurationConfigMap:
+  ## Name of an existing config map containing all the DAGs files you want to load in Airflow.
+  ##
+  # dagsConfigMap:
+  ## Airflow generic configuration
+  ##
+  loadExamples: true
+  ## Enable in order to download DAG files from git repository.
+  ##
+  cloneDagFilesFromGit:
+    enabled: false
+    repository:
+    revision:
+  ## URL used to access to airflow web ui
+  ##
+  # baseUrl:
+  ## Airflow worker component configuration
+  worker:
+    port: 8793
+    replicas: 2
+
+  auth:
+    ## Specify username to acccess web UI
+    ##
+    airflowUsername: user
+    ## Specify password to acccess web UI
+    ##
+    # airflowPassword:
+    ## Specify a fernet key to secure airflow connections
+    ## More info at: https://airflow.readthedocs.io/en/stable/howto/secure-connections.html
+    ##
+    # fernetKey:
+    ## Use existing secret (ignores previous airflowPassword and fernetKey)
+    ##
+    # existingSecret:
+
+  ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
+  ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
+  ##
+  # extraEnvVars:
+  #   - name: AIRFLOW__SMTP__SMTP_HOST
+  #     value: "localhost"
+  #   - name: AIRFLOW__SMTP__SMTP_PORT
+  #     value: "25"
+  #   - name: AIRFLOW__SMTP__USER
+  #     value: ""
+
+## Kubernetes Security Context
+## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+service:
+  type: ClusterIP
+  port: 8080
+
+  ## Specify the NodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+
+  ## Use loadBalancerIP to request a specific static IP,
+  # loadBalancerIP:
+
+  ## Service annotations done as key:value pairs
+  annotations:
+
+## Configure the ingress resource that allows you to access the
+## Airflow installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  enabled: false
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  certManager: false
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  annotations:
+  #  kubernetes.io/ingress.class: nginx
+
+  ## The list of hostnames to be covered with this ingress record.
+  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  hosts:
+  - name: airflow.local
+    path: /
+
+  ## The tls configuration for the ingress
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  tls:
+  - hosts:
+      - airflow.local
+    secretName: airflow.local-tls
+
+  secrets:
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  # - name: airflow.local-tls
+  #   key:
+  #   certificate:
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+#  limits:
+#    cpu: 200m
+#    memory: 1Gi
+#  requests:
+#    memory: 256Mi
+#    cpu: 250m
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 180
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+##
+## PostgreSQL chart configuration
+##
+## https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
+##
+postgresql:
+  enabled: true
+  postgresqlUsername: bn_airflow
+  #postgresqlPassword:
+  postgresqlDatabase: bitnami_airflow
+
+externalDatabase:
+  ## All of these values are only used when postgresql.enabled is set to false
+  ## Database host
+  host: localhost
+  ## non-root Username for Airflow Database
+  user: bn_airflow
+  ## Database password
+  password: ""
+  ## Database name
+  database: bitnami_airflow
+  ## Database port number
+  port: 5432
+
+##
+## Redis chart configuration
+##
+## https://github.com/helm/charts/blob/master/stable/redis/values.yaml
+##
+redis:
+  enabled: true
+
+externalRedis:
+  ## All of these values are only used when redis.enabled is set to false
+  ## Redis host
+  host: localhost
+  ## Redis port number
+  port: 6379
+  ## Redis password
+  password: ""

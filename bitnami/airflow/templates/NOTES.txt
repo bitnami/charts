@@ -1,0 +1,22 @@
+1. Get the Airflow URL by running:
+
+{{- if eq .Values.service.type "ClusterIP" }}
+
+  echo URL  : http://127.0.0.1:{{ default "8080" .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "airflow.fullname" . }} {{ default "8080" .Values.service.port }}:8080
+
+{{- else if eq .Values.service.type "NodePort" }}
+  export APP_BASE_URL=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export APP_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "airflow.fullname" . }})
+
+  echo URL  : $APP_BASE_URL
+
+{{- else }}
+
+  echo URL  : http://{{ .Values.airflow.baseUrl }}
+{{- end }}
+
+2. Get your Airflow login credentials by running:
+
+  echo User:    {{ .Values.airflow.auth.airflowUsername }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
