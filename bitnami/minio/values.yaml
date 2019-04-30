@@ -7,6 +7,7 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
+
 ## Bitnami MinIO image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
 ##
@@ -63,25 +64,32 @@ statefulset:
 ##
 # existingSecret:
 
+## Mount MinIO secret as a file instead of passing environment variable
+##
+useCredentialsFile: false
+
 accessKey:
   ## MinIO Access Key
   ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
   ##
   password:
-  ##
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
+  ##
   forcePassword: false
-
 secretKey:
   ## MinIO Secret Key
   ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
   ##
   password:
-  ##
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
+  ##
   forcePassword: false
+
+## Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)
+##
+# defaultBuckets: "my-bucket, my-second-bucket"
 
 ## Disable MinIO Web UI
 ## ref: https://github.com/minio/minio/tree/master/docs/config/#browser
@@ -146,7 +154,7 @@ persistence:
   ##
   enabled: true
 
-  ## Enable persistence using an existing PVC
+  ## Enable persistence using an existing PVC (only in standalone mode)
   ##
   # existingClaim:
 

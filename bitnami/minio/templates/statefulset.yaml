@@ -82,24 +82,26 @@ spec:
           {{- $minioHeadlessServiceName := printf "%s-%s" $minioFullname "headless" | trunc 63  }}
           {{- $releaseNamespace := .Release.Namespace }}
           value: {{range $i, $e := until $replicaCount }}{{ $minioFullname }}-{{ $e }}.{{ $minioHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local,{{ end }}
+        {{- if .Values.useCredentialsFile }}
+        - name: MINIO_ACCESS_KEY_FILE
+          value: "/opt/bitnami/minio/secrets/access-key"
+        {{- else }}
         - name: MINIO_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-              {{- else }}
-              name: {{ include "minio.fullname" . }}
-              {{- end }}
+              name: {{ include "minio.secretName" . }}
               key: access-key
+        {{- end }}
+        {{- if .Values.useCredentialsFile }}
+        - name: MINIO_SECRET_KEY_FILE
+          value: "/opt/bitnami/minio/secrets/secret-key"
+        {{- else }}
         - name: MINIO_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-              {{- else }}
-              name: {{ include "minio.fullname" . }}
-              {{- end }}
+              name: {{ include "minio.secretName" . }}
               key: secret-key
+        {{- end }}
         - name: MINIO_BROWSER
           {{- if .Values.disableWebUI }}
           value: "off"
@@ -137,18 +139,22 @@ spec:
         resources: {{ toYaml .Values.resources | nindent 10 }}
         {{- end }}
         volumeMounts:
+        {{- if .Values.useCredentialsFile }}
+        - name: minio-credentials
+          mountPath: /opt/bitnami/minio/secrets/
+        {{- end }}
         - name: "data"
           mountPath: {{ .Values.persistence.mountPath }}
-{{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
       volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
-{{- else if not .Values.persistence.enabled }}
+      {{- if .Values.useCredentialsFile }}
+      - name: minio-credentials
+        secret:
+          secretName: {{ include "minio.secretName" . }}
+      {{- end }}
+{{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
-
-{{- else if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+{{- else }}
   volumeClaimTemplates:
   - metadata:
       name: "data"

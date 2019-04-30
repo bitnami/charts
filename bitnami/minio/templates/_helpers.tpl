@@ -98,6 +98,30 @@ imagePullSecrets:
 {{- end -}}
 
 {{/*
+Get the credentials secret.
+*/}}
+{{- define "minio.secretName" -}}
+{{- if .Values.global.minio.existingSecret }}
+    {{- printf "%s" .Values.global.minio.existingSecret -}}
+{{- else if .Values.existingSecret -}}
+    {{- printf "%s" .Values.existingSecret -}}
+{{- else -}}
+    {{- printf "%s" (include "minio.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created
+*/}}
+{{- define "minio.createSecret" -}}
+{{- if .Values.global.minio.existingSecret }}
+{{- else if .Values.existingSecret -}}
+{{- else -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for networkpolicy.
 */}}
 {{- define "networkPolicy.apiVersion" -}}

@@ -63,24 +63,30 @@ spec:
         - name: BITNAMI_DEBUG
           value: "true"
         {{- end }}
+        {{- if .Values.useCredentialsFile }}
+        - name: MINIO_ACCESS_KEY_FILE
+          value: "/opt/bitnami/minio/secrets/access-key"
+        {{- else }}
         - name: MINIO_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-              {{- else }}
-              name: {{ include "minio.fullname" . }}
-              {{- end }}
+              name: {{ include "minio.secretName" . }}
               key: access-key
+        {{- end }}
+        {{- if .Values.useCredentialsFile }}
+        - name: MINIO_SECRET_KEY_FILE
+          value: "/opt/bitnami/minio/secrets/secret-key"
+        {{- else }}
         - name: MINIO_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-              {{- else }}
-              name: {{ include "minio.fullname" . }}
-              {{- end }}
+              name: {{ include "minio.secretName" . }}
               key: secret-key
+        {{- end }}
+        {{- if .Values.defaultBuckets }}
+        - name: MINIO_DEFAULT_BUCKETS
+          value: {{ .Values.defaultBuckets }}
+        {{- end }}
         - name: MINIO_BROWSER
           {{- if .Values.disableWebUI }}
           value: "off"
@@ -118,9 +124,18 @@ spec:
         resources: {{ toYaml .Values.resources | nindent 10 }}
         {{- end }}
         volumeMounts:
+        {{- if .Values.useCredentialsFile }}
+        - name: minio-credentials
+          mountPath: /opt/bitnami/minio/secrets/
+        {{- end }}
         - name: "data"
           mountPath: {{ .Values.persistence.mountPath }}
       volumes:
+      {{- if .Values.useCredentialsFile }}
+      - name: minio-credentials
+        secret:
+          secretName: {{ include "minio.secretName" . }}
+      {{- end }}
       - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:

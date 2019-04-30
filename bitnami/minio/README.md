@@ -63,10 +63,12 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `statefulset.updateStrategy`         | Statefulset update strategy policy                                                           | `RollingUpdate`                                         |
 | `statefulset.podManagementpolicy`    | Statefulset pods management policy                                                           | `Parallel`                                              |
 | `existingSecret`                     | Existing secret with MinIO credentials                                                       | `nil`                                                   |
+| `useCredentialsFile`                 | Have the secret mounted as a file instead of env vars                                        | `false`                                                 |
 | `accessKey.password`                 | MinIO Access Key. Ignored if existing secret is provided.                                    | _random 10 character alphanumeric string_               |
 | `accessKey.forcePassword`            | Force users to specify an Access Key                                                         | `false`                                                 |
 | `secretKey.password`                 | MinIO Secret Key. Ignored if existing secret is provided.                                    | _random 40 character alphanumeric string_               |
 | `secretKey.forcePassword`            | Force users to specify an Secret Key                                                         | `false`                                                 |
+| `defaultBuckets`                     | Comma, semi-colon or space separated list of buckets to create (only in standalone mode)     | `nil`                                                   |
 | `disableWebUI`                       | Disable MinIO Web UI                                                                         | `false`                                                 |
 | `extraEnv`                           | Any extra environment variables you would like to pass to the pods                           | `{}`                                                    |
 | `podAnnotations`                     | Annotations to be added to pods                                                              | {}                                                      |
@@ -94,7 +96,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                                                          | `ReadWriteOnce`                                         |
 | `persistence.size`                   | Size of data volume                                                                          | `8Gi`                                                   |
 | `persistence.annotations`            | Persistent Volume annotations                                                                | `{}`                                                    |
-| `persistence.existingClaim`          | Name of an existing PVC to use (avoids creating one if this is given)                        | `nil`                                                   |
+| `persistence.existingClaim`          | Name of an existing PVC to use (only in "standalone" mode)                                   | `nil`                                                   |
 | `service.type`                       | Kubernetes Service type                                                                      | `ClusterIP`                                             |
 | `service.port`                       | MinIO service port                                                                           | `9000`                                                  |
 | `service.nodePort`                   | Port to bind to for NodePort service type                                                    | `nil`                                                   |
