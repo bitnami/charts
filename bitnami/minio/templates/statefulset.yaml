@@ -28,6 +28,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "minio.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        helm.sh/chart: {{ include "minio.chart" . }}
       {{- if or .Values.podAnnotations }}
       annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
