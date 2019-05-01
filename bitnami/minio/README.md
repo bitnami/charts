@@ -50,10 +50,8 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `global.imageRegistry`                 | Global Docker image registry                                                                 | `nil`                                                   |
 | `global.imagePullSecrets`              | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods) |
 | `global.minio.existingSecret`          | Name of existing secret to use for MinIO credentials (overrides `existingSecret`)            | `nil`                                                   |
-| `global.minio.accessKey.password`      | MinIO Access Key (overrides `accessKey.password`)                                            | `nil`                                                   |
-| `global.minio.accessKey.forcePassword` | Force users to specify an Access Key (overrides `accessKey.forcePassword`)                   | `nil`                                                   |
-| `global.minio.secretKey.password`      | MinIO Secret Key (overrides `secretKey.password`)                                            | `nil`                                                   |
-| `global.minio.secretKey.forcePassword` | Force users to specify an Secret Key (overrides `secretKey.forcePassword`)                   | `nil`                                                   |
+| `global.minio.accessKey`               | MinIO Access Key (overrides `accessKey.password`)                                            | `nil`                                                   |
+| `global.minio.secretKey`               | MinIO Secret Key (overrides `secretKey.password`)                                            | `nil`                                                   |
 | `image.registry`                       | MinIO image registry                                                                         | `docker.io`                                             |
 | `image.repository`                     | MinIO image name                                                                             | `bitnami/minio`                                         |
 | `image.tag`                            | MinIO image tag                                                                              | `{VERSION}`                                             |

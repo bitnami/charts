@@ -6,12 +6,8 @@ global:
   minio: {}
 #  minio:
 #    existingSecret: ""
-#    accessKey:
-#      password: "my-access-key"
-#      forcePassword: false
-#    secretKey:
-#      password: "my-secret-key"
-#      forcePassword: false
+#    accessKey: ""
+#    secretKey: ""
 #  imageRegistry: myRegistryName
 #  imagePullSecrets:
 #    - myRegistryKeySecretName
