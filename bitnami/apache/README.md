@@ -44,42 +44,41 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Apache chart and their default values.
 
-| Parameter                         | Description                                       | Default                                                      |
-| --------------------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
-| `global.imageRegistry`            | Global Docker image registry                      | `nil`                                                        |
-| `global.imagePullSecrets`         | Global Docker registry secret names as an array   | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.registry`                  | Apache Docker image registry                      | `docker.io`                                                  |
-| `image.repository`                | Apache Docker image name                          | `bitnami/apache`                                             |
-| `image.tag`                       | Apache Docker image tag                           | `{VERSION}`                                                  |
-| `image.pullPolicy`                | Apache Docker image pull policy                   | `Always`                                                     |
-| `image.pullSecrets`               | Specify Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
-| `podAnnotations`                  | Pod annotations                                   | `{}`                                                         |
-| `ingress.enabled`                   | Enable ingress controller resource                            | `false`                                                  |
-| `ingress.annotations`               | Ingress annotations                                           | `[]`                                                     |
-| `ingress.certManager`               | Add annotations for cert-manager                              | `false`                                                  |
-| `ingress.hosts[0].name`             | Hostname to your Apache installation                           | `apache.local`                                            |
-| `ingress.hosts[0].path`             | Path within the url structure                                 | `/`                                                      |
-| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                | `false`                                                  |
-| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                               | `nil`                                                  |
-| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                     | `apache.local-tls-secret`                                 |
-| `ingress.secrets[0].name`           | TLS Secret Name                                               | `nil`                                                    |
-| `ingress.secrets[0].certificate`    | TLS Secret Certificate                                        | `nil`                                                    |
-| `ingress.secrets[0].key`            | TLS Secret Key                                                | `nil`                                                    |
-| `metrics.enabled`                 | Start a side-car prometheus exporter              | `false`                                                      |
-| `metrics.image.registry`          | Apache exporter image registry                    | `docker.io`                                                  |
-| `metrics.image.repository`        | Apache exporter image name                        | `lusotycoon/apache-exporter`                                 |
-| `metrics.image.tag`               | Apache exporter image tag                         | `v0.5.0`                                                     |
-| `metrics.image.pullPolicy`        | Apache exporter image pull policy                 | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`       | Specify Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`          | Additional annotations for Metrics exporter pod   | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`               | Exporter resource requests/limit                  | {}                                                           |
-| `service.type`                    | Kubernetes Service type                           | `LoadBalancer`                                               |
-| `service.port`                    | Service HTTP port                                 | `80`                                                         |
-| `service.httpsPort`               | Service HTTPS port                                | `443`                                                        |
-| `service.nodePorts.http`          | Kubernetes http node port                         | `""`                                                         |
-| `service.nodePorts.https`         | Kubernetes https node port                        | `""`                                                         |
-| `service.externalTrafficPolicy`   | Enable client source IP preservation              | `Cluster`                                                    |
-| `service.loadBalancerIP`          | LoadBalancer service IP address                   | `""`                                                         |
+| Parameter                        | Description                                      | Default                                                      |
+|----------------------------------|--------------------------------------------------|--------------------------------------------------------------|
+| `global.imageRegistry`           | Global Docker image registry                     | `nil`                                                        |
+| `global.imagePullSecrets`        | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.registry`                 | Apache Docker image registry                     | `docker.io`                                                  |
+| `image.repository`               | Apache Docker image name                         | `bitnami/apache`                                             |
+| `image.tag`                      | Apache Docker image tag                          | `{VERSION}`                                                  |
+| `image.pullPolicy`               | Apache Docker image pull policy                  | `Always`                                                     |
+| `image.pullSecrets`              | Specify Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
+| `ingress.enabled`                | Enable ingress controller resource               | `false`                                                      |
+| `ingress.certManager`            | Add annotations for cert-manager                 | `false`                                                      |
+| `ingress.annotations`            | Ingress annotations                              | `[]`                                                         |
+| `ingress.hosts[0].name`          | Hostname to your Apache installation             | `example.local`                                              |
+| `ingress.hosts[0].path`          | Path within the url structure                    | `/`                                                          |
+| `ingress.tls[0].hosts[0]`        | TLS hosts                                        | `example.local`                                              |
+| `ingress.tls[0].secretName`      | TLS Secret (certificates)                        | `example.local-tls`                                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                  | `nil`                                                        |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                           | `nil`                                                        |
+| `ingress.secrets[0].key`         | TLS Secret Key                                   | `nil`                                                        |
+| `metrics.enabled`                | Start a side-car prometheus exporter             | `false`                                                      |
+| `metrics.image.registry`         | Apache exporter image registry                   | `docker.io`                                                  |
+| `metrics.image.repository`       | Apache exporter image name                       | `lusotycoon/apache-exporter`                                 |
+| `metrics.image.tag`              | Apache exporter image tag                        | `v0.5.0`                                                     |
+| `metrics.image.pullPolicy`       | Apache exporter image pull policy                | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`      | Specify Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`              | Exporter resource requests/limit                 | {}                                                           |
+| `service.type`                   | Kubernetes Service type                          | `LoadBalancer`                                               |
+| `service.port`                   | Service HTTP port                                | `80`                                                         |
+| `service.httpsPort`              | Service HTTPS port                               | `443`                                                        |
+| `service.nodePorts.http`         | Kubernetes http node port                        | `""`                                                         |
+| `service.nodePorts.https`        | Kubernetes https node port                       | `""`                                                         |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation             | `Cluster`                                                    |
+| `service.loadBalancerIP`         | LoadBalancer service IP address                  | `""`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

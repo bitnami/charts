@@ -5,9 +5,9 @@ metadata:
   name: {{ template "fullname" . }}
   labels:
     app: "{{ template "fullname" . }}"
-    chart: "{{ template "chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -23,21 +23,11 @@ spec:
       paths:
       - path: {{ default "/" .path }}
         backend:
-          serviceName: {{ template "fullname" $ }}
+          serviceName: "{{ template "fullname" $ }}"
           servicePort: http
   {{- end }}
+  {{- if .Values.ingress.tls }}
   tls:
-  {{- range .Values.ingress.hosts }}
-  {{- if .tls }}
-  - hosts:
-  {{- if .tlsHosts }}
-  {{- range $host := .tlsHosts }}
-    - {{ $host }}
-  {{- end }}
-  {{- else }}
-    - {{ .name }}
-  {{- end }}
-    secretName: {{ .tlsSecret }}
-  {{- end }}
+{{ toYaml .Values.ingress.tls | indent 4 }}
   {{- end }}
 {{- end }}
