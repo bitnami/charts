@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 5.7.25
+  tag: 5.7.26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,6 +55,7 @@ root:
 db:
   ## MySQL username and password
   ## ref: https://github.com/bitnami/bitnami-docker-mysql#creating-a-database-user-on-first-run
+  ## Note that this user should be different from the MySQL replication user (replication.user)
   ##
   user:
   password:
@@ -74,6 +75,7 @@ replication:
   ##
   ## MySQL replication user
   ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-up-a-replication-cluster
+  ## Note that this user should be different from the MySQL user (db.user)
   ##
   user: replicator
   ## MySQL replication user password

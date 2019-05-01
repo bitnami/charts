@@ -1,8 +1,9 @@
 apiVersion: v1
 name: mean
-version: 6.1.1
+version: 6.1.2
 appVersion: 4.6.2
 description: MEAN is a free and open-source JavaScript software stack for building dynamic web sites and web applications. The MEAN stack is MongoDB, Express.js, Angular, and Node.js. Because all components of the MEAN stack support programs written in JavaScript, MEAN applications can be written in one language for both server-side and client-side execution environments.
+deprecated: 'This chart is deprecated and will be removed in 15 days. Use instead Node Chart.'
 keywords:
 - node
 - javascript
