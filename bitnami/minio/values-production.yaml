@@ -2,10 +2,19 @@
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+global:
+  minio: {}
+#  minio:
+#    existingSecret: ""
+#    accessKey:
+#      password: "my-access-key"
+#      forcePassword: false
+#    secretKey:
+#      password: "my-secret-key"
+#      forcePassword: false
+#  imageRegistry: myRegistryName
+#  imagePullSecrets:
+#    - myRegistryKeySecretName
 
 ## Bitnami MinIO image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
