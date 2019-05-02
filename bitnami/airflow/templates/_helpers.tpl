@@ -146,6 +146,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
+
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
@@ -161,15 +162,39 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.image.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.schedulerImage.pullSecrets .Values.workerImage.pullSecrets .Values.gitImage.pullSecrets .Values.metrics.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
+{{- range .Values.schedulerImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.workerImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.gitImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.metrics.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
 {{- end -}}
-{{- else if or .Values.image.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.schedulerImage.pullSecrets .Values.workerImage.pullSecrets .Values.gitImage.pullSecrets .Values.metrics.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.schedulerImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.workerImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.gitImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.metricsImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
