@@ -115,7 +115,7 @@ airflow:
   # dagsConfigMap:
   ## Airflow generic configuration
   ##
-  loadExamples: true
+  loadExamples: false
   ## Enable in order to download DAG files from git repository.
   ##
   cloneDagFilesFromGit:
@@ -124,17 +124,17 @@ airflow:
     revision:
   ## URL used to access to airflow web ui
   ##
-  # baseUrl:
+  baseUrl: http://airflow.local
   ## Airflow worker component configuration
   worker:
     port: 8793
-    replicas: 1
+    replicas: 3
 
   auth:
     ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
     ## If it is not forced, a random password will be generated.
     ##
-    forcePassword: false
+    forcePassword: true
     ## Specify username to acccess web UI
     ##
     airflowUsername: user
@@ -195,7 +195,7 @@ service:
 ##
 ingress:
   ## Set to true to enable ingress record generation
-  enabled: false
+  enabled: true
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
   certManager: false

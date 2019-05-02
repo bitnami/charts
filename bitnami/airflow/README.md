@@ -80,9 +80,10 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.cloneDagFilesFromGit.enabled`    | Enable in order to download DAG files from git repository.                                  | `false`                                                 |
 | `airflow.cloneDagFilesFromGit.repository` | Repository where download DAG files from                                                    | `nil`                                                   |
 | `airflow.cloneDagFilesFromGit.revision`   | Revision from repository to checkout                                                        | `nil`                                                   |
-| `airflow.baseUrl`                     | URL used to access to airflow web ui                                                        | `nil`                                                   |
+| `airflow.baseUrl`                         | URL used to access to airflow web ui                                                        | `nil`                                                   |
 | `airflow.worker.port`                     | Airflow Worker port                                                                         | `8793`                                                  |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                           | `2`                                                     |
+| `airflow.auth.forcePassword`              | Force users to specify a password                                                           | `false`                                                 |
 | `airflow.auth.airflowUsername`            | Username to access web UI                                                                   | `user`                                                  |
 | `airflow.auth.airflowPassword`            | Password to access web UI                                                                   | `nil`                                                   |
 | `airflow.auth.fernetKey`                  | Fernet key to secure connections                                                            | `nil`                                                   |

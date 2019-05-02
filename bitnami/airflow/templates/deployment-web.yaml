@@ -141,7 +141,7 @@ spec:
         - name: AIRFLOW_WEBSERVER_HOST
           value: {{ template "airflow.fullname" . }}
           {{- if .Values.airflow.baseUrl }}
-        - name: AIRFLOW_BASE_URl
+        - name: AIRFLOW_BASE_URL
           value: {{ .Values.airflow.baseUrl }}
           {{- end }}
         - name: AIRFLOW_LOAD_EXAMPLES
