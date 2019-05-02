@@ -7,13 +7,13 @@ metadata:
     helm.sh/chart: {{ include "airflow.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    component: scheduler
+    app.kubernetes.io/component: scheduler
 spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "airflow.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      component: scheduler
+      app.kubernetes.io/component: scheduler
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
@@ -21,7 +21,7 @@ spec:
         app.kubernetes.io/name: {{ include "airflow.name" . }}
         helm.sh/chart: {{ include "airflow.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-        component: scheduler
+        app.kubernetes.io/component: scheduler
     {{- if .Values.podAnnotations }}
       annotations:
       {{ toYaml .Values.podAnnotations | nindent 8 }}

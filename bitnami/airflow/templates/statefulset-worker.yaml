@@ -7,13 +7,13 @@ metadata:
     helm.sh/chart: {{ include "airflow.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    component: worker
+    app.kubernetes.io/component: worker
 spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "airflow.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      component: worker
+      app.kubernetes.io/component: worker
   serviceName: {{ template "airflow.fullname" . }}-headless
   replicas: {{ .Values.airflow.worker.replicas }}
   updateStrategy:
@@ -29,7 +29,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "airflow.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-        component: worker
+        app.kubernetes.io/component: worker
     spec:
 {{- include "airflow.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}

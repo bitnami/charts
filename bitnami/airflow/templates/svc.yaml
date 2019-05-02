@@ -28,4 +28,4 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "airflow.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    component: web
+    app.kubernetes.io/component: web
