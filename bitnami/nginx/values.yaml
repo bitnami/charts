@@ -44,8 +44,8 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-# vhost: |-
-#   # example PHP-FPM vhost
+# serverBlock: |-
+#   # example PHP-FPM server block
 #   server {
 #     listen 0.0.0.0:8080;
 #     root /app;
