@@ -31,7 +31,11 @@ image:
 ##
 service:
   type: LoadBalancer
-  # HTTP Port
+  ## Provide optional annotations to the service i.e. for external-dns
+  # annotations: 
+  #   external-dns.alpha.kubernetes.io/hostname: yourservicename.k8s.yourcompany.com
+  ##
+  ## HTTP Port
   port: 80
   ##
   ## loadBalancerIP:
