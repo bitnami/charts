@@ -42,31 +42,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the NGINX Open Source chart and their default values.
 
-|          Parameter        |             Description        |                        Default                            |
-| ------------------------- | ------------------------------ | --------------------------------------------------------- |
-| `global.imageRegistry`    | Global Docker image registry   | `nil`                                                     |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `image.registry`          | NGINX image registry           | `docker.io`                                               |
-| `image.repository`        | NGINX Image name               | `bitnami/nginx`                                           |
-| `image.tag`               | NGINX Image tag                | `{VERSION}`                                               |
-| `image.pullPolicy`        | NGINX image pull policy        | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
-| `image.pullSecrets`       | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)  |
-| `vhost`                   | Custom NGINX virtual host      | `nil`                                                     |
-| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
-| `metrics.image.registry`                   | Promethus exporter image registry                                                                                  | `docker.io`                                          |
-| `metrics.image.repository`                 | Promethus exporter image name                                                                                      | `nginx/nginx-prometheus-exporter`                    |
-| `metrics.image.tag`                        | Promethus exporter image tag                                                                                       | `0.1.0`                                              |
-| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                           | `[]` (does not add image pull secrets to deployed pods) |
-| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}`                                                   |
-| `metrics.resources`                        | Exporter resource requests/limit                                                                               | {}                        |
-| `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
-| `service.port`                    | Service HTTP port                  | `80`                                          |
-| `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
-| `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
-| `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
-| `service.annotations`   | 	Service annotations       | `{}`                                               |
+|          Parameter              |             Description                          |                        Default                               |
+| ------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| `global.imageRegistry`          | Global Docker image registry                     | `nil`                                                        |
+| `global.imagePullSecrets`       | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.registry`                | NGINX image registry                             | `docker.io`                                                  |
+| `image.repository`              | NGINX Image name                                 | `bitnami/nginx`                                              |
+| `image.tag`                     | NGINX Image tag                                  | `{VERSION}`                                                  |
+| `image.pullPolicy`              | NGINX image pull policy                          | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
+| `image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `serverBlock`                   | Custom NGINX server block                        | `nil`                                                        |
+| `podAnnotations`                | Pod annotations                                  | `{}`                                                         |
+| `metrics.enabled`               | Start a side-car prometheus exporter             | `false`                                                      |
+| `metrics.image.registry`        | Promethus exporter image registry                | `docker.io`                                                  |
+| `metrics.image.repository`      | Promethus exporter image name                    | `nginx/nginx-prometheus-exporter`                            |
+| `metrics.image.tag`             | Promethus exporter image tag                     | `0.1.0`                                                      |
+| `metrics.image.pullPolicy`      | Image pull policy                                | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`     | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`        | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}` |
+| `metrics.resources`             | Exporter resource requests/limit                 | {}                                                           |
+| `service.type`                  | Kubernetes Service type                          | `LoadBalancer`                                               |
+| `service.port`                  | Service HTTP port                                | `80`                                                         |
+| `service.nodePorts.http`        | Kubernetes http node port                        | `""`                                                         |
+| `service.externalTrafficPolicy` | Enable client source IP preservation             | `Cluster`                                                    |
+| `service.loadBalancerIP`        | LoadBalancer service IP address                  | `""`                                                         |
+| `service.annotations`           | Service annotations                              | `{}`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -86,14 +86,14 @@ $ helm install --name my-release -f values.yaml bitnami/nginx
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-### Providing a custom virtual host
+### Providing a custom server block
 
-You can use the `vhost` value to provide a custom virtual host for NGINX to use.
-To do this, create a values files with your virtual host:
+You can use the `serverBlock` value to provide a custom server block for NGINX to use.
+To do this, create a values files with your server block:
 
-_custom-vhost.yaml_
+_custom-server-block.yaml_
 ```yaml
-vhost: |-
+serverBlock: |-
   server {
     listen 0.0.0.0:8080;
     location / {
@@ -105,7 +105,7 @@ vhost: |-
 Install the chart with this value:
 
 ```console
-$ helm install --name my-release -f custom-vhost.yaml bitnami/nginx
+$ helm install --name my-release -f custom-server-block.yaml bitnami/nginx
 ```
 
 ## Upgrading

@@ -1,4 +1,4 @@
-{{- if .Values.vhost -}}
+{{- if .Values.serverBlock -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,6 +9,6 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 data:
-  vhost.conf: |-
-{{ .Values.vhost | indent 4 }}
+  server-block.conf: |-
+{{ .Values.serverBlock | indent 4 }}
 {{- end -}}
