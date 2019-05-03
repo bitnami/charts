@@ -162,7 +162,7 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.image.pullSecrets .Values.schedulerImage.pullSecrets .Values.workerImage.pullSecrets .Values.gitImage.pullSecrets .Values.metrics.image.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.schedulerImage.pullSecrets .Values.workerImage.pullSecrets .Values.git.pullSecrets .Values.metrics.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
@@ -173,14 +173,14 @@ imagePullSecrets:
 {{- range .Values.workerImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- range .Values.gitImage.pullSecrets }}
+{{- range .Values.git.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.metrics.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.schedulerImage.pullSecrets .Values.workerImage.pullSecrets .Values.gitImage.pullSecrets .Values.metrics.image.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.schedulerImage.pullSecrets .Values.workerImage.pullSecrets .Values.git.pullSecrets .Values.metrics.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
@@ -191,7 +191,7 @@ imagePullSecrets:
 {{- range .Values.workerImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- range .Values.gitImage.pullSecrets }}
+{{- range .Values.git.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.metricsImage.pullSecrets }}
