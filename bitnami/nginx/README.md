@@ -42,7 +42,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the NGINX Open Source chart and their default values.
 
-|          Parameter              |             Description                          |                        Default                               |
+| Parameter                       | Description                                      | Default                                                      |
 | ------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
 | `global.imageRegistry`          | Global Docker image registry                     | `nil`                                                        |
 | `global.imagePullSecrets`       | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
@@ -66,6 +66,11 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `service.nodePorts.http`        | Kubernetes http node port                        | `""`                                                         |
 | `service.externalTrafficPolicy` | Enable client source IP preservation             | `Cluster`                                                    |
 | `service.loadBalancerIP`        | LoadBalancer service IP address                  | `""`                                                         |
+| `ingress.enabled`               | Creates an Ingress resource                      | `false`                                                      |
+| `ingress.annotations`           | Annotations to add to the Ingress, such as class | `{}`                                                         |
+| `ingress.path`                  | Ingress Path                                     | `/`                                                          |
+| `ingress.hosts`                 | Host(s) to match with this ingress               | `[chart-example.local]`                                      |
+| `ingress.tls`                   | TLS configuration (if desired)                   | `[]`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -91,6 +96,7 @@ You can use the `serverBlock` value to provide a custom server block for NGINX t
 To do this, create a values files with your server block:
 
 _custom-server-block.yaml_
+
 ```yaml
 serverBlock: |-
   server {
