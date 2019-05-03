@@ -194,7 +194,7 @@ imagePullSecrets:
 {{- range .Values.git.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- range .Values.metricsImage.pullSecrets }}
+{{- range .Values.metrics.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
