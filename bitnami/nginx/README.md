@@ -66,6 +66,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `service.nodePorts.http`        | Kubernetes http node port                        | `""`                                                         |
 | `service.externalTrafficPolicy` | Enable client source IP preservation             | `Cluster`                                                    |
 | `service.loadBalancerIP`        | LoadBalancer service IP address                  | `""`                                                         |
+| `service.annotations`           | Service annotations                              | `{}`                                                         |
 | `ingress.enabled`               | Creates an Ingress resource                      | `false`                                                      |
 | `ingress.annotations`           | Annotations to add to the Ingress, such as class | `{}`                                                         |
 | `ingress.path`                  | Ingress Path                                     | `/`                                                          |
