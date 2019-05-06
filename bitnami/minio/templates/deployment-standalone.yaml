@@ -89,11 +89,7 @@ spec:
           value: {{ .Values.defaultBuckets }}
         {{- end }}
         - name: MINIO_BROWSER
-          {{- if .Values.disableWebUI }}
-          value: "off"
-          {{- else }}
-          value: "on"
-          {{- end }}
+          value: {{ ternary "off" "on" .Values.disableWebUI }}
 {{- if .Values.extraEnv }}
 {{ toYaml .Values.extraEnv | indent 8 }}
 {{- end }}
