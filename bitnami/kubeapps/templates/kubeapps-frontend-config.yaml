@@ -64,6 +64,9 @@ data:
       }
 
       location / {
+        # Add the Authorization header if exists
+        add_header Authorization $http_authorization;
+
         proxy_pass http://{{ template "kubeapps.dashboard.fullname" . }}:{{ .Values.dashboard.service.port }};
       }
     }

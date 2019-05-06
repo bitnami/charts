@@ -13,7 +13,7 @@ $ helm install bitnami/consul
 
 This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -52,6 +52,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | Parameter                            | Description                                                      | Default                                                    |
 | ------------------------------------ | ---------------------------------------------------------------- | ---------------------------------------------------------- |
 | `global.imageRegistry`               | Global Docker image registry                                     | `nil`                                                      |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                  | `[]` (does not add image pull secrets to deployed pods)    |
 | `image.registry`                     | HashiCorp Consul image registry                                  | `docker.io`                                                |
 | `image.repository`                   | HashiCorp Consul image name                                      | `bitnami/consul`                                           |
 | `image.tag`                          | HashiCorp Consul image tag                                       | `{VERSION}`                                                |
@@ -73,6 +74,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `securityContext.enabled`            | Enable security context                                          | `true`                                                     |
 | `securityContext.fsGroup`            | Group ID for the container                                       | `1001`                                                     |
 | `securityContext.runAsUser`          | User ID for the container                                        | `1001`                                                     |
+| `updateStrategy.type`                | Statefulset update strategy policy                               | `RollingUpdate`                                            |
 | `persistence.enabled`                | Use a PVC to persist data                                        | `true`                                                     |
 | `persistence.storageClass`           | Storage class of backing PVC                                     | `nil` (uses alpha storage class annotation)                |
 | `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                              | `ReadWriteOnce`                                            |

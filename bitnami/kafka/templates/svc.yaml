@@ -13,9 +13,17 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  {{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  {{- end }}
   ports:
   - name: kafka
     port: 9092
+    {{- if and .Values.service.nodePort (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
+    nodePort: {{ .Values.service.nodePort }}
+    {{- end }}
     targetPort: kafka
   selector:
     app: {{ template "kafka.name" . }}

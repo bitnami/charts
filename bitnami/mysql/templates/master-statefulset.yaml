@@ -17,7 +17,10 @@ spec:
   serviceName: "{{ template "mysql.master.fullname" . }}"
   replicas: 1
   updateStrategy:
-    type: RollingUpdate
+    type: {{ .Values.master.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.master.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- end }}
   template:
     metadata:
       labels:
@@ -62,12 +65,7 @@ spec:
                   app: "{{ template "name" . }}"
                   release: "{{ .Release.Name }}"
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "mysql.imagePullSecrets" . | indent 6 }}
       containers:
       - name: "mysql"
         image: {{ template "mysql.image" . }}
@@ -143,7 +141,7 @@ spec:
         {{- end }}
       {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "mysql.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
         - name: MYSQL_ROOT_PASSWORD

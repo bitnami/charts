@@ -7,13 +7,17 @@ metadata:
     chart: {{ template "zookeeper.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   updateStrategy:
     type: {{ .Values.updateStrategy | quote }}
-    {{- if .Values.rollingUpdatePartition }}
+    {{- if (eq "Recreate" .Values.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.rollingUpdatePartition }}
     rollingUpdate:
       partition: {{ .Values.rollingUpdatePartition }}
     {{- end }}
@@ -21,6 +25,7 @@ spec:
     matchLabels:
       app: {{ template "zookeeper.name" . }}
       release: {{ .Release.Name | quote }}
+      app.kubernetes.io/component: {{ template "zookeeper.name" . }}
   template:
     metadata:
       name: "{{ template "zookeeper.fullname" . }}"
@@ -29,13 +34,10 @@ spec:
         chart: {{ template "zookeeper.chart" . }}
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+        app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "zookeeper.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -48,6 +50,10 @@ spec:
       {{- if .Values.tolerations }}
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
       {{- end }}
       containers:
       - name: "{{ template "zookeeper.fullname" . }}"
@@ -73,7 +79,7 @@ spec:
             nami_initialize zookeeper
             exec tini -- /run.sh
         resources:
-{{ toYaml .Values.Resources | indent 10 }}
+{{ toYaml .Values.resources | indent 10 }}
         env:
         - name: ZOO_PORT_NUMBER
           value: {{ .Values.service.port | quote }}

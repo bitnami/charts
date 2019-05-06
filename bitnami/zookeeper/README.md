@@ -12,7 +12,7 @@ $ helm install bitnami/zookeeper
 
 This chart bootstraps a [Zookeeper](https://github.com/bitnami/bitnami-docker-zookeeper) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 |              Parameter                |                              Description                            |                            Default                       |
 |---------------------------------------|---------------------------------------------------------------------|----------------------------------------------------------|
 | `global.imageRegistry`                | Global Docker image registry                                        | `nil`                                                    |
+| `global.imagePullSecrets`             | Global Docker registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.registry`                      | Zookeeper image registry                                            | `docker.io`                                              |
 | `image.repository`                    | Zookeeper Image name                                                | `bitnami/zookeeper`                                      |
 | `image.tag`                           | Zookeeper Image tag                                                 | `{VERSION}`                                              |
@@ -86,6 +87,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `persistence.annotations`             | Annotations for the PVC                                             | `{}`                                                     |
 | `nodeSelector`                        | Node labels for pod assignment                                      | `{}`                                                     |
 | `tolerations`                         | Toleration labels for pod assignment                                | `[]`                                                     |
+| `affinity`                            | Map of node/pod affinities                                          | `{}`                                                     |
 | `resources`                           | CPU/Memory resource requests/limits                                 | Memory: `256Mi`, CPU: `250m`                             |
 | `livenessProbe.enabled`               | would you like a livessProbed to be enabled                         | `true`                                                   |
 | `livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                            | 30                                                       |

@@ -16,7 +16,9 @@ spec:
   replicas: {{ .Values.cluster.replicaCount }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStrategy }}
-    {{- if .Values.statefulset.rollingUpdatePartition }}
+    {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.statefulset.rollingUpdatePartition }}
     rollingUpdate:
       partition: {{ .Values.statefulset.rollingUpdatePartition }}
     {{- end }}
@@ -55,9 +57,10 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
       {{- end }}
+{{- include "cassandra.imagePullSecrets" . | indent 6 }}
       containers:
       - name: cassandra
-        command: 
+        command:
           - bash
           - -ec
           # Node 0 is the password seeder
@@ -65,7 +68,7 @@ spec:
               if [[ $HOSTNAME =~ (.*)-0$ ]]; then
                 echo "Setting node as password seeder"
                 export CASSANDRA_PASSWORD_SEEDER=yes
-              else 
+              else
                 # Only node 0 will execute the startup initdb scripts
                 export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
@@ -98,9 +101,9 @@ spec:
           value: {{ .Values.cluster.endpointSnitch }}
 {{- if .Values.tlsEncryptionSecretName }}
         - name: CASSANDRA_INTERNODE_ENCRYPTION
-          value: {{ .Values.cluster.internodeEncryption }}
+          value: {{ .Values.cluster.internodeEncryption | quote }}
         - name: CASSANDRA_CLIENT_ENCRYPTION
-          value: {{ .Values.cluster.clientEncryption }}
+          value: {{ .Values.cluster.clientEncryption | quote }}
         - name: CASSANDRA_TRUSTSTORE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -184,18 +187,10 @@ spec:
         - name: configurations
           mountPath: /bitnami/cassandra/conf
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Values.image.pullSecrets }}
-      {{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "cassandra.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        {{- if .Values.metrics.image.pullSecrets }}
-        imagePullSecrets:
-          - name: {{ .Values.metrics.image.pullSecrets }}
-        {{- end }}
         ports:
           - name: metrics
             containerPort: 8080
@@ -214,14 +209,14 @@ spec:
 {{- end }}
       volumes:
 {{- if .Values.tlsEncryptionSecretName }}
-        - name: encryption-secrets
-          secret:
-            secretName: {{ .Values.tlsEncryptionSecretName }}
-            items:
-            - key: keystore
-              path: keystore
-            - key: truststore
-              path: truststore
+      - name: encryption-secrets
+        secret:
+          secretName: {{ .Values.tlsEncryptionSecretName }}
+          items:
+          - key: keystore
+            path: keystore
+          - key: truststore
+            path: truststore
 {{- end }}
 {{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
       - name: configurations

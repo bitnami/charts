@@ -12,7 +12,7 @@ $ helm install bitnami/etcd
 
 This chart bootstraps a [etcd](https://github.com/bitnami/bitnami-docker-etcd) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 |          Parameter                    |                                                  Description                                             |                                     Default                        |
 |---------------------------------------|----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------- |
 | `global.imageRegistry`                | Global Docker image registry                                                                             | `nil`                                                              |
+| `global.imagePullSecrets`             | Global Docker registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)            |
 | `image.registry`                      | etcd image registry                                                                                      | `docker.io`                                                        |
 | `image.repository`                    | etcd Image name                                                                                          | `bitnami/etcd`                                                     |
 | `image.tag`                           | etcd Image tag                                                                                           | `{VERSION}`                                                        |
@@ -58,7 +59,8 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `statefulset.rollingUpdatePartition`  | Partition for Rolling Update strategy                                                                    | `nil`                                                              |
 | `statefulset.podManagementPolicy`     | Pod management policy for the stateful set                                                               | `OrderedReady`                                                     |
 | `statefulset.replicaCount`            | Number of etcd nodes                                                                                     | `1`                                                                |
-| `useConfigmap`                        | Switch to use the config map for etcd                                                                    | `false`                                                            |
+| `configFileConfigMap`                        | ConfigMap that contains a etcd.conf.yaml to be mounted                                                                   | `nil`                                                            |
+| `envVarsConfigMap`                        | ConfigMap that contains environment variables to be set in the container                                                                   | `nil`                                                            |
 | `allowNoneAuthentication`             | Allow to use etcd without configuring RBAC authentication                                                | `true`                                                             |
 | `auth.rbac.enabled`                   | Switch to enable the etcd authentication.                                                                | `true`                                                            |
 | `auth.rbac.rootPassword`              | Password for the root user                                                                               | `nil`                                                            |
@@ -124,6 +126,37 @@ $ helm install --name my-release -f values.yaml bitnami/etcd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Using custom configuration
+
+In order to use custom configuration parameters, two options are available:
+
+  - Using environment variables: etcd allows setting environment variables that map to configuration settings. In order to set extra environment variables, use the `envVarsConfigMap` value to point to a ConfigMap that contains them. Example:
+
+```console
+$ cat << EOF > /tmp/configurationEnvVars.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etcd-env-vars
+  namespace: default
+data:
+  ETCD_AUTO_COMPACTION_RETENTION: "0"
+  ETCD_HEARTBEAT_INTERVAL: "150"
+EOF
+
+$ kubectl create -f /tmp/configurationEnvVars.yaml
+
+$ helm install bitnami/etcd --set envVarsConfigMap=etcd-env-vars
+```
+
+  - Using a custom etcd.conf.yml: The etcd chart allows mounting a custom etcd.conf.yml file using the `configFileConfigMap` value. Example:
+
+```console
+$ kubectl create configmap etcd-conf --from-file=etcd.conf.yml
+
+$ helm install bitnami/etcd --set configFileConfigMap=etcd-conf
+```
 
 ## Production and horizontal scaling
 

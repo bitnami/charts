@@ -17,7 +17,9 @@ spec:
   replicas: {{ .Values.statefulset.replicaCount }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStratey }}
-    {{- if .Values.statefulset.rollingUpdatePartition }}
+    {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.statefulset.rollingUpdatePartition }}
     rollingUpdate:
       partition: {{ .Values.statefulset.rollingUpdatePartition }}
     {{- end }}
@@ -39,12 +41,7 @@ spec:
 {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "etcd.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -100,7 +97,7 @@ spec:
               mkdir -p "${DATA_DIR}"
               ## Setting up new cluster
               echo "==> There is no data at all. Creating new cluster"
-              export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
+              export ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
               store_member_id &
               if [ -n "${ETCD_ROOT_PASSWORD}" ] && [ "${HOSTNAME}" == "{{ $etcdFullname }}-0" ]; then
                 echo "==> Configuring RBAC authentication!"
@@ -120,13 +117,13 @@ spec:
                 member_id=$(cat "${DATA_DIR}/member_id")
                 if [ "${HOSTNAME}" != "{{ $etcdFullname }}-0" ]; then
                   echo "==> Updating member in existing cluster."
-                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
+                  export ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
                   etcdctl ${AUTH_OPTIONS} member update ${member_id} {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}
                 fi
               ## Adding new member to the cluster
               else
                 echo "==> Adding member to existing cluster."
-                export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
+                export ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
 
                 etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
                 sed -ie 's/^/export /' /bitnami/etcd/data/new_member_envs
@@ -138,13 +135,18 @@ spec:
               fi
             fi
 
-            {{- if .Values.useConfigmap }}
+            {{- if .Values.configFileConfigMap }}
             exec /opt/bitnami/etcd/bin/etcd --config-file /opt/bitnami/etcd/conf/etcd.conf.yml
             {{ else }}
             exec /opt/bitnami/etcd/bin/etcd
             {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+        {{- if .Values.envVarsConfigMap }}
+        envFrom:
+        - configMapRef:
+            name: {{ template "etcd.envVarsCM" . }}
+        {{- end }}
         env:
         {{- if .Values.image.debug }}
         - name: BASH_DEBUG
@@ -253,7 +255,7 @@ spec:
                   AUTH_OPTIONS="{{ template "etcd.authOptions" . }}"
                   DATA_DIR={{ template "etcd.dataDir" . }}
                   MEMBER_ID=$(etcdctl member list | grep name=`hostname -s` | awk {'print $1'} | awk -F ":" {'print $1'})
-                  export ETCDCTL_ENDPOINTS="{{ $etcdClientProtocol }}://{{ $etcdFullname }}-0.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $clientPort }}"
+                  export ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
                   echo "==> Removing $MEMBER_ID from etcd cluster"
                   etcdctl ${AUTH_OPTIONS} member remove $MEMBER_ID
                   if [ $? -eq 0 ]; then
@@ -284,7 +286,7 @@ spec:
         - name: data
           mountPath: /bitnami/etcd
         {{ end }}
-        {{ if .Values.useConfigmap }}
+        {{ if .Values.configFileConfigMap }}
         - name: etcd-config
           mountPath: /opt/bitnami/etcd/conf/
         {{ end }}
@@ -299,10 +301,10 @@ spec:
           readOnly: true
         {{ end }}
       volumes:
-      {{ if .Values.useConfigmap }}
+      {{ if .Values.configFileConfigMap }}
       - name: etcd-config
         configMap:
-          name: {{ template "etcd.fullname" . }}-configuration
+          name: {{ template "etcd.configFileCM" . }}
       {{ end }}
       {{ if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS ) ) }}
       - name: etcd-client-certs

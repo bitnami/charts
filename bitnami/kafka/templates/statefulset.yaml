@@ -16,7 +16,13 @@ spec:
   podManagementPolicy: "Parallel"
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
-    type: {{ .Values.updateStratey }}
+    type: {{ .Values.updateStrategy | quote }}
+    {{- if (eq "Recreate" .Values.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.rollingUpdatePartition }}
+    {{- end }}
   selector:
     matchLabels:
       app: {{ template "kafka.name" . }}
@@ -32,12 +38,7 @@ spec:
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "kafka.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -50,6 +51,10 @@ spec:
       {{- if .Values.tolerations }}
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
       {{- end }}
       containers:
       - name: "{{ template "kafka.fullname" . }}"
@@ -94,9 +99,9 @@ spec:
           {{- if .Values.advertisedListeners }}
           value: {{ .Values.advertisedListeners }}
           {{- else if .Values.auth.enabled  }}
-          value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}:$(KAFKA_PORT_NUMBER)'
+          value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.cluster.local:$(KAFKA_PORT_NUMBER)'
           {{- else }}
-          value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}:$(KAFKA_PORT_NUMBER)'
+          value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.cluster.local:$(KAFKA_PORT_NUMBER)'
           {{- end }}
         {{- if .Values.auth.enabled }}
         - name: KAFKA_OPTS
@@ -115,11 +120,6 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-inter-broker-password
-        {{- end }}
-        {{- if .Values.auth.certificatesPassword }}
-        - name: KAFKA_CERTIFICATE_PASSWORD
-          value: {{ .Values.auth.certificatesPassword | quote }}
-        {{- end }}
         {{- if .Values.auth.zookeeperUser }}
         - name: KAFKA_ZOOKEEPER_USER
           value: {{ .Values.auth.zookeeperUser | quote }}
@@ -130,6 +130,11 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-zookeeper-password
+        {{- end }}
+        {{- end }}
+        {{- if .Values.auth.certificatesPassword }}
+        - name: KAFKA_CERTIFICATE_PASSWORD
+          value: {{ .Values.auth.certificatesPassword | quote }}
         {{- end }}
         - name: ALLOW_PLAINTEXT_LISTENER
           {{- if .Values.auth.enabled }}
@@ -155,12 +160,24 @@ spec:
           value: {{ .Values.logRetentionCheckIntervalMs | quote }}
         - name: KAFKA_LOG_RETENTION_HOURS
           value: {{ .Values.logRetentionHours | quote }}
+        - name: KAFKA_LOG_MESSAGE_FORMAT_VERSION
+          value: {{ .Values.logMessageFormatVersion | quote }}
         - name: KAFKA_MAX_MESSAGE_BYTES
           value: {{ .Values.maxMessageBytes | replace "_" "" | quote }}
         - name: KAFKA_SEGMENT_BYTES
           value: {{ .Values.logSegmentBytes | replace "_" "" | quote }}
         - name: KAFKA_LOGS_DIRS
           value: {{ .Values.logsDirs }}
+        - name: KAFKA_DEFAULT_REPLICATION_FACTOR
+          value: {{ .Values.defaultReplicationFactor | quote }}
+        - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+          value: {{ .Values.offsetsTopicReplicationFactor | quote }}
+        - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+          value: {{ .Values.transactionStateLogReplicationFactor | quote }}
+        - name: KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
+          value: {{ .Values.sslEndpointIdentificationAlgorithm | quote }}
+        - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+          value: {{ .Values.transactionStateLogMinIsr | quote }}
         - name: KAFKA_NUM_IO_THREADS
           value: {{ .Values.numIoThreads | quote }}
         - name: KAFKA_NUM_NETWORK_THREADS
@@ -285,5 +302,3 @@ spec:
         - name: data
           emptyDir: {}
 {{- end }}
-
-

@@ -30,12 +30,7 @@ spec:
   {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "nginx.imagePullSecrets" . | indent 6 }}
       containers:
       - name: {{ template "fullname" . }}
         image: "{{ template "nginx.image" . }}"
@@ -58,13 +53,13 @@ spec:
           timeoutSeconds: 3
           periodSeconds: 5
         volumeMounts:
-        {{- if .Values.vhost }}
-        - name: nginx-vhost
-          mountPath: /opt/bitnami/nginx/conf/vhosts
+        {{- if .Values.serverBlock }}
+        - name: nginx-server-block
+          mountPath: /opt/bitnami/nginx/conf/server_blocks
         {{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "nginx.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: [ '/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:8080/status']
         ports:
@@ -86,8 +81,8 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 12 }}
 {{- end }}
       volumes:
-      {{- if .Values.vhost }}
-      - name: nginx-vhost
+      {{- if .Values.serverBlock }}
+      - name: nginx-server-block
         configMap:
           name: {{ template "fullname" . }}
       {{- end }}

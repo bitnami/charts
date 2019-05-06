@@ -21,6 +21,7 @@ spec:
         app: {{ template "kubeapps.fullname" . }}
         release: {{ .Release.Name }}
     spec:
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       containers:
       - name: nginx
         image: {{ template "kubeapps.image" (list .Values.frontend.image .Values.global) }}
@@ -36,6 +37,26 @@ spec:
           containerPort: 8080
         resources:
 {{ toYaml .Values.frontend.resources | indent 12 }}
+    {{- if .Values.authProxy.enabled }}
+      - name: auth-proxy
+        args:
+        - /keycloak-proxy
+        - --client-id={{ required "You must fill \".Values.authProxy.clientID\" with the Client ID of the OIDC provider" .Values.authProxy.clientID }}
+        - --client-secret={{ required "You must fill \".Values.authProxy.clientSecret\" with the Client Secret of the OIDC provider" .Values.authProxy.clientSecret }}
+        - --discovery-url={{ required "You must fill \".Values.authProxy.discoveryURL\" with the OIDC provider URL" .Values.authProxy.discoveryURL }}
+        - --upstream-url=http://localhost:8080/
+        - --resources=uri=/api/kube/*|white-listed=true
+        - --listen=0.0.0.0:3000
+        {{- range .Values.authProxy.additionalFlags }}
+        - {{ . }}
+        {{- end }}
+        image: {{ template "kubeapps.image" (list .Values.authProxy.image .Values.global) }}
+        ports:
+        - name: proxy
+          containerPort: 3000
+        resources:
+{{ toYaml .Values.authProxy.resources | indent 12 }}
+    {{- end }}
       volumes:
       - name: vhost
         configMap:

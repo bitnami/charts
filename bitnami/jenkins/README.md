@@ -12,7 +12,7 @@ $ helm install bitnami/jenkins
 
 This chart bootstraps a [Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 |         Parameter          |              Description               |                               Default                     |
 |----------------------------|----------------------------------------|---------------------------------------------------------- |
 | `global.imageRegistry`     | Global Docker image registry           | `nil`                                                     |
+| `global.imagePullSecrets`  | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`           | Jenkins image registry                 | `docker.io`                                               |
 | `image.repository`         | Jenkins Image name                     | `bitnami/jenkins`                                         |
 | `image.tag`                | Jenkins Image tag                      | `{VERSION}`                                               |
@@ -65,6 +66,17 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `service.nodePorts.https`                | Kubernetes https node port                 | `""`                                                    |
 | `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
 | `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
+| `ingress.enabled`                   | Enable ingress controller resource                            | `false`                                                  |
+| `ingress.annotations`               | Ingress annotations                                           | `[]`                                                     |
+| `ingress.certManager`               | Add annotations for cert-manager                              | `false`                                                  |
+| `ingress.hosts[0].name`             | Hostname to your jenkins installation                           | `jenkins.local`                                            |
+| `ingress.hosts[0].path`             | Path within the url structure                                 | `/`                                                      |
+| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                | `false`                                                  |
+| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                               | `nil`                                                  |
+| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                     | `jenkins.local-tls-secret`                                 |
+| `ingress.secrets[0].name`           | TLS Secret Name                                               | `nil`                                                    |
+| `ingress.secrets[0].certificate`    | TLS Secret Certificate                                        | `nil`                                                    |
+| `ingress.secrets[0].key`            | TLS Secret Key                                                | `nil`                                                    |
 | `persistence.enabled`      | Enable persistence using PVC           | `true`                                                    |
 | `persistence.storageClass` | PVC Storage Class for Jenkins volume   | `nil` (uses alpha storage class annotation)               |
 | `persistence.accessMode`   | PVC Access Mode for Jenkins volume     | `ReadWriteOnce`                                           |

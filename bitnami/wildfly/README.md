@@ -12,7 +12,7 @@ $ helm install bitnami/wildfly
 
 This chart bootstraps a [WildFly](https://github.com/bitnami/bitnami-docker-wildfly) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 |         Parameter               |              Description               |                           Default                          |
 |---------------------------------|----------------------------------------|------------------------------------------------------------|
 | `global.imageRegistry`          | Global Docker image registry           | `nil`                                                      |
+| `global.imagePullSecrets`       | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`                | WildFly image registry                 | `docker.io`                                                |
 | `image.repository`              | WildFly Image name                     | `bitnami/wildfly`                                          |
 | `image.tag`                     | WildFly Image tag                      | `{VERSION}`                                                |

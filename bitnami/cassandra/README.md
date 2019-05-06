@@ -13,7 +13,7 @@ $ helm install bitnami/cassandra
 
 This chart bootstraps a [Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -49,6 +49,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | Parameter                                  | Description                                                                                                    | Default                                              |
 |--------------------------------------------|----------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
 | `global.imageRegistry`                     | Global Docker Image registry                                                                                   | `nil`                                                |
+| `global.imagePullSecrets`                  | Global Docker registry secret names as an array                                                                | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`                           | Cassandra Image registry                                                                                           | `docker.io`                                          |
 | `image.repository`                         | Cassandra Image name                                                                                               | `bitnami/cassandra`                                      |
 | `image.tag`                                | Cassandra Image tag                                                                                                | `{VERSION}`                                          |

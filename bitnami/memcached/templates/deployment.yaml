@@ -33,12 +33,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "memcached.imagePullSecrets" . | indent 6 }}
       containers:
       - name: {{ template "fullname" . }}
         image: "{{ template "memcached.image" . }}"
@@ -70,7 +65,7 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "memcached.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         ports:
         - name: metrics

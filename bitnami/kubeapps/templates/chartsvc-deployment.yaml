@@ -19,6 +19,7 @@ spec:
         app: {{ template "kubeapps.chartsvc.fullname" . }}
         release: {{ .Release.Name }}
     spec:
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       containers:
       - name: chartsvc
         image: {{ template "kubeapps.image" (list .Values.chartsvc.image .Values.global) }}

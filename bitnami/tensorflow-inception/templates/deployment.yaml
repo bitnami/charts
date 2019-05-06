@@ -34,12 +34,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.server.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.server.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "tensorflow-inception.imagePullSecrets" . | indent 6 }}
       initContainers:
       - name: seed
         image: "{{ template "tensorflow-inception.client.image" . }}"
@@ -80,7 +75,7 @@ spec:
           mountPath: "/bitnami/model-data"
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "tensorflow-inception.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: ['python', 'tf_serving_exporter.py', '--tf_port', '{{ .Values.server.port }}', '--port', '9118', '--model_name', 'inception-v3']
         ports:

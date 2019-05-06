@@ -1,5 +1,5 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta2
+kind: StatefulSet
 metadata:
   name: {{ template "elasticsearch.master.fullname" . }}
   labels:
@@ -12,8 +12,9 @@ spec:
   selector:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}
-      release: "{{ .Release.Name }}"
+      release: {{ .Release.Name | quote }}
       role: "master"
+  serviceName: {{ template "elasticsearch.master.fullname" . }}
   replicas: {{ .Values.master.replicas }}
   template:
     metadata:
@@ -23,12 +24,13 @@ spec:
         release: {{ .Release.Name | quote }}
         role: "master"
     spec:
+      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
-      {{- if eq .Values.master.antiAffinity "hard" }}
       affinity:
+      {{- if eq .Values.master.antiAffinity "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: "kubernetes.io/hostname"
@@ -38,7 +40,6 @@ spec:
                   release: {{ .Release.Name | quote }}
                   role: "master"
       {{- else if eq .Values.master.antiAffinity "soft" }}
-      affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
@@ -50,17 +51,14 @@ spec:
                   release: {{ .Release.Name | quote }}
                   role: "master"
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
+      {{- if .Values.master.nodeAffinity }}
+{{ toYaml .Values.master.nodeAffinity | indent 8 }}
       {{- end }}
       {{- if .Values.sysctlImage.enabled }}
       ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
       initContainers:
       - name: sysctl
-        image: {{ template "sysctl.image" . }}
+        image: {{ template "elasticsearch.sysctl.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         command: ['sh', '-c', 'install_packages systemd && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
         securityContext:
@@ -69,14 +67,20 @@ spec:
       containers:
       - name: "elasticsearch"
         image: {{ template "elasticsearch.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.securityContext.enabled }}
         securityContext:
           runAsUser: {{ .Values.securityContext.runAsUser }}
         {{- end }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: {{ .Values.name | quote }}
+        - name: ELASTICSEARCH_CLUSTER_HOSTS
+          value: {{ template "elasticsearch.discovery.fullname" . }}
+        - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
+          {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
+          {{- $replicas := int .Values.master.replicas }}
+          value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
         {{- if .Values.plugins }}
         - name: ELASTICSEARCH_PLUGINS
           value: {{ .Values.plugins | quote }}
@@ -111,18 +115,22 @@ spec:
           httpGet:
             path: /_cluster/health?local=true
             port: 9200
-      {{- end }}
+        {{- end }}
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
         volumeMounts:
-        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch_custom.yml
+        {{- if .Values.config }}
+        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
           name: "config"
-          subPath: elasticsearch_custom.yml
+          subPath: elasticsearch.yml
+        {{- end }}
         - name: "data"
           mountPath: "/bitnami/elasticsearch/data"
       volumes:
+      {{- if .Values.config }}
       - name: "config"
         configMap:
           name: {{ template "elasticsearch.fullname" . }}
+      {{- end }}
       - name: "data"
         emptyDir: {}

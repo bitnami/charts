@@ -2,6 +2,9 @@
 
 The MEAN stack is MongoDB, Express.js, Angular and Node.js. Because all components of the MEAN stack support programs written in JavaScript, MEAN applications can be written in one language for both server-side and client-side execution environments.
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+This Chart will be removed in 15 days. Use instead the [Node Chart](https://github.com/bitnami/charts/tree/master/bitnami/node)
+
 ## TL;DR
 
 ```console
@@ -12,9 +15,9 @@ $ helm install bitnami/mean
 
 This chart bootstraps a [NodeJS](https://github.com/bitnami/bitnami-docker-node) and a [MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
-
 It clones and deploys a Node.js application from a git repository. Defaults to a demo MEAN application: https://github.com/bitnami/sample-mean.git
+
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -52,6 +55,7 @@ The following table lists the configurable parameters of the MEAN chart and thei
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                              | `nil`                                                     |
+| `global.imagePullSecrets`               | Global Docker registry secret names as an array           | `[]` (does not add image pull secrets to deployed pods)   |
 | `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
 | `image.repository`                      | NodeJS image name                                         | `bitnami/node`                                            |
 | `image.tag`                             | NodeJS image tag                                          | `{VERSION}`                                               |

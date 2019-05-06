@@ -13,9 +13,9 @@ $ helm install bitnami/node
 
 This chart bootstraps a [Node](https://github.com/bitnami/bitnami-docker-node) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+It clones and deploys a Node.js application from a Git repository. Optionally, you can set up an Ingress resource to access your application and provision an external database using the Kubernetes service catalog and the Open Service Broker for Azure.
 
-It clones and deploys a Node.js application from a git repository. Optionally you can set un an Ingress resource to access your application and provision an external database using the k8s service catalog and the Open Service Broker for Azure.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -53,6 +53,7 @@ The following table lists the configurable parameters of the Node chart and thei
 |              Parameter                  |            Description                                    |                        Default                            |
 |-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                              | `nil`                                                     |
+| `global.imagePullSecrets`               | Global Docker registry secret names as an array           | `[]` (does not add image pull secrets to deployed pods)   |
 | `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
 | `image.repository`                      | NodeJS image name                                         | `bitnami/node`                                            |
 | `image.tag`                             | NodeJS image tag                                          | `{VERSION}`                                               |

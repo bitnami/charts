@@ -1,6 +1,7 @@
+apiVersion: v1
 name: bitnami-common
-version: 0.0.6
-appVersion: 0.0.6
+version: 0.0.7
+appVersion: 0.0.7
 description: Chart with custom tempaltes used in Bitnami charts.
 icon: https://bitnami.com/downloads/logos/bitnami-mark.png
 keywords:

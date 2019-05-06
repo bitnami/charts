@@ -12,7 +12,7 @@ $ helm install bitnami/elasticsearch
 
 This chart bootstraps a [Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -52,6 +52,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 |            Parameter                              |                      Description                                                                                          |                Default                                  |
 |---------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                            | Global Docker image registry                                                                                              | `nil`                                                   |
+| `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                           | `[]` (does not add image pull secrets to deployed pods)                                          |
 | `image.registry`                                  | Elasticsearch image registry                                                                                              | `docker.io`                                             |
 | `image.repository`                                | Elasticsearch image repository                                                                                            | `bitnami/elasticsearch`                                 |
 | `image.tag`                                       | Elasticsearch image tag                                                                                                   | `{VERSION}`                                             |
@@ -64,6 +65,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.replicas`                                 | Desired number of Elasticsearch master-eligible nodes                                                                     | `2`                                                     |
 | `master.heapSize`                                 | Master-eligible node heap size                                                                                            | `128m`                                                  |
 | `master.antiAffinity`                             | Master-eligible node pod anti-affinity policy                                                                             | `soft`                                                  |
+| `coordinating.nodeAffinity`                       | Master-eligible node affinity policy                                                                           | `nil`                                                  |
 | `master.service.type`                             | Kubernetes Service type (master-eligible nodes)                                                                           | `ClusterIP`                                             |
 | `master.service.port`                             | Kubernetes Service port for Elasticsearch transport port (master-eligible nodes)                                          | `9300`                                                  |
 | `master.service.nodePort`                         | Kubernetes Service nodePort (master-eligible nodes)                                                                       | `nil`                                                   |
@@ -90,6 +92,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                   | `2`                                                     |
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                          | `128m`                                                  |
 | `coordinating.antiAffinity`                       | Coordinating-only node pod anti-affinity policy                                                                           | `soft`                                                  |
+| `coordinating.nodeAffinity`                       | Coordinating-only node affinity policy                                                                           | `nil`                                                  |
 | `coordinating.service.type`                       | Kubernetes Service type (coordinating-only nodes)                                                                         | `ClusterIP`                                             |
 | `coordinating.service.port`                       | Kubernetes Service port for REST API (coordinating-only nodes)                                                            | `9200`                                                  |
 | `coordinating.service.nodePort`                   | Kubernetes Service nodePort (coordinating-only nodes)                                                                     | `nil`                                                   |
@@ -110,8 +113,11 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `coordinating.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`                                                     |
 | `data.name`                                       | Data node pod name                                                                                                        | `data`                                                  |
 | `data.replicas`                                   | Desired number of Elasticsearch data nodes    nodes                                                                       | `3`                                                     |
+| `data.updateStrategy.type`                        | Update strategy for Data statefulset                                                                                      | `RollingUpdate`                                         |
+| `data.updateStrategy.rollingUpdatePartition`      | Partition update strategy for Data statefulset                                                                            | `nil`                                                   |
 | `data.heapSize`                                   | Data node heap size                                                                                                       | `1024m`                                                 |
 | `data.antiAffinity`                               | Data pod anti-affinity policy                                                                                             | `soft`                                                  |
+| `data.nodeAffinity`                       | Data pod node affinity policy                                                                           | `nil`                                                  |
 | `data.resources`                                  | CPU/Memory resource requests/limits for data nodes                                                                        | `requests: { cpu: "25m", memory: "1152Mi" }`            |
 | `data.persistence.enabled`                        | Enable persistence using a `PersistentVolumeClaim`                                                                        | `true`                                                  |
 | `data.persistence.annotations`                    | Persistent Volume Claim annotations                                                                                       | `{}`                                                    |
@@ -135,6 +141,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `ingest.replicas`                                 | Desired number of Elasticsearch ingest nodes                                                                              | `2`                                                     |
 | `ingest.heapSize`                                 | Ingest node heap size                                                                                                     | `128m`                                                  |
 | `ingest.antiAffinity`                             | Ingest node pod anti-affinity policy                                                                                      | `soft`                                                  |
+| `ingest.nodeAffinity`                       | Ingest node pod affinity policy                                                                           | `nil`                                                  |
 | `ingest.service.type`                             | Kubernetes Service type (ingest nodes)                                                                                    | `ClusterIP`                                             |
 | `ingest.service.port`                             | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                                       | `9300`                                                  |
 | `ingest.service.nodePort`                         | Kubernetes Service nodePort (ingest nodes)                                                                                | `nil`                                                   |

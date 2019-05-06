@@ -20,6 +20,7 @@ spec:
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "kubeapps.apprepository.fullname" . }}
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       containers:
       - name: controller
         image: {{ template "kubeapps.image" (list .Values.apprepository.image .Values.global) }}

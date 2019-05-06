@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami NGINX image version
 ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
@@ -10,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.14.2
+  tag: 1.16.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -21,14 +24,18 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
   type: LoadBalancer
-  # HTTP Port
+  ## Provide optional annotations to the service i.e. for external-dns
+  # annotations: 
+  #   external-dns.alpha.kubernetes.io/hostname: yourservicename.k8s.yourcompany.com
+  ##
+  ## HTTP Port
   port: 80
   ##
   ## loadBalancerIP:
@@ -41,8 +48,8 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-# vhost: |-
-#   # example PHP-FPM vhost
+# serverBlock: |-
+#   # example PHP-FPM server block
 #   server {
 #     listen 0.0.0.0:8080;
 #     root /app;
@@ -75,7 +82,7 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
     # pullSecrets:
-    #   - myRegistrKeySecretName
+    #   - myRegistryKeySecretName
   ## Metrics exporter pod Annotation and Labels
   podAnnotations:
     prometheus.io/scrape: "true"

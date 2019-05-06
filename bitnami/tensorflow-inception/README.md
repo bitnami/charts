@@ -1,3 +1,7 @@
+# Deprecation Notice
+
+The Bitnami TensorFlow Serving Inception v3 chart is deprecated. Consider using [TensorFlow Serving ResNet](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet) instead. This repository will be archived in 15 days.
+
 # TensorFlow Serving Inception v3
 
 TensorFlow Serving is an open-source software library for serving machine learning models. This chart will specifically serve the Inception v3 model with already trained data.
@@ -12,7 +16,7 @@ $ helm install bitnami/tensorflow-inception
 
 This chart bootstraps a TensorFlow Serving Inception v3 pod on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
@@ -63,6 +67,7 @@ The following tables lists the configurable parameters of the TensorFlow Incepti
 | Parameter                       | Description                                      | Default                                                      |
 | ------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
 | `global.imageRegistry`          | Global Docker image registry                     | `nil`                                                        |
+| `global.imagePullSecrets`       | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
 | `replicaCount`                  | desired number of pods                           | `1`                                                          |
 | `server.image.registry`         | TensorFlow Serving image registry                | `docker.io`                                                  |
 | `server.image.repository`       | TensorFlow Serving Image name                    | `bitnami/tensorflow-serving`                                 |

@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami etcd image version
 ## ref: https://hub.docker.com/r/bitnami/etcd/tags/
@@ -10,19 +13,18 @@
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.3.12
+  tag: 3.3.13
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: Always
-
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
@@ -46,10 +48,13 @@ statefulset:
   ##
   replicaCount: 1
 
-## Take into account that if you use a config map you need to provide the whole configuration
-## as the env vars defined in the statefulset.yaml will not be applied
+## ConfigMap that includes the etcd.conf.yml file
 ##
-useConfigmap: false
+# configFileConfigMap:
+
+## ConfigMap that includes extra environment variables
+##
+# envVarsConfigMap:
 
 ## etcd docker image available customizations
 ## https://github.com/bitnami/bitnami-docker-etcd#configuration

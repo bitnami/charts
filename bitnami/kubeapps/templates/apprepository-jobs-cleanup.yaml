@@ -18,6 +18,7 @@ spec:
         app: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
         release: {{ .Release.Name }}
     spec:
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       containers:
       - name: kubectl
         image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}

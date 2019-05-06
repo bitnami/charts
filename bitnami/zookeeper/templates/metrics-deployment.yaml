@@ -8,6 +8,8 @@ metadata:
     chart: {{ template "zookeeper.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
 spec:
   replicas: 1
   selector:
@@ -21,19 +23,16 @@ spec:
       labels:
         app: {{ template "zookeeper.name" . }}
         release: "{{ .Release.Name }}"
+        app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      {{- if .Values.metrics.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.metrics.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "zookeeper.imagePullSecrets" . | indent 6 }}
       containers:
-      - image: {{ template  "metrics.image" . }}
+      - image: {{ template "zookeeper.metrics.image" . }}
         name: zookeeper-exporter
         command:
           - /usr/local/bin/zookeeper-exporter
-          - -zk-list 
+          - -zk-list
           {{- $replicaCount := int .Values.replicaCount }}
           {{- $followerPort := int .Values.service.followerPort }}
           {{- $electionPort := int .Values.service.electionPort }}
@@ -43,7 +42,8 @@ spec:
           {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
           - {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $servicePort }}{{- if (lt $e ( sub $replicaCount 1)) -}},{{- end -}}{{ end }}
         ports:
-          - containerPort: 8080
+          - name: metrics
+            containerPort: 8080
         resources:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}

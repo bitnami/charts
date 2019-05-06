@@ -1,7 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 # The frontend service is the main reverse proxy used to access the Kubeapps UI
 # To expose Kubeapps externally either configure the ingress object below or
@@ -25,7 +29,7 @@ ingress:
     # Keep the connection open with the API server even if idle (the default is 60 seconds)
     # Setting it to 10 minutes which should be enough for our current use case of deploying/upgrading/deleting apps
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-    
+
   # The list of hostnames to be covered with this ingress record.
   # Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
@@ -94,14 +98,13 @@ apprepository:
   replicaCount: 1
   image:
     registry: docker.io
-    repository: kubeapps/apprepository-controller
-    tag: v1.2.0
+    repository: bitnami/kubeapps-apprepository-controller
+    tag: 1.3.1
   # Image used to perform chart repository syncs
   syncImage:
-    registry: quay.io
-    # TODO: Update tag when a new release is available
-    repository: helmpack/chart-repo
-    tag: v1.2.0
+    registry: docker.io
+    repository: bitnami/kubeapps-chart-repo
+    tag: 1.4.0-r1
   initialRepos:
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
@@ -150,8 +153,8 @@ tillerProxy:
   replicaCount: 2
   image:
     registry: docker.io
-    repository: kubeapps/tiller-proxy
-    tag: v1.2.0
+    repository: bitnami/kubeapps-tiller-proxy
+    tag: 1.3.1
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -176,9 +179,9 @@ tillerProxy:
 chartsvc:
   replicaCount: 2
   image:
-    registry: quay.io
-    repository: helmpack/chartsvc
-    tag: v1.3.0
+    registry: docker.io
+    repository: bitnami/kubeapps-chartsvc
+    tag: 1.4.0
   service:
     port: 8080
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
@@ -212,8 +215,8 @@ dashboard:
   replicaCount: 2
   image:
     registry: docker.io
-    repository: kubeapps/dashboard
-    tag: v1.2.0
+    repository: bitnami/kubeapps-dashboard
+    tag: 1.3.1
   service:
     port: 8080
   livenessProbe:
@@ -284,3 +287,30 @@ testImage:
   registry: docker.io
   repository: bitnami/nginx
   tag: 1.14.0-r27
+
+# Auth Proxy for OIDC support
+# ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
+authProxy:
+  # Set to true to enable the OIDC proxy
+  enabled: false
+  # Image used for the proxy
+  image:
+    registry: docker.io
+    repository: bitnami/keycloak-gatekeeper
+    tag: 2.3.0-r1
+  # Mandatory parametes
+  discoveryURL:
+  clientID:
+  clientSecret:
+  # Additional flags for Keycloak-Gatekeeper
+  additionalFlags:
+    # - --skip-openid-provider-tls-verify
+    # - --secure-cookie=false
+  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
