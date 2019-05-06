@@ -131,12 +131,12 @@ minio: mode
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MinIO - number of replicas must even, greater than 4 and lower than 32 */}}
+{{/* Validate values of MinIO - number of replicas must be even, greater than 4 and lower than 32 */}}
 {{- define "minio.validateValues.replicaCount" -}}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
 {{- if and (eq .Values.mode "distributed") (or (eq (mod $replicaCount 2) 1) (lt $replicaCount 4) (gt $replicaCount 32)) -}}
 minio: replicaCount
-    Number of replicas must even, greater than 4 and lower than 32!!
+    Number of replicas must be even, greater than 4 and lower than 32!!
     Please set a valid number of replicas (--set statefulset.replicaCount=X)
 {{- end -}}
 {{- end -}}
