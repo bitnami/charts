@@ -49,14 +49,14 @@ spec:
       affinity:
 {{ toYaml .Values.affinity | indent 8 }}
       {{- end }}
-      {{- if and .Values.airflow.cloneDagFilesFromGit.enabled (not .Values.airflow.dagsConfigMap) }}
+      {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
       initContainers:
       - name: git-clone-repository
         image: "{{ template "git.image" . }}"
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
         command: [ '/bin/sh', '-c' , 'git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} /dags && cd /dags && git checkout {{ .Values.airflow.cloneDagFilesFromGit.revision }}']
         volumeMounts:
-        - name: custom-dag-files
+        - name: github-cloned-dag-files
           mountPath: /dags
       {{- end }}
       containers:
@@ -166,27 +166,40 @@ spec:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
         {{- end }}
         volumeMounts:
-        {{- if or (.Files.Glob "files/dags/*.py") .Values.airflow.dagsConfigMap .Values.airflow.cloneDagFilesFromGit.enabled }}
-        - name: custom-dag-files
-          mountPath: /opt/bitnami/airflow/dags
+        {{- if .Files.Glob "files/dags/*.py" }}
+        - name: local-dag-files
+          mountPath: /opt/bitnami/airflow/dags/local
         {{- end }}
-        {{- if .Values.airflow.airflowConfigurationConfigMap }}
+        {{- if .Values.airflow.dagsConfigMap }}
+        - name: external-dag-files
+          mountPath: /opt/bitnami/airflow/dags/external
+        {{- end }}
+        {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+        - name: github-cloned-dag-files
+          mountPath: /opt/bitnami/airflow/dags/github
+        {{- end }}
+        {{- if .Values.airflow.configurationConfigMap }}
         - name: custom-configuration-file
           mountPath: /opt/bitnami/airflow/airflow.cfg
           subPath: airflow.cfg
         {{- end }}
       volumes:
-      {{- if or (.Files.Glob "files/dags/*.py") .Values.airflow.dagsConfigMap .Values.airflow.cloneDagFilesFromGit.enabled }}
-      - name: custom-dag-files
-        {{- if or (.Files.Glob "files/dags/*.py") .Values.airflow.dagsConfigMap }}
+      {{- if .Files.Glob "files/dags/*.py" }}
+      - name: local-dag-files
         configMap:
-          name: {{ template "airflow.dagFilesConfigMap" . }}
-        {{- else if .Values.airflow.cloneDagFilesFromGit.enabled }}
-        emptyDir: {}
-        {{- end }}
+          name: {{ template "airflow.fullname" . }}-dag-files
       {{- end }}
-      {{- if .Values.airflow.airflowConfigurationConfigMap }}
+      {{- if .Values.airflow.dagsConfigMap }}
+      - name: external-dag-files
+        configMap:
+          name: {{ .Values.airflow.dagsConfigMap }}
+      {{- end }}
+      {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+      - name: github-cloned-dag-files
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.airflow.configurationConfigMap }}
       - name: custom-configuration-file
         configMap:
-          name: {{ .Values.airflow.airflowConfigurationConfigMap }}
+          name: {{ .Values.airflow.configurationConfigMap }}
       {{- end }}

@@ -74,7 +74,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `gitImage.pullSecrets`                    | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `updateStrategy`                          | Update strategy for the stateful set                                                        | `RollingUpdate`                                              |
 | `rollingUpdatePartition`                  | Partition update strategy                                                                   | `nil`                                                        |
-| `airflow.airflowConfigurationConfigMap`   | Name of an existing config map containing the Airflow config file                           | `nil`                                                        |
+| `airflow.configurationConfigMap`          | Name of an existing config map containing the Airflow config file                           | `nil`                                                        |
 | `airflow.dagsConfigMap`                   | Name of an existing config map containing all the DAGs files you want to load in Airflow.   | `nil`                                                        |
 | `airflow.loadExamples`                    | Switch to load some Airflow examples                                                        | `true`                                                       |
 | `airflow.cloneDagFilesFromGit.enabled`    | Enable in order to download DAG files from git repository.                                  | `false`                                                      |
@@ -84,8 +84,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.worker.port`                     | Airflow Worker port                                                                         | `8793`                                                       |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                           | `2`                                                          |
 | `airflow.auth.forcePassword`              | Force users to specify a password                                                           | `false`                                                      |
-| `airflow.auth.airflowUsername`            | Username to access web UI                                                                   | `user`                                                       |
-| `airflow.auth.airflowPassword`            | Password to access web UI                                                                   | `nil`                                                        |
+| `airflow.auth.username`                   | Username to access web UI                                                                   | `user`                                                       |
+| `airflow.auth.password`                   | Password to access web UI                                                                   | `nil`                                                        |
 | `airflow.auth.fernetKey`                  | Fernet key to secure connections                                                            | `nil`                                                        |
 | `airflow.auth.existingSecret`             | Name of an existing secret containing airflow password and fernet key                       | `nil`                                                        |
 | `airflow.extraEnvVars`                    | Extra environment variables to add to airflow web, worker and scheduler pods                | `nil`                                                        |
@@ -148,8 +148,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set airflow.auth.airflowUsername=my-user,airflow.auth.airflowPassword=my-passsword \
-    bitnami/airflow
+               --set airflow.auth.username=my-user \
+               --set airflow.auth.password=my-passsword \
+               --set airflow.auth.fernetKey=my-fernet-key \
+               bitnami/airflow
 ```
 
 The above command sets the credentials to access the Airflow web UI.
@@ -166,9 +168,15 @@ $ helm install --name my-release -f values.yaml bitnami/airflow
 
 The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
 
+## Generate a Fernet key
+
+A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
+
+Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
+
 ## Load DAG files
 
-There are three different ways to load your custom DAG files into the Airflow chart:
+There are three different ways to load your custom DAG files into the Airflow chart. All of them are compatible so you can use more than one at the same time.
 
 ### Option 1: Load locally from the `files` folder
 

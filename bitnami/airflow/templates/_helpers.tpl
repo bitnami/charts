@@ -224,14 +224,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{ template "airflow.dagFilesConfigMap" . }}
+
 {{/*
-Get the DAG files ConfigMap name.
+Get the secret name
 */}}
-{{- define "airflow.dagFilesConfigMap" -}}
-{{- if .Values.airflow.dagsConfigMap -}}
-{{- printf "%s" .Values.airflow.dagsConfigMap -}}
+{{- define "airflow.secretName" -}}
+{{- if .Values.airflow.auth.existingSecret -}}
+{{- printf "%s" .Values.airflow.auth.existingSecret -}}
 {{- else -}}
-{{- printf "%s-dag-files" (include "airflow.fullname" .) -}}
+{{- printf "%s" (include "airflow.fullname" .) -}}
 {{- end -}}
 {{- end -}}

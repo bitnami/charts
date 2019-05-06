@@ -109,7 +109,7 @@ updateStrategy: RollingUpdate
 airflow:
   ## Name of an existing config map containing the Airflow config file
   ##
-  # airflowConfigurationConfigMap:
+  # configurationConfigMap:
   ## Name of an existing config map containing all the DAGs files you want to load in Airflow.
   ##
   # dagsConfigMap:
@@ -137,10 +137,10 @@ airflow:
     forcePassword: true
     ## Specify username to acccess web UI
     ##
-    airflowUsername: user
+    username: user
     ## Specify password to acccess web UI
     ##
-    # airflowPassword:
+    # password:
     ## Specify a fernet key to secure airflow connections
     ## Fernet key must be 32 url-safe base64-encoded bytes.
     ## More info at:
@@ -148,7 +148,7 @@ airflow:
     ## - https://bcb.github.io/airflow/fernet-key
     ##
     # fernetKey:
-    ## Use existing secret (ignores previous airflowPassword and fernetKey)
+    ## Use existing secret (ignores previous password and fernetKey)
     ##
     # existingSecret:
 

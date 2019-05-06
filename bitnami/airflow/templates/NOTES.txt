@@ -44,7 +44,7 @@ host. To configure Airflow with the URL of your service:
 2. Complete your Airflow deployment by running:
 
   helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set service.type={{ .Values.service.type }},airflow.baseUrl=http://$APP_HOST:$APP_PORT,airflow.auth.airflowPassword=$APP_PASSWORD,postgresql.postgresqlPassword=$APP_DATABASE_PASSWORD,redis.password=$APP_REDIS_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+    --set service.type={{ .Values.service.type }},airflow.baseUrl=http://$APP_HOST:$APP_PORT,airflow.auth.password=$APP_PASSWORD,postgresql.postgresqlPassword=$APP_DATABASE_PASSWORD,redis.password=$APP_REDIS_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- else -}}
 
@@ -72,7 +72,7 @@ host. To configure Airflow with the URL of your service:
 
 2. Get your Airflow login credentials by running:
 
-  echo User:    {{ .Values.airflow.auth.airflowUsername }}
+  echo User:    {{ .Values.airflow.auth.username }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
 
   {{- end  }}
