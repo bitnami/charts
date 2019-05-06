@@ -70,7 +70,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `ingress.enabled`                | Enable ingress controller resource               | `false`                                                      |
 | `ingress.certManager`            | Add annotations for cert-manager                 | `false`                                                      |
 | `ingress.annotations`            | Ingress annotations                              | `[]`                                                         |
-| `ingress.hosts[0].name`          | Hostname to your Wordpress installation          | `nginx.local`                                                |
+| `ingress.hosts[0].name`          | Hostname to your NGINX installation              | `nginx.local`                                                |
 | `ingress.hosts[0].path`          | Path within the url structure                    | `/`                                                          |
 | `ingress.tls[0].hosts[0]`        | TLS hosts                                        | `nginx.local`                                                |
 | `ingress.tls[0].secretName`      | TLS Secret (certificates)                        | `nginx.local-tls`                                            |
