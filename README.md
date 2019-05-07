@@ -52,7 +52,6 @@ $ helm search bitnami
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
 - [Kubeapps](https://github.com/bitnami/charts/tree/master/bitnami/kubeapps)
-- [Mean](https://github.com/bitnami/charts/tree/master/bitnami/mean)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
 - [Metrics Server](https://github.com/bitnami/charts/tree/master/bitnami/metrics-server)
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
