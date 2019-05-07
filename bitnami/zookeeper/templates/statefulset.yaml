@@ -11,6 +11,7 @@ metadata:
     helm.sh/chart: {{ template "zookeeper.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
@@ -29,6 +30,7 @@ spec:
       release: {{ .Release.Name | quote }}
       app.kubernetes.io/name: {{ template "zookeeper.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name | quote }}
+      app.kubernetes.io/component: {{ template "zookeeper.name" . }}
   template:
     metadata:
       name: "{{ template "zookeeper.fullname" . }}"
@@ -39,6 +41,7 @@ spec:
         app.kubernetes.io/name: {{ template "zookeeper.name" . }}
         helm.sh/chart: {{ template "zookeeper.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        app.kubernetes.io/component: {{ template "zookeeper.name" . }}
     spec:
 {{- include "zookeeper.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}

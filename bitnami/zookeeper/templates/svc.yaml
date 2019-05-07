@@ -11,6 +11,7 @@ metadata:
     helm.sh/chart: {{ template "zookeeper.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -28,3 +29,4 @@ spec:
     release: {{ .Release.Name | quote }}
     app.kubernetes.io/name: {{ template "zookeeper.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}

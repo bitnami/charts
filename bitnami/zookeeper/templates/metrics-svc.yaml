@@ -23,5 +23,6 @@ spec:
     app: {{ template "zookeeper.name" . }}
     release: {{ .Release.Name | quote }}
     app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
 {{- end }}

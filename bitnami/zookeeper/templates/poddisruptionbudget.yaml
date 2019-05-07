@@ -8,13 +8,18 @@ metadata:
     chart: {{ template "zookeeper.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    helm.sh/chart: {{ template "zookeeper.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
 spec:
   selector:
     matchLabels:
       app: {{ template "zookeeper.name" . }}
       release: {{ .Release.Name | quote }}
-      app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+      app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name | quote }}
+      app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
 {{ toYaml .Values.podDisruptionBudget | indent 2 }}
 {{- end }}
