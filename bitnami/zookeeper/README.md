@@ -108,8 +108,8 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `metrics.image.tag`                   | ZooKeeper exporter image tag                                        | `latest`                                                 |
 | `metrics.image.pullPolicy`            | Image pull policy                                                   | `IfNotPresent`                                           |
 | `metrics.image.pullSecrets`           | Specify docker-registry secret names as an array                    | `nil`                                                    |
-| `metrics.podLabels`                   | Additional labels for Metrics exporter pod                          | {}                                                       |
-| `metrics.podAnnotations`              | Additional annotations for Metrics exporter pod                     | {}                                                       |
+| `metrics.podLabels`                   | Additional labels for Metrics exporter pod                          | `{}`                                                     |
+| `metrics.podAnnotations`              | Additional annotations for Metrics exporter pod                     | `{prometheus.io/scrape: "true", prometheus.io/port: "9141"}` |
 | `metrics.resources`                   | Exporter resource requests/limit                                    | Memory: `256Mi`, CPU: `100m`                             |
 | `metrics.tolerations`                 | Exporter toleration labels for pod assignment                       | `[]`                                                     |
 
@@ -140,11 +140,20 @@ See the [Configuration](#configuration) section to configure the PVC or to disab
 
 ## Upgrading
 
+### To 2.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's statefulsets.
+Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is `zookeeper`:
+
+```console
+$ kubectl delete statefulset zookeeper-zookeeper --cascade=false
+```
+
 ### To 1.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is zookeeper:
 
 ```console
-$ kubectl delete statefulset zookeeper --cascade=false
+$ kubectl delete statefulset zookeeper-zookeeper --cascade=false
 ```

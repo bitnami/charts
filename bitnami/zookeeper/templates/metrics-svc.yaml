@@ -4,25 +4,19 @@ kind: Service
 metadata:
   name: {{ template "zookeeper.fullname" . }}-exporter
   labels:
-    app: {{ template "zookeeper.name" . }}
-    chart: {{ template "zookeeper.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
     app.kubernetes.io/name: {{ template "zookeeper.name" . }}
     helm.sh/chart: {{ template "zookeeper.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: metrics
 spec:
   type: ClusterIP
   ports:
   - name: metrics
-    port: 8080
+    port: 9141
     targetPort: metrics
   selector:
-    app: {{ template "zookeeper.name" . }}
-    release: {{ .Release.Name | quote }}
     app.kubernetes.io/name: {{ template "zookeeper.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: metrics
 {{- end }}

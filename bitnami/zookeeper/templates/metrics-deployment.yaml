@@ -4,38 +4,36 @@ kind: Deployment
 metadata:
   name: {{ template "zookeeper.fullname" . }}-exporter
   labels:
-    app: {{ template "zookeeper.name" . }}
-    chart: {{ template "zookeeper.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
     app.kubernetes.io/name: {{ template "zookeeper.name" . }}
     helm.sh/chart: {{ template "zookeeper.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: metrics
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ template "zookeeper.name" . }}
-      release: "{{ .Release.Name }}"
       app.kubernetes.io/name: {{ template "zookeeper.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name | quote }}
-      app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: metrics
   template:
     metadata:
-      annotations:
-{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+      {{- if .Values.metrics.podAnnotations }}
+      annotations: {{ toYaml .Values.metrics.podAnnotations | nindent 8 }}
+      {{- end }}
       labels:
-        app: {{ template "zookeeper.name" . }}
-        chart: {{ template "zookeeper.chart" . }}
-        release: "{{ .Release.Name }}"
         app.kubernetes.io/name: {{ template "zookeeper.name" . }}
         helm.sh/chart: {{ template "zookeeper.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+        app.kubernetes.io/component: metrics
+      {{- if .Values.metrics.podLabels }}
+{{ toYaml .Values.metrics.podLabels | indent 8 }}
+      {{- end }}
     spec:
 {{- include "zookeeper.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.metrics.tolerations }}
+      tolerations: {{ toYaml .Values.metrics.tolerations | nindent 8 }}
+      {{- end }}
       containers:
       - image: {{ template "zookeeper.metrics.image" . }}
         name: zookeeper-exporter
@@ -53,6 +51,5 @@ spec:
         ports:
           - name: metrics
             containerPort: 8080
-        resources:
-{{ toYaml .Values.metrics.resources | indent 10 }}
+        resources: {{ toYaml .Values.metrics.resources | nindent 10 }}
 {{- end }}
