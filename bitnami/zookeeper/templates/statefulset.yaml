@@ -3,18 +3,17 @@ kind: StatefulSet
 metadata:
   name: "{{ template "zookeeper.fullname" . }}"
   labels:
-    app: {{ template "zookeeper.name" . }}
-    chart: {{ template "zookeeper.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    helm.sh/chart: {{ template "zookeeper.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: zookeeper
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
-  podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
   updateStrategy:
-    type: {{ .Values.updateStrategy | quote }}
+    type: {{ .Values.updateStrategy }}
     {{- if (eq "Recreate" .Values.updateStrategy) }}
     rollingUpdate: null
     {{- else if .Values.rollingUpdatePartition }}
@@ -23,42 +22,40 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      app: {{ template "zookeeper.name" . }}
-      release: {{ .Release.Name | quote }}
-      app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+      app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: zookeeper
   template:
     metadata:
       name: "{{ template "zookeeper.fullname" . }}"
       labels:
-        app: {{ template "zookeeper.name" . }}
-        chart: {{ template "zookeeper.chart" . }}
-        release: {{ .Release.Name | quote }}
-        heritage: {{ .Release.Service | quote }}
-        app.kubernetes.io/component: {{ template "zookeeper.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+        helm.sh/chart: {{ template "zookeeper.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: zookeeper
     spec:
 {{- include "zookeeper.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
+      nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+      tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
-      affinity:
-{{ toYaml .Values.affinity | indent 8 }}
+      affinity: {{ toYaml .Values.affinity | nindent 8 }}
       {{- end }}
       containers:
       - name: "{{ template "zookeeper.fullname" . }}"
         image: "{{ template "zookeeper.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        {{- if .Values.securityContext.enabled }}
+        securityContext:
+          runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- end }}
         command:
          - bash
          - -ec
@@ -78,8 +75,7 @@ spec:
             . /init.sh
             nami_initialize zookeeper
             exec tini -- /run.sh
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
+        resources: {{ toYaml .Values.resources | nindent 10 }}
         env:
         - name: ZOO_PORT_NUMBER
           value: {{ .Values.service.port | quote }}
@@ -98,10 +94,10 @@ spec:
           {{- $releaseNamespace := .Release.Namespace }}
           {{- $zookeeperFullname := include "zookeeper.fullname" . }}
           {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
-          value: {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $followerPort }}:{{ $electionPort }} {{ end }}
-        {{- if .Values.auth.enabled }}
+          value: {{ range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $followerPort }}:{{ $electionPort }} {{ end }}
         - name: ZOO_ENABLE_AUTH
-          value: "yes"
+          value: {{ ternary "yes" "no" .Values.auth.enabled | quote }}
+        {{- if .Values.auth.enabled }}
         - name: ZOO_CLIENT_USER
           value: {{ .Values.auth.clientUser | quote }}
         - name: ZOO_CLIENT_PASSWORD
@@ -120,11 +116,7 @@ spec:
         - name: ZOO_HEAP_SIZE
           value: {{ .Values.heapSize | quote }}
         - name: ALLOW_ANONYMOUS_LOGIN
-        {{- if .Values.allowAnonymousLogin }}
-          value: "yes"
-        {{- else }}
-          value: "no"
-        {{- end }}
+          value: {{ ternary "yes" "no" .Values.allowAnonymousLogin | quote }}
         {{- if .Values.jvmFlags }}
         - name: JVMFLAGS
           value: {{ .Values.jvmFlags | quote }}
