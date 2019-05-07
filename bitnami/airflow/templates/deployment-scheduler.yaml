@@ -52,7 +52,7 @@ spec:
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
         command: [ '/bin/sh', '-c' , 'git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} /dags && cd /dags && git checkout {{ .Values.airflow.cloneDagFilesFromGit.revision }}']
         volumeMounts:
-        - name: github-cloned-dag-files
+        - name: git-cloned-dag-files
           mountPath: /dags
       {{- end }}
       containers:
@@ -158,8 +158,8 @@ spec:
           mountPath: /opt/bitnami/airflow/dags/external
         {{- end }}
         {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-        - name: github-cloned-dag-files
-          mountPath: /opt/bitnami/airflow/dags/github
+        - name: git-cloned-dag-files
+          mountPath: /opt/bitnami/airflow/dags/git
         {{- end }}
         {{- if .Values.airflow.configurationConfigMap }}
         - name: custom-configuration-file
@@ -180,7 +180,7 @@ spec:
           name: {{ .Values.airflow.dagsConfigMap }}
       {{- end }}
       {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-      - name: github-cloned-dag-files
+      - name: git-cloned-dag-files
         emptyDir: {}
       {{- end }}
       {{- if .Values.airflow.configurationConfigMap }}
