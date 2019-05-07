@@ -220,6 +220,16 @@ See the [Configuration](#configuration) section to configure the PVC or to disab
 
 ## Upgrading
 
+### To 2.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is kafka:
+
+```console
+$ kubectl delete statefulset kafka-kafka --cascade=false
+$ kubectl delete statefulset kafka-zookeeper --cascade=false
+```
+
 ### To 1.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
