@@ -6,25 +6,34 @@ metadata:
   labels:
     app: {{ template "zookeeper.name" . }}
     chart: {{ template "zookeeper.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    helm.sh/chart: {{ template "zookeeper.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: {{ template "zookeeper.name" . }}
       release: "{{ .Release.Name }}"
+      app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name | quote }}
+      app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
   template:
     metadata:
       annotations:
 {{ toYaml .Values.metrics.podAnnotations | indent 8 }}
       labels:
         app: {{ template "zookeeper.name" . }}
+        chart: {{ template "zookeeper.chart" . }}
         release: "{{ .Release.Name }}"
-        app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
+        app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+        helm.sh/chart: {{ template "zookeeper.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: {{ template "zookeeper.name" . }}-metrics
     spec:
 {{- include "zookeeper.imagePullSecrets" . | indent 6 }}
       containers:

@@ -7,8 +7,10 @@ metadata:
     chart: {{ template "zookeeper.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    helm.sh/chart: {{ template "zookeeper.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -24,4 +26,5 @@ spec:
   selector:
     app: {{ template "zookeeper.name" . }}
     release: {{ .Release.Name | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
