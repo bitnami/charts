@@ -4,10 +4,10 @@ kind: ConfigMap
 metadata:
   name: {{ template "kafka.fullname" . }}-jmx-configuration
   labels:
-    app: "{{ template "kafka.name" . }}"
-    chart: {{ template "kafka.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    helm.sh/chart: {{ template "kafka.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
   jmx-kafka-prometheus.yml: |+
 {{- if .Values.metrics.jmx.configMap.overrideConfig }}

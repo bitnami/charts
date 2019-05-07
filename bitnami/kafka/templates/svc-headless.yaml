@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: {{ template "kafka.fullname" . }}-headless
   labels:
-    app: {{ template "kafka.name" . }}
-    chart: {{ template "kafka.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    helm.sh/chart: {{ template "kafka.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: kafka
 spec:
   type: ClusterIP
   clusterIP: None
@@ -15,5 +16,6 @@ spec:
     port: 9092
     targetPort: kafka
   selector:
-    app: {{ template "kafka.name" . }}
-    release: "{{ .Release.Name }}"
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: kafka
