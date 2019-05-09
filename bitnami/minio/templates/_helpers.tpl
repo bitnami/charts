@@ -1,4 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
+
 {{/*
 Expand the name of the chart.
 */}}
@@ -26,74 +27,31 @@ Create chart name and version as used by the chart label.
 Return the proper MinIO image name
 */}}
 {{- define "minio.image" -}}
-{{- $registryName := .Values.image.registry -}}
+{{- $registryName := coalesce .Values.global.imageRegistry .Values.image.registry -}}
 {{- $repositoryName := .Values.image.repository -}}
 {{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
 {{/*
 Return the proper MinIO Client image name
 */}}
 {{- define "minio.clientImage" -}}
-{{- $registryName := .Values.clientImage.registry -}}
+{{- $registryName := coalesce .Values.global.imageRegistry .Values.clientImage.registry -}}
 {{- $repositoryName := .Values.clientImage.repository -}}
 {{- $tag := .Values.clientImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "minio.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
+{{- $imagePullSecrets := coalesce .Values.global.imagePullSecrets .Values.image.pullSecrets -}}
+{{- if $imagePullSecrets }}
+{{- range $imagePullSecrets }}
   - name: {{ . }}
-{{- end }}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
 {{- end -}}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
 {{- end -}}
 {{- end -}}
 
@@ -101,10 +59,9 @@ imagePullSecrets:
 Return MinIO accessKey
 */}}
 {{- define "minio.accessKey" -}}
-{{- if .Values.global.minio.accessKey }}
-    {{- .Values.global.minio.accessKey -}}
-{{- else if .Values.accessKey.password }}
-    {{- .Values.accessKey.password -}}
+{{- $accessKey := coalesce .Values.global.minio.accessKey .Values.accessKey.password -}}
+{{- if $accessKey }}
+    {{- $accessKey -}}
 {{- else if (not .Values.accessKey.forcePassword) }}
     {{- randAlphaNum 10 -}}
 {{- else -}}
@@ -116,10 +73,9 @@ Return MinIO accessKey
 Return MinIO secretKey
 */}}
 {{- define "minio.secretKey" -}}
-{{- if .Values.global.minio.secretKey }}
-    {{- .Values.global.minio.secretKey -}}
-{{- else if .Values.secretKey.password }}
-    {{- .Values.secretKey.password -}}
+{{- $secretKey := coalesce .Values.global.minio.secretKey .Values.secretKey.password -}}
+{{- if $secretKey }}
+    {{- $secretKey -}}
 {{- else if (not .Values.secretKey.forcePassword) }}
     {{- randAlphaNum 40 -}}
 {{- else -}}
@@ -152,12 +108,35 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for networkpolicy.
+Compile all warnings into a single message, and call fail.
 */}}
-{{- define "networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "networking.k8s.io/v1" -}}
+{{- define "minio.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "minio.validateValues.mode" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.replicaCount" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MinIO - must provide a valid mode ("distributed" or "standalone") */}}
+{{- define "minio.validateValues.mode" -}}
+{{- if and (ne .Values.mode "distributed") (ne .Values.mode "standalone") -}}
+minio: mode
+    Invalid mode selected. Valid values are "distributed" and
+    "standalone". Please set a valid mode (--set mode="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MinIO - number of replicas must be even, greater than 4 and lower than 32 */}}
+{{- define "minio.validateValues.replicaCount" -}}
+{{- $replicaCount := int .Values.statefulset.replicaCount }}
+{{- if and (eq .Values.mode "distributed") (or (eq (mod $replicaCount 2) 1) (lt $replicaCount 4) (gt $replicaCount 32)) -}}
+minio: replicaCount
+    Number of replicas must be even, greater than 4 and lower than 32!!
+    Please set a valid number of replicas (--set statefulset.replicaCount=X)
 {{- end -}}
 {{- end -}}

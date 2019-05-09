@@ -1,56 +1,3 @@
-{{- $replicaCount := int .Values.statefulset.replicaCount }}
-{{- if and (ne .Values.mode "distributed") (ne .Values.mode "standalone") }}
-################################################################################
-### ERROR: Invalid mode selected. Valid values are "distributed" and         ###
-### "standalone". Please set a valid mode (--set mode="xxxx")                ###
-################################################################################
-
-This deployment will be incomplete until you set a valid mode. To set the mode:
-
-1. Get the MinIO credentials:
-
-  export MINIO_ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.fullname" . }} -o jsonpath="{.data.access-key}" | base64 --decode)
-  export MINIO_SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.fullname" . }} -o jsonpath="{.data.secret-key}" | base64 --decode)
-
-2. Set a valid mode (e.g. "standalone"):
-
-    export MODE="standalone"
-
-3. Complete your MinIO deployment by running :
-
-    helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-      {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}--set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \{{- end }}{{- end }}
-      --set mode=$MODE \
-      --set accessKey.password=$MINIO_ACCESS_KEY \
-      --set secretKey.password=$MINIO_SECRET_KEY
-
-{{- else if and (eq .Values.mode "distributed") (or (eq (mod $replicaCount 2) 1) (lt $replicaCount 4) (gt $replicaCount 32)) }}
-################################################################################
-### ERROR: Number of replicas must even, greater than 4 and lower than 32!!  ###
-### Please set a valid number of replicas (--set statefulset.replicaCount=X) ###
-################################################################################
-
-This deployment will be incomplete until you configure a valid number of replicas.
-To set the number or replicas:
-
-1. Get the MinIO credentials:
-
-  export MINIO_ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.fullname" . }} -o jsonpath="{.data.access-key}" | base64 --decode)
-  export MINIO_SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.fullname" . }} -o jsonpath="{.data.secret-key}" | base64 --decode)
-
-2. Set a valid number or replicas (e.g. 4):
-
-  export REPLICA_COUNT=4
-
-3. Complete your MinIO deployment by running :
-
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}--set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \{{- end }}{{- end }}
-    --set statefulset.replicaCount=$REPLICA_COUNT \
-    --set accessKey.password=$MINIO_ACCESS_KEY \
-    --set secretKey.password=$MINIO_SECRET_KEY
-
-{{- else }}
 ** Please be patient while the chart is being deployed **
 
 MinIO can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
@@ -119,4 +66,5 @@ To access the MinIO web UI:
 
    WARN: MinIO Web UI is disabled.
 {{- end }}
-{{- end }}
+
+{{ include "minio.validateValues" . }}
