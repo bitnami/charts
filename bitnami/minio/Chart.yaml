@@ -1,0 +1,19 @@
+apiVersion: v1
+version: 0.1.0
+appVersion: 2019.5.2
+description: MinIO is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
+keywords:
+- minio
+- storage
+- object-storage
+- s3
+- cluster
+name: minio
+home: https://min.io
+icon: https://bitnami.com/assets/stacks/minio/img/minio-stack-220x234.png
+sources:
+- https://github.com/bitnami/bitnami-docker-minio
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl

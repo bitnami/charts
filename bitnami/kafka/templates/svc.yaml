@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: {{ template "kafka.fullname" . }}
   labels:
-    app: {{ template "kafka.name" . }}
-    chart: {{ template "kafka.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    helm.sh/chart: {{ template "kafka.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: kafka
   annotations:
     {{- range $key, $value := .Values.service.annotations }}
     {{ $key }}: {{ $value | quote }}
@@ -26,5 +27,6 @@ spec:
     {{- end }}
     targetPort: kafka
   selector:
-    app: {{ template "kafka.name" . }}
-    release: {{ .Release.Name | quote }}
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: kafka

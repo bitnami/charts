@@ -53,9 +53,9 @@ spec:
           timeoutSeconds: 3
           periodSeconds: 5
         volumeMounts:
-        {{- if .Values.vhost }}
-        - name: nginx-vhost
-          mountPath: /opt/bitnami/nginx/conf/vhosts
+        {{- if .Values.serverBlock }}
+        - name: nginx-server-block
+          mountPath: /opt/bitnami/nginx/conf/server_blocks
         {{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
@@ -81,8 +81,8 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 12 }}
 {{- end }}
       volumes:
-      {{- if .Values.vhost }}
-      - name: nginx-vhost
+      {{- if .Values.serverBlock }}
+      - name: nginx-server-block
         configMap:
           name: {{ template "fullname" . }}
       {{- end }}

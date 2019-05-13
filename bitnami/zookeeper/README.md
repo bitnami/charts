@@ -56,6 +56,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                    | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
 | `updateStrategy`                      | Update strategies                                                   | `RollingUpdate`                                          |
+| `podDisruptionBudget.maxUnavailable`  | Max number of pods down simultaneously                              | `1`                                                      |
 | `rollingUpdatePartition`              | Partition update strategy                                           | `nil`                                                    |
 | `podManagementpolicy`                 | Pod management policy                                               | `Parallel`                                               |
 | `replicaCount`                        | Number of ZooKeeper nodes                                           | `1`                                                      |
@@ -77,9 +78,9 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `service.port`                        | ZooKeeper port                                                      | `2181`                                                   |
 | `service.followerPort`                | ZooKeeper follower port                                             | `2888`                                                   |
 | `service.electionPort`                | ZooKeeper election port                                             | `3888`                                                   |
-| `securityContext.enabled`             | Enable security context (redis master pod)                          | `true`                                                   |
-| `securityContext.fsGroup`             | Group ID for the container (redis master pod)                       | `1001`                                                   |
-| `securityContext.runAsUser`           | User ID for the container (redis master pod)                        | `1001`                                                   |
+| `securityContext.enabled`             | Enable security context (ZooKeeper master pod)                      | `true`                                                   |
+| `securityContext.fsGroup`             | Group ID for the container (ZooKeeper master pod)                   | `1001`                                                   |
+| `securityContext.runAsUser`           | User ID for the container (ZooKeeper master pod)                    | `1001`                                                   |
 | `persistence.enabled`                 | Enable persistence using PVC                                        | `true`                                                   |
 | `persistence.storageClass`            | PVC Storage Class for Zookeeper volume                              | `nil`                                                    |
 | `persistence.accessMode`              | PVC Access Mode for Zookeeper volume                                | `ReadWriteOnce`                                          |
@@ -101,6 +102,16 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                            | 5                                                        |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded   | 6                                |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed | 1                                |
+| `metrics.enabled`                     | Start a side-car prometheus exporter                                | `false`                                                  |
+| `metrics.image.registry`              | ZooKeeper exporter image registry                                   | `docker.io`                                              |
+| `metrics.image.repository`            | ZooKeeper exporter image name                                       | `javsalgar/zookeeper-exporter`                           |
+| `metrics.image.tag`                   | ZooKeeper exporter image tag                                        | `latest`                                                 |
+| `metrics.image.pullPolicy`            | Image pull policy                                                   | `IfNotPresent`                                           |
+| `metrics.image.pullSecrets`           | Specify docker-registry secret names as an array                    | `nil`                                                    |
+| `metrics.podLabels`                   | Additional labels for Metrics exporter pod                          | `{}`                                                     |
+| `metrics.podAnnotations`              | Additional annotations for Metrics exporter pod                     | `{prometheus.io/scrape: "true", prometheus.io/port: "9141"}` |
+| `metrics.resources`                   | Exporter resource requests/limit                                    | Memory: `256Mi`, CPU: `100m`                             |
+| `metrics.tolerations`                 | Exporter toleration labels for pod assignment                       | `[]`                                                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -129,11 +140,20 @@ See the [Configuration](#configuration) section to configure the PVC or to disab
 
 ## Upgrading
 
+### To 2.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's statefulsets.
+Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is `zookeeper`:
+
+```console
+$ kubectl delete statefulset zookeeper-zookeeper --cascade=false
+```
+
 ### To 1.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is zookeeper:
 
 ```console
-$ kubectl delete statefulset zookeeper --cascade=false
+$ kubectl delete statefulset zookeeper-zookeeper --cascade=false
 ```
