@@ -67,11 +67,11 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `workerImage.pullPolicy`                  | Airflow Worker image pull policy                                                            | `Always`                                                     |
 | `workerImage.pullSecrets`                 | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `workerImage.debug`                       | Specify if debug values should be set                                                       | `false`                                                      |
-| `gitImage.registry`                       | Git image registry                                                                          | `docker.io`                                                  |
-| `gitImage.repository`                     | Git image name                                                                              | `bitnami/git`                                                |
-| `gitImage.tag`                            | Git image tag                                                                               | `{VERSION}`                                                  |
-| `gitImage.pullPolicy`                     | Git image pull policy                                                                       | `Always`                                                     |
-| `gitImage.pullSecrets`                    | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
+| `git.registry`                            | Git image registry                                                                          | `docker.io`                                                  |
+| `git.repository`                          | Git image name                                                                              | `bitnami/git`                                                |
+| `git.tag`                                 | Git image tag                                                                               | `{VERSION}`                                                  |
+| `git.pullPolicy`                          | Git image pull policy                                                                       | `Always`                                                     |
+| `git.pullSecrets`                         | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `updateStrategy`                          | Update strategy for the stateful set                                                        | `RollingUpdate`                                              |
 | `rollingUpdatePartition`                  | Partition update strategy                                                                   | `nil`                                                        |
 | `airflow.configurationConfigMap`          | Name of an existing config map containing the Airflow config file                           | `nil`                                                        |
