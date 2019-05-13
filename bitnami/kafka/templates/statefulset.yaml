@@ -296,6 +296,6 @@ spec:
       {{- end }}
       {{- end }}
 {{- else }}
-        - name: data
-          emptyDir: {}
+      - name: data
+        emptyDir: {}
 {{- end }}
