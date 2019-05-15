@@ -272,14 +272,25 @@ spec:
           secretName: {{ required "A secret containinig the Kafka JKS certificates is required when authentication in enabled" .Values.auth.certificatesSecret }}
           defaultMode: 256
       {{ end }}
-{{- if .Values.persistence.enabled }}
+{{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+      - name: data
+        persistentVolumeClaim:
+{{- with .Values.persistence.existingClaim }}
+          claimName: {{ tpl . $ }}
+{{- end }}
+{{- else if not .Values.persistence.enabled }}
+      - name: data
+        emptyDir: {}
+{{- else if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:
     - metadata:
         name: data
+      {{- with .Values.persistence.annotations }}
         annotations:
-        {{- range $key, $value := .Values.persistence.annotations }}
+        {{- range $key, $value := . }}
           {{ $key }}: {{ $value }}
         {{- end }}
+      {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
@@ -295,7 +306,4 @@ spec:
         storageClassName: "{{ .Values.persistence.storageClass }}"
       {{- end }}
       {{- end }}
-{{- else }}
-      - name: data
-        emptyDir: {}
 {{- end }}
