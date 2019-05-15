@@ -39,6 +39,8 @@ spec:
         name: zookeeper-exporter
         command:
           - /usr/local/bin/zookeeper-exporter
+          - -timeout
+          - {{ .Values.metrics.timeoutSeconds | quote }}
           - -zk-list
           {{- $replicaCount := int .Values.replicaCount }}
           {{- $followerPort := int .Values.service.followerPort }}
