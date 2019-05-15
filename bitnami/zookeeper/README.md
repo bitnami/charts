@@ -55,6 +55,8 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `image.pullPolicy`                    | Zookeeper image pull policy                                         | `Always`                                                 |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                    | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
+| `nameOverride`              | String to partially override zookeeper.fullname template with a string (will append the release name)                                           | `nil`                                                    |
+| `fullnameOverride`              | String to fully override zookeeper.fullname template with a string                                           | `nil`                                                    |
 | `updateStrategy`                      | Update strategies                                                   | `RollingUpdate`                                          |
 | `podDisruptionBudget.maxUnavailable`  | Max number of pods down simultaneously                              | `1`                                                      |
 | `rollingUpdatePartition`              | Partition update strategy                                           | `nil`                                                    |
