@@ -42,6 +42,13 @@ image:
 ##
 updateStrategy: RollingUpdate
 
+## Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
+## The PDB will only be created if replicaCount is greater than 1
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
+##
+podDisruptionBudget:
+  maxUnavailable: 1
+
 ## Partition update strategy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
 ##
@@ -116,6 +123,7 @@ service:
   port: 2181
   followerPort: 2888
   electionPort: 3888
+  publishNotReadyAddresses: true
 
 ## Zookeeper Pod Security Context
 securityContext:
@@ -197,19 +205,17 @@ metrics:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Metrics exporter pod Annotation and Labels
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "8080"
+    prometheus.io/port: "9141"
+  podLabels: {}
 
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  # resources: {}
+  resources: {}
 
   ## Metrics exporter labels and tolerations for pod assignment
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
   # tolerations: []
-
-  ## Metrics exporter pod Annotation and Labels
-  # podAnnotations: {}
-  # podLabels: {}

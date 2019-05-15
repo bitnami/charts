@@ -111,3 +111,25 @@ imagePullSecrets:
 {{- end }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return ZooKeeper Client Password
+*/}}
+{{- define "zookeeper.clientPassword" -}}
+{{- if .Values.auth.clientPassword -}}
+    {{- .Values.auth.clientPassword -}}
+{{- else -}}
+    {{- randAlphaNum 10 -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return ZooKeeper Servers Passwords
+*/}}
+{{- define "zookeeper.serverPasswords" -}}
+{{- if .Values.auth.serverPasswords -}}
+    {{- .Values.auth.serverPasswords -}}
+{{- else -}}
+    {{- randAlphaNum 10 -}}
+{{- end -}}
+{{- end -}}

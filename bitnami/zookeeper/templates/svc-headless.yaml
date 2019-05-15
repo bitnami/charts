@@ -3,15 +3,15 @@ kind: Service
 metadata:
   name: {{ template "zookeeper.fullname" . }}-headless
   labels:
-    app: {{ template "zookeeper.name" . }}
-    chart: {{ template "zookeeper.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    helm.sh/chart: {{ template "zookeeper.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: zookeeper
 spec:
   type: ClusterIP
   clusterIP: None
+  publishNotReadyAddresses: {{ .Values.service.publishNotReadyAddresses }}
   ports:
   - name: client
     port: 2181
@@ -23,6 +23,6 @@ spec:
     port: 3888
     targetPort: election
   selector:
-    app: {{ template "zookeeper.name" . }}
-    release: {{ .Release.Name | quote }}
-    app.kubernetes.io/component: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: zookeeper

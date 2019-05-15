@@ -57,6 +57,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `image.debug`                          | Specify if debug values should be set                                                                     | `false`                                                            |
 | `updateStrategy`                       | Update strategy for the stateful set                                                                      | `RollingUpdate`                                                    |
 | `rollingUpdatePartition`               | Partition update strategy                                                                                 | `nil`                                                              |
+| `podDisruptionBudget.maxUnavailable`                         | Max number of pods down simultaneously                                                                                     | `1`                                                                |
 | `replicaCount`                         | Number of Kafka nodes                                                                                     | `1`                                                                |
 | `config`                               | Configuration file for Kafka                                                                              | `nil`                                                              |
 | `allowPlaintextListener`               | Allow to use the PLAINTEXT listener                                                                       | `true`                                                             |
@@ -219,6 +220,16 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
 
 ## Upgrading
+
+### To 2.0.0
+
+Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
+Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is kafka:
+
+```console
+$ kubectl delete statefulset kafka-kafka --cascade=false
+$ kubectl delete statefulset kafka-zookeeper --cascade=false
+```
 
 ### To 1.0.0
 
