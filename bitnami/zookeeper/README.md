@@ -41,6 +41,10 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
+## Log level
+
+You can configure the Zookeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `FALSE` because of each readiness prove produce an `INFO` message on connection and a `WARN` message on disconnection.
+
 ## Configuration
 
 The following tables lists the configurable parameters of the Zookeeper chart and their default values.
@@ -74,6 +78,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `auth.serverUsers`                    | List of user to be created                                          | `[]`                                                     |
 | `auth.serverPasswords`                | List of passwords to assign to users when created                   | `[]`                                                     |
 | `heapSize`                            | Size in MB for the Java Heap options (Xmx and XMs)                  | `[]`                                                     |
+| `logLevel`                            | Log level of Zookeeper server                                       | `ERROR`                                                  |
 | `jvmFlags`                            | Default JVMFLAGS for the ZooKeeper process                          | `nil`                                                    |
 | `config`                              | Configure ZooKeeper with a custom zoo.conf file                     | `nil`                                                    |
 | `service.type`                        | Kubernetes Service type                                             | `ClusterIP`                                              |
