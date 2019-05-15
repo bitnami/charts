@@ -44,6 +44,7 @@ $ helm search bitnami
 ## Bitnami charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
+- [Apache Airflow](https://github.com/bitnami/charts/tree/master/bitnami/airflow)
 - [Cassandra](https://github.com/bitnami/charts/tree/master/bitnami/cassandra)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [ExternalDNS](https://github.com/bitnami/charts/tree/master/bitnami/external-dns)
@@ -52,14 +53,12 @@ $ helm search bitnami
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
 - [Kubeapps](https://github.com/bitnami/charts/tree/master/bitnami/kubeapps)
-- [Mean](https://github.com/bitnami/charts/tree/master/bitnami/mean)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
 - [Metrics Server](https://github.com/bitnami/charts/tree/master/bitnami/metrics-server)
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
 - [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
 - [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller)
 - [NodeJS](https://github.com/bitnami/charts/tree/master/bitnami/node)
-- [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-inception)
 - [TensorFlow ResNet](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet)
 - [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
 - [WildFly](https://github.com/bitnami/charts/tree/master/bitnami/wildfly)

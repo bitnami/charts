@@ -1,7 +1,7 @@
 apiVersion: v1
 name: mysql
-version: 4.5.2
-appVersion: 5.7.26
+version: 5.0.1
+appVersion: 8.0.16
 description: Chart to create a Highly available MySQL cluster
 keywords:
 - mysql

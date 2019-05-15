@@ -3,15 +3,17 @@ kind: StatefulSet
 metadata:
   name: "{{ template "kafka.fullname" . }}"
   labels:
-    app: {{ template "kafka.name" . }}
-    chart: {{ template "kafka.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    helm.sh/chart: {{ template "kafka.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: kafka
 spec:
   selector:
     matchLabels:
-      app: {{ template "kafka.name" . }}
-      release: "{{ .Release.Name }}"
+      app.kubernetes.io/name: {{ template "kafka.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: kafka
   serviceName: {{ template "kafka.fullname" . }}-headless
   podManagementPolicy: "Parallel"
   replicas: {{ .Values.replicaCount }}
@@ -23,20 +25,15 @@ spec:
     rollingUpdate:
       partition: {{ .Values.rollingUpdatePartition }}
     {{- end }}
-  selector:
-    matchLabels:
-      app: {{ template "kafka.name" . }}
-      chart: {{ template "kafka.chart" . }}
-      release: {{ .Release.Name | quote }}
-      heritage: {{ .Release.Service | quote }}
   template:
     metadata:
       name: "{{ template "kafka.fullname" . }}"
       labels:
-        app: {{ template "kafka.name" . }}
-        chart: {{ template "kafka.chart" . }}
-        release: {{ .Release.Name | quote }}
-        heritage: {{ .Release.Service | quote }}
+        app.kubernetes.io/name: {{ template "kafka.name" . }}
+        helm.sh/chart: {{ template "kafka.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/component: kafka
     spec:
 {{- include "kafka.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
@@ -299,6 +296,6 @@ spec:
       {{- end }}
       {{- end }}
 {{- else }}
-        - name: data
-          emptyDir: {}
+      - name: data
+        emptyDir: {}
 {{- end }}
