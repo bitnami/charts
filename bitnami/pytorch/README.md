@@ -60,7 +60,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `git.tag`                              | Git image tag                                                                                | `latest`                                                |
 | `git.pullPolicy`                       | Git image pull policy                                                                        | `Always`                                                |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
-| `pytorch.entrypoint.file`              | Main entrypoint to your application                                                          | `nil`                                                   |
+| `pytorch.entrypoint.file`              | Main entrypoint to your application                                                          | `''`                                                   |
 | `pytorch.entrypoint.args`              | Args required by your entrypoint                                                             | `nil`                                                   |
 | `pytorch.distributed.enabled`          | Enable distributed mode for PyTorch                                                          | `false`                                                 |
 | `pytorch.distributed.worldSize`        | Number of nodes that will execute your code                                                  | `4`                                                     |

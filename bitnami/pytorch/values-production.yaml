@@ -52,7 +52,7 @@ pytorch:
   ## The main entrypoint of your app, this will be executed as:
   ##   python [file] [args]
   entrypoint: 
-    #file: main.py
+    file:
     #args:
 
   ## To enable distributed mode
