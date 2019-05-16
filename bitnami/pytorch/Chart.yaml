@@ -1,0 +1,18 @@
+apiVersion: v1
+name: pytorch
+version: 0.0.1
+appVersion: 1.1.0
+description: Deep learning platform that accelerates the transition from research prototyping to production deployment
+keywords:
+- pytorch
+- python
+- machine
+- learning
+home: http://pytorch.org/
+sources:
+- https://github.com/bitnami/bitnami-docker-pytorch
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://bitnami.com/assets/stacks/pytorch/img/pytorch-stack-110x117.png
