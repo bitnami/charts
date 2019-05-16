@@ -18,7 +18,15 @@ To run it, you can either deploy again using the `pytorch.entrypoint.file` optio
 3. Execute your script as you would normally do.
 {{- end }}
 {{- else }}
-You haven't loaded any file. This chart allows three different methods to load your files:
+WARNING: You haven't loaded any file. You can access the Python REPL by jumping into the pods:
+
+1. Get the running pods
+    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "pytorch.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+2. Run the Python REPL
+    kubectl exec -ti [POD_NAME] python
+
+This chart allows three different methods to load your files:
 
 1. Load the files from an existing ConfigMap, using the `configMap` option.
 2. Putting your files in a `files` folder in the root of the Chart.
