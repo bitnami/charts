@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pytorch.fullname" . }}-master
+  name: {{ include "pytorch.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
   labels:
     app.kubernetes.io/name: {{ include "pytorch.name" . }}
     helm.sh/chart: {{ include "pytorch.chart" . }}
@@ -31,23 +31,26 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
+      nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+      tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
-      affinity:
-{{ toYaml .Values.affinity | indent 8 }}
+      affinity: {{ toYaml .Values.affinity | nindent 8 }}
       {{- end }}
-      {{- if .Values.pytorch.cloneFilesFromGit.enabled }}
+      {{- if .Values.cloneFilesFromGit.enabled }}
       initContainers:
       - name: git-clone-repository
         image: {{ include "git.image" . }}
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.pytorch.cloneFilesFromGit.repository }} /app && cd /app && git checkout {{ .Values.pytorch.cloneFilesFromGit.revision }}']
+        command:
+        - /bin/sh
+        - -c
+        - |
+        git clone {{ .Values.cloneFilesFromGit.repository }} /app
+        cd /app
+        git checkout {{ .Values.cloneFilesFromGit.revision }}
         volumeMounts:
         - name: git-cloned-files
           mountPath: /app
@@ -60,27 +63,27 @@ spec:
         - bash
         - -c
         - |
-          {{- if .Values.pytorch.entrypoint.file }}
-          python {{ .Values.pytorch.entrypoint.file }} {{ if .Values.pytorch.entrypoint.args }}{{ .Values.pytorch.entrypoint.args }}{{ end }}
+          {{- if .Values.entrypoint.file }}
+          python {{ .Values.entrypoint.file }} {{ if .Values.entrypoint.args }}{{ .Values.entrypoint.args }}{{ end }}
           {{- end }}
           sleep infinity
         env:
-        {{- if .Values.pytorch.distributed.enabled }}
+        {{- if eq .Values.mode "distributed" }}
         - name: MASTER_ADDR
           value: "127.0.0.1"
         - name: MASTER_PORT
-          value: {{ .Values.service.port | quote }}
+          value: {{ .Values.port | quote }}
         - name: WORLD_SIZE
-          value: {{ .Values.pytorch.distributed.worldSize | quote }}
+          value: {{ .Values.worldSize | quote }}
         - name: RANK
           value: "0"
         {{- end }}
-{{- if .Values.pytorch.extraEnvVars }}
-{{ toYaml .Values.pytorch.extraEnvVars | indent 8 }}
+{{- if .Values.extraEnvVars }}
+{{ toYaml .Values.extraEnvVars | indent 8 }}
 {{- end }}
         ports:
         - name: pytorch
-          containerPort: {{ .Values.service.port }}
+          containerPort: {{ .Values.port }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
@@ -109,28 +112,28 @@ spec:
         {{- end }}
         resources: {{ toYaml .Values.resources | nindent 12 }}
         volumeMounts:
-        {{- if .Values.pytorch.configMap }}
+        {{- if .Values.configMap }}
         - name: ext-files
           mountPath: /app
         {{- else if .Files.Glob "files/*" }}
         - name: local-files
           mountPath: /app
-        {{- else if .Values.pytorch.cloneFilesFromGit.enabled }}
+        {{- else if .Values.cloneFilesFromGit.enabled }}
         - name: git-cloned-files
           mountPath: /app
         {{- end }}
         - name: data
           mountPath: {{ .Values.persistence.mountPath }}
       volumes:
-      {{- if .Values.pytorch.configMap }}
+      {{- if .Values.configMap }}
       - name: ext-files
         configMap:
-          name: {{ .Values.pytorch.configMap }}
+          name: {{ .Values.configMap }}
       {{- else if .Files.Glob "files/*" }}
       - name: local-files
         configMap:
           name: {{ include "pytorch.fullname" . }}-files
-      {{- else if .Values.pytorch.cloneFilesFromGit.enabled }}
+      {{- else if .Values.cloneFilesFromGit.enabled }}
       - name: git-cloned-files
         emptyDir: {}
       {{- end }}

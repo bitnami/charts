@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "pytorch.fullname" . }}-master
+  name: {{ include "pytorch.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
   labels:
     app.kubernetes.io/name: {{ include "pytorch.name" . }}
     helm.sh/chart: {{ include "pytorch.chart" . }}

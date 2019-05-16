@@ -45,71 +45,67 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the MinIO chart and their default values.
 
-| Parameter                              | Description                                                                                  | Default                                                 |
-| -------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `global.imageRegistry`                 | Global Docker image registry                                                                 | `nil`                                                   |
-| `global.imagePullSecrets`              | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods) |
-| `image.registry`                       | PyTorch image registry                                                                       | `docker.io`                                             |
-| `image.repository`                     | PyTorch image name                                                                           | `bitnami/pytorch`                                       |
-| `image.tag`                            | PyTorch image tag                                                                            | `{VERSION}`                                             |
-| `image.pullPolicy`                     | Image pull policy                                                                            | `IfNotPresent`                                          |
-| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
-| `image.debug`                          | Specify if debug logs should be enabled                                                      | `false`                                                 |
-| `git.registry`                         | Git image registry                                                                           | `docker.io`                                             |
-| `git.repository`                       | Git image name                                                                               | `bitnami/git`                                           |
-| `git.tag`                              | Git image tag                                                                                | `latest`                                                |
-| `git.pullPolicy`                       | Git image pull policy                                                                        | `Always`                                                |
-| `git.pullSecrets`                      | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
-| `pytorch.entrypoint.file`              | Main entrypoint to your application                                                          | `''`                                                   |
-| `pytorch.entrypoint.args`              | Args required by your entrypoint                                                             | `nil`                                                   |
-| `pytorch.distributed.enabled`          | Enable distributed mode for PyTorch                                                          | `false`                                                 |
-| `pytorch.distributed.worldSize`        | Number of nodes that will execute your code                                                  | `4`                                                     |
-| `pytorch.configMap`                    | Config map that contains the files you want to load in PyTorch                               | `nil`                                                   |
-| `pytorch.cloneFilesFromGit.enabled`    | Enable in order to download files from git repository                                        | `false`                                                 |
-| `pytorch.cloneFilesFromGit.repository` | Repository that holds the files                                                              | `nil`                                                   |
-| `pytorch.cloneFilesFromGit.revision`   | Revision from the repository to checkout                                                     | `master`                                                |
-| `pytorch.extraEnvVars`                 | Extra environment variables to add to master and workers pods                                | `nil`                                                   |
-| `service.type`                         | Kubernetes Service type                                                                      | `ClusterIP`                                             |
-| `service.port`                         | PyTorch master service port                                                                  | `49875`                                                 |
-| `service.nodePort`                     | Port to bind to for NodePort service type                                                    | `nil`                                                   |
-| `service.loadBalancerIP`               | Static IP Address to use for LoadBalancer service type                                       | `nil`                                                   |
-| `service.annotations`                  | Kubernetes service annotations                                                               | `{}`                                                    |
-| `nodeSelector`                         | Node labels for pod assignment                                                               | `{}`                                                    |
-| `tolerations`                          | Toleration labels for pod assignment                                                         | `[]`                                                    |
-| `affinity`                             | Map of node/pod affinities                                                                   | `{}`                                                    |
-| `resources`                            | Pod resources                                                                                | `{}`                                                    |
-| `securityContext.enabled`              | Enable security context                                                                      | `true`                                                  |
-| `securityContext.fsGroup`              | Group ID for the container                                                                   | `1001`                                                  |
-| `securityContext.runAsUser`            | User ID for the container                                                                    | `1001`                                                  |
-| `livenessProbe.enabled`                | Enable/disable the Liveness probe                                                            | `true`                                                  |
-| `livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated                                                     | `5`                                                     |
-| `livenessProbe.periodSeconds`          | How often to perform the probe                                                               | `5`                                                     |
-| `livenessProbe.timeoutSeconds`         | When the probe times out                                                                     | `5`                                                     |
-| `livenessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                                     |
-| `livenessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | `5`                                                     |
-| `readinessProbe.enabled`               | Enable/disable the Readiness probe                                                           | `true`                                                  |
-| `readinessProbe.initialDelaySeconds`   | Delay before readiness probe is initiated                                                    | `5`                                                     |
-| `readinessProbe.periodSeconds`         | How often to perform the probe                                                               | `5`                                                     |
-| `readinessProbe.timeoutSeconds`        | When the probe times out                                                                     | `1`                                                     |
-| `readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                                     |
-| `readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | `5`                                                     |
-| `persistence.enabled`                  | Use a PVC to persist data                                                                    | `true`                                                  |
-| `persistence.mountPath`                | Path to mount the volume at                                                                  | `/bitnami/pytorch`                                      |
-| `persistence.storageClass`             | Storage class of backing PVC                                                                 | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`               | Use volume as ReadOnly or ReadWrite                                                          | `ReadWriteOnce`                                         |
-| `persistence.size`                     | Size of data volume                                                                          | `8Gi`                                                   |
-| `persistence.annotations`              | Persistent Volume annotations                                                                | `{}`                                                    |
+| Parameter                            | Description                                                                                  | Default                                                 |
+| ------------------------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `global.imageRegistry`               | Global Docker image registry                                                                 | `nil`                                                   |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`                     | PyTorch image registry                                                                       | `docker.io`                                             |
+| `image.repository`                   | PyTorch image name                                                                           | `bitnami/pytorch`                                       |
+| `image.tag`                          | PyTorch image tag                                                                            | `{VERSION}`                                             |
+| `image.pullPolicy`                   | Image pull policy                                                                            | `IfNotPresent`                                          |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                                                 |
+| `git.registry`                       | Git image registry                                                                           | `docker.io`                                             |
+| `git.repository`                     | Git image name                                                                               | `bitnami/git`                                           |
+| `git.tag`                            | Git image tag                                                                                | `latest`                                                |
+| `git.pullPolicy`                     | Git image pull policy                                                                        | `Always`                                                |
+| `git.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
+| `entrypoint.file`                    | Main entrypoint to your application                                                          | `''`                                                    |
+| `entrypoint.args`                    | Args required by your entrypoint                                                             | `nil`                                                   |
+| `mode`                               | Run PyTorch in standalone or distributed mode (possible values: `standalone`, `distributed`) | `standalone`                                            |
+| `worldSize`                          | Number of nodes that will execute your code                                                  | `nil`                                                   |
+| `port`                               | PyTorch master port                                                                          | `49875`                                                 |
+| `configMap`                          | Config map that contains the files you want to load in PyTorch                               | `nil`                                                   |
+| `cloneFilesFromGit.enabled`          | Enable in order to download files from git repository                                        | `false`                                                 |
+| `cloneFilesFromGit.repository`       | Repository that holds the files                                                              | `nil`                                                   |
+| `cloneFilesFromGit.revision`         | Revision from the repository to checkout                                                     | `master`                                                |
+| `extraEnvVars`                       | Extra environment variables to add to master and workers pods                                | `nil`                                                   |
+| `nodeSelector`                       | Node labels for pod assignment                                                               | `{}`                                                    |
+| `tolerations`                        | Toleration labels for pod assignment                                                         | `[]`                                                    |
+| `affinity`                           | Map of node/pod affinities                                                                   | `{}`                                                    |
+| `resources`                          | Pod resources                                                                                | `{}`                                                    |
+| `securityContext.enabled`            | Enable security context                                                                      | `true`                                                  |
+| `securityContext.fsGroup`            | Group ID for the container                                                                   | `1001`                                                  |
+| `securityContext.runAsUser`          | User ID for the container                                                                    | `1001`                                                  |
+| `livenessProbe.enabled`              | Enable/disable the Liveness probe                                                            | `true`                                                  |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                     | `5`                                                     |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                                                               | `5`                                                     |
+| `livenessProbe.timeoutSeconds`       | When the probe times out                                                                     | `5`                                                     |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                                     |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | `5`                                                     |
+| `readinessProbe.enabled`             | Enable/disable the Readiness probe                                                           | `true`                                                  |
+| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                    | `5`                                                     |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                                                               | `5`                                                     |
+| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                     | `1`                                                     |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                                     |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | `5`                                                     |
+| `persistence.enabled`                | Use a PVC to persist data                                                                    | `true`                                                  |
+| `persistence.mountPath`              | Path to mount the volume at                                                                  | `/bitnami/pytorch`                                      |
+| `persistence.storageClass`           | Storage class of backing PVC                                                                 | `nil` (uses alpha storage class annotation)             |
+| `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                                                          | `ReadWriteOnce`                                         |
+| `persistence.size`                   | Size of data volume                                                                          | `8Gi`                                                   |
+| `persistence.annotations`            | Persistent Volume annotations                                                                | `{}`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install --name my-release \
-  --set pytorch.distributed.enabled=true \
-  --set pytorch.distributed.worldSize=8 \
+  --set mode=distributed \
+  --set worldSize=4 \
     bitnami/pytorch
 ```
 
-The above command create 8 pods for PyTorch: one master and seven workers.
+The above command create 4 pods for PyTorch: one master and three workers.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -133,7 +129,7 @@ In order to use use an existing config map:
 
 ```console
 $ helm install --name my-release \
-  --set pytorch.configMap=my-config-map \
+  --set configMap=my-config-map \
   bitnami/pytorch
 ```
 
@@ -148,9 +144,9 @@ Finally, if you want to clone a git repository:
 
 ```console
 $ helm install --name my-release \
-  --set pytorch.cloneFilesFromGit.enabled=true \
-  --set pytorch.cloneFilesFromGit.repository=https://github.com/my-user/my-repo \
-  --set pytorch.cloneFilesFromGit.revision=master \
+  --set cloneFilesFromGit.enabled=true \
+  --set cloneFilesFromGit.repository=https://github.com/my-user/my-repo \
+  --set cloneFilesFromGit.revision=master \
   bitnami/pytorch
 ```
 
