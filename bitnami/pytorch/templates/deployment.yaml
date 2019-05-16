@@ -140,7 +140,7 @@ spec:
       - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ include "pytorch.fullname" . }}
+          claimName: {{ include "pytorch.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
       {{- else }}
         emptyDir: {}
       {{- end }}
