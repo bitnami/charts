@@ -26,3 +26,4 @@ You haven't loaded any file. This chart allows three different methods to load y
 
 Examples for the different methods can be found in the README.
 {{- end }}
+{{ include "pytorch.validateValues" . }}

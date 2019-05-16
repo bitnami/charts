@@ -111,3 +111,37 @@ imagePullSecrets:
 {{- end }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "pytorch.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "pytorch.validateValues.mode" .) -}}
+{{- $messages := append $messages (include "pytorch.validateValues.worldSize" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of PyTorch - must provide a valid mode ("distributed" or "standalone") */}}
+{{- define "pytorch.validateValues.mode" -}}
+{{- if and (ne .Values.mode "distributed") (ne .Values.mode "standalone") -}}
+pytorch: mode
+    Invalid mode selected. Valid values are "distributed" and
+    "standalone". Please set a valid mode (--set mode="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of PyTorch - number of replicas must be even, greater than 4 and lower than 32 */}}
+{{- define "pytorch.validateValues.worldSize" -}}
+{{- $replicaCount := int .Values.worldSize }}
+{{- if and (eq .Values.mode "distributed") (lt $replicaCount 24) -}}
+pytorch: worldSize
+    World size must be greater than 1 in distributed mode!!
+    Please set a valid world size (--set worldSize=X)
+{{- end -}}
+{{- end -}}
