@@ -59,6 +59,7 @@ $ helm search bitnami
 - [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
 - [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller)
 - [NodeJS](https://github.com/bitnami/charts/tree/master/bitnami/node)
+- [PyTorch](https://github.com/bitnami/charts/tree/master/bitnami/pytorch)
 - [TensorFlow ResNet](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet)
 - [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
 - [WildFly](https://github.com/bitnami/charts/tree/master/bitnami/wildfly)
