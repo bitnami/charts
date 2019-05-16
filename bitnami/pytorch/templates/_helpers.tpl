@@ -98,9 +98,9 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if .Values.image.pullSecrets }}
+{{- else if .Values.git.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
+{{- range .Values.git.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
