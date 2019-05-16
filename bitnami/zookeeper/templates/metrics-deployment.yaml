@@ -54,4 +54,14 @@ spec:
           - name: metrics
             containerPort: 8080
         resources: {{ toYaml .Values.metrics.resources | nindent 10 }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 180
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 15
 {{- end }}
