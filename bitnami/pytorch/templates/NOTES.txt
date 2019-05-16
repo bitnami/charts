@@ -1,6 +1,6 @@
 {{- if or (.Values.pytorch.configMap) (.Files.Glob "files/*") (.Values.pytorch.cloneFilesFromGit.enabled) }}
 {{- if .Values.pytorch.entrypoint.file }}
-Your file {{ .Values.pytorch.entrypoint.file }} is being executed. You can see the logs of each running node with:
+The provided file {{ .Values.pytorch.entrypoint.file }} is being executed. You can see the logs of each running node with:
     kubectl logs [POD_NAME]
 
 and the list of pods:
@@ -23,4 +23,6 @@ You haven't loaded any file. This chart allows three different methods to load y
 1. Load the files from an existing ConfigMap, using the `pytorch.configMap` option.
 2. Putting your files in a `files` folder in the root of the Chart.
 3. Cloning a Git repository with the `pytorch.cloneFilesFromGit` option.
+
+Examples for the different methods can be found in the README.
 {{- end }}
