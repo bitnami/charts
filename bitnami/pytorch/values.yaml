@@ -52,13 +52,13 @@ pytorch:
   ## The main entrypoint of your app, this will be executed as:
   ##   python [file] [args]
   entrypoint: 
-    file: main.py
+    #file: main.py
     #args:
 
   ## To enable distributed mode
   ##
   distributed:
-    enabled: true
+    enabled: false 
     worldSize: 4
 
   ## Name of an existing config map containing all the files you want to load in PyTorch
