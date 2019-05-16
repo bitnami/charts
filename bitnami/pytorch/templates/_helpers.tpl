@@ -92,14 +92,20 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if .Values.image.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.git.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
+{{- range .Values.git.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
 {{- end -}}
-{{- else if .Values.git.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.git.pullSecrets }}
 imagePullSecrets:
+{{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
 {{- range .Values.git.pullSecrets }}
   - name: {{ . }}
 {{- end }}
