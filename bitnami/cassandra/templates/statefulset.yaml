@@ -78,6 +78,9 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         env:
+        {{- if .Values.extraVars }}
+{{ toYaml .Values.extraVars | indent 8 }}
+        {{- end }}
         - name: CASSANDRA_CLUSTER_NAME
           value: {{ .Values.cluster.name }}
         - name: CASSANDRA_SEEDS
