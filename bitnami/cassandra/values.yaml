@@ -89,6 +89,12 @@ resources: {}
   #   memory: 4Gi
   #   cpu: 2
 
+## Environment variables, to pass to the entry point
+##
+# extraVars:
+#   - name: NAMI_DEBUG
+#     value: --log-level trace
+
 ## Secret with keystore, keystore password, truststore, truststore password
 # tlsEncryptionSecretName:
 ## ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
