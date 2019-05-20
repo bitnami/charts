@@ -43,7 +43,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Log level
 
-You can configure the Zookeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `FALSE` because of each readiness prove produce an `INFO` message on connection and a `WARN` message on disconnection.
+You can configure the Zookeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `ERROR` because of each readiness prove produce an `INFO` message on connection and a `WARN` message on disconnection.
 
 ## Configuration
 
