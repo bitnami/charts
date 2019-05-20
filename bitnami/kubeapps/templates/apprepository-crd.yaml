@@ -14,6 +14,7 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   group: kubeapps.com
+  scope: Namespaced
   names:
     kind: AppRepository
     plural: apprepositories

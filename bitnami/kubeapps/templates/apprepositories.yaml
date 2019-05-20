@@ -4,11 +4,19 @@ kind: AppRepository
 metadata:
   name: {{ .name }}
   annotations:
+{{- if semverCompare ">=2.14.0" $.Capabilities.TillerVersion.SemVer }}
+    # Using the hook pre-install because since Helm v2.14 the crd-install
+    # hook should be used only for CRDs and the issues related to install
+    # Custom Resources have been already fixed
+    # https://github.com/helm/helm/issues/5756#issuecomment-493653454
+    "helm.sh/hook": pre-install
+{{- else }}
     # Using the hook crd-install to avoid issue w/Helm v1.11
     # https://github.com/kubeapps/kubeapps/pull/955#pullrequestreview-200764260
     "helm.sh/hook": crd-install
     # Make sure this runs after the AppRepository CRD install
     "helm.sh/hook-weight": "10"
+{{- end }}
   labels:
     app: {{ template "kubeapps.apprepository.fullname" $ }}
     chart: {{ template "kubeapps.chart" $ }}
