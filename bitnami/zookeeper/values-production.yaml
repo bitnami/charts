@@ -96,12 +96,12 @@ auth:
   ## Password that will use Zookeeper clients to auth
   ##
   # clientPassword:
-  ## Comma, semicolon or whitespace separated list of user to be created. Example: user1,user2,admin
+  ## Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"
   ##
-  # serverUsers: []
-  ## Comma, semicolon or whitespace separated list of passwords to assign to users when created. Example: pass4user1, pass4user2, pass4admin
+  # serverUsers: ""
+  ## Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
   ##
-  # serverPasswords: []
+  # serverPasswords: ""
 
 ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
 ##

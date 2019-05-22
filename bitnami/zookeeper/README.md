@@ -75,8 +75,8 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `auth.enabled`                        | Enable Zookeeper auth                                               | `false`                                                  |
 | `auth.clientUser`                     | User that will use Zookeeper clients to auth                        | `nil`                                                    |
 | `auth.clientPassword`                 | Password that will use Zookeeper clients to auth                    | `nil`                                                    |
-| `auth.serverUsers`                    | List of user to be created                                          | `[]`                                                     |
-| `auth.serverPasswords`                | List of passwords to assign to users when created                   | `[]`                                                     |
+| `auth.serverUsers`                    | List of user to be created                                          | `nil`                                                     |
+| `auth.serverPasswords`                | List of passwords to assign to users when created                   | `nil`                                                     |
 | `heapSize`                            | Size in MB for the Java Heap options (Xmx and XMs)                  | `[]`                                                     |
 | `logLevel`                            | Log level of Zookeeper server                                       | `ERROR`                                                  |
 | `jvmFlags`                            | Default JVMFLAGS for the ZooKeeper process                          | `nil`                                                    |
