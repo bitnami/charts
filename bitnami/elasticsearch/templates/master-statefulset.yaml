@@ -26,7 +26,7 @@ spec:
 {{- with .Values.master.podAnnotations }}
       annotations:
 {{ toYaml . | indent 8 }}
-{{- end }
+{{- end }}
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
