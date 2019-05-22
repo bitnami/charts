@@ -46,11 +46,15 @@ git:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+service:
+  ## Kubernetes service type, ClusterIP and NodePort are supported at present
+  type: ClusterIP
+
 ## PyTorch configuration
 ##
 ## The main entrypoint of your app, this will be executed as:
 ##   python [file] [args]
-entrypoint: 
+entrypoint:
   file:
   #args:
 
@@ -80,7 +84,7 @@ cloneFilesFromGit:
 #  repository:
 #  revision: master
 
-## Additional environment variables 
+## Additional environment variables
 ##
 # extraEnvVars:
 #   - name: NCCL_DEBUG

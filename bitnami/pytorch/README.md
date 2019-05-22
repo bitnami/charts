@@ -60,6 +60,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `git.tag`                            | Git image tag                                                                                | `latest`                                                |
 | `git.pullPolicy`                     | Git image pull policy                                                                        | `Always`                                                |
 | `git.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
+| service.type                         | Kubernetes service type                                                                      | `ClusterIP`                                             |
 | `entrypoint.file`                    | Main entrypoint to your application                                                          | `''`                                                    |
 | `entrypoint.args`                    | Args required by your entrypoint                                                             | `nil`                                                   |
 | `mode`                               | Run PyTorch in standalone or distributed mode (possible values: `standalone`, `distributed`) | `standalone`                                            |
@@ -119,8 +120,8 @@ $ helm install --name my-release -f values.yaml bitnami/pytorch
 
 The PyTorch chart supports three different ways to load your files. In order of priority, they are:
 
-  1. Existing config map 
-  2. Files under the `files` directory 
+  1. Existing config map
+  2. Files under the `files` directory
   3. Cloning a git repository
 
 This means that if you specify a config map with your files, it won't look for the `files/` directory nor the git repository.
@@ -133,7 +134,7 @@ $ helm install --name my-release \
   bitnami/pytorch
 ```
 
-To load your files from the `files/` directory you don't have to set any option. Just copy your files inside and don't specify a `ConfigMap`: 
+To load your files from the `files/` directory you don't have to set any option. Just copy your files inside and don't specify a `ConfigMap`:
 
 ```console
 $ helm install --name my-release \
