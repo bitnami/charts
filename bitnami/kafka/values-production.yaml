@@ -94,6 +94,12 @@ allowPlaintextListener: false
 ## Hostname and port the broker will advertise to producers and consumers.
 # advertisedListeners:
 
+## The protocol->listener mapping
+# listenerSecurityProtocolMap:
+
+## The listener that the brokers should communicate on
+# interBrokerListenerName:
+
 ## ID of the Kafka node.
 brokerId: -1
 

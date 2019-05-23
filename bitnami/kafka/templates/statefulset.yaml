@@ -105,6 +105,14 @@ spec:
           {{- else }}
           value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.cluster.local:$(KAFKA_PORT_NUMBER)'
           {{- end }}
+        {{- if .Values.listenerSecurityProtocolMap }}
+        - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+          value: {{ .Values.listenerSecurityProtocolMap }}
+        {{- end }}
+        {{- if .Values.interBrokerListenerName }}
+        - name: KAFKA_INTER_BROKER_LISTENER_NAME
+          value: {{ .Values.interBrokerListenerName }}
+        {{- end }}
         {{- if .Values.auth.enabled }}
         - name: KAFKA_OPTS
           value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/conf/kafka_jaas.conf"
