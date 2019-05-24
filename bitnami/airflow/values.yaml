@@ -119,7 +119,7 @@ airflow:
   ## Enable in order to download DAG files from git repository.
   ##
   cloneDagFilesFromGit:
-    enabled: true
+    enabled: false
     # repository:
     # branch:
     # interval:

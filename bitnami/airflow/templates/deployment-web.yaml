@@ -59,7 +59,7 @@ spec:
         - name: git-cloned-dag-files
           mountPath: /dags
       containers:
-      - name: clone-repo-sidecar
+      - name: git-repo-syncer
         image: "{{ template "git.image" . }}"
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
         command:
