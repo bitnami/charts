@@ -167,7 +167,7 @@ socketSendBufferBytes: 102400
 zookeeperConnectionTimeoutMs: 6000
 
 ## The endpoint identification algorithm to validate server hostname using server certificate.
-sslEndpointIdentificationAlgorithm	: https
+sslEndpointIdentificationAlgorithm: https
 
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-kafka#security
