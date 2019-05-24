@@ -146,7 +146,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
@@ -232,5 +231,33 @@ Get the secret name
 {{- printf "%s" .Values.airflow.auth.existingSecret -}}
 {{- else -}}
 {{- printf "%s" (include "airflow.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "airflow.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Airflow - "airflow.cloneDagFilesFromGit.repository" must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
+{{- define "airflow.validateValues.cloneDagFilesFromGit" -}}
+{{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.repository) -}}
+airflow: airflow.cloneDagFilesFromGit.repository
+    The repository must be provided when enabling downloading DAG files
+    from git repository (--set airflow.cloneDagFilesFromGit.repository="xxx")
+{{- end -}}
+{{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.branch) -}}
+airflow: airflow.cloneDagFilesFromGit.branch
+    The branch must be provided when enabling downloading DAG files
+    from git repository (--set airflow.cloneDagFilesFromGit.branch="xxx")
 {{- end -}}
 {{- end -}}

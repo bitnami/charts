@@ -79,7 +79,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.loadExamples`                    | Switch to load some Airflow examples                                                        | `true`                                                       |
 | `airflow.cloneDagFilesFromGit.enabled`    | Enable in order to download DAG files from git repository.                                  | `false`                                                      |
 | `airflow.cloneDagFilesFromGit.repository` | Repository where download DAG files from                                                    | `nil`                                                        |
-| `airflow.cloneDagFilesFromGit.revision`   | Revision from repository to checkout                                                        | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.branch`     | Branch from repository to checkout                                                          | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.interval`   | Interval to pull the repository on sidecar container                                        | `nil`                                                        |
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                        | `nil`                                                        |
 | `airflow.worker.port`                     | Airflow Worker port                                                                         | `8793`                                                       |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                           | `2`                                                          |
@@ -188,12 +189,12 @@ You can manually create a config map containing all your DAG files and then pass
 
 ### Option 3: Get your DAG files from a git repository
 
-You can store all your DAG files on a GitHub repository and then clone to the Airflow pods with an initContainer. In order to do that, you can deploy airflow with the following options:
+You can store all your DAG files on a GitHub repository and then clone to the Airflow pods with an initContainer. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
 
 ```console
 helm install --name my-release bitnami/airflow \
              --set airflow.cloneDagFilesFromGit.enabled=true \
              --set airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY \
-             --set airflow.cloneDagFilesFromGit.revision=master
-
+             --set airflow.cloneDagFilesFromGit.branch=master
+             --set airflow.cloneDagFilesFromGit.interval=3600
 ```

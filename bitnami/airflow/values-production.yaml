@@ -120,8 +120,9 @@ airflow:
   ##
   cloneDagFilesFromGit:
     enabled: false
-    repository:
-    revision:
+    # repository:
+    # branch:
+    # interval:
   ## URL used to access to airflow web ui
   ##
   baseUrl: http://airflow.local
