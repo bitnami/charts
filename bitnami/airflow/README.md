@@ -196,5 +196,5 @@ helm install --name my-release bitnami/airflow \
              --set airflow.cloneDagFilesFromGit.enabled=true \
              --set airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY \
              --set airflow.cloneDagFilesFromGit.branch=master
-             --set airflow.cloneDagFilesFromGit.interval=3600
+             --set airflow.cloneDagFilesFromGit.interval=60
 ```

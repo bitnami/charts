@@ -72,7 +72,7 @@ spec:
         - |
           while true; do
               cd /dags && git pull origin {{ .Values.airflow.cloneDagFilesFromGit.branch }}
-              sleep {{ default "3600" .Values.airflow.cloneDagFilesFromGit.interval }}
+              sleep {{ default "60" .Values.airflow.cloneDagFilesFromGit.interval }}
           done
         volumeMounts:
         - name: git-cloned-dag-files

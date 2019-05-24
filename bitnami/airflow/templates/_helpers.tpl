@@ -239,7 +239,8 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "airflow.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit.repository" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit.branch" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -249,12 +250,15 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 
 {{/* Validate values of Airflow - "airflow.cloneDagFilesFromGit.repository" must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
-{{- define "airflow.validateValues.cloneDagFilesFromGit" -}}
+{{- define "airflow.validateValues.cloneDagFilesFromGit.repository" -}}
 {{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.repository) -}}
 airflow: airflow.cloneDagFilesFromGit.repository
     The repository must be provided when enabling downloading DAG files
     from git repository (--set airflow.cloneDagFilesFromGit.repository="xxx")
 {{- end -}}
+{{- end -}}
+{{/* Validate values of Airflow - "airflow.cloneDagFilesFromGit.branch" must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
+{{- define "airflow.validateValues.cloneDagFilesFromGit.branch" -}}
 {{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.branch) -}}
 airflow: airflow.cloneDagFilesFromGit.branch
     The branch must be provided when enabling downloading DAG files
