@@ -37,7 +37,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: latest
+  tag: 2.21.0-debian-9-r72
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

@@ -57,3 +57,10 @@ To connect to your database from outside the cluster execute the following comma
 {{- end }}
 {{- end }}
 
+
+{{- if and (contains bitnami/ .Values.image.repository) (not (regexMatch -r\d+$ .Values.image.tag)) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+
+{{- end }}

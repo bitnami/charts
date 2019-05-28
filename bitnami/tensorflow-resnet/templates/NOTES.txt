@@ -28,3 +28,9 @@
 2. Test the server with a sample image.
 
   docker run --rm -it bitnami/tensorflow-resnet bash -c "curl -Lo /tmp/cat.jpg https://tensorflow.org/images/blogs/serving/cat.jpg && resnet_client_cc --server_port=$APP_HOST:$APP_PORT --image_file=/tmp/cat.jpg"
+{{- if and (contains bitnami/ .Values.image.repository) (not (regexMatch -r\d+$ .Values.image.tag)) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+
+{{- end }}

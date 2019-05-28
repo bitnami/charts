@@ -55,7 +55,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `global.imagePullSecrets`             | Global Docker registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.registry`                      | Zookeeper image registry                                            | `docker.io`                                              |
 | `image.repository`                    | Zookeeper Image name                                                | `bitnami/zookeeper`                                      |
-| `image.tag`                           | Zookeeper Image tag                                                 | `{VERSION}`                                              |
+| `image.tag`                           | Zookeeper Image tag                                                 | `{TAG_NAME}`                                             |
 | `image.pullPolicy`                    | Zookeeper image pull policy                                         | `Always`                                                 |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                    | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
@@ -139,6 +139,12 @@ $ helm install --name my-release -f values.yaml bitnami/zookeeper
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Persistence
 

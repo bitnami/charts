@@ -42,7 +42,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: latest
+  tag: 2019.5.23-debian-9-r5
 
 ## MinIO server mode. Allowed values: standalone or distributed.
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide

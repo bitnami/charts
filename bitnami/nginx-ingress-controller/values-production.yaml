@@ -309,8 +309,9 @@ defaultBackend:
 
   name: default-backend
   image:
-    repository: k8s.gcr.io/defaultbackend
-    tag: "1.4"
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: 1.16.0-debian-9-r26
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
