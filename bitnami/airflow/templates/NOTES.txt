@@ -78,3 +78,4 @@ host. To configure Airflow with the URL of your service:
 {{- end  }}
 
 {{ include "airflow.validateValues" . }}
+{{ include "airflow.checkRollingTags" . }}
