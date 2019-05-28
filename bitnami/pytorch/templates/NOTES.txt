@@ -35,6 +35,7 @@ This chart allows three different methods to load your files:
 Examples for the different methods can be found in the README.
 {{- end }}
 {{ include "pytorch.validateValues" . }}
+
 {{- if and (contains bitnami/ .Values.image.repository) (not (regexMatch -r\d+$ .Values.image.tag)) }}
 
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.

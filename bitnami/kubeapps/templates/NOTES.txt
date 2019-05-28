@@ -59,10 +59,3 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 {{- end }}
 
 2. Open a browser and access Kubeapps using the obtained URL.
-
-{{- if and (contains bitnami/ .Values.image.repository) (not (regexMatch -r\d+$ .Values.image.tag)) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}

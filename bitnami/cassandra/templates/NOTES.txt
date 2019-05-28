@@ -38,7 +38,7 @@ To connect to your database from outside the cluster execute the following comma
 
    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "cassandra.fullname" . }})
-   
+
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $NODE_IP $NODE_PORT
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
@@ -56,7 +56,6 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- end }}
 {{- end }}
-
 
 {{- if and (contains bitnami/ .Values.image.repository) (not (regexMatch -r\d+$ .Values.image.tag)) }}
 
