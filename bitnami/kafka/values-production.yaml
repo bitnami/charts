@@ -169,6 +169,12 @@ zookeeperConnectionTimeoutMs: 6000
 ## The endpoint identification algorithm to validate server hostname using server certificate.
 sslEndpointIdentificationAlgorithm: https
 
+## All the parameters from the configuration file can be overwritten by using environment variables with this format: KAFKA_CFG_{KEY}
+##
+# extraEnvVars:
+#   - name: KAFKA_CFG_BACKGROUND_THREADS
+#     value: 10
+
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-kafka#security
 ##
