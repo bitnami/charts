@@ -200,8 +200,8 @@ spec:
           value: {{ .Values.socketSendBufferBytes | quote }}
         - name: KAFKA_CFG_ZOOKEEPER_CONNECT_TIMEOUT_MS
           value: {{ .Values.zookeeperConnectionTimeoutMs | quote }}
-        {{- if .Values.airflow.extraEnvVars }}
-          {{ toYaml .Values.airflow.extraEnvVars | nindent 8 }}
+        {{- if .Values.extraEnvVars }}
+          {{ toYaml .Values.extraEnvVars | nindent 8 }}
         {{- end }}
         ports:
         - name: kafka
