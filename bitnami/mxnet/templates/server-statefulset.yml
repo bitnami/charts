@@ -57,9 +57,9 @@ spec:
         - name: git-cloned-files
           mountPath: /app
       {{- end }}
-{{- if .Values.initContainers }}
-{{ toYaml .Values.initContainers | indent 6 }}
-{{- end }}
+      {{- if .Values.initContainers }}
+        {{- toYaml .Values.initContainers | nindent 6 }}
+      {{- end }}
       containers:
       - name: mxnet
         workingDir: {{ .Values.entrypoint.workDir }}
@@ -72,7 +72,7 @@ spec:
           SERVER_RANK=${POD_NAME##*-}
           ((SERVER_RANK++))
           export SERVER_RANK
-{{ include "mxnet.entrypoint" . | indent 10 }}
+          {{- include "mxnet.entrypoint" . | nindent 10 }}
         env:
         - name: POD_NAME
           valueFrom:
@@ -88,12 +88,12 @@ spec:
           value: {{ include "mxnet.fullname" . }}-scheduler
         - name: DMLC_PS_ROOT_PORT
           value: {{ .Values.schedulerPort | quote }}
-{{- if .Values.commonExtraEnvVars }}
-{{ include "mxnet.parseEnvVars" .Values.commonExtraEnvVars | indent 8 }}
-{{- end }}
-{{- if .Values.serverExtraEnvVars }}
-{{ include "mxnet.parseEnvVars" .Values.serverExtraVars | indent 8 }}
-{{- end }}
+      {{- if .Values.commonExtraEnvVars }}
+        {{- include "mxnet.parseEnvVars" .Values.commonExtraEnvVars | nindent 8 }}
+      {{- end }} 
+      {{- if .Values.serverExtraEnvVars }}
+        {{- include "mxnet.parseEnvVars" .Values.serverExtraVars | nindent 8 }}
+      {{- end }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
@@ -138,9 +138,9 @@ spec:
         - name: secret-data
           mountPath: /secrets
       {{- end }}
-{{- if .Values.sidecars }}
-{{ toYaml .Values.sidecars | indent 6 }}
-{{- end }}
+    {{- if .Values.sidecars }}
+      {{- toYaml .Values.sidecars | nindent 6 }}
+    {{- end }}
       volumes:
       {{- if .Values.existingSecret }}
       - name: secret-data

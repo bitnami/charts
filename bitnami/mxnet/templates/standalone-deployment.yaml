@@ -56,9 +56,9 @@ spec:
         - name: git-cloned-files
           mountPath: /app
       {{- end }}
-{{- if .Values.initContainers }}
-{{ toYaml .Values.initContainers | indent 6 }}
-{{- end }}
+      {{- if .Values.initContainers }}
+        {{- toYaml .Values.initContainers | nindent 6 }}
+      {{- end }}
       containers:
       - name: mxnet
         workingDir: {{ .Values.entrypoint.workDir }}
@@ -68,11 +68,11 @@ spec:
         - bash
         - -c
         - |
-{{ include "mxnet.entrypoint" . | indent 10 }}
+          {{- include "mxnet.entrypoint" . | nindent 10 }}
         env:
-{{- if .Values.commonExtraEnvVars }}
-{{ include "mxnet.parseEnvVars" .Values.commonExtraEnvVars | indent 8 }}
-{{- end }}
+      {{- if .Values.commonExtraEnvVars }}
+        {{- include "mxnet.parseEnvVars" .Values.commonExtraEnvVars | nindent 8 }}
+      {{- end }} 
         ports:
         - name: mxnet
           containerPort: {{ .Values.schedulerPort }}
@@ -120,9 +120,9 @@ spec:
         - name: secret-data
           mountPath: /secrets
       {{- end }}
-{{- if .Values.sidecars }}
-{{ toYaml .Values.sidecars | indent 6 }}
-{{- end }}
+    {{- if .Values.sidecars }}
+      {{- toYaml .Values.sidecars | nindent 6 }}
+    {{- end }}
       volumes:
       {{- if .Values.existingSecret }}
       - name: secret-data

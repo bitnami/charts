@@ -1,9 +1,3 @@
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
 {{- if or (.Values.configMap) (.Files.Glob "files/*") (.Values.cloneFilesFromGit.enabled) }}
 {{- if .Values.entrypoint.file }}
 The provided file {{ .Values.entrypoint.file }} is being executed. You can see the logs of each running node with:
@@ -41,7 +35,7 @@ This chart allows three different methods to load your files:
 Examples for the different methods can be found in the README.
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (regexMatch "-r\\d+$" .Values.image.tag)) }}
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
