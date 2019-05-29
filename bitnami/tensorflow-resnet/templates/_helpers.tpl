@@ -127,11 +127,11 @@ imagePullSecrets:
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "tensorflow-resnet.checkRollingTags" -}}
-{{- if and (contains "bitnami/" .Values.server.image.repository) (not (.Values.server.image.tag | regexFind "-r\\d+$")) }}
+{{- if and (contains "bitnami/" .Values.server.image.repository) (not (.Values.server.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 {{- end }}
-{{- if and (contains "bitnami/" .Values.client.image.repository) (not (.Values.client.image.tag | regexFind "-r\\d+$")) }}
+{{- if and (contains "bitnami/" .Values.client.image.repository) (not (.Values.client.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 {{- end }}
