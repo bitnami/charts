@@ -1,0 +1,18 @@
+{{- if .Values.disasterRecovery.enabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "etcd.fullname" . }}-snapshot
+  labels:
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    helm.sh/chart: {{ template "etcd.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.disasterRecovery.size | quote }}
+  storageClassName: nfs
+{{- end -}}

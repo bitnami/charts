@@ -149,12 +149,6 @@ persistence:
   size: 8Gi
   annotations: {}
 
-## Node labels and tolerations for pod assignment
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
-nodeSelector: {}
-tolerations: []
-
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
@@ -189,8 +183,50 @@ readinessProbe:
 ##
 podAnnotations: {}
 
+## Node Affinity. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
+##
+nodeAffinity: {}
+## Pod Affinity. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+podAffinity: {}
+## Pod AntiAffinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+podAntiAffinity: soft
+
+## Node labels for pod assignment. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+##
+nodeSelector: {}
+## Tolerations for pod assignment. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+##
+tolerations: {}
+
+## Add the corresponding annotations so Prometheus can collect etcd metrics
+##
 metrics:
   enabled: true
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "2379"
+
+## Enable auto disaster recovery by periodically snapshotting the keyspace
+## - It creates a sidecar container to periodically snapshotting the keyspace
+## - It also creates a ReadWriteMany PVC to store the snapshots
+## If the cluster permanently loses more than (N-1)/2 members, it tries to recover
+## the cluster from a previous snapshot.
+##
+disasterRecovery:
+  enabled: true
+  ## Interval (in seconds) to save snapshots
+  ##
+  interval: 300
+  ## PVC Storage Request
+  ##
+  size: 2Gi
+  ## storageClassName, choose a storageClassName with ReadWriteMany support
+  ##
+  storageClassName: nfs

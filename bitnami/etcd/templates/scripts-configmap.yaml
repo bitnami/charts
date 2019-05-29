@@ -1,0 +1,156 @@
+{{- $replicaCount := int .Values.statefulset.replicaCount }}
+{{- $clientPort := int .Values.service.port }}
+{{- $peerPort := int .Values.service.peerPort }}
+{{- $etcdAuthOptions := include "etcd.authOptions" . }}
+{{- $etcdDataDir := include "etcd.dataDir" . }}
+{{- $etcdFullname := include "etcd.fullname" . }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+{{- $dnsBase := .Values.service.dnsBase }}
+{{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
+{{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    helm.sh/chart: {{ template "etcd.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  name: {{ template "etcd.fullname" . }}-scripts
+data:
+  setup.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Constants
+    HOSTNAME="$(hostname -s)"
+    AUTH_OPTIONS="{{ $etcdAuthOptions }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    # Remove the last comma "," introduced in the string
+    export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS::-1}"
+
+    # Functions
+    ## Store member id for later member replacement
+    store_member_id() {
+        while ! etcdctl $AUTH_OPTIONS member list >/dev/null 2>&1; do sleep 1; done
+        etcdctl $AUTH_OPTIONS member list | grep "$HOSTNAME" | awk '{ print $1}' | awk -F "," '{ print $1}' > "$ETCD_DATA_DIR/member_id"
+        exit 0
+    }
+    ## Configure RBAC
+    configure_rbac() {
+        # When there's more than one replica, we can assume the 1st member
+        # to be created is "{{ $etcdFullname }}-0" since a statefulset is used
+        if [[ -n "$ETCD_ROOT_PASSWORD" ]] && [[ "$HOSTNAME" == "{{ $etcdFullname }}-0" ]]; then
+            echo "==> Configuring RBAC authentication!"
+            etcd > /dev/null 2>&1 &
+            ETCD_PID=$!
+            while ! etcdctl member list >/dev/null 2>&1; do sleep 1; done
+            echo "$ETCD_ROOT_PASSWORD" | etcdctl user add root --interactive=false
+            etcdctl auth enable
+            kill "$ETCD_PID"
+            sleep 5
+        fi
+    }
+
+    if [[ ! -d "$ETCD_DATA_DIR" ]]; then
+        echo "==> Creating data dir..."
+        mkdir -p "$ETCD_DATA_DIR"
+        echo "==> There is no data at all. Initializing a new member of the cluster..."
+        store_member_id &
+        configure_rbac
+    else
+        echo "==> Detected data from previous deployments..."
+        if ! etcdctl $AUTH_OPTIONS endpoint status >/dev/null 2>&1; then
+            echo "==> Cluster not responding!!"
+{{- if .Values.disasterRecovery.enabled }}
+            if [[ -f "/snapshots/db" ]]; then
+                echo "==> Restoring etcd cluster from snapshot..."
+                rm -rf $ETCD_DATA_DIR
+                etcdctl snapshot restore /snapshots/db \
+                  --name $ETCD_NAME \
+                  --data-dir $ETCD_DATA_DIR \
+                  --initial-cluster $ETCD_INITIAL_CLUSTER \
+                  --initial-cluster-token $ETCD_INITIAL_CLUSTER_TOKEN \
+                  --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS
+                store_member_id &
+            else
+                echo "==> There was no snapshot to perform data recovery!!"
+                exit 1
+            fi
+{{- else }}
+            exit 1
+{{- end }}
+        elif [[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]; then
+            echo "==> Updating member in existing cluster..."
+            etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}"
+        else
+            echo "==> Adding new member to existing cluster..."
+            etcdctl $AUTH_OPTIONS member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}" | grep "^ETCD_" > "$ETCD_DATA_DIR/new_member_envs"
+            sed -ie 's/^/export /' "$ETCD_DATA_DIR/new_member_envs"
+            echo "==> Loading env vars of existing cluster..."
+            source "$ETCD_DATA_DIR/new_member_envs"
+            store_member_id &
+        fi
+    fi
+
+    {{- if .Values.configFileConfigMap }}
+    exec etcd --config-file /opt/bitnami/etcd/conf/etcd.conf.yml
+    {{- else }}
+    exec etcd
+    {{- end }}
+  prestop-hook.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Constants
+    HOSTNAME="$(hostname -s)"
+    AUTH_OPTIONS="{{ $etcdAuthOptions }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    # Remove the last comma "," introduced in the string
+    export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS::-1}"
+
+    etcdctl $AUTH_OPTIONS member remove "$(cat "$ETCD_DATA_DIR/member_id")" && rm -rf $ETCD_DATA_DIR/*
+  probes.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Constants
+    AUTH_OPTIONS="{{ $etcdAuthOptions }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    # Remove the last comma "," introduced in the string
+    export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS::-1}"
+
+    etcdctl $AUTH_OPTIONS endpoint status >/dev/null 2>&1
+{{- if .Values.disasterRecovery.enabled }}
+  sidecar.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Constants
+    AUTH_OPTIONS="{{ $etcdAuthOptions }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    # Remove the last comma "," introduced in the string
+    export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS::-1}"
+
+    mkdir -p "/snapshots"
+    while true; do
+        if etcdctl $AUTH_OPTIONS endpoint status >/dev/null 2>&1; then
+            echo "Snapshotting the keyspace..."
+            etcdctl $AUTH_OPTIONS snapshot save "/snapshots/db"
+        fi
+        sleep {{ default "600" .Values.disasterRecovery.interval }}
+    done
+{{- end }}

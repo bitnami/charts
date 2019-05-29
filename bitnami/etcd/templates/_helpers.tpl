@@ -82,9 +82,9 @@ Return the proper etcd data dir
 Return the proper etcdctl authentication options
 */}}
 {{- define "etcd.authOptions" -}}
-{{- $rbacOption := "-u root:$ETCD_ROOT_PASSWORD" -}}
-{{- $certsOption := " --cert-file $ETCD_CERT_FILE --key-file $ETCD_KEY_FILE" -}}
-{{- $caOption := " --ca-file $ETCD_TRUSTED_CA_FILE" -}}
+{{- $rbacOption := "--user root:$ETCD_ROOT_PASSWORD" -}}
+{{- $certsOption := " --cert=\"$ETCD_CERT_FILE\" --key=\"$ETCD_KEY_FILE\"" -}}
+{{- $caOption := " --cacert=\"$ETCD_TRUSTED_CA_FILE\"" -}}
 {{- if .Values.auth.rbac.enabled -}}
 {{- printf "%s" $rbacOption -}}
 {{- end -}}
@@ -136,5 +136,38 @@ imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "etcd.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "etcd.validateValues.disasterRecovery" .) -}}
+{{- $messages := append $messages (include "etcd.validateValues.podAntiAffinity" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of etcd - persistence must be enabled when disasterRecovery is enabled */}}
+{{- define "etcd.validateValues.disasterRecovery" -}}
+{{- if and .Values.disasterRecovery.enabled (not .Values.persistence.enabled) -}}
+etcd: disasterRecovery
+    Persistence must be enabled when disasterRecovery is enabled!!
+    Please enable persistence (--set persistence.enabled=true)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of etcd - must provide a valid podAntiAffinity ("soft" or "hard") */}}
+{{- define "etcd.validateValues.podAntiAffinity" -}}
+{{- if and (ne .Values.podAntiAffinity "soft") (ne .Values.podAntiAffinity "hard") -}}
+etcd: mode
+    Invalid podAntiAffinity selected. Valid values are "soft" and
+    "hard". Please set a valid mode (--set podAntiAffinity="xxxx")
 {{- end -}}
 {{- end -}}
