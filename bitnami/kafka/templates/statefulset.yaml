@@ -27,6 +27,11 @@ spec:
     {{- end }}
   template:
     metadata:
+      {{ if .Values.metrics.jmx.enabled }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.metrics.jmx.exporterPort | quote }}
+      {{- end }}
       name: "{{ template "kafka.fullname" . }}"
       labels:
         app.kubernetes.io/name: {{ template "kafka.name" . }}
@@ -117,6 +122,10 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-inter-broker-password
+        {{ if .Values.metrics.jmx.enabled }}
+        - name: JMX_PORT
+          value: {{ .Values.metrics.jmx.jmxPort | quote }}
+        {{- end }}
         {{- if .Values.auth.zookeeperUser }}
         - name: KAFKA_ZOOKEEPER_USER
           value: {{ .Values.auth.zookeeperUser | quote }}
