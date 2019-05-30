@@ -31,7 +31,7 @@ data:
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
     ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
-    export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS::-1}"
+    export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
     # Functions
     ## Store member id for later member replacement
@@ -64,7 +64,8 @@ data:
         configure_rbac
     else
         echo "==> Detected data from previous deployments..."
-        if ! etcdctl $AUTH_OPTIONS endpoint status >/dev/null 2>&1; then
+        ETCDCTL_OTHER_ENDPOINTS="$(sed 's/,/ /g' <<< ${ETCDCTL_ENDPOINTS//$ETCD_ADVERTISE_CLIENT_URLS/} | awk '{$1=$1};1' | sed 's/ /,/g')"
+        if ! etcdctl $AUTH_OPTIONS endpoint status --endpoints="$ETCDCTL_OTHER_ENDPOINTS" >/dev/null 2>&1; then
             echo "==> Cluster not responding!!"
 {{- if .Values.disasterRecovery.enabled }}
             if [[ -f "/snapshots/db" ]]; then
