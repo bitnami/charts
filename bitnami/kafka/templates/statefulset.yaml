@@ -81,7 +81,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: KAFKA_ZOOKEEPER_CONNECT
+        - name: KAFKA_CFG_ZOOKEEPER_CONNECT
           {{- if .Values.zookeeper.enabled }}
           value: {{ template "kafka.zookeeper.fullname" . }}
           {{- else }}
@@ -89,7 +89,7 @@ spec:
           {{- end }}
         - name: KAFKA_PORT_NUMBER
           value: {{ .Values.service.port | quote }}
-        - name: KAFKA_LISTENERS
+        - name: KAFKA_CFG_LISTENERS
           {{- if .Values.listeners }}
           value: {{ .Values.listeners }}
           {{- else if .Values.auth.enabled }}
@@ -97,7 +97,7 @@ spec:
           {{- else }}
           value: "PLAINTEXT://:$(KAFKA_PORT_NUMBER)"
           {{- end }}
-        - name: KAFKA_ADVERTISED_LISTENERS
+        - name: KAFKA_CFG_ADVERTISED_LISTENERS
           {{- if .Values.advertisedListeners }}
           value: {{ .Values.advertisedListeners }}
           {{- else if .Values.auth.enabled  }}
@@ -150,56 +150,59 @@ spec:
           {{- else }}
           value: "no"
           {{- end }}
-        - name: KAFKA_BROKER_ID
+        - name: KAFKA_CFG_BROKER_ID
           value: {{ .Values.brokerId | quote }}
-        - name: KAFKA_DELETE_TOPIC_ENABLE
+        - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
           value: {{ .Values.deleteTopicEnable | quote }}
         - name: KAFKA_HEAP_OPTS
           value: {{ .Values.heapOpts | quote }}
-        - name: KAFKA_LOG_FLUSH_INTERVAL_MESSAGES
+        - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES
           value: {{ .Values.logFlushIntervalMessages | quote }}
-        - name: KAFKA_LOG_FLUSH_INTERVAL_MS
+        - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MS
           value: {{ .Values.logFlushIntervalMs | quote }}
-        - name: KAFKA_LOG_RETENTION_BYTES
+        - name: KAFKA_CFG_LOG_RETENTION_BYTES
           value: {{ .Values.logRetentionBytes | replace "_" "" | quote }}
-        - name: KAFKA_LOG_RETENTION_CHECK_INTERVALS_MS
+        - name: KAFKA_CFG_LOG_RETENTION_CHECK_INTERVALS_MS
           value: {{ .Values.logRetentionCheckIntervalMs | quote }}
-        - name: KAFKA_LOG_RETENTION_HOURS
+        - name: KAFKA_CFG_LOG_RETENTION_HOURS
           value: {{ .Values.logRetentionHours | quote }}
-        - name: KAFKA_LOG_MESSAGE_FORMAT_VERSION
+        - name: KAFKA_CFG_LOG_MESSAGE_FORMAT_VERSION
           value: {{ .Values.logMessageFormatVersion | quote }}
-        - name: KAFKA_MAX_MESSAGE_BYTES
+        - name: KAFKA_CFG_MAX_MESSAGE_BYTES
           value: {{ .Values.maxMessageBytes | replace "_" "" | quote }}
-        - name: KAFKA_SEGMENT_BYTES
+        - name: KAFKA_CFG_SEGMENT_BYTES
           value: {{ .Values.logSegmentBytes | replace "_" "" | quote }}
-        - name: KAFKA_LOGS_DIRS
+        - name: KAFKA_CFG_LOGS_DIRS
           value: {{ .Values.logsDirs }}
-        - name: KAFKA_DEFAULT_REPLICATION_FACTOR
+        - name: KAFKA_CFG_DEFAULT_REPLICATION_FACTOR
           value: {{ .Values.defaultReplicationFactor | quote }}
-        - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+        - name: KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR
           value: {{ .Values.offsetsTopicReplicationFactor | quote }}
-        - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+        - name: KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
           value: {{ .Values.transactionStateLogReplicationFactor | quote }}
-        - name: KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
+        - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
           value: {{ .Values.sslEndpointIdentificationAlgorithm | quote }}
-        - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+        - name: KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR
           value: {{ .Values.transactionStateLogMinIsr | quote }}
-        - name: KAFKA_NUM_IO_THREADS
+        - name: KAFKA_CFG_NUM_IO_THREADS
           value: {{ .Values.numIoThreads | quote }}
-        - name: KAFKA_NUM_NETWORK_THREADS
+        - name: KAFKA_CFG_NUM_NETWORK_THREADS
           value: {{ .Values.numNetworkThreads | quote }}
-        - name: KAFKA_NUM_PARTITIONS
+        - name: KAFKA_CFG_NUM_PARTITIONS
           value: {{ .Values.numPartitions | quote }}
-        - name: KAFKA_NUM_RECOVERY_THREADS_PER_DATA_DIR
+        - name: KAFKA_CFG_NUM_RECOVERY_THREADS_PER_DATA_DIR
           value: {{ .Values.numRecoveryThreadsPerDataDir | quote }}
-        - name: KAFKA_SOCKET_RECEIVE_BUFFER_BYTES
+        - name: KAFKA_CFG_SOCKET_RECEIVE_BUFFER_BYTES
           value: {{ .Values.socketReceiveBufferBytes | quote }}
-        - name: KAFKA_SOCKET_REQUEST_MAX_BYTES
+        - name: KAFKA_CFG_SOCKET_REQUEST_MAX_BYTES
           value: {{ .Values.socketRequestMaxBytes | replace "_" "" | quote }}
-        - name: KAFKA_SOCKET_SEND_BUFFER_BYTES
+        - name: KAFKA_CFG_SOCKET_SEND_BUFFER_BYTES
           value: {{ .Values.socketSendBufferBytes | quote }}
-        - name: KAFKA_ZOOKEEPER_CONNECT_TIMEOUT_MS
+        - name: KAFKA_CFG_ZOOKEEPER_CONNECT_TIMEOUT_MS
           value: {{ .Values.zookeeperConnectionTimeoutMs | quote }}
+        {{- if .Values.extraEnvVars }}
+          {{ toYaml .Values.extraEnvVars | nindent 8 }}
+        {{- end }}
         ports:
         - name: kafka
           containerPort: {{ .Values.service.port }}
