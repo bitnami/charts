@@ -60,7 +60,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `git.tag`                            | Git image tag                                                                                | `latest`                                                |
 | `git.pullPolicy`                     | Git image pull policy                                                                        | `Always`                                                |
 | `git.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
-| service.type                         | Kubernetes service type                                                                      | `ClusterIP`                                             |
+| `service.type`                         | Kubernetes service type                                                                      | `ClusterIP`                                             |
 | `entrypoint.file`                    | Main entrypoint to your application. If not speficied, it will be a `sleep infinity` command                                                          | `''`                                                    |
 | `entrypoint.args`                    | Args required by your entrypoint                                                             | `nil`                                                   |
 | `entrypoint.workDir`                    | Working directory for launching the entrypoint                                                          | `'/app'`                                                    |
@@ -116,7 +116,7 @@ $ helm install --name my-release \
     bitnami/mxnet
 ```
 
-The above command create 6 pods for MXNet: one scheduler, two servers and and three workers.
+The above command creates 6 pods for MXNet: one scheduler, two servers, and three workers.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
