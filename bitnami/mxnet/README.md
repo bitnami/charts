@@ -46,12 +46,12 @@ The command removes all the Kubernetes components associated with the chart and 
 The following table lists the configurable parameters of the MinIO chart and their default values.
 
 | Parameter                            | Description                                                                                  | Default                                                 |
-| ------------------------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|--------------------------------------|----------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                 | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods) |
-| `image.registry`                     | MXNet image registry                                                                       | `docker.io`                                             |
-| `image.repository`                   | MXNet image name                                                                           | `bitnami/MXNet`                                       |
-| `image.tag`                          | MXNet image tag                                                                            | `{VERSION}`                                             |
+| `image.registry`                     | MXNet image registry                                                                         | `docker.io`                                             |
+| `image.repository`                   | MXNet image name                                                                             | `bitnami/MXNet`                                         |
+| `image.tag`                          | MXNet image tag                                                                              | `{VERSION}`                                             |
 | `image.pullPolicy`                   | Image pull policy                                                                            | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                                                 |
@@ -60,29 +60,29 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `git.tag`                            | Git image tag                                                                                | `latest`                                                |
 | `git.pullPolicy`                     | Git image pull policy                                                                        | `Always`                                                |
 | `git.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
-| `service.type`                         | Kubernetes service type                                                                      | `ClusterIP`                                             |
-| `entrypoint.file`                    | Main entrypoint to your application. If not speficied, it will be a `sleep infinity` command                                                          | `''`                                                    |
+| `service.type`                       | Kubernetes service type                                                                      | `ClusterIP`                                             |
+| `entrypoint.file`                    | Main entrypoint to your application. If not speficied, it will be a `sleep infinity` command | `''`                                                    |
 | `entrypoint.args`                    | Args required by your entrypoint                                                             | `nil`                                                   |
-| `entrypoint.workDir`                    | Working directory for launching the entrypoint                                                          | `'/app'`                                                    |
-| `podManagementPolicy`                               | StatefulSet (worker and server nodes) pod management policy | `Parallel`                                            |
-| `mode`                               | Run MXNet in standalone or distributed mode (possible values: `standalone`, `distributed`) | `standalone`                                            |
-| `serverCount`                          | Number of server nodes that will execute your code                                                  | `1`                                                   |
-| `workerCount`                          | Number of worker nodes that will execute your code                                                  | `1`                                                   |
-| `schedulerPort`                               | MXNet scheduler port (only for distributed mode)                                                                         | `49875`                                                 |
-| `configMap`                          | Config map that contains the files you want to load in MXNet                               | `nil`                                                   |
+| `entrypoint.workDir`                 | Working directory for launching the entrypoint                                               | `'/app'`                                                |
+| `podManagementPolicy`                | StatefulSet (worker and server nodes) pod management policy                                  | `Parallel`                                              |
+| `mode`                               | Run MXNet in standalone or distributed mode (possible values: `standalone`, `distributed`)   | `standalone`                                            |
+| `serverCount`                        | Number of server nodes that will execute your code                                           | `1`                                                     |
+| `workerCount`                        | Number of worker nodes that will execute your code                                           | `1`                                                     |
+| `schedulerPort`                      | MXNet scheduler port (only for distributed mode)                                             | `49875`                                                 |
+| `configMap`                          | Config map that contains the files you want to load in MXNet                                 | `nil`                                                   |
 | `cloneFilesFromGit.enabled`          | Enable in order to download files from git repository                                        | `false`                                                 |
 | `cloneFilesFromGit.repository`       | Repository that holds the files                                                              | `nil`                                                   |
 | `cloneFilesFromGit.revision`         | Revision from the repository to checkout                                                     | `master`                                                |
-| `commonExtraEnvVars`                       | Extra environment variables to add to server, scheduler and worker nodes                                | `nil`                                                   |
-| `workerExtraEnvVars`                       | Extra environment variables to add to the worker nodes                                | `nil`                                                   |
-| `serverExtraEnvVars`                       | Extra environment variables to add to the server nodes                                | `nil`                                                   |
-| `schedulerExtraEnvVars`                       | Extra environment variables to add to the scheduler node                                | `nil`                                                   |
-| `sidecars`                       | Attach additional containers to the pods (scheduler, worker and server nodes)    | `nil`                                                   |
-| `initContainers`                       | Attach additional init containers to the pods (scheduler, worker and server nodes)    | `nil`                                                   |
-| `existingSecret`                       | Name of a secret with sensitive data to mount in the pods   | `nil`                                                   |
-| `nodeSelector`                       | Node labels for pod assignment (this value is evaluated as a template)                                                              | `{}`                                                    |
-| `tolerations`                        | Toleration labels for pod assignment (this value is evaluated as a template)                                                        | `[]`                                                    |
-| `affinity`                           | Map of node/pod affinities (this value is evaluated as a template)                                                                  | `{}`                                                    |
+| `commonExtraEnvVars`                 | Extra environment variables to add to server, scheduler and worker nodes                     | `nil`                                                   |
+| `workerExtraEnvVars`                 | Extra environment variables to add to the worker nodes                                       | `nil`                                                   |
+| `serverExtraEnvVars`                 | Extra environment variables to add to the server nodes                                       | `nil`                                                   |
+| `schedulerExtraEnvVars`              | Extra environment variables to add to the scheduler node                                     | `nil`                                                   |
+| `sidecars`                           | Attach additional containers to the pods (scheduler, worker and server nodes)                | `nil`                                                   |
+| `initContainers`                     | Attach additional init containers to the pods (scheduler, worker and server nodes)           | `nil`                                                   |
+| `existingSecret`                     | Name of a secret with sensitive data to mount in the pods                                    | `nil`                                                   |
+| `nodeSelector`                       | Node labels for pod assignment (this value is evaluated as a template)                       | `{}`                                                    |
+| `tolerations`                        | Toleration labels for pod assignment (this value is evaluated as a template)                 | `[]`                                                    |
+| `affinity`                           | Map of node/pod affinities (this value is evaluated as a template)                           | `{}`                                                    |
 | `resources`                          | Pod resources                                                                                | `{}`                                                    |
 | `securityContext.enabled`            | Enable security context                                                                      | `true`                                                  |
 | `securityContext.fsGroup`            | Group ID for the container                                                                   | `1001`                                                  |
@@ -99,8 +99,8 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `readinessProbe.timeoutSeconds`      | When the probe times out                                                                     | `1`                                                     |
 | `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                                     |
 | `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | `5`                                                     |
-| `persistence.enabled`                | Use a PVC to persist data                                                                   | `false`                                                  |
-| `persistence.mountPath`              | Path to mount the volume at                                                                  | `/bitnami/mxnet`                                      |
+| `persistence.enabled`                | Use a PVC to persist data                                                                    | `false`                                                 |
+| `persistence.mountPath`              | Path to mount the volume at                                                                  | `/bitnami/mxnet`                                        |
 | `persistence.storageClass`           | Storage class of backing PVC                                                                 | `nil` (uses alpha storage class annotation)             |
 | `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                                                          | `ReadWriteOnce`                                         |
 | `persistence.size`                   | Size of data volume                                                                          | `8Gi`                                                   |
