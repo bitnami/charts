@@ -23,7 +23,7 @@ spec:
         helm.sh/chart: {{ include "mxnet.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/component: "standalone"
+        app.kubernetes.io/component: standalone
     spec:
       {{- include "mxnet.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
@@ -31,14 +31,14 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
-      {{- if .Values.affinity }}
-      affinity: {{ toYaml .Values.affinity | nindent 8 }}
+      {{- with .Values.affinity }}
+      affinity: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
       {{- if .Values.cloneFilesFromGit.enabled }}
       initContainers:
@@ -49,9 +49,7 @@ spec:
         - /bin/sh
         - -c
         - |
-          git clone {{ .Values.cloneFilesFromGit.repository }} /app
-          cd /app
-          git checkout {{ .Values.cloneFilesFromGit.revision }}
+          git clone {{ .Values.cloneFilesFromGit.repository }} --branch {{ .Values.cloneFilesFromGit.revision }} /app
         volumeMounts:
         - name: git-cloned-files
           mountPath: /app

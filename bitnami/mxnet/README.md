@@ -80,9 +80,9 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `sidecars`                       | Attach additional containers to the pods (scheduler, worker and server nodes)    | `nil`                                                   |
 | `initContainers`                       | Attach additional init containers to the pods (scheduler, worker and server nodes)    | `nil`                                                   |
 | `existingSecret`                       | Name of a secret with sensitive data to mount in the pods   | `nil`                                                   |
-| `nodeSelector`                       | Node labels for pod assignment                                                               | `{}`                                                    |
-| `tolerations`                        | Toleration labels for pod assignment                                                         | `[]`                                                    |
-| `affinity`                           | Map of node/pod affinities                                                                   | `{}`                                                    |
+| `nodeSelector`                       | Node labels for pod assignment (this value is evaluated as a template)                                                              | `{}`                                                    |
+| `tolerations`                        | Toleration labels for pod assignment (this value is evaluated as a template)                                                        | `[]`                                                    |
+| `affinity`                           | Map of node/pod affinities (this value is evaluated as a template)                                                                  | `{}`                                                    |
 | `resources`                          | Pod resources                                                                                | `{}`                                                    |
 | `securityContext.enabled`            | Enable security context                                                                      | `true`                                                  |
 | `securityContext.fsGroup`            | Group ID for the container                                                                   | `1001`                                                  |
