@@ -15,7 +15,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "mxnet.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/component: "server"
+      app.kubernetes.io/component: server
   replicas: {{ .Values.serverCount }}
   serviceName: {{ template "mxnet.fullname" . }}-headless
   template:

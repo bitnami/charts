@@ -15,7 +15,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "mxnet.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/component: "scheduler"
+      app.kubernetes.io/component: scheduler
   template:
     metadata:
       labels:
@@ -23,7 +23,7 @@ spec:
         helm.sh/chart: {{ include "mxnet.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
-        app.kubernetes.io/component: "scheduler"
+        app.kubernetes.io/component: scheduler
     spec:
       {{- include "mxnet.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}

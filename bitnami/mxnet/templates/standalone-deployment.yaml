@@ -8,14 +8,14 @@ metadata:
     helm.sh/chart: {{ include "mxnet.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/component: "standalone"
+    app.kubernetes.io/component: standalone
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "mxnet.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/component: "standalone"
+      app.kubernetes.io/component: standalone
   template:
     metadata:
       labels:
