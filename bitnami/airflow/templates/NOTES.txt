@@ -75,4 +75,7 @@ host. To configure Airflow with the URL of your service:
   echo User:    {{ .Values.airflow.auth.username }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
 
-  {{- end  }}
+{{- end  }}
+
+{{ include "airflow.validateValues" . }}
+{{ include "airflow.checkRollingTags" . }}

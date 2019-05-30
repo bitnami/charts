@@ -21,6 +21,10 @@ spec:
         app: {{ template "elasticsearch.name" . }}
         release: {{ .Release.Name | quote }}
         role: "coordinating-only"
+{{- with .Values.coordinating.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- if .Values.securityContext.enabled }}
       securityContext:

@@ -146,7 +146,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
@@ -233,4 +232,56 @@ Get the secret name
 {{- else -}}
 {{- printf "%s" (include "airflow.fullname" .) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "airflow.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit.repository" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit.branch" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Airflow - "airflow.cloneDagFilesFromGit.repository" must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
+{{- define "airflow.validateValues.cloneDagFilesFromGit.repository" -}}
+{{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.repository) -}}
+airflow: airflow.cloneDagFilesFromGit.repository
+    The repository must be provided when enabling downloading DAG files
+    from git repository (--set airflow.cloneDagFilesFromGit.repository="xxx")
+{{- end -}}
+{{- end -}}
+{{/* Validate values of Airflow - "airflow.cloneDagFilesFromGit.branch" must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
+{{- define "airflow.validateValues.cloneDagFilesFromGit.branch" -}}
+{{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.branch) -}}
+airflow: airflow.cloneDagFilesFromGit.branch
+    The branch must be provided when enabling downloading DAG files
+    from git repository (--set airflow.cloneDagFilesFromGit.branch="xxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Check if there are rolling tags in the images */}}
+{{- define "airflow.checkRollingTags" -}}
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.schedulerImage.repository) (not (.Values.schedulerImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.schedulerImage.repository }}:{{ .Values.schedulerImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.workerImage.repository) (not (.Values.workerImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.workerImage.repository }}:{{ .Values.workerImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.git.repository) (not (.Values.git.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.git.repository }}:{{ .Values.git.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
 {{- end -}}

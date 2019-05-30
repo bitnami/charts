@@ -41,6 +41,10 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
+## Log level
+
+You can configure the Zookeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `ERROR` because of each readiness probe produce an `INFO` message on connection and a `WARN` message on disconnection.
+
 ## Configuration
 
 The following tables lists the configurable parameters of the Zookeeper chart and their default values.
@@ -51,10 +55,12 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `global.imagePullSecrets`             | Global Docker registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.registry`                      | Zookeeper image registry                                            | `docker.io`                                              |
 | `image.repository`                    | Zookeeper Image name                                                | `bitnami/zookeeper`                                      |
-| `image.tag`                           | Zookeeper Image tag                                                 | `{VERSION}`                                              |
+| `image.tag`                           | Zookeeper Image tag                                                 | `{TAG_NAME}`                                             |
 | `image.pullPolicy`                    | Zookeeper image pull policy                                         | `Always`                                                 |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                    | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
+| `nameOverride`              | String to partially override zookeeper.fullname template with a string (will append the release name)                                           | `nil`                                                    |
+| `fullnameOverride`              | String to fully override zookeeper.fullname template with a string                                           | `nil`                                                    |
 | `updateStrategy`                      | Update strategies                                                   | `RollingUpdate`                                          |
 | `podDisruptionBudget.maxUnavailable`  | Max number of pods down simultaneously                              | `1`                                                      |
 | `rollingUpdatePartition`              | Partition update strategy                                           | `nil`                                                    |
@@ -69,9 +75,10 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `auth.enabled`                        | Enable Zookeeper auth                                               | `false`                                                  |
 | `auth.clientUser`                     | User that will use Zookeeper clients to auth                        | `nil`                                                    |
 | `auth.clientPassword`                 | Password that will use Zookeeper clients to auth                    | `nil`                                                    |
-| `auth.serverUsers`                    | List of user to be created                                          | `[]`                                                     |
-| `auth.serverPasswords`                | List of passwords to assign to users when created                   | `[]`                                                     |
+| `auth.serverUsers`                    | List of user to be created                                          | `nil`                                                     |
+| `auth.serverPasswords`                | List of passwords to assign to users when created                   | `nil`                                                     |
 | `heapSize`                            | Size in MB for the Java Heap options (Xmx and XMs)                  | `[]`                                                     |
+| `logLevel`                            | Log level of Zookeeper server                                       | `ERROR`                                                  |
 | `jvmFlags`                            | Default JVMFLAGS for the ZooKeeper process                          | `nil`                                                    |
 | `config`                              | Configure ZooKeeper with a custom zoo.conf file                     | `nil`                                                    |
 | `service.type`                        | Kubernetes Service type                                             | `ClusterIP`                                              |
@@ -113,6 +120,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `metrics.podAnnotations`              | Additional annotations for Metrics exporter pod                     | `{prometheus.io/scrape: "true", prometheus.io/port: "9141"}` |
 | `metrics.resources`                   | Exporter resource requests/limit                                    | Memory: `256Mi`, CPU: `100m`                             |
 | `metrics.tolerations`                 | Exporter toleration labels for pod assignment                       | `[]`                                                     |
+| `metrics.timeoutSeconds`              | Timeout in seconds the exporter uses to scrape its targets          | 3                                                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -131,6 +139,12 @@ $ helm install --name my-release -f values.yaml bitnami/zookeeper
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Persistence
 

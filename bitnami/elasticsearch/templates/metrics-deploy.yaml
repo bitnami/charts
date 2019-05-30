@@ -23,6 +23,10 @@ spec:
         release: {{ .Release.Name | quote }}
         chart: {{ template "elasticsearch.chart" . }}
         role: "metrics"
+{{- with .Values.metrics.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
 {{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
       containers:

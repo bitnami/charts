@@ -51,7 +51,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 | `global.imagePullSecrets`                 | Global Docker registry secret names as an array                            | `[]` (does not add image pull secrets to deployed pods)           |
 | `image.registry`                          | MySQL image registry                                                       | `docker.io`                                                       |
 | `image.repository`                        | MySQL Image name                                                           | `bitnami/mysql`                                                   |
-| `image.tag`                               | MySQL Image tag                                                            | `{VERSION}`                                                       |
+| `image.tag`                               | MySQL Image tag                                                            | `{TAG_NAME}`                                                      |
 | `image.pullPolicy`                        | MySQL image pull policy                                                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`           |
 | `image.pullSecrets`                       | Specify docker-registry secret names as an array                           | `[]` (does not add image pull secrets to deployed pods)           |
 | `service.type`                            | Kubernetes service type                                                    | `ClusterIP`                                                       |
@@ -137,6 +137,12 @@ $ helm install --name my-release -f values.yaml bitnami/mysql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Initialize a fresh instance
 

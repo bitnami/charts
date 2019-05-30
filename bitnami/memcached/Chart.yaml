@@ -1,7 +1,7 @@
 apiVersion: v1
 name: memcached
-version: 1.5.3
-appVersion: 1.5.14
+version: 1.5.7
+appVersion: 1.5.16
 description: Chart for Memcached
 keywords:
 - memcached

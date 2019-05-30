@@ -55,7 +55,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                           | `[]` (does not add image pull secrets to deployed pods)                                          |
 | `image.registry`                                  | Elasticsearch image registry                                                                                              | `docker.io`                                             |
 | `image.repository`                                | Elasticsearch image repository                                                                                            | `bitnami/elasticsearch`                                 |
-| `image.tag`                                       | Elasticsearch image tag                                                                                                   | `{VERSION}`                                             |
+| `image.tag`                                       | Elasticsearch image tag                                                                                                   | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                                | Image pull policy                                                                                                         | `Always`                                                |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]` (does not add image pull secrets to deployed pods)                                                   |
 | `name`                                            | Elasticsearch cluster name                                                                                                | `elastic`                                               |
@@ -78,6 +78,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.livenessProbe.timeoutSeconds`             | When the probe times out (master-eligible nodes pod)                                                                      | `5`                                                     |
 | `master.livenessProbe.successThreshold`           | Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)   | `1`                                                     |
 | `master.livenessProbe.failureThreshold`           | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`                                                     |
+| `master.podAnnotations`                        | Annotations for master pods. | `{}` |
 | `master.readinessProbe.enabled`                   | Enable/disable the readiness probe (master-eligible nodes pod)                                                            | `true`                                                  |
 | `master.readinessProbe.initialDelaySeconds`       | Delay before readiness probe is initiated (master-eligible nodes pod)                                                     | `90`                                                    |
 | `master.readinessProbe.periodSeconds`             | How often to perform the probe (master-eligible nodes pod)                                                                | `10`                                                    |
@@ -93,6 +94,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                          | `128m`                                                  |
 | `coordinating.antiAffinity`                       | Coordinating-only node pod anti-affinity policy                                                                           | `soft`                                                  |
 | `coordinating.nodeAffinity`                       | Coordinating-only node affinity policy                                                                           | `nil`                                                  |
+| `coordinating.podAnnotations`                     | Annotations for coordniating pods. | `{}` |
 | `coordinating.service.type`                       | Kubernetes Service type (coordinating-only nodes)                                                                         | `ClusterIP`                                             |
 | `coordinating.service.port`                       | Kubernetes Service port for REST API (coordinating-only nodes)                                                            | `9200`                                                  |
 | `coordinating.service.nodePort`                   | Kubernetes Service nodePort (coordinating-only nodes)                                                                     | `nil`                                                   |
@@ -130,6 +132,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `data.livenessProbe.timeoutSeconds`               | When the probe times out (data nodes pod)                                                                                 | `5`                                                     |
 | `data.livenessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)              | `1`                                                     |
 | `data.livenessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`                                                     |
+| `data.podAnnotations`                             | Annotations for data pods. | `{}` |
 | `data.readinessProbe.enabled`                     | Enable/disable the readiness probe (data nodes pod)                                                                       | `true`                                                  |
 | `data.readinessProbe.initialDelaySeconds`         | Delay before readiness probe is initiated (data nodes pod)                                                                | `90`                                                    |
 | `data.readinessProbe.periodSeconds`               | How often to perform the probe (data nodes pod)                                                                           | `10`                                                    |
@@ -154,6 +157,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `ingest.livenessProbe.timeoutSeconds`             | When the probe times out (ingest nodes pod)                                                                               | `5`                                                     |
 | `ingest.livenessProbe.successThreshold`           | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)            | `1`                                                     |
 | `ingest.livenessProbe.failureThreshold`           | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`                                                     |
+| `ingest.podAnnotations`                           | Annotations for ingest pods. | `{}` |
 | `ingest.readinessProbe.enabled`                   | Enable/disable the readiness probe (ingest nodes pod)                                                                     | `true`                                                  |
 | `ingest.readinessProbe.initialDelaySeconds`       | Delay before readiness probe is initiated (ingest nodes pod)                                                              | `90`                                                    |
 | `ingest.readinessProbe.periodSeconds`             | How often to perform the probe (ingest nodes pod)                                                                         | `10`                                                    |
@@ -168,6 +172,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.image.pullPolicy`                        | Metrics exporter image pull policy                                                                                        | `Always`                                                |
 | `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                    | `ClusterIP`                                             |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                  | `requests: { cpu: "25m" }`                              |
+| `metrics.podAnnotations`                          | Annotations for metrics pods. | `{}` |
 | `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                     | `false`                                                 |
 | `sysctlImage.registry`                            | Kernel settings modifier image registry                                                                                   | `docker.io`                                             |
 | `sysctlImage.repository`                          | Kernel settings modifier image repository                                                                                 | `bitnami/minideb`                                       |
@@ -191,6 +196,12 @@ $ helm install --name my-release -f values.yaml bitnami/elasticsearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml). [values-production.yaml](values-production.yaml) has defaults optimized for use in production environments.
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Persistence
 

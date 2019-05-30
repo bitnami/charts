@@ -54,12 +54,32 @@ spec:
       - name: git-clone-repository
         image: "{{ template "git.image" . }}"
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} /dags && cd /dags && git checkout {{ .Values.airflow.cloneDagFilesFromGit.revision }}']
+        command:
+        - /bin/bash
+        - -ec
+        - |
+          git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
         volumeMounts:
         - name: git-cloned-dag-files
           mountPath: /dags
-      {{- end }}
       containers:
+      - name: git-repo-syncer
+        image: "{{ template "git.image" . }}"
+        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+        command:
+        - /bin/bash
+        - -ec
+        - |
+          while true; do
+              cd /dags && git pull origin {{ .Values.airflow.cloneDagFilesFromGit.branch }}
+              sleep {{ default "60" .Values.airflow.cloneDagFilesFromGit.interval }}
+          done
+        volumeMounts:
+        - name: git-cloned-dag-files
+          mountPath: /dags
+      {{- else }}
+      containers:
+      {{- end }}
       - name: airflow-worker
         image: "{{ template "airflow.workerImage" . }}"
         imagePullPolicy: "{{ .Values.workerImage.pullPolicy }}"

@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 1.10.3
+  tag: 1.10.3-debian-9-r16
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -37,7 +37,7 @@ image:
 schedulerImage:
   registry: docker.io
   repository: bitnami/airflow-scheduler
-  tag: 1.10.3
+  tag: 1.10.3-debian-9-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -61,7 +61,7 @@ schedulerImage:
 workerImage:
   registry: docker.io
   repository: bitnami/airflow-worker
-  tag: 1.10.3
+  tag: 1.10.3-debian-9-r25
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -85,7 +85,7 @@ workerImage:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: latest
+  tag: 2.21.0-debian-9-r72
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -120,8 +120,9 @@ airflow:
   ##
   cloneDagFilesFromGit:
     enabled: false
-    repository:
-    revision:
+    # repository:
+    # branch:
+    # interval:
   ## URL used to access to airflow web ui
   ##
   baseUrl: http://airflow.local

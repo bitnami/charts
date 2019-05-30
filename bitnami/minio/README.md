@@ -54,13 +54,13 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `global.minio.secretKey`               | MinIO Secret Key (overrides `secretKey.password`)                                            | `nil`                                                   |
 | `image.registry`                       | MinIO image registry                                                                         | `docker.io`                                             |
 | `image.repository`                     | MinIO image name                                                                             | `bitnami/minio`                                         |
-| `image.tag`                            | MinIO image tag                                                                              | `{VERSION}`                                             |
+| `image.tag`                            | MinIO image tag                                                                              | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                     | Image pull policy                                                                            | `Always`                                                |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                          | Specify if debug logs should be enabled                                                      | `false`                                                 |
 | `clientImage.registry`                 | MinIO Client image registry                                                                  | `docker.io`                                             |
 | `clientImage.repository`               | MinIO Client image name                                                                      | `bitnami/minio-client`                                  |
-| `clientImage.tag`                      | MinIO Client image tag                                                                       | `{VERSION}`                                             |
+| `clientImage.tag`                      | MinIO Client image tag                                                                       | `{TAG_NAME}`                                            |
 | `mode`                                 | MinIO server mode (`standalone` or `distributed`)                                            | `standalone`                                            |
 | `statefulset.replicaCount`             | Number of pods (only for Minio distributed mode). Should be 4 <= x <= 32                     | `4`                                                     |
 | `statefulset.updateStrategy`           | Statefulset update strategy policy                                                           | `RollingUpdate`                                         |
@@ -135,6 +135,12 @@ $ helm install --name my-release -f values.yaml bitnami/minio
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Distributed mode
 

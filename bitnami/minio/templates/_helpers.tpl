@@ -140,3 +140,15 @@ minio: replicaCount
     Please set a valid number of replicas (--set statefulset.replicaCount=X)
 {{- end -}}
 {{- end -}}
+
+{{/* Check if there are rolling tags in the images */}}
+{{- define "minio.checkRollingTags" -}}
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.clientImage.repository) (not (.Values.clientImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.clientImage.repository }}:{{ .Values.clientImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- end -}}

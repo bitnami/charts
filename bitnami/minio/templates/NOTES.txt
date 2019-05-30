@@ -68,3 +68,4 @@ To access the MinIO web UI:
 {{- end }}
 
 {{ include "minio.validateValues" . }}
+{{ include "minio.checkRollingTags" . }}

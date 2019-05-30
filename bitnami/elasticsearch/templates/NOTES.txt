@@ -63,3 +63,10 @@
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "elasticsearch.coordinating.fullname" . }} {{ .Values.coordinating.service.port }}:9200 &
     curl http://127.0.0.1:9200/
 {{- end }}
+
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+
+{{- end }}

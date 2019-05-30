@@ -115,6 +115,8 @@ spec:
         {{- end }}
         - name: ZOO_HEAP_SIZE
           value: {{ .Values.heapSize | quote }}
+        - name: ZOO_LOG_LEVEL
+          value: {{ .Values.logLevel | quote }}
         - name: ALLOW_ANONYMOUS_LOGIN
           value: {{ ternary "yes" "no" .Values.allowAnonymousLogin | quote }}
         {{- if .Values.jvmFlags }}

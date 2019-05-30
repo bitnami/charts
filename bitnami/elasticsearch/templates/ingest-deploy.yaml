@@ -22,6 +22,10 @@ spec:
         app: {{ template "elasticsearch.name" . }}
         release: {{ .Release.Name | quote }}
         role: "ingest"
+{{- with .Values.ingest.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
