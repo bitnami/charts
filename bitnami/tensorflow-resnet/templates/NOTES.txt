@@ -28,3 +28,5 @@
 2. Test the server with a sample image.
 
   docker run --rm -it bitnami/tensorflow-resnet bash -c "curl -Lo /tmp/cat.jpg https://tensorflow.org/images/blogs/serving/cat.jpg && resnet_client_cc --server_port=$APP_HOST:$APP_PORT --image_file=/tmp/cat.jpg"
+
+{{ include "tensorflow-resnet.checkRollingTags" . }}

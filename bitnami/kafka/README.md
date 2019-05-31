@@ -55,6 +55,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `image.pullPolicy`                      | Kafka image pull policy                                                                                   | `Always`                                                           |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)            |
 | `image.debug`                           | Specify if debug values should be set                                                                     | `false`                                                            |
+| `nameOverride`                          | String to partially override kafka.fullname template with a string (will append the release name)         | `nil`                                                              |
+| `fullnameOverride`                      | String to fully override kafka.fullname template with a string                                            | `nil`                                                              |
 | `updateStrategy`                        | Update strategy for the stateful set                                                                      | `RollingUpdate`                                                    |
 | `rollingUpdatePartition`                | Partition update strategy                                                                                 | `nil`                                                              |
 | `podDisruptionBudget.maxUnavailable`    | Max number of pods down simultaneously                                                                    | `1`                                                                |
@@ -87,6 +89,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `socketRequestMaxBytes`                 | The maximum size of a request that the socket server will accept (protection against OOM).                | `_104857600`                                                       |
 | `socketSendBufferBytes`                 | The send buffer (SO_SNDBUF) used by the socket server.                                                    | `102400`                                                           |
 | `zookeeperConnectionTimeoutMs`          | Timeout in ms for connecting to zookeeper.                                                                | `6000`                                                             |
+| `extraEnvVars`                          | Extra environment variables to add to kafka pods                                                          | `nil`                                                              |
 | `sslEndpointIdentificationAlgorithm`    | The endpoint identification algorithm to validate server hostname using server certificate.               | `https`                                                            |
 | `auth.enabled`                          | Switch to enable the kafka authentication.                                                                | `false`                                                            |
 | `auth.existingSecret`                   | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser.     | `nil`                                                              |
@@ -171,6 +174,17 @@ $ helm install --name my-release -f values.yaml bitnami/kafka
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+## Setting custom parameters
+
+Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`.
+In order to pass custom environment variables use the `extraEnvVars` property.
 
 ## Production and horizontal scaling
 

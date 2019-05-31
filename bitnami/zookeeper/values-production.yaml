@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.4.14
+  tag: 3.4.14-debian-9-r25
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -30,6 +30,12 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
+
+## String to partially override zookeeper.fullname template (will maintain the release name)
+# nameOverride:
+
+## String to fully override zookeeper.fullname template
+# fullnameOverride:
 
 ## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -90,12 +96,12 @@ auth:
   ## Password that will use Zookeeper clients to auth
   ##
   # clientPassword:
-  ## Comma, semicolon or whitespace separated list of user to be created. Example: user1,user2,admin
+  ## Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"
   ##
-  # serverUsers: []
-  ## Comma, semicolon or whitespace separated list of passwords to assign to users when created. Example: pass4user1, pass4user2, pass4admin
+  # serverUsers: ""
+  ## Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
   ##
-  # serverPasswords: []
+  # serverPasswords: ""
 
 ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
 ##
@@ -189,8 +195,8 @@ metrics:
 
   image:
     registry: docker.io
-    repository: javsalgar/zookeeper-exporter
-    tag: latest
+    repository: dabealu/zookeeper-exporter
+    tag: v0.1.0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -204,6 +210,8 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9141"
   podLabels: {}
+
+  timeoutSeconds: 3
 
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

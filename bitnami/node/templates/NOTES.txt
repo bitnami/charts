@@ -21,3 +21,5 @@
   echo "Node app URL: http://127.0.0.1:{{ .Values.service.port }}/"
 
 {{- end }}
+
+{{ include "node.checkRollingTags" . }}

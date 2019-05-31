@@ -104,7 +104,7 @@ spec:
               key: secret-key
         {{- end }}
         - name: MINIO_BROWSER
-          value: {{ ternary "off" "on" .Values.disableWebUI }}
+          value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
 {{- if .Values.extraEnv }}
 {{ toYaml .Values.extraEnv | indent 8 }}
 {{- end }}
