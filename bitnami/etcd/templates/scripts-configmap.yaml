@@ -59,7 +59,7 @@ data:
     is_disastrous_failure() {
         local endpoints_array=(${ETCDCTL_ENDPOINTS//,/ })
         local active_endpoints=0
-        local -r min_endpoints=$(({{ $replicaCount }} - (({{ $replicaCount }} - 1)/2)))
+        local -r min_endpoints=$((({{ $replicaCount }} + 1)/2))
 
         for e in "${endpoints_array[@]}"; do
             if [[ "$e" != "$ETCD_ADVERTISE_CLIENT_URLS" ]] && etcdctl $AUTH_OPTIONS  endpoint health --endpoints="$e" >/dev/null 2>&1; then
