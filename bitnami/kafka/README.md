@@ -109,7 +109,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `service.nodePort`                      | Kubernetes Service nodePort                                                                               | `nil`                                                              |
 | `service.loadBalancerIP`                | loadBalancerIP for Kafka Service                                                                          | `nil`                                                              |
 | `service.annotations`                   | Service annotations                                                                                       | ``                                                                 |
-| `persistence.enabled`                   | Enable Kafka persistence using PVC, note that zookeaper perisstency is unaffected                        | `true`                                                             |
+| `persistence.enabled`                   | Enable Kafka persistence using PVC, note that zookeeper perisstency is unaffected                        | `true`                                                             |
 | `persistence.existingClaim`             | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template.                        | `nil`                                                              |
 | `persistence.storageClass`              | PVC Storage Class for Kafka volume                                                                        | `nil`                                                              |
 | `persistence.accessMode`                | PVC Access Mode for Kafka volume                                                                          | `ReadWriteOnce`                                                    |
@@ -155,7 +155,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.jmx.jmxPort`                   | The jmx port which JMX style metrics are exposed (note: these are not scrapeable by Prometheus)           | `5555`                                                             |
 | `metrics.jmx.whitelistObjectNames`      | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                      | (see `values.yaml`)                                                |
 | `zookeeper.enabled`                     | Switch to enable or disable the Zookeeper helm chart                                                      | `true`                                                             |
-| `zookeeper.persistence.enabled`         | Enable Zookeaper persistence using PVC                                                                    | `true`                                                             |
+| `zookeeper.persistence.enabled`         | Enable Zookeeper persistence using PVC                                                                    | `true`                                                             |
 | `externalZookeeper.servers`             | Server or list of external zookeeper servers to use.                                                      | `nil`                                                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
