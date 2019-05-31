@@ -51,25 +51,25 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.registry`                          | Airflow image registry                                                                      | `docker.io`                                                  |
 | `image.repository`                        | Airflow image name                                                                          | `bitnami/airflow`                                            |
-| `image.tag`                               | Airflow image tag                                                                           | `{VERSION}`                                                  |
+| `image.tag`                               | Airflow image tag                                                                           | `{TAG_NAME}`                                                 |
 | `image.pullPolicy`                        | Airflow image pull policy                                                                   | `Always`                                                     |
 | `image.pullSecrets`                       | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.debug`                             | Specify if debug values should be set                                                       | `false`                                                      |
 | `schedulerImage.registry`                 | Airflow Scheduler image registry                                                            | `docker.io`                                                  |
 | `schedulerImage.repository`               | Airflow Scheduler image name                                                                | `bitnami/airflow-shceduler`                                  |
-| `schedulerImage.tag`                      | Airflow Scheduler image tag                                                                 | `{VERSION}`                                                  |
+| `schedulerImage.tag`                      | Airflow Scheduler image tag                                                                 | `{TAG_NAME}`                                                 |
 | `schedulerImage.pullPolicy`               | Airflow Scheduler image pull policy                                                         | `Always`                                                     |
 | `schedulerImage.pullSecrets`              | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `schedulerImage.debug`                    | Specify if debug values should be set                                                       | `false`                                                      |
 | `workerImage.registry`                    | Airflow Worker image registry                                                               | `docker.io`                                                  |
 | `workerImage.repository`                  | Airflow Worker image name                                                                   | `bitnami/airflow-worker`                                     |
-| `workerImage.tag`                         | Airflow Worker image tag                                                                    | `{VERSION}`                                                  |
+| `workerImage.tag`                         | Airflow Worker image tag                                                                    | `{TAG_NAME}`                                                 |
 | `workerImage.pullPolicy`                  | Airflow Worker image pull policy                                                            | `Always`                                                     |
 | `workerImage.pullSecrets`                 | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `workerImage.debug`                       | Specify if debug values should be set                                                       | `false`                                                      |
 | `git.registry`                            | Git image registry                                                                          | `docker.io`                                                  |
 | `git.repository`                          | Git image name                                                                              | `bitnami/git`                                                |
-| `git.tag`                                 | Git image tag                                                                               | `{VERSION}`                                                  |
+| `git.tag`                                 | Git image tag                                                                               | `{TAG_NAME}`                                                 |
 | `git.pullPolicy`                          | Git image pull policy                                                                       | `Always`                                                     |
 | `git.pullSecrets`                         | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `updateStrategy`                          | Update strategy for the stateful set                                                        | `RollingUpdate`                                              |
@@ -79,7 +79,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.loadExamples`                    | Switch to load some Airflow examples                                                        | `true`                                                       |
 | `airflow.cloneDagFilesFromGit.enabled`    | Enable in order to download DAG files from git repository.                                  | `false`                                                      |
 | `airflow.cloneDagFilesFromGit.repository` | Repository where download DAG files from                                                    | `nil`                                                        |
-| `airflow.cloneDagFilesFromGit.revision`   | Revision from repository to checkout                                                        | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.branch`     | Branch from repository to checkout                                                          | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.interval`   | Interval to pull the repository on sidecar container                                        | `nil`                                                        |
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                        | `nil`                                                        |
 | `airflow.worker.port`                     | Airflow Worker port                                                                         | `8793`                                                       |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                           | `2`                                                          |
@@ -164,6 +165,12 @@ $ helm install --name my-release -f values.yaml bitnami/airflow
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ## Persistence
 
 The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
@@ -188,12 +195,12 @@ You can manually create a config map containing all your DAG files and then pass
 
 ### Option 3: Get your DAG files from a git repository
 
-You can store all your DAG files on a GitHub repository and then clone to the Airflow pods with an initContainer. In order to do that, you can deploy airflow with the following options:
+You can store all your DAG files on a GitHub repository and then clone to the Airflow pods with an initContainer. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
 
 ```console
 helm install --name my-release bitnami/airflow \
              --set airflow.cloneDagFilesFromGit.enabled=true \
              --set airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY \
-             --set airflow.cloneDagFilesFromGit.revision=master
-
+             --set airflow.cloneDagFilesFromGit.branch=master
+             --set airflow.cloneDagFilesFromGit.interval=60
 ```

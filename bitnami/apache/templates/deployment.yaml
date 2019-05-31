@@ -58,9 +58,6 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 3
           periodSeconds: 5
-        volumeMounts:
-        - name: apache-data
-          mountPath: /bitnami/apache
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "apache.metrics.image" . }}
@@ -84,6 +81,3 @@ spec:
         resources:
   {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
-      volumes:
-      - name: apache-data
-        emptyDir: {}

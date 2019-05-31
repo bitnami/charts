@@ -66,14 +66,14 @@ The following tables lists the configurable parameters of the TensorFlow ResNet 
 | `global.imagePullSecrets`                     | Global Docker registry secret names as an array      | `[]` (does not add image pull secrets to deployed pods)      |
 | `server.image.registry`                       | TensorFlow Serving image registry                    | `docker.io`                                                  |
 | `server.image.repository`                     | TensorFlow Serving Image name                        | `bitnami/tensorflow-serving`                                 |
-| `server.image.tag`                            | TensorFlow Serving Image tag                         | `{VERSION}`                                                  |
+| `server.image.tag`                            | TensorFlow Serving Image tag                         | `{TAG_NAME}`                                                 |
 | `server.image.pullPolicy`                     | TensorFlow Serving image pull policy                 | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
 | `server.image.pullSecrets`                    | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)      |
 | `replicaCount`                                | Desired number of pods                               | `1`                                                          |
 | `server.port`                                 | Tensorflow server port                               | `8500`                                                       |
 | `client.image.registry`                       | TensorFlow ResNet image registry                     | `docker.io`                                                  |
 | `client.image.repository`                     | TensorFlow ResNet Image name                         | `bitnami/tensorflow-resnet`                                  |
-| `client.image.tag`                            | TensorFlow ResNet Image tag                          | `{VERSION}`                                                  |
+| `client.image.tag`                            | TensorFlow ResNet Image tag                          | `{TAG_NAME}`                                                 |
 | `client.image.pullPolicy`                     | TensorFlow ResNet image pull policy                  | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
 | `client.image.pullSecrets`                    | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)      |
 | `imagePullPolicy`                             | Image pull policy                                    | `Always` if `image` tag is `latest`, else `IfNotPresent`     |
@@ -125,3 +125,9 @@ $ helm install --name my-release -f values.yaml bitnami/tensorflow-resnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.

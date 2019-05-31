@@ -35,3 +35,4 @@ This chart allows three different methods to load your files:
 Examples for the different methods can be found in the README.
 {{- end }}
 {{ include "pytorch.validateValues" . }}
+{{ include "pytorch.checkRollingTags" . }}

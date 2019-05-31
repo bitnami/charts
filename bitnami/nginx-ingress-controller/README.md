@@ -53,7 +53,7 @@ Parameter | Description | Default
 `name` | name of the controller component | `controller`
 `image.registry` | name of the container image registry | `docker.io`
 `image.repository` | controller container image repository | `bitnami/nginx-ingress-controller`
-`image.tag` | controller container image tag | `{VERSION}`
+`image.tag` | controller container image tag | `{TAG_NAME}`
 `image.pullPolicy` | controller container image pull policy | `IfNotPresent`
 `config` | nginx ConfigMap entries | `use-geoip: "false", use-geoip2: "true"`
 `hostNetwork` | If the nginx deployment / daemonset should run on the host's network namespace. Do not set this when `controller.service.externalIPs` is set and `kube-proxy` is used as there will be a port-conflict for port `80` | false
@@ -181,6 +181,12 @@ $ helm install --name my-release -f values.yaml bitnami/nginx-ingress-controller
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Upgrading
 

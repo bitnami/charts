@@ -55,7 +55,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                           | `[]` (does not add image pull secrets to deployed pods)                                          |
 | `image.registry`                                  | Elasticsearch image registry                                                                                              | `docker.io`                                             |
 | `image.repository`                                | Elasticsearch image repository                                                                                            | `bitnami/elasticsearch`                                 |
-| `image.tag`                                       | Elasticsearch image tag                                                                                                   | `{VERSION}`                                             |
+| `image.tag`                                       | Elasticsearch image tag                                                                                                   | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                                | Image pull policy                                                                                                         | `Always`                                                |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]` (does not add image pull secrets to deployed pods)                                                   |
 | `name`                                            | Elasticsearch cluster name                                                                                                | `elastic`                                               |
@@ -196,6 +196,12 @@ $ helm install --name my-release -f values.yaml bitnami/elasticsearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml). [values-production.yaml](values-production.yaml) has defaults optimized for use in production environments.
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Persistence
 
