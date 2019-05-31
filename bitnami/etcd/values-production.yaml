@@ -214,19 +214,33 @@ metrics:
     prometheus.io/port: "2379"
 
 ## Enable auto disaster recovery by periodically snapshotting the keyspace
-## - It creates a sidecar container to periodically snapshotting the keyspace
+## - It creates a cronjob to periodically snapshotting the keyspace
 ## - It also creates a ReadWriteMany PVC to store the snapshots
 ## If the cluster permanently loses more than (N-1)/2 members, it tries to recover
 ## the cluster from a previous snapshot.
 ##
 disasterRecovery:
   enabled: true
-  ## Interval (in seconds) to save snapshots
-  ##
-  interval: 300
-  ## PVC Storage Request
-  ##
-  size: 2Gi
-  ## storageClassName, choose a storageClassName with ReadWriteMany support
-  ##
-  storageClassName: nfs
+  cronjob:
+    ## Schedule in Cron format to save snapshots
+    ## See https://en.wikipedia.org/wiki/Cron
+    ##
+    schedule: "*/30 * * * *"
+    ## Number of successful finished jobs to retain
+    ##
+    historyLimit: 1
+    ## Pod annotations
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    # resources:
+  pvc:
+    ## PVC Storage Request
+    ##
+    size: 2Gi
+    ## storageClassName, choose a storageClassName with ReadWriteMany support
+    ##
+    storageClassName: nfs

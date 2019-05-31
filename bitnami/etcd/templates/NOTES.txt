@@ -24,12 +24,12 @@ etcd can be accessed via port {{ .Values.service.port }} on the following DNS na
 To set a key run the following command:
 
     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "etcd.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl exec -it $POD_NAME -c etcd -- etcdctl put /message Hello
+    kubectl exec -it $POD_NAME -- etcdctl put /message Hello
 
 To get a key run the following command:
 
     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "etcd.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl exec -it $POD_NAME -c etcd -- etcdctl get /message
+    kubectl exec -it $POD_NAME -- etcdctl get /message
 
 To connect to your etcd server from outside the cluster execute the following commands:
 

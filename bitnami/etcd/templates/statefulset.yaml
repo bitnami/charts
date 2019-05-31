@@ -5,13 +5,13 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "etcd.name" . }}
     helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "etcd.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name | quote }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   serviceName: {{ template "etcd.fullname" . }}-headless
   podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
   replicas: {{ .Values.statefulset.replicaCount }}
@@ -29,8 +29,8 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "etcd.name" . }}
         helm.sh/chart: {{ template "etcd.chart" . }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
-        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
 {{- if .Values.podAnnotations }}
@@ -61,7 +61,7 @@ spec:
             labelSelector:
               matchLabels:
                 app.kubernetes.io/name: {{ template "etcd.name" . }}
-                app.kubernetes.io/instance: {{ .Release.Name | quote }}
+                app.kubernetes.io/instance: {{ .Release.Name }}
         {{- else if eq .Values.podAntiAffinity "soft" }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -71,7 +71,7 @@ spec:
               labelSelector:
                 matchLabels:
                   app.kubernetes.io/name: {{ template "etcd.name" . }}
-                  app.kubernetes.io/instance: {{ .Release.Name | quote }}
+                  app.kubernetes.io/instance: {{ .Release.Name }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
@@ -100,8 +100,9 @@ spec:
             exec:
               command:
               - /scripts/prestop-hook.sh
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
+        {{- if .Values.resources }}
+        resources: {{ toYaml .Values.resources | nindent 10 }}
+        {{- end }}
         {{- if .Values.envVarsConfigMap }}
         envFrom:
         - configMapRef:
@@ -229,7 +230,14 @@ spec:
         {{- end }}
         volumeMounts:
         - name: scripts
-          mountPath: /scripts
+          mountPath: /scripts/setup.sh
+          subPath: setup.sh
+        - name: scripts
+          mountPath: /scripts/prestop-hook.sh
+          subPath: prestop-hook.sh
+        - name: scripts
+          mountPath: /scripts/probes.sh
+          subPath: probes.sh
         - name: data
           mountPath: /bitnami/etcd
         {{- if .Values.disasterRecovery.enabled }}
@@ -250,30 +258,6 @@ spec:
           mountPath: /opt/bitnami/etcd/certs/peer/
           readOnly: true
         {{- end }}
-      {{- if .Values.disasterRecovery.enabled }}
-      - name: snapshotter-sidecar
-        image: "{{ template "etcd.image" . }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-        command:
-        - /scripts/sidecar.sh
-        env:
-        - name: ETCDCTL_API
-          value: "3"
-        {{- if .Values.auth.rbac.enabled }}
-        - name: ETCD_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "etcd.fullname" . }}{{ end }}
-              key: etcd-root-password
-        {{- end }}
-        volumeMounts:
-        - name: scripts
-          mountPath: /scripts
-        - name: data
-          mountPath: /bitnami/etcd
-        - name: snapshot-volume
-          mountPath: /snapshots
-      {{- end }}
       volumes:
       - name: scripts
         configMap:
@@ -282,7 +266,7 @@ spec:
       {{- if .Values.disasterRecovery.enabled }}
       - name: snapshot-volume
         persistentVolumeClaim:
-          claimName: {{ template "etcd.fullname" . }}-snapshot
+          claimName: {{ template "etcd.fullname" . }}-snapshotter
       {{- end }}
       {{- if .Values.configFileConfigMap }}
       - name: etcd-config

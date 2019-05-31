@@ -7,8 +7,8 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "etcd.name" . }}
     helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   type: ClusterIP
   clusterIP: None
@@ -21,4 +21,4 @@ spec:
     targetPort: peer
   selector:
     app.kubernetes.io/name: {{ template "etcd.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

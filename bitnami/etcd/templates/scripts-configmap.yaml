@@ -15,8 +15,8 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "etcd.name" . }}
     helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
   name: {{ template "etcd.fullname" . }}-scripts
 data:
   setup.sh: |-
@@ -55,6 +55,33 @@ data:
             sleep 5
         fi
     }
+    ## Checks whether there was a disaster or not
+    is_disastrous_failure() {
+        local endpoints_array=(${ETCDCTL_ENDPOINTS//,/ })
+        local active_endpoints=0
+        local -r min_endpoints=$(({{ $replicaCount }} - (({{ $replicaCount }} - 1)/2)))
+
+        for e in "${endpoints_array[@]}"; do
+            if [[ "$e" != "$ETCD_ADVERTISE_CLIENT_URLS" ]] && etcdctl $AUTH_OPTIONS  endpoint health --endpoints="$e" >/dev/null 2>&1; then
+                active_endpoints=$((active_endpoints + 1))
+            fi
+        done
+
+        if [[ -f "/snapshots/.disaster_recovery" ]]; then
+            if [[ $active_endpoints -eq $(({{ $replicaCount }} - 1)) ]]; then
+                echo "==> I'm the last to recover from the disaster!"
+                rm "/snapshots/.disaster_recovery"
+            fi
+            true
+        else
+            if [[ $active_endpoints -lt $min_endpoints ]]; then
+                touch "/snapshots/.disaster_recovery"
+                true
+            else
+                false
+            fi
+        fi
+    }
 
     if [[ ! -d "$ETCD_DATA_DIR" ]]; then
         echo "==> Creating data dir..."
@@ -64,12 +91,12 @@ data:
         configure_rbac
     else
         echo "==> Detected data from previous deployments..."
-        ETCDCTL_OTHER_ENDPOINTS="$(sed 's/,/ /g' <<< ${ETCDCTL_ENDPOINTS//$ETCD_ADVERTISE_CLIENT_URLS/} | awk '{$1=$1};1' | sed 's/ /,/g')"
-        if ! etcdctl $AUTH_OPTIONS endpoint status --endpoints="$ETCDCTL_OTHER_ENDPOINTS" >/dev/null 2>&1; then
+        if is_disastrous_failure; then
             echo "==> Cluster not responding!!"
 {{- if .Values.disasterRecovery.enabled }}
             if [[ -f "/snapshots/db" ]]; then
                 echo "==> Restoring etcd cluster from snapshot..."
+
                 rm -rf $ETCD_DATA_DIR
                 etcdctl snapshot restore /snapshots/db \
                   --name $ETCD_NAME \
@@ -131,9 +158,9 @@ data:
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS::-1}"
 
-    etcdctl $AUTH_OPTIONS endpoint status >/dev/null 2>&1
+    etcdctl $AUTH_OPTIONS endpoint health >/dev/null 2>&1
 {{- if .Values.disasterRecovery.enabled }}
-  sidecar.sh: |-
+  save-snapshot.sh: |-
     #!/bin/bash
 
     set -o errexit
@@ -147,11 +174,11 @@ data:
     export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS::-1}"
 
     mkdir -p "/snapshots"
-    while true; do
-        if etcdctl $AUTH_OPTIONS endpoint status >/dev/null 2>&1; then
-            echo "Snapshotting the keyspace..."
-            etcdctl $AUTH_OPTIONS snapshot save "/snapshots/db"
-        fi
-        sleep {{ default "600" .Values.disasterRecovery.interval }}
-    done
+    if etcdctl $AUTH_OPTIONS endpoint health >/dev/null 2>&1; then
+        echo "Snapshotting the keyspace..."
+        etcdctl $AUTH_OPTIONS snapshot save "/snapshots/db"
+    else
+        echo "Cluster isn't responding!!"
+        exit 1
+    fi
 {{- end }}

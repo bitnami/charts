@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "etcd.fullname" . }}-snapshot
+  name: {{ template "etcd.fullname" . }}-snapshotter
   labels:
     app.kubernetes.io/name: {{ template "etcd.name" . }}
     helm.sh/chart: {{ template "etcd.chart" . }}
@@ -13,6 +13,6 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.disasterRecovery.size | quote }}
-  storageClassName: nfs
+      storage: {{ .Values.disasterRecovery.pvc.size | quote }}
+  storageClassName: {{ .Values.disasterRecovery.pvc.storageClassName | quote }}
 {{- end -}}

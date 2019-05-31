@@ -5,8 +5,8 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "etcd.name" . }}
     helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- if .Values.service.annotations }}
   annotations:
 {{ toYaml .Values.service.annotations | indent 4 }}
@@ -31,4 +31,4 @@ spec:
     {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "etcd.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
