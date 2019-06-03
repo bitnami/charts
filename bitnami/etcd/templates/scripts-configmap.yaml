@@ -66,7 +66,7 @@ data:
                 active_endpoints=$((active_endpoints + 1))
             fi
         done
-
+{{- if .Values.disasterRecovery.enabled }}
         if [[ -f "/snapshots/.disaster_recovery" ]]; then
             if [[ $active_endpoints -eq $(({{ $replicaCount }} - 1)) ]]; then
                 echo "==> I'm the last to recover from the disaster!"
@@ -81,6 +81,13 @@ data:
                 false
             fi
         fi
+{{- else }}
+        if [[ $active_endpoints -lt $min_endpoints ]]; then
+            true
+        else
+            false
+        fi
+{{- end }}
     }
 
     if [[ ! -d "$ETCD_DATA_DIR" ]]; then
