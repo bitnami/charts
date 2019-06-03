@@ -104,7 +104,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-chart-repo
-    tag: 1.4.0-r1
+    tag: 1.8.0-r0
   initialRepos:
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
@@ -181,7 +181,7 @@ chartsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-chartsvc
-    tag: 1.4.0
+    tag: 1.8.0-r0
   service:
     port: 8080
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
