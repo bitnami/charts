@@ -55,6 +55,7 @@ $ helm search bitnami
 - [Kubeapps](https://github.com/bitnami/charts/tree/master/bitnami/kubeapps)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
 - [Metrics Server](https://github.com/bitnami/charts/tree/master/bitnami/metrics-server)
+- [MXNet](https://github.com/bitnami/charts/tree/master/bitnami/mxnet)
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
 - [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
 - [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller)
