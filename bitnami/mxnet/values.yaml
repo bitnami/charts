@@ -1,0 +1,216 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+
+## Bitnami MXNet image version
+## ref: https://hub.docker.com/r/bitnami/mxnet/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/mxnet
+  tag: 1.4.1-debian-9-r0
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+  ##
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+## Bitnami git image version
+## ref: https://hub.docker.com/r/bitnami/git/tags/
+##
+git:
+  registry: docker.io
+  repository: bitnami/git
+  tag: 2.21.0-debian-9-r73
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## Service for the scheduler node
+service:
+  ## Kubernetes service type, ClusterIP and NodePort are supported at present
+  type: ClusterIP
+
+## MXNet configuration
+##
+## The main entrypoint of your app, this will be executed as:
+##   python [file] [args]
+entrypoint:
+  file:
+  workDir: /app
+  #args:
+
+## MXNet deployment mode. Can be `standalone` or `distributed`
+mode: standalone
+
+## Number of server nodes (only for distributed mode)
+serverCount: 1
+
+## Number of worker nodes (only for distributed mode)
+workerCount: 1
+
+## Pointer a to a secret to mount sensitive data
+# existingSecret:
+
+## The port used to communicate with the scheduler
+##   MASTER_PORT will be set to this value
+##
+schedulerPort: 9092
+
+## Name of an existing config map containing all the files you want to load in MXNet
+##
+#configMap:
+
+## Enable in order to download files from git repository.
+##
+cloneFilesFromGit:
+  enabled: false
+#  repository:
+#  revision: master
+
+## Additional environment variables for all node types
+##
+# commonExtraEnvVars:
+#   - name: PS_VERBOSE
+#     value: "1"
+
+## Additional environment variables for worker nodes
+##
+# workerExtraEnvVars:
+#   - name: PS_VERBOSE
+#     value: "1"
+
+## Additional environment variables for server nodes
+##
+# serverExtraEnvVars:
+#   - name: PS_VERBOSE
+#     value: "1"
+
+## Additional environment variables for the scheduler node
+##
+# schedulerExtraEnvVars:
+#   - name: PS_VERBOSE
+#     value: "1"
+
+## StatefulSet pod management policy
+podManagementPolicy: Parallel
+
+## Node labels for pod assignment (this value is evaluated as a template)
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment (this value is evaluated as a template)
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Affinity for pod assignment (this value is evaluated as a template)
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}
+
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
+## Configure liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 15
+  successThreshold: 1
+  failureThreshold: 5
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 15
+  successThreshold: 1
+  failureThreshold: 5
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## If true, use a Persistent Volume Claim
+  ##
+  enabled: false
+
+  ## Data volume mount path
+  ##
+  mountPath: /bitnami/mxnet
+
+  ## Persistent Volume Access Mode
+  ##
+  accessModes:
+  - ReadWriteOnce
+
+  ## Persistent Volume size
+  ##
+  size: 8Gi
+
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+
+  ## Persistent Volume Claim annotations
+  ##
+  annotations: {}
+
+sidecars:
+## Add sidecars to the pod.
+## e.g.
+# - name: your-image-name
+  # image: your-image
+  # imagePullPolicy: Always
+  # ports:
+  # - name: portname
+  #   containerPort: 1234
+
+initContainers:
+## Add init containers to the pod.
+## e.g.
+# - name: your-image-name
+  # image: your-image
+  # imagePullPolicy: Always
+  # ports:
+  # - name: portname
+  #   containerPort: 1234
