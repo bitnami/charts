@@ -117,6 +117,7 @@ data:
                 exit 1
             fi
 {{- else }}
+            echo "==> Disaster recovery is disabled, the cluster cannot be recovered!"
             exit 1
 {{- end }}
         elif [[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]; then
