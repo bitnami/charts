@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "apache.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "apache.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "apache.fullname" . }}
       release: "{{ .Release.Name }}"
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "apache.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
@@ -35,8 +35,39 @@ spec:
       - ip: "127.0.0.1"
         hostnames:
         - "status.localhost"
+      {{- if .Values.cloneHtdocsFromGit.enabled }}
+      initContainers:
+      - name: git-clone-repository
+        image: "{{ template "git.image" . }}"
+        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+        command:
+        - /bin/bash
+        - -ec
+        - |
+          git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /app
+        volumeMounts:
+        - name: git-cloned-dag-files
+          mountPath: /dags
       containers:
-      - name: {{ template "fullname" . }}
+      - name: git-repo-syncer
+        image: "{{ template "git.image" . }}"
+        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+        command:
+        - /bin/bash
+        - -ec
+        - |
+          while true; do
+              cd /app && git pull origin {{ .Values.airflow.cloneDagFilesFromGit.branch }}
+              sleep {{ default "60" .Values.airflow.cloneDagFilesFromGit.interval }}
+          done
+        volumeMounts:
+        - name: htdocs
+          mountPath: /app
+      {{- else -}}
+      containers:
+      {{- end }}
+      
+      - name: {{ template "apache.fullname" . }}
         image: "{{ template "apache.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:
