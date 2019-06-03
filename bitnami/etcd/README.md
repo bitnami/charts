@@ -115,6 +115,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `disasterRecovery.cronjob.schedule`       | Schedule in Cron format to save snapshots                                                                | `*/30 * * * *`                                                     |
 | `disasterRecovery.cronjob.historyLimit`   | Number of successful finished jobs to retain                                                             | `1`                                                                |
 | `disasterRecovery.cronjob.podAnnotations` | Pod annotations for cronjob pods                                                                         | `{}`                                                               |
+| `disasterRecovery.pvc.existingClaim`      | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template.                       | `nil`                                                              |
 | `disasterRecovery.pvc.size`               | PVC Storage Request                                                                                      | `2Gi`                                                              |
 | `disasterRecovery.pvc.storageClassName`   | Storage Class for snapshots volume                                                                       | `nfs`                                                              |
 
@@ -235,6 +236,8 @@ $ helm upgrade my-release bitnami/etcd \
   -f ./values-production.yaml
   --set statefulset.replicaCount=5
 ```
+
+> **Note**: Scaling the statefulset with `kubectl scale ...` command is highly discouraged. Use `helm upgrade ...` for horizontal scaling so you ensure all the environment variables used to configure the ectd cluster are properly updated.
 
 ## Enable security for etcd
 

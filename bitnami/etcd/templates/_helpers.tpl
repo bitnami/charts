@@ -79,6 +79,19 @@ Return the proper etcd data dir
 {{- end -}}
 
 {{/*
+Return the proper Disaster Recovery PVC name
+*/}}
+{{- define "etcd.disasterRecovery.pvc.name" -}}
+{{- if .Values.disasterRecovery.pvc.existingClaim -}}
+{{- with .Values.disasterRecovery.pvc.existingClaim -}}
+{{ tpl . $ }}
+{{- end -}}
+{{- else -}}
+{{ template "etcd.fullname" . }}-snapshotter
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper etcdctl authentication options
 */}}
 {{- define "etcd.authOptions" -}}

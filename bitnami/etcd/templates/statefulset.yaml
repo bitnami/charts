@@ -266,7 +266,7 @@ spec:
       {{- if .Values.disasterRecovery.enabled }}
       - name: snapshot-volume
         persistentVolumeClaim:
-          claimName: {{ template "etcd.fullname" . }}-snapshotter
+          claimName: {{ template "etcd.disasterRecovery.pvc.name" . }}
       {{- end }}
       {{- if .Values.configFileConfigMap }}
       - name: etcd-config
