@@ -131,6 +131,12 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+## Notable changes
+
+### 5.0.0
+
+This release allows you to use your custom static applicaton. In order to do so, check [this section](#deploying-your-custom-web-application).
+
 ## Upgrading
 
 ### To 2.0.0
