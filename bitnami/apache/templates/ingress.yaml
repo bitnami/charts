@@ -4,10 +4,10 @@ kind: Ingress
 metadata:
   name: {{ template "apache.fullname" . }}
   labels:
-    app: "{{ template "apache.fullname" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "apache.fullname" . }}
+    helm.sh/chart: {{ include "apache.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
