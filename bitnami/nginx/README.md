@@ -42,41 +42,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the NGINX Open Source chart and their default values.
 
-| Parameter                        | Description                                      | Default                                                      |
-| -------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
-| `global.imageRegistry`           | Global Docker image registry                     | `nil`                                                        |
-| `global.imagePullSecrets`        | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.registry`                 | NGINX image registry                             | `docker.io`                                                  |
-| `image.repository`               | NGINX Image name                                 | `bitnami/nginx`                                              |
-| `image.tag`                      | NGINX Image tag                                  | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`               | NGINX image pull policy                          | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
-| `image.pullSecrets`              | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
-| `serverBlock`                    | Custom NGINX server block                        | `nil`                                                        |
-| `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
-| `metrics.enabled`                | Start a side-car prometheus exporter             | `false`                                                      |
-| `metrics.image.registry`         | Promethus exporter image registry                | `docker.io`                                                  |
-| `metrics.image.repository`       | Promethus exporter image name                    | `nginx/nginx-prometheus-exporter`                            |
-| `metrics.image.tag`              | Promethus exporter image tag                     | `0.1.0`                                                      |
-| `metrics.image.pullPolicy`       | Image pull policy                                | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}` |
-| `metrics.resources`              | Exporter resource requests/limit                 | {}                                                           |
-| `service.type`                   | Kubernetes Service type                          | `LoadBalancer`                                               |
-| `service.port`                   | Service HTTP port                                | `80`                                                         |
-| `service.nodePorts.http`         | Kubernetes http node port                        | `""`                                                         |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation             | `Cluster`                                                    |
-| `service.loadBalancerIP`         | LoadBalancer service IP address                  | `""`                                                         |
-| `service.annotations`            | Service annotations                              | `{}`                                                         |
-| `ingress.enabled`                | Enable ingress controller resource               | `false`                                                      |
-| `ingress.certManager`            | Add annotations for cert-manager                 | `false`                                                      |
-| `ingress.annotations`            | Ingress annotations                              | `[]`                                                         |
-| `ingress.hosts[0].name`          | Hostname to your NGINX installation              | `nginx.local`                                                |
-| `ingress.hosts[0].path`          | Path within the url structure                    | `/`                                                          |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                                        | `nginx.local`                                                |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)                        | `nginx.local-tls`                                            |
-| `ingress.secrets[0].name`        | TLS Secret Name                                  | `nil`                                                        |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                           | `nil`                                                        |
-| `ingress.secrets[0].key`         | TLS Secret Key                                   | `nil`                                                        |
+| Parameter                        | Description                                      | Default                                                                                                                                      |
+| -------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `global.imageRegistry`           | Global Docker image registry                     | `nil`                                                                                                                                        |
+| `global.imagePullSecrets`        | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)                                                                                      |
+| `image.registry`                 | NGINX image registry                             | `docker.io`                                                                                                                                  |
+| `image.repository`               | NGINX Image name                                 | `bitnami/nginx`                                                                                                                              |
+| `image.tag`                      | NGINX Image tag                                  | `{TAG_NAME}`                                                                                                                                 |
+| `image.pullPolicy`               | NGINX image pull policy                          | `Always` if `imageTag` is `latest`, else `IfNotPresent`                                                                                      |
+| `image.pullSecrets`              | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)                                                                                      |
+| `serverBlock`                    | Custom NGINX server block                        | `nil`                                                                                                                                        |
+| `podAnnotations`                 | Pod annotations                                  | `{}`                                                                                                                                         |
+| `metrics.enabled`                | Start a side-car prometheus exporter             | `false`                                                                                                                                      |
+| `metrics.image.registry`         | Promethus exporter image registry                | `docker.io`                                                                                                                                  |
+| `metrics.image.repository`       | Promethus exporter image name                    | `nginx/nginx-prometheus-exporter`                                                                                                            |
+| `metrics.image.tag`              | Promethus exporter image tag                     | `0.1.0`                                                                                                                                      |
+| `metrics.image.pullPolicy`       | Image pull policy                                | `IfNotPresent`                                                                                                                               |
+| `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)                                                                                      |
+| `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}`                                                                                 |
+| `metrics.resources`              | Exporter resource requests/limit                 | {}                                                                                                                                           |
+| `service.type`                   | Kubernetes Service type                          | `LoadBalancer`                                                                                                                               |
+| `service.port`                   | Service HTTP port                                | `80`                                                                                                                                         |
+| `service.nodePorts.http`         | Kubernetes http node port                        | `""`                                                                                                                                         |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation             | `Cluster`                                                                                                                                    |
+| `service.loadBalancerIP`         | LoadBalancer service IP address                  | `""`                                                                                                                                         |
+| `service.annotations`            | Service annotations                              | `{}`                                                                                                                                         |
+| `ingress.enabled`                | Enable ingress controller resource               | `false`                                                                                                                                      |
+| `ingress.certManager`            | Add annotations for cert-manager                 | `false`                                                                                                                                      |
+| `ingress.annotations`            | Ingress annotations                              | `[]`                                                                                                                                         |
+| `ingress.hosts[0].name`          | Hostname to your NGINX installation              | `nginx.local`                                                                                                                                |
+| `ingress.hosts[0].path`          | Path within the url structure                    | `/`                                                                                                                                          |
+| `ingress.tls[0].hosts[0]`        | TLS hosts                                        | `nginx.local`                                                                                                                                |
+| `ingress.tls[0].secretName`      | TLS Secret (certificates)                        | `nginx.local-tls`                                                                                                                            |
+| `ingress.secrets[0].name`        | TLS Secret Name                                  | `nil`                                                                                                                                        |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                           | `nil`                                                                                                                                        |
+| `ingress.secrets[0].key`         | TLS Secret Key                                   | `nil`                                                                                                                                        |
+| `livenessProbe`                  | Deployment Liveness Probe                        | `httpGet:`<br>&nbsp;&nbsp;`path: /`<br>&nbsp;&nbsp;`port: http`<br>`initialDelaySeconds: 30`<br>`timeoutSeconds: 5`<br>`failureThreshold: 6` |
+| `readinessProbe`                 | Deployment Readiness Probe                       | `httpGet:`<br>&nbsp;&nbsp;`path: /`<br>&nbsp;&nbsp;`port: http`<br>`initialDelaySeconds: 5`<br>`timeoutSeconds: 3`<br>`periodSeconds: 5`     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
