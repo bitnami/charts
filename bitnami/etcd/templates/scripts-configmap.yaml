@@ -152,7 +152,7 @@ data:
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
-    etcdctl $AUTH_OPTIONS member remove "$(cat "$ETCD_DATA_DIR/member_id")" && rm -rf $ETCD_DATA_DIR/*
+    etcdctl $AUTH_OPTIONS member remove "$(cat "$ETCD_DATA_DIR/member_id")" && rm -rf $ETCD_DATA_DIR/* || true
   probes.sh: |-
     #!/bin/bash
 
