@@ -155,6 +155,13 @@ See the [Configuration](#configuration) section to configure the PVC or to disab
 
 ## Upgrading
 
+### To 3.0.0
+
+This new version of the chart includes the new Zookeeper major version 3.5.5. Note that to perform an automatic upgrade
+of the application, each node will need to have at least one snapshot file created in the data directory. If not, the
+new version of the application won't be able to start the service. Please refer to [ZOOKEEPER-3056](https://issues.apache.org/jira/browse/ZOOKEEPER-3056)
+in order to find ways to workaround this issue in case you are facing it.
+
 ### To 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's statefulsets.
