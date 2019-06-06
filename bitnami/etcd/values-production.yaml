@@ -62,6 +62,11 @@ statefulset:
 ## Allow to use etcd without configuring RBAC authentication
 allowNoneAuthentication: true
 
+## Limits the number of operating system threads that can execute user-level
+## Go code simultaneously by setting GOMAXPROCS environment variable
+## ref: https://golang.org/pkg/runtime
+##
+# maxProcs
 
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-etcd#security
