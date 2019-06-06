@@ -156,6 +156,8 @@ spec:
         - name: NAMI_LOG_LEVEL
           value: "trace8"
         {{- end }}
+
+        ## Basic configuration
         - name: MY_POD_IP
           valueFrom:
             fieldRef:
@@ -164,8 +166,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-
-        ## Basic configuration
         - name: ETCD_NAME
           value: "$(MY_POD_NAME)"
         - name: ETCD_DATA_DIR
@@ -178,6 +178,10 @@ spec:
           value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ .Values.service.peerPort }}"
         - name: ETCD_LISTEN_PEER_URLS
           value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.service.peerPort }}"
+        {{- if .Values.maxProcs }}
+        - name: GOMAXPROCS
+          value: {{ .Values.maxProcs }}
+        {{- end }}
 
         ## Clustering configuration
         {{- if gt $replicaCount 1 }}
