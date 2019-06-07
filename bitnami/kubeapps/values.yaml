@@ -61,7 +61,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.0-r3
+    tag: 1.16.0-r40
   service:
     port: 80
     type: ClusterIP
@@ -99,7 +99,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.4.0
+    tag: 1.4.1
   # Image used to perform chart repository syncs
   syncImage:
     registry: docker.io
@@ -154,7 +154,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.4.0
+    tag: 1.4.1
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -216,7 +216,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.4.0
+    tag: 1.4.1
   service:
     port: 8080
   livenessProbe:
@@ -288,7 +288,7 @@ testImage:
   # Image used for the tests. The only requirement is to include curl
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.0-r3
+  tag: 1.16.0-r40
 
 # Auth Proxy for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
