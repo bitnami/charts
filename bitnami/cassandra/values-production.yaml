@@ -101,10 +101,10 @@ cluster:
   replicaCount: 3
   seedCount: 2
   numTokens: 256
-  endpointSnitch: SimpleSnitch
   datacenter: dc1
   rack: rack1
   enableRPC: true
+  endpointSnitch: SimpleSnitch
   minimumAvailable: 2
   ## Encryption values. NOTE: They require tlsEncryptionSecretName
   internodeEncryption: none
