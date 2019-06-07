@@ -203,6 +203,7 @@ ingress:
 #    },
 #    "serf_lan":"0.0.0.0"
 #    }
+
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
