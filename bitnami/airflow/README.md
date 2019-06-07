@@ -165,6 +165,34 @@ $ helm install --name my-release -f values.yaml bitnami/airflow
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+
+- URL used to access to airflow web ui:
+```diff
+- # airflow.baseUrl:
++ airflow.baseUrl: http://airflow.local
+```
+
+- Number of Airflow Worker replicas:
+```diff
+- airflow.worker.replicas: 1
++ airflow.worker.replicas: 3
+```
+
+- Force users to specify a password:
+```diff
+- airflow.auth.forcePassword: false
++ airflow.auth.forcePassword: true
+```
+
+- Enable ingress controller resource:
+```diff
+- ingress.enabled: false
++ ingress.enabled: true
+```
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.

@@ -112,7 +112,7 @@ airflow:
   # configurationConfigMap:
   ## Name of an existing config map containing all the DAGs files you want to load in Airflow.
   ##
-  # dagsConfigMap:
+  ## dagsConfigMap:
   ## Airflow generic configuration
   ##
   loadExamples: false
