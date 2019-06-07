@@ -184,7 +184,11 @@ $ helm install --name my-release -f values.yaml bitnami/nginx-ingress-controller
 
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/nginx-ingress-controller
+```
 
 - Enable "vts-status" page:
 ```diff
