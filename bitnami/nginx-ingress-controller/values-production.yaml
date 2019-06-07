@@ -249,8 +249,8 @@ extraVolumes: []
 extraInitContainers: []
 ## Containers, which are run before the app containers are started.
 # - name: init-myservice
-#   image: busybox
-#   command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+#   image: bitnami/minideb
+#   command: ['sh', '-c', 'install_packages dnsutils && until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
 
 stats:
   enabled: true
@@ -266,10 +266,10 @@ stats:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 18080
+    port: 18080
     type: ClusterIP
 
-## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
+## If stats.enabled = true and metrics.enabled = true, Prometheus metrics will be exported
 ##
 metrics:
   enabled: true
@@ -288,7 +288,7 @@ metrics:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 9913
+    port: 9913
     type: ClusterIP
 
 lifecycle: {}
@@ -303,7 +303,7 @@ revisionHistoryLimit: 10
 ##
 defaultBackend:
 
-  ## If false, controller.defaultBackendService must be provided
+  ## If false, defaultBackendService must be provided
   ##
   enabled: true
 
@@ -371,7 +371,7 @@ defaultBackend:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 80
+    port: 80
     type: ClusterIP
 
   priorityClassName: ""

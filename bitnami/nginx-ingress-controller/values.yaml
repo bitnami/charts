@@ -268,7 +268,7 @@ stats:
     port: 18080
     type: ClusterIP
 
-## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
+## If stats.enabled = true and metrics.enabled = true, Prometheus metrics will be exported
 ##
 metrics:
   enabled: false
@@ -302,7 +302,7 @@ revisionHistoryLimit: 10
 ##
 defaultBackend:
 
-  ## If false, controller.defaultBackendService must be provided
+  ## If false, defaultBackendService must be provided
   ##
   enabled: true
 
@@ -311,7 +311,7 @@ defaultBackend:
     registry: docker.io
     repository: bitnami/nginx
     tag: 1.16.0-debian-9-r26
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
