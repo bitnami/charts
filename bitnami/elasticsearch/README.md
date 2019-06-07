@@ -195,7 +195,7 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 $ helm install --name my-release -f values.yaml bitnami/elasticsearch
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml). [values-production.yaml](values-production.yaml) has defaults optimized for use in production environments.
+> **Tip**: You can use the default [values.yaml](values.yaml). [values-production.yaml](values-production.yaml) has [defaults optimized for use in production environments](#production-configuration).
 
 ### Production configuration
 
