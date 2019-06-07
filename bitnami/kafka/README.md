@@ -180,7 +180,11 @@ $ helm install --name my-release -f values.yaml bitnami/kafka
 
 ### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
+```
 
 - Number of Kafka nodes:
 ```diff
