@@ -116,6 +116,22 @@ $ helm install --name my-release -f values.yaml bitnami/pytorch
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+
+- Run PyTorch in distributed mode:
+```diff
+- mode: standalone
++ mode: distributed
+```
+
+- Number of nodes that will run the code:
+```diff
+- #worldSize:
++ worldSize: 4
+```
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
