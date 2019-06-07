@@ -45,7 +45,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the external-dns chart and their default values.
 
-
 | Parameter                             | Description                                                                                              | Default                                                  |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `global.imageRegistry`                | Global Docker image registry                                                                             | `nil`                                                    |
@@ -126,7 +125,11 @@ $ helm install --name my-release -f values.yaml bitnami/external-dns
 
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/external-dns
+```
 
 - Desired number of ExternalDNS replicas:
 ```diff
