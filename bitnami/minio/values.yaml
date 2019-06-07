@@ -23,7 +23,7 @@ image:
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -71,7 +71,6 @@ statefulset:
 ## Mount MinIO secret as a file instead of passing environment variable
 ##
 useCredentialsFile: false
-
 accessKey:
   ## MinIO Access Key
   ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
@@ -102,7 +101,7 @@ disableWebUI: false
 
 ## Define custom environment variables to pass to the image here
 ##
-extraEnv:
+extraEnv: {}
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
