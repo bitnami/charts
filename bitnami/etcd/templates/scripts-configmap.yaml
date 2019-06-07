@@ -90,6 +90,19 @@ data:
 {{- end }}
     }
 
+    ## Check wether the member was succesfully removed from the cluster
+    should_add_new_member() {
+        return_value=0
+        if (grep -E "^Member [a-z0-9]+ removed from cluster [a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log" > /dev/null) || \
+           ! ([[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]); then
+            rm -rf $ETCD_DATA_DIR/*
+        else
+            return_value=1
+        fi
+        rm "$(dirname "$ETCD_DATA_DIR")/member_removal.log"
+        return $return_value
+    }
+
     if [[ ! -d "$ETCD_DATA_DIR" ]]; then
         echo "==> Creating data dir..."
         mkdir -p "$ETCD_DATA_DIR"
@@ -120,16 +133,16 @@ data:
             echo "==> Disaster recovery is disabled, the cluster cannot be recovered!"
             exit 1
 {{- end }}
-        elif [[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]; then
-            echo "==> Updating member in existing cluster..."
-            etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}"
-        else
+        elif should_add_new_member; then
             echo "==> Adding new member to existing cluster..."
             etcdctl $AUTH_OPTIONS member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}" | grep "^ETCD_" > "$ETCD_DATA_DIR/new_member_envs"
             sed -ie 's/^/export /' "$ETCD_DATA_DIR/new_member_envs"
             echo "==> Loading env vars of existing cluster..."
             source "$ETCD_DATA_DIR/new_member_envs"
             store_member_id &
+        else
+            echo "==> Updating member in existing cluster..."
+            etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}"
         fi
     fi
 
@@ -152,7 +165,7 @@ data:
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
-    etcdctl $AUTH_OPTIONS member remove "$(cat "$ETCD_DATA_DIR/member_id")" && rm -rf $ETCD_DATA_DIR/* || true
+    etcdctl $AUTH_OPTIONS member remove --debug=true "$(cat "$ETCD_DATA_DIR/member_id")" > "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 2>&1
   probes.sh: |-
     #!/bin/bash
 
