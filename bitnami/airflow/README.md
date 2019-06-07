@@ -167,7 +167,11 @@ $ helm install --name my-release -f values.yaml bitnami/airflow
 
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/airflow
+```
 
 - URL used to access to airflow web ui:
 ```diff
