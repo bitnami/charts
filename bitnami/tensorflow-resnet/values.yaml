@@ -125,3 +125,7 @@ metrics:
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
   # resources: {}
+
+## Test value; it is not gonna be merged
+test:
+  foo: bar
