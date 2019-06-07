@@ -222,15 +222,6 @@ MinIO exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Promet
 
 > Find more information about MinIO metrics at https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html
 
-## Production settings
-
-The [values-production.yaml](values-production.yaml) file consists a configuration to deploy a high-available MinIO deployment distributed mode for production environments. We recommend that you base your production configuration on this template and adjust the parameters appropriately.
-
-```console
-$ curl -O https://raw.githubusercontent.com/bitnami/charts/master/bitnami/minio/values-production.yaml
-$ helm install --name my-release -f ./values-production.yaml bitnami/minio
-```
-
 ## Persistence
 
 The [Bitnami MinIO](https://github.com/bitnami/bitnami-docker-minio) image stores data at the `/data` path of the container.
