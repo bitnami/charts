@@ -26,6 +26,25 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Image that performs the sysctl operation
+##
+sysctlImage:
+  enabled: false
+  registry: docker.io
+  repository: bitnami/minideb
+  tag: latest
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
 ## Elasticsearch cluster name
 ##
 name: elastic
@@ -66,6 +85,9 @@ master:
     annotations: {}
     # loadBalancerIP:
 
+  ## Provide annotations for the master pods.
+  podAnnotations: {}
+
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -90,24 +112,10 @@ master:
     successThreshold: 1
     failureThreshold: 5
 
-## Image that performs the sysctl operation
+## Elasticsearch discovery node parameters
 ##
-sysctlImage:
-  enabled: false
-  registry: docker.io
-  repository: bitnami/minideb
-  tag: latest
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+discovery:
+  name: discovery
 
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -117,16 +125,11 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
-## Elasticsearch discovery node parameters
-##
-discovery:
-  name: discovery
-
 ## Elasticsearch coordinating-only node parameters
 ##
 coordinating:
   name: coordinating-only
-  replicas: 2
+  replicas: 3
   heapSize: 128m
   antiAffinity: "soft"
   ## node affinity
@@ -147,6 +150,9 @@ coordinating:
     ##
     annotations: {}
     # loadBalancerIP:
+
+  ## Provide annotations for the coordinating pods.
+  podAnnotations: {}
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -186,6 +192,8 @@ data:
   antiAffinity: "soft"
   ## node affinity
   # nodeAffinity:
+  ## Provide annotations for the data pods.
+  podAnnotations: {}
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -243,7 +251,7 @@ data:
 ingest:
   enabled: true
   name: ingest
-  replicas: 2
+  replicas: 3
   heapSize: 128m
   antiAffinity: "soft"
   ## node affinity
@@ -264,6 +272,9 @@ ingest:
     ##
     annotations: {}
     # loadBalancerIP:
+
+  ## Provide annotations for the ingest pods.
+  podAnnotations: {}
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -303,11 +314,13 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+  ## Provide annotations for the metrics pods.
+  podAnnotations: {}
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9108"
   service:
     type: ClusterIP
-  resources: {}
-  #  requests:
-  #    cpu: 25m
+  resources:
+    # requests:
+    #   cpu: 25m

@@ -114,7 +114,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `coordinating.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod) | `1`                                                     |
 | `coordinating.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`                                                     |
 | `data.name`                                       | Data node pod name                                                                                                        | `data`                                                  |
-| `data.replicas`                                   | Desired number of Elasticsearch data nodes    nodes                                                                       | `3`                                                     |
+| `data.replicas`                                   | Desired number of Elasticsearch data nodes                                                                                | `3`                                                     |
 | `data.updateStrategy.type`                        | Update strategy for Data statefulset                                                                                      | `RollingUpdate`                                         |
 | `data.updateStrategy.rollingUpdatePartition`      | Partition update strategy for Data statefulset                                                                            | `nil`                                                   |
 | `data.heapSize`                                   | Data node heap size                                                                                                       | `1024m`                                                 |
@@ -196,6 +196,174 @@ $ helm install --name my-release -f values.yaml bitnami/elasticsearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml). [values-production.yaml](values-production.yaml) has defaults optimized for use in production environments.
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+
+- Desired number of Elasticsearch master-eligible nodes:
+```diff
+- master.replicas: 2
++ master.replicas: 3
+```
+
+- Enable the liveness probe (master-eligible nodes pod):
+```diff
+- master.livenessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ master.livenessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the readiness probe (master-eligible nodes pod):
+```diff
+- master.readinessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ master.readinessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Desired number of Elasticsearch coordinating-only nodes:
+```diff
+- data.replicas: 2
++ data.replicas: 3
+```
+
+- Enable the liveness probe (coordinating-only nodes pod):
+```diff
+- coordinating.livenessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ coordinating.livenessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the readiness probe (coordinating-only nodes pod):
+```diff
+- coordinating.readinessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ coordinating.readinessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Desired number of Elasticsearch data nodes:
+```diff
+- data.replicas: 2
++ data.replicas: 3
+```
+
+- Enable the liveness probe (data nodes pod):
+```diff
+- data.livenessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ data.livenessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the readiness probe (data nodes pod):
+```diff
+- data.readinessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ data.readinessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable ingest nodes:
+```diff
+- ingest.enabled: false
++ ingest.enabled: true
+```
+
+- Desired number of Elasticsearch ingest nodes:
+```diff
+- data.replicas: 2
++ data.replicas: 3
+```
+
+- Enable the liveness probe (ingest nodes pod):
+```diff
+- ingest.livenessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ ingest.livenessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the readiness probe (ingest nodes pod):
+```diff
+- ingest.readinessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ ingest.readinessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable prometheus exporter:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
