@@ -128,9 +128,13 @@ $ helm install --name my-release -f values.yaml bitnami/etcd
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-### Production configuration
+### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/etcd
+```
 
 - Number of etcd nodes:
 ```diff
@@ -168,6 +172,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+To horizontally scale this chart once it has been deployed:
+
+```console
+$ kubectl scale statefulset my-etcd --replicas=5
+```
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -203,21 +213,6 @@ $ helm install bitnami/etcd --set envVarsConfigMap=etcd-env-vars
 $ kubectl create configmap etcd-conf --from-file=etcd.conf.yml
 
 $ helm install bitnami/etcd --set configFileConfigMap=etcd-conf
-```
-
-## Production and horizontal scaling
-
-The following repo contains the recommended production settings for etcd server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment.
-
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/etcd
-```
-
-To horizontally scale this chart once it has been deployed:
-
-```console
-$ kubectl scale statefulset my-etcd --replicas=5
 ```
 
 ## Enable security for etcd
