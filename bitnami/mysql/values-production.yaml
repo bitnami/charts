@@ -104,7 +104,6 @@ master:
     ## Enable persistence using an existing PVC
     ##
     # existingClaim:
-
     ## Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -171,7 +170,9 @@ master:
     failureThreshold: 3
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 15
+    ##
+    ## Initializing the database could take some time
+    initialDelaySeconds: 30
     ##
     ## Default Kubernetes values
     periodSeconds: 10
@@ -247,7 +248,9 @@ slave:
     failureThreshold: 3
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 15
+    ##
+    ## Initializing the database could take some time
+    initialDelaySeconds: 30
     ##
     ## Default Kubernetes values
     periodSeconds: 10
