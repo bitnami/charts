@@ -182,8 +182,8 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/minio
 
 - Don't require client label for connections:
 ```diff
-- allowExternal: true
-+ allowExternal: false
+- networkPolicy.allowExternal: true
++ networkPolicy.allowExternal: false
 ```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
