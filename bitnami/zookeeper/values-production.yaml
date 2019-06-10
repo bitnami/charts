@@ -107,6 +107,10 @@ auth:
 ##
 heapSize: 1024
 
+## Log level for the Zookeeper server. ERROR by default. Have in mind if you set it to INFO or WARN the ReadinessProve will produce a lot of logs.
+##
+logLevel: ERROR
+
 ## Default JVMFLAGS for the ZooKeeper process
 ##
 # jvmFlags:
