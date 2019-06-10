@@ -74,10 +74,10 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `defaultBuckets`                       | Comma, semi-colon or space separated list of buckets to create (only in standalone mode)     | `nil`                                                   |
 | `disableWebUI`                         | Disable MinIO Web UI                                                                         | `false`                                                 |
 | `extraEnv`                             | Any extra environment variables you would like to pass to the pods                           | `{}`                                                    |
-| `podAnnotations`                       | Annotations to be added to pods                                                              | {}                                                      |
+| `podAnnotations`                       | Annotations to be added to pods                                                              | `{}`                                                    |
 | `antiAffinity`                         | Pod anti-affinity policy                                                                     | `soft`                                                  |
 | `nodeAffinity`                         | Node affinity policy                                                                         | `nil`                                                   |
-| `resources`                            | Pod resources                                                                                | {}                                                      |
+| `resources`                            | Pod resources                                                                                | `{}`                                                    |
 | `securityContext.enabled`              | Enable security context                                                                      | `true`                                                  |
 | `securityContext.fsGroup`              | Group ID for the container                                                                   | `1001`                                                  |
 | `securityContext.runAsUser`            | User ID for the container                                                                    | `1001`                                                  |
@@ -136,6 +136,56 @@ $ helm install --name my-release -f values.yaml bitnami/minio
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/minio
+```
+
+- MinIO server mode:
+```diff
+- mode: standalone
++ mode: distributed
+```
+
+- Disable MinIO Web UI:
+```diff
+- disableWebUI: false
++ disableWebUI: true
+```
+
+- Annotations to be added to pods:
+```diff
+- podAnnotations: {}
++ podAnnotations:
++   prometheus.io/scrape: "true"
++   prometheus.io/path: "/minio/prometheus/metrics"
++   prometheus.io/port: "9000"
+```
+
+- Pod resources:
+```diff
+- resources: {}
++ resources:
++   requests:
++     memory: 256Mi
++     cpu: 250m
+```
+
+- Enable NetworkPolicy:
+```diff
+- networkPolicy.enabled: false
++ networkPolicy.enabled: true
+```
+
+- Don't require client label for connections:
+```diff
+- networkPolicy.allowExternal: true
++ networkPolicy.allowExternal: false
+```
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -171,15 +221,6 @@ MinIO exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Promet
 ```
 
 > Find more information about MinIO metrics at https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html
-
-## Production settings
-
-The [values-production.yaml](values-production.yaml) file consists a configuration to deploy a high-available MinIO deployment distributed mode for production environments. We recommend that you base your production configuration on this template and adjust the parameters appropriately.
-
-```console
-$ curl -O https://raw.githubusercontent.com/bitnami/charts/master/bitnami/minio/values-production.yaml
-$ helm install --name my-release -f ./values-production.yaml bitnami/minio
-```
 
 ## Persistence
 
