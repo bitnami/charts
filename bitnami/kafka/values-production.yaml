@@ -54,7 +54,6 @@ updateStrategy: RollingUpdate
 podDisruptionBudget:
   maxUnavailable: 1
 
-
 replicaCount: 3
 
 config: |-

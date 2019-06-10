@@ -178,6 +178,80 @@ $ helm install --name my-release -f values.yaml bitnami/kafka
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### Production configuration and horizontal scaling
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
+```
+
+- Number of Kafka nodes:
+```diff
+- replicaCount: 1
++ replicaCount: 3
+```
+
+- Allow to use the PLAINTEXT listener:
+```diff
+- allowPlaintextListener: true
++ allowPlaintextListener: false
+```
+
+- Default replication factors for automatically created topics:
+```diff
+- defaultReplicationFactor: 1
++ defaultReplicationFactor: 3
+```
+
+- The replication factor for the offsets topic:
+```diff
+- offsetsTopicReplicationFactor: 1
++ offsetsTopicReplicationFactor: 3
+```
+
+- The replication factor for the transaction topic:
+```diff
+- transactionStateLogReplicationFactor: 1
++ transactionStateLogReplicationFactor: 3
+```
+
+- Overridden min.insync.replicas config for the transaction topic:
+```diff
+- transactionStateLogMinIsr: 1
++ transactionStateLogMinIsr: 3
+```
+
+- Switch to enable the kafka authentication:
+```diff
+- auth.enabled: false
++ auth.enabled: true
+```
+
+- Whether or not to create a separate Kafka exporter:
+```diff
+- metrics.kafka.enabled: false
++ metrics.kafka.enabled: true
+```
+
+- Whether or not to expose JMX metrics to Prometheus:
+```diff
+- metrics.jmx.enabled: false
++ metrics.jmx.enabled: true
+```
+
+- Zookeeper chart metrics configuration:
+```diff
++ zookeeper.metrics.enabled: true
+```
+
+To horizontally scale this chart, first download the [values-production.yaml](values-production.yaml) file to your local folder, then:
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
+$ kubectl scale statefulset my-kafka-slave --replicas=3
+```
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -188,17 +262,6 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`.
 In order to pass custom environment variables use the `extraEnvVars` property.
-
-## Production and horizontal scaling
-
-The following repo contains the recommended production settings for Kafka server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment
-
-To horizontally scale this chart, first download the [values-production.yaml](values-production.yaml) file to your local folder, then:
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
-$ kubectl scale statefulset my-kafka-slave --replicas=3
-```
 
 ## Enable security for Kafka and Zookeeper
 
