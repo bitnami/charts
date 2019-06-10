@@ -45,7 +45,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the external-dns chart and their default values.
 
-
 | Parameter                             | Description                                                                                              | Default                                                  |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `global.imageRegistry`                | Global Docker image registry                                                                             | `nil`                                                    |
@@ -85,7 +84,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `service.loadBalancerIP`              | loadBalancerIP if ExternalDNS service type is `LoadBalancer`                                             | `nil`                                                    |
 | `rbac.create`                         | Wether to create & use RBAC resources or not                                                             | `false`                                                  |
 | `rbac.serviceAccountName`             | ServiceAccount (ignored if rbac.create == true)                                                          | `default`                                                |
-| `rbac.apiVersion`                         | Version of the RBAC API                                                             | `v1beta1`                                                  |
+| `rbac.apiVersion`                     | Version of the RBAC API                                                                                  | `v1beta1`                                                |
 | `securityContext.enabled`             | Enable security context                                                                                  | `true`                                                   |
 | `securityContext.fsGroup`             | Group ID for the container                                                                               | `1001`                                                   |
 | `securityContext.runAsUser`           | User ID for the container                                                                                | `1001`                                                   |
@@ -106,8 +105,8 @@ The following table lists the configurable parameters of the external-dns chart 
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                                                                 | 5                                                        |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.               | 6                                                        |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed              | 1                                                        |
-| `metrics.enabled`                          | Enable prometheus to access external-dns metrics endpoint                                                                           | `false`                                              |
-| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                                               | {`prometheus.io/scrape: "true",prometheus.io/port: "7979"`}                                                   |
+| `metrics.enabled`                     | Enable prometheus to access external-dns metrics endpoint                                                | `false`                                                  |
+| `metrics.podAnnotations`              | Annotations for enabling prometheus to access the metrics endpoint                                       | {`prometheus.io/scrape: "true",prometheus.io/port: "7979"`} |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -123,6 +122,26 @@ $ helm install --name my-release -f values.yaml bitnami/external-dns
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/external-dns
+```
+
+- Desired number of ExternalDNS replicas:
+```diff
+- replicas: 1
++ replicas: 3
+```
+
+- Enable prometheus to access external-dns metrics endpoint:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
