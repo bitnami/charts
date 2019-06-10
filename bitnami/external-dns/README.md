@@ -52,7 +52,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `image.registry`                      | ExternalDNS image registry                                                                               | `docker.io`                                              |
 | `image.repository`                    | ExternalDNS Image name                                                                                   | `bitnami/external-dns`                                   |
 | `image.tag`                           | ExternalDNS Image tag                                                                                    | `{TAG_NAME}`                                             |
-| `image.pullPolicy`                    | ExternalDNS image pull policy                                                                            | `Always`                                                 |
+| `image.pullPolicy`                    | ExternalDNS image pull policy                                                                            | `IfNotPresent`                                           |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                         | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                                                                    | `false`                                                  |
 | `sources`                             | List of resource types to be observed for new DNS entries by ExternalDNS                                 | `[service, ingress]`                                     |

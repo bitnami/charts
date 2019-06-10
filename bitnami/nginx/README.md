@@ -49,7 +49,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `image.registry`                 | NGINX image registry                             | `docker.io`                                                  |
 | `image.repository`               | NGINX Image name                                 | `bitnami/nginx`                                              |
 | `image.tag`                      | NGINX Image tag                                  | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`               | NGINX image pull policy                          | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
+| `image.pullPolicy`               | NGINX image pull policy                          | `IfNotPresent`                                               |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `serverBlock`                    | Custom NGINX server block                        | `nil`                                                        |
 | `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |

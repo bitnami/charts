@@ -55,7 +55,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `image.registry`                       | MinIO image registry                                                                         | `docker.io`                                             |
 | `image.repository`                     | MinIO image name                                                                             | `bitnami/minio`                                         |
 | `image.tag`                            | MinIO image tag                                                                              | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                     | Image pull policy                                                                            | `Always`                                                |
+| `image.pullPolicy`                     | Image pull policy                                                                            | `IfNotPresent`                                          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                          | Specify if debug logs should be enabled                                                      | `false`                                                 |
 | `clientImage.registry`                 | MinIO Client image registry                                                                  | `docker.io`                                             |
