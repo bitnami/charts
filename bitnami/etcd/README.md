@@ -53,19 +53,19 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `image.repository`                    | etcd Image name                                                                                          | `bitnami/etcd`                                                     |
 | `image.tag`                           | etcd Image tag                                                                                           | `{TAG_NAME}`                                                       |
 | `image.pullPolicy`                    | etcd image pull policy                                                                                   | `Always`                                                           |
-| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                         | `[]` (does not add image pull secrets to deployed pods)           |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                         | `[]` (does not add image pull secrets to deployed pods)            |
 | `image.debug`                         | Specify if debug values should be set                                                                    | `false`                                                            |
 | `statefulset.updateStrategy`          | Update strategy for the stateful set                                                                     | `RollingUpdate`                                                    |
 | `statefulset.rollingUpdatePartition`  | Partition for Rolling Update strategy                                                                    | `nil`                                                              |
 | `statefulset.podManagementPolicy`     | Pod management policy for the stateful set                                                               | `OrderedReady`                                                     |
 | `statefulset.replicaCount`            | Number of etcd nodes                                                                                     | `1`                                                                |
-| `configFileConfigMap`                        | ConfigMap that contains a etcd.conf.yaml to be mounted                                                                   | `nil`                                                            |
-| `envVarsConfigMap`                        | ConfigMap that contains environment variables to be set in the container                                                                   | `nil`                                                            |
+| `configFileConfigMap`                 | ConfigMap that contains a etcd.conf.yaml to be mounted                                                   | `nil`                                                              |
+| `envVarsConfigMap`                    | ConfigMap that contains environment variables to be set in the container                                 | `nil`                                                              |
 | `allowNoneAuthentication`             | Allow to use etcd without configuring RBAC authentication                                                | `true`                                                             |
 | `maxProcs`                            | Set GOMAXPROCS environment variable to limit the number of CPUs                                          | `nil`                                                              |
-| `auth.rbac.enabled`                   | Switch to enable the etcd authentication.                                                                | `true`                                                            |
-| `auth.rbac.rootPassword`              | Password for the root user                                                                               | `nil`                                                            |
-| `auth.rbac.existingSecret`            | Name of the existing secret containing the root password                                                 | `nil`                                                            |
+| `auth.rbac.enabled`                   | Switch to enable the etcd authentication.                                                                | `true`                                                             |
+| `auth.rbac.rootPassword`              | Password for the root user                                                                               | `nil`                                                              |
+| `auth.rbac.existingSecret`            | Name of the existing secret containing the root password                                                 | `nil`                                                              |
 | `auth.client.secureTransport`         | Switch to encrypt client communication using TLS certificates                                            | `false`                                                            |
 | `auth.client.useAutoTLS`              | Switch to automatically create the TLS certificates                                                      | `false`                                                            |
 | `auth.client.enableAuthentication`    | Switch to enable host authentication using TLS certificates. Requires existing secret.                   | `secret`                                                           |
@@ -106,9 +106,9 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                                                                 |  5                                                                 |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.               |  6                                                                 |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed              |  1                                                                 |
-| `podAnnotations`                     | Annotations to be added to pods                                                              | {}                                |
-| `metrics.enabled`                          | Enable prometheus to access etcd metrics endpoint                                                                           | `false`                                              |
-| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                                               | {`prometheus.io/scrape: "true",prometheus.io/port: "2379"`}                                                   |
+| `podAnnotations`                      | Annotations to be added to pods                                                                          | {}                                                                 |
+| `metrics.enabled`                     | Enable prometheus to access etcd metrics endpoint                                                        | `false`                                                            |
+| `metrics.podAnnotations`              | Annotations for enabling prometheus to access the metrics endpoint                                       | {`prometheus.io/scrape: "true",prometheus.io/port: "2379"`}        |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -127,6 +127,56 @@ $ helm install --name my-release -f values.yaml bitnami/etcd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Production configuration and horizontal scaling
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/etcd
+```
+
+- Number of etcd nodes:
+```diff
+- statefulset.replicaCount: 1
++ statefulset.replicaCount: 3
+```
+
+- Switch to encrypt client communication using TLS certificates:
+```diff
+- auth.client.secureTransport: false
++ auth.client.secureTransport: true
+```
+
+- Switch to enable host authentication using TLS certificates:
+```diff
+- auth.client.enableAuthentication: false
++ auth.client.enableAuthentication: true
+```
+
+- Switch to encrypt peer communication using TLS certificates:
+```diff
+- auth.peer.secureTransport: false
++ auth.peer.secureTransport: true
+```
+
+- Switch to automatically create the TLS certificates:
+```diff
+- auth.peer.useAutoTLS: false
++ auth.peer.useAutoTLS: true
+```
+
+- Enable prometheus to access etcd metrics endpoint:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
+
+To horizontally scale this chart once it has been deployed:
+
+```console
+$ kubectl scale statefulset my-etcd --replicas=5
+```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
@@ -163,21 +213,6 @@ $ helm install bitnami/etcd --set envVarsConfigMap=etcd-env-vars
 $ kubectl create configmap etcd-conf --from-file=etcd.conf.yml
 
 $ helm install bitnami/etcd --set configFileConfigMap=etcd-conf
-```
-
-## Production and horizontal scaling
-
-The following repo contains the recommended production settings for etcd server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment.
-
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/etcd
-```
-
-To horizontally scale this chart once it has been deployed:
-
-```console
-$ kubectl scale statefulset my-etcd --replicas=5
 ```
 
 ## Enable security for etcd

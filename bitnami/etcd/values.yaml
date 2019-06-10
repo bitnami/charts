@@ -90,13 +90,13 @@ auth:
     # existingSecret:
 
   peer:
-    ## Switch to encrypt client communication using TLS certificates
+    ## Switch to encrypt peer communication using TLS certificates
     secureTransport: false
     ## Switch to automatically create the TLS certificates
     useAutoTLS: false
     ## Switch to enable host authentication using TLS certificates. Requires existing secret.
     enableAuthentication: false
-    ## Name of the existing secret containing cert files for client communication.
+    ## Name of the existing secret containing cert files for peer communication.
     # existingSecret:
 
 
