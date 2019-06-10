@@ -18,7 +18,7 @@ image:
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -316,7 +316,7 @@ metrics:
       registry: docker.io
       repository: danielqsj/kafka-exporter
       tag: v1.0.1
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -347,7 +347,7 @@ metrics:
       registry: docker.io
       repository: solsson/kafka-prometheus-jmx-exporter@sha256
       tag: a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
