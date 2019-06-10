@@ -243,12 +243,6 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/elasticsear
 +   failureThreshold: 5
 ```
 
-- Desired number of Elasticsearch coordinating-only nodes:
-```diff
-- data.replicas: 2
-+ data.replicas: 3
-```
-
 - Enable the liveness probe (coordinating-only nodes pod):
 ```diff
 - coordinating.livenessProbe.enabled: false
@@ -323,12 +317,6 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/elasticsear
 ```diff
 - ingest.enabled: false
 + ingest.enabled: true
-```
-
-- Desired number of Elasticsearch ingest nodes:
-```diff
-- data.replicas: 2
-+ data.replicas: 3
 ```
 
 - Enable the liveness probe (ingest nodes pod):

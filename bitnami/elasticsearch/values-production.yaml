@@ -129,7 +129,7 @@ securityContext:
 ##
 coordinating:
   name: coordinating-only
-  replicas: 3
+  replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
   ## node affinity
@@ -251,7 +251,7 @@ data:
 ingest:
   enabled: true
   name: ingest
-  replicas: 3
+  replicas: 2
   heapSize: 128m
   antiAffinity: "soft"
   ## node affinity
