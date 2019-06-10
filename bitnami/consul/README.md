@@ -56,7 +56,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `image.registry`                     | HashiCorp Consul image registry                                  | `docker.io`                                                |
 | `image.repository`                   | HashiCorp Consul image name                                      | `bitnami/consul`                                           |
 | `image.tag`                          | HashiCorp Consul image tag                                       | `{TAG_NAME}`                                               |
-| `image.pullPolicy`                   | Image pull policy                                                | `Always`                                                   |
+| `image.pullPolicy`                   | Image pull policy                                                | `IfNotPresent`                                             |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                 | `[]` (does not add image pull secrets to deployed pods)    |
 | `replicas`                           | Number of replicas                                               | `3`                                                        |
 | `port`                               | HashiCorp Consul http listening port                             | `8500`                                                     |

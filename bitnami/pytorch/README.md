@@ -57,8 +57,8 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                                                 |
 | `git.registry`                       | Git image registry                                                                           | `docker.io`                                             |
 | `git.repository`                     | Git image name                                                                               | `bitnami/git`                                           |
-| `git.tag`                            | Git image tag                                                                                | `latest`                                                |
-| `git.pullPolicy`                     | Git image pull policy                                                                        | `Always`                                                |
+| `git.tag`                            | Git image tag                                                                                | `{TAG_NAME}`                                              |
+| `git.pullPolicy`                     | Git image pull policy                                                                        | `IfNotPresent`                                          |
 | `git.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | service.type                         | Kubernetes service type                                                                      | `ClusterIP`                                             |
 | `entrypoint.file`                    | Main entrypoint to your application                                                          | `''`                                                    |

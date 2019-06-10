@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `image.registry`                | WildFly image registry                 | `docker.io`                                                |
 | `image.repository`              | WildFly Image name                     | `bitnami/wildfly`                                          |
 | `image.tag`                     | WildFly Image tag                      | `{TAG_NAME}`                                               |
-| `image.pullPolicy`              | WildFly image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent`    |
+| `image.pullPolicy`              | WildFly image pull policy              | `IfNotPresent`                                             |
 | `image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)   |
 | `wildflyUsername`               | WildFly admin user                     | `user`                                                     |
 | `wildflyPassword`               | WildFly admin password                 | _random 10 character alphanumeric string_                  |

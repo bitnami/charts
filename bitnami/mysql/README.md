@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 | `image.registry`                          | MySQL image registry                                                       | `docker.io`                                                       |
 | `image.repository`                        | MySQL Image name                                                           | `bitnami/mysql`                                                   |
 | `image.tag`                               | MySQL Image tag                                                            | `{TAG_NAME}`                                                      |
-| `image.pullPolicy`                        | MySQL image pull policy                                                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`           |
+| `image.pullPolicy`                        | MySQL image pull policy                                                    | `IfNotPresent`                                                    |
 | `image.pullSecrets`                       | Specify docker-registry secret names as an array                           | `[]` (does not add image pull secrets to deployed pods)           |
 | `service.type`                            | Kubernetes service type                                                    | `ClusterIP`                                                       |
 | `service.port`                            | MySQL service port                                                         | `3306`                                                            |

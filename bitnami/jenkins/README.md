@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `image.registry`           | Jenkins image registry                 | `docker.io`                                               |
 | `image.repository`         | Jenkins Image name                     | `bitnami/jenkins`                                         |
 | `image.tag`                | Jenkins Image tag                      | `{TAG_NAME}`                                              |
-| `image.pullPolicy`         | Jenkins image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullPolicy`         | Jenkins image pull policy              | `IfNotPresent`                                            |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array             | `[]` (does not add image pull secrets to deployed pods)  |
 | `jenkinsUser`              | User of the application                | `user`                                                    |
 | `jenkinsPassword`          | Application password                   | _random 10 character alphanumeric string_                 |

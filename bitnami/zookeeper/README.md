@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `image.registry`                      | Zookeeper image registry                                            | `docker.io`                                              |
 | `image.repository`                    | Zookeeper Image name                                                | `bitnami/zookeeper`                                      |
 | `image.tag`                           | Zookeeper Image tag                                                 | `{TAG_NAME}`                                             |
-| `image.pullPolicy`                    | Zookeeper image pull policy                                         | `Always`                                                 |
+| `image.pullPolicy`                    | Zookeeper image pull policy                                         | `IfNotPresent`                                           |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                    | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
 | `nameOverride`              | String to partially override zookeeper.fullname template with a string (will append the release name)                                           | `nil`                                                    |

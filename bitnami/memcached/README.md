@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `image.registry`            | Memcached image registry            | `docker.io`                                               |
 | `image.repository`          | Memcached Image name                | `bitnami/memcached`                                       |
 | `image.tag`                 | Memcached Image tag                 | `{TAG_NAME}`                                              |
-| `image.pullPolicy`          | Memcached image pull policy         | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullPolicy`          | Memcached image pull policy         | `IfNotPresent`                                            |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array          | `[]` (does not add image pull secrets to deployed pods)  |
 | `securityContext.enabled`   | Enable security context             | `true`                                                    |
 | `securityContext.fsGroup`   | Group ID for the container          | `1001`                                                    |

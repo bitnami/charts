@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `image.registry`         | Metrics Server image registry                                               | `docker.io`                            |
 | `image.repository`       | Metrics Server image name                                                   | `bitnami/metrics-server`               |
 | `image.tag`              | Metrics Server image tag                                                    | `{TAG_NAME}`                           |
-| `image.pullPolicy`       | Metrics Server image pull policy                                            | `Always`                               |
+| `image.pullPolicy`       | Metrics Server image pull policy                                            | `IfNotPresent`                         |
 | `securePort`             | Port where metrics-server will be running                                   | `8443`                                 |
 | `service.type`           | Kubernetes Service type                                                     | `ClusterIP`                            |
 | `service.port`           | Kubernetes Service port                                                     | `443`                                  |
