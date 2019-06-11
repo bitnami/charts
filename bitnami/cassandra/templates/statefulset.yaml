@@ -93,6 +93,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
+        - name: CASSANDRA_USER
+          value: {{ .Values.dbUser.user | quote }}
         - name: CASSANDRA_NUM_TOKENS
           value: {{ .Values.cluster.numTokens | quote }}
         - name: CASSANDRA_DATACENTER
