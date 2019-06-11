@@ -155,15 +155,25 @@ mariadb:
       accessMode: ReadWriteOnce
       size: 8Gi
 
+  enabled: true
+
 ##
 ## Elasticsearch chart configuration
 ##
-## https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml
+## https://github.com/bitnami/charts/blob/master/bitnami/elasticsearch/values.yaml
 ##
 elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
-  enabled: true
+  enabled: false
+  sysctlImage:
+    enabled: false
+  master:
+    replicas: 1
+  coordinating:
+    replicas: 1
+  data:
+    replicas: 1
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
