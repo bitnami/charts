@@ -164,12 +164,16 @@ elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
   enabled: true
+  ## Enable to perform the sysctl operation
   sysctlImage:
     enabled: false
+  ## Elasticsearch master-eligible node parameters
   master:
     replicas: 1
+  ## Elasticsearch coordinating-only node parameters
   coordinating:
     replicas: 1
+  ## Elasticsearch data node parameters
   data:
     replicas: 1
 

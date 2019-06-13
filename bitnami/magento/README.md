@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install stable/magento
+$ helm install bitnami/magento
 ```
 
 ## Introduction
@@ -26,7 +26,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/magento
+$ helm install --name my-release bitnami/magento
 ```
 
 The command deploys Magento on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -47,93 +47,93 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the Magento chart and their default values.
 
-| Parameter                            | Description                                                                          | Default                                                      |
-| ------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
-| `global.imageRegistry`               | Global Docker image registry                                                         | `nil`                                                        |
-| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.registry`                     | Magento image registry                                                               | `docker.io`                                                  |
-| `image.repository`                   | Magento Image name                                                                   | `bitnami/magento`                                            |
-| `image.tag`                          | Magento Image tag                                                                    | `{TAG_NAME}`                                                 |
-| `image.debug`                        | Specify if debug values should be set                                                | `false`                                                      |
-| `image.pullPolicy`                   | Image pull policy                                                                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `magentoHost`                        | Magento host to create application URLs                                              | `nil`                                                        |
-| `magentoLoadBalancerIP`              | `loadBalancerIP` for the magento Service                                             | `nil`                                                        |
-| `magentoUsername`                    | User of the application                                                              | `user`                                                       |
-| `magentoPassword`                    | Application password                                                                 | _random 10 character long alphanumeric string_               |
-| `magentoEmail`                       | Admin email                                                                          | `user@example.com`                                           |
-| `magentoFirstName`                   | Magento Admin First Name                                                             | `FirstName`                                                  |
-| `magentoLastName`                    | Magento Admin Last Name                                                              | `LastName`                                                   |
-| `magentoMode`                        | Magento mode                                                                         | `developer`                                                  |
-| `magentoAdminUri`                    | Magento prefix to access Magento Admin                                               | `admin`                                                      |
-| `allowEmptyPassword`                 | Allow DB blank passwords                                                             | `yes`                                                        |
-| `ingress.enabled`                    | Enable ingress controller resource                                                   | `false`                                                      |
-| `ingress.annotations`                | Ingress annotations                                                                  | `[]`                                                         |
-| `ingress.certManager`                | Add annotations for cert-manager                                                     | `false`                                                      |
-| `ingress.hosts[0].name`              | Hostname to your Magento installation                                                | `magento.local`                                              |
-| `ingress.hosts[0].path`              | Path within the url structure                                                        | `/`                                                          |
-| `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                       | `false`                                                      |
-| `ingress.hosts[0].tlsHosts`          | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`) | `nil`                                                        |
-| `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                            | `magento.local-tls-secret`                                   |
-| `ingress.secrets[0].name`            | TLS Secret Name                                                                      | `nil`                                                        |
-| `ingress.secrets[0].certificate`     | TLS Secret Certificate                                                               | `nil`                                                        |
-| `ingress.secrets[0].key`             | TLS Secret Key                                                                       | `nil`                                                        |
-| `externalDatabase.host`              | Host of the external database                                                        | `nil`                                                        |
-| `externalDatabase.port`              | Port of the external database                                                        | `3306`                                                       |
-| `externalDatabase.user`              | Existing username in the external db                                                 | `bn_magento`                                                 |
-| `externalDatabase.password`          | Password for the above username                                                      | `nil`                                                        |
-| `externalDatabase.database`          | Name of the existing database                                                        | `bitnami_magento`                                            |
-| `externalElasticsearch.host`         | Host of the external elasticsearch server                                            | `nil`                                                        |
-| `externalElasticsearch.port`         | Port of the external elasticsearch server                                            | `nil`                                                        |
-| `mariadb.enabled`                    | Whether to use the MariaDB chart                                                     | `true`                                                       |
-| `mariadb.rootUser.password`          | MariaDB admin password                                                               | `nil`                                                        |
-| `mariadb.db.name`                    | Database name to create                                                              | `bitnami_magento`                                            |
-| `mariadb.db.user`                    | Database user to create                                                              | `bn_magento`                                                 |
-| `mariadb.db.password`                | Password for the database                                                            | _random 10 character long alphanumeric string_               |
-| `elasticsearch.enabled`              | Use the Elasticsearch chart as search engine                                         | `false`                                                      |
-| `service.type`                       | Kubernetes Service type                                                              | `LoadBalancer`                                               |
-| `service.port`                       | Service HTTP port                                                                    | `80`                                                         |
-| `service.httpsPort`                  | Service HTTPS port                                                                   | `443`                                                        |
-| `nodePorts.https`                    | Kubernetes https node port                                                           | `""`                                                         |
-| `service.externalTrafficPolicy`      | Enable client source IP preservation                                                 | `Cluster`                                                    |
-| `service.nodePorts.http`             | Kubernetes http node port                                                            | `""`                                                         |
-| `service.nodePorts.https`            | Kubernetes https node port                                                           | `""`                                                         |
-| `service.loadBalancerIP`             | `loadBalancerIP` for the Magento Service                                             | `nil`                                                        |
-| `livenessProbe.enabled`              | Turn on and off liveness probe                                                       | `true`                                                       |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                             | `1000`                                                       |
-| `livenessProbe.periodSeconds`        | How often to perform the probe                                                       | `10`                                                         |
-| `livenessProbe.timeoutSeconds`       | When the probe times out                                                             | `5`                                                          |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                                          | `1`                                                          |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                                           | `6`                                                          |
-| `readinessProbe.enabled`             | Turn on and off readiness probe                                                      | `true`                                                       |
-| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                            | `30`                                                         |
-| `readinessProbe.periodSeconds`       | How often to perform the probe                                                       | `5`                                                          |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                                             | `3`                                                          |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                                          | `1`                                                          |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                                           | `3`                                                          |
-| `persistence.enabled`                | Enable persistence using PVC                                                         | `true`                                                       |
-| `persistence.apache.storageClass`    | PVC Storage Class for Apache volume                                                  | `nil`  (uses alpha storage annotation)                       |
-| `persistence.apache.accessMode`      | PVC Access Mode for Apache volume                                                    | `ReadWriteOnce`                                              |
-| `persistence.apache.size`            | PVC Storage Request for Apache volume                                                | `1Gi`                                                        |
-| `persistence.magento.storageClass`   | PVC Storage Class for Magento volume                                                 | `nil`  (uses alpha storage annotation)                       |
-| `persistence.magento.accessMode`     | PVC Access Mode for Magento volume                                                   | `ReadWriteOnce`                                              |
-| `persistence.magento.size`           | PVC Storage Request for Magento volume                                               | `8Gi`                                                        |
-| `resources`                          | CPU/Memory resource requests/limits                                                  | Memory: `512Mi`, CPU: `300m`                                 |
-| `podAnnotations`                     | Pod annotations                                                                      | `{}`                                                         |
-| `metrics.enabled`                    | Start a side-car prometheus exporter                                                 | `false`                                                      |
-| `metrics.image.registry`             | Apache exporter image registry                                                       | `docker.io`                                                  |
-| `metrics.image.repository`           | Apache exporter image name                                                           | `lusotycoon/apache-exporter`                                 |
-| `metrics.image.tag`                  | Apache exporter image tag                                                            | `v0.5.0`                                                     |
-| `metrics.image.pullPolicy`           | Image pull policy                                                                    | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod                                      | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`                  | Exporter resource requests/limit                                                     | {}                                                           |
+| Parameter                             | Description                                                                          | Default                                                      |
+| ------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| `global.imageRegistry`                | Global Docker image registry                                                         | `nil`                                                        |
+| `global.imagePullSecrets`             | Global Docker registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.registry`                      | Magento image registry                                                               | `docker.io`                                                  |
+| `image.repository`                    | Magento Image name                                                                   | `bitnami/magento`                                            |
+| `image.tag`                           | Magento Image tag                                                                    | `{TAG_NAME}`                                                 |
+| `image.debug`                         | Specify if debug values should be set                                                | `false`                                                      |
+| `image.pullPolicy`                    | Image pull policy                                                                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                     | `[]` (does not add image pull secrets to deployed pods)      |
+| `magentoHost`                         | Magento host to create application URLs                                              | `nil`                                                        |
+| `magentoLoadBalancerIP`               | `loadBalancerIP` for the magento Service                                             | `nil`                                                        |
+| `magentoUsername`                     | User of the application                                                              | `user`                                                       |
+| `magentoPassword`                     | Application password                                                                 | _random 10 character long alphanumeric string_               |
+| `magentoEmail`                        | Admin email                                                                          | `user@example.com`                                           |
+| `magentoFirstName`                    | Magento Admin First Name                                                             | `FirstName`                                                  |
+| `magentoLastName`                     | Magento Admin Last Name                                                              | `LastName`                                                   |
+| `magentoMode`                         | Magento mode                                                                         | `developer`                                                  |
+| `magentoAdminUri`                     | Magento prefix to access Magento Admin                                               | `admin`                                                      |
+| `allowEmptyPassword`                  | Allow DB blank passwords                                                             | `yes`                                                        |
+| `ingress.enabled`                     | Enable ingress controller resource                                                   | `false`                                                      |
+| `ingress.annotations`                 | Ingress annotations                                                                  | `[]`                                                         |
+| `ingress.certManager`                 | Add annotations for cert-manager                                                     | `false`                                                      |
+| `ingress.hosts[0].name`               | Hostname to your Magento installation                                                | `magento.local`                                              |
+| `ingress.hosts[0].path`               | Path within the url structure                                                        | `/`                                                          |
+| `ingress.hosts[0].tls`                | Utilize TLS backend in ingress                                                       | `false`                                                      |
+| `ingress.hosts[0].tlsHosts`           | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`) | `nil`                                                        |
+| `ingress.hosts[0].tlsSecret`          | TLS Secret (certificates)                                                            | `magento.local-tls-secret`                                   |
+| `ingress.secrets[0].name`             | TLS Secret Name                                                                      | `nil`                                                        |
+| `ingress.secrets[0].certificate`      | TLS Secret Certificate                                                               | `nil`                                                        |
+| `ingress.secrets[0].key`              | TLS Secret Key                                                                       | `nil`                                                        |
+| `externalDatabase.host`               | Host of the external database                                                        | `nil`                                                        |
+| `externalDatabase.port`               | Port of the external database                                                        | `3306`                                                       |
+| `externalDatabase.user`               | Existing username in the external db                                                 | `bn_magento`                                                 |
+| `externalDatabase.password`           | Password for the above username                                                      | `nil`                                                        |
+| `externalDatabase.database`           | Name of the existing database                                                        | `bitnami_magento`                                            |
+| `externalElasticsearch.host`          | Host of the external elasticsearch server                                            | `nil`                                                        |
+| `externalElasticsearch.port`          | Port of the external elasticsearch server                                            | `nil`                                                        |
+| `mariadb.enabled`                     | Whether to use the MariaDB chart                                                     | `true`                                                       |
+| `mariadb.rootUser.password`           | MariaDB admin password                                                               | `nil`                                                        |
+| `mariadb.db.name`                     | Database name to create                                                              | `bitnami_magento`                                            |
+| `mariadb.db.user`                     | Database user to create                                                              | `bn_magento`                                                 |
+| `mariadb.db.password`                 | Password for the database                                                            | _random 10 character long alphanumeric string_               |
+| `elasticsearch.enabled`               | Use the Elasticsearch chart as search engine                                         | `true`                                                       |
+| `elasticsearch.sysctlImage.enabled`   | Enable kernel settings modifier image for Elasticsearch                              | `false`                                                      |
+| `elasticsearch.master.replicas`       | Desired number of Elasticsearch master-eligible nodes                                | `1`                                                          |
+| `elasticsearch.coordinating.replicas` | Desired number of Elasticsearch coordinating-only nodes                              | `1`                                                          |
+| `elasticsearch.data.replicas`         | Desired number of Elasticsearch data nodes                                           | `1`                                                          |
+| `service.type`                        | Kubernetes Service type                                                              | `LoadBalancer`                                               |
+| `service.port`                        | Service HTTP port                                                                    | `80`                                                         |
+| `service.httpsPort`                   | Service HTTPS port                                                                   | `443`                                                        |
+| `nodePorts.https`                     | Kubernetes https node port                                                           | `""`                                                         |
+| `service.externalTrafficPolicy`       | Enable client source IP preservation                                                 | `Cluster`                                                    |
+| `service.nodePorts.http`              | Kubernetes http node port                                                            | `""`                                                         |
+| `service.nodePorts.https`             | Kubernetes https node port                                                           | `""`                                                         |
+| `service.loadBalancerIP`              | `loadBalancerIP` for the Magento Service                                             | `nil`                                                        |
+| `livenessProbe.enabled`               | Turn on and off liveness probe                                                       | `true`                                                       |
+| `livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                             | `1000`                                                       |
+| `livenessProbe.periodSeconds`         | How often to perform the probe                                                       | `10`                                                         |
+| `livenessProbe.timeoutSeconds`        | When the probe times out                                                             | `5`                                                          |
+| `livenessProbe.successThreshold`      | Minimum consecutive successes for the probe                                          | `1`                                                          |
+| `livenessProbe.failureThreshold`      | Minimum consecutive failures for the probe                                           | `6`                                                          |
+| `readinessProbe.enabled`              | Turn on and off readiness probe                                                      | `true`                                                       |
+| `readinessProbe.initialDelaySeconds`  | Delay before readiness probe is initiated                                            | `30`                                                         |
+| `readinessProbe.periodSeconds`        | How often to perform the probe                                                       | `5`                                                          |
+| `readinessProbe.timeoutSeconds`       | When the probe times out                                                             | `3`                                                          |
+| `readinessProbe.successThreshold`     | Minimum consecutive successes for the probe                                          | `1`                                                          |
+| `readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe                                           | `3`                                                          |
+| `persistence.enabled`                 | Enable persistence using PVC                                                         | `true`                                                       |
+| `persistence.apache.storageClass`     | PVC Storage Class for Apache volume                                                  | `nil`  (uses alpha storage annotation)                       |
+| `persistence.apache.accessMode`       | PVC Access Mode for Apache volume                                                    | `ReadWriteOnce`                                              |
+| `persistence.apache.size`             | PVC Storage Request for Apache volume                                                | `1Gi`                                                        |
+| `persistence.magento.storageClass`    | PVC Storage Class for Magento volume                                                 | `nil`  (uses alpha storage annotation)                       |
+| `persistence.magento.accessMode`      | PVC Access Mode for Magento volume                                                   | `ReadWriteOnce`                                              |
+| `persistence.magento.size`            | PVC Storage Request for Magento volume                                               | `8Gi`                                                        |
+| `resources`                           | CPU/Memory resource requests/limits                                                  | Memory: `512Mi`, CPU: `300m`                                 |
+| `podAnnotations`                      | Pod annotations                                                                      | `{}`                                                         |
+| `metrics.enabled`                     | Start a side-car prometheus exporter                                                 | `false`                                                      |
+| `metrics.image.registry`              | Apache exporter image registry                                                       | `docker.io`                                                  |
+| `metrics.image.repository`            | Apache exporter image name                                                           | `lusotycoon/apache-exporter`                                 |
+| `metrics.image.tag`                   | Apache exporter image tag                                                            | `v0.5.0`                                                     |
+| `metrics.image.pullPolicy`            | Image pull policy                                                                    | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`           | Specify docker-registry secret names as an array                                     | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`              | Additional annotations for Metrics exporter pod                                      | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`                   | Exporter resource requests/limit                                                     | {}                                                           |
 
 The above parameters map to the env variables defined in [bitnami/magento](http://github.com/bitnami/bitnami-docker-magento). For more information please refer to the [bitnami/magento](http://github.com/bitnami/bitnami-docker-magento) image documentation.
-
-> **Note**:
->
-> Setting `elasticsearch.enabled` to true will launch seven more pods by default. Use it with caution.
 
 > **Note**:
 >
@@ -154,7 +154,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set magentoUsername=admin,magentoPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    stable/magento
+    bitnami/magento
 ```
 
 The above command sets the Magento administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -162,10 +162,24 @@ The above command sets the Magento administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml stable/magento
+$ helm install --name my-release -f values.yaml bitnami/magento
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/magento
+```
+
+- Start a side-car prometheus exporter:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
