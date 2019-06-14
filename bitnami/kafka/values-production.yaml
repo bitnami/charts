@@ -178,7 +178,7 @@ sslEndpointIdentificationAlgorithm: https
 ##
 # extraEnvVars:
 #   - name: KAFKA_CFG_BACKGROUND_THREADS
-#     value: 10
+#     value: "10"
 
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-kafka#security
