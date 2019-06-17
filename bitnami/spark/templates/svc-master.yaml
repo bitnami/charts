@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "spark.fullname" . }}-master-svc
+  labels:
+    app.kubernetes.io/name: {{ include "spark.name" . }}
+    helm.sh/chart: {{ include "spark.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    {{- range $key, $value := .Values.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  {{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  {{- end }}
+  ports:
+  - port: {{ .Values.service.clusterPort }}
+    targetPort: cluster
+    name: cluster
+  - port: {{ .Values.service.webPort }}
+    targetPort: http
+    name: http
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ include "spark.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: master
