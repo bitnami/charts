@@ -240,6 +240,10 @@ spec:
           subPath: probes.sh
         - name: data
           mountPath: /bitnami/etcd
+        {{- if .Values.startFromSnapshot.enabled }}
+        - name: init-snapshot-volume
+          mountPath: /init-snapshot
+        {{- end }}
         {{- if .Values.disasterRecovery.enabled }}
         - name: snapshot-volume
           mountPath: /snapshots
@@ -263,6 +267,11 @@ spec:
         configMap:
           name: {{ template "etcd.fullname" . }}-scripts
           defaultMode: 0755
+      {{- if .Values.startFromSnapshot.enabled }}
+      - name: init-snapshot-volume
+        persistentVolumeClaim:
+          claimName: {{ .Values.startFromSnapshot.existingClaim }}
+      {{- end }}
       {{- if .Values.disasterRecovery.enabled }}
       - name: snapshot-volume
         persistentVolumeClaim:

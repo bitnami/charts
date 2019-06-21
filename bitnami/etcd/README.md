@@ -111,6 +111,9 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `tolerations`                             | Tolerations for pod assignment. The value is evaluated as a template.                                    | `{}`                                                               |
 | `metrics.enabled`                         | Enable Prometheus exporter to expose etcd metrics                                                        | `false`                                                            |
 | `metrics.podAnnotations`                  | Annotations for enabling prometheus to access the metrics endpoint                                       | {`prometheus.io/scrape: "true",prometheus.io/port: "2379"`}        |
+| `startFromSnapshot.enabled`               | Initialize new cluster recovering an existing snapshot                                                   | `false`                                                            |
+| `startFromSnapshot.existingClaim`         | PVC containing the existing snapshot                                                                     | `nil`                                                              |
+| `startFromSnapshot.snapshotFilename`      | Snapshot filename                                                                                        | `nil`                                                              |
 | `disasterRecovery.enabled`                | Enable auto disaster recovery by periodically snapshotting the keyspace                                  | `false`                                                            |
 | `disasterRecovery.cronjob.schedule`       | Schedule in Cron format to save snapshots                                                                | `*/30 * * * *`                                                     |
 | `disasterRecovery.cronjob.historyLimit`   | Number of successful finished jobs to retain                                                             | `1`                                                                |
@@ -321,6 +324,17 @@ Backwards compatibility is not guaranteed. The following notables changes were i
 - Labels are adapted to follow the Helm charts best practices.
 
 To upgrade from previous charts versions, create a snapshot of the keyspace and restore it in a new etcd cluster. Only v3 API data can be restored.
+You can use the command below to upgrade your chart by starting a new cluster using an existing snapshot, available in an existing PVC, to initialize the members:
+
+```console
+$ helm install --name new-release bitnami/etcd \
+  --set statefulset.replicaCount=3 \
+  --set persistence.enable=true \
+  --set persistence.size=8Gi \
+  --set startFromSnapshot.enabled=true \
+  --set startFromSnapshot.existingClaim=my-claim \
+  --set startFromSnapshot.snapshotFilename=my-snapshot.db
+```
 
 ### To 1.0.0
 

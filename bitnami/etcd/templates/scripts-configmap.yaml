@@ -9,6 +9,7 @@
 {{- $dnsBase := .Values.service.dnsBase }}
 {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
 {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
+{{- $initSnapshotFilename := .Values.startFromSnapshot.snapshotFilename }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -107,8 +108,25 @@ data:
         echo "==> Creating data dir..."
         mkdir -p "$ETCD_DATA_DIR"
         echo "==> There is no data at all. Initializing a new member of the cluster..."
+{{- if .Values.startFromSnapshot.enabled }}
+        if [[ -f "/init-snapshot/{{ $initSnapshotFilename }}" ]]; then
+            echo "==> Initializing member by restoring etcd cluster from snapshot..."
+
+            etcdctl snapshot restore /init-snapshot/{{ $initSnapshotFilename }} \
+              --name $ETCD_NAME \
+              --data-dir $ETCD_DATA_DIR \
+              --initial-cluster $ETCD_INITIAL_CLUSTER \
+              --initial-cluster-token $ETCD_INITIAL_CLUSTER_TOKEN \
+              --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS
+            store_member_id &
+        else
+            echo "==> There was no snapshot to perform data recovery!!"
+            exit 1
+        fi
+{{- else }}
         store_member_id &
         configure_rbac
+{{- end }}
     else
         echo "==> Detected data from previous deployments..."
         if is_disastrous_failure; then
