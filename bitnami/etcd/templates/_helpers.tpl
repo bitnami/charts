@@ -79,12 +79,25 @@ Return the proper etcd data dir
 {{- end -}}
 
 {{/*
+Return the proper Disaster Recovery PVC name
+*/}}
+{{- define "etcd.disasterRecovery.pvc.name" -}}
+{{- if .Values.disasterRecovery.pvc.existingClaim -}}
+{{- with .Values.disasterRecovery.pvc.existingClaim -}}
+{{ tpl . $ }}
+{{- end -}}
+{{- else -}}
+{{ template "etcd.fullname" . }}-snapshotter
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper etcdctl authentication options
 */}}
 {{- define "etcd.authOptions" -}}
-{{- $rbacOption := "-u root:$ETCD_ROOT_PASSWORD" -}}
-{{- $certsOption := " --cert-file $ETCD_CERT_FILE --key-file $ETCD_KEY_FILE" -}}
-{{- $caOption := " --ca-file $ETCD_TRUSTED_CA_FILE" -}}
+{{- $rbacOption := "--user root:$ETCD_ROOT_PASSWORD" -}}
+{{- $certsOption := " --cert=\"$ETCD_CERT_FILE\" --key=\"$ETCD_KEY_FILE\"" -}}
+{{- $caOption := " --cacert=\"$ETCD_TRUSTED_CA_FILE\"" -}}
 {{- if .Values.auth.rbac.enabled -}}
 {{- printf "%s" $rbacOption -}}
 {{- end -}}
@@ -136,5 +149,58 @@ imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "etcd.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "etcd.validateValues.startFromSnapshot.existingClaim" .) -}}
+{{- $messages := append $messages (include "etcd.validateValues.startFromSnapshot.snapshotFilename" .) -}}
+{{- $messages := append $messages (include "etcd.validateValues.disasterRecovery" .) -}}
+{{- $messages := append $messages (include "etcd.validateValues.podAntiAffinity" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of etcd - an existing claim must be provided when startFromSnapshot is enabled */}}
+{{- define "etcd.validateValues.startFromSnapshot.existingClaim" -}}
+{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.existingClaim) -}}
+etcd: startFromSnapshot.existingClaim
+    An existing claim must be provided when startFromSnapshot is enabled!!
+    Please provide it (--set startFromSnapshot.existingClaim="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of etcd - the snapshot filename must be provided when startFromSnapshot is enabled */}}
+{{- define "etcd.validateValues.startFromSnapshot.snapshotFilename" -}}
+{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.snapshotFilename) -}}
+etcd: startFromSnapshot.snapshotFilename
+    The snapshot filename must be provided when startFromSnapshot is enabled!!
+    Please provide it (--set startFromSnapshot.snapshotFilename="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of etcd - persistence must be enabled when disasterRecovery is enabled */}}
+{{- define "etcd.validateValues.disasterRecovery" -}}
+{{- if and .Values.disasterRecovery.enabled (not .Values.persistence.enabled) -}}
+etcd: disasterRecovery
+    Persistence must be enabled when disasterRecovery is enabled!!
+    Please enable persistence (--set persistence.enabled=true)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of etcd - must provide a valid podAntiAffinity ("soft" or "hard") */}}
+{{- define "etcd.validateValues.podAntiAffinity" -}}
+{{- if and (ne .Values.podAntiAffinity "soft") (ne .Values.podAntiAffinity "hard") -}}
+etcd: mode
+    Invalid podAntiAffinity selected. Valid values are "soft" and
+    "hard". Please set a valid mode (--set podAntiAffinity="xxxx")
 {{- end -}}
 {{- end -}}

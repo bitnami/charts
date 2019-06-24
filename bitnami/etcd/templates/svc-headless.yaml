@@ -5,20 +5,20 @@ metadata:
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   labels:
-    app: {{ template "etcd.name" . }}
-    chart: {{ template "etcd.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    helm.sh/chart: {{ template "etcd.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   type: ClusterIP
   clusterIP: None
   ports:
   - name: client
-    port: 2379
+    port: {{ .Values.service.port  }}
     targetPort: client
   - name: peer
-    port: 2380
+    port: {{ .Values.service.peerPort  }}
     targetPort: peer
   selector:
-    app: {{ template "etcd.name" . }}
-    release: {{ .Release.Name | quote }}
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
