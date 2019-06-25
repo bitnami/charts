@@ -1,0 +1,68 @@
+{{- if .Values.disasterRecovery.enabled -}}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "etcd.fullname" . }}-snapshotter
+  labels:
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    helm.sh/chart: {{ template "etcd.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  concurrencyPolicy: Forbid
+  schedule: {{ .Values.disasterRecovery.cronjob.schedule | quote }}
+  successfulJobsHistoryLimit: {{ .Values.disasterRecovery.cronjob.historyLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: {{ template "etcd.name" . }}
+            helm.sh/chart: {{ template "etcd.chart" . }}
+            app.kubernetes.io/instance: {{ .Release.Name }}
+            app.kubernetes.io/managed-by: {{ .Release.Service }}
+            app.kubernetes.io/component: snapshotter
+          {{- if .Values.disasterRecovery.cronjob.podAnnotations }}
+          annotations: {{ toYaml .Values.disasterRecovery.cronjob.podAnnotations | nindent 12 }}
+          {{- end }}
+        spec:
+          restartPolicy: OnFailure
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            fsGroup: {{ .Values.securityContext.fsGroup }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- end }}
+          containers:
+          - name: etcd-snapshotter
+            image: "{{ template "etcd.image" . }}"
+            imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+            command:
+            - /scripts/save-snapshot.sh
+            env:
+            - name: ETCDCTL_API
+              value: "3"
+            {{- if .Values.auth.rbac.enabled }}
+            - name: ETCD_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "etcd.fullname" . }}{{ end }}
+                  key: etcd-root-password
+            {{- end }}
+            {{- if .Values.disasterRecovery.cronjob.resources }}
+            resources: {{ toYaml .Values.disasterRecovery.cronjob.resources | nindent 14 }}
+            {{- end }}
+            volumeMounts:
+            - name: scripts
+              mountPath: /scripts/save-snapshot.sh
+              subPath: save-snapshot.sh
+            - name: snapshot-volume
+              mountPath: /snapshots
+          volumes:
+          - name: scripts
+            configMap:
+              name: {{ template "etcd.fullname" . }}-scripts
+              defaultMode: 0755
+          - name: snapshot-volume
+            persistentVolumeClaim:
+              claimName: {{ template "etcd.disasterRecovery.pvc.name" . }}
+{{- end }}

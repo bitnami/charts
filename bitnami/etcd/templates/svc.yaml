@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: {{ template "etcd.fullname" . }}
   labels:
-    app: {{ template "etcd.name" . }}
-    chart: {{ template "etcd.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    helm.sh/chart: {{ template "etcd.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- if .Values.service.annotations }}
   annotations:
 {{ toYaml .Values.service.annotations | indent 4 }}
@@ -18,17 +18,17 @@ spec:
   {{- end }}
   ports:
   - name: client
-    port: 2379
+    port: {{ .Values.service.port  }}
     targetPort: client
     {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort)) }}
     nodePort: {{ .Values.service.nodePort  }}
     {{- end }}
   - name: peer
-    port: 2380
+    port: {{ .Values.service.peerPort  }}
     targetPort: peer
     {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.peerNodePort)) }}
     nodePort: {{ .Values.service.peerNodePort  }}
     {{- end }}
   selector:
-    app: {{ template "etcd.name" . }}
-    release: {{ .Release.Name | quote }}
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
