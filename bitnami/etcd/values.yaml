@@ -31,6 +31,12 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+  ## String to partially override etcd.fullname template (will maintain the release name)
+  # nameOverride:
+
+  ## String to fully override etcd.fullname template
+  # fullnameOverride:
+
 statefulset:
   ## Update strategy, can be set to RollingUpdate or OnDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
