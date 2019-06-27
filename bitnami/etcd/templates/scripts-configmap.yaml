@@ -45,7 +45,7 @@ data:
     configure_rbac() {
         # When there's more than one replica, we can assume the 1st member
         # to be created is "{{ $etcdFullname }}-0" since a statefulset is used
-        if [[ -n "$ETCD_ROOT_PASSWORD" ]] && [[ "$HOSTNAME" == "{{ $etcdFullname }}-0" ]]; then
+        if [[ -n "${ETCD_ROOT_PASSWORD:-}" ]] && [[ "$HOSTNAME" == "{{ $etcdFullname }}-0" ]]; then
             echo "==> Configuring RBAC authentication!"
             etcd > /dev/null 2>&1 &
             ETCD_PID=$!
