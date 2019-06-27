@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "jenkins.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "jenkins.fullname" . }}
+    chart: {{ include "jenkins.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "jenkins.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        app: {{ template "jenkins.fullname" . }}
+        chart: {{ include "jenkins.chart" . }}
         release: "{{ .Release.Name }}"
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
@@ -39,7 +39,7 @@ spec:
         - name: JENKINS_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "jenkins.fullname" . }}
               key: jenkins-password
         - name: JENKINS_HOME
           value: {{ .Values.jenkinsHome | quote }}
@@ -84,7 +84,7 @@ spec:
         - name: JENKINS_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "jenkins.fullname" . }}
               key: jenkins-password
         ports:
         - name: metrics
@@ -108,7 +108,7 @@ spec:
       - name: jenkins-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
+          claimName: {{ template "jenkins.fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end }}
