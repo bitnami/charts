@@ -44,6 +44,7 @@ $ helm search bitnami
 
 - [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
 - [Apache Airflow](https://github.com/bitnami/charts/tree/master/bitnami/airflow)
+- [Apache Spark](https://github.com/bitnami/charts/tree/master/bitnami/spark)
 - [Cassandra](https://github.com/bitnami/charts/tree/master/bitnami/cassandra)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [ExternalDNS](https://github.com/bitnami/charts/tree/master/bitnami/external-dns)

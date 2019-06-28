@@ -1,0 +1,259 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+
+## Bitnami Spark image version
+## ref: https://hub.docker.com/r/bitnami/spark/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/spark
+  tag: 2.4.3-debian-9-r13
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+
+  ## Pull secret for this image
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+
+## Spark Components configuration
+##
+master:
+  ## Spark master specific configuration
+
+  ## Set a custom configuration by using an existing configMap with the configuration file.
+  # configurationConfigMap:
+
+  webPort: 8080
+  clusterPort: 7077
+
+  ## Set the master daemon memory limit.
+  # daemonMemoryLimit:
+
+  ## Use a string to set the config options for in the form "-Dx=y"
+  # configOptions:
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: SPARK_DAEMON_JAVA_OPTS
+  ##    value: -Dx=y
+  # extraEnvVars:
+
+  ## Kubernetes Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+  #  limits:
+  #    cpu: 200m
+  #    memory: 1Gi
+  #  requests:
+  #    memory: 256Mi
+  #    cpu: 250m
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+worker:
+  ## Spark worker specific configuration
+
+  ## Set a custom configuration by using an existing configMap with the configuration file.
+  # configurationConfigMap:
+
+  webPort: 8081
+  ## Set to true to use a custom cluster port instead of a random port.
+  # clusterPort:
+
+  ## Set the daemonMemoryLimit as the daemon max memory
+  # daemonMemoryLimit:
+
+  ## Set the worker memory limit
+  # memoryLimit:
+
+  ## Set the maximun number of cores
+  # coreLimit:
+
+  ## Working directory for the application
+  # dir:
+
+  ## Options for the JVM as "-Dx=y"
+  # javaOptions:
+
+  ## Configuraion options in the form "-Dx=y"
+  # configOptions:
+
+  ## Number of spark workers (will be the min number when autoscaling is enabled)
+  replicaCount: 2
+
+  autoscaling:
+    ## Enable replica autoscaling depending on CPU
+    enabled: true
+    resource:
+
+  ## Max number of workers when using autoscaling
+  # replicasMax:
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: SPARK_DAEMON_JAVA_OPTS
+  ##    value: -Dx=y
+  # extraEnvVars:
+
+  ## Kubernetes Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+  #  limits:
+  #    cpu: 200m
+  #    memory: 1Gi
+  #  requests:
+  #    memory: 256Mi
+  #    cpu: 250m
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+## Security configuration
+security:
+  ## Name of the secret that contains all the passwords. This is optional, by default random passwords are generated.
+  # passwordsSecretName:
+
+  ## RPC configuration
+  rpc:
+    authenticationEnabled: yes
+    encryptionEnabled: yes
+
+  ## Enables local storage encryption
+  storageEncryptionEnabled: yes
+
+  ## SSL configuration
+  ssl:
+    enabled: yes
+    needClientAuth: yes
+    protocol: TLSv1.2
+
+  ## Name of the secret that contains the certificates
+  ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
+  # certificatesSecretName:
+
+
+## Service to access the master from the workers and to the WebUI
+##
+service:
+  type: ClusterIP
+  clusterPort: 7077
+  webPort: 8080
+  ## Specify the NodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+
+  ## Use loadBalancerIP to request a specific static IP,
+  # loadBalancerIP:
+
+  ## Service annotations done as key:value pairs
+  annotations:
+
+## Ingress controller to access the web UI.
+ingress:
+  enabled: true
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  certManager: false
+
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  annotations:
+
+  ## The list of hostnames to be covered with this ingress record.
+  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  hosts:
+  - name: spark.local
+    path: /
