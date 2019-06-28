@@ -109,6 +109,7 @@ cluster:
   ## Encryption values. NOTE: They require tlsEncryptionSecretName
   internodeEncryption: none
   clientEncryption: false
+  domain: cluster.local
 
 jvm:
   ## Extra JVM Settings

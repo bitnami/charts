@@ -83,7 +83,8 @@ spec:
         - name: CASSANDRA_SEEDS
           {{- $global := . }}
           {{- $replicas := .Values.cluster.seedCount | int }}
-          value: "{{- range $i, $e := until $replicas }}{{ template "cassandra.fullname" $global }}-{{ $i }}.{{ template "cassandra.fullname" $global }}-headless.{{ $global.Release.Namespace }}.svc.cluster.local{{- if (lt ( add1 $i ) $replicas ) }},{{- end }}{{- end }}"
+          {{- $domain := .Values.cluster.domain }}
+          value: "{{- range $i, $e := until $replicas }}{{ template "cassandra.fullname" $global }}-{{ $i }}.{{ template "cassandra.fullname" $global }}-headless.{{ $global.Release.Namespace }}.svc.{{ $domain }}{{- if (lt ( add1 $i ) $replicas ) }},{{- end }}{{- end }}"
         - name: CASSANDRA_PASSWORD
           valueFrom:
             secretKeyRef:
