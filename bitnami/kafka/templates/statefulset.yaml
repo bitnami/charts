@@ -101,9 +101,9 @@ spec:
           {{- if .Values.advertisedListeners }}
           value: {{ .Values.advertisedListeners }}
           {{- else if .Values.auth.enabled  }}
-          value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.cluster.local:$(KAFKA_PORT_NUMBER)'
+          value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.domain }}:$(KAFKA_PORT_NUMBER)'
           {{- else }}
-          value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.cluster.local:$(KAFKA_PORT_NUMBER)'
+          value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.domain }}:$(KAFKA_PORT_NUMBER)'
           {{- end }}
         {{- if .Values.listenerSecurityProtocolMap }}
         - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
