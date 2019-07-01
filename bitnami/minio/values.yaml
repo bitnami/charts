@@ -131,6 +131,9 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
+# Cluster domain
+domain: cluster.local
+
 ## Configure liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##

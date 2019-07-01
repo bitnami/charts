@@ -81,6 +81,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `securityContext.enabled`              | Enable security context                                                                      | `true`                                                  |
 | `securityContext.fsGroup`              | Group ID for the container                                                                   | `1001`                                                  |
 | `securityContext.runAsUser`            | User ID for the container                                                                    | `1001`                                                  |
+| `domain`                               | Kubernetes cluster domain                                                                    | `cluster.local`                                         |
 | `livenessProbe.enabled`                | Enable/disable the Liveness probe                                                            | `true`                                                  |
 | `livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated                                                     | `60`                                                    |
 | `livenessProbe.periodSeconds`          | How often to perform the probe                                                               | `10`                                                    |
