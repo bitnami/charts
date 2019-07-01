@@ -46,6 +46,9 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
+# Cluster domain
+domain: cluster.local
+
 ## Datacenter name for consul. If not supplied, will use the consul
 ## default 'dc1'
 datacenterName: dc1
