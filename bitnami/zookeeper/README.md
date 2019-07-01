@@ -60,6 +60,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `updateStrategy`                      | Update strategies                                                   | `RollingUpdate`                                          |
 | `podDisruptionBudget.maxUnavailable`  | Max number of pods down simultaneously                              | `1`                                                      |
 | `rollingUpdatePartition`              | Partition update strategy                                           | `nil`                                                    |
+| `domain`                              | Kubernetes cluster domain                                           | `cluster.local`                                          |
 | `podManagementpolicy`                 | Pod management policy                                               | `Parallel`                                               |
 | `replicaCount`                        | Number of ZooKeeper nodes                                           | `1`                                                      |
 | `tickTime`                            | Basic time unit in milliseconds used by ZooKeeper for heartbeats    | `2000`                                                   |

@@ -61,6 +61,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `memcachedPassword`         | Memcached admin password            | `nil`                                                     |
 | `serviceType`               | Kubernetes Service type             | `ClusterIP`                                               |
 | `resources`                 | CPU/Memory resource requests/limits | Memory: `256Mi`, CPU: `250m`                              |
+| `domain`                    | Kubernetes cluster domain           | `cluster.local`                                           |
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
 | `metrics.image.registry`                   | MongoDB exporter image registry                                                                                  | `docker.io`                                          |
 | `metrics.image.repository`                 | MongoDB exporter image name                                                                                      | `prom/memcached-exporter`                           |
