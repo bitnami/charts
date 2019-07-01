@@ -42,7 +42,7 @@
 
 ** Please be patient while the chart is being deployed **
 
-  Elasticsearch can be accessed within the cluster on port {{ .Values.coordinating.service.port }} at {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  Elasticsearch can be accessed within the cluster on port {{ .Values.coordinating.service.port }} at {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.domain }}
 
   To access from outside the cluster execute the following commands:
 
