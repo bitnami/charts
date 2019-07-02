@@ -19,7 +19,7 @@
 
 ZooKeeper can be accessed via port 2181 on the following DNS name from within your cluster:
 
-    {{ template "zookeeper.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.domain }}
+    {{ template "zookeeper.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To connect to your ZooKeeper server run the following commands:
 

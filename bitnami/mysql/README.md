@@ -65,7 +65,7 @@ The following tables lists the configurable parameters of the MySQL chart and th
 | `securityContext.enabled`                 | Enable security context                                                    | `true`                                                            |
 | `securityContext.fsGroup`                 | Group ID for the container                                                 | `1001`                                                            |
 | `securityContext.runAsUser`               | User ID for the container                                                  | `1001`                                                            |
-| `domain`                                  | Kubernetes cluster domain                                                  | `cluster.local`                                                   |
+| `clusterDomain`                           | Kubernetes cluster domain                                                  | `cluster.local`                                                   |
 | `replication.enabled`                     | MySQL replication enabled                                                  | `true`                                                            |
 | `replication.user`                        | MySQL replication user (should be different from db.user)                  | `replicator`                                                      |
 | `replication.password`                    | MySQL replication user password                                            | _random 10 character alphanumeric string_                         |

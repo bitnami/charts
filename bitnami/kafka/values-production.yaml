@@ -223,7 +223,7 @@ securityContext:
   runAsUser: 1001
 
 # Cluster domain
-domain: cluster.local
+clusterDomain: cluster.local
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer

@@ -94,7 +94,7 @@ spec:
           {{- $releaseNamespace := .Release.Namespace }}
           {{- $zookeeperFullname := include "zookeeper.fullname" . }}
           {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
-          value: {{ range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ .Values.domain }}:{{ $followerPort }}:{{ $electionPort }} {{ end }}
+          value: {{ range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ .Values.clusterDomain }}:{{ $followerPort }}:{{ $electionPort }} {{ end }}
         - name: ZOO_ENABLE_AUTH
           value: {{ ternary "yes" "no" .Values.auth.enabled | quote }}
         {{- if .Values.auth.enabled }}

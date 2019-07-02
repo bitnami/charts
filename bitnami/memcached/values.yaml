@@ -68,7 +68,7 @@ resources:
 podAnnotations: {}
 
 # Cluster domain
-domain: cluster.local
+clusterDomain: cluster.local
 
 ## Prometheus Exporter / Metrics
 ##

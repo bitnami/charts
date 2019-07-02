@@ -126,7 +126,7 @@ securityContext:
   runAsUser: 1001
 
 # Cluster domain
-domain: cluster.local
+clusterDomain: cluster.local
 
 ## Elasticsearch coordinating-only node parameters
 ##

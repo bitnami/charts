@@ -82,7 +82,7 @@ spec:
           {{- $minioFullname := include "minio.fullname" . }}
           {{- $minioHeadlessServiceName := printf "%s-%s" $minioFullname "headless" | trunc 63  }}
           {{- $releaseNamespace := .Release.Namespace }}
-          value: {{range $i, $e := until $replicaCount }}{{ $minioFullname }}-{{ $e }}.{{ $minioHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ .Values.domain }},{{ end }}
+          value: {{range $i, $e := until $replicaCount }}{{ $minioFullname }}-{{ $e }}.{{ $minioHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ .Values.clusterDomain }},{{ end }}
         {{- if .Values.useCredentialsFile }}
         - name: MINIO_ACCESS_KEY_FILE
           value: "/opt/bitnami/minio/secrets/access-key"

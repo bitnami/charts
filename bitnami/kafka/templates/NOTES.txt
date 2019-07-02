@@ -18,7 +18,7 @@
 
 Kafka can be accessed via port 9092 on the following DNS name from within your cluster:
 
-    {{ template "kafka.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.domain }}
+    {{ template "kafka.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To create a topic run the following command:
 

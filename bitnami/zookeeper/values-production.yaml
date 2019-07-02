@@ -55,7 +55,7 @@ podDisruptionBudget:
 # rollingUpdatePartition:
 
 # Cluster domain
-domain: cluster.local
+clusterDomain: cluster.local
 
 ## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy

@@ -2,7 +2,7 @@
 
 MinIO can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
-   {{ include "minio.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.domain }}
+   {{ include "minio.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To get your credentials run:
 
