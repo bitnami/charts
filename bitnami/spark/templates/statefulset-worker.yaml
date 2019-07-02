@@ -44,7 +44,7 @@ spec:
       {{- end }}
       containers:
         - name: spark-worker
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ template "spark.image" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
