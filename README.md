@@ -13,6 +13,7 @@ $ helm search bitnami
 
 - [Dokuwiki](https://github.com/helm/charts/tree/master/stable/dokuwiki)
 - [Drupal](https://github.com/helm/charts/tree/master/stable/drupal)
+- [ExternalDNS](https://github.com/helm/charts/tree/master/stable/external-dns)
 - [Ghost](https://github.com/helm/charts/tree/master/stable/ghost)
 - [JasperReports](https://github.com/helm/charts/tree/master/stable/jasperreports)
 - [Joomla!](https://github.com/helm/charts/tree/master/stable/joomla)
@@ -47,7 +48,6 @@ $ helm search bitnami
 - [Apache Spark](https://github.com/bitnami/charts/tree/master/bitnami/spark)
 - [Cassandra](https://github.com/bitnami/charts/tree/master/bitnami/cassandra)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
-- [ExternalDNS](https://github.com/bitnami/charts/tree/master/bitnami/external-dns)
 - [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
 - [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
