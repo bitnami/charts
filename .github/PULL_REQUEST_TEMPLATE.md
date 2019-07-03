@@ -27,7 +27,6 @@
 <!-- Enter any applicable Issues here (You can reference an issue using #) -->
   - fixes #
 
-
 **Additional information**
 
 <!-- If there's anything else that's important and relevant to your pull
