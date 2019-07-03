@@ -7,9 +7,9 @@ Tip:
 
 Services:
 
-  echo Master: {{ template "fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+  echo Master: {{ template "fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
 {{- if .Values.replication.enabled }}
-  echo Slave:  {{ template "mysql.slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+  echo Slave:  {{ template "mysql.slave.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
 {{- end }}
 
 Administrator credentials:
@@ -25,13 +25,13 @@ To connect to your database:
 
   2. To connect to master service (read/write):
 
-      mysql -h {{ template "fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
+      mysql -h {{ template "fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.db.name }}
 
 {{- if .Values.replication.enabled }}
 
   3. To connect to slave service (read-only):
 
-      mysql -h {{ template "mysql.slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
+      mysql -h {{ template "mysql.slave.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.db.name }}
 {{- end }}
 
 To upgrade this helm chart:
