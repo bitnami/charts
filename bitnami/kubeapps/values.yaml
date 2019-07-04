@@ -61,7 +61,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.0-r40
+    tag: 1.16.0-r64
   service:
     port: 80
     type: ClusterIP
@@ -167,7 +167,7 @@ tillerProxy:
   resources:
     limits:
       cpu: 250m
-      memory: 128Mi
+      memory: 256Mi
     requests:
       cpu: 25m
       memory: 32Mi
