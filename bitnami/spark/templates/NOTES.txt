@@ -13,7 +13,7 @@
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "spark.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   echo http://$SERVICE_IP:{{ .Values.service.webPort }}
 {{- else if contains "ClusterIP" .Values.service.type }}
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "spark.fullname" . }}-master-svc {{ default "8080" .Values.service.webPort }}:{{ default "8080" .Values.service.webPort }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "spark.fullname" . }}-master-svc {{ default "80" .Values.service.webPort }}:{{ default "80" .Values.service.webPort }}
   echo "Visit http://127.0.0.1:{{ .Values.service.webPort }} to use your application"
 {{- end }}
 {{- end }}

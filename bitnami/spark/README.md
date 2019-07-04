@@ -114,12 +114,14 @@ The following tables lists the configurable parameters of the spark chart and th
 | `security.ssl.protocol`                     | Set the SSL protocol                                                                        | `TLSv1.2`                                               |
 | `security.certificatesSecretName`           | Set the name of the secret that contains the certificates                                   | No default                                              |
 | `service.type`                              | Kubernetes Service type                                                                     | `ClusterIP`                                             |
-| `service.port`                              | spark client port                                                                           | `2379`                                                  |
+| `service.webPort`                           | Spark client port                                                                           | `80`                                                    |
+| `service.clusterPort`                       | Spark cluster port                                                                          | `7077`                                                  |
 | `service.nodePort`                          | Port to bind to for NodePort service type (client port)                                     | `nil`                                                   |
 | `service.annotations`                       | Annotations for spark service                                                               | {}                                                      |
 | `service.loadBalancerIP`                    | loadBalancerIP if spark service type is `LoadBalancer`                                      | `nil`                                                   |
-| `ingress.enabled`                           | Enable the use of the ingress controller to access the web UI                               | `false`                                                  |
+| `ingress.enabled`                           | Enable the use of the ingress controller to access the web UI                               | `false`                                                 |
 | `ingress.hosts`                             | Add hosts to the ingress controller with name and path                                      | `name: spark.local`, `path: /`                          |
+
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
