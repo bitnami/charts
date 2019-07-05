@@ -1,0 +1,29 @@
+{{- $jobservice := .Values.persistence.persistentVolumeClaim.jobservice -}}
+{{- if and .Values.persistence.enabled (not $jobservice.existingClaim) }}
+{{- if eq .Values.jobservice.jobLogger "file" }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "harbor.jobservice" . }}
+  {{- if eq .Values.persistence.resourcePolicy "keep" }}
+  annotations:
+    helm.sh/resource-policy: keep
+  {{- end }}
+  labels:
+    {{- include "harbor.labels" . | nindent 4 }}
+    app.kubernetes.io/component: jobservice
+spec:
+  accessModes:
+    - {{ $jobservice.accessMode }}
+  resources:
+    requests:
+      storage: {{ $jobservice.size }}
+  {{- if $jobservice.storageClass }}
+    {{- if eq "-" $jobservice.storageClass }}
+  storageClassName: ""
+    {{- else }}
+  storageClassName: {{ $jobservice.storageClass }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
