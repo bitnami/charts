@@ -230,7 +230,7 @@ security:
 service:
   type: ClusterIP
   clusterPort: 7077
-  webPort: 8080
+  webPort: 80
   ## Specify the NodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
