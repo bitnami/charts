@@ -18,7 +18,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2019.6.1-debian-9-r0
+  tag: 2019.7.3-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -42,7 +42,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2019.5.23-debian-9-r5
+  tag: 2019.7.3-debian-9-r0
 
 ## MinIO server mode. Allowed values: standalone or distributed.
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -136,6 +136,9 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+# Cluster domain
+clusterDomain: cluster.local
 
 ## Configure liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)

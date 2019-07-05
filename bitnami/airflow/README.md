@@ -52,25 +52,25 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `image.registry`                          | Airflow image registry                                                                      | `docker.io`                                                  |
 | `image.repository`                        | Airflow image name                                                                          | `bitnami/airflow`                                            |
 | `image.tag`                               | Airflow image tag                                                                           | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                        | Airflow image pull policy                                                                   | `Always`                                                     |
+| `image.pullPolicy`                        | Airflow image pull policy                                                                   | `IfNotPresent`                                               |
 | `image.pullSecrets`                       | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.debug`                             | Specify if debug values should be set                                                       | `false`                                                      |
 | `schedulerImage.registry`                 | Airflow Scheduler image registry                                                            | `docker.io`                                                  |
 | `schedulerImage.repository`               | Airflow Scheduler image name                                                                | `bitnami/airflow-shceduler`                                  |
 | `schedulerImage.tag`                      | Airflow Scheduler image tag                                                                 | `{TAG_NAME}`                                                 |
-| `schedulerImage.pullPolicy`               | Airflow Scheduler image pull policy                                                         | `Always`                                                     |
+| `schedulerImage.pullPolicy`               | Airflow Scheduler image pull policy                                                         | `IfNotPresent`                                               |
 | `schedulerImage.pullSecrets`              | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `schedulerImage.debug`                    | Specify if debug values should be set                                                       | `false`                                                      |
 | `workerImage.registry`                    | Airflow Worker image registry                                                               | `docker.io`                                                  |
 | `workerImage.repository`                  | Airflow Worker image name                                                                   | `bitnami/airflow-worker`                                     |
 | `workerImage.tag`                         | Airflow Worker image tag                                                                    | `{TAG_NAME}`                                                 |
-| `workerImage.pullPolicy`                  | Airflow Worker image pull policy                                                            | `Always`                                                     |
+| `workerImage.pullPolicy`                  | Airflow Worker image pull policy                                                            | `IfNotPresent`                                               |
 | `workerImage.pullSecrets`                 | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `workerImage.debug`                       | Specify if debug values should be set                                                       | `false`                                                      |
 | `git.registry`                            | Git image registry                                                                          | `docker.io`                                                  |
 | `git.repository`                          | Git image name                                                                              | `bitnami/git`                                                |
 | `git.tag`                                 | Git image tag                                                                               | `{TAG_NAME}`                                                 |
-| `git.pullPolicy`                          | Git image pull policy                                                                       | `Always`                                                     |
+| `git.pullPolicy`                          | Git image pull policy                                                                       | `IfNotPresent`                                               |
 | `git.pullSecrets`                         | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `updateStrategy`                          | Update strategy for the stateful set                                                        | `RollingUpdate`                                              |
 | `rollingUpdatePartition`                  | Partition update strategy                                                                   | `nil`                                                        |
@@ -165,6 +165,38 @@ $ helm install --name my-release -f values.yaml bitnami/airflow
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/airflow
+```
+
+- URL used to access to airflow web ui:
+```diff
+- # airflow.baseUrl:
++ airflow.baseUrl: http://airflow.local
+```
+
+- Number of Airflow Worker replicas:
+```diff
+- airflow.worker.replicas: 1
++ airflow.worker.replicas: 3
+```
+
+- Force users to specify a password:
+```diff
+- airflow.auth.forcePassword: false
++ airflow.auth.forcePassword: true
+```
+
+- Enable ingress controller resource:
+```diff
+- ingress.enabled: false
++ ingress.enabled: true
+```
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -204,3 +236,9 @@ helm install --name my-release bitnami/airflow \
              --set airflow.cloneDagFilesFromGit.branch=master
              --set airflow.cloneDagFilesFromGit.interval=60
 ```
+
+## Notable changes
+
+### 1.0.0
+
+This release updates the PostgreSQL chart dependency to use PostgreSQL 11.x. You need to migrate the existing PostgreSQL data to this version before upgrading to this release. For more information follow [this link](https://github.com/helm/charts/tree/master/stable/postgresql#500).

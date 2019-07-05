@@ -13,12 +13,12 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.2.1-debian-9-r0
+  tag: 2.3.0-debian-9-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -53,7 +53,6 @@ updateStrategy: RollingUpdate
 ##
 podDisruptionBudget:
   maxUnavailable: 1
-
 
 replicaCount: 3
 
@@ -179,7 +178,7 @@ sslEndpointIdentificationAlgorithm: https
 ##
 # extraEnvVars:
 #   - name: KAFKA_CFG_BACKGROUND_THREADS
-#     value: 10
+#     value: "10"
 
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-kafka#security
@@ -222,6 +221,9 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+# Cluster domain
+clusterDomain: cluster.local
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -317,7 +319,7 @@ metrics:
       registry: docker.io
       repository: danielqsj/kafka-exporter
       tag: v1.0.1
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -348,7 +350,7 @@ metrics:
       registry: docker.io
       repository: solsson/kafka-prometheus-jmx-exporter@sha256
       tag: a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

@@ -5,7 +5,7 @@ metadata:
   name: {{ template "jenkins.fullname" . }}
   labels:
     app: "{{ template "jenkins.fullname" . }}"
-    chart: "{{ template "jenkins.chart" . }}"
+    chart: {{ include "jenkins.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
   annotations:
@@ -23,7 +23,7 @@ spec:
       paths:
       - path: {{ default "/" .path }}
         backend:
-          serviceName: {{ template "fullname" $ }}
+          serviceName: {{ template "jenkins.fullname" $ }}
           servicePort: http
   {{- end }}
   tls:

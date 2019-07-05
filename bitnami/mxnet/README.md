@@ -51,14 +51,14 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`                     | MXNet image registry                                                                         | `docker.io`                                             |
 | `image.repository`                   | MXNet image name                                                                             | `bitnami/MXNet`                                         |
-| `image.tag`                          | MXNet image tag                                                                              | `{VERSION}`                                             |
+| `image.tag`                          | MXNet image tag                                                                              | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                   | Image pull policy                                                                            | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                                                 |
 | `git.registry`                       | Git image registry                                                                           | `docker.io`                                             |
 | `git.repository`                     | Git image name                                                                               | `bitnami/git`                                           |
-| `git.tag`                            | Git image tag                                                                                | `latest`                                                |
-| `git.pullPolicy`                     | Git image pull policy                                                                        | `Always`                                                |
+| `git.tag`                            | Git image tag                                                                                | `{TAG_NAME}`                                            |
+| `git.pullPolicy`                     | Git image pull policy                                                                        | `IfNotPresent`                                          |
 | `git.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `service.type`                       | Kubernetes service type                                                                      | `ClusterIP`                                             |
 | `entrypoint.file`                    | Main entrypoint to your application. If not speficied, it will be a `sleep infinity` command | `''`                                                    |
@@ -125,6 +125,38 @@ $ helm install --name my-release -f values.yaml bitnami/mxnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/mxnet
+```
+
+- Run MXNet in distributed mode:
+```diff
+- mode: standalone
++ mode: distributed
+```
+
+- Number of server nodes that will execute your code:
+```diff
+- serverCount: 1
++ serverCount: 2
+```
+
+- Number of worker nodes that will execute your code:
+```diff
+- workerCount: 1
++ workerCount: 4
+```
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Loading your files
 

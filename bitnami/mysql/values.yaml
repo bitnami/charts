@@ -13,12 +13,12 @@
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.16-debian-9-r16
+  tag: 8.0.16-debian-9-r33
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -28,7 +28,6 @@ image:
 
 service:
   ## Kubernetes service type
-  # nodePort:
   type: ClusterIP
   port: 3306
 
@@ -39,6 +38,9 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+# Cluster domain
+clusterDomain: cluster.local
 
 root:
   ## MySQL admin password
@@ -171,6 +173,7 @@ master:
     failureThreshold: 3
   readinessProbe:
     enabled: true
+    ##
     ## Initializing the database could take some time
     initialDelaySeconds: 30
     ##
@@ -248,6 +251,7 @@ slave:
     failureThreshold: 3
   readinessProbe:
     enabled: true
+    ##
     ## Initializing the database could take some time
     initialDelaySeconds: 30
     ##

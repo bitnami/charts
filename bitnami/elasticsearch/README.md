@@ -56,7 +56,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `image.registry`                                  | Elasticsearch image registry                                                                                              | `docker.io`                                             |
 | `image.repository`                                | Elasticsearch image repository                                                                                            | `bitnami/elasticsearch`                                 |
 | `image.tag`                                       | Elasticsearch image tag                                                                                                   | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                                | Image pull policy                                                                                                         | `Always`                                                |
+| `image.pullPolicy`                                | Image pull policy                                                                                                         | `IfNotPresent`                                          |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]` (does not add image pull secrets to deployed pods)                                                   |
 | `name`                                            | Elasticsearch cluster name                                                                                                | `elastic`                                               |
 | `plugins`                                         | Comma, semi-colon or space separated list of plugins to install at initialization                                         | `nil`                                                   |
@@ -88,6 +88,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `securityContext.enabled`                         | Enable security context                                                                                                   | `true`                                                  |
 | `securityContext.fsGroup`                         | Group ID for the container                                                                                                | `1001`                                                  |
 | `securityContext.runAsUser`                       | User ID for the container                                                                                                 | `1001`                                                  |
+| `clusterDomain`                                   | Kubernetes cluster domain                                                                                                 | `cluster.local`                                         |
 | `discovery.name`                                  | Discover node pod name                                                                                                    | `discovery`                                             |
 | `coordinating.name`                               | Coordinating-only node pod name                                                                                           | `coordinating-only`                                     |
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                   | `2`                                                     |
@@ -114,7 +115,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `coordinating.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod) | `1`                                                     |
 | `coordinating.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`                                                     |
 | `data.name`                                       | Data node pod name                                                                                                        | `data`                                                  |
-| `data.replicas`                                   | Desired number of Elasticsearch data nodes    nodes                                                                       | `3`                                                     |
+| `data.replicas`                                   | Desired number of Elasticsearch data nodes                                                                                | `3`                                                     |
 | `data.updateStrategy.type`                        | Update strategy for Data statefulset                                                                                      | `RollingUpdate`                                         |
 | `data.updateStrategy.rollingUpdatePartition`      | Partition update strategy for Data statefulset                                                                            | `nil`                                                   |
 | `data.heapSize`                                   | Data node heap size                                                                                                       | `1024m`                                                 |
@@ -169,7 +170,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.image.registry`                          | Metrics exporter image registry                                                                                           | `docker.io`                                             |
 | `metrics.image.repository`                        | Metrics exporter image repository                                                                                         | `bitnami/elasticsearch-exporter`                        |
 | `metrics.image.tag`                               | Metrics exporter image tag                                                                                                | `1.0.2`                                                 |
-| `metrics.image.pullPolicy`                        | Metrics exporter image pull policy                                                                                        | `Always`                                                |
+| `metrics.image.pullPolicy`                        | Metrics exporter image pull policy                                                                                        | `IfNotPresent`                                          |
 | `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                    | `ClusterIP`                                             |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                  | `requests: { cpu: "25m" }`                              |
 | `metrics.podAnnotations`                          | Annotations for metrics pods. | `{}` |
@@ -195,7 +196,167 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 $ helm install --name my-release -f values.yaml bitnami/elasticsearch
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml). [values-production.yaml](values-production.yaml) has defaults optimized for use in production environments.
+> **Tip**: You can use the default [values.yaml](values.yaml).
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/elasticsearch
+```
+
+- Desired number of Elasticsearch master-eligible nodes:
+```diff
+- master.replicas: 2
++ master.replicas: 3
+```
+
+- Enable the liveness probe (master-eligible nodes pod):
+```diff
+- master.livenessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ master.livenessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the readiness probe (master-eligible nodes pod):
+```diff
+- master.readinessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ master.readinessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the liveness probe (coordinating-only nodes pod):
+```diff
+- coordinating.livenessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ coordinating.livenessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the readiness probe (coordinating-only nodes pod):
+```diff
+- coordinating.readinessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ coordinating.readinessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Desired number of Elasticsearch data nodes:
+```diff
+- data.replicas: 2
++ data.replicas: 3
+```
+
+- Enable the liveness probe (data nodes pod):
+```diff
+- data.livenessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ data.livenessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the readiness probe (data nodes pod):
+```diff
+- data.readinessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ data.readinessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable ingest nodes:
+```diff
+- ingest.enabled: false
++ ingest.enabled: true
+```
+
+- Enable the liveness probe (ingest nodes pod):
+```diff
+- ingest.livenessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ ingest.livenessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable the readiness probe (ingest nodes pod):
+```diff
+- ingest.readinessProbe.enabled: false
+-   #  initialDelaySeconds: 90
+-   #  periodSeconds: 10
+-   #  timeoutSeconds: 5
+-   #  successThreshold: 1
+-   #  failureThreshold: 5
++ ingest.readinessProbe.enabled: true
++   initialDelaySeconds: 90
++   periodSeconds: 10
++   timeoutSeconds: 5
++   successThreshold: 1
++   failureThreshold: 5
+```
+
+- Enable prometheus exporter:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 

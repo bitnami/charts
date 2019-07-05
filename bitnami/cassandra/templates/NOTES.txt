@@ -2,8 +2,8 @@
 
 Cassandra can be accessed through the following URLs from within the cluster:
 
-  - CQL: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
-  - Thrift: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.thriftPort }}
+  - CQL: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.cluster.domain }}:{{ .Values.service.port }}
+  - Thrift: {{ template "cassandra.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.cluster.domain }}:{{ .Values.service.thriftPort }}
 
 To get your password run:
 

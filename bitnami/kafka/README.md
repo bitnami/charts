@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `image.registry`                        | Kafka image registry                                                                                      | `docker.io`                                                        |
 | `image.repository`                      | Kafka Image name                                                                                          | `bitnami/kafka`                                                    |
 | `image.tag`                             | Kafka Image tag                                                                                           | `{VERSION}`                                                        |
-| `image.pullPolicy`                      | Kafka image pull policy                                                                                   | `Always`                                                           |
+| `image.pullPolicy`                      | Kafka image pull policy                                                                                   | `IfNotPresent`                                                     |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)            |
 | `image.debug`                           | Specify if debug values should be set                                                                     | `false`                                                            |
 | `nameOverride`                          | String to partially override kafka.fullname template with a string (will append the release name)         | `nil`                                                              |
@@ -106,12 +106,13 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `securityContext.enabled`               | Enable security context                                                                                   | `true`                                                             |
 | `securityContext.fsGroup`               | Group ID for the container                                                                                | `1001`                                                             |
 | `securityContext.runAsUser`             | User ID for the container                                                                                 | `1001`                                                             |
+| `clusterDomain`                         | Kubernetes cluster domain                                                                                 | `cluster.local`                                                    |
 | `service.type`                          | Kubernetes Service type                                                                                   | `ClusterIP`                                                        |
 | `service.port`                          | Kafka port                                                                                                | `9092`                                                             |
 | `service.nodePort`                      | Kubernetes Service nodePort                                                                               | `nil`                                                              |
 | `service.loadBalancerIP`                | loadBalancerIP for Kafka Service                                                                          | `nil`                                                              |
 | `service.annotations`                   | Service annotations                                                                                       | ``                                                                 |
-| `persistence.enabled`                   | Enable Kafka persistence using PVC, note that Zookeeper perisstency is unaffected                        | `true`                                                             |
+| `persistence.enabled`                   | Enable Kafka persistence using PVC, note that Zookeeper perisstency is unaffected                         | `true`                                                             |
 | `persistence.existingClaim`             | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template.                        | `nil`                                                              |
 | `persistence.storageClass`              | PVC Storage Class for Kafka volume                                                                        | `nil`                                                              |
 | `persistence.accessMode`                | PVC Access Mode for Kafka volume                                                                          | `ReadWriteOnce`                                                    |
@@ -137,7 +138,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.image.registry`          | Kafka exporter image registry                                                                             | `docker.io`                                                        |
 | `metrics.kafka.image.repository`        | Kafka exporter image name                                                                                 | `danielqsj/kafka-exporter`                                         |
 | `metrics.kafka.image.tag`               | Kafka exporter image tag                                                                                  | `v1.0.1`                                                           |
-| `metrics.kafka.image.pullPolicy`        | Kafka exporter image pull policy                                                                          | `Always`                                                           |
+| `metrics.kafka.image.pullPolicy`        | Kafka exporter image pull policy                                                                          | `IfNotPresent`                                                     |
 | `metrics.kafka.image.pullSecrets`       | Specify docker-registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)            |
 | `metrics.kafka.interval`                | Interval that Prometheus scrapes Kafka metrics when using Prometheus Operator                             | `10s`                                                              |
 | `metrics.kafka.port`                    | Kafka Exporter Port which exposes metrics in Prometheus format for scraping                               | `9308`                                                             |
@@ -147,7 +148,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.jmx.image.registry`            | JMX exporter image registry                                                                               | `docker.io`                                                        |
 | `metrics.jmx.image.repository`          | JMX exporter image name                                                                                   | `solsson/kafka-prometheus-jmx-exporter@sha256`                     |
 | `metrics.jmx.image.tag`                 | JMX exporter image tag                                                                                    | `a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8` |
-| `metrics.jmx.image.pullPolicy`          | JMX exporter image pull policy                                                                            | `Always`                                                           |
+| `metrics.jmx.image.pullPolicy`          | JMX exporter image pull policy                                                                            | `IfNotPresent`                                                     |
 | `metrics.jmx.image.pullSecrets`         | Specify docker-registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)            |
 | `metrics.jmx.interval`                  | Interval that Prometheus scrapes JMX metrics when using Prometheus Operator                               | `10s`                                                              |
 | `metrics.jmx.exporterPort`              | JMX Exporter Port which exposes metrics in Prometheus format for scraping                                 | `5556`                                                             |
@@ -178,6 +179,80 @@ $ helm install --name my-release -f values.yaml bitnami/kafka
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### Production configuration and horizontal scaling
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
+```
+
+- Number of Kafka nodes:
+```diff
+- replicaCount: 1
++ replicaCount: 3
+```
+
+- Allow to use the PLAINTEXT listener:
+```diff
+- allowPlaintextListener: true
++ allowPlaintextListener: false
+```
+
+- Default replication factors for automatically created topics:
+```diff
+- defaultReplicationFactor: 1
++ defaultReplicationFactor: 3
+```
+
+- The replication factor for the offsets topic:
+```diff
+- offsetsTopicReplicationFactor: 1
++ offsetsTopicReplicationFactor: 3
+```
+
+- The replication factor for the transaction topic:
+```diff
+- transactionStateLogReplicationFactor: 1
++ transactionStateLogReplicationFactor: 3
+```
+
+- Overridden min.insync.replicas config for the transaction topic:
+```diff
+- transactionStateLogMinIsr: 1
++ transactionStateLogMinIsr: 3
+```
+
+- Switch to enable the kafka authentication:
+```diff
+- auth.enabled: false
++ auth.enabled: true
+```
+
+- Whether or not to create a separate Kafka exporter:
+```diff
+- metrics.kafka.enabled: false
++ metrics.kafka.enabled: true
+```
+
+- Whether or not to expose JMX metrics to Prometheus:
+```diff
+- metrics.jmx.enabled: false
++ metrics.jmx.enabled: true
+```
+
+- Zookeeper chart metrics configuration:
+```diff
++ zookeeper.metrics.enabled: true
+```
+
+To horizontally scale this chart, first download the [values-production.yaml](values-production.yaml) file to your local folder, then:
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
+$ kubectl scale statefulset my-kafka-slave --replicas=3
+```
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -188,17 +263,6 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`.
 In order to pass custom environment variables use the `extraEnvVars` property.
-
-## Production and horizontal scaling
-
-The following repo contains the recommended production settings for Kafka server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment
-
-To horizontally scale this chart, first download the [values-production.yaml](values-production.yaml) file to your local folder, then:
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
-$ kubectl scale statefulset my-kafka-slave --replicas=3
-```
 
 ## Enable security for Kafka and Zookeeper
 

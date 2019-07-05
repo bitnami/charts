@@ -49,7 +49,8 @@ spec:
           {{- $releaseNamespace := .Release.Namespace }}
           {{- $zookeeperFullname := include "zookeeper.fullname" . }}
           {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
-          - {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.cluster.local:{{ $servicePort }}{{- if (lt $e ( sub $replicaCount 1)) -}},{{- end -}}{{ end }}
+          {{- $clusterDomain := .Values.clusterDomain }}
+          - {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }}{{- if (lt $e ( sub $replicaCount 1)) -}},{{- end -}}{{ end }}
         ports:
           - name: metrics
             containerPort: 8080

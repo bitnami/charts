@@ -13,12 +13,12 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.4.14-debian-9-r25
+  tag: 3.5.5-debian-9-r29
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -53,6 +53,9 @@ podDisruptionBudget:
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
 ##
 # rollingUpdatePartition:
+
+# Cluster domain
+clusterDomain: cluster.local
 
 ## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy

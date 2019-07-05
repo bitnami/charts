@@ -25,6 +25,12 @@ metadata:
 spec:
   type: helm
   url: {{ .url }}
+  {{- if $.Values.securityContext.enabled }}
+  syncJobPodTemplate:
+    spec:
+      securityContext:
+        runAsUser: {{ $.Values.securityContext.runAsUser }}
+  {{- end }}
   {{- if or .caCert .authorizationHeader }}
   auth:
     {{- if .caCert }}

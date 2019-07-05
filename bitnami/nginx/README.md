@@ -49,7 +49,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `image.registry`                 | NGINX image registry                             | `docker.io`                                                  |
 | `image.repository`               | NGINX Image name                                 | `bitnami/nginx`                                              |
 | `image.tag`                      | NGINX Image tag                                  | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`               | NGINX image pull policy                          | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
+| `image.pullPolicy`               | NGINX image pull policy                          | `IfNotPresent`                                               |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `serverBlock`                    | Custom NGINX server block                        | `nil`                                                        |
 | `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
@@ -77,6 +77,8 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `ingress.secrets[0].name`        | TLS Secret Name                                  | `nil`                                                        |
 | `ingress.secrets[0].certificate` | TLS Secret Certificate                           | `nil`                                                        |
 | `ingress.secrets[0].key`         | TLS Secret Key                                   | `nil`                                                        |
+| `livenessProbe`                  | Deployment Liveness Probe                        | See `values.yaml`                                            |
+| `readinessProbe`                 | Deployment Readiness Probe                       | See `values.yaml`                                            |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
