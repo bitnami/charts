@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "harbor.core" . }}
+  name: "{{ template "harbor.core" . }}"
   labels:
     {{- include "harbor.labels" . | nindent 4 }}
     app.kubernetes.io/component: core
@@ -67,7 +67,7 @@ spec:
         - name: CORE_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ template "harbor.core" . }}
+              name: "{{ template "harbor.core" . }}"
               key: secret
         - name: JOBSERVICE_SECRET
           valueFrom:
@@ -105,13 +105,13 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ template "harbor.core" . }}
+          name: "{{ template "harbor.core" . }}"
           items:
             - key: app.conf
               path: app.conf
       - name: secret-key
         secret:
-          secretName: {{ template "harbor.core" . }}
+          secretName: "{{ template "harbor.core" . }}"
           items:
             - key: secretKey
               path: key
@@ -120,7 +120,7 @@ spec:
           {{- if .Values.core.secretName }}
           secretName: {{ .Values.core.secretName }}
           {{- else }}
-          secretName: {{ template "harbor.core" . }}
+          secretName: "{{ template "harbor.core" . }}"
           {{- end }}
       {{- if .Values.service.tls.enabled }}
       - name: ca-download
@@ -128,7 +128,7 @@ spec:
         {{- if eq (include "harbor.autoGenCertForIngress" .) "true" }}
           secretName: "{{ template "harbor.ingress" . }}"
         {{- else if eq (include "harbor.autoGenCertForNginx" .) "true" }}
-          secretName: {{ template "harbor.nginx" . }}
+          secretName: "{{ template "harbor.nginx" . }}"
         {{- else }}
           secretName: {{ .Values.service.tls.secretName }}
         {{- end }}

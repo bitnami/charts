@@ -63,7 +63,7 @@ spec:
         - name: CORE_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ template "harbor.core" . }}
+              name: "{{ template "harbor.core" . }}"
               key: secret
         - name: JOBSERVICE_SECRET
           valueFrom:

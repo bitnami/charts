@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "harbor.nginx" . }}
+  name: "{{ template "harbor.nginx" . }}"
   labels:
     {{- include "harbor.labels" . | nindent 4 }}
     app.kubernetes.io/component: nginx
@@ -90,14 +90,14 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ template "harbor.nginx" . }}
+          name: "{{ template "harbor.nginx" . }}"
       {{- if .Values.service.tls.enabled }}
       - name: certificate
         secret:
           {{- if .Values.service.tls.secretName }}
           secretName: {{ .Values.service.tls.secretName }}
           {{- else }}
-          secretName: {{ template "harbor.nginx" . }}
+          secretName: "{{ template "harbor.nginx" . }}"
           {{- end }}
       {{- end }}
       {{- with .Values.nginx.nodeSelector }}

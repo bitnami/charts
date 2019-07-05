@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "harbor.notary-server" . }}
+  name: "{{ template "harbor.notary-server" . }}"
   labels: {{ include "harbor.labels" . | nindent 4 }}
     component: notary-server
 spec:
@@ -28,7 +28,7 @@ spec:
       {{- end }}
       containers:
       - name: notary-server
-        image: {{ template "harbor.notaryServerImage" . }}
+        image: "{{ template "harbor.notaryServerImage" . }}"
         imagePullPolicy: {{ .Values.notaryServerImage.pullPolicy }}
         {{- if .Values.notary.server.resources }}
         resources: {{ toYaml .Values.notary.server.resources | nindent 10 }}
@@ -39,7 +39,7 @@ spec:
         - name: MIGRATIONS_PATH
           value: migrations/server/postgresql
         - name: DB_URL
-          value: {{ template "harbor.database.notaryServer" . }}
+          value: "{{ template "harbor.database.notaryServer" . }}"
         volumeMounts:
         - name: notary-config
           mountPath: /etc/notary
@@ -60,7 +60,7 @@ spec:
           {{- if .Values.core.secretName }}
           secretName: {{ .Values.core.secretName }}
           {{- else }}
-          secretName: {{ template "harbor.core" . }}
+          secretName: "{{ template "harbor.core" . }}"
           {{- end }}
       {{- if .Values.notary.secretName }}
       - name: notary-ca

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "harbor.registry" . }}
+  name: "{{ template "harbor.registry" . }}"
   labels: {{ include "harbor.labels" . | nindent 4 }}
 data:
   config.yml: |+

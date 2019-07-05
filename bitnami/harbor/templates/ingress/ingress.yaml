@@ -40,27 +40,27 @@ spec:
       paths:
       - path: /*
         backend:
-          serviceName: {{ template "harbor.portal" . }}
+          serviceName: "{{ template "harbor.portal" . }}"
           servicePort: 80
       - path: /api/*
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
       - path: /service/*
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
       - path: /v2/*
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
       - path: /chartrepo/*
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
       - path: /c/*
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
     {{- if $ingress.hosts.core }}
     host: {{ $ingress.hosts.core }}
@@ -70,7 +70,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ template "harbor.notary-server" . }}
+          serviceName: "{{ template "harbor.notary-server" . }}"
           servicePort: 4443
     {{- if $ingress.hosts.notary }}
     host: {{ $ingress.hosts.notary }}
@@ -82,27 +82,27 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ template "harbor.portal" . }}
+          serviceName: "{{ template "harbor.portal" . }}"
           servicePort: 80
       - path: /api/
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
       - path: /service/
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
       - path: /v2/
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
       - path: /chartrepo/
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
       - path: /c/
         backend:
-          serviceName: {{ template "harbor.core" . }}
+          serviceName: "{{ template "harbor.core" . }}"
           servicePort: 80
     {{- if $ingress.hosts.core }}
     host: {{ $ingress.hosts.core }}
@@ -112,7 +112,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ template "harbor.notary-server" . }}
+          serviceName: "{{ template "harbor.notary-server" . }}"
           servicePort: 4443
     {{- if $ingress.hosts.notary }}
     host: {{ $ingress.hosts.notary }}

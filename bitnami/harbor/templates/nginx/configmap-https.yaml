@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "harbor.nginx" . }}
+  name: "{{ template "harbor.nginx" . }}"
   labels: {{ include "harbor.labels" . | nindent 4 }}
 data:
   nginx.conf: |+

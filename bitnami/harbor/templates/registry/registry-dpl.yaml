@@ -121,12 +121,12 @@ spec:
         - name: CORE_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ template "harbor.core" . }}
+              name: "{{ template "harbor.core" . }}"
               key: secret
         - name: JOBSERVICE_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ template "harbor.jobservice" . }}
+              name: "{{ template "harbor.jobservice" . }}"
               key: secret
         ports:
         - containerPort: 8080
@@ -147,7 +147,7 @@ spec:
           {{- if .Values.core.secretName }}
           secretName: {{ .Values.core.secretName }}
           {{- else }}
-          secretName: {{ template "harbor.core" . }}
+          secretName: "{{ template "harbor.core" . }}"
           {{- end }}
       - name: registry-config
         configMap:
@@ -162,7 +162,7 @@ spec:
       {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
       - name: gcs-key
         secret:
-          secretName: {{ template "harbor.registry" . }}
+          secretName: "{{ template "harbor.registry" . }}"
           items:
             - key: GCS_KEY_DATA
               path: gcs-key.json
