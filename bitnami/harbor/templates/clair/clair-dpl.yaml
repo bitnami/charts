@@ -64,7 +64,7 @@ spec:
           value: {{ .Values.clair.httpsProxy }}
         {{- end }}
         - name: NO_PROXY
-          value: "{{ template "harbor.registry" . }},{{ template "harbor.clair" . }}"
+          value: "{{ template "harbor.registry" . }},{{ template "harbor.core" . }}"
         {{- if .Values.clair.resources }}
         resources:
           {{ toYaml .Values.clair.resources | nindent 10 }}
