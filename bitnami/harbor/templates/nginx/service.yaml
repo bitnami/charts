@@ -25,8 +25,7 @@ spec:
 {{- else if eq .Values.service.type "NodePort" }}
 {{- $nodePort := .Values.service.nodePort }}
   name: {{ $nodePort.name }}
-  labels:
-    {{ include "harbor.labels" . | nindent 4 }}
+  labels: {{ include "harbor.labels" . | nindent 4 }}
 spec:
   type: NodePort
   ports:
@@ -55,8 +54,7 @@ spec:
 {{- else if eq .Values.service.type "LoadBalancer" }}
 {{- $loadBalancer := .Values.service.loadBalancer }}
   name: {{ $loadBalancer.name }}
-  labels:
-    {{ include "harbor.labels" . | nindent 4 }}
+  labels: {{ include "harbor.labels" . | nindent 4 }}
 spec:
   type: LoadBalancer
   ports:

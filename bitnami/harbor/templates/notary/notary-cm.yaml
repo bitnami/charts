@@ -1,4 +1,4 @@
-{{ if .Values.notary.enabled }}
+{{- if .Values.notary.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -70,4 +70,4 @@ data:
         "default_alias": "defaultalias"
       }
     }
-{{ end }}
+{{- end }}

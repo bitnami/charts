@@ -1,4 +1,4 @@
-{{ if .Values.notary.enabled }}
+{{- if .Values.notary.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -51,6 +51,9 @@ spec:
           mountPath: /etc/ssl/notary/cert/notary-signer-ca.crt
           subPath: ca
         {{- end }}
+        ports:
+        - containerPort: 4443
+          name: notary-server
       volumes:
       - name: notary-config
         configMap:
@@ -76,4 +79,4 @@ spec:
     {{- with .Values.notary.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
     {{- end }}
-{{ end }}
+{{- end }}

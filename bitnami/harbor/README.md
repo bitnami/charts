@@ -1,4 +1,4 @@
-# Helm Chart for Harbor
+# Harbor
 
 This Helm chart has been developed based on [goharbor/harbor-helm](https://github.com/goharbor/harbor-helm) chart but including some features common to the Bitnami chart library.
 For example, the following changes have been introduced:
@@ -9,8 +9,15 @@ For example, the following changes have been introduced:
 - Uses new Helm chart labels formating.
 - Uses Bitnami container images:
   - non-root by default
-  - published for debian-9, ol-7, and eventually centos-7
+  - published for debian-9 and ol-7
 - At this moment, this chart does not support the Harbor optional component Chartmuseum but it does support Clair and Notary integrations.
+
+## TL;DR:
+
+```
+helm repo add bitnami https://charts.bitnami.com
+helm install bitnami/harbor
+```
 
 ## Introduction
 
@@ -21,9 +28,26 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 - Kubernetes cluster 1.10+
 - Helm 2.8.0+
 
-## Installation
+## Installing the Chart
 
-### Download the chart
+Install the Harbor helm chart with a release name `my-release`:
+
+```bash
+helm repo add bitnami https://charts.bitnami.com
+helm install --name my-release bitnami/harbor
+```
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```bash
+helm delete --purge my-release
+```
+
+Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
+
+## Downloading the chart
 
 Download Harbor helm chart
 
@@ -37,11 +61,9 @@ Change directory to Harbor code
 cd charts/bitnami/harbor
 ```
 
-### Configure the chart
+## Configuration
 
-The following items can be configured in `values.yaml` or set via `--set` flag during installation.
-
-#### Configure the way how to expose Harbor service:
+### Configure the way how to expose Harbor service:
 
 - **Ingress**: The ingress controller must be installed in the Kubernetes cluster.
   **Notes:** if the TLS is disabled, the port must be included in the command when pulling/pushing images. Refer to issue [#5291](https://github.com/goharbor/harbor/issues/5291) for the detail.
@@ -49,7 +71,7 @@ The following items can be configured in `values.yaml` or set via `--set` flag d
 - **NodePort**: Exposes the service on each Node’s IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`.
 - **LoadBalancer**: Exposes the service externally using a cloud provider’s load balancer.
 
-#### Configure the external URL
+### Configure the external URL:
 
 The external URL for Harbor core service is used to:
 
@@ -65,42 +87,22 @@ Format: `protocol://domain[:port]`. Usually:
 
 If Harbor is deployed behind the proxy, set it as the URL of proxy.
 
-#### Configure data persistence:
+### Configure data persistence:
 
 - **Disable**: The data does not survive the termination of a pod.
 - **Persistent Volume Claim(default)**: A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `storageClass` or set `existingClaim` if you have already existing persistent volumes to use.
 - **External Storage(only for images and charts)**: For images and charts, the external storages are supported: `azure`, `gcs`, `s3` `swift` and `oss`.
 
-#### Configure the secrets
+### Configure the secrets:
 
 - **Secret keys**: Secret keys are used for secure communication between components. Fill `core.secret`, `jobservice.secret` and `registry.secret` to configure.
 - **Certificates**: Used for token encryption/decryption. Fill `core.secretName` to configure.
 
 Secrets and certificates must be setup to avoid changes on every Helm upgrade (see: [#107](https://github.com/goharbor/harbor-helm/issues/107)).
 
-#### Configure the other items listed in [configuration](#configuration) section.
+### Configure the deployment options:
 
-### Install the chart
-
-Install the Harbor helm chart with a release name `my-release`:
-
-```bash
-helm install --name my-release --set service.tls.commonName=your.domain.com .
-```
-
-## Uninstallation
-
-To uninstall/delete the `my-release` deployment:
-
-```bash
-helm delete --purge my-release
-```
-
-Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
-
-## Configuration
-
-The following table lists the configurable parameters of the Harbor chart and the default values.
+The following table lists the configurable parameters of the Harbor chart and the default values. They can be configured in `values.yaml` or set via `--set` flag during installation.
 
 | Parameter                                                                   | Description                                                              | Default                                                 |
 | --------------------------------------------------------------------------- |  ----------------------------------------------------------------------- | ------------------------------------------------------- |
@@ -255,8 +257,6 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `clair.podAnnotations`                                                      | Annotations to add to the clair pod                                      | `{}`                                                    |
 | `clair.livenessProbe`                                                       | Liveness probe configuration                                             | `Check values.yaml file`                                |
 | `clair.readinessProbe`                                                      | Readiness probe configuration                                            | `Check values.yaml file`                                |
-
-
 | **PostgreSQL**                                                              |
 | `posgresql.enabled`                                                          | If external database is used, set it to `false`                          | `true`                                                  |
 | `posgresql.postgresqlUsername`                                               | Postgresql username                                                      | `postgres`                                              |
@@ -274,7 +274,6 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `externalDatabase.notaryServerDatabase`                                      | External database name for notary server                                 | `nil`                                                   |
 | `externalDatabase.notarySignerDatabase`                                      | External database name for notary signer                                 | `nil`                                                   |
 | `externalDatabase.sslmode`                                                   | External database ssl mode                                               | `nil`                                                   |
-
 | **Redis**                                                                    |
 | `redis.enabled`                                                              | If external redis is used, set it to `false`                             | `true`                                                  |
 | `redis.password`                                                             | Redis password                                                           | `nil`                                                   |

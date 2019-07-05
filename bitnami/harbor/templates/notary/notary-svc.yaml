@@ -1,4 +1,4 @@
-{{ if .Values.notary.enabled }}
+{{- if .Values.notary.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -26,4 +26,4 @@ spec:
   selector:
     {{ include "harbor.matchLabels" . | nindent 4 }}
     component: notary-signer
-{{ end }}
+{{- end }}
