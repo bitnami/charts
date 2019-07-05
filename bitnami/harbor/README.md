@@ -152,8 +152,9 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `harborAdminPassword`                                                       | The initial password of Harbor admin. Change it from portal after launching Harbor | `Harbor12345`                                 |
 | `secretkey`                                                                 | The key used for encryption. Must be a string of 16 chars                | `not-a-secure-key`                                      |
 | **Nginx** (if expose the service via `ingress`, the Nginx will not be used) |
-| `nginx.image.repository`                                                    | Image repository                                                         | `goharbor/nginx-photon`                                 |
-| `nginx.image.tag`                                                           | Image tag                                                                | `dev`                                                   |
+| `nginxImage.registry`                                                       | Registry for Nginx image                                                 | `docker.io`                                             |
+| `nginxImage.repository`                                                     | Repository for Nginx image                                               | `bitnami/nginx`                                         |
+| `nginxImage.tag`                                                            | Tag for Nginx image                                                      | `{TAG_NAME}`                                            |
 | `nginx.replicas`                                                            | The replica count                                                        | `1`                                                     |
 | `nginx.resources`                                                           | The [resources] to allocate for container                                | undefined                                               |
 | `nginx.nodeSelector`                                                        | Node labels for pod assignment                                           | `{}` (The value is evaluated as a template)             |
@@ -161,9 +162,9 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `nginx.affinity`                                                            | Node/Pod affinities                                                      | `{}` (The value is evaluated as a template)             |
 | `nginx.podAnnotations`                                                      | Annotations to add to the nginx pod                                      | `{}`                                                    |
 | **Portal**                                                                  |
-| `portalImage.registry`                                                      | Registry for portal image                                                | `goharbor/harbor-portal`                                |
-| `portalImage.repository`                                                    | Repository for portal image                                              | `goharbor/harbor-portal`                                |
-| `portalImage.tag`                                                           | Tag for portal image                                                     | `dev`                                                   |
+| `portalImage.registry`                                                      | Registry for portal image                                                | `docker.io`                                             |
+| `portalImage.repository`                                                    | Repository for portal image                                              | `bitnami/harbor-portal`                                 |
+| `portalImage.tag`                                                           | Tag for portal image                                                     | `{TAG_NAME}`                                            |
 | `portalImage.pullPolicy`                                                    | Harbor Portal image pull policy                                          | `IfNotPresent`                                          |
 | `portalImage.pullSecrets`                                                   | Specify docker-registry secret names as an array                         | `[]` (does not add image pull secrets to deployed pods) |
 | `portalImage.debug`                                                         | Specify if debug logs should be enabled                                  | `false`                                                 |
@@ -176,9 +177,9 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `portal.livenessProbe`                                                      | Liveness probe configuration for Portal                                  | `Check values.yaml file`                                |
 | `portal.readinessProbe`                                                     | Readines probe configuration for Portal                                  | `Check values.yaml file`                                |
 | **Core**                                                                    |
-| `coreImage.registry`                                                        | Registry for core image                                                  | `goharbor/harbor-portal`                                |
-| `coreImage.repository`                                                      | Repository for Harbor core image                                         | `goharbor/harbor-core`                                  |
-| `coreImage.tag`                                                             | Tag for Harbor core image                                                | `dev`                                                   |
+| `coreImage.registry`                                                        | Registry for core image                                                  | `docker.io`                                             |
+| `coreImage.repository`                                                      | Repository for Harbor core image                                         | `bitnami/harbor-core`                                   |
+| `coreImage.tag`                                                             | Tag for Harbor core image                                                | `{TAG_NAME}`                                            |
 | `coreImage.pullPolicy`                                                      | Harbor Core image pull policy                                            | `IfNotPresent`                                          |
 | `coreImage.pullSecrets`                                                     | Specify docker-registry secret names as an array                         | `[]` (does not add image pull secrets to deployed pods) |
 | `coreImage.debug`                                                           | Specify if debug logs should be enabled                                  | `false`                                                 |
@@ -193,9 +194,9 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `core.livenessProbe`                                                        | Liveness probe configuration for Core                                    | `Check values.yaml file`                                |
 | `core.readinessProbe`                                                       | Readines probe configuration for Core                                    | `Check values.yaml file`                                |
 | **Jobservice**                                                              |
-| `jobserviceImage.registry`                                                  | Registry for jobservice image                                            | `goharbor/harbor-portal`                                |
-| `jobserviceImage.repository`                                                | Repository for jobservice image                                          | `goharbor/harbor-jobservice`                            |
-| `jobserviceImage.tag`                                                       | Tag for jobservice image                                                 | `dev`                                                   |
+| `jobserviceImage.registry`                                                  | Registry for jobservice image                                            | `docker.io`                                             |
+| `jobserviceImage.repository`                                                | Repository for jobservice image                                          | `bitnami/harbor-jobservice`                             |
+| `jobserviceImage.tag`                                                       | Tag for jobservice image                                                 | `{TAG_NAME}`                                            |
 | `jobserviceImage.pullPolicy`                                                | Harbor Jobservice image pull policy                                      | `IfNotPresent`                                          |
 | `jobserviceImage.pullSecrets`                                               | Specify docker-registry secret names as an array                         | `[]` (does not add image pull secrets to deployed pods) |
 | `jobserviceImage.debug`                                                     | Specify if debug logs should be enabled                                  | `false`                                                 |
@@ -211,18 +212,18 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `jobservice.livenessProbe`                                                  | Liveness probe configuration for Job Service                             | `Check values.yaml file`                                |
 | `jobservice.readinessProbe`                                                 | Readines probe configuration for Job Service                             | `Check values.yaml file`                                |
 | **Registry**                                                                |
-| `registryImage.registry`                                                    | Registry for registry image                                              | `goharbor/harbor-portal`                                |
-| `registryImage.repository`                                                  | Repository for registry image                                            | `goharbor/registry-photon`                              |
-| `registryImage.tag`                                                         | Tag for registry image                                                   | `dev`                                                   |
+| `registryImage.registry`                                                    | Registry for registry image                                              | `docker.io`                                             |
+| `registryImage.repository`                                                  | Repository for registry image                                            | `bitnami/harbor-registry`                               |
+| `registryImage.tag`                                                         | Tag for registry image                                                   | `{TAG_NAME}`                                            |
 | `registryImage.pullPolicy`                                                  | Harbor Registry image pull policy                                        | `IfNotPresent`                                          |
 | `registryImage.pullSecrets`                                                 | Specify docker-registry secret names as an array                         | `[]` (does not add image pull secrets to deployed pods) |
 | `registryImage.debug`                                                       | Specify if debug logs should be enabled                                  | `false`                                                 |
 | `registry.registry.resources`                                               | The [resources] to allocate for container                                | undefined                                               |
 | `registry.registry.livenessProbe`                                           | Liveness probe configuration for Registry                                | `Check values.yaml file`                                |
 | `registry.registry.readinessProbe`                                          | Readines probe configuration for Registry                                | `Check values.yaml file`                                |
-| `registryctlImage.registry`                                                 | Registry for registryctl image                                           | `goharbor/harbor-portal`                                |
-| `registryctlImage.repository`                                               | Repository for registryctl controller image                              | `goharbor/harbor-registryctl`                           |
-| `registryctlImage.tag`                                                      | Tag for registrycrtl controller image                                    | `dev`                                                   |
+| `registryctlImage.registry`                                                 | Registry for registryctl image                                           | `docker.io`                                             |
+| `registryctlImage.repository`                                               | Repository for registryctl controller image                              | `bitnami/harbor-registryctl`                            |
+| `registryctlImage.tag`                                                      | Tag for registrycrtl controller image                                    | `{TAG_NAME}`                                            |
 | `registryctlImage.pullPolicy`                                               | Harbor Registryctl image pull policy                                     | `IfNotPresent`                                          |
 | `registryctlImage.pullSecrets`                                              | Specify docker-registry secret names as an array                         | `[]` (does not add image pull secrets to deployed pods) |
 | `registryctlImage.debug`                                                    | Specify if debug logs should be enabled                                  | `false`                                                 |
@@ -254,41 +255,40 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `clair.podAnnotations`                                                      | Annotations to add to the clair pod                                      | `{}`                                                    |
 | `clair.livenessProbe`                                                       | Liveness probe configuration                                             | `Check values.yaml file`                                |
 | `clair.readinessProbe`                                                      | Readiness probe configuration                                            | `Check values.yaml file`                                |
+
+
 | **PostgreSQL**                                                              |
-| `database.type`                                                             | If external database is used, set it to `external`                       | `internal`                                              |
-| `database.internal.image.repository`                                        | Repository for database image                                            | `goharbor/harbor-db`                                    |
-| `database.internal.image.tag`                                               | Tag for database image                                                   | `dev`                                                   |
-| `database.internal.password`                                                | The password for database                                                | `changeit`                                              |
-| `database.internal.resources`                                               | The [resources] to allocate for container                                | undefined                                               |
-| `database.internal.nodeSelector`                                            | Node labels for pod assignment                                           | `{}`                                                    |
-| `database.internal.tolerations`                                             | Tolerations for pod assignment                                           | `[]`                                                    |
-| `database.internal.affinity`                                                | Node/Pod affinities                                                      | `{}`                                                    |
-| `database.external.host`                                                    | The hostname of external database                                        | `192.168.0.1`                                           |
-| `database.external.port`                                                    | The port of external database                                            | `5432`                                                  |
-| `database.external.username`                                                | The username of external database                                        | `user`                                                  |
-| `database.external.password`                                                | The password of external database                                        | `password`                                              |
-| `database.external.coreDatabase`                                            | The database used by core service                                        | `registry`                                              |
-| `database.external.clairDatabase`                                           | The database used by clair                                               | `clair`                                                 |
-| `database.external.notaryServerDatabase`                                    | The database used by Notary server                                       | `notary_server`                                         |
-| `database.external.notarySignerDatabase`                                    | The database used by Notary signer                                       | `notary_signer`                                         |
-| `database.external.sslmode`                                                 | Connection method of external database (require                          | prefer                                                  |
-| `database.podAnnotations`                                                   | Annotations to add to the database pod                                   | `{}`                                                    |
-| **Redis**                                                                   |
-| `redis.type`                                                                | If external redis is used, set it to `external`                          | `internal`                                              |
-| `redis.internal.image.repository`                                           | Repository for redis image                                               | `goharbor/redis-photon`                                 |
-| `redis.internal.image.tag`                                                  | Tag for redis image                                                      | `dev`                                                   |
-| `redis.internal.resources`                                                  | The [resources] to allocate for container                                | undefined                                               |
-| `redis.internal.nodeSelector`                                               | Node labels for pod assignment                                           | `{}`                                                    |
-| `redis.internal.tolerations`                                                | Tolerations for pod assignment                                           | `[]`                                                    |
-| `redis.internal.affinity`                                                   | Node/Pod affinities                                                      | `{}`                                                    |
-| `redis.external.host`                                                       | The hostname of external Redis                                           | `192.168.0.2`                                           |
-| `redis.external.port`                                                       | The port of external Redis                                               | `6379`                                                  |
-| `redis.external.coreDatabaseIndex`                                          | The database index for core                                              | `0`                                                     |
-| `redis.external.jobserviceDatabaseIndex`                                    | The database index for jobservice                                        | `1`                                                     |
-| `redis.external.registryDatabaseIndex`                                      | The database index for registry                                          | `2`                                                     |
-| `redis.external.chartmuseumDatabaseIndex`                                   | The database index for chartmuseum                                       | `3`                                                     |
-| `redis.external.password`                                                   | The password of external Redis                                           | `nil`                                                   |
-| `redis.podAnnotations`                                                      | Annotations to add to the redis pod                                      | `{}`                                                    |
+| `posgresql.enabled`                                                          | If external database is used, set it to `false`                          | `true`                                                  |
+| `posgresql.postgresqlUsername`                                               | Postgresql username                                                      | `postgres`                                              |
+| `posgresql.postgresqlPassword`                                               | Postgresql password                                                      | `not-a-secure-database-password`                        |
+| `posgresql.replication.enabled`                                              | Enable replicated postgresql                                             | `false`                                                 |
+| `posgresql.persistence.enabled`                                              | Enable persistence for PostgreSQL                                        | `true`                                                  |
+| `posgresql.initdbScripts`                                                    | Initdb scripts to create Harbor databases                                | `See values.yaml file`                                  |
+| `externalDatabase.host`                                                      | Host of the external database                                            | `localhost`                                             |
+| `externalDatabase.port`                                                      | Port of the external database                                            | `5432`                                                  |
+| `externalDatabase.user`                                                      | Existing username in the external db                                     | `bn_harbor`                                             |
+| `externalDatabase.password`                                                  | Password for the above username                                          | `nil`                                                   |
+| `externalDatabase.database`                                                  | Name of the existing database                                            | `bitnami_harbor`                                        |
+| `externalDatabase.coreDatabase`                                              | External database name for core                                          | `nil`                                                   |
+| `externalDatabase.clairDatabase`                                             | External database name for clair                                         | `nil`                                                   |
+| `externalDatabase.notaryServerDatabase`                                      | External database name for notary server                                 | `nil`                                                   |
+| `externalDatabase.notarySignerDatabase`                                      | External database name for notary signer                                 | `nil`                                                   |
+| `externalDatabase.sslmode`                                                   | External database ssl mode                                               | `nil`                                                   |
+
+| **Redis**                                                                    |
+| `redis.enabled`                                                              | If external redis is used, set it to `false`                             | `true`                                                  |
+| `redis.password`                                                             | Redis password                                                           | `nil`                                                   |
+| `redis.usePassword`                                                          | Use redis password                                                       | `false`                                                 |
+| `redis.cluster.enabled`                                                      | Enable cluster redis                                                     | `false`                                                 |
+| `redis.master.persistence.enabled`                                           | Enable persistence for master Redis                                      | `true`                                                  |
+| `redis.slave.persistence.enabled`                                            | Enable persistence for slave Redis                                       | `true`                                                  |
+| `externalRedis.host`                                                         | Host of the external redis                                               | `localhost`                                             |
+| `externalRedis.port`                                                         | Port of the external redis                                               | `6379`                                                  |
+| `externalRedis.password`                                                     | Password for the external redis                                          | `nil`                                                   |
+| `externalRedis.coreDatabaseIndex`                                            | Index for core database                                                  | `0`                                                     |
+| `externalRedis.jobserviceDatabaseIndex`                                      | Index for jobservice database                                            | `1`                                                     |
+| `externalRedis.registryDatabaseIndex`                                        | Index for registry database                                              | `2`                                                     |
+| `externalRedis.chartmuseumDatabaseIndex`                                     | Index for chartmuseum database                                           | `3`                                                     |
 
 [resources]: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 
