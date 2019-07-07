@@ -79,6 +79,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `ingress.secrets[0].key`         | TLS Secret Key                                   | `nil`                                                        |
 | `livenessProbe`                  | Deployment Liveness Probe                        | See `values.yaml`                                            |
 | `readinessProbe`                 | Deployment Readiness Probe                       | See `values.yaml`                                            |
+| `resources`                      | Resource requests/limit                          | {}                                                           |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
