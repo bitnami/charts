@@ -136,6 +136,11 @@ readinessProbe:
 ##
 podAnnotations: {}
 
+## Resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+# resources: {}
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:

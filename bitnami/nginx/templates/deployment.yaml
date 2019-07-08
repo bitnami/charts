@@ -45,6 +45,8 @@ spec:
         - name: nginx-server-block
           mountPath: /opt/bitnami/nginx/conf/server_blocks
         {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "nginx.metrics.image" . }}
