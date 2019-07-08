@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        {{ include "harbor.matchLabels" . | nindent 8 }}
+        {{ include "harbor.labels" . | nindent 8 }}
         app.kubernetes.io/component: portal
       annotations:
       {{- if .Values.portal.podAnnotations }}
