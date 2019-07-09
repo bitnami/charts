@@ -49,6 +49,7 @@ $ helm search bitnami
 - [Cassandra](https://github.com/bitnami/charts/tree/master/bitnami/cassandra)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
+- [Harbor](https://github.com/bitnami/charts/tree/master/bitnami/harbor)
 - [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)

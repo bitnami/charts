@@ -1,0 +1,29 @@
+{{- if .Values.notary.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "harbor.notary-server" . }}"
+  labels: {{ include "harbor.labels" . | nindent 4 }}
+spec:
+{{- if (eq .Values.service.ingress.controller "gce") }}
+  type: NodePort
+{{- end }}
+  ports:
+  - port: 4443
+  selector:
+    {{ include "harbor.matchLabels" . | nindent 4 }}
+    component: notary-server
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "harbor.notary-signer" . }}"
+  labels: {{ include "harbor.labels" . | nindent 4 }}
+spec:
+  ports:
+  - port: 7899
+  selector:
+    {{ include "harbor.matchLabels" . | nindent 4 }}
+    component: notary-signer
+{{- end }}

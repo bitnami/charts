@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "harbor.jobservice" . }}"
+  labels: {{ include "harbor.labels" . | nindent 4 }}
+data:
+  config.yml: |+
+    protocol: "http"
+    port: 8080
+    worker_pool:
+      workers: {{ .Values.jobservice.maxJobWorkers }}
+      backend: "redis"
+      redis_pool:
+        redis_url: "{{ template "harbor.redisForJobservice" . }}"
+        namespace: "harbor_job_service_namespace"
+    job_loggers:
+      {{- if eq .Values.jobservice.jobLogger "file" }}
+      - name: "FILE"
+        level: {{ .Values.logLevel | upper }}
+        settings: # Customized settings of logger
+          base_dir: "/var/log/jobs"
+        sweeper:
+          duration: 14 #days
+          settings: # Customized settings of sweeper
+            work_dir: "/var/log/jobs"
+      {{- else if eq .Values.jobservice.jobLogger "database" }}
+      - name: "DB"
+        level: {{ .Values.logLevel | upper }}
+        sweeper:
+          duration: 14 #days
+      {{- else }}
+      - name: "STD_OUTPUT"
+        level: {{ .Values.logLevel | upper }}
+      {{- end }}
+    #Loggers for the job service
+    loggers:
+      - name: "STD_OUTPUT"
+        level: {{ .Values.logLevel | upper }}
