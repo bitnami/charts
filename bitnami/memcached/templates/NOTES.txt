@@ -1,7 +1,7 @@
 
 ** Please be patient while the chart is being deployed **
 
-Memcached can be accessed on port 11211 on the following DNS name from within your cluster: {{ template "fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+Memcached can be accessed on port 11211 on the following DNS name from within your cluster: {{ template "memcached.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 
