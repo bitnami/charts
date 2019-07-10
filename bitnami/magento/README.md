@@ -57,6 +57,8 @@ The following table lists the configurable parameters of the Magento chart and t
 | `image.debug`                         | Specify if debug values should be set                                                | `false`                                                      |
 | `image.pullPolicy`                    | Image pull policy                                                                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                     | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                        | String to partially override magento.fullname template with a string (will prepend the release name) | `nil`                                        |
+| `fullnameOverride`                    | String to fully override magento.fullname template with a string                                     | `nil`                                        |
 | `magentoHost`                         | Magento host to create application URLs                                              | `nil`                                                        |
 | `magentoLoadBalancerIP`               | `loadBalancerIP` for the magento Service                                             | `nil`                                                        |
 | `magentoUsername`                     | User of the application                                                              | `user`                                                       |

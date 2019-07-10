@@ -25,6 +25,14 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## String to partially override apache.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override apache.fullname template
+##
+# fullnameOverride:
+
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##

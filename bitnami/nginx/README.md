@@ -51,6 +51,8 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `image.tag`                      | NGINX Image tag                                  | `{TAG_NAME}`                                                 |
 | `image.pullPolicy`               | NGINX image pull policy                          | `IfNotPresent`                                               |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                   | String to partially override nginx.fullname template with a string (will prepend the release name) | `nil`      |
+| `fullnameOverride`               | String to fully override nginx.fullname template with a string                                     | `nil`      |
 | `serverBlock`                    | Custom NGINX server block                        | `nil`                                                        |
 | `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
 | `metrics.enabled`                | Start a side-car prometheus exporter             | `false`                                                      |

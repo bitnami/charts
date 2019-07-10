@@ -55,6 +55,8 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `image.pullPolicy`                   | Image pull policy                                                                            | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                                                 |
+| `nameOverride`                       | String to partially override mxnet.fullname template with a string (will prepend the release name) | `nil`                                             |
+| `fullnameOverride`                   | String to fully override mxnet.fullname template with a string                               | `nil`                                                   |
 | `git.registry`                       | Git image registry                                                                           | `docker.io`                                             |
 | `git.repository`                     | Git image name                                                                               | `bitnami/git`                                           |
 | `git.tag`                            | Git image tag                                                                                | `{TAG_NAME}`                                            |
@@ -193,7 +195,7 @@ $ helm install --name my-release \
   bitnami/mxnet
 ```
 
-In case you want to add a file that includes sensitive information, pass a secret object using the `existingSecret` parameter. All the files in the secret will be mounted in the `/secrets` folder. 
+In case you want to add a file that includes sensitive information, pass a secret object using the `existingSecret` parameter. All the files in the secret will be mounted in the `/secrets` folder.
 
 ### Distributed training example
 

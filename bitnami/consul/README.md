@@ -58,6 +58,8 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `image.tag`                          | HashiCorp Consul image tag                                       | `{TAG_NAME}`                                               |
 | `image.pullPolicy`                   | Image pull policy                                                | `IfNotPresent`                                             |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                 | `[]` (does not add image pull secrets to deployed pods)    |
+| `nameOverride`                       | String to partially override consul.fullname template with a string (will prepend the release name) | `nil`                   |
+| `fullnameOverride`                   | String to fully override consul.fullname template with a string  | `nil`                                                      |
 | `replicas`                           | Number of replicas                                               | `3`                                                        |
 | `port`                               | HashiCorp Consul http listening port                             | `8500`                                                     |
 | `service.rpcPort`                    | HashiCorp Consul rpc listening port                              | `8400`                                                     |

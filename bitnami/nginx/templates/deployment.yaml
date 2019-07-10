@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "nginx.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "nginx.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "nginx.name" . }}
       release: "{{ .Release.Name }}"
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "nginx.name" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
@@ -32,7 +32,7 @@ spec:
     spec:
 {{- include "nginx.imagePullSecrets" . | indent 6 }}
       containers:
-      - name: {{ template "fullname" . }}
+      - name: nginx
         image: "{{ template "nginx.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:
@@ -74,5 +74,5 @@ spec:
       {{- if .Values.serverBlock }}
       - name: nginx-server-block
         configMap:
-          name: {{ template "fullname" . }}
+          name: {{ template "nginx.fullname" . }}
       {{- end }}

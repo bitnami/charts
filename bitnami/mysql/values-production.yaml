@@ -31,6 +31,14 @@ service:
   type: ClusterIP
   port: 3306
 
+## String to partially override mysql.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override mysql.fullname template
+##
+# fullnameOverride:
+
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
