@@ -105,6 +105,11 @@ apprepository:
     registry: docker.io
     repository: bitnami/kubeapps-chart-repo
     tag: 1.8.0-r0
+  initialReposProxy:
+    enabled: false
+#    http_proxy: "http://yourproxy:3128"
+#    https_proxy: "http://yourproxy:3128"
+#    no_proxy: "0.0.0.0/0"
   initialRepos:
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
