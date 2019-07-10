@@ -36,7 +36,7 @@ spec:
         hostnames:
         - "status.localhost"
       containers:
-      - name: {{ template "apache.fullname" . }}
+      - name: apache
         image: "{{ template "apache.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:
