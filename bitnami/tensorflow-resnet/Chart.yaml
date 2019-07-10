@@ -1,7 +1,7 @@
 apiVersion: v1
 name: tensorflow-resnet
-version: 0.1.6
-appVersion: 1.13.0
+version: 0.1.7
+appVersion: 1.14.0
 description: Open-source software library serving the ResNet machine learning model.
 keywords:
 - tensorflow
