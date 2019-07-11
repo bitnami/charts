@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: {{ template "tomcat.fullname" . }}
   labels:
-    app: {{ template "tomcat.name" . }}
+    app: {{ template "tomcat.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "tomcat.name" . }}
+      app: {{ template "tomcat.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "tomcat.name" . }}
+        app: {{ template "tomcat.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
     spec:

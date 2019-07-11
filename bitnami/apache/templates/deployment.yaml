@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: {{ template "apache.fullname" . }}
   labels:
-    app: {{ template "apache.name" . }}
+    app: {{ template "apache.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "apache.name" . }}
+      app: {{ template "apache.fullname" . }}
       release: "{{ .Release.Name }}"
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "apache.name" . }}
+        app: {{ template "apache.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"

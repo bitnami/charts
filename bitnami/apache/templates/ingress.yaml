@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: {{ template "apache.fullname" . }}
   labels:
-    app: "{{ template "apache.name" . }}"
+    app: "{{ template "apache.fullname" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"

@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: {{ template "wildfly.fullname" . }}
   labels:
-    app: {{ template "wildfly.name" . }}
+    app: {{ template "wildfly.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "wildfly.name" . }}
+      app: {{ template "wildfly.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "wildfly.name" . }}
+        app: {{ template "wildfly.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
     spec:

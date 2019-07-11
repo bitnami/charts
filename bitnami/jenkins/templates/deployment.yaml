@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: {{ template "jenkins.fullname" . }}
   labels:
-    app: {{ template "jenkins.name" . }}
+    app: {{ template "jenkins.fullname" . }}
     chart: {{ include "jenkins.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "jenkins.name" . }}
+      app: {{ template "jenkins.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "jenkins.name" . }}
+        app: {{ template "jenkins.fullname" . }}
         chart: {{ include "jenkins.chart" . }}
         release: "{{ .Release.Name }}"
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}

@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: {{ template "jenkins.fullname" . }}
   labels:
-    app: "{{ template "jenkins.name" . }}"
+    app: "{{ template "jenkins.fullname" . }}"
     chart: {{ include "jenkins.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "tomcat.fullname" . }}
   labels:
-    app: {{ template "tomcat.name" . }}
+    app: {{ template "tomcat.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -23,4 +23,4 @@ spec:
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- end }}
   selector:
-    app: {{ template "tomcat.name" . }}
+    app: {{ template "tomcat.fullname" . }}

@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: {{ template "nginx.fullname" . }}
   labels:
-    app: {{ template "nginx.name" . }}
+    app: {{ template "nginx.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "nginx.name" . }}
+      app: {{ template "nginx.fullname" . }}
       release: "{{ .Release.Name }}"
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "nginx.name" . }}
+        app: {{ template "nginx.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"

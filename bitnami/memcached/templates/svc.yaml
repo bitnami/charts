@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "memcached.fullname" . }}
   labels:
-    app: {{ template "memcached.name" . }}
+    app: {{ template "memcached.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -14,4 +14,4 @@ spec:
     port: 11211
     targetPort: memcache
   selector:
-    app: {{ template "memcached.name" . }}
+    app: {{ template "memcached.fullname" . }}
