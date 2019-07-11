@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "apache.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "apache.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "apache.fullname" . }}
       release: "{{ .Release.Name }}"
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "apache.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
@@ -36,7 +36,7 @@ spec:
         hostnames:
         - "status.localhost"
       containers:
-      - name: {{ template "fullname" . }}
+      - name: apache
         image: "{{ template "apache.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:

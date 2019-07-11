@@ -31,6 +31,14 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## String to partially override mxnet.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override mxnet.fullname template
+##
+# fullnameOverride:
+
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##

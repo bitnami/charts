@@ -46,6 +46,14 @@ git:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## String to partially override pytorch.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override pytorch.fullname template
+##
+# fullnameOverride:
+
 service:
   ## Kubernetes service type, ClusterIP and NodePort are supported at present
   type: ClusterIP

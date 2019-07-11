@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ template "mysql.master.fullname" . }}-init-scripts
   labels:
-    app: {{ template "name" . }}
+    app: {{ template "mysql.name" . }}
     component: "master"
     chart: {{ template "mysql.chart" . }}
     release: {{ .Release.Name | quote }}

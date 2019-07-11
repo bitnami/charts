@@ -26,6 +26,14 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## String to partially override nginx-ingress-controller.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override nginx-ingress-controller.fullname template
+##
+# fullnameOverride:
+
 config:
   use-geoip: "false"
   use-geoip2: "true"

@@ -54,6 +54,8 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `image.tag`                     | WildFly Image tag                      | `{TAG_NAME}`                                               |
 | `image.pullPolicy`              | WildFly image pull policy              | `IfNotPresent`                                             |
 | `image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)   |
+| `nameOverride`                  | String to partially override wildfly.fullname template with a string (will prepend the release name) | `nil` |
+| `fullnameOverride`              | String to fully override wildfly.fullname template with a string                                     | `nil` |
 | `wildflyUsername`               | WildFly admin user                     | `user`                                                     |
 | `wildflyPassword`               | WildFly admin password                 | _random 10 character alphanumeric string_                  |
 | `securityContext.enabled`       | Enable security context                | `true`                                                     |

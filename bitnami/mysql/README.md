@@ -54,6 +54,8 @@ The following tables lists the configurable parameters of the MySQL chart and th
 | `image.tag`                               | MySQL Image tag                                                            | `{TAG_NAME}`                                                      |
 | `image.pullPolicy`                        | MySQL image pull policy                                                    | `IfNotPresent`                                                    |
 | `image.pullSecrets`                       | Specify docker-registry secret names as an array                           | `[]` (does not add image pull secrets to deployed pods)           |
+| `nameOverride`                            | String to partially override mysql.fullname template with a string (will prepend the release name) | `nil`                                     |
+| `fullnameOverride`                        | String to fully override mysql.fullname template with a string             | `nil`                                                             |
 | `service.type`                            | Kubernetes service type                                                    | `ClusterIP`                                                       |
 | `service.port`                            | MySQL service port                                                         | `3306`                                                            |
 | `root.password`                           | Password for the `root` user                                               | _random 10 character alphanumeric string_                         |
