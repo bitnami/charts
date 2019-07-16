@@ -13,7 +13,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -37,7 +37,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 1.8.1-debian-9-r0
+  tag: 1.8.1-debian-9-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -61,7 +61,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -85,7 +85,7 @@ jobserviceImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -109,7 +109,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -133,7 +133,7 @@ registryctlImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -157,7 +157,7 @@ clairImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -181,7 +181,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
