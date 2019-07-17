@@ -223,6 +223,14 @@ nginxImage:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## String to partially override harbor.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override harbor.fullname template
+##
+# fullnameOverride:
+
 service:
   # Set the way how to expose the service. Set the type as "Ingress",
   # "ClusterIP", "NodePort" or "LoadBalancer" and fill the information

@@ -54,6 +54,8 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `image.tag`                     | Tomcat Image tag                             | `{TAG_NAME}`                                              |
 | `image.pullPolicy`              | Tomcat image pull policy                     | `IfNotPresent`                                            |
 | `image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)  |
+| `nameOverride`                  | String to partially override tomcat.fullname template with a string (will prepend the release name) | `nil` |
+| `fullnameOverride`              | String to fully override tomcat.fullname template with a string                                     | `nil` |
 | `tomcatUsername`                | Tomcat admin user                            | `user`                                                    |
 | `tomcatPassword`                | Tomcat admin password                        | _random 10 character alphanumeric string_                 |
 | `tomcatAllowRemoteManagement`   | Enable remote access to management interface | `0` (disabled)                                            |

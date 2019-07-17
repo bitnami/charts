@@ -59,7 +59,7 @@ spec:
 {{ toYaml .Values.affinity | indent 8 }}
       {{- end }}
       containers:
-      - name: "{{ template "kafka.fullname" . }}"
+      - name: kafka
         image: "{{ template "kafka.image" . }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         resources:

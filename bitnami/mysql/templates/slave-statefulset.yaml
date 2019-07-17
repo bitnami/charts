@@ -4,7 +4,7 @@ kind: StatefulSet
 metadata:
   name: {{ template "mysql.slave.fullname" . }}
   labels:
-    app: "{{ template "name" . }}"
+    app: "{{ template "mysql.name" . }}"
     chart: {{ template "mysql.chart" . }}
     component: "slave"
     release: {{ .Release.Name | quote }}
@@ -12,7 +12,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "name" . }}
+      app: {{ template "mysql.name" . }}
       release: "{{ .Release.Name }}"
       component: "slave"
   serviceName: "{{ template "mysql.slave.fullname" . }}"
@@ -25,7 +25,7 @@ spec:
   template:
     metadata:
       labels:
-        app: "{{ template "name" . }}"
+        app: "{{ template "mysql.name" . }}"
         chart: {{ template "mysql.chart" . }}
         component: "slave"
         release: {{ .Release.Name | quote }}
@@ -52,7 +52,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: "{{ template "name" . }}"
+                  app: "{{ template "mysql.name" . }}"
                   release: "{{ .Release.Name }}"
       {{- else if eq .Values.slave.antiAffinity "soft" }}
       affinity:
@@ -63,7 +63,7 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: "{{ template "name" . }}"
+                  app: "{{ template "mysql.name" . }}"
                   release: "{{ .Release.Name }}"
       {{- end }}
 {{- include "mysql.imagePullSecrets" . | indent 6 }}
@@ -75,7 +75,7 @@ spec:
         - name: MYSQL_REPLICATION_MODE
           value: "slave"
         - name: MYSQL_MASTER_HOST
-          value: {{ template "fullname" . }}
+          value: {{ template "mysql.fullname" . }}
         - name: MYSQL_MASTER_PORT_NUMBER
           value: "3306"
         - name: MYSQL_MASTER_ROOT_USER
@@ -83,14 +83,14 @@ spec:
         - name: MYSQL_MASTER_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "mysql.fullname" . }}
               key: mysql-root-password
         - name: MYSQL_REPLICATION_USER
           value: "{{ .Values.replication.user }}"
         - name: MYSQL_REPLICATION_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "mysql.fullname" . }}
               key: mysql-replication-password
         ports:
         - name: mysql
@@ -133,7 +133,7 @@ spec:
         - name: MYSQL_MASTER_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "mysql.fullname" . }}
               key: mysql-root-password
         command: [ 'sh', '-c', 'DATA_SOURCE_NAME="root:$MYSQL_MASTER_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter' ]
         ports:
@@ -165,7 +165,7 @@ spec:
     - metadata:
         name: data
         labels:
-          app: "{{ template "name" . }}"
+          app: "{{ template "mysql.name" . }}"
           component: "slave"
           release: {{ .Release.Name | quote }}
           heritage: {{ .Release.Service | quote }}
