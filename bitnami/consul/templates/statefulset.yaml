@@ -77,7 +77,7 @@ spec:
                   - "{{ template "consul.name" . }}"
       {{- end }}
       containers:
-      - name: consul
+      - name: "{{ template "consul.fullname" . }}"
         image: "{{ template "consul.image" . }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         ports:

@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "mysql.fullname" . }}
+  name: {{ template "fullname" . }}
   labels:
-    app: "{{ template "mysql.name" . }}"
+    app: "{{ template "name" . }}"
     component: "master"
     chart: {{ template "mysql.chart" . }}
     release: {{ .Release.Name | quote }}
@@ -20,6 +20,6 @@ spec:
     targetPort: metrics
 {{- end }}
   selector:
-    app: "{{ template "mysql.name" . }}"
+    app: "{{ template "name" . }}"
     component: "master"
     release: "{{ .Release.Name }}"

@@ -2,9 +2,9 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "nginx.fullname" . }}
+  name: {{ template "fullname" . }}
   labels:
-    app: {{ template "nginx.fullname" . }}
+    app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -23,7 +23,7 @@ spec:
       paths:
       - path: {{ default "/" .path }}
         backend:
-          serviceName: "{{ template "nginx.fullname" $ }}"
+          serviceName: "{{ template "fullname" $ }}"
           servicePort: http
   {{- end }}
   {{- if .Values.ingress.tls }}

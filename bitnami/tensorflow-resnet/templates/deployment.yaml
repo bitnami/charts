@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "tensorflow-resnet.fullname" . }}
+  name: {{ template "fullname" . }}
   labels:
-    app: {{ template "tensorflow-resnet.name" . }}
+    app: {{ template "name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "tensorflow-resnet.name" . }}
+      app: {{ template "name" . }}
       release: "{{ .Release.Name }}"
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
-        app: {{ template "tensorflow-resnet.name" . }}
+        app: {{ template "name" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}

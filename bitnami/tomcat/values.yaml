@@ -26,14 +26,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override tomcat.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override tomcat.fullname template
-##
-# fullnameOverride:
-
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##

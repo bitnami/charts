@@ -59,8 +59,6 @@ The following table lists the configurable parameters of the Node chart and thei
 | `image.tag`                             | NodeJS image tag                                          | `{TAG_NAME}`                                              |
 | `image.pullPolicy`                      | NodeJS image pull policy                                  | `IfNotPresent`                                            |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array          | `[]` (does not add image pull secrets to deployed pods)   |
-| `nameOverride`                          | String to partially override node.fullname template with a string (will prepend the release name) | `nil`             |
-| `fullnameOverride`                      | String to fully override node.fullname template with a string                                     | `nil`             |
 | `git.registry`                          | Git image registry                                        | `docker.io`                                               |
 | `git.repository`                        | Git image name                                            | `bitnami/git`                                             |
 | `git.tag`                               | Git image tag                                             | `{TAG_NAME}`                                              |
@@ -70,9 +68,9 @@ The following table lists the configurable parameters of the Node chart and thei
 | `replicas`                              | Number of replicas for the application                    | `1`                                                       |
 | `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
 | `extraEnv`                              | Any extra environment variables to be pass to the pods    | `{}`                                                      |
-| `securityContext.enabled`               | Enable security context                                   | `true`                                                    |
-| `securityContext.fsGroup`               | Group ID for the container                                | `1001`                                                    |
-| `securityContext.runAsUser`             | User ID for the container                                 | `1001`                                                    |
+| `securityContext.enabled`                     | Enable security context                                                                                                | `true`                                                   |
+| `securityContext.fsGroup`                     | Group ID for the container                                                                                             | `1001`                                                   |
+| `securityContext.runAsUser`                   | User ID for the container                                                                                              | `1001`                                                   |
 | `service.type`                          | Kubernetes Service type                                   | `ClusterIP`                                               |
 | `service.port`                          | Kubernetes Service port                                   | `80`                                                      |
 | `service.annotations`                   | Annotations for the Service                               | {}                                                        |

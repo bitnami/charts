@@ -45,54 +45,52 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Jenkins chart and their default values.
 
-Parameter | Description | Default
---- | --- | ---
-`global.imageRegistry` | Global Docker image registry | `nil`
-`global.imagePullSecrets`  | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)
-`image.registry` | Jenkins image registry | `docker.io`
-`image.repository` | Jenkins Image name | `bitnami/jenkins`
-`image.tag` | Jenkins Image tag  | `{TAG_NAME}`
-`image.pullPolicy` | Jenkins image pull policy  | `IfNotPresent`
-`image.pullSecrets` | Specify docker-registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)
-`nameOverride` | String to partially override jenkins.fullname template with a string (will prepend the release name) | `nil`
-`fullnameOverride` | String to fully override jenkins.fullname template with a string | `nil`
-`jenkinsUser` | User of the application | `user`
-`jenkinsPassword` | Application password  | _random 10 character alphanumeric string_
-`jenkinsHome` | Jenkins home directory | `/opt/bitnami/jenkins/jenkins_home`
-`disableInitialization` | Allows to disable the initial Bitnami configuration for Jenkins  | `no`
-`javaOpts` | Customize JVM parameters | `nil`
-`service.type` | Kubernetes Service type | `LoadBalancer`
-`service.port` | Service HTTP port | `80`
-`service.httpsPort` | Service HTTPS port | `443`
-`service.nodePorts.http` | Kubernetes http node port | `""`
-`service.nodePorts.https` | Kubernetes https node port | `""`
-`service.externalTrafficPolicy` | Enable client source IP preservation | `Cluster`
-`service.loadBalancerIP` | LoadBalancer service IP address | `""`
-`ingress.enabled` | Enable ingress controller resource | `false`
-`ingress.annotations` | Ingress annotations | `[]`
-`ingress.certManager` | Add annotations for cert-manager | `false`
-`ingress.hosts[0].name` | Hostname to your jenkins installation  | `jenkins.local`
-`ingress.hosts[0].path` | Path within the url structure  | `/`
-`ingress.hosts[0].tls`| Utilize TLS backend in ingress | `false`
-`ingress.hosts[0].tlsHosts` | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`) | `nil`
-`ingress.hosts[0].tlsSecret` | TLS Secret (certificates) | `jenkins.local-tls-secret`
-`ingress.secrets[0].name`| TLS Secret Name | `nil`
-`ingress.secrets[0].certificate` | TLS Secret Certificate | `nil`
-`ingress.secrets[0].key` | TLS Secret Key | `nil`
-`persistence.enabled` | Enable persistence using PVC | `true`
-`persistence.storageClass`| PVC Storage Class for Jenkins volume | `nil` (uses alpha storage class annotation)
-`persistence.accessMode` | PVC Access Mode for Jenkins volume | `ReadWriteOnce`
-`persistence.size` | PVC Storage Request for Jenkins volume | `8Gi`
-`resources` | CPU/Memory resource requests/limits | Memory: `512Mi`, CPU: `300m`
-`podAnnotations` | Pod annotations | `{}`
-`metrics.enabled` | Start a side-car Jenkins prometheus exporter | `false`
-`metrics.image.registry` | Jenkins exporter image registry  | `docker.io`
-`metrics.image.repository` | Jenkins exporter image name | `tolleiv/jenkins_exporter`
-`metrics.image.tag` | Jenkins exporter image tag | `latest`
-`metrics.image.pullPolicy` | Image pull policy  | `IfNotPresent`
-`metrics.image.pullSecrets` | Specify docker-registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)
-`metrics.podAnnotations` | Additional annotations for Metrics exporter pod | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}`
-`metrics.resources` | Exporter resource requests/limit | Memory: `256Mi`, CPU: `100m`
+|         Parameter          |              Description               |                               Default                     |
+|----------------------------|----------------------------------------|---------------------------------------------------------- |
+| `global.imageRegistry`     | Global Docker image registry           | `nil`                                                     |
+| `global.imagePullSecrets`  | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`           | Jenkins image registry                 | `docker.io`                                               |
+| `image.repository`         | Jenkins Image name                     | `bitnami/jenkins`                                         |
+| `image.tag`                | Jenkins Image tag                      | `{TAG_NAME}`                                              |
+| `image.pullPolicy`         | Jenkins image pull policy              | `IfNotPresent`                                            |
+| `image.pullSecrets`        | Specify docker-registry secret names as an array             | `[]` (does not add image pull secrets to deployed pods)  |
+| `jenkinsUser`              | User of the application                | `user`                                                    |
+| `jenkinsPassword`          | Application password                   | _random 10 character alphanumeric string_                 |
+| `jenkinsHome`              | Jenkins home directory                 | `/opt/bitnami/jenkins/jenkins_home`                       |
+| `disableInitialization`    | Allows to disable the initial Bitnami configuration for Jenkins  | `no`                            |
+| `javaOpts`                 | Customize JVM parameters               | `nil`                                                     |
+| `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
+| `service.port`                    | Service HTTP port                  | `80`                                          |
+| `service.httpsPort`                    | Service HTTPS port                   | `443`                                          |
+| `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
+| `service.nodePorts.https`                | Kubernetes https node port                 | `""`                                                    |
+| `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
+| `service.loadBalancerIP`   | LoadBalancer service IP address       | `""`                                               |
+| `ingress.enabled`                   | Enable ingress controller resource                            | `false`                                                  |
+| `ingress.annotations`               | Ingress annotations                                           | `[]`                                                     |
+| `ingress.certManager`               | Add annotations for cert-manager                              | `false`                                                  |
+| `ingress.hosts[0].name`             | Hostname to your jenkins installation                           | `jenkins.local`                                            |
+| `ingress.hosts[0].path`             | Path within the url structure                                 | `/`                                                      |
+| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                | `false`                                                  |
+| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                               | `nil`                                                  |
+| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                     | `jenkins.local-tls-secret`                                 |
+| `ingress.secrets[0].name`           | TLS Secret Name                                               | `nil`                                                    |
+| `ingress.secrets[0].certificate`    | TLS Secret Certificate                                        | `nil`                                                    |
+| `ingress.secrets[0].key`            | TLS Secret Key                                                | `nil`                                                    |
+| `persistence.enabled`      | Enable persistence using PVC           | `true`                                                    |
+| `persistence.storageClass` | PVC Storage Class for Jenkins volume   | `nil` (uses alpha storage class annotation)               |
+| `persistence.accessMode`   | PVC Access Mode for Jenkins volume     | `ReadWriteOnce`                                           |
+| `persistence.size`         | PVC Storage Request for Jenkins volume | `8Gi`                                                     |
+| `resources`                | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                              |
+| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
+| `metrics.enabled`                          | Start a side-car Jenkins prometheus exporter                                                                           | `false`                                              |
+| `metrics.image.registry`                   | Jenkins exporter image registry                                                                                  | `docker.io`                                          |
+| `metrics.image.repository`                 | Jenkins exporter image name                                                                                      | `tolleiv/jenkins_exporter`                           |
+| `metrics.image.tag`                        | Jenkins exporter image tag                                                                                       | `latest`                                            |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array        | `[]` (does not add image pull secrets to deployed pods)                                        |
+| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}`                                                   |
+| `metrics.resources`                        | Exporter resource requests/limit                                                                               | Memory: `256Mi`, CPU: `100m`                         |
 
 
 The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.

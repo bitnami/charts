@@ -57,11 +57,9 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                                                 |
 | `git.registry`                       | Git image registry                                                                           | `docker.io`                                             |
 | `git.repository`                     | Git image name                                                                               | `bitnami/git`                                           |
-| `git.tag`                            | Git image tag                                                                                | `{TAG_NAME}`                                            |
+| `git.tag`                            | Git image tag                                                                                | `{TAG_NAME}`                                              |
 | `git.pullPolicy`                     | Git image pull policy                                                                        | `IfNotPresent`                                          |
 | `git.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`                       | String to partially override pytorch.fullname template with a string (will prepend the release name) | `nil`                                           |
-| `fullnameOverride`                   | String to fully override pytorch.fullname template with a string                                     | `nil`                                           |
 | service.type                         | Kubernetes service type                                                                      | `ClusterIP`                                             |
 | `entrypoint.file`                    | Main entrypoint to your application                                                          | `''`                                                    |
 | `entrypoint.args`                    | Args required by your entrypoint                                                             | `nil`                                                   |

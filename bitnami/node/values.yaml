@@ -26,14 +26,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override node.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override node.fullname template
-##
-# fullnameOverride:
-
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##

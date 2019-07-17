@@ -50,14 +50,6 @@ client:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
-## String to partially override tensorflow-resnet.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override tensorflow-resnet.fullname template
-##
-# fullnameOverride:
-
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
