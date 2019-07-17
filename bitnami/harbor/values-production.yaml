@@ -253,7 +253,7 @@ service:
     # described above. Fill the name of secret if you want to use a
     # separated one. Only needed when the type is "ingress".
     notarySecretName: ""
-    # The commmon name used to generate the certificate, it's necessary
+    # The common name used to generate the certificate, it's necessary
     # when the type isn't "ingress" and "secretName" is null
     commonName: ""
   ingress:
@@ -263,6 +263,7 @@ service:
     # set to the type of ingress controller if it has specific requirements.
     # leave as `default` for most ingress controllers.
     # set to `gce` if using the GCE ingress controller
+    # set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
     controller: default
     annotations:
       ingress.kubernetes.io/ssl-redirect: "true"
@@ -280,6 +281,8 @@ service:
       # The service port Notary listens on. Only needed when notary.enabled
       # is set to true
       notaryPort: 4443
+    annotations: {}
+    sourceRanges: []
   nodePort:
     # The name of NodePort service
     name: harbor
@@ -326,6 +329,14 @@ service:
 #
 # If Harbor is deployed behind the proxy, set it as the URL of proxy
 externalURL: https://core.harbor.domain
+
+## UAA Authentication Options
+# If you're using UAA for authentication behind a self-signed
+# certificate you will need to provide the CA Cert.
+# Set uaaSecretName below to provide a pre-created secret that
+# contains a base64 encoded CA Certificate named `ca.crt`.
+# uaaSecretName:
+
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
