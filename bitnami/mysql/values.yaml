@@ -26,6 +26,14 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## String to partially override mysql.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override mysql.fullname template
+##
+# fullnameOverride:
+
 service:
   ## Kubernetes service type
   type: ClusterIP

@@ -1,21 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "tomcat.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "tomcat.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "tomcat.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "tomcat.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
     spec:
@@ -26,7 +26,7 @@ spec:
       {{- end}}
 {{- include "tomcat.imagePullSecrets" . | indent 6 }}
       containers:
-      - name: {{ template "fullname" . }}
+      - name: tomcat
         image: "{{ template "tomcat.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
@@ -35,7 +35,7 @@ spec:
         - name: TOMCAT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "tomcat.fullname" . }}
               key: tomcat-password
         - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
           value: {{ .Values.tomcatAllowRemoteManagement | quote }}
@@ -65,7 +65,7 @@ spec:
       - name: tomcat-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
+          claimName: {{ template "tomcat.fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end -}}

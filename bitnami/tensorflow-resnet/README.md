@@ -69,6 +69,8 @@ The following tables lists the configurable parameters of the TensorFlow ResNet 
 | `server.image.tag`                            | TensorFlow Serving Image tag                         | `{TAG_NAME}`                                                 |
 | `server.image.pullPolicy`                     | TensorFlow Serving image pull policy                 | `IfNotPresent`                                               |
 | `server.image.pullSecrets`                    | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                                | String to partially override tensorflow-resnet.fullname template with a string (will prepend the release name) | `nil` |
+| `fullnameOverride`                            | String to fully override tensorflow-resnet.fullname template with a string                                     | `nil` |
 | `replicaCount`                                | Desired number of pods                               | `1`                                                          |
 | `server.port`                                 | Tensorflow server port                               | `8500`                                                       |
 | `client.image.registry`                       | TensorFlow ResNet image registry                     | `docker.io`                                                  |

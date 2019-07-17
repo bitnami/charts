@@ -49,6 +49,8 @@ The following tables lists the configurable parameters of the spark chart and th
 | `image.tag`                                 | spark Image tag                                                                             | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                          | spark image pull policy                                                                     | `IfNotPresent`                                          |
 | `image.pullSecrets`                         | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                              | String to partially override spark.fullname template with a string (will prepend the release name) | `nil`                                            |
+| `fullnameOverride`                          | String to fully override spark.fullname template with a string                              | `nil`                                                   |
 | `master.debug`                              | Specify if debug values should be set on the master                                         | `false`                                                 |
 | `master.webPort`                            | Specify the port where the web interface will listen on the master                          | `8080`                                                  |
 | `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                       | `7077`                                                  |
