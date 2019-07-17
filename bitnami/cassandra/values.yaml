@@ -29,14 +29,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override cassandra.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override cassandra.fullname template
-##
-# fullnameOverride:
-
 ## Specify a service type
 ## ref: http://kubernetes.io/docs/user-guide/services/
 ##

@@ -55,8 +55,6 @@ Parameter | Description | Default
 `image.repository` | Controller container image repository | `bitnami/nginx-ingress-controller`
 `image.tag` | Controller container image tag | `{TAG_NAME}`
 `image.pullPolicy` | Controller container image pull policy | `IfNotPresent`
-`nameOverride` | String to partially override nginx-ingress-controller.fullname template with a string (will prepend the release name) | `nil`
-`fullnameOverride` | String to fully override nginx-ingress-controller.fullname template with a string | `nil`
 `config` | Nginx ConfigMap entries | `use-geoip: "false", use-geoip2: "true"`
 `hostNetwork` | If the nginx deployment / daemonset should run on the host's network namespace. Do not set this when `service.externalIPs` is set and `kube-proxy` is used as there will be a port-conflict for port `80` | false
 `defaultBackendService` | Default 404 backend service; required only if `defaultBackend.enabled = false` | `""`

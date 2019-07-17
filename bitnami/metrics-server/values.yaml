@@ -26,14 +26,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override metrics-server.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override metrics-server.fullname template
-##
-# fullnameOverride:
-
 rbac:
   # Specifies whether RBAC resources should be created
   create: true

@@ -1,21 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "wildfly.fullname" . }}
+  name: {{ template "fullname" . }}
   labels:
-    app: {{ template "wildfly.fullname" . }}
+    app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "wildfly.fullname" . }}
+      app: {{ template "fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "wildfly.fullname" . }}
+        app: {{ template "fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
     spec:
@@ -26,7 +26,7 @@ spec:
       {{- end }}
 {{- include "wildfly.imagePullSecrets" . | indent 6 }}
       containers:
-      - name: wildlfy
+      - name: {{ template "fullname" . }}
         image: "{{ template "wildfly.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
@@ -35,7 +35,7 @@ spec:
         - name: WILDFLY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "wildfly.fullname" . }}
+              name: {{ template "fullname" . }}
               key: wildfly-password
         ports:
         - name: http
@@ -65,7 +65,7 @@ spec:
       - name: wildfly-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "wildfly.fullname" . }}
+          claimName: {{ template "fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end -}}

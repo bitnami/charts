@@ -31,14 +31,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override magento.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override magento.fullname template
-##
-# fullnameOverride:
-
 ## Magento host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##

@@ -45,14 +45,6 @@ sysctlImage:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override elasticsearch.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override elasticsearch.fullname template
-##
-# fullnameOverride:
-
 ## Elasticsearch cluster name
 ##
 name: elastic

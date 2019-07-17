@@ -24,13 +24,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override spark.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override spark.fullname template
-##
-# fullnameOverride:
 
 ## Spark Components configuration
 ##

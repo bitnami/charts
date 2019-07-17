@@ -49,7 +49,7 @@ spec:
       affinity: {{ toYaml .Values.affinity | nindent 8 }}
       {{- end }}
       containers:
-      - name: zookeeper
+      - name: "{{ template "zookeeper.fullname" . }}"
         image: "{{ template "zookeeper.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.securityContext.enabled }}

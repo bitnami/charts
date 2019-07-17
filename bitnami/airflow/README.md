@@ -72,8 +72,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `git.tag`                                 | Git image tag                                                                               | `{TAG_NAME}`                                                 |
 | `git.pullPolicy`                          | Git image pull policy                                                                       | `IfNotPresent`                                               |
 | `git.pullSecrets`                         | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                            | String to partially override airflow.fullname template with a string (will prepend the release name) | `nil`                                               |
-| `fullnameOverride`                        | String to fully override ariflow.fullname template with a string                                     | `nil`                                               |
 | `updateStrategy`                          | Update strategy for the stateful set                                                        | `RollingUpdate`                                              |
 | `rollingUpdatePartition`                  | Partition update strategy                                                                   | `nil`                                                        |
 | `airflow.configurationConfigMap`          | Name of an existing config map containing the Airflow config file                           | `nil`                                                        |

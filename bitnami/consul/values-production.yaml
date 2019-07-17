@@ -26,14 +26,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override consul.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override consul.fullname template
-##
-# fullnameOverride:
-
 ## Consul replicas
 replicas: 3
 
