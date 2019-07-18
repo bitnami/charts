@@ -281,8 +281,6 @@ service:
       # The service port Notary listens on. Only needed when notary.enabled
       # is set to true
       notaryPort: 4443
-    annotations: {}
-    sourceRanges: []
   nodePort:
     # The name of NodePort service
     name: harbor
@@ -314,6 +312,8 @@ service:
       # The service port Notary listens on. Only needed when notary.enabled
       # is set to true
       notaryPort: 4443
+    annotations: {}
+    sourceRanges: []
 
 # The external URL for Harbor core service. It is used to
 # 1) populate the docker/helm commands showed on portal
@@ -336,7 +336,6 @@ externalURL: https://core.harbor.domain
 # Set uaaSecretName below to provide a pre-created secret that
 # contains a base64 encoded CA Certificate named `ca.crt`.
 # uaaSecretName:
-
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
