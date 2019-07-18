@@ -281,8 +281,6 @@ service:
       # The service port Notary listens on. Only needed when notary.enabled
       # is set to true
       notaryPort: 4443
-    annotations: {}
-    sourceRanges: []
   nodePort:
     # The name of NodePort service
     name: harbor
@@ -314,6 +312,8 @@ service:
       # The service port Notary listens on. Only needed when notary.enabled
       # is set to true
       notaryPort: 4443
+    annotations: {}
+    sourceRanges: []
 
 # The external URL for Harbor core service. It is used to
 # 1) populate the docker/helm commands showed on portal
