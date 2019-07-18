@@ -175,6 +175,8 @@ elasticsearch:
   ## Tag for the Bitnami Elasticsearch image to use
   ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch
   image:
+    registry: docker.io
+    repository: bitnami/elasticsearch
     tag: 6.8.1-debian-9-r23
   ## Enable to perform the sysctl operation
   sysctlImage:
