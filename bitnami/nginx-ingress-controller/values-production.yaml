@@ -13,7 +13,7 @@ name: controller
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.24.1-debian-9-r25
+  tag: 0.24.1-debian-9-r40
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -25,6 +25,14 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+
+## String to partially override nginx-ingress-controller.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override nginx-ingress-controller.fullname template
+##
+# fullnameOverride:
 
 config:
   use-geoip: "false"
@@ -249,8 +257,8 @@ extraVolumes: []
 extraInitContainers: []
 ## Containers, which are run before the app containers are started.
 # - name: init-myservice
-#   image: busybox
-#   command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+#   image: bitnami/minideb
+#   command: ['sh', '-c', 'install_packages dnsutils && until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
 
 stats:
   enabled: true
@@ -266,10 +274,10 @@ stats:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 18080
+    port: 18080
     type: ClusterIP
 
-## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
+## If stats.enabled = true and metrics.enabled = true, Prometheus metrics will be exported
 ##
 metrics:
   enabled: true
@@ -288,7 +296,7 @@ metrics:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 9913
+    port: 9913
     type: ClusterIP
 
 lifecycle: {}
@@ -303,7 +311,7 @@ revisionHistoryLimit: 10
 ##
 defaultBackend:
 
-  ## If false, controller.defaultBackendService must be provided
+  ## If false, defaultBackendService must be provided
   ##
   enabled: true
 
@@ -311,7 +319,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.0-debian-9-r26
+    tag: 1.16.0-debian-9-r46
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -371,7 +379,7 @@ defaultBackend:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 80
+    port: 80
     type: ClusterIP
 
   priorityClassName: ""

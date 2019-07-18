@@ -52,7 +52,9 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `image.registry`         | Metrics Server image registry                                               | `docker.io`                            |
 | `image.repository`       | Metrics Server image name                                                   | `bitnami/metrics-server`               |
 | `image.tag`              | Metrics Server image tag                                                    | `{TAG_NAME}`                           |
-| `image.pullPolicy`       | Metrics Server image pull policy                                            | `Always`                               |
+| `image.pullPolicy`       | Metrics Server image pull policy                                            | `IfNotPresent`                         |
+| `nameOverride`           | String to partially override metrics-server.fullname template with a string (will prepend the release name) | `nil`  |
+| `fullnameOverride`       | String to fully override metrics-server.fullname template with a string                                     | `nil`  |
 | `securePort`             | Port where metrics-server will be running                                   | `8443`                                 |
 | `service.type`           | Kubernetes Service type                                                     | `ClusterIP`                            |
 | `service.port`           | Kubernetes Service port                                                     | `443`                                  |

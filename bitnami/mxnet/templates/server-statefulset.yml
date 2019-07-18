@@ -1,0 +1,186 @@
+{{- if eq .Values.mode "distributed" }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "mxnet.fullname" . }}-server
+  labels:
+    app.kubernetes.io/name: {{ include "mxnet.name" . }}
+    helm.sh/chart: {{ include "mxnet.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: server
+spec:
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "mxnet.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: server
+  replicas: {{ .Values.serverCount }}
+  serviceName: {{ template "mxnet.fullname" . }}-headless
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "mxnet.name" . }}
+        helm.sh/chart: {{ include "mxnet.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: server
+    spec:
+      {{- include "mxnet.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cloneFilesFromGit.enabled }}
+      initContainers:
+      - name: git-clone-repository
+        image: {{ include "git.image" . }}
+        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+        command:
+        - /bin/sh
+        - -c
+        - |
+          git clone {{ .Values.cloneFilesFromGit.repository }} --branch {{ .Values.cloneFilesFromGit.revision }} /app
+        volumeMounts:
+        - name: git-cloned-files
+          mountPath: /app
+      {{- end }}
+      {{- if .Values.initContainers }}
+        {{- toYaml .Values.initContainers | nindent 6 }}
+      {{- end }}
+      containers:
+      - name: mxnet
+        workingDir: {{ .Values.entrypoint.workDir }}
+        image: {{ include "mxnet.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: 
+        - bash
+        - -c
+        - |
+          SERVER_RANK=${POD_NAME##*-}
+          ((SERVER_RANK++))
+          export SERVER_RANK
+          {{- include "mxnet.entrypoint" . | nindent 10 }}
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: DMLC_ROLE
+          value: "server"
+        - name: DMLC_NUM_WORKER
+          value: {{ .Values.workerCount | quote }}
+        - name: DMLC_NUM_SERVER
+          value: {{ .Values.serverCount | quote }}
+        - name: DMLC_PS_ROOT_URI
+          value: {{ include "mxnet.fullname" . }}-scheduler
+        - name: DMLC_PS_ROOT_PORT
+          value: {{ .Values.schedulerPort | quote }}
+      {{- if .Values.commonExtraEnvVars }}
+        {{- include "mxnet.parseEnvVars" .Values.commonExtraEnvVars | nindent 8 }}
+      {{- end }} 
+      {{- if .Values.serverExtraEnvVars }}
+        {{- include "mxnet.parseEnvVars" .Values.serverExtraVars | nindent 8 }}
+      {{- end }}
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          exec:
+            command:
+            - python3
+            - -c
+            - import os; os.environ["DMLC_PS_ROOT_URI"] = "127.0.0.1"; os.environ["DMLC_ROLE"] = "worker"; import mxnet; print(mxnet.__version__)
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          exec:
+            command:
+            - python3
+            - -c
+            - import os; os.environ["DMLC_PS_ROOT_URI"] = "127.0.0.1"; os.environ["DMLC_ROLE"] = "worker"; import mxnet; print(mxnet.__version__)
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        resources: {{ toYaml .Values.resources | nindent 12 }}
+        volumeMounts:
+        {{- if .Values.configMap }}
+        - name: ext-files
+          mountPath: /app
+        {{- else if .Files.Glob "files/*" }}
+        - name: local-files
+          mountPath: /app
+        {{- else if .Values.cloneFilesFromGit.enabled }}
+        - name: git-cloned-files
+          mountPath: /app
+        {{- end }}
+        - name: data
+          mountPath: {{ .Values.persistence.mountPath }}
+      {{- if .Values.existingSecret }}
+        - name: secret-data
+          mountPath: /secrets
+      {{- end }}
+    {{- if .Values.sidecars }}
+      {{- toYaml .Values.sidecars | nindent 6 }}
+    {{- end }}
+      volumes:
+      {{- if .Values.existingSecret }}
+      - name: secret-data
+        secret:
+          secretName: {{ .Values.existingSecret }}
+      {{- end }}
+      {{- if .Values.configMap }}
+      - name: ext-files
+        configMap:
+          name: {{ .Values.configMap }}
+      {{- else if .Files.Glob "files/*" }}
+      - name: local-files
+        configMap:
+          name: {{ include "mxnet.fullname" . }}-files
+      {{- else if .Values.cloneFilesFromGit.enabled }}
+      - name: git-cloned-files
+        emptyDir: {}
+      {{- end }}
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        app.kubernetes.io/name: {{ include "mxnet.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- if .Values.persistence.annotations }}
+      annotations: {{ toYaml .Values.persistence.annotations | nindent 8 }}
+      {{- end }}
+    spec:
+      accessModes: {{ toYaml .Values.persistence.accessModes | nindent 8 }}
+      {{- if .Values.persistence.storageClass }}
+      {{- if (eq "-" .Values.persistence.storageClass) }}
+      storageClassName: ""
+      {{- else }}
+      storageClassName: {{ .Values.persistence.storageClass | quote }}
+      {{- end }}
+      {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.persistence.size | quote }}
+  {{- else }}
+      - name: data
+        emptyDir: {}
+  {{- end }}
+{{- end }}

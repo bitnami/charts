@@ -56,8 +56,10 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `image.registry`                     | HashiCorp Consul image registry                                  | `docker.io`                                                |
 | `image.repository`                   | HashiCorp Consul image name                                      | `bitnami/consul`                                           |
 | `image.tag`                          | HashiCorp Consul image tag                                       | `{TAG_NAME}`                                               |
-| `image.pullPolicy`                   | Image pull policy                                                | `Always`                                                   |
+| `image.pullPolicy`                   | Image pull policy                                                | `IfNotPresent`                                             |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                 | `[]` (does not add image pull secrets to deployed pods)    |
+| `nameOverride`                       | String to partially override consul.fullname template with a string (will prepend the release name) | `nil`                   |
+| `fullnameOverride`                   | String to fully override consul.fullname template with a string  | `nil`                                                      |
 | `replicas`                           | Number of replicas                                               | `3`                                                        |
 | `port`                               | HashiCorp Consul http listening port                             | `8500`                                                     |
 | `service.rpcPort`                    | HashiCorp Consul rpc listening port                              | `8400`                                                     |
@@ -74,6 +76,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `securityContext.enabled`            | Enable security context                                          | `true`                                                     |
 | `securityContext.fsGroup`            | Group ID for the container                                       | `1001`                                                     |
 | `securityContext.runAsUser`          | User ID for the container                                        | `1001`                                                     |
+| `clusterDomain`                      | Kubernetes cluster domain                                        | `cluster.local`                                            |
 | `updateStrategy.type`                | Statefulset update strategy policy                               | `RollingUpdate`                                            |
 | `persistence.enabled`                | Use a PVC to persist data                                        | `true`                                                     |
 | `persistence.storageClass`           | Storage class of backing PVC                                     | `nil` (uses alpha storage class annotation)                |
@@ -132,6 +135,20 @@ $ helm install --name my-release -f values.yaml bitnami/consul
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/consul
+```
+
+- Start a side-car prometheus exporter:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 

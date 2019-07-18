@@ -41,10 +41,6 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Log level
-
-You can configure the Zookeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `ERROR` because of each readiness probe produce an `INFO` message on connection and a `WARN` message on disconnection.
-
 ## Configuration
 
 The following tables lists the configurable parameters of the Zookeeper chart and their default values.
@@ -56,7 +52,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `image.registry`                      | Zookeeper image registry                                            | `docker.io`                                              |
 | `image.repository`                    | Zookeeper Image name                                                | `bitnami/zookeeper`                                      |
 | `image.tag`                           | Zookeeper Image tag                                                 | `{TAG_NAME}`                                             |
-| `image.pullPolicy`                    | Zookeeper image pull policy                                         | `Always`                                                 |
+| `image.pullPolicy`                    | Zookeeper image pull policy                                         | `IfNotPresent`                                           |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                    | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                         | Specify if debug values should be set                               | `false`                                                  |
 | `nameOverride`              | String to partially override zookeeper.fullname template with a string (will append the release name)                                           | `nil`                                                    |
@@ -64,6 +60,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `updateStrategy`                      | Update strategies                                                   | `RollingUpdate`                                          |
 | `podDisruptionBudget.maxUnavailable`  | Max number of pods down simultaneously                              | `1`                                                      |
 | `rollingUpdatePartition`              | Partition update strategy                                           | `nil`                                                    |
+| `clusterDomain`                       | Kubernetes cluster domain                                           | `cluster.local`                                          |
 | `podManagementpolicy`                 | Pod management policy                                               | `Parallel`                                               |
 | `replicaCount`                        | Number of ZooKeeper nodes                                           | `1`                                                      |
 | `tickTime`                            | Basic time unit in milliseconds used by ZooKeeper for heartbeats    | `2000`                                                   |
@@ -140,11 +137,35 @@ $ helm install --name my-release -f values.yaml bitnami/zookeeper
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/zookeeper
+```
+
+- Number of ZooKeeper nodes:
+```diff
+- replicaCount: 1
++ replicaCount: 3
+```
+
+- Start a side-car prometheus exporter:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Log level
+
+You can configure the Zookeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `ERROR` because of each readiness probe produce an `INFO` message on connection and a `WARN` message on disconnection.
 
 ## Persistence
 
@@ -154,6 +175,13 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
 
 ## Upgrading
+
+### To 3.0.0
+
+This new version of the chart includes the new Zookeeper major version 3.5.5. Note that to perform an automatic upgrade
+of the application, each node will need to have at least one snapshot file created in the data directory. If not, the
+new version of the application won't be able to start the service. Please refer to [ZOOKEEPER-3056](https://issues.apache.org/jira/browse/ZOOKEEPER-3056)
+in order to find ways to workaround this issue in case you are facing it.
 
 ### To 2.0.0
 

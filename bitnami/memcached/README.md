@@ -52,8 +52,10 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `image.registry`            | Memcached image registry            | `docker.io`                                               |
 | `image.repository`          | Memcached Image name                | `bitnami/memcached`                                       |
 | `image.tag`                 | Memcached Image tag                 | `{TAG_NAME}`                                              |
-| `image.pullPolicy`          | Memcached image pull policy         | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
+| `image.pullPolicy`          | Memcached image pull policy         | `IfNotPresent`                                            |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array          | `[]` (does not add image pull secrets to deployed pods)  |
+| `nameOverride`              | String to partially override memcached.fullname template with a string (will prepend the release name) | `nil`       |
+| `fullnameOverride`          | String to fully override memcached.fullname template with a string                                     | `nil`       |
 | `securityContext.enabled`   | Enable security context             | `true`                                                    |
 | `securityContext.fsGroup`   | Group ID for the container          | `1001`                                                    |
 | `securityContext.runAsUser` | User ID for the container           | `1001`                                                    |
@@ -61,6 +63,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `memcachedPassword`         | Memcached admin password            | `nil`                                                     |
 | `serviceType`               | Kubernetes Service type             | `ClusterIP`                                               |
 | `resources`                 | CPU/Memory resource requests/limits | Memory: `256Mi`, CPU: `250m`                              |
+| `clusterDomain`                    | Kubernetes cluster domain           | `cluster.local`                                           |
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
 | `metrics.image.registry`                   | MongoDB exporter image registry                                                                                  | `docker.io`                                          |
 | `metrics.image.repository`                 | MongoDB exporter image name                                                                                      | `prom/memcached-exporter`                           |
@@ -88,6 +91,20 @@ $ helm install --name my-release -f values.yaml bitnami/memcached
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/memcached
+```
+
+- Start a side-car prometheus exporter:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 

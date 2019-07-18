@@ -1,0 +1,17 @@
+{{- if eq .Values.mode "distributed" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mxnet.fullname" . }}-headless
+  labels:
+    app.kubernetes.io/name: {{ include "mxnet.name" . }}
+    helm.sh/chart: {{ include "mxnet.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: {{ include "mxnet.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

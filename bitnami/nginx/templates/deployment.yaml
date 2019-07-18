@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "nginx.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "nginx.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "nginx.fullname" . }}
       release: "{{ .Release.Name }}"
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "nginx.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
@@ -32,31 +32,21 @@ spec:
     spec:
 {{- include "nginx.imagePullSecrets" . | indent 6 }}
       containers:
-      - name: {{ template "fullname" . }}
+      - name: nginx
         image: "{{ template "nginx.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:
         - name: http
           containerPort: 8080
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-          failureThreshold: 6
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 5
-          timeoutSeconds: 3
-          periodSeconds: 5
+        livenessProbe: {{ toYaml .Values.livenessProbe | nindent 10 }}
+        readinessProbe: {{ toYaml .Values.readinessProbe | nindent 10 }}
         volumeMounts:
         {{- if .Values.serverBlock }}
         - name: nginx-server-block
           mountPath: /opt/bitnami/nginx/conf/server_blocks
         {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "nginx.metrics.image" . }}
@@ -84,5 +74,5 @@ spec:
       {{- if .Values.serverBlock }}
       - name: nginx-server-block
         configMap:
-          name: {{ template "fullname" . }}
+          name: {{ template "nginx.fullname" . }}
       {{- end }}

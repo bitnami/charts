@@ -52,20 +52,26 @@ The following tables lists the configurable parameters of the MySQL chart and th
 | `image.registry`                          | MySQL image registry                                                       | `docker.io`                                                       |
 | `image.repository`                        | MySQL Image name                                                           | `bitnami/mysql`                                                   |
 | `image.tag`                               | MySQL Image tag                                                            | `{TAG_NAME}`                                                      |
-| `image.pullPolicy`                        | MySQL image pull policy                                                    | `Always` if `imageTag` is `latest`, else `IfNotPresent`           |
+| `image.pullPolicy`                        | MySQL image pull policy                                                    | `IfNotPresent`                                                    |
 | `image.pullSecrets`                       | Specify docker-registry secret names as an array                           | `[]` (does not add image pull secrets to deployed pods)           |
+| `nameOverride`                            | String to partially override mysql.fullname template with a string (will prepend the release name) | `nil`                                     |
+| `fullnameOverride`                        | String to fully override mysql.fullname template with a string             | `nil`                                                             |
 | `service.type`                            | Kubernetes service type                                                    | `ClusterIP`                                                       |
 | `service.port`                            | MySQL service port                                                         | `3306`                                                            |
 | `root.password`                           | Password for the `root` user                                               | _random 10 character alphanumeric string_                         |
+| `root.forcePassword`                      | Force users to specify a password. That is required for 'helm upgrade' to work properly | `false`                                              |
 | `db.user`                                 | Username of new user to create (should be different from replication.user) | `nil`                                                             |
 | `db.password`                             | Password for the new user                                                  | _random 10 character alphanumeric string if `db.user` is defined_ |
 | `db.name`                                 | Name for new database to create                                            | `my_database`                                                     |
+| `db.forcePassword`                        | Force users to specify a password. That is required for 'helm upgrade' to work properly | `false`                                              |
 | `securityContext.enabled`                 | Enable security context                                                    | `true`                                                            |
 | `securityContext.fsGroup`                 | Group ID for the container                                                 | `1001`                                                            |
 | `securityContext.runAsUser`               | User ID for the container                                                  | `1001`                                                            |
+| `clusterDomain`                           | Kubernetes cluster domain                                                  | `cluster.local`                                                   |
 | `replication.enabled`                     | MySQL replication enabled                                                  | `true`                                                            |
 | `replication.user`                        | MySQL replication user (should be different from db.user)                  | `replicator`                                                      |
 | `replication.password`                    | MySQL replication user password                                            | _random 10 character alphanumeric string_                         |
+| `replication.forcePassword`               | Force users to specify a password. That is required for 'helm upgrade' to work properly | `false`                                              |
 | `master.antiAffinity`                     | Master pod anti-affinity policy                                            | `soft`                                                            |
 | `master.updateStrategy.type`              | Master statefulset update strategy policy                                  | `RollingUpdate`                                                   |
 | `master.persistence.enabled`              | Enable persistence using a `PersistentVolumeClaim`                         | `true`                                                            |
@@ -137,6 +143,38 @@ $ helm install --name my-release -f values.yaml bitnami/mysql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/mysql
+```
+
+- Force users to specify a password:
+```diff
+- root.forcePassword: false
++ root.forcePassword: true
+
+- db.forcePassword: false
++ db.forcePassword: true
+
+- replication.forcePassword: false
++ replication.forcePassword: true
+```
+
+- Desired number of slave replicas:
+```diff
+- slave.replicas: 1
++ slave.replicas: 2
+```
+
+- Start a side-car prometheus exporter:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 

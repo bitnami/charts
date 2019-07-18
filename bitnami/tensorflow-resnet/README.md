@@ -67,16 +67,17 @@ The following tables lists the configurable parameters of the TensorFlow ResNet 
 | `server.image.registry`                       | TensorFlow Serving image registry                    | `docker.io`                                                  |
 | `server.image.repository`                     | TensorFlow Serving Image name                        | `bitnami/tensorflow-serving`                                 |
 | `server.image.tag`                            | TensorFlow Serving Image tag                         | `{TAG_NAME}`                                                 |
-| `server.image.pullPolicy`                     | TensorFlow Serving image pull policy                 | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
+| `server.image.pullPolicy`                     | TensorFlow Serving image pull policy                 | `IfNotPresent`                                               |
 | `server.image.pullSecrets`                    | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                                | String to partially override tensorflow-resnet.fullname template with a string (will prepend the release name) | `nil` |
+| `fullnameOverride`                            | String to fully override tensorflow-resnet.fullname template with a string                                     | `nil` |
 | `replicaCount`                                | Desired number of pods                               | `1`                                                          |
 | `server.port`                                 | Tensorflow server port                               | `8500`                                                       |
 | `client.image.registry`                       | TensorFlow ResNet image registry                     | `docker.io`                                                  |
 | `client.image.repository`                     | TensorFlow ResNet Image name                         | `bitnami/tensorflow-resnet`                                  |
 | `client.image.tag`                            | TensorFlow ResNet Image tag                          | `{TAG_NAME}`                                                 |
-| `client.image.pullPolicy`                     | TensorFlow ResNet image pull policy                  | `Always` if `imageTag` is `latest`, else `IfNotPresent`      |
+| `client.image.pullPolicy`                     | TensorFlow ResNet image pull policy                  | `IfNotPresent`                                               |
 | `client.image.pullSecrets`                    | Specify docker-registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)      |
-| `imagePullPolicy`                             | Image pull policy                                    | `Always` if `image` tag is `latest`, else `IfNotPresent`     |
 | `podAnnotations`                              | Pod annotations                                      | `{}`                                                         |
 | `livenessProbe.enabled`                       | Would you like a livessProbed to be enabled                                                       |  `true`         |
 | `livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated                                                          |  30             |

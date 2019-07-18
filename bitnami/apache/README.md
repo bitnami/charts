@@ -51,8 +51,10 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `image.registry`                 | Apache Docker image registry                     | `docker.io`                                                  |
 | `image.repository`               | Apache Docker image name                         | `bitnami/apache`                                             |
 | `image.tag`                      | Apache Docker image tag                          | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`               | Apache Docker image pull policy                  | `Always`                                                     |
+| `image.pullPolicy`               | Apache Docker image pull policy                  | `IfNotPresent`                                               |
 | `image.pullSecrets`              | Specify Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                   | String to partially override apache.fullname template with a string (will prepend the release name) | `nil`     |
+| `fullnameOverride`               | String to fully override apache.fullname template with a string                                     | `nil`     |
 | `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
 | `ingress.enabled`                | Enable ingress controller resource               | `false`                                                      |
 | `ingress.certManager`            | Add annotations for cert-manager                 | `false`                                                      |
