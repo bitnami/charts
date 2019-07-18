@@ -347,3 +347,36 @@ This chart includes a `values-production.yaml` file where you can find some para
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+## Upgrade
+
+## 2.0.0
+
+In this version, this **chart depends on PostgreSQL 11 instead of PostgreSQL 10**. You can find the main difference and notable changes in the following links: [https://www.postgresql.org/about/news/1894/](https://www.postgresql.org/about/news/1894/) and [https://www.postgresql.org/about/featurematrix/](https://www.postgresql.org/about/featurematrix/).
+
+For major releases of PostgreSQL, the internal data storage format is subject to change, thus complicating upgrades, you can see some errors like the following one in the logs:
+
+```bash
+Welcome to the Bitnami postgresql container
+Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-postgresql
+Submit issues and feature requests at https://github.com/bitnami/bitnami-docker-postgresql/issues
+Send us your feedback at containers@bitnami.com
+
+INFO  ==> ** Starting PostgreSQL setup **
+NFO  ==> Validating settings in POSTGRESQL_* env vars..
+INFO  ==> Initializing PostgreSQL database...
+INFO  ==> postgresql.conf file not detected. Generating it...
+INFO  ==> pg_hba.conf file not detected. Generating it...
+INFO  ==> Deploying PostgreSQL with persisted data...
+INFO  ==> Configuring replication parameters
+INFO  ==> Loading custom scripts...
+INFO  ==> Enabling remote connections
+INFO  ==> Stopping PostgreSQL...
+INFO  ==> ** PostgreSQL setup finished! **
+
+INFO  ==> ** Starting PostgreSQL **
+  [1] FATAL:  database files are incompatible with server
+  [1] DETAIL:  The data directory was initialized by PostgreSQL version 10, which is not compatible with this version 11.3.
+```
+
+In this case, you should migrate the data from the old PostgreSQL chart to the new one following an approach similar to that described in [this section](https://www.postgresql.org/docs/current/upgrading.html#UPGRADING-VIA-PGDUMPALL) from the official documentation. Basically, create a database dump in the old chart, move and restore it in the new one.
