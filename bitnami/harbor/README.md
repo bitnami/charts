@@ -153,7 +153,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `imagePullPolicy`                                                           | The image pull policy                                                    | `IfNotPresent`                                          |
 | `logLevel`                                                                  | The log level                                                            | `debug`                                                 |
 | `forcePassword`                                                             | Option to ensure all passwords and keys are set by the user              | `false`                                                 |
-| `harborAdminPassword`                                                       | The initial password of Harbor admin. Change it from portal after launching Harbor | `Harbor12345`                                 |
+| `harborAdminPassword`                                                       | The initial password of Harbor admin. Change it from portal after launching Harbor | _random 10 character long alphanumeric string_ |
 | `secretkey`                                                                 | The key used for encryption. Must be a string of 16 chars                | `not-a-secure-key`                                      |
 | **Nginx** (if expose the service via `ingress`, the Nginx will not be used) |
 | `nginxImage.registry`                                                       | Registry for Nginx image                                                 | `docker.io`                                             |
