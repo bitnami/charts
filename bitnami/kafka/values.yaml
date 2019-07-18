@@ -282,7 +282,7 @@ affinity: {}
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
-resources:
+resources: {}
 #  limits:
 #    cpu: 200m
 #    memory: 1Gi
