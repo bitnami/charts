@@ -337,7 +337,6 @@ externalURL: https://core.harbor.domain
 # contains a base64 encoded CA Certificate named `ca.crt`.
 # uaaSecretName:
 
-
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
