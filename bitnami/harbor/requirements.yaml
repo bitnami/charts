@@ -1,6 +1,6 @@
 dependencies:
 - name: postgresql
-  version: 5.x.x
+  version: 6.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: postgresql.enabled
 - name: redis
