@@ -55,8 +55,16 @@ spec:
 {{- $loadBalancer := .Values.service.loadBalancer }}
   name: {{ $loadBalancer.name }}
   labels: {{ include "harbor.labels" . | nindent 4 }}
+  {{- with $loadBalancer.annotations }}
+    annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: LoadBalancer
+  {{- with $loadBalancer.sourceRanges }}
+    loadBalancerSourceRanges:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   ports:
     - name: http
       port: {{ $loadBalancer.ports.httpPort }}
