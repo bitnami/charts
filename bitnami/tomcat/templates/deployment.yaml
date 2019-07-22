@@ -25,6 +25,19 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end}}
 {{- include "tomcat.imagePullSecrets" . | indent 6 }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "tomcat.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/tomcat"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 -}}
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/tomcat
+      {{- end }}
       containers:
       - name: tomcat
         image: "{{ template "tomcat.image" . }}"
@@ -59,10 +72,10 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: tomcat-data
+        - name: data
           mountPath: /bitnami/tomcat
       volumes:
-      - name: tomcat-data
+      - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "tomcat.fullname" . }}

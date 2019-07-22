@@ -45,33 +45,39 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Tomcat chart and their default values.
 
-|           Parameter             |                 Description                  |                           Default                         |
-|---------------------------------|----------------------------------------------|---------------------------------------------------------- |
-| `global.imageRegistry`          | Global Docker image registry                 | `nil`                                                     |
-| `global.imagePullSecrets`       | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)|
-| `image.registry`                | Tomcat image registry                        | `docker.io`                                               |
-| `image.repository`              | Tomcat Image name                            | `bitnami/tomcat`                                          |
-| `image.tag`                     | Tomcat Image tag                             | `{TAG_NAME}`                                              |
-| `image.pullPolicy`              | Tomcat image pull policy                     | `IfNotPresent`                                            |
-| `image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)  |
-| `nameOverride`                  | String to partially override tomcat.fullname template with a string (will prepend the release name) | `nil` |
-| `fullnameOverride`              | String to fully override tomcat.fullname template with a string                                     | `nil` |
-| `tomcatUsername`                | Tomcat admin user                            | `user`                                                    |
-| `tomcatPassword`                | Tomcat admin password                        | _random 10 character alphanumeric string_                 |
-| `tomcatAllowRemoteManagement`   | Enable remote access to management interface | `0` (disabled)                                            |
-| `securityContext.enabled`       | Enable security context                      | `true`                                                    |
-| `securityContext.fsGroup`       | Group ID for the container                   | `1001`                                                    |
-| `securityContext.runAsUser`     | User ID for the container                    | `1001`                                                    |
-| `service.type`                  | Kubernetes Service type                      | `LoadBalancer`                                            |
-| `service.port`                  | Service HTTP port                            | `80`                                                      |
-| `service.nodePorts.http`        | Kubernetes http node port                    | `""`                                                      |
-| `service.externalTrafficPolicy` | Enable client source IP preservation         | `Cluster`                                                 |
-| `service.loadBalancerIP`        | LoadBalancer service IP address              | `""`                                                      |
-| `persistence.enabled`           | Enable persistence using PVC                 | `true`                                                    |
-| `persistence.storageClass`      | PVC Storage Class for Tomcat volume          | `nil` (uses alpha storage class annotation)               |
-| `persistence.accessMode`        | PVC Access Mode for Tomcat volume            | `ReadWriteOnce`                                           |
-| `persistence.size`              | PVC Storage Request for Tomcat volume        | `8Gi`                                                     |
-| `resources`                     | CPU/Memory resource requests/limits          | Memory: `512Mi`, CPU: `300m`                              |
+| Parameter                            | Description                                                                                                                                               | Default                                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`                     | Tomcat image registry                                                                                                                                     | `docker.io`                                             |
+| `image.repository`                   | Tomcat Image name                                                                                                                                         | `bitnami/tomcat`                                        |
+| `image.tag`                          | Tomcat Image tag                                                                                                                                          | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                   | Tomcat image pull policy                                                                                                                                  | `IfNotPresent`                                          |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                       | String to partially override tomcat.fullname template with a string (will prepend the release name)                                                       | `nil`                                                   |
+| `fullnameOverride`                   | String to fully override tomcat.fullname template with a string                                                                                           | `nil`                                                   |
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
+| `tomcatUsername`                     | Tomcat admin user                                                                                                                                         | `user`                                                  |
+| `tomcatPassword`                     | Tomcat admin password                                                                                                                                     | _random 10 character alphanumeric string_               |
+| `tomcatAllowRemoteManagement`        | Enable remote access to management interface                                                                                                              | `0` (disabled)                                          |
+| `securityContext.enabled`            | Enable security context                                                                                                                                   | `true`                                                  |
+| `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                  |
+| `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                  |
+| `service.type`                       | Kubernetes Service type                                                                                                                                   | `LoadBalancer`                                          |
+| `service.port`                       | Service HTTP port                                                                                                                                         | `80`                                                    |
+| `service.nodePorts.http`             | Kubernetes http node port                                                                                                                                 | `""`                                                    |
+| `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                                                      | `Cluster`                                               |
+| `service.loadBalancerIP`             | LoadBalancer service IP address                                                                                                                           | `""`                                                    |
+| `persistence.enabled`                | Enable persistence using PVC                                                                                                                              | `true`                                                  |
+| `persistence.storageClass`           | PVC Storage Class for Tomcat volume                                                                                                                       | `nil` (uses alpha storage class annotation)             |
+| `persistence.accessMode`             | PVC Access Mode for Tomcat volume                                                                                                                         | `ReadWriteOnce`                                         |
+| `persistence.size`                   | PVC Storage Request for Tomcat volume                                                                                                                     | `8Gi`                                                   |
+| `resources`                          | CPU/Memory resource requests/limits                                                                                                                       | Memory: `512Mi`, CPU: `300m`                            |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
@@ -104,6 +110,15 @@ The [Bitnami Tomcat](https://github.com/bitnami/bitnami-docker-tomcat) image sto
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
 
