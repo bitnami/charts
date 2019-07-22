@@ -58,6 +58,19 @@ spec:
 {{ toYaml . | indent 8 }}
       {{- end }}
 {{- include "cassandra.imagePullSecrets" . | indent 6 }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "cassandra.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/cassandra"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 -}}
+        volumeMounts:
+        - name: data
+          mountPath: "/bitnami/cassandra"
+      {{- end }}
       containers:
       - name: cassandra
         command:
@@ -75,8 +88,7 @@ spec:
               /app-entrypoint.sh /run.sh
         image: {{ template "cassandra.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
+        resources: {{ toYaml .Values.resources | nindent 10 -}}
         env:
         - name: CASSANDRA_CLUSTER_NAME
           value: {{ .Values.cluster.name }}
