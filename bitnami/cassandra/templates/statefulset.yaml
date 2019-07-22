@@ -69,7 +69,7 @@ spec:
         resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 -}}
         volumeMounts:
         - name: data
-          mountPath: "/bitnami/cassandra"
+          mountPath: /bitnami/cassandra
       {{- end }}
       containers:
       - name: cassandra
