@@ -1,14 +1,14 @@
 {{- if eq .Values.service.type "Ingress" }}
 {{- $ingress := .Values.service.ingress -}}
 {{- $tls := .Values.service.tls -}}
-{{- if eq .Values.expose.ingress.controller "gce" }}
+{{- if eq .Values.service.ingress.controller "gce" }}
   {{- $_ := set . "portal_path" "/*" -}}
   {{- $_ := set . "api_path" "/api/*" -}}
   {{- $_ := set . "service_path" "/service/*" -}}
   {{- $_ := set . "v2_path" "/v2/*" -}}
   {{- $_ := set . "chartrepo_path" "/chartrepo/*" -}}
   {{- $_ := set . "controller_path" "/c/*" -}}
-{{- else if eq .Values.expose.ingress.controller "ncp" }}
+{{- else if eq .Values.service.ingress.controller "ncp" }}
   {{- $_ := set . "portal_path" "/" -}}
   {{- $_ := set . "api_path" "/api/.*" -}}
   {{- $_ := set . "service_path" "/service/.*" -}}
@@ -56,7 +56,7 @@ spec:
     {{- end }}
   {{- end }}
   {{- end }}
-  {{- if eq .Values.expose.ingress.controller "ncp" }}
+  {{- if eq .Values.service.ingress.controller "ncp" }}
   backend:
     serviceName: "{{ template "harbor.portal" . }}"
     servicePort: http
