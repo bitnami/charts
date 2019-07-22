@@ -155,7 +155,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `imagePullPolicy`                                                           | The image pull policy                                                    | `IfNotPresent`                                          |
 | `logLevel`                                                                  | The log level                                                            | `debug`                                                 |
 | `forcePassword`                                                             | Option to ensure all passwords and keys are set by the user              | `false`                                                 |
-| `harborAdminPassword`                                                       | The initial password of Harbor admin. Change it from portal after launching Harbor | `Harbor12345`                                 |
+| `harborAdminPassword`                                                       | The initial password of Harbor admin. Change it from portal after launching Harbor | _random 10 character long alphanumeric string_ |
 | `secretkey`                                                                 | The key used for encryption. Must be a string of 16 chars                | `not-a-secure-key`                                      |
 | **Nginx** (if expose the service via `ingress`, the Nginx will not be used) |
 | `nginxImage.registry`                                                       | Registry for Nginx image                                                 | `docker.io`                                             |
@@ -349,3 +349,39 @@ This chart includes a `values-production.yaml` file where you can find some para
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+## Upgrade
+
+## 2.0.0
+
+In this version, two major changes were performed:
+
+- This **chart depends on the Redis 5 chart instead of Redis 4**. There is a breaking change that will affect releases with `metrics.enabled: true`, since the default tag for the exporter image is now `v1.x.x`. This introduces many changes including metrics names. You'll want to use [this dashboard](https://github.com/oliver006/redis_exporter/blob/master/contrib/grafana_prometheus_redis_dashboard.json) now. Please see the [redis_exporter github page](https://github.com/oliver006/redis_exporter#upgrading-from-0x-to-1x) for more details.
+- This **chart depends on the PostgreSQL 11 chart instead of PostgreSQL 10**. You can find the main difference and notable changes in the following links: [https://www.postgresql.org/about/news/1894/](https://www.postgresql.org/about/news/1894/) and [https://www.postgresql.org/about/featurematrix/](https://www.postgresql.org/about/featurematrix/).
+
+For major releases of PostgreSQL, the internal data storage format is subject to change, thus complicating upgrades, you can see some errors like the following one in the logs:
+
+```bash
+Welcome to the Bitnami postgresql container
+Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-postgresql
+Submit issues and feature requests at https://github.com/bitnami/bitnami-docker-postgresql/issues
+Send us your feedback at containers@bitnami.com
+
+INFO  ==> ** Starting PostgreSQL setup **
+NFO  ==> Validating settings in POSTGRESQL_* env vars..
+INFO  ==> Initializing PostgreSQL database...
+INFO  ==> postgresql.conf file not detected. Generating it...
+INFO  ==> pg_hba.conf file not detected. Generating it...
+INFO  ==> Deploying PostgreSQL with persisted data...
+INFO  ==> Configuring replication parameters
+INFO  ==> Loading custom scripts...
+INFO  ==> Enabling remote connections
+INFO  ==> Stopping PostgreSQL...
+INFO  ==> ** PostgreSQL setup finished! **
+
+INFO  ==> ** Starting PostgreSQL **
+  [1] FATAL:  database files are incompatible with server
+  [1] DETAIL:  The data directory was initialized by PostgreSQL version 10, which is not compatible with this version 11.3.
+```
+
+In this case, you should migrate the data from the old PostgreSQL chart to the new one following an approach similar to that described in [this section](https://www.postgresql.org/docs/current/upgrading.html#UPGRADING-VIA-PGDUMPALL) from the official documentation. Basically, create a database dump in the old chart, move and restore it in the new one.
