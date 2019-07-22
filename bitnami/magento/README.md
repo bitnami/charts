@@ -93,6 +93,9 @@ The following table lists the configurable parameters of the Magento chart and t
 | `mariadb.db.user`                     | Database user to create                                                              | `bn_magento`                                                 |
 | `mariadb.db.password`                 | Password for the database                                                            | _random 10 character long alphanumeric string_               |
 | `elasticsearch.enabled`               | Use the Elasticsearch chart as search engine                                         | `true`                                                       |
+| `elasticsearch.image.registry`        | Elasticsearch image registry                                                         | `docker.io`                                                  |
+| `elasticsearch.image.repository`      | Elasticsearch image name                                                             | `bitnami/elasticsearch`                                      |
+| `elasticsearch.image.tag`             | Elasticsearch image tag                                                              | `{TAG_NAME}`                                                 |
 | `elasticsearch.sysctlImage.enabled`   | Enable kernel settings modifier image for Elasticsearch                              | `false`                                                      |
 | `elasticsearch.master.replicas`       | Desired number of Elasticsearch master-eligible nodes                                | `1`                                                          |
 | `elasticsearch.coordinating.replicas` | Desired number of Elasticsearch coordinating-only nodes                              | `1`                                                          |
