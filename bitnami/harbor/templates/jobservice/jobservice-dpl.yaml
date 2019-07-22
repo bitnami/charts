@@ -36,7 +36,7 @@ spec:
         command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/var/log/jobs"]
         securityContext:
           runAsUser: 0
-        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 -}}
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
         volumeMounts:
         - name: job-logs
           mountPath: /var/log/jobs
