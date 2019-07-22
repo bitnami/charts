@@ -37,9 +37,8 @@ image:
 ##
 # fullnameOverride:
 
-##
 ## Init containers parameters:
-## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
 volumePermissions:
   enabled: false
