@@ -100,6 +100,15 @@ If Harbor is deployed behind the proxy, set it as the URL of proxy.
 
 Secrets and certificates must be setup to avoid changes on every Helm upgrade (see: [#107](https://github.com/goharbor/harbor-helm/issues/107)).
 
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
 ### Configure the deployment options:
 
 The following table lists the configurable parameters of the Harbor chart and the default values. They can be configured in `values.yaml` or set via `--set` flag during installation.
@@ -151,6 +160,12 @@ The following table lists the configurable parameters of the Harbor chart and th
 | **General**                                                                 |
 | `nameOverride`                                                              | String to partially override harbor.fullname template with a string (will prepend the release name) | `nil`                        |
 | `fullnameOverride`                                                          | String to fully override harbor.fullname template with a string                                     | `nil`                        |
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                     |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
 | `externalURL`                                                               | The external URL for Harbor core service                                 | `https://core.harbor.domain`                            |
 | `imagePullPolicy`                                                           | The image pull policy                                                    | `IfNotPresent`                                          |
 | `logLevel`                                                                  | The log level                                                            | `debug`                                                 |

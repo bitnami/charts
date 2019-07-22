@@ -28,6 +28,20 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "harbor.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/var/log/jobs"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 -}}
+        volumeMounts:
+        - name: job-logs
+          mountPath: /var/log/jobs
+          subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+      {{- end }}
       containers:
       - name: jobservice
         image: "{{ template "harbor.jobserviceImage" . }}"
