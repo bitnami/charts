@@ -76,6 +76,19 @@ spec:
                   values:
                   - "{{ template "consul.name" . }}"
       {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "consul.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/consul/data"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 -}}
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/consul/data
+      {{- end }}
       containers:
       - name: consul
         image: "{{ template "consul.image" . }}"
