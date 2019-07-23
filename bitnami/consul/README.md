@@ -49,77 +49,83 @@ $ helm delete --purge my-release
 
 The following tables lists the configurable parameters of the HashiCorp Consul chart and their default values.
 
-| Parameter                            | Description                                                      | Default                                                    |
-| ------------------------------------ | ---------------------------------------------------------------- | ---------------------------------------------------------- |
-| `global.imageRegistry`               | Global Docker image registry                                     | `nil`                                                      |
-| `global.imagePullSecrets`            | Global Docker registry secret names as an array                  | `[]` (does not add image pull secrets to deployed pods)    |
-| `image.registry`                     | HashiCorp Consul image registry                                  | `docker.io`                                                |
-| `image.repository`                   | HashiCorp Consul image name                                      | `bitnami/consul`                                           |
-| `image.tag`                          | HashiCorp Consul image tag                                       | `{TAG_NAME}`                                               |
-| `image.pullPolicy`                   | Image pull policy                                                | `IfNotPresent`                                             |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array                 | `[]` (does not add image pull secrets to deployed pods)    |
-| `nameOverride`                       | String to partially override consul.fullname template with a string (will prepend the release name) | `nil`                   |
-| `fullnameOverride`                   | String to fully override consul.fullname template with a string  | `nil`                                                      |
-| `replicas`                           | Number of replicas                                               | `3`                                                        |
-| `port`                               | HashiCorp Consul http listening port                             | `8500`                                                     |
-| `service.rpcPort`                    | HashiCorp Consul rpc listening port                              | `8400`                                                     |
-| `service.serflanPort`                | Container serf lan listening port                                | `8301`                                                     |
-| `service.serverPort`                 | Container server listening port                                  | `8300`                                                     |
-| `service.consulDnsPort`              | Container dns listening port                                     | `8600`                                                     |
-| `service.uiPort`                     | HashiCorp Consul UI port                                         | `80`                                                       |
-| `datacenterName`                     | HashiCorp Consul datacenter name                                 | `dc1`                                                      |
-| `gossipKey`                          | Gossip key for all members                                       | `nil`                                                      |
-| `domain`                             | HashiCorp Consul domain                                          | `consul`                                                   |
-| `clientAddress`                      | Address in which HashiCorp Consul will bind client interfaces    | `0.0.0.0`                                                  |
-| `serflanAddress`                     | Address used for Serf LAN communications                         | `0.0.0.0`                                                  |
-| `raftMultiplier`                     | Multiplier used to scale key Raft timing parameters              | `10Gi`                                                     |
-| `securityContext.enabled`            | Enable security context                                          | `true`                                                     |
-| `securityContext.fsGroup`            | Group ID for the container                                       | `1001`                                                     |
-| `securityContext.runAsUser`          | User ID for the container                                        | `1001`                                                     |
-| `clusterDomain`                      | Kubernetes cluster domain                                        | `cluster.local`                                            |
-| `updateStrategy.type`                | Statefulset update strategy policy                               | `RollingUpdate`                                            |
-| `persistence.enabled`                | Use a PVC to persist data                                        | `true`                                                     |
-| `persistence.storageClass`           | Storage class of backing PVC                                     | `nil` (uses alpha storage class annotation)                |
-| `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                              | `ReadWriteOnce`                                            |
-| `persistence.size`                   | Size of data volume                                              | `8Gi`                                                      |
-| `persistence.annotations`            | Annotations for the persistent volume                            | `nil`                                                      |
-| `resources`                          | Container resource requests and limits                           | `{}`                                                       |
-| `maxUnavailable`                     | Pod disruption Budget maxUnavailable                             | `1`                                                        |
-| `nodeAffinity`                       | HashiCorp Consul pod node-affinity setting                       | `nil`                                                      |
-| `antiAffinity`                       | HashiCorp Consul pod anti-affinity setting                       | `soft`                                                     |
-| `ui.service.enabled`                 | Use a service to access HashiCorp Consul Ui                      | `true`                                                     |
-| `ui.service.type`                    | Kubernetes Service Type                                          | `ClusterIP`                                                |
-| `ui.service.annotations`             | Annotations for HashiCorp Consul UI service                      | {}                                                         |
-| `ui.service.loadBalancerIP`          | IP if HashiCorp Consul UI service type is `LoadBalancer`         | `nil`                                                      |
-| `ingress.enabled`                    | Enable ingress controller resource                               | `false`                                                    |
-| `ingress.certManager`                | Add annotations for cert-manager                                 | `false`                                                    |
-| `ingress.annotations`                | Ingress annotations                                              | `[]`                                                       |
-| `ingress.hosts[0].name`              | Hostname to your HashiCorp Consul installation                   | `consul-ui.local`                                          |
-| `ingress.hosts[0].path`              | Path within the url structure                                    | `/`                                                        |
-| `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                   | `false`                                                    |
-| `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                        | `consul-ui.local-tls`                                      |
-| `ingress.secrets[0].name`            | TLS Secret Name                                                  | `nil`                                                      |
-| `ingress.secrets[0].certificate`     | TLS Secret Certificate                                           | `nil`                                                      |
-| `ingress.secrets[0].key`             | TLS Secret Key                                                   | `nil`                                                      |
-| `configmap`                          | HashiCorp Consul configuration to be injected as ConfigMap       | `nil`                                                      |
-| `metrics.enabled`                    | Start a side-car prometheus exporter                             | `false`                                                    |
-| `metrics.image`                      | Exporter image                                                   | `prom/consul-exporter`                                     |
-| `metrics.imageTag`                   | Exporter image tag                                               | `v0.3.0`                                                   |
-| `metrics.imagePullPolicy`            | Exporter image pull policy                                       | `IfNotPresent`                                             |
-| `metrics.resources`                  | Exporter resource requests/limit                                 | `{}`                                                       |
-| `metrics.podAnnotations`             | Exporter annotations                                             | `{}`                                                       |
-| `nodeSelector`                       | Node labels for pod assignment                                   | `{}`                                                       |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                         | 30                                                         |
-| `livenessProbe.periodSeconds`        | How often to perform the probe                                   | 10                                                         |
-| `livenessProbe.timeoutSeconds`       | When the probe times out                                         | 5                                                          |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed. | 1                              |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | 6                              |
-| `podAnnotations`                     | Pod annotations                                                  | `{}`                                                       |
-| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                        | 5                                                          |
-| `readinessProbe.periodSeconds`       | How often to perform the probe                                   | 10                                                         |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                         | 5                                                          |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed. | 1                              |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded. | 6                                |
+| Parameter                            | Description                                                                                                                                               | Default                                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`                     | HashiCorp Consul image registry                                                                                                                           | `docker.io`                                             |
+| `image.repository`                   | HashiCorp Consul image name                                                                                                                               | `bitnami/consul`                                        |
+| `image.tag`                          | HashiCorp Consul image tag                                                                                                                                | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                   | Image pull policy                                                                                                                                         | `IfNotPresent`                                          |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                       | String to partially override consul.fullname template with a string (will prepend the release name)                                                       | `nil`                                                   |
+| `fullnameOverride`                   | String to fully override consul.fullname template with a string                                                                                           | `nil`                                                   |
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
+| `replicas`                           | Number of replicas                                                                                                                                        | `3`                                                     |
+| `port`                               | HashiCorp Consul http listening port                                                                                                                      | `8500`                                                  |
+| `service.rpcPort`                    | HashiCorp Consul rpc listening port                                                                                                                       | `8400`                                                  |
+| `service.serflanPort`                | Container serf lan listening port                                                                                                                         | `8301`                                                  |
+| `service.serverPort`                 | Container server listening port                                                                                                                           | `8300`                                                  |
+| `service.consulDnsPort`              | Container dns listening port                                                                                                                              | `8600`                                                  |
+| `service.uiPort`                     | HashiCorp Consul UI port                                                                                                                                  | `80`                                                    |
+| `datacenterName`                     | HashiCorp Consul datacenter name                                                                                                                          | `dc1`                                                   |
+| `gossipKey`                          | Gossip key for all members                                                                                                                                | `nil`                                                   |
+| `domain`                             | HashiCorp Consul domain                                                                                                                                   | `consul`                                                |
+| `clientAddress`                      | Address in which HashiCorp Consul will bind client interfaces                                                                                             | `0.0.0.0`                                               |
+| `serflanAddress`                     | Address used for Serf LAN communications                                                                                                                  | `0.0.0.0`                                               |
+| `raftMultiplier`                     | Multiplier used to scale key Raft timing parameters                                                                                                       | `10Gi`                                                  |
+| `securityContext.enabled`            | Enable security context                                                                                                                                   | `true`                                                  |
+| `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                  |
+| `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                  |
+| `clusterDomain`                      | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                         |
+| `updateStrategy.type`                | Statefulset update strategy policy                                                                                                                        | `RollingUpdate`                                         |
+| `persistence.enabled`                | Use a PVC to persist data                                                                                                                                 | `true`                                                  |
+| `persistence.storageClass`           | Storage class of backing PVC                                                                                                                              | `nil` (uses alpha storage class annotation)             |
+| `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                                                                                                                       | `ReadWriteOnce`                                         |
+| `persistence.size`                   | Size of data volume                                                                                                                                       | `8Gi`                                                   |
+| `persistence.annotations`            | Annotations for the persistent volume                                                                                                                     | `nil`                                                   |
+| `resources`                          | Container resource requests and limits                                                                                                                    | `{}`                                                    |
+| `maxUnavailable`                     | Pod disruption Budget maxUnavailable                                                                                                                      | `1`                                                     |
+| `nodeAffinity`                       | HashiCorp Consul pod node-affinity setting                                                                                                                | `nil`                                                   |
+| `antiAffinity`                       | HashiCorp Consul pod anti-affinity setting                                                                                                                | `soft`                                                  |
+| `ui.service.enabled`                 | Use a service to access HashiCorp Consul Ui                                                                                                               | `true`                                                  |
+| `ui.service.type`                    | Kubernetes Service Type                                                                                                                                   | `ClusterIP`                                             |
+| `ui.service.annotations`             | Annotations for HashiCorp Consul UI service                                                                                                               | {}                                                      |
+| `ui.service.loadBalancerIP`          | IP if HashiCorp Consul UI service type is `LoadBalancer`                                                                                                  | `nil`                                                   |
+| `ingress.enabled`                    | Enable ingress controller resource                                                                                                                        | `false`                                                 |
+| `ingress.certManager`                | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
+| `ingress.annotations`                | Ingress annotations                                                                                                                                       | `[]`                                                    |
+| `ingress.hosts[0].name`              | Hostname to your HashiCorp Consul installation                                                                                                            | `consul-ui.local`                                       |
+| `ingress.hosts[0].path`              | Path within the url structure                                                                                                                             | `/`                                                     |
+| `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                                                                                            | `false`                                                 |
+| `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                                                                                                 | `consul-ui.local-tls`                                   |
+| `ingress.secrets[0].name`            | TLS Secret Name                                                                                                                                           | `nil`                                                   |
+| `ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
+| `ingress.secrets[0].key`             | TLS Secret Key                                                                                                                                            | `nil`                                                   |
+| `configmap`                          | HashiCorp Consul configuration to be injected as ConfigMap                                                                                                | `nil`                                                   |
+| `metrics.enabled`                    | Start a side-car prometheus exporter                                                                                                                      | `false`                                                 |
+| `metrics.image`                      | Exporter image                                                                                                                                            | `prom/consul-exporter`                                  |
+| `metrics.imageTag`                   | Exporter image tag                                                                                                                                        | `v0.3.0`                                                |
+| `metrics.imagePullPolicy`            | Exporter image pull policy                                                                                                                                | `IfNotPresent`                                          |
+| `metrics.resources`                  | Exporter resource requests/limit                                                                                                                          | `{}`                                                    |
+| `metrics.podAnnotations`             | Exporter annotations                                                                                                                                      | `{}`                                                    |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                                                            | `{}`                                                    |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                  | 30                                                      |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                            | 10                                                      |
+| `livenessProbe.timeoutSeconds`       | When the probe times out                                                                                                                                  | 5                                                       |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | 1                                                       |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | 6                                                       |
+| `podAnnotations`                     | Pod annotations                                                                                                                                           | `{}`                                                    |
+| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                                                                                 | 5                                                       |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                                                                                                                            | 10                                                      |
+| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                                                                                  | 5                                                       |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | 1                                                       |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | 6                                                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -162,6 +168,15 @@ The [Bitnami HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul)
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Ingress
 

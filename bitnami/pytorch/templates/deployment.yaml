@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: "master"
 spec:
-  replicas: 1 
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "pytorch.name" . }}
@@ -39,8 +39,8 @@ spec:
       {{- if .Values.affinity }}
       affinity: {{ toYaml .Values.affinity | nindent 8 }}
       {{- end }}
-      {{- if .Values.cloneFilesFromGit.enabled }}
       initContainers:
+      {{- if .Values.cloneFilesFromGit.enabled }}
       - name: git-clone-repository
         image: {{ include "git.image" . }}
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
@@ -55,11 +55,23 @@ spec:
         - name: git-cloned-files
           mountPath: /app
       {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      - name: volume-permissions
+        image: "{{ template "pytorch.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: {{ .Values.persistence.path }}
+      {{- end }}
       containers:
       - name: master
         image: {{ include "pytorch.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command: 
+        command:
         - bash
         - -c
         - |

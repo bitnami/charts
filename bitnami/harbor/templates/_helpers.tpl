@@ -542,7 +542,7 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.harbor.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets}}
+{{- else if or .Values.harbor.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.harbor.coreImage.pullSecrets }}
   - name: {{ . }}
@@ -560,10 +560,13 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- range .Values.nginxImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.volumePermissions.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if or .Values.harbor.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets}}
+{{- else if or .Values.harbor.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.harbor.coreImage.pullSecrets }}
   - name: {{ . }}
@@ -581,6 +584,9 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- range .Values.nginxImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.volumePermissions.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
@@ -642,5 +648,28 @@ harbor: External PostgreSQL password
     An external database password is required!.
     Please set a passsord (--set externalDatabase.password="xxxx")
   {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "harbor.volumePermissions.image" -}}
+{{- $registryName := .Values.volumePermissions.image.registry -}}
+{{- $repositoryName := .Values.volumePermissions.image.repository -}}
+{{- $tag := .Values.volumePermissions.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
