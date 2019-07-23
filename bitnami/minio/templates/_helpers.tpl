@@ -57,6 +57,7 @@ Return the proper Docker Image Registry Secret Names
 {{- define "minio.imagePullSecrets" -}}
 {{- $imagePullSecrets := coalesce .Values.global.imagePullSecrets .Values.image.pullSecrets .Values.volumePermissions.image.pullSecrets -}}
 {{- if $imagePullSecrets }}
+imagePullSecrets:
 {{- range $imagePullSecrets }}
   - name: {{ . }}
 {{- end -}}
