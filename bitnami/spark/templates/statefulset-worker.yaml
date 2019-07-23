@@ -23,6 +23,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         helm.sh/chart: {{ include "spark.chart" . }}
         app.kubernetes.io/component: worker
+    spec:
     {{- if .Values.worker.nodeSelector }}
       nodeSelector:
       {{- toYaml .Values.worker.nodeSelector | nindent 8 }}
@@ -35,7 +36,6 @@ spec:
       tolerations:
       {{- toYaml . | nindent 8 }}
     {{- end }}
-    spec:
       {{- include "spark.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.worker.securityContext.enabled }}
       securityContext:
