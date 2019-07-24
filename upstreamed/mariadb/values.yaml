@@ -44,6 +44,24 @@ image:
 ##
 # fullnameOverride:
 
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: latest
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
+
 service:
   ## Kubernetes service type, ClusterIP and NodePort are supported at present
   type: ClusterIP
@@ -391,8 +409,8 @@ metrics:
   enabled: false
   image:
     registry: docker.io
-    repository: prom/mysqld-exporter
-    tag: v0.10.0
+    repository: bitnami/mysqld-exporter
+    tag: 0.12.0-debian-9-r2
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

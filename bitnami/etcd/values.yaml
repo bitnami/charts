@@ -69,7 +69,7 @@ statefulset:
   ## Pod management policy
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
-  podManagementPolicy: OrderedReady
+  podManagementPolicy: Parallel
   ## Number od replicas
   ##
   replicaCount: 1

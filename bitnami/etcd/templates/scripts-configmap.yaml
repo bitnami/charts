@@ -94,7 +94,7 @@ data:
     ## Check wether the member was succesfully removed from the cluster
     should_add_new_member() {
         return_value=0
-        if (grep -E "^Member [a-z0-9]+ removed from cluster [a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log" > /dev/null) || \
+        if (grep -E "^Member[[:space:]]+[a-z0-9]+ removed from cluster [a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log" > /dev/null) || \
            ! ([[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]); then
             rm -rf $ETCD_DATA_DIR/*
         else
@@ -193,9 +193,6 @@ data:
 
     # Constants
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
-    # Remove the last comma "," introduced in the string
-    export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
     etcdctl $AUTH_OPTIONS endpoint health >/dev/null 2>&1
 {{- if .Values.disasterRecovery.enabled }}
