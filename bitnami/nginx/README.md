@@ -57,8 +57,8 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
 | `metrics.enabled`                | Start a side-car prometheus exporter             | `false`                                                      |
 | `metrics.image.registry`         | Promethus exporter image registry                | `docker.io`                                                  |
-| `metrics.image.repository`       | Promethus exporter image name                    | `nginx/nginx-prometheus-exporter`                            |
-| `metrics.image.tag`              | Promethus exporter image tag                     | `0.1.0`                                                      |
+| `metrics.image.repository`       | Promethus exporter image name                    | `bitnami/nginx-exporter`                                     |
+| `metrics.image.tag`              | Promethus exporter image tag                     | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`       | Image pull policy                                | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}` |

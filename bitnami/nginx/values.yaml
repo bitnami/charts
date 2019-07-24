@@ -155,8 +155,8 @@ metrics:
   enabled: false
   image:
     registry: docker.io
-    repository: nginx/nginx-prometheus-exporter
-    tag: 0.1.0
+    repository: bitnami/nginx-exporter
+    tag: 0.4.2-debian-9-r1
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
