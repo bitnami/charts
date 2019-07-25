@@ -100,6 +100,15 @@ If Harbor is deployed behind the proxy, set it as the URL of proxy.
 
 Secrets and certificates must be setup to avoid changes on every Helm upgrade (see: [#107](https://github.com/goharbor/harbor-helm/issues/107)).
 
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
 ### Configure the deployment options:
 
 The following table lists the configurable parameters of the Harbor chart and the default values. They can be configured in `values.yaml` or set via `--set` flag during installation.
@@ -109,7 +118,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | **Expose**                                                                  |
 | `service.type`                                                              | The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer` | `ingress`                                |
 | `service.tls.enabled`                                                       | Enable the tls or not                                                    | `true`                                                  |
-| `service.ingress.controller`                                                | The ingress controller type. Currently supports `default` and `gce`      | `default`                                               |
+| `service.ingress.controller`                                                | The ingress controller type. Currently supports `default`, `gce` and `ncp`      | `default`                                               |
 | `service.tls.secretName`                                                    | Fill the name of secret if you want to use your own TLS certificate and private key. The secret must contain two keys named `tls.crt` and `tls.key` that contain the certificate and private key to use for TLS. Will be generated automatically if not set | `nil` |
 | `service.tls.notarySecretName`                                              | By default, the Notary service will use the same cert and key as described above. Fill the name of secret if you want to use a separated one. Only needed when the `service.type` is `ingress`. | `nil` |
 | `service.tls.commonName`                                                    | The common name used to generate the certificate, it's necessary when the `service.type` is `ClusterIP` or `NodePort` and `service.tls.secretName` is null | `nil` |
@@ -131,6 +140,8 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `service.loadBalancer.ports.httpPort`                                       | The service port Harbor listens on when serving with HTTP                | `80`                                                    |
 | `service.loadBalancer.ports.httpsPort`                                      | The service port Harbor listens on when serving with HTTP                | `30002`                                                 |
 | `service.loadBalancer.ports.notaryPort`                                     | The service port Notary listens on. Only needed when `notary.enabled` is set to `true` | `nil`                                     |
+| `service.loadBalancer.annotations`                                          | The annotations attached to the loadBalancer service                     | {}                                                      |
+| `service.loadBalancer.sourceRanges`                                         | List of IP address ranges to assign to loadBalancerSourceRanges          | []                                                      |
 | **Persistence**                                                             |
 | `persistence.enabled`                                                       | Enable the data persistence or not                                       | `true`                                                  |
 | `persistence.resourcePolicy`                                                | Setting it to `keep` to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `keep` |
@@ -147,11 +158,19 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `persistence.imageChartStorage.disableredirect`                             | The configuration for managing redirects from content backends. For backends which do not supported it (such as using minio for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail | `false` |
 | `persistence.imageChartStorage.type`                                        | The type of storage for images and charts: `filesystem`, `azure`, `gcs`, `s3`, `swift` or `oss`. The type must be `filesystem` if you want to use persistent volumes for registry and chartmuseum. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage) for more information about the detail | `filesystem` |
 | **General**                                                                 |
+| `nameOverride`                                                              | String to partially override harbor.fullname template with a string (will prepend the release name) | `nil`                        |
+| `fullnameOverride`                                                          | String to fully override harbor.fullname template with a string                                     | `nil`                        |
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                     |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
 | `externalURL`                                                               | The external URL for Harbor core service                                 | `https://core.harbor.domain`                            |
 | `imagePullPolicy`                                                           | The image pull policy                                                    | `IfNotPresent`                                          |
 | `logLevel`                                                                  | The log level                                                            | `debug`                                                 |
 | `forcePassword`                                                             | Option to ensure all passwords and keys are set by the user              | `false`                                                 |
-| `harborAdminPassword`                                                       | The initial password of Harbor admin. Change it from portal after launching Harbor | `Harbor12345`                                 |
+| `harborAdminPassword`                                                       | The initial password of Harbor admin. Change it from portal after launching Harbor | _random 10 character long alphanumeric string_ |
 | `secretkey`                                                                 | The key used for encryption. Must be a string of 16 chars                | `not-a-secure-key`                                      |
 | **Nginx** (if expose the service via `ingress`, the Nginx will not be used) |
 | `nginxImage.registry`                                                       | Registry for Nginx image                                                 | `docker.io`                                             |
@@ -345,3 +364,39 @@ This chart includes a `values-production.yaml` file where you can find some para
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+## Upgrade
+
+## 2.0.0
+
+In this version, two major changes were performed:
+
+- This **chart depends on the Redis 5 chart instead of Redis 4**. There is a breaking change that will affect releases with `metrics.enabled: true`, since the default tag for the exporter image is now `v1.x.x`. This introduces many changes including metrics names. You'll want to use [this dashboard](https://github.com/oliver006/redis_exporter/blob/master/contrib/grafana_prometheus_redis_dashboard.json) now. Please see the [redis_exporter github page](https://github.com/oliver006/redis_exporter#upgrading-from-0x-to-1x) for more details.
+- This **chart depends on the PostgreSQL 11 chart instead of PostgreSQL 10**. You can find the main difference and notable changes in the following links: [https://www.postgresql.org/about/news/1894/](https://www.postgresql.org/about/news/1894/) and [https://www.postgresql.org/about/featurematrix/](https://www.postgresql.org/about/featurematrix/).
+
+For major releases of PostgreSQL, the internal data storage format is subject to change, thus complicating upgrades, you can see some errors like the following one in the logs:
+
+```bash
+Welcome to the Bitnami postgresql container
+Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-postgresql
+Submit issues and feature requests at https://github.com/bitnami/bitnami-docker-postgresql/issues
+Send us your feedback at containers@bitnami.com
+
+INFO  ==> ** Starting PostgreSQL setup **
+NFO  ==> Validating settings in POSTGRESQL_* env vars..
+INFO  ==> Initializing PostgreSQL database...
+INFO  ==> postgresql.conf file not detected. Generating it...
+INFO  ==> pg_hba.conf file not detected. Generating it...
+INFO  ==> Deploying PostgreSQL with persisted data...
+INFO  ==> Configuring replication parameters
+INFO  ==> Loading custom scripts...
+INFO  ==> Enabling remote connections
+INFO  ==> Stopping PostgreSQL...
+INFO  ==> ** PostgreSQL setup finished! **
+
+INFO  ==> ** Starting PostgreSQL **
+  [1] FATAL:  database files are incompatible with server
+  [1] DETAIL:  The data directory was initialized by PostgreSQL version 10, which is not compatible with this version 11.3.
+```
+
+In this case, you should migrate the data from the old PostgreSQL chart to the new one following an approach similar to that described in [this section](https://www.postgresql.org/docs/current/upgrading.html#UPGRADING-VIA-PGDUMPALL) from the official documentation. Basically, create a database dump in the old chart, move and restore it in the new one.

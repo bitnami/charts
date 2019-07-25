@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ template "mysql.slave.fullname" . }}
   labels:
-    app: "{{ template "name" . }}"
+    app: "{{ template "mysql.name" . }}"
     chart: {{ template "mysql.chart" . }}
     component: "slave"
     release: {{ .Release.Name | quote }}
@@ -21,7 +21,7 @@ spec:
     targetPort: metrics
 {{- end }}
   selector:
-    app: "{{ template "name" . }}"
+    app: "{{ template "mysql.name" . }}"
     component: "slave"
     release: "{{ .Release.Name }}"
 {{- end }}

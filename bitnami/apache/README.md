@@ -53,6 +53,8 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `image.tag`                      | Apache Docker image tag                          | `{TAG_NAME}`                                                 |
 | `image.pullPolicy`               | Apache Docker image pull policy                  | `IfNotPresent`                                               |
 | `image.pullSecrets`              | Specify Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                   | String to partially override apache.fullname template with a string (will prepend the release name) | `nil`     |
+| `fullnameOverride`               | String to fully override apache.fullname template with a string                                     | `nil`     |
 | `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
 | `ingress.enabled`                | Enable ingress controller resource               | `false`                                                      |
 | `ingress.certManager`            | Add annotations for cert-manager                 | `false`                                                      |
@@ -66,8 +68,8 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `ingress.secrets[0].key`         | TLS Secret Key                                   | `nil`                                                        |
 | `metrics.enabled`                | Start a side-car prometheus exporter             | `false`                                                      |
 | `metrics.image.registry`         | Apache exporter image registry                   | `docker.io`                                                  |
-| `metrics.image.repository`       | Apache exporter image name                       | `lusotycoon/apache-exporter`                                 |
-| `metrics.image.tag`              | Apache exporter image tag                        | `v0.5.0`                                                     |
+| `metrics.image.repository`       | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`              | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`       | Apache exporter image pull policy                | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`      | Specify Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |

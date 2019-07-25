@@ -45,31 +45,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Memcached chart and their default values.
 
-|      Parameter              |             Description             |                          Default                          |
-|-----------------------------|-------------------------------------|---------------------------------------------------------- |
-| `global.imageRegistry`      | Global Docker image registry        | `nil`                                                     |
-| `global.imagePullSecrets`   | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `image.registry`            | Memcached image registry            | `docker.io`                                               |
-| `image.repository`          | Memcached Image name                | `bitnami/memcached`                                       |
-| `image.tag`                 | Memcached Image tag                 | `{TAG_NAME}`                                              |
-| `image.pullPolicy`          | Memcached image pull policy         | `IfNotPresent`                                            |
-| `image.pullSecrets`         | Specify docker-registry secret names as an array          | `[]` (does not add image pull secrets to deployed pods)  |
-| `securityContext.enabled`   | Enable security context             | `true`                                                    |
-| `securityContext.fsGroup`   | Group ID for the container          | `1001`                                                    |
-| `securityContext.runAsUser` | User ID for the container           | `1001`                                                    |
-| `memcachedUsername`         | Memcached admin user                | `nil`                                                     |
-| `memcachedPassword`         | Memcached admin password            | `nil`                                                     |
-| `serviceType`               | Kubernetes Service type             | `ClusterIP`                                               |
-| `resources`                 | CPU/Memory resource requests/limits | Memory: `256Mi`, CPU: `250m`                              |
-| `clusterDomain`                    | Kubernetes cluster domain           | `cluster.local`                                           |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
-| `metrics.image.registry`                   | MongoDB exporter image registry                                                                                  | `docker.io`                                          |
-| `metrics.image.repository`                 | MongoDB exporter image name                                                                                      | `prom/memcached-exporter`                           |
-| `metrics.image.tag`                        | MongoDB exporter image tag                                                                                       | `v0.4.1`                                            |
-| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `[]` (does not add image pull secrets to deployed pods)  |
-| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | {}                                                   |
-| `metrics.resources`                        | Exporter resource requests/limit                                                                               | Memory: `256Mi`, CPU: `100m`                         |
+| Parameter                   | Description                                                                                            | Default                                                 |
+|-----------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`      | Global Docker image registry                                                                           | `nil`                                                   |
+| `global.imagePullSecrets`   | Global Docker registry secret names as an array                                                        | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`            | Memcached image registry                                                                               | `docker.io`                                             |
+| `image.repository`          | Memcached Image name                                                                                   | `bitnami/memcached`                                     |
+| `image.tag`                 | Memcached Image tag                                                                                    | `{TAG_NAME}`                                            |
+| `image.pullPolicy`          | Memcached image pull policy                                                                            | `IfNotPresent`                                          |
+| `image.pullSecrets`         | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`              | String to partially override memcached.fullname template with a string (will prepend the release name) | `nil`                                                   |
+| `fullnameOverride`          | String to fully override memcached.fullname template with a string                                     | `nil`                                                   |
+| `securityContext.enabled`   | Enable security context                                                                                | `true`                                                  |
+| `securityContext.fsGroup`   | Group ID for the container                                                                             | `1001`                                                  |
+| `securityContext.runAsUser` | User ID for the container                                                                              | `1001`                                                  |
+| `memcachedUsername`         | Memcached admin user                                                                                   | `nil`                                                   |
+| `memcachedPassword`         | Memcached admin password                                                                               | `nil`                                                   |
+| `serviceType`               | Kubernetes Service type                                                                                | `ClusterIP`                                             |
+| `resources`                 | CPU/Memory resource requests/limits                                                                    | Memory: `256Mi`, CPU: `250m`                            |
+| `clusterDomain`             | Kubernetes cluster domain                                                                              | `cluster.local`                                         |
+| `metrics.enabled`           | Start a side-car prometheus exporter                                                                   | `false`                                                 |
+| `metrics.image.registry`    | Memcached exporter image registry                                                                      | `docker.io`                                             |
+| `metrics.image.repository`  | Memcached exporter image name                                                                          | `bitnami/memcached-exporter`                            |
+| `metrics.image.tag`         | Memcached exporter image tag                                                                           | `{TAG_NAME}`                                            |
+| `metrics.image.pullPolicy`  | Image pull policy                                                                                      | `IfNotPresent`                                          |
+| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
+| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                        | {}                                                      |
+| `metrics.resources`         | Exporter resource requests/limit                                                                       | Memory: `256Mi`, CPU: `100m`                            |
 
 
 The above parameters map to the env variables defined in [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached). For more information please refer to the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) image documentation.

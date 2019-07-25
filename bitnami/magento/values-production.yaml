@@ -31,6 +31,14 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## String to partially override magento.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override magento.fullname template
+##
+# fullnameOverride:
+
 ## Magento host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
@@ -164,6 +172,12 @@ elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
   enabled: true
+  ## Tag for the Bitnami Elasticsearch image to use
+  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch
+  image:
+    registry: docker.io
+    repository: bitnami/elasticsearch
+    tag: 6.8.1-debian-9-r23
   ## Enable to perform the sysctl operation
   sysctlImage:
     enabled: false
@@ -318,8 +332,8 @@ metrics:
   enabled: true
   image:
     registry: docker.io
-    repository: lusotycoon/apache-exporter
-    tag: v0.5.0
+    repository: bitnami/apache-exporter
+    tag: 0.7.0-debian-9-r2
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

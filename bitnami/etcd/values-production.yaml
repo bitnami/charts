@@ -31,11 +31,39 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
-  ## String to partially override etcd.fullname template (will maintain the release name)
-  # nameOverride:
+## String to partially override etcd.fullname template (will maintain the release name)
+##
+# nameOverride:
 
-  ## String to fully override etcd.fullname template
-  # fullnameOverride:
+## String to fully override etcd.fullname template
+##
+# fullnameOverride:
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: latest
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
+
+## String to partially override etcd.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override etcd.fullname template
+##
+# fullnameOverride:
 
 statefulset:
   ## Update strategy, can be set to RollingUpdate or OnDelete by default.
@@ -49,7 +77,7 @@ statefulset:
   ## Pod management policy
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
-  podManagementPolicy: OrderedReady
+  podManagementPolicy: Parallel
   ## Number od replicas
   ##
   replicaCount: 3

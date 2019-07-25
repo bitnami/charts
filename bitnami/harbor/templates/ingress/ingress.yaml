@@ -1,6 +1,28 @@
 {{- if eq .Values.service.type "Ingress" }}
 {{- $ingress := .Values.service.ingress -}}
 {{- $tls := .Values.service.tls -}}
+{{- if eq .Values.service.ingress.controller "gce" }}
+  {{- $_ := set . "portal_path" "/*" -}}
+  {{- $_ := set . "api_path" "/api/*" -}}
+  {{- $_ := set . "service_path" "/service/*" -}}
+  {{- $_ := set . "v2_path" "/v2/*" -}}
+  {{- $_ := set . "chartrepo_path" "/chartrepo/*" -}}
+  {{- $_ := set . "controller_path" "/c/*" -}}
+{{- else if eq .Values.service.ingress.controller "ncp" }}
+  {{- $_ := set . "portal_path" "/" -}}
+  {{- $_ := set . "api_path" "/api/.*" -}}
+  {{- $_ := set . "service_path" "/service/.*" -}}
+  {{- $_ := set . "v2_path" "/v2/.*" -}}
+  {{- $_ := set . "chartrepo_path" "/chartrepo/.*" -}}
+  {{- $_ := set . "controller_path" "/c/.*" -}}
+{{- else }}
+  {{- $_ := set . "portal_path" "/" -}}
+  {{- $_ := set . "api_path" "/api/" -}}
+  {{- $_ := set . "service_path" "/service/" -}}
+  {{- $_ := set . "v2_path" "/v2/" -}}
+  {{- $_ := set . "chartrepo_path" "/chartrepo/" -}}
+  {{- $_ := set . "controller_path" "/c/" -}}
+{{- end }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -34,31 +56,35 @@ spec:
     {{- end }}
   {{- end }}
   {{- end }}
-{{- if  eq .Values.service.ingress.controller "gce" }}
+  {{- if eq .Values.service.ingress.controller "ncp" }}
+  backend:
+    serviceName: "{{ template "harbor.portal" . }}"
+    servicePort: http
+  {{- end }}
   rules:
   - http:
       paths:
-      - path: /*
+      - path: {{ .portal_path }}
         backend:
           serviceName: "{{ template "harbor.portal" . }}"
           servicePort: http
-      - path: /api/*
+      - path: {{ .api_path }}
         backend:
           serviceName: "{{ template "harbor.core" . }}"
           servicePort: http
-      - path: /service/*
+      - path: {{ .service_path }}
         backend:
           serviceName: "{{ template "harbor.core" . }}"
           servicePort: http
-      - path: /v2/*
+      - path: {{ .v2_path }}
         backend:
           serviceName: "{{ template "harbor.core" . }}"
           servicePort: http
-      - path: /chartrepo/*
+      - path: {{ .chartrepo_path }}
         backend:
           serviceName: "{{ template "harbor.core" . }}"
           servicePort: http
-      - path: /c/*
+      - path: {{ .controller_path }}
         backend:
           serviceName: "{{ template "harbor.core" . }}"
           servicePort: http
@@ -76,47 +102,4 @@ spec:
     host: {{ $ingress.hosts.notary }}
     {{- end }}
   {{- end }}
-{{- else }}
-  rules:
-  - http:
-      paths:
-      - path: /
-        backend:
-          serviceName: "{{ template "harbor.portal" . }}"
-          servicePort: http
-      - path: /api/
-        backend:
-          serviceName: "{{ template "harbor.core" . }}"
-          servicePort: http
-      - path: /service/
-        backend:
-          serviceName: "{{ template "harbor.core" . }}"
-          servicePort: http
-      - path: /v2/
-        backend:
-          serviceName: "{{ template "harbor.core" . }}"
-          servicePort: http
-      - path: /chartrepo/
-        backend:
-          serviceName: "{{ template "harbor.core" . }}"
-          servicePort: http
-      - path: /c/
-        backend:
-          serviceName: "{{ template "harbor.core" . }}"
-          servicePort: http
-    {{- if $ingress.hosts.core }}
-    host: {{ $ingress.hosts.core }}
-    {{- end }}
-  {{- if .Values.notary.enabled }}
-  - http:
-      paths:
-      - path: /
-        backend:
-          serviceName: "{{ template "harbor.notary-server" . }}"
-          servicePort: notary-server
-    {{- if $ingress.hosts.notary }}
-    host: {{ $ingress.hosts.notary }}
-    {{- end }}
-  {{- end }}
-{{- end }}
 {{- end }}

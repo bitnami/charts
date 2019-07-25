@@ -1,21 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "wildfly.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "wildfly.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "wildfly.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "wildfly.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
     spec:
@@ -25,8 +25,21 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
 {{- include "wildfly.imagePullSecrets" . | indent 6 }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "wildfly.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/wildfly"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/wildfly
+      {{- end }}
       containers:
-      - name: {{ template "fullname" . }}
+      - name: wildlfy
         image: "{{ template "wildfly.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
@@ -35,7 +48,7 @@ spec:
         - name: WILDFLY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "wildfly.fullname" . }}
               key: wildfly-password
         ports:
         - name: http
@@ -59,13 +72,13 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: wildfly-data
+        - name: data
           mountPath: /bitnami/wildfly
       volumes:
-      - name: wildfly-data
+      - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
+          claimName: {{ template "wildfly.fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end -}}

@@ -18,7 +18,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2019.7.3-debian-9-r2
+  tag: 2019.7.24-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -36,13 +36,39 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## String to partially override minio.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override minio.fullname template
+##
+# fullnameOverride:
+
 ## Bitnami MinIO Client image version
 ## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
 ##
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2019.7.3-debian-9-r2
+  tag: 2019.7.24-debian-9-r0
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: latest
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
 
 ## MinIO server mode. Allowed values: standalone or distributed.
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide

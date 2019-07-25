@@ -58,8 +58,21 @@ spec:
       affinity:
 {{ toYaml .Values.affinity | indent 8 }}
       {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "kafka.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/kafka"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: "/bitnami/kafka"
+      {{- end }}
       containers:
-      - name: "{{ template "kafka.fullname" . }}"
+      - name: kafka
         image: "{{ template "kafka.image" . }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         resources:

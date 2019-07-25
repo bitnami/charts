@@ -13,7 +13,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -37,7 +37,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 1.8.1-debian-9-r0
+  tag: 1.8.1-debian-9-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -61,7 +61,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -85,7 +85,7 @@ jobserviceImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -109,7 +109,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -133,7 +133,7 @@ registryctlImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -157,7 +157,7 @@ clairImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -181,7 +181,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 1.8.1-debian-9-r3
+  tag: 1.8.1-debian-9-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -223,6 +223,32 @@ nginxImage:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## String to partially override harbor.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override harbor.fullname template
+##
+# fullnameOverride:
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: latest
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
+
 service:
   # Set the way how to expose the service. Set the type as "Ingress",
   # "ClusterIP", "NodePort" or "LoadBalancer" and fill the information
@@ -245,7 +271,7 @@ service:
     # described above. Fill the name of secret if you want to use a
     # separated one. Only needed when the type is "ingress".
     notarySecretName: ""
-    # The commmon name used to generate the certificate, it's necessary
+    # The common name used to generate the certificate, it's necessary
     # when the type isn't "ingress" and "secretName" is null
     commonName: ""
   ingress:
@@ -255,6 +281,7 @@ service:
     # set to the type of ingress controller if it has specific requirements.
     # leave as `default` for most ingress controllers.
     # set to `gce` if using the GCE ingress controller
+    # set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
     controller: default
     annotations:
       ingress.kubernetes.io/ssl-redirect: "true"
@@ -303,6 +330,8 @@ service:
       # The service port Notary listens on. Only needed when notary.enabled
       # is set to true
       notaryPort: 4443
+    annotations: {}
+    sourceRanges: []
 
 # The external URL for Harbor core service. It is used to
 # 1) populate the docker/helm commands showed on portal
@@ -318,6 +347,13 @@ service:
 #
 # If Harbor is deployed behind the proxy, set it as the URL of proxy
 externalURL: https://core.harbor.domain
+
+## UAA Authentication Options
+# If you're using UAA for authentication behind a self-signed
+# certificate you will need to provide the CA Cert.
+# Set uaaSecretName below to provide a pre-created secret that
+# contains a base64 encoded CA Certificate named `ca.crt`.
+# uaaSecretName:
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/

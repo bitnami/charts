@@ -10,6 +10,7 @@ spec:
 {{- end }}
   ports:
   - port: 4443
+    targetPort: notary-server
   selector:
     {{ include "harbor.matchLabels" . | nindent 4 }}
     component: notary-server

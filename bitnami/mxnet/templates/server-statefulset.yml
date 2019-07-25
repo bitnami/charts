@@ -41,8 +41,8 @@ spec:
       {{- with .Values.affinity }}
       affinity: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
-      {{- if .Values.cloneFilesFromGit.enabled }}
       initContainers:
+      {{- if .Values.cloneFilesFromGit.enabled }}
       - name: git-clone-repository
         image: {{ include "git.image" . }}
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
@@ -55,6 +55,18 @@ spec:
         - name: git-cloned-files
           mountPath: /app
       {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      - name: volume-permissions
+        image: "{{ template "mxnet.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.mountPath }}"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: {{ .Values.persistence.mountPath }}
+      {{- end }}
       {{- if .Values.initContainers }}
         {{- toYaml .Values.initContainers | nindent 6 }}
       {{- end }}
@@ -63,7 +75,7 @@ spec:
         workingDir: {{ .Values.entrypoint.workDir }}
         image: {{ include "mxnet.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command: 
+        command:
         - bash
         - -c
         - |
@@ -88,7 +100,7 @@ spec:
           value: {{ .Values.schedulerPort | quote }}
       {{- if .Values.commonExtraEnvVars }}
         {{- include "mxnet.parseEnvVars" .Values.commonExtraEnvVars | nindent 8 }}
-      {{- end }} 
+      {{- end }}
       {{- if .Values.serverExtraEnvVars }}
         {{- include "mxnet.parseEnvVars" .Values.serverExtraVars | nindent 8 }}
       {{- end }}
