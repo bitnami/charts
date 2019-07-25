@@ -78,6 +78,11 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `persistence.accessMode`             | PVC Access Mode for Tomcat volume                                                                                                                         | `ReadWriteOnce`                                         |
 | `persistence.size`                   | PVC Storage Request for Tomcat volume                                                                                                                     | `8Gi`                                                   |
 | `resources`                          | CPU/Memory resource requests/limits                                                                                                                       | Memory: `512Mi`, CPU: `300m`                            |
+| `ingress.enabled` | Enable the ingress controller | `false` |
+| `ingress.certManager` | Add annotations for certManager | `false` |
+| `ingress.annotations` | Annotations to set in the ingress controller | - |
+| `ingress.hosts` | List of hostnames to be covered with the ingress | `tomcat.local` |
+| `ingress.tls` | List with TLS configuration for the ingress | `hosts: tomcat.local, secretName: tomcat.local-tls` | 
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
