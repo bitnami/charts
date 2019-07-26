@@ -49,10 +49,10 @@ spec:
       {{- end }}
       affinity:
         {{- with .Values.nodeAffinity }}
-        nodeAffinity: {{ tpl (toYaml .) $ | nindent 8 }}
+        nodeAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
         {{- end }}
         {{- with .Values.podAffinity }}
-        podAffinity: {{ tpl (toYaml .) $ | nindent 8 }}
+        podAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
         {{- end }}
         {{- if eq .Values.podAntiAffinity "hard" }}
         podAntiAffinity:
