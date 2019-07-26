@@ -99,12 +99,12 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.4.1
+    tag: 1.4.2-r0
   # Image used to perform chart repository syncs
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-chart-repo
-    tag: 1.8.0-r0
+    tag: 1.8.2-r0
   initialReposProxy:
     enabled: false
 #    http_proxy: "http://yourproxy:3128"
@@ -159,7 +159,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.4.1
+    tag: 1.4.2-r0
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -186,7 +186,7 @@ chartsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-chartsvc
-    tag: 1.8.0-r0
+    tag: 1.8.2-r0
   service:
     port: 8080
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
@@ -221,7 +221,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.4.1
+    tag: 1.4.2-r0
   service:
     port: 8080
   livenessProbe:
