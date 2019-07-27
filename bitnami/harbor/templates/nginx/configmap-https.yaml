@@ -73,8 +73,9 @@ data:
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          # When setting up Harbor behind other proxy, such as an Nginx instance, remove the below line if the proxy already has similar settings.
+          {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
+          {{- end }}
 
           proxy_buffering off;
           proxy_request_buffering off;
@@ -108,8 +109,9 @@ data:
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          # When setting up Harbor behind other proxy, such as an Nginx instance, remove the below line if the proxy already has similar settings.
+          {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
+          {{- end }}
 
           # Add Secure flag when serving HTTPS
           proxy_cookie_path / "/; secure";
@@ -124,8 +126,9 @@ data:
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          # When setting up Harbor behind other proxy, such as an Nginx instance, remove the below line if the proxy already has similar settings.
+          {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
+          {{- end }}
 
           proxy_buffering off;
           proxy_request_buffering off;
@@ -137,8 +140,9 @@ data:
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          # When setting up Harbor behind other proxy, such as an Nginx instance, remove the below line if the proxy already has similar settings.
+          {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
+          {{- end }}
 
           proxy_buffering off;
           proxy_request_buffering off;
@@ -150,8 +154,9 @@ data:
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          # When setting up Harbor behind other proxy, such as an Nginx instance, remove the below line if the proxy already has similar settings.
+          {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
+          {{- end }}
 
           proxy_buffering off;
           proxy_request_buffering off;
@@ -167,8 +172,10 @@ data:
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          # When setting up Harbor behind other proxy, such as an Nginx instance, remove the below line if the proxy already has similar settings.
+          {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
+          {{- end }}
+
           proxy_buffering off;
           proxy_request_buffering off;
         }
@@ -179,8 +186,9 @@ data:
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          # When setting up Harbor behind other proxy, such as an Nginx instance, remove the below line if the proxy already has similar settings.
+          {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
+          {{- end }}
 
           proxy_buffering off;
           proxy_request_buffering off;

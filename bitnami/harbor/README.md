@@ -182,6 +182,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `nginx.tolerations`                                                         | Tolerations for pod assignment                                           | `[]` (The value is evaluated as a template)             |
 | `nginx.affinity`                                                            | Node/Pod affinities                                                      | `{}` (The value is evaluated as a template)             |
 | `nginx.podAnnotations`                                                      | Annotations to add to the nginx pod                                      | `{}`                                                    |
+| `nginx.behindReverseProxy`                                                  | If nginx is behind another reverse proxy, set to true                    | `false`                                                    |
 | **Portal**                                                                  |
 | `portalImage.registry`                                                      | Registry for portal image                                                | `docker.io`                                             |
 | `portalImage.repository`                                                    | Repository for portal image                                              | `bitnami/harbor-portal`                                 |
