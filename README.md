@@ -5,7 +5,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm search bitnami
 ```
 
