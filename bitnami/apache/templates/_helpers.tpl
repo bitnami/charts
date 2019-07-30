@@ -3,11 +3,7 @@
 Expand the name of the chart.
 */}}
 {{- define "apache.name" -}}
-<<<<<<< HEAD
-{{- default .Chart.Name .Values.nameOverride | trunc 24 -}}
-=======
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
->>>>>>> master
 {{- end -}}
 
 {{/*
@@ -15,12 +11,9 @@ Create a default fully qualified app name.
 We truncate at 24 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "apache.fullname" -}}
-<<<<<<< HEAD
-=======
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
->>>>>>> master
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
