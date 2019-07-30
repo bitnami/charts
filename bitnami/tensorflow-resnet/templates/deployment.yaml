@@ -50,7 +50,7 @@ spec:
         - name: seed
           mountPath: /seed
       containers:
-      - name: serving
+      - name: tensorflow-serving
         image: "{{ template "tensorflow-resnet.server.image" . }}"
         imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
         ports:
