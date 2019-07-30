@@ -102,14 +102,14 @@ Also, we can't use a single if because lazy evaluation is not an option
 
 {{/*
 Create a default fully qualified zookeeper name.
-We truncate at 24 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "kafka.zookeeper.fullname" -}}
 {{- if .Values.zookeeper.fullnameOverride -}}
-{{- .Values.zookeeper.fullnameOverride | trunc 24 | trimSuffix "-" -}}
+{{- .Values.zookeeper.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default "zookeeper" .Values.zookeeper.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 24 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
