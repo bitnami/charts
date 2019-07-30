@@ -9,7 +9,7 @@ Expand the name of the chart.
 
 {{/*
 Create a default fully qualified app name.
-We truncate at 24 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "minio.fullname" -}}
 {{- if .Values.fullnameOverride -}}
