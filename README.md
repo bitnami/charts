@@ -57,6 +57,7 @@ $ helm search bitnami
 - [Magento](https://github.com/bitnami/charts/tree/master/bitnami/magento)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
 - [Metrics Server](https://github.com/bitnami/charts/tree/master/bitnami/metrics-server)
+- [Minio](https://github.com/bitnami/charts/tree/master/bitnami/minio)
 - [MXNet](https://github.com/bitnami/charts/tree/master/bitnami/mxnet)
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
 - [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
