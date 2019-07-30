@@ -25,6 +25,34 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Bitnami git image version
+## ref: https://hub.docker.com/r/bitnami/git/tags/
+##
+git:
+  registry: docker.io
+  repository: bitnami/git
+  tag: 2.21.0-debian-9-r72
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+replicaCount: 1
+
+cloneHtdocsFromGit:
+  enabled: false
+  # repository:
+  # branch:
+  interval: 60
+
+# htdocsConfigMap:
+
+# htdocsPVC:
+
+# vhostsConfigMap:
 ## String to partially override apache.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -37,6 +65,35 @@ image:
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+#  limits:
+#    cpu: 200m
+#    memory: 1Gi
+#  requests:
+#    memory: 256Mi
+#    cpu: 250m
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 180
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 
 ## Configure the ingress resource that allows you to access the
 ## Apache installation. Set up the URL

@@ -103,3 +103,95 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return true if mouting a static web page
+*/}}
+{{- define "apache.useHtdocs" -}}
+{{ or .Values.cloneHtdocsFromGit.enabled .Values.htdocsConfigMap .Values.htdocsPVC }}
+{{- end -}}
+
+{{/*
+Return associated volume
+*/}}
+{{- define "apache.htdocsVolume" -}}
+{{- if .Values.cloneHtdocsFromGit.enabled }}
+emptyDir: {}
+{{- else if .Values.htdocsConfigMap }}
+configMap:
+  name: {{ .Values.htdocsConfigMap }}
+{{- else if .Values.htdocsPVC }} 
+persistentVolumeClaim:
+  claimName: {{ .Values.htdocsPVC }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Validate data
+*/}}
+{{- define "apache.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "apache.validateValues.htdocs" .) -}}
+{{- $messages := append $messages (include "apache.validateValues.htdocsGit" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+ {{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "apache.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Validate data (htdocs)
+*/}}
+{{- define "apache.validateValues.htdocs" -}}
+{{- if or (and .Values.cloneHtdocsFromGit.enabled (or .Values.htdocsPVC .htdocsConfigMap )) (and .Values.htdocsPVC (or .Values.htdocsConfigMap .Values.cloneHtdocsFromGit.enabled )) (and .Values.htdocsConfigMap (or .Values.htdocsPVC .Values.cloneHtdocsFromGit.enabled )) }}
+apache: htdocs
+    You have selected more than one way of deploying htdocs. Please select only one of htdocsConfigMap cloneHtdocsFromGit or htdocsVolume
+{{- end }}
+{{- end -}}
+
+{{/*
+Validate data (htdocs git)
+*/}}
+{{- define "apache.validateValues.htdocsGit" -}}
+{{- if .Values.cloneHtdocsFromGit.enabled }}
+  {{- if not .Values.cloneHtdocsFromGit.repository }}
+apache: htdocs-git-repository
+    You did not specify a git repository to clone. Please set cloneHtdocsFromGit.repository
+  {{- end }}
+  {{- if not .Values.cloneHtdocsFromGit.branch }}
+apache: htdocs-git-branch
+    You did not specify a branch to checkout in the git repository. Please set cloneHtdocsFromGit.branch
+  {{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper git image name
+*/}}
+{{- define "git.image" -}}
+{{- $registryName := .Values.git.registry -}}
+{{- $repositoryName := .Values.git.repository -}}
+{{- $tag := .Values.git.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}

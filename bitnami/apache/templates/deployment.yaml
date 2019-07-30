@@ -3,40 +3,70 @@ kind: Deployment
 metadata:
   name: {{ template "apache.fullname" . }}
   labels:
-    app: {{ template "apache.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "apache.fullname" . }}
+    helm.sh/chart: {{ include "apache.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "apache.fullname" . }}
-      release: "{{ .Release.Name }}"
-  replicas: 1
+      app.kubernetes.io/name: {{ template "apache.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
-        app: {{ template "apache.fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
-{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+        app.kubernetes.io/name: {{ template "apache.fullname" . }}
+        helm.sh/chart: {{ include "apache.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
-  {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
-  {{- end }}
-  {{- if .Values.metrics.podAnnotations }}
-{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
-  {{- end }}
-{{- end }}
+        {{- if .Values.podAnnotations }}
+          {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.podAnnotations }}
+          {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
-{{- include "apache.imagePullSecrets" . | indent 6 }}
+      {{- include "apache.imagePullSecrets" . | nindent 6 }}
       hostAliases:
       - ip: "127.0.0.1"
         hostnames:
         - "status.localhost"
+      {{- if .Values.cloneHtdocsFromGit.enabled }}
+      initContainers:
+      - name: git-clone-repository
+        image: "{{ template "git.image" . }}"
+        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+        command:
+        - /bin/bash
+        - -ec
+        - |
+          git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /app
+        volumeMounts:
+        - name: htdocs
+          mountPath: /app
       containers:
-      - name: apache
+      - name: git-repo-syncer
+        image: "{{ template "git.image" . }}"
+        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+        command:
+        - /bin/bash
+        - -ec
+        - |
+          while true; do
+              cd /app && git pull origin {{ .Values.cloneHtdocsFromGit.branch }}
+              sleep {{ .Values.cloneHtdocsFromGit.interval }}
+          done
+        volumeMounts:
+        - name: htdocs
+          mountPath: /app
+      {{- else }}
+      containers:
+      {{- end }}
+      - name: "{{ template "apache.fullname" . }}"
         image: "{{ template "apache.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:
@@ -44,21 +74,39 @@ spec:
           containerPort: 8080
         - name: https
           containerPort: 8443
+        {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-          failureThreshold: 6
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
             path: /
             port: http
-          initialDelaySeconds: 5
-          timeoutSeconds: 3
-          periodSeconds: 5
-{{- if .Values.metrics.enabled }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        resources: {{ toYaml .Values.resources | nindent 10 }}
+        volumeMounts:
+        {{- if (include "apache.useHtdocs" .) }}
+        - name: htdocs
+          mountPath: /app
+        {{- end }}
+        {{- if .Values.vhostsConfigMap }}
+        - name: vhosts
+          mountPath: /vhosts
+        {{- end }}          
+      {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "apache.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
@@ -78,6 +126,15 @@ spec:
             port: metrics
           initialDelaySeconds: 5
           timeoutSeconds: 1
-        resources:
-  {{ toYaml .Values.metrics.resources | indent 10 }}
-{{- end }}
+        resources: {{ toYaml .Values.metrics.resources | nindent 10 }}
+      {{- end }}
+      volumes:
+      {{- if (include "apache.useHtdocs" .) }}
+      - name: htdocs
+        {{- include "apache.htdocsVolume" . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vhostsConfigMap }}
+      - name: vhosts
+        configMap:
+          name: {{ .Values.vhostsConfigMap }}
+      {{- end }}          

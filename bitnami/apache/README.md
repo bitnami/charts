@@ -44,43 +44,53 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Apache chart and their default values.
 
-| Parameter                        | Description                                      | Default                                                      |
-|----------------------------------|--------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`           | Global Docker image registry                     | `nil`                                                        |
-| `global.imagePullSecrets`        | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.registry`                 | Apache Docker image registry                     | `docker.io`                                                  |
-| `image.repository`               | Apache Docker image name                         | `bitnami/apache`                                             |
-| `image.tag`                      | Apache Docker image tag                          | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`               | Apache Docker image pull policy                  | `IfNotPresent`                                               |
-| `image.pullSecrets`              | Specify Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                   | String to partially override apache.fullname template with a string (will prepend the release name) | `nil`     |
-| `fullnameOverride`               | String to fully override apache.fullname template with a string                                     | `nil`     |
-| `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
-| `ingress.enabled`                | Enable ingress controller resource               | `false`                                                      |
-| `ingress.certManager`            | Add annotations for cert-manager                 | `false`                                                      |
-| `ingress.annotations`            | Ingress annotations                              | `[]`                                                         |
-| `ingress.hosts[0].name`          | Hostname to your Apache installation             | `example.local`                                              |
-| `ingress.hosts[0].path`          | Path within the url structure                    | `/`                                                          |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                                        | `example.local`                                              |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)                        | `example.local-tls`                                          |
-| `ingress.secrets[0].name`        | TLS Secret Name                                  | `nil`                                                        |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                           | `nil`                                                        |
-| `ingress.secrets[0].key`         | TLS Secret Key                                   | `nil`                                                        |
-| `metrics.enabled`                | Start a side-car prometheus exporter             | `false`                                                      |
-| `metrics.image.registry`         | Apache exporter image registry                   | `docker.io`                                                  |
-| `metrics.image.repository`       | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`              | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`       | Apache exporter image pull policy                | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`      | Specify Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`              | Exporter resource requests/limit                 | {}                                                           |
-| `service.type`                   | Kubernetes Service type                          | `LoadBalancer`                                               |
-| `service.port`                   | Service HTTP port                                | `80`                                                         |
-| `service.httpsPort`              | Service HTTPS port                               | `443`                                                        |
-| `service.nodePorts.http`         | Kubernetes http node port                        | `""`                                                         |
-| `service.nodePorts.https`        | Kubernetes https node port                       | `""`                                                         |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation             | `Cluster`                                                    |
-| `service.loadBalancerIP`         | LoadBalancer service IP address                  | `""`                                                         |
+| Parameter                        | Description                                             | Default                                                      |
+|----------------------------------|---------------------------------------------------------|--------------------------------------------------------------|
+| `global.imageRegistry`           | Global Docker image registry                            | `nil`                                                        |
+| `global.imagePullSecrets`        | Global Docker registry secret names as an array         | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.registry`                 | Apache Docker image registry                            | `docker.io`                                                  |
+| `image.repository`               | Apache Docker image name                                | `bitnami/apache`                                             |
+| `image.tag`                      | Apache Docker image tag                                 | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`               | Apache Docker image pull policy                         | `Always`                                                     |
+| `image.pullSecrets`              | Specify Docker registry secret names as an array        | `[]` (does not add image pull secrets to deployed pods)      |
+| `git.registry`                   | Git image registry                                      | `docker.io`                                                  |
+| `git.repository`                 | Git image name                                          | `bitnami/git`                                                |
+| `git.tag`                        | Git image tag                                           | `{TAG_NAME}`                                                 |
+| `git.pullPolicy`                 | Git image pull policy                                   | `Always`                                                     |
+| `git.pullSecrets`                | Specify docker-registry secret names as an array        | `[]` (does not add image pull secrets to deployed pods)      |
+| `replicaCount`                   | Number of replicas of the Apache deployment             | `docker.io`                                                  |
+| `htdocsConfigMap`                | ConfigMap with the server static content                | `nil`                                                        |
+| `htdocsPVC`                      | PVC with the server static content                      | `nil`                                                        |
+| `cloneHtdocsFromGit.enabled`     | Get the server static content from a git repository     | `false`                                                      |
+| `cloneHtdocsFromGit.repository`  | Repository to clone static content from                 | `nil`                                                        |
+| `cloneHtdocsFromGit.branch`      | Branch inside the git repository                        | `nil`                                                        |
+| `cloneHtdocsFromGit.interval`    | Interval for sidecar container pull from the repository | `60`                                                         |
+| `podAnnotations`                 | Pod annotations                                         | `{}`                                                         |
+| `ingress.enabled`                | Enable ingress controller resource                      | `false`                                                      |
+| `ingress.certManager`            | Add annotations for cert-manager                        | `false`                                                      |
+| `ingress.annotations`            | Ingress annotations                                     | `[]`                                                         |
+| `ingress.hosts[0].name`          | Hostname to your Apache installation                    | `example.local`                                              |
+| `ingress.hosts[0].path`          | Path within the url structure                           | `/`                                                          |
+| `ingress.tls[0].hosts[0]`        | TLS hosts                                               | `example.local`                                              |
+| `ingress.tls[0].secretName`      | TLS Secret (certificates)                               | `example.local-tls`                                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                         | `nil`                                                        |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                  | `nil`                                                        |
+| `ingress.secrets[0].key`         | TLS Secret Key                                          | `nil`                                                        |
+| `metrics.enabled`                | Start a side-car prometheus exporter                    | `false`                                                      |
+| `metrics.image.registry`         | Apache exporter image registry                          | `docker.io`                                                  |
+| `metrics.image.repository`       | Apache exporter image name                              | `lusotycoon/apache-exporter`                                 |
+| `metrics.image.tag`              | Apache exporter image tag                               | `v0.5.0`                                                     |
+| `metrics.image.pullPolicy`       | Apache exporter image pull policy                       | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`      | Specify Docker registry secret names as an array        | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod         | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`              | Exporter resource requests/limit                        | {}                                                           |
+| `service.type`                   | Kubernetes Service type                                 | `LoadBalancer`                                               |
+| `service.port`                   | Service HTTP port                                       | `80`                                                         |
+| `service.httpsPort`              | Service HTTPS port                                      | `443`                                                        |
+| `service.nodePorts.http`         | Kubernetes http node port                               | `""`                                                         |
+| `service.nodePorts.https`        | Kubernetes https node port                              | `""`                                                         |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                    | `Cluster`                                                    |
+| `service.loadBalancerIP`         | LoadBalancer service IP address                         | `""`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -100,11 +110,32 @@ $ helm install --name my-release -f values.yaml bitnami/apache
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Deploying your custom web application
+The Apache chart allows you to deploy a custom web application using one of the following methods:
+
+  - Cloning from a git repository: Set `cloneHtdocsFromGit.enabled` to `true` and set the repository and branch using the `cloneHtdocsFromGit.repository` and  `cloneHtdocsFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneHtdocsFromGit.interval`.
+  - Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder. 
+  - Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
+
+In the following example you can deploy a example web application using git:
+
+```
+helm install bitnami/apache --set cloneHtdocsFromGit.enabled=true --set cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git --set cloneHtdocsFromGit.branch=master
+```
+
+You may also want to mount different virtual host configurations. This can be done using the `vhostsConfigMap` value. This a pointer to a ConfigMap with the desired Apache virtual host configurations.
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+## Notable changes
+
+### 6.0.0
+
+This release allows you to use your custom static applicaton. In order to do so, check [this section](#deploying-your-custom-web-application).
 
 ## Upgrading
 
