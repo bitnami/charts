@@ -45,66 +45,74 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the MinIO chart and their default values.
 
-| Parameter                            | Description                                                                                  | Default                                                 |
-|--------------------------------------|----------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`               | Global Docker image registry                                                                 | `nil`                                                   |
-| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods) |
-| `image.registry`                     | MXNet image registry                                                                         | `docker.io`                                             |
-| `image.repository`                   | MXNet image name                                                                             | `bitnami/MXNet`                                         |
-| `image.tag`                          | MXNet image tag                                                                              | `{VERSION}`                                             |
-| `image.pullPolicy`                   | Image pull policy                                                                            | `IfNotPresent`                                          |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
-| `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                                                 |
-| `git.registry`                       | Git image registry                                                                           | `docker.io`                                             |
-| `git.repository`                     | Git image name                                                                               | `bitnami/git`                                           |
-| `git.tag`                            | Git image tag                                                                                | `latest`                                                |
-| `git.pullPolicy`                     | Git image pull policy                                                                        | `Always`                                                |
-| `git.pullSecrets`                    | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
-| `service.type`                       | Kubernetes service type                                                                      | `ClusterIP`                                             |
-| `entrypoint.file`                    | Main entrypoint to your application. If not speficied, it will be a `sleep infinity` command | `''`                                                    |
-| `entrypoint.args`                    | Args required by your entrypoint                                                             | `nil`                                                   |
-| `entrypoint.workDir`                 | Working directory for launching the entrypoint                                               | `'/app'`                                                |
-| `podManagementPolicy`                | StatefulSet (worker and server nodes) pod management policy                                  | `Parallel`                                              |
-| `mode`                               | Run MXNet in standalone or distributed mode (possible values: `standalone`, `distributed`)   | `standalone`                                            |
-| `serverCount`                        | Number of server nodes that will execute your code                                           | `1`                                                     |
-| `workerCount`                        | Number of worker nodes that will execute your code                                           | `1`                                                     |
-| `schedulerPort`                      | MXNet scheduler port (only for distributed mode)                                             | `49875`                                                 |
-| `configMap`                          | Config map that contains the files you want to load in MXNet                                 | `nil`                                                   |
-| `cloneFilesFromGit.enabled`          | Enable in order to download files from git repository                                        | `false`                                                 |
-| `cloneFilesFromGit.repository`       | Repository that holds the files                                                              | `nil`                                                   |
-| `cloneFilesFromGit.revision`         | Revision from the repository to checkout                                                     | `master`                                                |
-| `commonExtraEnvVars`                 | Extra environment variables to add to server, scheduler and worker nodes                     | `nil`                                                   |
-| `workerExtraEnvVars`                 | Extra environment variables to add to the worker nodes                                       | `nil`                                                   |
-| `serverExtraEnvVars`                 | Extra environment variables to add to the server nodes                                       | `nil`                                                   |
-| `schedulerExtraEnvVars`              | Extra environment variables to add to the scheduler node                                     | `nil`                                                   |
-| `sidecars`                           | Attach additional containers to the pods (scheduler, worker and server nodes)                | `nil`                                                   |
-| `initContainers`                     | Attach additional init containers to the pods (scheduler, worker and server nodes)           | `nil`                                                   |
-| `existingSecret`                     | Name of a secret with sensitive data to mount in the pods                                    | `nil`                                                   |
-| `nodeSelector`                       | Node labels for pod assignment (this value is evaluated as a template)                       | `{}`                                                    |
-| `tolerations`                        | Toleration labels for pod assignment (this value is evaluated as a template)                 | `[]`                                                    |
-| `affinity`                           | Map of node/pod affinities (this value is evaluated as a template)                           | `{}`                                                    |
-| `resources`                          | Pod resources                                                                                | `{}`                                                    |
-| `securityContext.enabled`            | Enable security context                                                                      | `true`                                                  |
-| `securityContext.fsGroup`            | Group ID for the container                                                                   | `1001`                                                  |
-| `securityContext.runAsUser`          | User ID for the container                                                                    | `1001`                                                  |
-| `livenessProbe.enabled`              | Enable/disable the Liveness probe                                                            | `true`                                                  |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                     | `5`                                                     |
-| `livenessProbe.periodSeconds`        | How often to perform the probe                                                               | `5`                                                     |
-| `livenessProbe.timeoutSeconds`       | When the probe times out                                                                     | `5`                                                     |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                                     |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | `5`                                                     |
-| `readinessProbe.enabled`             | Enable/disable the Readiness probe                                                           | `true`                                                  |
-| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                    | `5`                                                     |
-| `readinessProbe.periodSeconds`       | How often to perform the probe                                                               | `5`                                                     |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                     | `1`                                                     |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                                     |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | `5`                                                     |
-| `persistence.enabled`                | Use a PVC to persist data                                                                    | `false`                                                 |
-| `persistence.mountPath`              | Path to mount the volume at                                                                  | `/bitnami/mxnet`                                        |
-| `persistence.storageClass`           | Storage class of backing PVC                                                                 | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                                                          | `ReadWriteOnce`                                         |
-| `persistence.size`                   | Size of data volume                                                                          | `8Gi`                                                   |
-| `persistence.annotations`            | Persistent Volume annotations                                                                | `{}`                                                    |
+| Parameter                            | Description                                                                                                                                               | Default                                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`                     | MXNet image registry                                                                                                                                      | `docker.io`                                             |
+| `image.repository`                   | MXNet image name                                                                                                                                          | `bitnami/MXNet`                                         |
+| `image.tag`                          | MXNet image tag                                                                                                                                           | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                   | Image pull policy                                                                                                                                         | `IfNotPresent`                                          |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`                        | Specify if debug logs should be enabled                                                                                                                   | `false`                                                 |
+| `nameOverride`                       | String to partially override mxnet.fullname template with a string (will prepend the release name)                                                        | `nil`                                                   |
+| `fullnameOverride`                   | String to fully override mxnet.fullname template with a string                                                                                            | `nil`                                                   |
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
+| `git.registry`                       | Git image registry                                                                                                                                        | `docker.io`                                             |
+| `git.repository`                     | Git image name                                                                                                                                            | `bitnami/git`                                           |
+| `git.tag`                            | Git image tag                                                                                                                                             | `{TAG_NAME}`                                            |
+| `git.pullPolicy`                     | Git image pull policy                                                                                                                                     | `IfNotPresent`                                          |
+| `git.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `service.type`                       | Kubernetes service type                                                                                                                                   | `ClusterIP`                                             |
+| `entrypoint.file`                    | Main entrypoint to your application. If not speficied, it will be a `sleep infinity` command                                                              | `''`                                                    |
+| `entrypoint.args`                    | Args required by your entrypoint                                                                                                                          | `nil`                                                   |
+| `entrypoint.workDir`                 | Working directory for launching the entrypoint                                                                                                            | `'/app'`                                                |
+| `podManagementPolicy`                | StatefulSet (worker and server nodes) pod management policy                                                                                               | `Parallel`                                              |
+| `mode`                               | Run MXNet in standalone or distributed mode (possible values: `standalone`, `distributed`)                                                                | `standalone`                                            |
+| `serverCount`                        | Number of server nodes that will execute your code                                                                                                        | `1`                                                     |
+| `workerCount`                        | Number of worker nodes that will execute your code                                                                                                        | `1`                                                     |
+| `schedulerPort`                      | MXNet scheduler port (only for distributed mode)                                                                                                          | `49875`                                                 |
+| `configMap`                          | Config map that contains the files you want to load in MXNet                                                                                              | `nil`                                                   |
+| `cloneFilesFromGit.enabled`          | Enable in order to download files from git repository                                                                                                     | `false`                                                 |
+| `cloneFilesFromGit.repository`       | Repository that holds the files                                                                                                                           | `nil`                                                   |
+| `cloneFilesFromGit.revision`         | Revision from the repository to checkout                                                                                                                  | `master`                                                |
+| `commonExtraEnvVars`                 | Extra environment variables to add to server, scheduler and worker nodes                                                                                  | `nil`                                                   |
+| `workerExtraEnvVars`                 | Extra environment variables to add to the worker nodes                                                                                                    | `nil`                                                   |
+| `serverExtraEnvVars`                 | Extra environment variables to add to the server nodes                                                                                                    | `nil`                                                   |
+| `schedulerExtraEnvVars`              | Extra environment variables to add to the scheduler node                                                                                                  | `nil`                                                   |
+| `sidecars`                           | Attach additional containers to the pods (scheduler, worker and server nodes)                                                                             | `nil`                                                   |
+| `initContainers`                     | Attach additional init containers to the pods (scheduler, worker and server nodes)                                                                        | `nil`                                                   |
+| `existingSecret`                     | Name of a secret with sensitive data to mount in the pods                                                                                                 | `nil`                                                   |
+| `nodeSelector`                       | Node labels for pod assignment (this value is evaluated as a template)                                                                                    | `{}`                                                    |
+| `tolerations`                        | Toleration labels for pod assignment (this value is evaluated as a template)                                                                              | `[]`                                                    |
+| `affinity`                           | Map of node/pod affinities (this value is evaluated as a template)                                                                                        | `{}`                                                    |
+| `resources`                          | Pod resources                                                                                                                                             | `{}`                                                    |
+| `securityContext.enabled`            | Enable security context                                                                                                                                   | `true`                                                  |
+| `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                  |
+| `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                  |
+| `livenessProbe.enabled`              | Enable/disable the Liveness probe                                                                                                                         | `true`                                                  |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                  | `5`                                                     |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                            | `5`                                                     |
+| `livenessProbe.timeoutSeconds`       | When the probe times out                                                                                                                                  | `5`                                                     |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                                                     |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `5`                                                     |
+| `readinessProbe.enabled`             | Enable/disable the Readiness probe                                                                                                                        | `true`                                                  |
+| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                                                                                 | `5`                                                     |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                                                                                                                            | `5`                                                     |
+| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                                                                                  | `1`                                                     |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                                                     |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `5`                                                     |
+| `persistence.enabled`                | Use a PVC to persist data                                                                                                                                 | `false`                                                 |
+| `persistence.mountPath`              | Path to mount the volume at                                                                                                                               | `/bitnami/mxnet`                                        |
+| `persistence.storageClass`           | Storage class of backing PVC                                                                                                                              | `nil` (uses alpha storage class annotation)             |
+| `persistence.accessMode`             | Use volume as ReadOnly or ReadWrite                                                                                                                       | `ReadWriteOnce`                                         |
+| `persistence.size`                   | Size of data volume                                                                                                                                       | `8Gi`                                                   |
+| `persistence.annotations`            | Persistent Volume annotations                                                                                                                             | `{}`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -125,6 +133,38 @@ $ helm install --name my-release -f values.yaml bitnami/mxnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/mxnet
+```
+
+- Run MXNet in distributed mode:
+```diff
+- mode: standalone
++ mode: distributed
+```
+
+- Number of server nodes that will execute your code:
+```diff
+- serverCount: 1
++ serverCount: 2
+```
+
+- Number of worker nodes that will execute your code:
+```diff
+- workerCount: 1
++ workerCount: 4
+```
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Loading your files
 
@@ -161,7 +201,7 @@ $ helm install --name my-release \
   bitnami/mxnet
 ```
 
-In case you want to add a file that includes sensitive information, pass a secret object using the `existingSecret` parameter. All the files in the secret will be mounted in the `/secrets` folder. 
+In case you want to add a file that includes sensitive information, pass a secret object using the `existingSecret` parameter. All the files in the secret will be mounted in the `/secrets` folder.
 
 ### Distributed training example
 
@@ -234,6 +274,15 @@ $ kubectl logs my-release-mxnet-scheduler-67dbd4bb7c-px2wf
 The [Bitnami MXNet](https://github.com/bitnami/bitnami-docker-mxnet) image can persist data. If enabled, the persisted path is `/bitnami/mxnet` by default.
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Sidecars and Init Containers
 

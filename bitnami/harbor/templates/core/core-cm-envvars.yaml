@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "harbor.core" . }}-envvars
+  labels: {{ include "harbor.labels" . | nindent 4 }}
+data:
+  DATABASE_TYPE: "postgresql"
+  POSTGRESQL_HOST: "{{ template "harbor.postgresql.fullname" . }}"
+  POSTGRESQL_PORT: "{{ .Values.postgresql.service.port }}"
+  POSTGRESQL_USERNAME: "{{ .Values.postgresql.postgresqlUsername }}"
+  POSTGRESQL_DATABASE: "registry"
+  POSTGRESQL_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
+  EXT_ENDPOINT: "{{ .Values.externalURL }}"
+  CORE_URL: "http://{{ template "harbor.core" . }}"
+  JOBSERVICE_URL: "http://{{ template "harbor.fullname" . }}-jobservice"
+  REGISTRY_URL: "http://{{ template "harbor.registry" . }}:5000"
+  TOKEN_SERVICE_URL: "http://{{ template "harbor.core" . }}/service/token"
+  WITH_NOTARY: "{{ .Values.notary.enabled }}"
+  NOTARY_URL: "http://{{ template "harbor.notary-server" . }}:4443"
+  CFG_EXPIRATION: "5"
+  ADMIRAL_URL: "NA"
+  WITH_CLAIR: "{{ .Values.clair.enabled }}"
+  CLAIR_DB_HOST: "{{ template "harbor.postgresql.fullname" . }}"
+  CLAIR_DB_PORT: "{{ .Values.postgresql.service.port }}"
+  CLAIR_DB_USERNAME: "{{ .Values.postgresql.postgresqlUsername }}"
+  CLAIR_DB: "{{ template "harbor.database.clairDatabase" . }}"
+  CLAIR_DB_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
+  CLAIR_URL: "http://{{ template "harbor.fullname" . }}-clair:6060"
+  REGISTRY_STORAGE_PROVIDER_NAME: "{{ .Values.persistence.imageChartStorage.type }}"
+  WITH_CHARTMUSEUM: "{{ .Values.chartmuseum.enabled }}"
+  CHART_REPOSITORY_URL: "http://{{ template "harbor.chartmuseum" . }}"
+  LOG_LEVEL: "{{ .Values.logLevel }}"
+  CONFIG_PATH: "/etc/core/app.conf"
+  SYNC_REGISTRY: "false"
+  CHART_CACHE_DRIVER: "redis"
+  _REDIS_URL: "{{ template "harbor.redisForCore" . }}"
+  _REDIS_URL_REG: "{{ template "harbor.redisForGC" . }}"
+  PORTAL_URL: "http://{{ template "harbor.portal" . }}"
+  REGISTRYCTL_URL: "http://{{ template "harbor.registry" . }}:8080"
+  CLAIR_HEALTH_CHECK_SERVER_URL: "http://{{ template "harbor.clair" . }}:6061"
+  {{- if .Values.uaaSecretName }}
+  UAA_CA_ROOT: "/etc/core/ca/auth-ca.crt"
+  {{- end }}

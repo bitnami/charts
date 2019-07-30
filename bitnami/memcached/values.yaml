@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.5.16-debian-9-r3
+  tag: 1.5.16-debian-9-r17
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -25,6 +25,14 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+
+## String to partially override memcached.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override memcached.fullname template
+##
+# fullnameOverride:
 
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -67,14 +75,17 @@ resources:
 ##
 podAnnotations: {}
 
+# Cluster domain
+clusterDomain: cluster.local
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
   enabled: false
   image:
     registry: docker.io
-    repository: prom/memcached-exporter
-    tag: v0.4.1
+    repository: bitnami/memcached-exporter
+    tag: 0.5.0-debian-9-r1
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

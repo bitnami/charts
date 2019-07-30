@@ -13,11 +13,11 @@
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.39-debian-9-r40
+  tag: 2.4.39-debian-9-r53
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -25,6 +25,7 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+<<<<<<< HEAD
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
@@ -53,6 +54,15 @@ cloneHtdocsFromGit:
 # htdocsPVC:
 
 # vhostsConfigMap:
+=======
+## String to partially override apache.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override apache.fullname template
+##
+# fullnameOverride:
+>>>>>>> master
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -141,8 +151,8 @@ metrics:
   enabled: false
   image:
     registry: docker.io
-    repository: lusotycoon/apache-exporter
-    tag: v0.5.0
+    repository: bitnami/apache-exporter
+    tag: 0.7.0-debian-9-r2
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -1,21 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "tomcat.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "tomcat.fullname" . }}
+    chart: {{ template "tomcat.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "tomcat.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "tomcat.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
     spec:
@@ -25,8 +25,21 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end}}
 {{- include "tomcat.imagePullSecrets" . | indent 6 }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "tomcat.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/tomcat"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/tomcat
+      {{- end }}
       containers:
-      - name: {{ template "fullname" . }}
+      - name: tomcat
         image: "{{ template "tomcat.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
@@ -35,7 +48,7 @@ spec:
         - name: TOMCAT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "tomcat.fullname" . }}
               key: tomcat-password
         - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
           value: {{ .Values.tomcatAllowRemoteManagement | quote }}
@@ -59,13 +72,13 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: tomcat-data
+        - name: data
           mountPath: /bitnami/tomcat
       volumes:
-      - name: tomcat-data
+      - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
+          claimName: {{ template "tomcat.fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end -}}

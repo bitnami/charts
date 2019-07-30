@@ -1,0 +1,18 @@
+{{- if and .Values.disasterRecovery.enabled (not .Values.disasterRecovery.pvc.existingClaim) -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "etcd.fullname" . }}-snapshotter
+  labels:
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    helm.sh/chart: {{ template "etcd.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.disasterRecovery.pvc.size | quote }}
+  storageClassName: {{ .Values.disasterRecovery.pvc.storageClassName | quote }}
+{{- end -}}

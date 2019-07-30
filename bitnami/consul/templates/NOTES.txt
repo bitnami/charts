@@ -1,6 +1,6 @@
   ** Please be patient while the chart is being deployed **
 
-  Consul can be accessed within the cluster on port {{ .Values.service.serverPort }} at {{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  Consul can be accessed within the cluster on port {{ .Values.service.serverPort }} at {{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 {{- if .Values.ui.service.enabled }}
 

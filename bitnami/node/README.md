@@ -50,50 +50,58 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the Node chart and their default values.
 
-|              Parameter                  |            Description                                    |                        Default                            |
-|-----------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
-| `global.imageRegistry`                  | Global Docker image registry                              | `nil`                                                     |
-| `global.imagePullSecrets`               | Global Docker registry secret names as an array           | `[]` (does not add image pull secrets to deployed pods)   |
-| `image.registry`                        | NodeJS image registry                                     | `docker.io`                                               |
-| `image.repository`                      | NodeJS image name                                         | `bitnami/node`                                            |
-| `image.tag`                             | NodeJS image tag                                          | `{TAG_NAME}`                                              |
-| `image.pullPolicy`                      | NodeJS image pull policy                                  | `IfNotPresent`                                            |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array          | `[]` (does not add image pull secrets to deployed pods)   |
-| `git.registry`                          | Git image registry                                        | `docker.io`                                               |
-| `git.repository`                        | Git image name                                            | `bitnami/git`                                             |
-| `git.tag`                               | Git image tag                                             | `latest`                                                  |
-| `git.pullPolicy`                        | Git image pull policy                                     | `Always` if `imageTag` is `latest`, else `IfNotPresent`   |
-| `repository`                            | Repo of the application                                   | `https://github.com/bitnami/sample-mean.git`              |
-| `revision`                              | Revision to checkout                                      | `master`                                                  |
-| `replicas`                              | Number of replicas for the application                    | `1`                                                       |
-| `applicationPort`                       | Port where the application will be running                | `3000`                                                    |
-| `extraEnv`                              | Any extra environment variables to be pass to the pods    | `{}`                                                      |
-| `securityContext.enabled`                     | Enable security context                                                                                                | `true`                                                   |
-| `securityContext.fsGroup`                     | Group ID for the container                                                                                             | `1001`                                                   |
-| `securityContext.runAsUser`                   | User ID for the container                                                                                              | `1001`                                                   |
-| `service.type`                          | Kubernetes Service type                                   | `ClusterIP`                                               |
-| `service.port`                          | Kubernetes Service port                                   | `80`                                                      |
-| `service.annotations`                   | Annotations for the Service                               | {}                                                        |
-| `service.loadBalancerIP`                | LoadBalancer IP if Service type is `LoadBalancer`         | `nil`                                                     |
-| `service.nodePort`                      | NodePort if Service type is `LoadBalancer` or `NodePort`  | `nil`                                                     |
-| `persistence.enabled`                   | Enable persistence using PVC                              | `false`                                                   |
-| `persistence.path`                      | Path to persisted directory                               | `/app/data`                                               |
-| `persistence.accessMode`                | PVC Access Mode                                           | `ReadWriteOnce`                                           |
-| `persistence.size`                      | PVC Storage Request                                       | `1Gi`                                                     |
-| `mongodb.install`                       | Wheter to install or not the MongoDB chart                | `true`                                                    |
-| `externaldb.secretName`                 | Secret containing existing database credentials           | `nil`                                                     |
-| `externaldb.type`                       | Type of database that defines the database secret mapping | `osba`                                                    |
-| `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                   | `nil`                                                     |
-| `ingress.enabled`                       | Enable ingress controller resource                        | `false`                                                   |
-| `ingress.hosts[0].name`                 | Hostname to your Node installation                        | `node.local`                                              |
-| `ingress.hosts[0].path`                 | Path within the url structure                             | `/`                                                       |
-| `ingress.hosts[0].tls`                  | Utilize TLS backend in ingress                            | `false`                                                   |
-| `ingress.hosts[0].certManager`          | Add annotations for cert-manager                          | `false`                                                   |
-| `ingress.hosts[0].tlsSecret`            | TLS Secret (certificates)                                 | `node.local-tls-secret`                                   |
-| `ingress.hosts[0].annotations`          | Annotations for this host's ingress record                | `[]`                                                      |
-| `ingress.secrets[0].name`               | TLS Secret Name                                           | `nil`                                                     |
-| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                    | `nil`                                                     |
-| `ingress.secrets[0].key`                | TLS Secret Key                                            | `nil`                                                     |
+| Parameter                               | Description                                                                                                                                               | Default                                                 |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `global.imageRegistry`                  | Global Docker image registry                                                                                                                              | `nil`                                                   |
+| `global.imagePullSecrets`               | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`                        | NodeJS image registry                                                                                                                                     | `docker.io`                                             |
+| `image.repository`                      | NodeJS image name                                                                                                                                         | `bitnami/node`                                          |
+| `image.tag`                             | NodeJS image tag                                                                                                                                          | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                      | NodeJS image pull policy                                                                                                                                  | `IfNotPresent`                                          |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                          | String to partially override node.fullname template with a string (will prepend the release name)                                                         | `nil`                                                   |
+| `fullnameOverride`                      | String to fully override node.fullname template with a string                                                                                             | `nil`                                                   |
+| `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`    | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                                                               | `latest`                                                |
+| `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`           | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
+| `git.registry`                          | Git image registry                                                                                                                                        | `docker.io`                                             |
+| `git.repository`                        | Git image name                                                                                                                                            | `bitnami/git`                                           |
+| `git.tag`                               | Git image tag                                                                                                                                             | `{TAG_NAME}`                                            |
+| `git.pullPolicy`                        | Git image pull policy                                                                                                                                     | `IfNotPresent`                                          |
+| `repository`                            | Repo of the application                                                                                                                                   | `https://github.com/bitnami/sample-mean.git`            |
+| `revision`                              | Revision to checkout                                                                                                                                      | `master`                                                |
+| `replicas`                              | Number of replicas for the application                                                                                                                    | `1`                                                     |
+| `applicationPort`                       | Port where the application will be running                                                                                                                | `3000`                                                  |
+| `extraEnv`                              | Any extra environment variables to be pass to the pods                                                                                                    | `{}`                                                    |
+| `securityContext.enabled`               | Enable security context                                                                                                                                   | `true`                                                  |
+| `securityContext.fsGroup`               | Group ID for the container                                                                                                                                | `1001`                                                  |
+| `securityContext.runAsUser`             | User ID for the container                                                                                                                                 | `1001`                                                  |
+| `service.type`                          | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                             |
+| `service.port`                          | Kubernetes Service port                                                                                                                                   | `80`                                                    |
+| `service.annotations`                   | Annotations for the Service                                                                                                                               | {}                                                      |
+| `service.loadBalancerIP`                | LoadBalancer IP if Service type is `LoadBalancer`                                                                                                         | `nil`                                                   |
+| `service.nodePort`                      | NodePort if Service type is `LoadBalancer` or `NodePort`                                                                                                  | `nil`                                                   |
+| `persistence.enabled`                   | Enable persistence using PVC                                                                                                                              | `false`                                                 |
+| `persistence.path`                      | Path to persisted directory                                                                                                                               | `/app/data`                                             |
+| `persistence.accessMode`                | PVC Access Mode                                                                                                                                           | `ReadWriteOnce`                                         |
+| `persistence.size`                      | PVC Storage Request                                                                                                                                       | `1Gi`                                                   |
+| `mongodb.install`                       | Wheter to install or not the MongoDB chart                                                                                                                | `true`                                                  |
+| `externaldb.secretName`                 | Secret containing existing database credentials                                                                                                           | `nil`                                                   |
+| `externaldb.type`                       | Type of database that defines the database secret mapping                                                                                                 | `osba`                                                  |
+| `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                                                                                                                   | `nil`                                                   |
+| `ingress.enabled`                       | Enable ingress controller resource                                                                                                                        | `false`                                                 |
+| `ingress.hosts[0].name`                 | Hostname to your Node installation                                                                                                                        | `node.local`                                            |
+| `ingress.hosts[0].path`                 | Path within the url structure                                                                                                                             | `/`                                                     |
+| `ingress.hosts[0].tls`                  | Utilize TLS backend in ingress                                                                                                                            | `false`                                                 |
+| `ingress.hosts[0].certManager`          | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
+| `ingress.hosts[0].tlsSecret`            | TLS Secret (certificates)                                                                                                                                 | `node.local-tls-secret`                                 |
+| `ingress.hosts[0].annotations`          | Annotations for this host's ingress record                                                                                                                | `[]`                                                    |
+| `ingress.secrets[0].name`               | TLS Secret Name                                                                                                                                           | `nil`                                                   |
+| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
+| `ingress.secrets[0].key`                | TLS Secret Key                                                                                                                                            | `nil`                                                   |
 
 The above parameters map to the env variables defined in [bitnami/node](http://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](http://github.com/bitnami/bitnami-docker-node) image documentation.
 
@@ -127,6 +135,15 @@ The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores 
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Set up an Ingress controller
 

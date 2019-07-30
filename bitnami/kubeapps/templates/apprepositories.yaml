@@ -25,6 +25,24 @@ metadata:
 spec:
   type: helm
   url: {{ .url }}
+{{- if or $.Values.securityContext.enabled $.Values.apprepository.initialReposProxy.enabled}}
+  syncJobPodTemplate:
+    spec:
+  {{- if $.Values.apprepository.initialReposProxy.enabled }}
+      containers:
+      - env:
+          - name: https_proxy
+            value: {{ $.Values.apprepository.initialReposProxy.https_proxy }}
+          - name: http_proxy
+            value: {{ $.Values.apprepository.initialReposProxy.http_proxy }}
+          - name: no_proxy
+            value: {{ $.Values.apprepository.initialReposProxy.no_proxy }}
+  {{- end }}
+  {{- if $.Values.securityContext.enabled }}
+        securityContext:
+        runAsUser: {{ $.Values.securityContext.runAsUser }}
+  {{- end }}
+{{- end }}
   {{- if or .caCert .authorizationHeader }}
   auth:
     {{- if .caCert }}

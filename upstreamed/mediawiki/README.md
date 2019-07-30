@@ -54,8 +54,10 @@ The following table lists the configurable parameters of the MediaWiki chart and
 | `image.registry`                     | MediaWiki image registry                                    | `docker.io`                                             |
 | `image.repository`                   | MediaWiki Image name                                        | `bitnami/mediawiki`                                     |
 | `image.tag`                          | MediaWiki Image tag                                         | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                   | Image pull policy                                           | `Always`                                                |
+| `image.pullPolicy`                   | Image pull policy                                           | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                       | String to partially override mediawiki.fullname template with a string (will prepend the release name)    | `nil`     |
+| `fullnameOverride`                   | String to fully override mediawiki.fullname template with a string                                        | `nil`     |
 | `mediawikiUser`                      | User of the application                                     | `user`                                                  |
 | `mediawikiPassword`                  | Application password                                        | _random 10 character long alphanumeric string_          |
 | `mediawikiEmail`                     | Admin email                                                 | `user@example.com`                                      |
@@ -113,8 +115,8 @@ The following table lists the configurable parameters of the MediaWiki chart and
 | `podAnnotations`                     | Pod annotations                                             | `{}`                                                    |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                        | `false`                                                 |
 | `metrics.image.registry`             | Apache exporter image registry                              | `docker.io`                                             |
-| `metrics.image.repository`           | Apache exporter image name                                  | `lusotycoon/apache-exporter`                            |
-| `metrics.image.tag`                  | Apache exporter image tag                                   | `v0.5.0`                                                |
+| `metrics.image.repository`           | Apache exporter image name                                  | `bitnami/apache-exporter`                               |
+| `metrics.image.tag`                  | Apache exporter image tag                                   | `{TAG_NAME}`                                            |
 | `metrics.image.pullPolicy`           | Image pull policy                                           | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods) |
 | `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod             | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
@@ -148,7 +150,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image stores the MediaWiki data and configurations at the `/bitnami/mediawiki` and `/bitnami/apache` paths of the container.
+The [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image stores the MediaWiki data and configurations at the `/bitnami/mediawiki` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.

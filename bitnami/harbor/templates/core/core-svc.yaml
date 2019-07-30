@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "harbor.core" . }}"
+  labels: {{ include "harbor.labels" . | nindent 4 }}
+spec:
+  {{- if  (eq .Values.service.ingress.controller "gce") }}
+  type: NodePort
+  {{- end }}
+  ports:
+    - port: 80
+      targetPort: http
+  selector:
+    {{- include "harbor.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: core

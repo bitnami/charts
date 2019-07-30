@@ -17,10 +17,10 @@ spec:
     # Allow inbound connections
     - ports:
       - port: 9000
-        {{- if not .Values.networkPolicy.allowExternal }}
-        from:
-        - podSelector:
-            matchLabels:
-              {{ include "minio.fullname" . }}-client: "true"
-        {{- end }}
+      {{- if not .Values.networkPolicy.allowExternal }}
+      from:
+      - podSelector:
+          matchLabels:
+            {{ include "minio.fullname" . }}-client: "true"
+      {{- end }}
 {{- end }}

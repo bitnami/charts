@@ -1,17 +1,17 @@
 apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: "{{ template "etcd.fullname" . }}"
+  name: {{ template "etcd.fullname" . }}
   labels:
-    app: {{ template "etcd.name" . }}
-    chart: {{ template "etcd.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ template "etcd.name" . }}
+    helm.sh/chart: {{ template "etcd.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "etcd.name" . }}
-      release: "{{ .Release.Name }}"
+      app.kubernetes.io/name: {{ template "etcd.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   serviceName: {{ template "etcd.fullname" . }}-headless
   podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
   replicas: {{ .Values.statefulset.replicaCount }}
@@ -27,10 +27,10 @@ spec:
     metadata:
       name: "{{ template "etcd.fullname" . }}"
       labels:
-        app: {{ template "etcd.name" . }}
-        chart: {{ template "etcd.chart" . }}
-        release: {{ .Release.Name | quote }}
-        heritage: {{ .Release.Service | quote }}
+        app.kubernetes.io/name: {{ template "etcd.name" . }}
+        helm.sh/chart: {{ template "etcd.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
 {{- if .Values.podAnnotations }}
@@ -47,17 +47,50 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.affinity }}
       affinity:
-{{ toYaml .Values.affinity | indent 8 }}
+        {{- with .Values.nodeAffinity }}
+        nodeAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
+        {{- end }}
+        {{- with .Values.podAffinity }}
+        podAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
+        {{- end }}
+        {{- if eq .Values.podAntiAffinity "hard" }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: {{ template "etcd.name" . }}
+                app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- else if eq .Values.podAntiAffinity "soft" }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ template "etcd.name" . }}
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- with .Values.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "etcd.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/etcd"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: "/bitnami/etcd"
       {{- end }}
       containers:
       # Variables to populate static cluster
@@ -70,78 +103,19 @@ spec:
       {{- $dnsBase := .Values.service.dnsBase }}
       {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
       {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
-      - name: "{{ template "etcd.fullname" . }}"
+      - name: etcd
         image: "{{ template "etcd.image" . }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         command:
-         - bash
-         - -ec
-         - |
-            HOSTNAME=$(hostname -s)
-            ID=${HOSTNAME:(-1)}
-            echo "==> The ID of the host is $ID"
-            DATA_DIR={{ template "etcd.dataDir" . }}
-
-            AUTH_OPTIONS="{{ template "etcd.authOptions" . }}"
-
-            ## Store member id for later member replacement
-            store_member_id() {
-                while ! etcdctl ${AUTH_OPTIONS} member list &>/dev/null; do sleep 1; done
-                etcdctl ${AUTH_OPTIONS} member list | grep `hostname -s` | awk '{ print $1}' | awk -F ":" '{ print $1}' > ${DATA_DIR}/member_id
-                exit 0
-            }
-
-            ## Create data dir if not exists
-            if [ ! -d "${DATA_DIR}" ]; then
-              echo "==> Creating data dir..."
-              mkdir -p "${DATA_DIR}"
-              ## Setting up new cluster
-              echo "==> There is no data at all. Creating new cluster"
-              export ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
-              store_member_id &
-              if [ -n "${ETCD_ROOT_PASSWORD}" ] && [ "${HOSTNAME}" == "{{ $etcdFullname }}-0" ]; then
-                echo "==> Configuring RBAC authentication!"
-                etcd > /dev/null 2>&1 &
-                ETCD_PID=$!
-                while ! etcdctl member list &>/dev/null; do sleep 1; done
-                echo "${ETCD_ROOT_PASSWORD}" | etcdctl user add root
-                etcdctl auth enable
-                etcdctl ${AUTH_OPTIONS} role revoke guest -path '/*' --readwrite
-                kill "${ETCD_PID}"
-                sleep 5
-              fi
-            else
-              ## Re-joining failed node
-              if [ -d "${DATA_DIR}/member/snap" ]; then
-                echo "==> Data exists. Re-joining etcd member"
-                member_id=$(cat "${DATA_DIR}/member_id")
-                if [ "${HOSTNAME}" != "{{ $etcdFullname }}-0" ]; then
-                  echo "==> Updating member in existing cluster."
-                  export ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
-                  etcdctl ${AUTH_OPTIONS} member update ${member_id} {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}
-                fi
-              ## Adding new member to the cluster
-              else
-                echo "==> Adding member to existing cluster."
-                export ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
-
-                etcdctl ${AUTH_OPTIONS} member add `hostname -s` {{ $etcdPeerProtocol }}://`hostname -s`.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }} | grep "^ETCD_" > ${DATA_DIR}/new_member_envs
-                sed -ie 's/^/export /' /bitnami/etcd/data/new_member_envs
-
-                echo "==> Loading env vars of existing cluster"
-                source "${DATA_DIR}/new_member_envs"
-
-                store_member_id &
-              fi
-            fi
-
-            {{- if .Values.configFileConfigMap }}
-            exec /opt/bitnami/etcd/bin/etcd --config-file /opt/bitnami/etcd/conf/etcd.conf.yml
-            {{ else }}
-            exec /opt/bitnami/etcd/bin/etcd
-            {{- end }}
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
+        - /scripts/setup.sh
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /scripts/prestop-hook.sh
+        {{- if .Values.resources }}
+        resources: {{ toYaml .Values.resources | nindent 10 }}
+        {{- end }}
         {{- if .Values.envVarsConfigMap }}
         envFrom:
         - configMapRef:
@@ -156,6 +130,8 @@ spec:
         - name: NAMI_LOG_LEVEL
           value: "trace8"
         {{- end }}
+
+        ## Basic configuration
         - name: MY_POD_IP
           valueFrom:
             fieldRef:
@@ -164,8 +140,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-
-        ## Basic configuration
+        - name: ETCDCTL_API
+          value: "3"
         - name: ETCD_NAME
           value: "$(MY_POD_NAME)"
         - name: ETCD_DATA_DIR
@@ -178,6 +154,10 @@ spec:
           value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ .Values.service.peerPort }}"
         - name: ETCD_LISTEN_PEER_URLS
           value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.service.peerPort }}"
+        {{- if .Values.maxProcs }}
+        - name: GOMAXPROCS
+          value: {{ .Values.maxProcs }}
+        {{- end }}
 
         ## Clustering configuration
         {{- if gt $replicaCount 1 }}
@@ -191,13 +171,7 @@ spec:
 
         ## RBAC authentication
         - name: ALLOW_NONE_AUTHENTICATION
-          {{- if .Values.auth.rbac.enabled }}
-          value: "no"
-          {{- else if .Values.allowNoneAuthentication }}
-          value: "yes"
-          {{- else }}
-          value: "no"
-          {{- end }}
+          value: {{ ternary "yes" "no" (or .Values.auth.rbac.enabled .Values.allowNoneAuthentication) | quote }}
         {{- if .Values.auth.rbac.enabled }}
         - name: ETCD_ROOT_PASSWORD
           valueFrom:
@@ -242,29 +216,14 @@ spec:
 
         ports:
         - name: client
-          containerPort: {{ .Values.service.port }}
+          containerPort: 2379
         - name: peer
-          containerPort: {{ .Values.service.port }}
-        lifecycle:
-          preStop:
-            exec:
-              command:
-                - "/bin/sh"
-                - "-ec"
-                - |
-                  AUTH_OPTIONS="{{ template "etcd.authOptions" . }}"
-                  DATA_DIR={{ template "etcd.dataDir" . }}
-                  MEMBER_ID=$(etcdctl member list | grep name=`hostname -s` | awk {'print $1'} | awk -F ":" {'print $1'})
-                  export ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
-                  echo "==> Removing $MEMBER_ID from etcd cluster"
-                  etcdctl ${AUTH_OPTIONS} member remove $MEMBER_ID
-                  if [ $? -eq 0 ]; then
-                      rm -rf ${DATA_DIR}/*
-                  fi
+          containerPort: 2380
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
-          tcpSocket:
-            port: client
+          exec:
+            command:
+            - /scripts/probes.sh
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -273,8 +232,9 @@ spec:
         {{- end }}
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
-          tcpSocket:
-            port: client
+          exec:
+            command:
+            - /scripts/probes.sh
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -282,42 +242,71 @@ spec:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
         {{- end }}
         volumeMounts:
-        {{- if .Values.persistence.enabled }}
+        - name: scripts
+          mountPath: /scripts/setup.sh
+          subPath: setup.sh
+        - name: scripts
+          mountPath: /scripts/prestop-hook.sh
+          subPath: prestop-hook.sh
+        - name: scripts
+          mountPath: /scripts/probes.sh
+          subPath: probes.sh
         - name: data
           mountPath: /bitnami/etcd
-        {{ end }}
-        {{ if .Values.configFileConfigMap }}
+        {{- if .Values.startFromSnapshot.enabled }}
+        - name: init-snapshot-volume
+          mountPath: /init-snapshot
+        {{- end }}
+        {{- if .Values.disasterRecovery.enabled }}
+        - name: snapshot-volume
+          mountPath: /snapshots
+        {{- end }}
+        {{- if .Values.configFileConfigMap }}
         - name: etcd-config
           mountPath: /opt/bitnami/etcd/conf/
-        {{ end }}
-        {{ if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS ) ) }}
+        {{- end }}
+        {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS ) ) }}
         - name: etcd-client-certs
           mountPath: /opt/bitnami/etcd/certs/client/
           readOnly: true
-        {{ end }}
-        {{ if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS ) ) }}
+        {{- end }}
+        {{- if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS ) ) }}
         - name: etcd-peer-certs
           mountPath: /opt/bitnami/etcd/certs/peer/
           readOnly: true
-        {{ end }}
+        {{- end }}
       volumes:
-      {{ if .Values.configFileConfigMap }}
+      - name: scripts
+        configMap:
+          name: {{ template "etcd.fullname" . }}-scripts
+          defaultMode: 0755
+      {{- if .Values.startFromSnapshot.enabled }}
+      - name: init-snapshot-volume
+        persistentVolumeClaim:
+          claimName: {{ .Values.startFromSnapshot.existingClaim }}
+      {{- end }}
+      {{- if .Values.disasterRecovery.enabled }}
+      - name: snapshot-volume
+        persistentVolumeClaim:
+          claimName: {{ template "etcd.disasterRecovery.pvc.name" . }}
+      {{- end }}
+      {{- if .Values.configFileConfigMap }}
       - name: etcd-config
         configMap:
           name: {{ template "etcd.configFileCM" . }}
-      {{ end }}
-      {{ if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS ) ) }}
+      {{- end }}
+      {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS ) ) }}
       - name: etcd-client-certs
         secret:
           secretName: {{ required "A secret containinig the client certificates is required" .Values.auth.client.existingSecret }}
           defaultMode: 256
-      {{ end }}
-      {{ if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS ) ) }}
+      {{- end }}
+      {{- if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS ) ) }}
       - name: etcd-peer-certs
         secret:
           secretName: {{ required "A secret containinig the peer certificates is required" .Values.auth.peer.existingSecret }}
           defaultMode: 256
-      {{ end }}
+      {{- end }}
 {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
