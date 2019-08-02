@@ -61,7 +61,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.0-r64
+    tag: 1.16.0-r99
   service:
     port: 80
     type: ClusterIP
@@ -146,7 +146,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.12.3-r13
+    tag: 1.12.10-r23
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -293,7 +293,7 @@ testImage:
   # Image used for the tests. The only requirement is to include curl
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.0-r40
+  tag: 1.16.0-r99
 
 # Auth Proxy for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
