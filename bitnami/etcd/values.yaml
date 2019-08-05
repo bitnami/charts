@@ -129,10 +129,13 @@ auth:
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
+securityContextEnabled: true
 securityContext:
-  enabled: true
   fsGroup: 1001
   runAsUser: 1001
+#  seLinuxOptions:
+#    level: "s0"
+#  runAsNonRoot: true
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer

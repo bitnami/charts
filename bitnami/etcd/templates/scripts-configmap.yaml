@@ -106,17 +106,17 @@ data:
     ## Check wether the member was succesfully removed from the cluster
     should_add_new_member() {
         return_value=0
-        if (grep -E "^Member[[:space:]]+[a-z0-9]+ removed from cluster [a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log") || \
+        if (grep -E "^Member[[:space:]]+[a-z0-9]+ removed from cluster [a-z0-9]+$" "${ETCD_DATA_DIR}/member_removal.log") || \
            ! ([[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]); then
             rm -rf $ETCD_DATA_DIR/* 1>&3 2>&4
         else
             return_value=1
         fi
-        rm "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 1>&3 2>&4
+        rm "${ETCD_DATA_DIR}/member_removal.log" 1>&3 2>&4
         return $return_value
     }
 
-    if [[ ! -d "$ETCD_DATA_DIR" ]]; then
+    if [[ ! -d "${ETCD_DATA_DIR}/member" ]]; then
         echo "==> Creating data dir..." 1>&3 2>&4
         mkdir -p "$ETCD_DATA_DIR" 1>&3 2>&4
         echo "==> There is no data at all. Initializing a new member of the cluster..." 1>&3 2>&4
@@ -207,7 +207,7 @@ data:
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
-    etcdctl $AUTH_OPTIONS member remove --debug=true "$(cat "$ETCD_DATA_DIR/member_id")" > "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 2>&1
+    etcdctl $AUTH_OPTIONS member remove --debug=true "$(cat ${ETCD_DATA_DIR}/member_id)" > "${ETCD_DATA_DIR}/member_removal.log" 2>&1
   probes.sh: |-
     #!/bin/bash
 

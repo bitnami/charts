@@ -42,11 +42,10 @@ spec:
 {{- end }}
     spec:
 {{- include "etcd.imagePullSecrets" . | indent 6 }}
-      {{- if .Values.securityContext.enabled }}
+{{- if .Values.securityContextEnabled }}
       securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-      {{- end }}
+{{ toYaml .Values.securityContext | indent 8 }}
+{{- end }}
       affinity:
         {{- with .Values.nodeAffinity }}
         nodeAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
@@ -90,7 +89,7 @@ spec:
         resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
         volumeMounts:
         - name: data
-          mountPath: "/bitnami/etcd"
+          mountPath: {{ template "etcd.dataDir" . }}
       {{- end }}
       containers:
       # Variables to populate static cluster
@@ -251,8 +250,10 @@ spec:
         - name: scripts
           mountPath: /scripts/probes.sh
           subPath: probes.sh
+        - name: tmp
+          mountPath: /tmp
         - name: data
-          mountPath: /bitnami/etcd
+          mountPath: {{ template "etcd.dataDir" . }}
         {{- if .Values.startFromSnapshot.enabled }}
         - name: init-snapshot-volume
           mountPath: /init-snapshot
@@ -280,6 +281,8 @@ spec:
         configMap:
           name: {{ template "etcd.fullname" . }}-scripts
           defaultMode: 0755
+      - name: tmp
+        emptyDir: {}
       {{- if .Values.startFromSnapshot.enabled }}
       - name: init-snapshot-volume
         persistentVolumeClaim:

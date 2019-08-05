@@ -79,11 +79,7 @@ Return the proper etcd client protocol
 Return the proper etcd data dir
 */}}
 {{- define "etcd.dataDir" -}}
-{{- if .Values.persistence.enabled -}}
-{{- print "/bitnami/etcd/data" -}}
-{{- else -}}
 {{- print "/opt/bitnami/etcd/data" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*
