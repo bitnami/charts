@@ -30,6 +30,38 @@ spec:
   {{- end }}
 {{- end }}
     spec:
+      affinity:
+        {{- with .Values.nodeAffinity }}
+        nodeAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
+        {{- end }}
+        {{- with .Values.podAffinity }}
+        podAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
+        {{- end }}
+        {{- if eq .Values.podAntiAffinity "hard" }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: {{ template "nginx.fullname" . }}
+                release: "{{ .Release.Name }}"
+        {{- else if eq .Values.podAntiAffinity "soft" }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: {{ template "nginx.fullname" . }}
+                  release: "{{ .Release.Name }}"
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
 {{- include "nginx.imagePullSecrets" . | indent 6 }}
       containers:
       - name: nginx
