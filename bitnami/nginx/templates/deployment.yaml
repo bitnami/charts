@@ -12,7 +12,7 @@ spec:
     matchLabels:
       app: {{ template "nginx.fullname" . }}
       release: "{{ .Release.Name }}"
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
