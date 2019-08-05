@@ -55,6 +55,11 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `fullnameOverride`               | String to fully override nginx.fullname template with a string                                     | `nil`      |
 | `serverBlock`                    | Custom NGINX server block                        | `nil`                                                        |
 | `podAnnotations`                 | Pod annotations                                  | `{}`                                                         |
+| `nodeAffinity`                   | Node Affinity rules for pod assignment. The value is evaluated as a template | `{}`                             |
+| `podAffinity`                    | Affinity rules for pod assignment. The value is evaluated as a template      | `{}`                             |
+| `podAntiAffinity`                | Anti-Affinity rules for pod assignment. Allowed values: `soft` and `hard`    | `soft`                           |
+| `nodeSelector`                   | Node labels for pod assignment. The value is evaluated as a template         | `{}`                             |
+| `tolerations`                    | Tolerations for pod assignment. The value is evaluated as a template         | `{}`                             |
 | `metrics.enabled`                | Start a side-car prometheus exporter             | `false`                                                      |
 | `metrics.image.registry`         | Promethus exporter image registry                | `docker.io`                                                  |
 | `metrics.image.repository`       | Promethus exporter image name                    | `bitnami/nginx-exporter`                                     |
