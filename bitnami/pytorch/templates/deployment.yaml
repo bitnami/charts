@@ -59,13 +59,13 @@ spec:
       - name: volume-permissions
         image: "{{ template "pytorch.volumePermissions.image" . }}"
         imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.mountPath }}"]
         securityContext:
           runAsUser: 0
         resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
         volumeMounts:
         - name: data
-          mountPath: {{ .Values.persistence.path }}
+          mountPath: {{ .Values.persistence.mountPath }}
       {{- end }}
       containers:
       - name: master
