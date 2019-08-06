@@ -68,6 +68,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}` |
 | `metrics.resources`              | Exporter resource requests/limit                 | {}                                                           |
+| `replicaCount`                   | Number of replicas to deploy                     | `1`                                                          |
 | `service.type`                   | Kubernetes Service type                          | `LoadBalancer`                                               |
 | `service.port`                   | Service HTTP port                                | `80`                                                         |
 | `service.nodePorts.http`         | Kubernetes http node port                        | `""`                                                         |

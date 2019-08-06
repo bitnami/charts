@@ -34,6 +34,9 @@ image:
 ##
 # fullnameOverride:
 
+## Number of replicas to deploy
+replicaCount: 1
+
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
