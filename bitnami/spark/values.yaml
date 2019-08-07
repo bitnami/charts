@@ -143,7 +143,7 @@ worker:
   autoscaling:
     ## Enable replica autoscaling depending on CPU
     enabled: false
-    resource:
+    CpuTargetPercentage: 50
 
   ## Max number of workers when using autoscaling
   # replicasMax:
