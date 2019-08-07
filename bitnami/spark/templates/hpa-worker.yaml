@@ -15,7 +15,7 @@ spec:
     kind: statefulset
     name: {{ include "spark.fullname" . }}-worker
   minReplicas: {{ .Values.worker.replicaCount }}
-  maxReplicas: {{ .Values.worker.replicasMax }}
+  maxReplicas: {{ .Values.worker.autoscaling.replicasMax }}
   metrics:
   - type: Resource
     resource:

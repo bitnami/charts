@@ -144,9 +144,8 @@ worker:
     ## Enable replica autoscaling depending on CPU
     enabled: true
     CpuTargetPercentage: 50
-
-  ## Max number of workers when using autoscaling
-  replicasMax: 10
+    ## Max number of workers when using autoscaling
+    replicasMax: 10
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
