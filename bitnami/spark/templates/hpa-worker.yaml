@@ -19,5 +19,6 @@ spec:
   metrics:
   - type: Resource
     resource:
-      {{- tpl .Values.worker.autoscaling.resource | nindent 6 }}
+      name: cpu
+      targetAverageUtilization: {{ .Values.worker.autoscaling.CpuTargetPercentage }}
 {{- end }}

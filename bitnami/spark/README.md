@@ -85,8 +85,9 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.javaOptions`                        | Set options for the JVM in the form `-Dx=y`                                                 | No default                                              |
 | `worker.configOptions`                      | Set extra options to configure the worker in the form `-Dx=y`                               | No default                                              |
 | `worker.replicaCount`                       | Set the number of workers                                                                   | `2`                                                     |
-| `worker.enableAutoscaling`                  | Enable autoscaling depending on CPU                                                         | `false`                                                 |
-| `worker.replicasMax`                        | Maximum number of workers when using autoscaling                                            | `false`                                                 |
+| `worker.autoscaling.enabled`                | Enable autoscaling depending on CPU                                                         | `false`                                                 |
+| `worker.autoscaling.CpuTargetPercentage`    | k8s hpa cpu targetPercentage                                                                | `50`                                                    |
+| `worker.replicasMax`                        | Maximum number of workers when using autoscaling                                            | `10`                                                    |
 | `worker.replicaCount`                       | Number of worker replicas                                                                   | `1`                                                     |
 | `worker.securityContext.enabled`            | Enable security context                                                                     | `true`                                                  |
 | `worker.securityContext.fsGroup`            | Group ID for the container                                                                  | `1001`                                                  |
