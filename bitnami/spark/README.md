@@ -85,9 +85,9 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.javaOptions`                        | Set options for the JVM in the form `-Dx=y`                                                 | No default                                              |
 | `worker.configOptions`                      | Set extra options to configure the worker in the form `-Dx=y`                               | No default                                              |
 | `worker.replicaCount`                       | Set the number of workers                                                                   | `2`                                                     |
-| `worker.enableAutoscaling`                  | Enable autoscaling depending on CPU                                                         | `false`                                                 |
-| `worker.replicasMax`                        | Maximum number of workers when using autoscaling                                            | `false`                                                 |
-| `worker.replicaCount`                       | Number of worker replicas                                                                   | `1`                                                     |
+| `worker.autoscaling.enabled`                | Enable autoscaling depending on CPU                                                         | `false`                                                 |
+| `worker.autoscaling.CpuTargetPercentage`    | k8s hpa cpu targetPercentage                                                                | `50`                                                    |
+| `worker.autoscaling.replicasMax`            | Maximum number of workers when using autoscaling                                            | `5`                                                     |
 | `worker.securityContext.enabled`            | Enable security context                                                                     | `true`                                                  |
 | `worker.securityContext.fsGroup`            | Group ID for the container                                                                  | `1001`                                                  |
 | `worker.securityContext.runAsUser`          | User ID for the container                                                                   | `1001`                                                  |
@@ -224,7 +224,9 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/spark
 - Enable autoscaling depending on CPU:
 ```diff
 - worker.autoscaling.enabled: false
+- worker.autoscaling.replicasMax: 5
 + worker.autoscaling.enabled: true
++ worker.autoscaling.replicasMax: 10
 ```
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
