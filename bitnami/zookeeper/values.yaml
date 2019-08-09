@@ -220,8 +220,8 @@ metrics:
 
   image:
     registry: docker.io
-    repository: dabealu/zookeeper-exporter
-    tag: v0.1.0
+    repository: bitnami/zookeeper-exporter
+    tag: 0.1.1-debian-9-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
