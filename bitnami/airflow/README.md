@@ -141,8 +141,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `externalRedis.password`                  | External Redis password                                                                     | `nil`                                                        |
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                                        | `false`                                                      |
 | `metrics.image.registry`                  | Airflow exporter image registry                                                             | `docker.io`                                                  |
-| `metrics.image.repository`                | Airflow exporter image name                                                                 | `pbweb/airflow-prometheus-exporter`                          |
-| `metrics.image.tag`                       | Airflow exporter image tag                                                                  | `latest`                                                     |
+| `metrics.image.repository`                | Airflow exporter image name                                                                 | `bitnami/airflow-exporter`                                   |
+| `metrics.image.tag`                       | Airflow exporter image tag                                                                  | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`                | Image pull policy                                                                           | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                  | Additional annotations for Metrics exporter                                                 | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |
