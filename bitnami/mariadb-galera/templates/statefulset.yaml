@@ -155,7 +155,7 @@ spec:
             {{- end }}
               key: ldap-bindpw
         - name: MARIADB_LDAP_NSS_INITGROUPS_IGNOREUSERS
-          value: {{ .Values.ldap.nss_initgroups_ignoreusers | default "root,nslcd" | quote }}
+          value: {{ .Values.ldap.nss_initgroups_ignoreusers | quote }}
         {{- if .Values.ldap.bslookup }}
         - name: MARIADB_LDAP_BASE_LOOKUP
           value: {{ .Values.ldap.bslookup }}
