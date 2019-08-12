@@ -43,6 +43,15 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- end }}
 
+{{- if .Values.metrics.enabled }}
+
+To access the MariaDB Prometheus metrics from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "mariadb-galera.fullname" . }}-metrics {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
+    curl 127.0.0.1:{{ .Values.metrics.service.port }}/metrics
+
+{{- end }}
+
 To upgrade this helm chart:
 
     helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/mariadb-galera \

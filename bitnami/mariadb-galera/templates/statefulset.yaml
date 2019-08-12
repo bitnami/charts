@@ -8,12 +8,12 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/instance: {{ .Release.Name }}
       app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
   serviceName: {{ template "mariadb-galera.fullname" . }}
-  replicas: {{ .Values.replicaCount }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
@@ -45,9 +45,6 @@ spec:
         {{- with .Values.nodeAffinity }}
         nodeAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
         {{- end }}
-        {{- with .Values.podAffinity }}
-        podAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
-        {{- end }}
         {{- if eq .Values.podAntiAffinity "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -67,6 +64,9 @@ spec:
                   app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
                   app.kubernetes.io/instance: {{ .Release.Name }}
         {{- end }}
+        {{- with .Values.podAffinity }}
+        podAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
@@ -83,18 +83,14 @@ spec:
         image: {{ template "mariadb-galera.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
-        - name: MARIADB_GALERA_CLUSTER_NAME
-          value: {{ .Values.galera.name | quote }}
-        - name: MARIADB_GALERA_CLUSTER_ADDRESS
-          value: "gcomm://{{ template "mariadb-galera.fullname" . }}-headless.{{ .Release.Namespace }}.svc.cluster.local"
         {{- if .Values.image.debug}}
         - name: BITNAMI_DEBUG
           value: "true"
         {{- end }}
-        {{- if .Values.extraFlags }}
-        - name: MARIADB_EXTRA_FLAGS
-          value: {{ .Values.extraFlags | quote }}
-        {{- end }}
+        - name: MARIADB_GALERA_CLUSTER_NAME
+          value: {{ .Values.galera.name | quote }}
+        - name: MARIADB_GALERA_CLUSTER_ADDRESS
+          value: "gcomm://{{ template "mariadb-galera.fullname" . }}-headless.{{ .Release.Namespace }}.svc.cluster.local"
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -160,6 +156,10 @@ spec:
               key: ldap-bindpw
         - name: MARIADB_LDAP_BASE_LOOKUP
           value: {{ .Values.ldap.bslookup }}
+        {{- end }}
+        {{- if .Values.extraFlags }}
+        - name: MARIADB_EXTRA_FLAGS
+          value: {{ .Values.extraFlags | quote }}
         {{- end }}
         ports:
         - name: mysql
