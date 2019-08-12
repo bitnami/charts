@@ -335,8 +335,8 @@ metrics:
 
     image:
       registry: docker.io
-      repository: danielqsj/kafka-exporter
-      tag: v1.0.1
+      repository: bitnami/kafka-exporter
+      tag: 1.2.0-debian-9-r3
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
@@ -366,8 +366,8 @@ metrics:
 
     image:
       registry: docker.io
-      repository: solsson/kafka-prometheus-jmx-exporter@sha256
-      tag: a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8
+      repository: bitnami/jmx-exporter
+      tag: 0.12.0-debian-9-r3
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
