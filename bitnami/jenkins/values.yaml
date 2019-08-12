@@ -181,8 +181,8 @@ metrics:
   enabled: false
   image:
     registry: docker.io
-    repository: tolleiv/jenkins_exporter
-    tag: latest
+    repository: bitnami/jenkins-exporter
+    tag: 0.20171225.0-debian-9-r3
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
