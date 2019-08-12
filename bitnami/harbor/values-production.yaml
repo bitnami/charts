@@ -1,3 +1,4 @@
+
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
@@ -62,6 +63,30 @@ jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
   tag: 1.8.1-debian-9-r12
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
+## Bitnami ChartMuseum image
+## ref: https://hub.docker.com/r/bitnami/chartmuseum/tags/
+##
+chartMuseumImage:
+  registry: docker.io
+  repository: bitnami/chartmuseum
+  tag: latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -397,6 +422,14 @@ persistence:
       subPath: ""
       accessMode: ReadWriteOnce
       size: 1Gi
+
+    chartmuseum:
+      existingClaim: ""
+      storageClass: ""
+      subPath: ""
+      accessMode: ReadWriteOnce
+      size: 5Gi
+
   # Define which storage backend is used for registry and chartmuseum to store
   # images and charts. Refer to
   # https://github.com/docker/distribution/blob/master/docs/configuration.md#storage
@@ -424,7 +457,7 @@ persistence:
       #realm: core.windows.net
     gcs:
       bucket: bucketname
-      # The base64 encoded json file which contains the key
+      # The base64 encoded json file which contains the gcs key (file's content)
       encodedkey: base64-encoded-json-key-file
       #rootdirectory: /gcs/object/name/prefix
       #chunksize: "5242880"
@@ -692,9 +725,65 @@ registry:
   # Must be a string of 16 chars.
   secret: ""
 
-# Enable Chartmuseum is not supported yet.
 chartmuseum:
-  enabled: false
+  enabled: true
+  replicas: 1
+  port: 8080
+
+  ## Set the use of the Redis cache.
+  useRedisCache: true
+
+  ## Set the absolute URL to access the chartmuseum repository and the
+  ## endpoint where it will be available.
+  absoluteUrl: false
+  chartRepoName: "chartsRepo"
+
+  ## Configure basic authentication to access the ChartMuseum server.
+  basicAuth:
+    enabled: true
+    basicAuthUser: "chart_controller"
+    basicAuthPass: "password"
+
+  depth: 1
+  logJson: false
+  disableMetrics: false
+  disableApi: false
+  disableStatefiles: false
+  allowOverwrite: true
+  anonymousGet: false
+
+  ## Optional parameters for ChartMuseum not used by default.
+  # contextPath: ""
+  # indexLimit: 0
+  # chartPostFormFieldName: "chart"
+  # provPostFormFieldName: "prov"
+
+  ## Enable the TLS access to the ChartMuseum server.
+  enableTLS: true
+
+  ## An array to add extra env vars to chartmuseum
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: BEARER_AUTH
+  ##    value: true
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 20
+    failureThreshold: 10
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 20
+    failureThreshold: 10
+    successThreshold: 1
 
 clair:
   enabled: true

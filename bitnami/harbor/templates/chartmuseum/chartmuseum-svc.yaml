@@ -1,0 +1,17 @@
+{{- if .Values.chartmuseum.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "harbor.chartmuseum" . }}"
+  labels:
+    {{ include "harbor.labels" . | nindent 4 }}
+    app.kubernetes.io/component: chartmuseum-service
+spec:
+  ports:
+    - port: 80
+      name: http
+      targetPort: 8080
+  selector:
+    {{ include "harbor.matchLabels" . | nindent 4 }}
+    component: chartmuseum
+{{- end }}
