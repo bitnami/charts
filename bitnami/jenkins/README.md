@@ -99,8 +99,8 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `podAnnotations`                     | Pod annotations                                                                                      | `{}`                                                         |
 | `metrics.enabled`                    | Start a side-car Jenkins prometheus exporter                                                         | `false`                                                      |
 | `metrics.image.registry`             | Jenkins exporter image registry                                                                      | `docker.io`                                                  |
-| `metrics.image.repository`           | Jenkins exporter image name                                                                          | `tolleiv/jenkins_exporter`                                   |
-| `metrics.image.tag`                  | Jenkins exporter image tag                                                                           | `latest`                                                     |
+| `metrics.image.repository`           | Jenkins exporter image name                                                                          | `bitnami/jenkins-exporter`                                   |
+| `metrics.image.tag`                  | Jenkins exporter image tag                                                                           | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`           | Image pull policy                                                                                    | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod                                                      | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}` |
