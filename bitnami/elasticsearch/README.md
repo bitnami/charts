@@ -5,6 +5,7 @@
 ## TL;DR
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/elasticsearch
 ```
 
