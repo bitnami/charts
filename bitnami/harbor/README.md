@@ -10,7 +10,7 @@ For example, the following changes have been introduced:
 - Uses Bitnami container images:
   - non-root by default
   - published for debian-9 and ol-7
-- At this moment, this chart does not support the Harbor optional component Chartmuseum but it does support Clair and Notary integrations.
+- This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
 ## TL;DR:
 
