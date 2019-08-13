@@ -28,6 +28,15 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
+      {{- with .Values.chartmuseum.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.chartmuseum.affinity }}
+      affinity: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.chartmuseum.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
       containers:
       - name: chartmuseum
         image: "{{ template "harbor.chartMuseumImage" . }}"
@@ -116,13 +125,4 @@ spec:
             - key: TLS_KEY
               path: server.key
       {{- end }}
-  {{- with .Values.chartmuseum.nodeSelector }}
-  nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
-  {{- end }}
-  {{- with .Values.chartmuseum.affinity }}
-  affinity: {{ tpl (toYaml .) $ | nindent 8 }}
-  {{- end }}
-  {{- with .Values.chartmuseum.tolerations }}
-  tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
-  {{- end }}
 {{- end }}
