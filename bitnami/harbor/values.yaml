@@ -531,10 +531,22 @@ nginx:
   #  requests:
   #    memory: 256Mi
   #    cpu: 100m
-  ## These values are evaluated as a template (nodeSelector, tolerations and affinity)
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
   nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
   affinity: {}
+
   ## Additional deployment annotations
   podAnnotations: {}
   ## When setting up Harbor behind another reverse proxy, such as a nginx instance, set this value to true
@@ -565,10 +577,22 @@ portal:
   #  requests:
   #    memory: 256Mi
   #    cpu: 100m
-  ## These values are evaluated as a template (nodeSelector, tolerations and affinity)
+  
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
   nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
   affinity: {}
+
   ## Additional deployment annotations
   podAnnotations: {}
   ## Configure extra options for liveness and readiness probes
@@ -595,10 +619,22 @@ core:
   #  requests:
   #    memory: 256Mi
   #    cpu: 100m
-  ## These values are evaluated as a template (nodeSelector, tolerations and affinity)
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
   nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
   affinity: {}
+
   ## Additional deployment annotations
   podAnnotations: {}
   # Secret is used when core server communicates with other components.
@@ -639,10 +675,22 @@ jobservice:
   #   requests:
   #     memory: 256Mi
   #     cpu: 100m
-  ## These values are evaluated as a template (nodeSelector, tolerations and affinity)
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
   nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
   affinity: {}
+
   ## Additional deployment annotations
   podAnnotations: {}
   # Secret is used when job service communicates with other components.
@@ -713,10 +761,22 @@ registry:
     #    memory: 256Mi
     #    cpu: 100m
   replicas: 1
-  ## These values are evaluated as a template (nodeSelector, tolerations and affinity)
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
   nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
   affinity: {}
+
   ## Additional deployment annotations
   podAnnotations: {}
   # Secret is used to secure the upload state from client
@@ -754,6 +814,8 @@ chartmuseum:
   anonymousGet: false
 
   ## Optional parameters for ChartMuseum not used by default.
+  ## ref: https://chartmuseum.com/docs/#other-cli-options
+  ##
   # contextPath: ""
   # indexLimit: 0
   # chartPostFormFieldName: "chart"
@@ -768,6 +830,28 @@ chartmuseum:
   ##  - name: BEARER_AUTH
   ##    value: true
 
+  # resources:
+  #  requests:
+  #    memory: 256Mi
+  #    cpu: 100m
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Additional deployment annotations
+  podAnnotations: {}
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
@@ -799,9 +883,22 @@ clair:
   #  requests:
   #    memory: 256Mi
   #    cpu: 100m
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
   nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
   affinity: {}
+
   ## Additional deployment annotations
   podAnnotations: {}
   ## Configure extra options for liveness and readiness probes
