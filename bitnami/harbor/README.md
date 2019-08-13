@@ -15,7 +15,7 @@ For example, the following changes have been introduced:
 ## TL;DR:
 
 ```
-helm repo add bitnami https://charts.bitnami.com
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install bitnami/harbor
 ```
 
@@ -33,7 +33,7 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 Install the Harbor helm chart with a release name `my-release`:
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install --name my-release bitnami/harbor
 ```
 
