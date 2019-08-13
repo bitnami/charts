@@ -10,7 +10,7 @@ For example, the following changes have been introduced:
 - Uses Bitnami container images:
   - non-root by default
   - published for debian-9 and ol-7
-- At this moment, this chart does not support the Harbor optional component Chartmuseum but it does support Clair and Notary integrations.
+- This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
 ## TL;DR:
 
@@ -117,8 +117,8 @@ The following table lists the configurable parameters of the Harbor chart and th
 | --------------------------------------------------------------------------- |  ----------------------------------------------------------------------- | ------------------------------------------------------- |
 | **Expose**                                                                  |
 | `service.type`                                                              | The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer` | `ingress`                                |
-| `service.tls.enabled`                                                       | Enable the tls or not                                                    | `true`                                                  |
-| `service.ingress.controller`                                                | The ingress controller type. Currently supports `default`, `gce` and `ncp`      | `default`                                               |
+| `service.tls.enabled`                                                       | Enable the tls or not                                                                   | `true`                                                  |
+| `service.ingress.controller`                                                | The ingress controller type. Currently supports `default`, `gce` and `ncp`              | `default`                                               |
 | `service.tls.secretName`                                                    | Fill the name of secret if you want to use your own TLS certificate and private key. The secret must contain two keys named `tls.crt` and `tls.key` that contain the certificate and private key to use for TLS. Will be generated automatically if not set | `nil` |
 | `service.tls.notarySecretName`                                              | By default, the Notary service will use the same cert and key as described above. Fill the name of secret if you want to use a separated one. Only needed when the `service.type` is `ingress`. | `nil` |
 | `service.tls.commonName`                                                    | The common name used to generate the certificate, it's necessary when the `service.type` is `ClusterIP` or `NodePort` and `service.tls.secretName` is null | `nil` |
@@ -258,6 +258,36 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `registry.affinity`                                                         | Node/Pod affinities                                                      | `{}` (The value is evaluated as a template)             |
 | `registry.podAnnotations`                                                   | Annotations to add to the registry pod                                   | `{}`                                                    |
 | `registry.secret`                                                           | Secret is used to secure the upload state from client and registry storage backend. See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars. | `nil` |
+| **Chartmuseum**                                                             |
+| `chartMuseumImage.registry`                                                 | Registry for ChartMuseum image                                           | `docker.io`                                             |
+| `chartMuseumImage.repository`                                               | Repository for clair image                                               | `bitnami/chartmuseum`                                   |
+| `chartMuseumImage.tag`                                                      | Tag for ChartMuseum image                                                | `0.9.0-debian-9-r6`                                     |
+| `chartMuseumImage.pullPolicy`                                               | ChartMuseum image pull policy                                            | `IfNotPresent`                                          |
+| `chartMuseumImage.debug`                                                    | Specify if debug logs should be enabled                                  | `false`                                                 |
+| `chartmuseum.enabled`                                                       | Enable ChartMuseum                                                       | `true`                                                  |
+| `chartmuseum.replicas`                                                      | Number of ChartMuseum replicas                                           | `1`                                                     |
+| `chartmuseum.port`                                                          | ChartMuseum listen port                                                  | `8080`                                                  |
+| `chartmuseum.useRedisCache`                                                 | Specify if ChartMuseum will use redis cache                              | `true`                                                  |
+| `chartmuseum.absoluteUrl`                                                   | Specify an absolute URL for ChartMuseum registry                         | `false`                                                 |
+| `chartmuseum.chartRepoName`                                                 | Specify the endpoint for the chartmuseum registry. Only applicable if `chartmuseum.absoluteUrl` is `true` | `chartsRepo`           |
+| `chartmuseum.basicAuth.enabled`                                             | Enable ChartMuseum basic authentication                                  | `true`                                                  |
+| `chartmuseum.basicAuth.basicAuthUser`                                       | Chartmuseum's user                                                       | `chart_controller`                                      |
+| `chartmuseum.basicAuth.basicAuthPass`                                       | Chartmuseum's password                                                   | Random value                                            |
+| `chartmuseum.depth`                                                         |  Support for multitenancy. More info [here](https://chartmuseum.com/docs/#multitenancy) | `0`                                      |
+| `chartmuseum.logJson`                                                       | Print logs on JSON format                                                | `false`                                                 |
+| `chartmuseum.disableMetrics`                                                | Disable prometheus metrics exposure                                      | `false`                                                 |
+| `chartmuseum.disableApi`                                                    | Disable all the routes prefixed with `/api`                              | `false`                                                 |
+| `chartmuseum.disableStatefiles`                                             | Disable use of index-cache.yaml                                          | `false`                                                 |
+| `chartmuseum.allowOverwrite`                                                | Allow chart versions to be re-uploaded without force querystring         | `true`                                                  |
+| `chartmuseum.anonymousGet`                                                  | Allow anonymous GET operations                                           | `false`                                                 |
+| `chartmuseum.enableTLS`                                                     | Enable use of TLS access                                                 | `false`                                                 |
+| `chartmuseum.contextPath`                                                   | Set the base context path for ChartMuseum                                | `nil`                                                   |
+| `chartmuseum.indexLimit`                                                    | Limit the number of parallels indexes for ChartMuseum                    | `nil`                                                   |
+| `chartmuseum.chartPostFormFieldName`                                        | Form field which will be queried for the chart file content              | `nil`                                                   |
+| `chartmuseum.provPostFormFieldName`                                         | Form field which will be queried for the provenance file content         | `nil`                                                   |
+| `chartmuseum.extraEnvVars`                                                  | Allow to pass extra environment variables to the chartmuseum image       | `nil`                                                   |
+| `chartmuseum.livenessProbe`                                                 | Liveness probe configuration                                             | `Check values.yaml file`                                |
+| `chartmuseum.readinessProbe`                                                | Readiness probe configuration                                            | `Check values.yaml file`                                |
 | **Clair**                                                                   |
 | `clairImage.registry`                                                       | Registry for clair image                                                 | `docker.io`                                             |
 | `clairImage.repository`                                                     | Repository for clair image                                               | `bitnami/harbor-clair`                                  |
