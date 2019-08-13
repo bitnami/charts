@@ -7,6 +7,7 @@ The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most p
 ## TL;DR
 
 ```bash
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/apache
 ```
 
