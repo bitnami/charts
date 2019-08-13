@@ -12,5 +12,7 @@ spec:
   ports:
   - port: {{ .Values.server.port }}
     protocol: TCP
+  - port: {{ .Values.server.restApiPort }}
+    protocol: TCP
   selector:
     app: {{ template "tensorflow-resnet.name" . }}
