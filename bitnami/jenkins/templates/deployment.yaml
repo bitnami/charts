@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "jenkins.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "jenkins.fullname" . }}
+    chart: {{ include "jenkins.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "jenkins.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        app: {{ template "jenkins.fullname" . }}
+        chart: {{ include "jenkins.chart" . }}
         release: "{{ .Release.Name }}"
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
@@ -28,12 +28,7 @@ spec:
   {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "jenkins.imagePullSecrets" . | indent 6 }}
       containers:
       - name: jenkins
         image: "{{ template "jenkins.image" . }}"
@@ -44,7 +39,7 @@ spec:
         - name: JENKINS_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "jenkins.fullname" . }}
               key: jenkins-password
         - name: JENKINS_HOME
           value: {{ .Values.jenkinsHome | quote }}
@@ -59,20 +54,28 @@ spec:
           containerPort: 8080
         - name: https
           containerPort: 8443
+        {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path: /login
             port: http
-          initialDelaySeconds: 180
-          timeoutSeconds: 5
-          failureThreshold: 6
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
             path: /login
             port: http
-          initialDelaySeconds: 30
-          timeoutSeconds: 3
-          periodSeconds: 5
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
@@ -80,7 +83,7 @@ spec:
           mountPath: /bitnami/jenkins
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "jenkins.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: ['sh', '-c', 'python -u ./jenkins_exporter.py -j http://127.0.0.1:8080 --user $JENKINS_USERNAME --password $JENKINS_PASSWORD']
         env:
@@ -89,7 +92,7 @@ spec:
         - name: JENKINS_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "jenkins.fullname" . }}
               key: jenkins-password
         ports:
         - name: metrics
@@ -113,7 +116,7 @@ spec:
       - name: jenkins-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ template "fullname" . }}
+          claimName: {{ template "jenkins.fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end }}

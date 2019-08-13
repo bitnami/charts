@@ -1,0 +1,9 @@
+dependencies:
+- name: mariadb
+  version: 6.x.x
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: mariadb.enabled
+- name: elasticsearch
+  version: 6.x.x
+  repository: https://charts.bitnami.com/bitnami
+  condition: elasticsearch.enabled

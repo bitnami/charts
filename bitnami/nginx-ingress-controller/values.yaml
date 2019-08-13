@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami NGINX Ingress controller image version
 ## ref: https://hub.docker.com/r/bitnami/nginx-ingress-controller/tags/
@@ -10,12 +13,26 @@ name: controller
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.22.0
+  tag: 0.24.1-debian-9-r40
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## String to partially override nginx-ingress-controller.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override nginx-ingress-controller.fullname template
+##
+# fullnameOverride:
 
 config:
   use-geoip: "false"
@@ -259,7 +276,7 @@ stats:
     port: 18080
     type: ClusterIP
 
-## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
+## If stats.enabled = true and metrics.enabled = true, Prometheus metrics will be exported
 ##
 metrics:
   enabled: false
@@ -293,7 +310,7 @@ revisionHistoryLimit: 10
 ##
 defaultBackend:
 
-  ## If false, controller.defaultBackendService must be provided
+  ## If false, defaultBackendService must be provided
   ##
   enabled: true
 
@@ -301,8 +318,14 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: latest
-    pullPolicy: Always
+    tag: 1.16.0-debian-9-r46
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
 
   extraArgs: {}
 
@@ -379,11 +402,6 @@ podSecurityPolicy:
 serviceAccount:
   create: true
   name:
-
-## Optional array of imagePullSecrets containing private registry credentials
-## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
-# - name: secretName
 
 # TCP service key:value pairs
 # Ref: https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tcp

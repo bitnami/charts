@@ -14,7 +14,7 @@ spec:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}
       release: "{{ .Release.Name }}"
-      role: "metrics"      
+      role: "metrics"
   replicas: 1
   template:
     metadata:
@@ -23,16 +23,15 @@ spec:
         release: {{ .Release.Name | quote }}
         chart: {{ template "elasticsearch.chart" . }}
         role: "metrics"
+{{- with .Values.metrics.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
       containers:
       - name: {{ template "elasticsearch.metrics.fullname" . }}
-        image:  {{ template "metrics.image" . }}
+        image:  {{ template "elasticsearch.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         args: [ "-es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
         ports:

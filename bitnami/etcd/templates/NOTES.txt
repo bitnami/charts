@@ -4,7 +4,7 @@
  WARNING
 
     By specifying "service.type=LoadBalancer" and "allowNoneAuthentication=true" you
-    have most likely exposed the Redis service externally without any authentication
+    have most likely exposed the etcd service externally without any authentication
     mechanism.
 
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
@@ -23,12 +23,12 @@ etcd can be accessed via port {{ .Values.service.port }} on the following DNS na
 
 To set a key run the following command:
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "etcd.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl exec -it $POD_NAME -- etcdctl set /message Hello
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "etcd.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+    kubectl exec -it $POD_NAME -- etcdctl put /message Hello
 
 To get a key run the following command:
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "etcd.name" . }}" -o jsonpath="{.items[0].metadata.name}")
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "etcd.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
     kubectl exec -it $POD_NAME -- etcdctl get /message
 
 To connect to your etcd server from outside the cluster execute the following commands:
@@ -45,33 +45,47 @@ To connect to your etcd server from outside the cluster execute the following co
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "etcd.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "etcd.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    echo "etcd URL: http://$SERVICE_IP:2379/"
+    echo "etcd URL: http://$SERVICE_IP:{{ .Values.service.port }}/"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "etcd.fullname" . }} 2379:2379 &
-    echo "etcd URL: http://127.0.0.1:2379"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "etcd.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+    echo "etcd URL: http://127.0.0.1:{{ .Values.service.port }}"
 
 {{- end }}
+{{- if .Values.auth.rbac.enabled }}
 
-
-{{ if .Values.auth.rbac.enabled }}
- * As rbac is enabled you should add the flag `-u root:$ETCD_ROOT_PASSWORD` to the etcdctl commands. Export the password with this command:
+ * As rbac is enabled you should add the flag `--user root:$ETCD_ROOT_PASSWORD` to the etcdctl commands. Use the command below to export the password:
 
     export ETCD_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "etcd.fullname" . }} -o jsonpath="{.data.etcd-root-password}" | base64 --decode)
 
-{{ end }}
+{{- end }}
 {{- if .Values.auth.client.secureTransport }}
 {{- if .Values.auth.client.useAutoTLS }}
+
  * As TLS is enabled you should add the flag `--cert-file {{ template "etcd.dataDir" . }}/fixtures/client/cert.pem --key-file {{ template "etcd.dataDir" .}}/fixtures/client/key.pem` to the etcdctl commands.
+
 {{- else }}
+
  * As TLS is enabled you should add the flag `--cert-file /opt/bitnami/etcd/certs/client/cert.pem --key-file /opt/bitnami/etcd/certs/client/key.pem` to the etcdctl commands.
+
 {{- end }}
+
  * You should also export a proper etcdctl endpoint using the https schema. Eg.
 
     export ETCDCTL_ENDPOINTS=https://{{ template "etcd.fullname" . }}-0:{{ .Values.service.port }}
 
 {{- end }}
-{{ if .Values.auth.client.enableAuthentication }}
+{{- if .Values.auth.client.enableAuthentication }}
+
  * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/ca.crt` to the etcdctl commands.
+
 {{- end }}
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+
+{{- end }}
+
+{{ include "etcd.validateValues" . }}

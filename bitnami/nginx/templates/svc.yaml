@@ -1,12 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "nginx.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "nginx.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+{{- with .Values.service.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
@@ -23,4 +27,4 @@ spec:
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- end }}
   selector:
-    app: {{ template "fullname" . }}
+    app: {{ template "nginx.fullname" . }}

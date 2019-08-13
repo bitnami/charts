@@ -5,26 +5,33 @@
 
 {{- if contains "NodePort" .Values.service.type }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "wildfly.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo http://$NODE_IP:$NODE_PORT/
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
-** Please ensure an external IP is associated to the {{ template "fullname" . }} service before proceeding **
-** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fullname" . }} **
+** Please ensure an external IP is associated to the {{ template "wildfly.fullname" . }} service before proceeding **
+** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "wildfly.fullname" . }} **
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "wildfly.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 {{- $port:=.Values.service.port | toString }}
   echo URL            : http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/
   echo Management Url : http://$SERVICE_IP:{{ .Values.service.mgmtPort }}/
 {{- else if contains "ClusterIP"  .Values.service.type }}
   echo URL            : http://127.0.0.1:8080/
   echo Management URL : http://127.0.0.1:9990/
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "fullname" . }} 8080:{{ .Values.service.port}} 9990:{{ .Values.service.mgmtPort }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "wildfly.fullname" . }} 8080:{{ .Values.service.port}} 9990:{{ .Values.service.mgmtPort }}
 {{- end }}
 
 2. Login with the following credentials
 
   echo Username: {{ .Values.wildflyUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.wildfly-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "wildfly.fullname" . }} -o jsonpath="{.data.wildfly-password}" | base64 --decode)
+
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+
+{{- end }}

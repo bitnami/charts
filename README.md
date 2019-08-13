@@ -5,7 +5,7 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm search bitnami
 ```
 
@@ -13,11 +13,11 @@ $ helm search bitnami
 
 - [Dokuwiki](https://github.com/helm/charts/tree/master/stable/dokuwiki)
 - [Drupal](https://github.com/helm/charts/tree/master/stable/drupal)
+- [ExternalDNS](https://github.com/helm/charts/tree/master/stable/external-dns)
 - [Ghost](https://github.com/helm/charts/tree/master/stable/ghost)
 - [JasperReports](https://github.com/helm/charts/tree/master/stable/jasperreports)
 - [Joomla!](https://github.com/helm/charts/tree/master/stable/joomla)
 - [Kubewatch](https://github.com/helm/charts/tree/master/stable/kubewatch)
-- [Magento](https://github.com/helm/charts/tree/master/stable/magento)
 - [MariaDB](https://github.com/helm/charts/tree/master/stable/mariadb)
 - [MediaWiki](https://github.com/helm/charts/tree/master/stable/mediawiki)
 - [MongoDB](https://github.com/helm/charts/tree/master/stable/mongodb)
@@ -44,22 +44,26 @@ $ helm search bitnami
 ## Bitnami charts
 
 - [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
+- [Apache Airflow](https://github.com/bitnami/charts/tree/master/bitnami/airflow)
+- [Apache Spark](https://github.com/bitnami/charts/tree/master/bitnami/spark)
 - [Cassandra](https://github.com/bitnami/charts/tree/master/bitnami/cassandra)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
-- [ExternalDNS](https://github.com/bitnami/charts/tree/master/bitnami/external-dns)
 - [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
+- [Harbor](https://github.com/bitnami/charts/tree/master/bitnami/harbor)
 - [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
 - [Kubeapps](https://github.com/bitnami/charts/tree/master/bitnami/kubeapps)
-- [Mean](https://github.com/bitnami/charts/tree/master/bitnami/mean)
+- [Magento](https://github.com/bitnami/charts/tree/master/bitnami/magento)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
 - [Metrics Server](https://github.com/bitnami/charts/tree/master/bitnami/metrics-server)
+- [Minio](https://github.com/bitnami/charts/tree/master/bitnami/minio)
+- [MXNet](https://github.com/bitnami/charts/tree/master/bitnami/mxnet)
 - [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
 - [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
 - [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller)
 - [NodeJS](https://github.com/bitnami/charts/tree/master/bitnami/node)
-- [TensorFlow Inception](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-inception)
+- [PyTorch](https://github.com/bitnami/charts/tree/master/bitnami/pytorch)
 - [TensorFlow ResNet](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet)
 - [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
 - [WildFly](https://github.com/bitnami/charts/tree/master/bitnami/wildfly)

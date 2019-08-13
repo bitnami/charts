@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami HashiCorp Consul image version
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
@@ -10,18 +13,44 @@
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.4.2
+  tag: 1.5.3-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
+
+## String to partially override consul.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override consul.fullname template
+##
+# fullnameOverride:
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: latest
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
 
 ## Consul replicas
 replicas: 3
@@ -42,6 +71,9 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+# Cluster domain
+clusterDomain: cluster.local
 
 ## Datacenter name for consul. If not supplied, will use the consul
 ## default 'dc1'
@@ -66,6 +98,11 @@ domain: consul
 
 ## Consul raft multiplier.
 raftMultiplier: '1'
+
+## updateStrategy for Consul statefulset
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+updateStrategy:
+  type: RollingUpdate
 
 ## Consul data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
@@ -195,6 +232,7 @@ ingress:
 #    },
 #    "serf_lan":"0.0.0.0"
 #    }
+
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -204,9 +242,15 @@ metrics:
   enabled: true
   image:
     registry: docker.io
-    repository: prom/consul-exporter
-    tag: v0.3.0
+    repository: bitnami/consul-exporter
+    tag: 0.5.0-debian-9-r3
     pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
   resources: {}
   podAnnotations:
     prometheus.io/scrape: "true"

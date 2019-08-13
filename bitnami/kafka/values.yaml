@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami Kafka image version
 ## ref: https://hub.docker.com/r/bitnami/kafka/tags/
@@ -10,26 +13,65 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.1.1
+  tag: 2.3.0-debian-9-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
-
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## String to partially override kafka.fullname template (will maintain the release name)
+# nameOverride:
+
+ ## String to fully override kafka.fullname template
+# fullnameOverride:
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: latest
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
+
+## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+##
 updateStrategy: RollingUpdate
+
+## Partition update strategy
+## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+##
+# rollingUpdatePartition:
+
+## Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
+## The PDB will only be created if replicaCount is greater than 1
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
+##
+podDisruptionBudget:
+  maxUnavailable: 1
+
 replicaCount: 1
 
 config: |-
@@ -69,6 +111,12 @@ allowPlaintextListener: true
 ## Hostname and port the broker will advertise to producers and consumers.
 # advertisedListeners:
 
+## The protocol->listener mapping
+# listenerSecurityProtocolMap:
+
+## The listener that the brokers should communicate on
+# interBrokerListenerName:
+
 ## ID of the Kafka node.
 brokerId: -1
 
@@ -96,11 +144,26 @@ logRetentionHours: 168
 ## The maximum size of a log segment file. When this size is reached a new log segment will be created.
 logSegmentBytes: _1073741824
 
+## Log message format version
+logMessageFormatVersion: ""
+
 ## A comma separated list of directories under which to store log files.
 logsDirs: /opt/bitnami/kafka/data
 
 ## The largest record batch size allowed by Kafka
 maxMessageBytes: _1000012
+
+## Default replication factors for automatically created topics
+defaultReplicationFactor: 1
+
+## The replication factor for the offsets topic
+offsetsTopicReplicationFactor: 1
+
+## The replication factor for the transaction topic
+transactionStateLogReplicationFactor: 1
+
+## Overridden min.insync.replicas config for the transaction topic
+transactionStateLogMinIsr: 1
 
 ## The number of threads doing disk I/O.
 numIoThreads: 8
@@ -125,6 +188,15 @@ socketSendBufferBytes: 102400
 
 ## Timeout in ms for connecting to zookeeper.
 zookeeperConnectionTimeoutMs: 6000
+
+## The endpoint identification algorithm to validate server hostname using server certificate.
+sslEndpointIdentificationAlgorithm: https
+
+## All the parameters from the configuration file can be overwritten by using environment variables with this format: KAFKA_CFG_{KEY}
+##
+# extraEnvVars:
+#   - name: KAFKA_CFG_BACKGROUND_THREADS
+#     value: "10"
 
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-kafka#security
@@ -168,12 +240,24 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
+# Cluster domain
+clusterDomain: cluster.local
+
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
   type: ClusterIP
   port: 9092
+
+  ## Specify the NodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+
+  ## Use loadBalancerIP to request a specific static IP,
+  # loadBalancerIP:
+
   ## Service annotations done as key:value pairs
   annotations:
 
@@ -186,22 +270,37 @@ service:
 ##
 persistence:
   enabled: true
+  ## A manually managed Persistent Volume and Claim
+  ## If defined, PVC must be created manually before volume will be bound
+  ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
+  ##
+  # existingClaim:
+
   # storageClass: "-"
   accessModes:
     - ReadWriteOnce
   size: 8Gi
   annotations: {}
 
-## Node labels and tolerations for pod assignment
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
 nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
 tolerations: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
-resources:
+resources: {}
 #  limits:
 #    cpu: 200m
 #    memory: 1Gi
@@ -236,15 +335,15 @@ metrics:
 
     image:
       registry: docker.io
-      repository: danielqsj/kafka-exporter
-      tag: v1.0.1
-      pullPolicy: Always
+      repository: bitnami/kafka-exporter
+      tag: 1.2.0-debian-9-r3
+      pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
       ##
       # pullSecrets:
-      #   - myRegistrKeySecretName
+      #   - myRegistryKeySecretName
 
     ## Interval at which Prometheus scrapes metrics, note: only used by Prometheus Operator
     interval: 10s
@@ -267,15 +366,15 @@ metrics:
 
     image:
       registry: docker.io
-      repository: solsson/kafka-prometheus-jmx-exporter@sha256
-      tag: a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8
-      pullPolicy: Always
+      repository: bitnami/jmx-exporter
+      tag: 0.12.0-debian-9-r3
+      pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
       ##
       # pullSecrets:
-      #   - myRegistrKeySecretName
+      #   - myRegistryKeySecretName
 
     ## Interval at which Prometheus scrapes metrics, note: only used by Prometheus Operator
     interval: 10s
@@ -331,7 +430,7 @@ metrics:
 ## Zookeeper chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
-## 
+##
 zookeeper:
   enabled: true
 

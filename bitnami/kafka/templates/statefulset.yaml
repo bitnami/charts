@@ -3,41 +3,44 @@ kind: StatefulSet
 metadata:
   name: "{{ template "kafka.fullname" . }}"
   labels:
-    app: {{ template "kafka.name" . }}
-    chart: {{ template "kafka.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    helm.sh/chart: {{ template "kafka.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: kafka
 spec:
   selector:
     matchLabels:
-      app: {{ template "kafka.name" . }}
-      release: "{{ .Release.Name }}"
+      app.kubernetes.io/name: {{ template "kafka.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: kafka
   serviceName: {{ template "kafka.fullname" . }}-headless
   podManagementPolicy: "Parallel"
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
-    type: {{ .Values.updateStratey }}
-  selector:
-    matchLabels:
-      app: {{ template "kafka.name" . }}
-      chart: {{ template "kafka.chart" . }}
-      release: {{ .Release.Name | quote }}
-      heritage: {{ .Release.Service | quote }}
+    type: {{ .Values.updateStrategy | quote }}
+    {{- if (eq "Recreate" .Values.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.rollingUpdatePartition }}
+    {{- end }}
   template:
     metadata:
+      {{ if .Values.metrics.jmx.enabled }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.metrics.jmx.exporterPort | quote }}
+      {{- end }}
       name: "{{ template "kafka.fullname" . }}"
       labels:
-        app: {{ template "kafka.name" . }}
-        chart: {{ template "kafka.chart" . }}
-        release: {{ .Release.Name | quote }}
-        heritage: {{ .Release.Service | quote }}
+        app.kubernetes.io/name: {{ template "kafka.name" . }}
+        helm.sh/chart: {{ template "kafka.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/component: kafka
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "kafka.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -51,8 +54,25 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
       {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "kafka.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/kafka"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: "/bitnami/kafka"
+      {{- end }}
       containers:
-      - name: "{{ template "kafka.fullname" . }}"
+      - name: kafka
         image: "{{ template "kafka.image" . }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         resources:
@@ -74,7 +94,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: KAFKA_ZOOKEEPER_CONNECT
+        - name: KAFKA_CFG_ZOOKEEPER_CONNECT
           {{- if .Values.zookeeper.enabled }}
           value: {{ template "kafka.zookeeper.fullname" . }}
           {{- else }}
@@ -82,7 +102,7 @@ spec:
           {{- end }}
         - name: KAFKA_PORT_NUMBER
           value: {{ .Values.service.port | quote }}
-        - name: KAFKA_LISTENERS
+        - name: KAFKA_CFG_LISTENERS
           {{- if .Values.listeners }}
           value: {{ .Values.listeners }}
           {{- else if .Values.auth.enabled }}
@@ -90,14 +110,26 @@ spec:
           {{- else }}
           value: "PLAINTEXT://:$(KAFKA_PORT_NUMBER)"
           {{- end }}
-        - name: KAFKA_ADVERTISED_LISTENERS
+        - name: KAFKA_CFG_ADVERTISED_LISTENERS
           {{- if .Values.advertisedListeners }}
           value: {{ .Values.advertisedListeners }}
           {{- else if .Values.auth.enabled  }}
-          value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}:$(KAFKA_PORT_NUMBER)'
+          value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)'
           {{- else }}
-          value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}:$(KAFKA_PORT_NUMBER)'
+          value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)'
           {{- end }}
+        {{- if .Values.listenerSecurityProtocolMap }}
+        - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+          value: {{ .Values.listenerSecurityProtocolMap }}
+        {{- end }}
+        {{- if .Values.interBrokerListenerName }}
+        - name: KAFKA_INTER_BROKER_LISTENER_NAME
+          value: {{ .Values.interBrokerListenerName }}
+        {{- end }}
+        {{- if .Values.metrics.jmx.enabled }}
+        - name: JMX_PORT
+          value: {{ .Values.metrics.jmx.jmxPort | quote }}
+        {{- end }}
         {{- if .Values.auth.enabled }}
         - name: KAFKA_OPTS
           value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/conf/kafka_jaas.conf"
@@ -115,11 +147,6 @@ spec:
             secretKeyRef:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-inter-broker-password
-        {{- end }}
-        {{- if .Values.auth.certificatesPassword }}
-        - name: KAFKA_CERTIFICATE_PASSWORD
-          value: {{ .Values.auth.certificatesPassword | quote }}
-        {{- end }}
         {{- if .Values.auth.zookeeperUser }}
         - name: KAFKA_ZOOKEEPER_USER
           value: {{ .Values.auth.zookeeperUser | quote }}
@@ -131,6 +158,11 @@ spec:
               name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "kafka.fullname" . }}{{ end }}
               key: kafka-zookeeper-password
         {{- end }}
+        {{- end }}
+        {{- if .Values.auth.certificatesPassword }}
+        - name: KAFKA_CERTIFICATE_PASSWORD
+          value: {{ .Values.auth.certificatesPassword | quote }}
+        {{- end }}
         - name: ALLOW_PLAINTEXT_LISTENER
           {{- if .Values.auth.enabled }}
           value: "no"
@@ -139,44 +171,59 @@ spec:
           {{- else }}
           value: "no"
           {{- end }}
-        - name: KAFKA_BROKER_ID
+        - name: KAFKA_CFG_BROKER_ID
           value: {{ .Values.brokerId | quote }}
-        - name: KAFKA_DELETE_TOPIC_ENABLE
+        - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
           value: {{ .Values.deleteTopicEnable | quote }}
         - name: KAFKA_HEAP_OPTS
           value: {{ .Values.heapOpts | quote }}
-        - name: KAFKA_LOG_FLUSH_INTERVAL_MESSAGES
+        - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES
           value: {{ .Values.logFlushIntervalMessages | quote }}
-        - name: KAFKA_LOG_FLUSH_INTERVAL_MS
+        - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MS
           value: {{ .Values.logFlushIntervalMs | quote }}
-        - name: KAFKA_LOG_RETENTION_BYTES
+        - name: KAFKA_CFG_LOG_RETENTION_BYTES
           value: {{ .Values.logRetentionBytes | replace "_" "" | quote }}
-        - name: KAFKA_LOG_RETENTION_CHECK_INTERVALS_MS
+        - name: KAFKA_CFG_LOG_RETENTION_CHECK_INTERVALS_MS
           value: {{ .Values.logRetentionCheckIntervalMs | quote }}
-        - name: KAFKA_LOG_RETENTION_HOURS
+        - name: KAFKA_CFG_LOG_RETENTION_HOURS
           value: {{ .Values.logRetentionHours | quote }}
-        - name: KAFKA_MAX_MESSAGE_BYTES
+        - name: KAFKA_CFG_LOG_MESSAGE_FORMAT_VERSION
+          value: {{ .Values.logMessageFormatVersion | quote }}
+        - name: KAFKA_CFG_MAX_MESSAGE_BYTES
           value: {{ .Values.maxMessageBytes | replace "_" "" | quote }}
-        - name: KAFKA_SEGMENT_BYTES
+        - name: KAFKA_CFG_SEGMENT_BYTES
           value: {{ .Values.logSegmentBytes | replace "_" "" | quote }}
-        - name: KAFKA_LOGS_DIRS
+        - name: KAFKA_CFG_LOGS_DIRS
           value: {{ .Values.logsDirs }}
-        - name: KAFKA_NUM_IO_THREADS
+        - name: KAFKA_CFG_DEFAULT_REPLICATION_FACTOR
+          value: {{ .Values.defaultReplicationFactor | quote }}
+        - name: KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR
+          value: {{ .Values.offsetsTopicReplicationFactor | quote }}
+        - name: KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+          value: {{ .Values.transactionStateLogReplicationFactor | quote }}
+        - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
+          value: {{ .Values.sslEndpointIdentificationAlgorithm | quote }}
+        - name: KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR
+          value: {{ .Values.transactionStateLogMinIsr | quote }}
+        - name: KAFKA_CFG_NUM_IO_THREADS
           value: {{ .Values.numIoThreads | quote }}
-        - name: KAFKA_NUM_NETWORK_THREADS
+        - name: KAFKA_CFG_NUM_NETWORK_THREADS
           value: {{ .Values.numNetworkThreads | quote }}
-        - name: KAFKA_NUM_PARTITIONS
+        - name: KAFKA_CFG_NUM_PARTITIONS
           value: {{ .Values.numPartitions | quote }}
-        - name: KAFKA_NUM_RECOVERY_THREADS_PER_DATA_DIR
+        - name: KAFKA_CFG_NUM_RECOVERY_THREADS_PER_DATA_DIR
           value: {{ .Values.numRecoveryThreadsPerDataDir | quote }}
-        - name: KAFKA_SOCKET_RECEIVE_BUFFER_BYTES
+        - name: KAFKA_CFG_SOCKET_RECEIVE_BUFFER_BYTES
           value: {{ .Values.socketReceiveBufferBytes | quote }}
-        - name: KAFKA_SOCKET_REQUEST_MAX_BYTES
+        - name: KAFKA_CFG_SOCKET_REQUEST_MAX_BYTES
           value: {{ .Values.socketRequestMaxBytes | replace "_" "" | quote }}
-        - name: KAFKA_SOCKET_SEND_BUFFER_BYTES
+        - name: KAFKA_CFG_SOCKET_SEND_BUFFER_BYTES
           value: {{ .Values.socketSendBufferBytes | quote }}
-        - name: KAFKA_ZOOKEEPER_CONNECT_TIMEOUT_MS
+        - name: KAFKA_CFG_ZOOKEEPER_CONNECT_TIMEOUT_MS
           value: {{ .Values.zookeeperConnectionTimeoutMs | quote }}
+        {{- if .Values.extraEnvVars }}
+          {{ toYaml .Values.extraEnvVars | nindent 8 }}
+        {{- end }}
         ports:
         - name: kafka
           containerPort: {{ .Values.service.port }}
@@ -258,14 +305,25 @@ spec:
           secretName: {{ required "A secret containinig the Kafka JKS certificates is required when authentication in enabled" .Values.auth.certificatesSecret }}
           defaultMode: 256
       {{ end }}
-{{- if .Values.persistence.enabled }}
+{{- if not .Values.persistence.enabled }}
+      - name: data
+        emptyDir: {}
+{{- else if .Values.persistence.existingClaim }}
+      - name: data
+        persistentVolumeClaim:
+{{- with .Values.persistence.existingClaim }}
+          claimName: {{ tpl . $ }}
+{{- end }}
+{{- else }}
   volumeClaimTemplates:
     - metadata:
         name: data
+      {{- with .Values.persistence.annotations }}
         annotations:
-        {{- range $key, $value := .Values.persistence.annotations }}
+        {{- range $key, $value := . }}
           {{ $key }}: {{ $value }}
         {{- end }}
+      {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
@@ -281,9 +339,4 @@ spec:
         storageClassName: "{{ .Values.persistence.storageClass }}"
       {{- end }}
       {{- end }}
-{{- else }}
-        - name: data
-          emptyDir: {}
 {{- end }}
-
-

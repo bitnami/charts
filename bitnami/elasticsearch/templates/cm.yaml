@@ -1,3 +1,4 @@
+{{- if .Values.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,13 +9,6 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
 data:
-  elasticsearch_custom.yml: |-
-
-    discovery:
-      zen:
-        ping.unicast.hosts: {{ template "elasticsearch.discovery.fullname" . }}
-        minimum_master_nodes: 2
-
-{{- if .Values.config }}
+  elasticsearch.yml: |-
 {{ toYaml .Values.config | indent 4 }}
 {{- end }}

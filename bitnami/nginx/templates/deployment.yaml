@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "nginx.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "nginx.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "nginx.fullname" . }}
       release: "{{ .Release.Name }}"
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "nginx.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
@@ -30,41 +30,58 @@ spec:
   {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
+      affinity:
+        {{- with .Values.nodeAffinity }}
+        nodeAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
+        {{- end }}
+        {{- with .Values.podAffinity }}
+        podAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
+        {{- end }}
+        {{- if eq .Values.podAntiAffinity "hard" }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: {{ template "nginx.fullname" . }}
+                release: "{{ .Release.Name }}"
+        {{- else if eq .Values.podAntiAffinity "soft" }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: {{ template "nginx.fullname" . }}
+                  release: "{{ .Release.Name }}"
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+{{- include "nginx.imagePullSecrets" . | indent 6 }}
       containers:
-      - name: {{ template "fullname" . }}
+      - name: nginx
         image: "{{ template "nginx.image" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:
         - name: http
           containerPort: 8080
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-          failureThreshold: 6
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 5
-          timeoutSeconds: 3
-          periodSeconds: 5
+        livenessProbe: {{ toYaml .Values.livenessProbe | nindent 10 }}
+        readinessProbe: {{ toYaml .Values.readinessProbe | nindent 10 }}
         volumeMounts:
-        {{- if .Values.vhost }}
-        - name: nginx-vhost
-          mountPath: /opt/bitnami/nginx/conf/vhosts
+        {{- if .Values.serverBlock }}
+        - name: nginx-server-block
+          mountPath: /opt/bitnami/nginx/conf/server_blocks
         {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "nginx.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: [ '/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:8080/status']
         ports:
@@ -86,8 +103,8 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 12 }}
 {{- end }}
       volumes:
-      {{- if .Values.vhost }}
-      - name: nginx-vhost
+      {{- if .Values.serverBlock }}
+      - name: nginx-server-block
         configMap:
-          name: {{ template "fullname" . }}
+          name: {{ template "nginx.fullname" . }}
       {{- end }}

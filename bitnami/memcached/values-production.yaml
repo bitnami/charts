@@ -1,10 +1,19 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+
 ## Bitnami Memcached image version
 ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.5.11-debian-9
+  tag: 1.5.16-debian-9-r79
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -15,7 +24,15 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
+
+## String to partially override memcached.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override memcached.fullname template
+##
+# fullnameOverride:
 
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -58,21 +75,24 @@ resources:
 ##
 podAnnotations: {}
 
+# Cluster domain
+clusterDomain: cluster.local
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
   enabled: true
   image:
     registry: docker.io
-    repository: prom/memcached-exporter
-    tag: v0.4.1
+    repository: bitnami/memcached-exporter
+    tag: 0.5.0-debian-9-r19
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
     # pullSecrets:
-    #   - myRegistrKeySecretName
+    #   - myRegistryKeySecretName
    ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

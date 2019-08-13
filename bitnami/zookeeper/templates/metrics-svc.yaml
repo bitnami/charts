@@ -1,0 +1,22 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "zookeeper.fullname" . }}-exporter
+  labels:
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    helm.sh/chart: {{ template "zookeeper.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: metrics
+spec:
+  type: ClusterIP
+  ports:
+  - name: metrics
+    port: 9141
+    targetPort: metrics
+  selector:
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: metrics
+{{- end }}

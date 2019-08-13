@@ -1,0 +1,81 @@
+{{- if not .Values.airflow.baseUrl -}}
+###############################################################################
+### ERROR: You did not provide an external URL in your 'helm install' call ###
+###############################################################################
+
+This deployment will be incomplete until you configure Airflow with a resolvable
+host. To configure Airflow with the URL of your service:
+
+{{- if .Values.ingress.enabled }}
+
+1. Get the Airflow URL indicated on the Ingress Rule and associate it to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} -o jsonpath='{.spec.rules[0].host}')
+   echo "Airflow URL: http://$HOSTNAME/"
+   echo "$CLUSTER_IP  $HOSTNAME" | sudo tee -a /etc/hosts
+
+{{- else }}
+1. Get the Airflow URL by running:
+
+  {{- if contains "NodePort" .Values.service.type }}
+
+   export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   export APP_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "airflow.fullname" . }})
+
+  {{- else if contains "ClusterIP" .Values.service.type }}
+
+  export APP_HOST=127.0.0.1
+  export APP_PORT=8080
+
+  {{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "airflow.fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  export APP_PORT=80
+  {{- end }}
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.postgresql.fullname" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+
+{{- end }}
+2. Complete your Airflow deployment by running:
+
+  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set service.type={{ .Values.service.type }},airflow.baseUrl=http://$APP_HOST:$APP_PORT,airflow.auth.password=$APP_PASSWORD,postgresql.postgresqlPassword=$APP_DATABASE_PASSWORD,redis.password=$APP_REDIS_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+
+{{- else -}}
+
+1. Get the Airflow URL by running:
+
+{{- if .Values.ingress.enabled }}
+
+  echo URL  : {{ .Values.airflow.baseUrl }}
+
+{{- else if eq .Values.service.type "ClusterIP" }}
+
+  echo URL  : http://127.0.0.1:{{ default "8080" .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "airflow.fullname" . }} {{ default "8080" .Values.service.port }}:8080
+
+{{- else if eq .Values.servicePort "nodePort" }}
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export APP_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "airflow.fullname" . }})
+
+  echo URL  : http://$APP_HOST:$APP_PORT
+
+{{- else }}
+
+  echo URL  : {{ .Values.airflow.baseUrl }}
+{{- end }}
+
+2. Get your Airflow login credentials by running:
+
+  echo User:    {{ .Values.airflow.auth.username }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
+
+{{- end  }}
+
+{{ include "airflow.validateValues" . }}
+{{ include "airflow.checkRollingTags" . }}

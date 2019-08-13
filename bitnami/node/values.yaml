@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami node image version
 ## ref: https://hub.docker.com/r/bitnami/node/tags/
@@ -10,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 8.15.0
+  tag: 10.16.2-debian-9-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -21,7 +24,33 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
+
+## String to partially override node.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override node.fullname template
+##
+# fullnameOverride:
+
+  ## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: latest
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
 
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
@@ -29,8 +58,14 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: latest
+  tag: 2.22.0-debian-9-r59
   pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
 
 ## Git repository http/https
 ##

@@ -9,6 +9,14 @@ metadata:
     release: {{ .Release.Name | quote }}
     role: "data"
 spec:
+  updateStrategy:
+    type: {{ .Values.data.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.data.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else if .Values.data.updateStrategy.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.data.updateStrategy.rollingUpdatePartition }}
+    {{- end }}
   selector:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}
@@ -23,13 +31,18 @@ spec:
         chart: {{ template "elasticsearch.chart" . }}
         release: {{ .Release.Name | quote }}
         role: "data"
+{{- with .Values.data.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
+      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
-      {{- if eq .Values.data.antiAffinity "hard" }}
       affinity:
+      {{- if eq .Values.data.antiAffinity "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: "kubernetes.io/hostname"
@@ -39,7 +52,6 @@ spec:
                   release: {{ .Release.Name | quote }}
                   role: "data"
       {{- else if eq .Values.data.antiAffinity "soft" }}
-      affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
@@ -51,15 +63,30 @@ spec:
                   release: {{ .Release.Name | quote }}
                   role: "data"
       {{- end }}
+      {{- if .Values.data.nodeAffinity }}
+{{ toYaml .Values.data.nodeAffinity | indent 8 }}
+      {{- end }}
+      initContainers:
       {{- if .Values.sysctlImage.enabled }}
       ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
-      initContainers:
       - name: sysctl
-        image: {{ template "sysctl.image" . }}
+        image: {{ template "elasticsearch.sysctl.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         command: ['sh', '-c', 'install_packages systemd && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
         securityContext:
           privileged: true
+      {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.data.persistence.enabled }}
+      - name: volume-permissions
+        image: "{{ template "elasticsearch.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/elasticsearch/data"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: "/bitnami/elasticsearch/data"
       {{- end }}
       containers:
       - name: "elasticsearch"
@@ -72,6 +99,8 @@ spec:
         env:
         - name: ELASTICSEARCH_CLUSTER_NAME
           value: {{ .Values.name | quote }}
+        - name: ELASTICSEARCH_CLUSTER_HOSTS
+          value: {{ template "elasticsearch.discovery.fullname" . }}
         {{- if .Values.plugins }}
         - name: ELASTICSEARCH_PLUGINS
           value: {{ .Values.plugins | quote }}
@@ -110,15 +139,19 @@ spec:
         resources:
 {{ toYaml .Values.data.resources | indent 10 }}
         volumeMounts:
-        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch_custom.yml
+        {{- if .Values.config }}
+        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
           name: "config"
-          subPath: elasticsearch_custom.yml
+          subPath: elasticsearch.yml
+        {{- end }}
         - name: "data"
           mountPath: "/bitnami/elasticsearch/data"
       volumes:
+      {{- if .Values.config }}
       - name: "config"
         configMap:
           name: {{ template "elasticsearch.fullname" . }}
+      {{- end }}
 {{- if .Values.data.persistence.enabled }}
   volumeClaimTemplates:
   - metadata:

@@ -4,10 +4,10 @@ kind: ConfigMap
 metadata:
   name: {{ template "zookeeper.fullname" . }}
   labels:
-    app: {{ template "zookeeper.name" . }}
-    chart: {{ template "zookeeper.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
+    helm.sh/chart: {{ template "zookeeper.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
   zoo.cfg: |-
 {{ .Values.config | indent 4 }}

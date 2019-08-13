@@ -1,0 +1,112 @@
+{{- if ne .Values.service.type "Ingress" }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "harbor.nginx" . }}"
+  labels:
+    {{- include "harbor.labels" . | nindent 4 }}
+    app.kubernetes.io/component: nginx
+spec:
+  replicas: {{ .Values.nginx.replicas }}
+  selector:
+    matchLabels: {{ include "harbor.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: nginx
+  template:
+    metadata:
+      labels:
+        {{ include "harbor.labels" . | nindent 8 }}
+        app.kubernetes.io/component: nginx
+      annotations:
+      {{- if not .Values.service.tls.enabled }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/nginx/configmap-http.yaml") . | sha256sum }}
+      {{- else }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/nginx/configmap-https.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if eq (include "harbor.autoGenCertForNginx" .) "true" }}
+        checksum/secret: {{ include (print $.Template.BasePath "/nginx/secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if .Values.nginx.podAnnotations }}
+        {{ toYaml .Values.nginx.podAnnotations | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      containers:
+      - name: nginx
+        image: "{{ template "harbor.nginxImage" . }}"
+        imagePullPolicy: {{ .Values.nginxImage.pullPolicy | quote }}
+        {{- if .Values.nginx.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ ternary "https" "http" .Values.service.tls.enabled }}
+            {{- if .Values.service.tls.enabled }}
+            scheme: HTTPS
+            {{- end }}
+          initialDelaySeconds: {{ .Values.nginx.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.nginx.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.nginx.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.nginx.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.nginx.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.nginx.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ ternary "https" "http" .Values.service.tls.enabled }}
+            {{- if .Values.service.tls.enabled }}
+            scheme: HTTPS
+            {{- end }}
+          initialDelaySeconds: {{ .Values.nginx.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.nginx.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.nginx.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.nginx.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.nginx.readinessProbe.failureThreshold }}
+        {{- end }}
+        env:
+        - name: BITNAMI_DEBUG
+          value: {{ ternary "true" "false" .Values.nginxImage.debug | quote }}
+        {{- if .Values.nginx.resources }}
+        resources: {{ toYaml .Values.nginx.resources | nindent 10 }}
+        {{- end }}
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 8443
+          name: https
+        - containerPort: 4443
+          name: notary
+        volumeMounts:
+        - name: config
+          mountPath: /opt/bitnami/nginx/conf/nginx.conf
+          subPath: nginx.conf
+        {{- if .Values.service.tls.enabled }}
+        - name: certificate
+          mountPath: /etc/nginx/cert
+        {{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: "{{ template "harbor.nginx" . }}"
+      {{- if .Values.service.tls.enabled }}
+      - name: certificate
+        secret:
+          {{- if .Values.service.tls.secretName }}
+          secretName: {{ .Values.service.tls.secretName }}
+          {{- else }}
+          secretName: "{{ template "harbor.nginx" . }}"
+          {{- end }}
+      {{- end }}
+      {{- with .Values.nginx.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nginx.affinity }}
+      affinity: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nginx.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- end }}

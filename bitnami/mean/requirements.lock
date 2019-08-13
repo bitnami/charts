@@ -1,9 +1,0 @@
-dependencies:
-- name: mongodb
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 4.6.2
-- name: bitnami-common
-  repository: https://charts.bitnami.com/bitnami
-  version: 0.0.3
-digest: sha256:e08b8d1bb8197aa8fdc27536aaa1de2e7de210515a451ebe94949a3db55264dd
-generated: 2018-10-25T11:06:24.877576+02:00

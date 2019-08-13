@@ -1,0 +1,24 @@
+{{- if .Values.worker.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ include "spark.name" . }}
+    helm.sh/chart: {{ include "spark.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/component: worker-autoscaler
+  name: {{ include "spark.fullname" . }}-autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: statefulset
+    name: {{ include "spark.fullname" . }}-worker
+  minReplicas: {{ .Values.worker.replicaCount }}
+  maxReplicas: {{ .Values.worker.autoscaling.replicasMax }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: {{ .Values.worker.autoscaling.CpuTargetPercentage }}
+{{- end }}

@@ -1,0 +1,22 @@
+{{- if eq .Values.mode "distributed" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mxnet.fullname" . }}-scheduler
+  labels:
+    app.kubernetes.io/name: {{ include "mxnet.name" . }}
+    helm.sh/chart: {{ include "mxnet.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: scheduler
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.schedulerPort }}
+      targetPort: mxnet
+      name: mxnet
+  selector:
+    app.kubernetes.io/name: {{ include "mxnet.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: scheduler
+{{- end }}

@@ -4,10 +4,11 @@ kind: Deployment
 metadata:
   name: {{ template "kafka.fullname" . }}-exporter
   labels:
-    app: {{ template "kafka.name" . }}
-    chart: {{ template "kafka.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    helm.sh/chart: {{ template "kafka.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: metrics
 spec:
   replicas: 1
   selector:
@@ -25,12 +26,7 @@ spec:
         app: {{ template "kafka.name" . }}
         release: "{{ .Release.Name }}"
     spec:
-      {{- if .Values.metrics.kafka.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.metrics.kafka.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "kafka.imagePullSecrets" . | indent 6 }}
       containers:
       - image: {{ template  "kafka.metrics.kafka.image" . }}
         name: kafka-exporter

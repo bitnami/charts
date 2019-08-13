@@ -45,31 +45,40 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the WildFly chart and their default values.
 
-|         Parameter               |              Description               |                           Default                          |
-|---------------------------------|----------------------------------------|------------------------------------------------------------|
-| `global.imageRegistry`          | Global Docker image registry           | `nil`                                                      |
-| `image.registry`                | WildFly image registry                 | `docker.io`                                                |
-| `image.repository`              | WildFly Image name                     | `bitnami/wildfly`                                          |
-| `image.tag`                     | WildFly Image tag                      | `{VERSION}`                                                |
-| `image.pullPolicy`              | WildFly image pull policy              | `Always` if `imageTag` is `latest`, else `IfNotPresent`    |
-| `image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)   |
-| `wildflyUsername`               | WildFly admin user                     | `user`                                                     |
-| `wildflyPassword`               | WildFly admin password                 | _random 10 character alphanumeric string_                  |
-| `securityContext.enabled`       | Enable security context                | `true`                                                     |
-| `securityContext.fsGroup`       | Group ID for the container             | `1001`                                                     |
-| `securityContext.runAsUser`     | User ID for the container              | `1001`                                                     |
-| `service.type`                  | Kubernetes Service type                | `LoadBalancer`                                             |
-| `service.port`                  | Service HTTP port                      | `80`                                                       |
-| `service.mgmtPort`              | Service Management port                | `9990`                                                     |
-| `service.nodePorts.http`        | Kubernetes http node port              | `""`                                                       |
-| `service.nodePorts.mgmt`        | Kubernetes management node port        | `""`                                                       |
-| `service.externalTrafficPolicy` | Enable client source IP preservation   | `Cluster`                                                  |
-| `service.loadBalancerIP`        | LoadBalancer service IP address        | `""`                                                       |
-| `persistence.enabled`           | Enable persistence using PVC           | `true`                                                     |
-| `persistence.storageClass`      | PVC Storage Class for WildFly volume   | `nil` (uses alpha storage class annotation)                |
-| `persistence.accessMode`        | PVC Access Mode for WildFly volume     | `ReadWriteOnce`                                            |
-| `persistence.size`              | PVC Storage Request for WildFly volume | `8Gi`                                                      |
-| `resources`                     | CPU/Memory resource requests/limits    | Memory: `512Mi`, CPU: `300m`                               |
+| Parameter                            | Description                                                                                                                                               | Default                                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`                     | WildFly image registry                                                                                                                                    | `docker.io`                                             |
+| `image.repository`                   | WildFly Image name                                                                                                                                        | `bitnami/wildfly`                                       |
+| `image.tag`                          | WildFly Image tag                                                                                                                                         | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                   | WildFly image pull policy                                                                                                                                 | `IfNotPresent`                                          |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                       | String to partially override wildfly.fullname template with a string (will prepend the release name)                                                      | `nil`                                                   |
+| `fullnameOverride`                   | String to fully override wildfly.fullname template with a string                                                                                          | `nil`                                                   |
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
+| `wildflyUsername`                    | WildFly admin user                                                                                                                                        | `user`                                                  |
+| `wildflyPassword`                    | WildFly admin password                                                                                                                                    | _random 10 character alphanumeric string_               |
+| `securityContext.enabled`            | Enable security context                                                                                                                                   | `true`                                                  |
+| `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                  |
+| `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                  |
+| `service.type`                       | Kubernetes Service type                                                                                                                                   | `LoadBalancer`                                          |
+| `service.port`                       | Service HTTP port                                                                                                                                         | `80`                                                    |
+| `service.mgmtPort`                   | Service Management port                                                                                                                                   | `9990`                                                  |
+| `service.nodePorts.http`             | Kubernetes http node port                                                                                                                                 | `""`                                                    |
+| `service.nodePorts.mgmt`             | Kubernetes management node port                                                                                                                           | `""`                                                    |
+| `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                                                      | `Cluster`                                               |
+| `service.loadBalancerIP`             | LoadBalancer service IP address                                                                                                                           | `""`                                                    |
+| `persistence.enabled`                | Enable persistence using PVC                                                                                                                              | `true`                                                  |
+| `persistence.storageClass`           | PVC Storage Class for WildFly volume                                                                                                                      | `nil` (uses alpha storage class annotation)             |
+| `persistence.accessMode`             | PVC Access Mode for WildFly volume                                                                                                                        | `ReadWriteOnce`                                         |
+| `persistence.size`                   | PVC Storage Request for WildFly volume                                                                                                                    | `8Gi`                                                   |
+| `resources`                          | CPU/Memory resource requests/limits                                                                                                                       | Memory: `512Mi`, CPU: `300m`                            |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
@@ -91,12 +100,27 @@ $ helm install --name my-release -f values.yaml bitnami/wildfly
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ## Persistence
 
 The [Bitnami WildFly](https://github.com/bitnami/bitnami-docker-wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
 

@@ -7,6 +7,10 @@ metadata:
     chart: {{ template "cassandra.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+  annotations:
+    {{- range $key, $value := .Values.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
 spec:
 {{- if .Values.service.nodePort }}
   nodePort: {{ .Values.service.nodePort }}

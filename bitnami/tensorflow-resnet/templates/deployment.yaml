@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "tensorflow-resnet.fullname" . }}
   labels:
-    app: {{ template "name" . }}
+    app: {{ template "tensorflow-resnet.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "name" . }}
+      app: {{ template "tensorflow-resnet.name" . }}
       release: "{{ .Release.Name }}"
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
+        app: {{ template "tensorflow-resnet.name" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}
@@ -29,12 +29,7 @@ spec:
   {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.server.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.server.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "tensorflow-resnet.imagePullSecrets" . | indent 6 }}
       initContainers:
       - name: seed
         image: "{{ template "tensorflow-resnet.client.image" . }}"
@@ -55,7 +50,7 @@ spec:
         - name: seed
           mountPath: /seed
       containers:
-      - name: serving
+      - name: tensorflow-serving
         image: "{{ template "tensorflow-resnet.server.image" . }}"
         imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
         ports:
@@ -89,7 +84,7 @@ spec:
           mountPath: "/bitnami/model-data"
 {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "metrics.image" . }}
+        image: {{ template "tensorflow-resnet.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: ['python', 'tf_serving_exporter.py', '--tf_port', '{{ .Values.server.port }}', '--port', {{ .Values.metrics.port }}, '--model_name', 'resnet']
         ports:

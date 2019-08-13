@@ -1,0 +1,140 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: {{ template "elasticsearch.master.fullname" . }}
+  labels:
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    role: "master"
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "elasticsearch.name" . }}
+      release: {{ .Release.Name | quote }}
+      role: "master"
+  serviceName: {{ template "elasticsearch.master.fullname" . }}
+  replicas: {{ .Values.master.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "elasticsearch.name" . }}
+        chart: {{ template "elasticsearch.chart" . }}
+        release: {{ .Release.Name | quote }}
+        role: "master"
+{{- with .Values.master.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+    spec:
+      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
+      affinity:
+      {{- if eq .Values.master.antiAffinity "hard" }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: {{ template "elasticsearch.name" . }}
+                  release: {{ .Release.Name | quote }}
+                  role: "master"
+      {{- else if eq .Values.master.antiAffinity "soft" }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: {{ template "elasticsearch.name" . }}
+                  release: {{ .Release.Name | quote }}
+                  role: "master"
+      {{- end }}
+      {{- if .Values.master.nodeAffinity }}
+{{ toYaml .Values.master.nodeAffinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.sysctlImage.enabled }}
+      ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
+      initContainers:
+      - name: sysctl
+        image: {{ template "elasticsearch.sysctl.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        command: ['sh', '-c', 'install_packages systemd && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
+        securityContext:
+          privileged: true
+      {{- end }}
+      containers:
+      - name: "elasticsearch"
+        image: {{ template "elasticsearch.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        {{- if .Values.securityContext.enabled }}
+        securityContext:
+          runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- end }}
+        env:
+        - name: ELASTICSEARCH_CLUSTER_NAME
+          value: {{ .Values.name | quote }}
+        - name: ELASTICSEARCH_CLUSTER_HOSTS
+          value: {{ template "elasticsearch.discovery.fullname" . }}
+        - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
+          {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
+          {{- $replicas := int .Values.master.replicas }}
+          value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
+        {{- if .Values.plugins }}
+        - name: ELASTICSEARCH_PLUGINS
+          value: {{ .Values.plugins | quote }}
+        {{- end }}
+        - name: ELASTICSEARCH_HEAP_SIZE
+          value: {{ .Values.master.heapSize | quote }}
+        - name: ELASTICSEARCH_IS_DEDICATED_NODE
+          value: "yes"
+        - name: ELASTICSEARCH_NODE_TYPE
+          value: "master"
+        ports:
+        - name: transport
+          containerPort: 9300
+        {{- if .Values.master.livenessProbe.enabled }}
+        livenessProbe:
+          initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.master.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
+          httpGet:
+            path: /_cluster/health?local=true
+            port: 9200
+        {{- end }}
+        {{- if .Values.master.readinessProbe.enabled }}
+        readinessProbe:
+          initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.master.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
+          httpGet:
+            path: /_cluster/health?local=true
+            port: 9200
+        {{- end }}
+        resources:
+{{ toYaml .Values.master.resources | indent 10 }}
+        volumeMounts:
+        {{- if .Values.config }}
+        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
+          name: "config"
+          subPath: elasticsearch.yml
+        {{- end }}
+        - name: "data"
+          mountPath: "/bitnami/elasticsearch/data"
+      volumes:
+      {{- if .Values.config }}
+      - name: "config"
+        configMap:
+          name: {{ template "elasticsearch.fullname" . }}
+      {{- end }}
+      - name: "data"
+        emptyDir: {}

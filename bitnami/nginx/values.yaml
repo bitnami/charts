@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami NGINX image version
 ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
@@ -10,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.14.2
+  tag: 1.16.0-debian-9-r69
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -21,14 +24,29 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistrKeySecretName
+  #   - myRegistryKeySecretName
+
+## String to partially override nginx.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override nginx.fullname template
+##
+# fullnameOverride:
+
+## Number of replicas to deploy
+replicaCount: 1
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
   type: LoadBalancer
-  # HTTP Port
+  ## Provide optional annotations to the service i.e. for external-dns
+  # annotations:
+  #   external-dns.alpha.kubernetes.io/hostname: yourservicename.k8s.yourcompany.com
+  ##
+  ## HTTP Port
   port: 80
   ##
   ## loadBalancerIP:
@@ -41,8 +59,55 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-# vhost: |-
-#   # example PHP-FPM vhost
+## Configure the ingress resource that allows you to access the
+## NGINX installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  enabled: false
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  certManager: false
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  annotations:
+  #  kubernetes.io/ingress.class: nginx
+
+  ## The list of hostnames to be covered with this ingress record.
+  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  hosts:
+  - name: nginx.local
+    path: /
+
+  ## The tls configuration for the ingress
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  tls:
+  - hosts:
+      - nginx.local
+    secretName: nginx.local-tls
+
+  secrets:
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  # - name: nginx.local-tls
+  #   key:
+  #   certificate:
+
+# serverBlock: |-
+#   # example PHP-FPM server block
 #   server {
 #     listen 0.0.0.0:8080;
 #     root /app;
@@ -56,10 +121,58 @@ service:
 #     }
 #   }
 
+## Liveness Probe. The block is directly forwarded into the deployment, so you can use whatever livenessProbe configuration you want.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+##
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+## Readiness Probe. The block is directly forwarded into the deployment, so you can use whatever readinessProbe configuration you want.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 5
+  timeoutSeconds: 3
+  periodSeconds: 5
+
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Node Affinity. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
+##
+nodeAffinity: {}
+## Pod Affinity. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+podAffinity: {}
+## Pod AntiAffinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+podAntiAffinity: soft
+
+## Node labels for pod assignment. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+##
+nodeSelector: {}
+## Tolerations for pod assignment. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+##
+tolerations: {}
+
+## Resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+# resources: {}
 
 ## Prometheus Exporter / Metrics
 ##
@@ -67,15 +180,15 @@ metrics:
   enabled: false
   image:
     registry: docker.io
-    repository: nginx/nginx-prometheus-exporter
-    tag: 0.1.0
+    repository: bitnami/nginx-exporter
+    tag: 0.4.2-debian-9-r17
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
     # pullSecrets:
-    #   - myRegistrKeySecretName
+    #   - myRegistryKeySecretName
   ## Metrics exporter pod Annotation and Labels
   podAnnotations:
     prometheus.io/scrape: "true"

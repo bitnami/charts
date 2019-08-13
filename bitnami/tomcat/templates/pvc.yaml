@@ -2,10 +2,10 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "tomcat.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "tomcat.fullname" . }}
+    chart: {{ template "tomcat.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
   annotations:

@@ -46,77 +46,88 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the cassandra chart and their default values.
 
-| Parameter                                  | Description                                                                                                    | Default                                              |
-|--------------------------------------------|----------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| `global.imageRegistry`                     | Global Docker Image registry                                                                                   | `nil`                                                |
-| `image.registry`                           | Cassandra Image registry                                                                                           | `docker.io`                                          |
-| `image.repository`                         | Cassandra Image name                                                                                               | `bitnami/cassandra`                                      |
-| `image.tag`                                | Cassandra Image tag                                                                                                | `{VERSION}`                                          |
-| `image.pullPolicy`                         | Image pull policy                                                                                              | `Always`                                             |
-| `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                               | `[]` (does not add image pull secrets to deployed pods) |
-| `service.type`                       | Kubernetes Service type                                                                          | `ClusterIP`                                          |
-| `service.nodePort`                   | Kubernetes Service nodePort                                                                      | `nil`                                                |
-| `service.loadBalancerIP`             | LoadBalancerIP if service type is `LoadBalancer`                                                   | `nil`                            |
-| `service.annotations`                | Annotations for the service                                                                            | {}                                                   |
-| `persistence.enabled`               | Use PVCs to persist data                                                                        | `true`                                               |
-| `persistence.storageClass`          | Persistent Volume Storage Class                                                                                    | `generic`                                            |
-| `persistence.annotations`                | Persistent Volume Claim annotations Annotations                                                                            | {}                                                   |
-| `persistence.accessModes`           | Persistent Volume Access Modes                                                                                 | `[ReadWriteOnce]`                                    |
-| `persistence.size`                  | Persistent Volume Size                                                                                             | `8Gi`                                                |
-| `tlsEncryptionSecretName`                         | Secret with keystore, keystore password, truststore and truststore password                                                               |  `{}`                         |
-| `resources`                         | CPU/Memory resource requests/limits                                                               |  `{}`                         |
-| `existingConfiguration`             | Pointer to a configMap that contains custom Cassandra configuration files. This will override any Cassandra configuration variable set in the chart        |  `{}`                         |
-| `cluster.name`                         | Cassandra cluster name                                                               |  `cassandra`                         |
-| `cluster.replicaCount`                         | Number of Cassandra nodes                                                               |  `1`                         |
-| `cluster.seedCount`                           | Number of seed nodes (note: must be greater or equal than 1 and less or equal to `cluster.replicaCount`)                                                   | `1`                                                |
-| `cluster.numTokens`                           | Number of tokens for each node                                              | `256`                                                |
-| `cluster.datacenter`                           | Datacenter name                                                  | `dc1`                                                |
-| `cluster.rack`                           | Rack name                                                   | `rack1`                                                |
-| `cluster.enableRPC`                           | Enable Thrift RPC endpoint                                    | `true`                  |
-| `cluster.minimumAvailable`                           | Minimum nuber of instances that must be available in the cluster (used of PodDisruptionBudget)                                    | `1`                                                |
-| `cluster.internodeEncryption`                           | Set internode encryption. NOTE: A value different from 'none' requires setting `tlsEncryptionSecretName`                                   | `none`                                                |
-| `cluster.clientEncryption`                           | Set client-server encryption. NOTE: A value different from 'false' requires setting `tlsEncryptionSecretName`                                 | `false`                                                |
-| `cluster.jvm.extraOpts`                           | Set the value for Java Virtual Machine extra optinos (JVM_EXTRA_OPTS)                                                   | `nil`                                                |
-| `cluster.jvm.maxHeapSize`                           | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                                                 | `nil`                                                |
-| `cluster.jvm.newHeapSize`                           | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                                                 | `nil`                                                |
-| `service.port`                           | CQL Port for the Kubernetes service                                                 | `9042`                                                |
-| `service.thriftPort`                           | Thrift Port for the Kubernetes service                                                 | `9160`                                                |
-| `dbUser.user`                           | Cassandra admin user                                                   | `cassandra`                                                |
-| `dbUser.forcePassword`                           | Force the user to provide a non-empty password for `dbUser.user`                                                   | `false`                                                |
-| `dbUser.password`                              | Password for `dbUser.user`. Randomly generated if empty                                                                                                   | (Random generated)                                               |
-| `dbUser.existingSecret`                                 | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                                                                 | `nil`                                   |
-| `initDBConfigMap`                                 | Configmap for initialization CQL commands (done in the first node). Useful for creating keyspaces at startup, for instance                                                                 | `nil`                                   |
-| `livenessProbe.enabled`             | Turn on and off liveness probe                                                             | `true`                                               |
-| `livenessProbe.initialDelaySeconds` | Delay before liveness probe is initiated                                                    | `30`                                                 |
-| `livenessProbe.periodSeconds`       | How often to perform the probe                                                             | `30`                                                 |
-| `livenessProbe.timeoutSeconds`      | When the probe times out                                                                    | `5`                                                  |
-| `livenessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed | `1`                                                  |
-| `livenessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.                     | `5`                                                  |
-| `readinessProbe.enabled`            | Turn on and off readiness probe                                                             | `true`                                               |
-| `readinessProbe.initialDelaySeconds`| Delay before readiness probe is initiated                                                   | `5`                                                  |
-| `readinessProbe.periodSeconds`      | How often to perform the probe                                                              | `10`                                                 |
-| `readinessProbe.timeoutSeconds`     | When the probe times out                                                                    | `5`                                                  |
-| `readinessProbe.successThreshold`   | Minimum consecutive successes for the probe to be considered successful after having failed | `1`                                                  |
-| `readinessProbe.failureThreshold`   | Minimum consecutive failures for the probe to be considered failed after having succeeded.                     | `5`                                                  |
-| `podAnnotations`                     | Additional pod annotations                                                                     | `{}`                              |
-| `podLabels`                         | Additional pod labels                                                                         | `{}`                                                   |
-| `statefulset.updateStrategy`        | Update strategy for StatefulSet                                                                                | onDelete                                             |
-| `statefulset.rollingUpdatePartition`        | Partition update strategy                                                                                | `nil`                                             |
-| `securityContext.enabled`           | Enable security context                                                                     | `true`                                               |
-| `securityContext.fsGroup`           | Group ID for the container                                                                  | `1001`                                               |
-| `securityContext.runAsUser`         | User ID for the container                                                                   | `1001`                                               |
-| `affinity`                          | Enable node/pod affinity                                                                 | {}                                   |
-| `tolerations`                       | Toleration labels for pod assignment                                                              | []                                                   |
-| `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                           | `false`                                              |
-| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                     | `true`                                |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
-| `metrics.image.registry`                   | Cassandra exporter Image registry                                                                                  | `docker.io`                                          |
-| `metrics.image.repository`                 | Cassandra exporter Image name                                                                                      | `criteo/cassandra_exporter`                           |
-| `metrics.image.tag`                        | Cassandra exporter Image tag                                                                                       | `2.0.4`                                            |
-| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                              | `[]` (does not add image pull secrets to deployed pods)                             |
-| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter                                                                 | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}`                                                   |
-| `metrics.resources`                        | Exporter resource requests/limit                                                                               | `{}`                         |
+| Parameter                            | Description                                                                                                                                               | Default                                                      |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `global.imageRegistry`               | Global Docker Image registry                                                                                                                              | `nil`                                                        |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.registry`                     | Cassandra Image registry                                                                                                                                  | `docker.io`                                                  |
+| `image.repository`                   | Cassandra Image name                                                                                                                                      | `bitnami/cassandra`                                          |
+| `image.tag`                          | Cassandra Image tag                                                                                                                                       | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                   | Image pull policy                                                                                                                                         | `IfNotPresent`                                               |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                       | String to partially override cassandra.fullname template with a string (will prepend the release name)                                                    | `nil`                                                        |
+| `fullnameOverride`                   | String to fully override cassandra.fullname template with a string                                                                                        | `nil`                                                        |
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                     |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| `service.type`                       | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                                  |
+| `service.nodePort`                   | Kubernetes Service nodePort                                                                                                                               | `nil`                                                        |
+| `service.loadBalancerIP`             | LoadBalancerIP if service type is `LoadBalancer`                                                                                                          | `nil`                                                        |
+| `service.annotations`                | Annotations for the service                                                                                                                               | {}                                                           |
+| `persistence.enabled`                | Use PVCs to persist data                                                                                                                                  | `true`                                                       |
+| `persistence.storageClass`           | Persistent Volume Storage Class                                                                                                                           | `generic`                                                    |
+| `persistence.annotations`            | Persistent Volume Claim annotations Annotations                                                                                                           | {}                                                           |
+| `persistence.accessModes`            | Persistent Volume Access Modes                                                                                                                            | `[ReadWriteOnce]`                                            |
+| `persistence.size`                   | Persistent Volume Size                                                                                                                                    | `8Gi`                                                        |
+| `tlsEncryptionSecretName`            | Secret with keystore, keystore password, truststore and truststore password                                                                               | `{}`                                                         |
+| `resources`                          | CPU/Memory resource requests/limits                                                                                                                       | `{}`                                                         |
+| `existingConfiguration`              | Pointer to a configMap that contains custom Cassandra configuration files. This will override any Cassandra configuration variable set in the chart       | `{}`                                                         |
+| `cluster.name`                       | Cassandra cluster name                                                                                                                                    | `cassandra`                                                  |
+| `cluster.replicaCount`               | Number of Cassandra nodes                                                                                                                                 | `1`                                                          |
+| `cluster.seedCount`                  | Number of seed nodes (note: must be greater or equal than 1 and less or equal to `cluster.replicaCount`)                                                  | `1`                                                          |
+| `cluster.numTokens`                  | Number of tokens for each node                                                                                                                            | `256`                                                        |
+| `cluster.datacenter`                 | Datacenter name                                                                                                                                           | `dc1`                                                        |
+| `cluster.rack`                       | Rack name                                                                                                                                                 | `rack1`                                                      |
+| `cluster.enableRPC`                  | Enable Thrift RPC endpoint                                                                                                                                | `true`                                                       |
+| `cluster.minimumAvailable`           | Minimum nuber of instances that must be available in the cluster (used of PodDisruptionBudget)                                                            | `1`                                                          |
+| `cluster.internodeEncryption`        | Set internode encryption. NOTE: A value different from 'none' requires setting `tlsEncryptionSecretName`                                                  | `none`                                                       |
+| `cluster.clientEncryption`           | Set client-server encryption. NOTE: A value different from 'false' requires setting `tlsEncryptionSecretName`                                             | `false`                                                      |
+| `cluster.jvm.extraOpts`              | Set the value for Java Virtual Machine extra optinos (JVM_EXTRA_OPTS)                                                                                     | `nil`                                                        |
+| `cluster.jvm.maxHeapSize`            | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                                                             | `nil`                                                        |
+| `cluster.jvm.newHeapSize`            | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                                                                  | `nil`                                                        |
+| `cluster.domain`                     | Set the kubernetes cluster domain                                                                                                                         | `cluster.local`                                              |
+| `service.port`                       | CQL Port for the Kubernetes service                                                                                                                       | `9042`                                                       |
+| `service.thriftPort`                 | Thrift Port for the Kubernetes service                                                                                                                    | `9160`                                                       |
+| `dbUser.user`                        | Cassandra admin user                                                                                                                                      | `cassandra`                                                  |
+| `dbUser.forcePassword`               | Force the user to provide a non-empty password for `dbUser.user`                                                                                          | `false`                                                      |
+| `dbUser.password`                    | Password for `dbUser.user`. Randomly generated if empty                                                                                                   | (Random generated)                                           |
+| `dbUser.existingSecret`              | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                                                                  | `nil`                                                        |
+| `initDBConfigMap`                    | Configmap for initialization CQL commands (done in the first node). Useful for creating keyspaces at startup, for instance                                | `nil`                                                        |
+| `livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                                            | `true`                                                       |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                  | `30`                                                         |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                            | `30`                                                         |
+| `livenessProbe.timeoutSeconds`       | When the probe times out                                                                                                                                  | `5`                                                          |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | `1`                                                          |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `5`                                                          |
+| `readinessProbe.enabled`             | Turn on and off readiness probe                                                                                                                           | `true`                                                       |
+| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                                                                                 | `5`                                                          |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                                                                                                                            | `10`                                                         |
+| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                                                                                  | `5`                                                          |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | `1`                                                          |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `5`                                                          |
+| `podAnnotations`                     | Additional pod annotations                                                                                                                                | `{}`                                                         |
+| `podLabels`                          | Additional pod labels                                                                                                                                     | `{}`                                                         |
+| `statefulset.updateStrategy`         | Update strategy for StatefulSet                                                                                                                           | onDelete                                                     |
+| `statefulset.rollingUpdatePartition` | Partition update strategy                                                                                                                                 | `nil`                                                        |
+| `securityContext.enabled`            | Enable security context                                                                                                                                   | `true`                                                       |
+| `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                       |
+| `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                       |
+| `affinity`                           | Enable node/pod affinity                                                                                                                                  | {}                                                           |
+| `tolerations`                        | Toleration labels for pod assignment                                                                                                                      | \[]                                                          |
+| `networkPolicy.enabled`              | Enable NetworkPolicy                                                                                                                                      | `false`                                                      |
+| `networkPolicy.allowExternal`        | Don't require client label for connections                                                                                                                | `true`                                                       |
+| `metrics.enabled`                    | Start a side-car prometheus exporter                                                                                                                      | `false`                                                      |
+| `metrics.image.registry`             | Cassandra exporter Image registry                                                                                                                         | `docker.io`                                                  |
+| `metrics.image.repository`           | Cassandra exporter Image name                                                                                                                             | `bitnami/cassandra-exporter`                                 |
+| `metrics.image.tag`                  | Cassandra exporter Image tag                                                                                                                              | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`           | Image pull policy                                                                                                                                         | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`             | Additional annotations for Metrics exporter                                                                                                               | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}` |
+| `metrics.resources`                  | Exporter resource requests/limit                                                                                                                          | `{}`                                                         |
+
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
 
@@ -136,12 +147,67 @@ $ helm install --name my-release -f values.yaml bitnami/cassandra
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/cassandra
+```
+
+- Number of Cassandra and seed nodes:
+```diff
+- master.replicaCount: 1
+- master.seedCount: 1
++ master.replicaCount: 3
++ master.seedCount: 2
+```
+
+- Minimum nuber of instances that must be available in the cluster:
+```diff
+- cluster.minimumAvailable: 1
++ cluster.minimumAvailable: 2
+```
+
+- Force the user to provide a non-empty password for `dbUser.user`:
+```diff
+- dbUser.forcePassword: false
++ dbUser.forcePassword: true
+```
+
+- Enable NetworkPolicy:
+```diff
+- networkPolicy.enabled: false
++ networkPolicy.enabled: true
+```
+
+- Start a side-car prometheus exporter:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ## Persistence
 
 The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image stores the cassandra data at the `/bitnami/cassandra` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Enable TLS for Cassandra
 

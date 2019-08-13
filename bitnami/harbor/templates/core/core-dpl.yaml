@@ -1,0 +1,157 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ template "harbor.core" . }}"
+  labels:
+    {{- include "harbor.labels" . | nindent 4 }}
+    app.kubernetes.io/component: core
+spec:
+  replicas: {{ .Values.core.replicas }}
+  selector:
+    matchLabels: {{ include "harbor.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: core
+  template:
+    metadata:
+      labels:
+        {{ include "harbor.matchLabels" . | nindent 8 }}
+        app.kubernetes.io/component: core
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/core/core-cm.yaml") . | sha256sum }}
+        checksum/configmap-envvars: {{ include (print $.Template.BasePath "/core/core-cm-envvars.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
+        checksum/secret-envvars: {{ include (print $.Template.BasePath "/core/core-secret-envvars.yaml") . | sha256sum }}
+        checksum/secret-jobservice: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
+        {{- if .Values.core.podAnnotations }}
+        {{- toYaml .Values.core.podAnnotations | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      containers:
+      - name: core
+        image: "{{ template "harbor.coreImage" . }}"
+        imagePullPolicy: {{ .Values.coreImage.pullPolicy | quote }}
+        {{- if .Values.core.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /api/ping
+            port: http
+          initialDelaySeconds: {{ .Values.core.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.core.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.core.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.core.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.core.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.core.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /api/ping
+            port: http
+          initialDelaySeconds: {{ .Values.core.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.core.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.core.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.core.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.core.readinessProbe.failureThreshold }}
+        {{- end }}
+        envFrom:
+        - configMapRef:
+            name: "{{ template "harbor.core" . }}-envvars"
+        - secretRef:
+            name: "{{ template "harbor.core" . }}-envvars"
+        env:
+        - name: BITNAMI_DEBUG
+          value: {{ ternary "true" "false" .Values.coreImage.debug | quote }}
+        - name: CORE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: "{{ template "harbor.core" . }}"
+              key: secret
+        - name: JOBSERVICE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: "{{ template "harbor.jobservice" . }}"
+              key: secret
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - name: config
+          mountPath: /etc/core/app.conf
+          subPath: app.conf
+        - name: secret-key
+          mountPath: /etc/core/key
+          subPath: key
+        - name: token-service-private-key
+          mountPath: /etc/core/private_key.pem
+          subPath: tls.key
+        {{- if .Values.service.tls.enabled }}
+        - name: ca-download
+          mountPath: /etc/core/ca/ca.crt
+          subPath: ca.crt
+        {{- end }}
+        {{- if .Values.uaaSecretName }}
+        - name: auth-ca-cert
+          mountPath: /etc/core/ca/auth-ca.crt
+          subPath: auth-ca.crt
+        {{- end }}
+        - name: psc
+          mountPath: /etc/core/token
+        {{- if .Values.core.resources }}
+        resources: {{ toYaml .Values.core.resources | nindent 10 }}
+        {{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: "{{ template "harbor.core" . }}"
+          items:
+            - key: app.conf
+              path: app.conf
+      - name: secret-key
+        secret:
+          secretName: "{{ template "harbor.core" . }}"
+          items:
+            - key: secretKey
+              path: key
+      - name: token-service-private-key
+        secret:
+          {{- if .Values.core.secretName }}
+          secretName: {{ .Values.core.secretName }}
+          {{- else }}
+          secretName: "{{ template "harbor.core" . }}"
+          {{- end }}
+      {{- if .Values.service.tls.enabled }}
+      - name: ca-download
+        secret:
+        {{- if eq (include "harbor.autoGenCertForIngress" .) "true" }}
+          secretName: "{{ template "harbor.ingress" . }}"
+        {{- else if eq (include "harbor.autoGenCertForNginx" .) "true" }}
+          secretName: "{{ template "harbor.nginx" . }}"
+        {{- else }}
+          secretName: {{ .Values.service.tls.secretName }}
+        {{- end }}
+          items:
+            - key: ca.crt
+              path: ca.crt
+      {{- end }}
+      {{- if .Values.uaaSecretName }}
+      - name: auth-ca-cert
+        secret:
+          secretName: {{ .Values.uaaSecretName }}
+          items:
+            - key: ca.crt
+              path: auth-ca.crt
+      {{- end }}
+      - name: psc
+        emptyDir: {}
+      {{- with .Values.core.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.core.affinity }}
+      affinity: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.core.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}

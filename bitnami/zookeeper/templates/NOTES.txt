@@ -19,11 +19,11 @@
 
 ZooKeeper can be accessed via port 2181 on the following DNS name from within your cluster:
 
-    {{ template "zookeeper.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    {{ template "zookeeper.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To connect to your ZooKeeper server run the following commands:
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "zookeeper.name" . }}" -o jsonpath="{.items[0].metadata.name}")
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "zookeeper.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=zookeeper" -o jsonpath="{.items[0].metadata.name}")
     kubectl exec -it $POD_NAME -- zkCli.sh
 
 To connect to your ZooKeeper server from outside the cluster execute the following commands:
@@ -46,5 +46,12 @@ To connect to your ZooKeeper server from outside the cluster execute the followi
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "zookeeper.fullname" . }} 2181:2181 &
     zkCli.sh 127.0.0.1:2181
+
+{{- end }}
+
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 
 {{- end }}

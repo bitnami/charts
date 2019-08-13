@@ -1,8 +1,11 @@
-## Global Docker image registry
-## Please, note that this will override the image registry for all the images, including dependencies, configured to use the global value
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 # global:
-#   imageRegistry:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
 
 ## Bitnami Metrics Server image version
 ## ref: https://hub.docker.com/r/bitnami/metrics-server/tags/
@@ -10,12 +13,26 @@
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.3.1
+  tag: 0.3.3-debian-9-r30
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## String to partially override metrics-server.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override metrics-server.fullname template
+##
+# fullnameOverride:
 
 rbac:
   # Specifies whether RBAC resources should be created

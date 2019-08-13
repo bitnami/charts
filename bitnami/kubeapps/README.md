@@ -24,13 +24,11 @@ This chart bootstraps a [Kubeapps](https://kubeapps.com) deployment on a [Kubern
 
 It also packages the [Bitnami MongoDB chart](https://github.com/helm/charts/tree/master/stable/mongodb) which is required for bootstrapping a MongoDB deployment for the database requirements of the Kubeapps application.
 
-This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
-
 ## Prerequisites
 
 - Kubernetes 1.8+ (tested with Azure Kubernetes Service, Google Kubernetes Engine, minikube and Docker for Desktop Kubernetes)
 - Helm 2.10.0+
-- Administrative access to the cluster to create and update RBAC ClusterRoles
+- Administrative access to the cluster to create Custom Resource Definitions (CRDs)
 
 ## Installing the Chart
 

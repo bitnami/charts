@@ -149,3 +149,31 @@ Repositories that include a caCert or an authorizationHeader
 {{- end }}
 {{- end }}
 {{- end -}}
+
+{{/*
+Frontend service port number
+*/}}
+{{- define "kubeapps.frontend-port-number" -}}
+{{- if .Values.authProxy.enabled -}}
+3000
+{{- else -}}
+8080
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "kubeapps.imagePullSecrets" -}}
+{{/*
+We can not use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+{{- if .Values.global.imagePullSecrets }}
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+{{- end -}}

@@ -18,34 +18,34 @@
 
 Kafka can be accessed via port 9092 on the following DNS name from within your cluster:
 
-    {{ template "kafka.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    {{ template "kafka.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To create a topic run the following command:
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kafka.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl exec -it $POD_NAME -- kafka-topics.sh --create --zookeeper {{  template "kafka.zookeeper.fullname" . }}:2181 --replication-factor 1 --partitions 1 --topic test
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
+    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-topics.sh --create --zookeeper {{  template "kafka.zookeeper.fullname" . }}:2181 --replication-factor 1 --partitions 1 --topic test
 
 To list all the topics run the following command:
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kafka.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-    kubectl exec -it $POD_NAME -- kafka-topics.sh --list --zookeeper {{  template "kafka.zookeeper.fullname" . }}:2181
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
+    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-topics.sh --list --zookeeper {{  template "kafka.zookeeper.fullname" . }}:2181
 
 To start a kafka producer run the following command:
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kafka.name" . }}" -o jsonpath="{.items[0].metadata.name}")
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
     {{- if .Values.auth.enabled }}
-    kubectl exec -it $POD_NAME -- kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/conf/producer.properties
+    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/conf/producer.properties
     {{- else }}
-    kubectl exec -it $POD_NAME -- kafka-console-producer.sh --broker-list localhost:9092 --topic test
+    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-producer.sh --broker-list localhost:9092 --topic test
     {{- end }}
 
 To start a kafka consumer run the following command:
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kafka.name" . }}" -o jsonpath="{.items[0].metadata.name}")
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
     {{- if .Values.auth.enabled }}
-    kubectl exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --consumer.config /opt/bitnami/kafka/conf/consumer.properties
+    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --consumer.config /opt/bitnami/kafka/conf/consumer.properties
     {{- else }}
-    kubectl exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
     {{- end }}
 
 To connect to your Kafka server from outside the cluster execute the following commands:
@@ -79,8 +79,8 @@ To connect to your Kafka server from outside the cluster execute the following c
   NOTE: In order to connect to the cluster with an external client you need to properly specify the credentials stored in the JAAS file generated in the Kafka image.
         You should get the content of that file and write it in your host machine:
 
-        export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kafka.name" . }}" -o jsonpath="{.items[0].metadata.name}")
-        kubectl exec -it $POD_NAME -- cat /opt/bitnami/kafka/conf/kafka_jaas.conf >> kafka_jaas.conf
+        export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
+        kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- cat /opt/bitnami/kafka/conf/kafka_jaas.conf >> kafka_jaas.conf
 
         Finally, before using your client you need to export the following env var:
 
@@ -91,3 +91,10 @@ To connect to your Kafka server from outside the cluster execute the following c
     CONSUMER:
         kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning
 {{ end }}
+
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+
+{{- end }}

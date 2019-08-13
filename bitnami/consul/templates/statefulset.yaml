@@ -15,7 +15,10 @@ spec:
   serviceName: "{{ template "consul.fullname" . }}"
   replicas: {{ default 3 .Values.replicas }}
   updateStrategy:
-    type: RollingUpdate
+    type: {{ .Values.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- end }}
   template:
     metadata:
       name: "{{ template "consul.fullname" . }}"
@@ -39,12 +42,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
-      imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end}}
-      {{- end }}
+{{- include "consul.imagePullSecrets" . | indent 6 }}
       {{- if eq .Values.antiAffinity "hard" }}
       affinity:
         {{- if .Values.nodeAffinity }}
@@ -78,8 +76,21 @@ spec:
                   values:
                   - "{{ template "consul.name" . }}"
       {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      initContainers:
+      - name: volume-permissions
+        image: "{{ template "consul.volumePermissions.image" . }}"
+        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/consul/data"]
+        securityContext:
+          runAsUser: 0
+        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/consul/data
+      {{- end }}
       containers:
-      - name: "{{ template "consul.fullname" . }}"
+      - name: consul
         image: "{{ template "consul.image" . }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         ports:
@@ -168,8 +179,8 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command:              
-              - consul 
+              command:
+              - consul
               - leave
         volumeMounts:
         {{ if .Values.tlsEncryptionSecretName }}
@@ -184,14 +195,14 @@ spec:
         {{ if .Values.configmap }}
         - name: consul-config
           mountPath: /opt/bitnami/consul/conf/config.json
-          subPath: config.json 
+          subPath: config.json
         - name: consul-config
           mountPath: /opt/bitnami/consul/conf/connection.json
-          subPath: connection.json 
+          subPath: connection.json
         {{ end }}
       {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: "{{ .Values.metrics.image.registry }}/{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+        image: "{{ template "consul.metrics.image" . }}"
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         env:
         command: [ '/bin/consul_exporter' , '--consul.server={{ template "consul.fullname" . }}:{{ .Values.port }}']
@@ -258,5 +269,3 @@ spec:
         - name: data
           emptyDir: {}
 {{- end }}
-
-

@@ -21,6 +21,7 @@ spec:
         app: {{ template "kubeapps.dashboard.fullname" . }}
         release: {{ .Release.Name }}
     spec:
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       containers:
       - name: dashboard
         image: {{ template "kubeapps.image" (list .Values.dashboard.image .Values.global) }}
@@ -30,7 +31,7 @@ spec:
 {{ toYaml .Values.dashboard.readinessProbe | indent 10 }}
         volumeMounts:
         - name: vhost
-          mountPath: /opt/bitnami/nginx/conf/vhosts
+          mountPath: /opt/bitnami/nginx/conf/server_blocks
         - name: config
           mountPath: /app/config.json
           subPath: config.json
