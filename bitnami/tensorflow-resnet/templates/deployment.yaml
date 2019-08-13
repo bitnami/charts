@@ -83,13 +83,13 @@ spec:
           value: {{ .Values.server.port }}
         - name: TENSORFLOW_SERVING_REST_API_PORT_NUMBER
           value: {{ .Values.server.restApiPort }}
+        {{- if .Values.metrics.enabled }}
         - name: TENSORFLOW_SERVING_ENABLE_MONITORING
           value: {{ ternary "yes" "no" .Values.metrics.enabled | quote }}
+        {{- end }}
         volumeMounts:
         - name: seed
           mountPath: "/bitnami/model-data"
-        {{- end }}
-{{- end }}
       volumes:
       - name: seed
         emptyDir: {}
