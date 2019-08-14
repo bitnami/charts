@@ -19,6 +19,7 @@ spec:
       annotations:
         checksum/configmap-envvars: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-cm-envvars.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-secret.yaml") . | sha256sum }}
+        checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if .Values.chartmuseum.podAnnotations }}
         {{ toYaml .Values.chartmuseum.podAnnotations | indent 8 }}
         {{- end }}
@@ -84,6 +85,12 @@ spec:
         {{- if .Values.extraEnvVars }}
         {{ toYaml .Values.extraEnvVars | indent 8 }}
         {{- end }}
+        - name: BASIC_AUTH_PASS
+          valueFrom:
+            secretKeyRef:
+              # Take the password from the core component secret
+              name: {{ template "harbor.core" . }}
+              key: secret
         ports:
         - containerPort: {{ .Values.chartmuseum.port }}
           name: http

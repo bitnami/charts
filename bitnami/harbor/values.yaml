@@ -1,4 +1,3 @@
-
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
@@ -577,7 +576,7 @@ portal:
   #  requests:
   #    memory: 256Mi
   #    cpu: 100m
-  
+
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -799,13 +798,7 @@ chartmuseum:
   absoluteUrl: false
   chartRepoName: "chartsRepo"
 
-  ## Configure basic authentication to access the ChartMuseum server.
-  basicAuth:
-    enabled: true
-    basicAuthUser: "chart_controller"
-    basicAuthPass: ""
-
-  depth: 0
+  depth: 1
   logJson: false
   disableMetrics: false
   disableApi: false

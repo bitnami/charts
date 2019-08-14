@@ -797,12 +797,6 @@ chartmuseum:
   absoluteUrl: false
   chartRepoName: "chartsRepo"
 
-  ## Configure basic authentication to access the ChartMuseum server.
-  basicAuth:
-    enabled: true
-    basicAuthUser: "chart_controller"
-    basicAuthPass: "password"
-
   depth: 1
   logJson: false
   disableMetrics: false
@@ -813,6 +807,7 @@ chartmuseum:
 
   ## Optional parameters for ChartMuseum not used by default.
   ## ref: https://chartmuseum.com/docs/#other-cli-options
+  ##
   # contextPath: ""
   # indexLimit: 0
   # chartPostFormFieldName: "chart"
@@ -826,6 +821,11 @@ chartmuseum:
   ## extraEnvVars:
   ##  - name: BEARER_AUTH
   ##    value: true
+
+  # resources:
+  #  requests:
+  #    memory: 256Mi
+  #    cpu: 100m
 
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -842,6 +842,8 @@ chartmuseum:
   ##
   affinity: {}
 
+  ## Additional deployment annotations
+  podAnnotations: {}
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
