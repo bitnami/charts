@@ -8,7 +8,8 @@ spec:
   type: NodePort
   {{- end }}
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: http
   selector:
     {{- include "harbor.matchLabels" . | nindent 4 }}
