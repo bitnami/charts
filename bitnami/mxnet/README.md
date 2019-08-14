@@ -5,6 +5,7 @@
 ## TL;DR;
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/mxnet
 ```
 
@@ -24,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/mxnet
 ```
 
-The command deploys MXNet on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured.
+These commands deploy MXNet on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured.
 
 > **Tip**: List all releases using `helm list`
 
@@ -49,6 +51,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
 | `image.registry`                     | MXNet image registry                                                                                                                                      | `docker.io`                                             |
 | `image.repository`                   | MXNet image name                                                                                                                                          | `bitnami/MXNet`                                         |
 | `image.tag`                          | MXNet image tag                                                                                                                                           | `{TAG_NAME}`                                            |

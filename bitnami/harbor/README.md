@@ -10,13 +10,13 @@ For example, the following changes have been introduced:
 - Uses Bitnami container images:
   - non-root by default
   - published for debian-9 and ol-7
-- At this moment, this chart does not support the Harbor optional component Chartmuseum but it does support Clair and Notary integrations.
+- This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
 ## TL;DR:
 
 ```
-helm repo add bitnami https://charts.bitnami.com
-helm install bitnami/harbor
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm install bitnami/harbor
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 Install the Harbor helm chart with a release name `my-release`:
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com
-helm install --name my-release bitnami/harbor
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm install --name my-release bitnami/harbor
 ```
 
 ## Uninstalling the Chart
@@ -42,7 +42,7 @@ helm install --name my-release bitnami/harbor
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-helm delete --purge my-release
+$ helm delete --purge my-release
 ```
 
 Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
@@ -52,13 +52,13 @@ Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manual
 Download Harbor helm chart
 
 ```bash
-git clone https://github.com/bitnami/charts
+$ git clone https://github.com/bitnami/charts
 ```
 
 Change directory to Harbor code
 
 ```bash
-cd charts/bitnami/harbor
+$ cd charts/bitnami/harbor
 ```
 
 ## Configuration

@@ -5,6 +5,7 @@
 ## TL;DR;
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/pytorch
 ```
 
@@ -24,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/pytorch
 ```
 
-The command deploys PyTorch on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured.
+These commands deploy PyTorch on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured.
 
 > **Tip**: List all releases using `helm list`
 
