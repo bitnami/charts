@@ -41,6 +41,18 @@ spec:
             env:
             - name: ETCDCTL_API
               value: "3"
+            {{- if .Values.auth.client.secureTransport }}
+            - name: ETCD_CERT_FILE
+              value: "/opt/bitnami/etcd/certs/client/cert.pem"
+            - name: ETCD_KEY_FILE
+              value: "/opt/bitnami/etcd/certs/client/key.pem"
+            {{- if .Values.auth.client.enableAuthentication }}
+            - name: ETCD_CLIENT_CERT_AUTH
+              value: "true"
+            - name: ETCD_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/client/ca.crt"
+            {{- end }}
+            {{- end }}
             {{- if .Values.auth.rbac.enabled }}
             - name: ETCD_ROOT_PASSWORD
               valueFrom:
@@ -57,7 +69,13 @@ spec:
               subPath: save-snapshot.sh
             - name: snapshot-volume
               mountPath: /snapshots
+            - name: certs
+              mountPath: /opt/bitnami/etcd/certs/client
+              readOnly: true
           volumes:
+          - name: certs
+            secret:
+              secretName: etcd-client-certs
           - name: scripts
             configMap:
               name: {{ template "etcd.fullname" . }}-scripts
