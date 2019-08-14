@@ -69,13 +69,18 @@ spec:
               subPath: save-snapshot.sh
             - name: snapshot-volume
               mountPath: /snapshots
+           {{- if .Values.auth.client.secureTransport }}
             - name: certs
               mountPath: /opt/bitnami/etcd/certs/client
               readOnly: true
+           {{- end }}
           volumes:
+          {{- if .Values.auth.client.secureTransport }}
           - name: certs
             secret:
-              secretName: etcd-client-certs
+              secretName: {{ required "A secret containinig the client certificates is required" .Values.auth.client.existingSecret }}
+              defaultMode: 256 
+          {{- end }}
           - name: scripts
             configMap:
               name: {{ template "etcd.fullname" . }}-scripts
