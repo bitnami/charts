@@ -10,9 +10,11 @@ metadata:
 spec:
   type: {{ .Values.serviceType }}
   ports:
-  - port: {{ .Values.server.port }}
-    protocol: TCP
-  - port: {{ .Values.server.restApiPort }}
-    protocol: TCP
+  - name: tf-serving
+    port: {{ .Values.server.port }}
+    targetPort: tf-serving
+  - name: tf-serving-api
+    port: {{ .Values.server.restApiPort }}
+    targetPort: tf-serving-api
   selector:
     app: {{ template "tensorflow-resnet.name" . }}
