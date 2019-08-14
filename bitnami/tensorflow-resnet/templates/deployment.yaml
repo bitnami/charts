@@ -56,6 +56,8 @@ spec:
         ports:
         - name: tf-serving
           containerPort: {{ .Values.server.port }}
+        - name: tf-serving-api
+          containerPort: {{ .Values.server.restApiPort }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           tcpSocket:
@@ -80,9 +82,9 @@ spec:
         - name: TENSORFLOW_SERVING_MODEL_NAME
           value: "resnet"
         - name: TENSORFLOW_SERVING_PORT_NUMBER
-          value: {{ .Values.server.port }}
+          value: "{{ .Values.server.port }}"
         - name: TENSORFLOW_SERVING_REST_API_PORT_NUMBER
-          value: {{ .Values.server.restApiPort }}
+          value: "{{ .Values.server.restApiPort }}"
         {{- if .Values.metrics.enabled }}
         - name: TENSORFLOW_SERVING_ENABLE_MONITORING
           value: {{ ternary "yes" "no" .Values.metrics.enabled | quote }}
