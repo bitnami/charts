@@ -196,11 +196,11 @@ For example:
 $ helm install --name my-release bitnami/mariadb-galera \
     --set ldap.enabled="true" \
     --set ldap.uri="ldap://my_ldap_server" \
-    --set ldap.base="dc=example\,dc=org" \
-    --set ldap.binddn="cn=admin\,dc=example\,dc=org" \
+    --set ldap.base="dc=example,dc=org" \
+    --set ldap.binddn="cn=admin,dc=example,dc=org" \
     --set ldap.bindpw="admin" \
-    --set ldap.bslookup="ou=group-ok\,dc=example\,dc=org" \
-    --set ldap.nss_initgroups_ignoreusers="root\,nslcd" \
+    --set ldap.bslookup="ou=group-ok,dc=example,dc=org" \
+    --set ldap.nss_initgroups_ignoreusers="root,nslcd" \
     --set ldap.scope="sub" \
     --set ldap.tls_reqcert="demand"
 ```

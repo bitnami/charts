@@ -171,7 +171,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "mariadb-galera.validateValues.rootPassword" -}}
 {{- if and .Values.rootUser.forcePassword (empty .Values.rootUser.password) -}}
 mariadb-galera: rootUser.password
-    A MariaDB Database Root Password is required (`rootUser.forcePassword=true` is set)
+    A MariaDB Database Root Password is required ("rootUser.forcePassword=true" is set)
     Please set a password (--set rootUser.password="xxxx")
 {{- end -}}
 {{- end -}}
@@ -180,7 +180,7 @@ mariadb-galera: rootUser.password
 {{- define "mariadb-galera.validateValues.password" -}}
 {{- if and .Values.db.forcePassword (empty .Values.db.password) -}}
 mariadb-galera: db.password
-    A MariaDB Database Password is required (`db.forcePassword=true` is set)
+    A MariaDB Database Password is required ("db.forcePassword=true" is set)
     Please set a password (--set db.password="xxxx")
 {{- end -}}
 {{- end -}}
@@ -189,7 +189,7 @@ mariadb-galera: db.password
 {{- define "mariadb-galera.validateValues.mariadbBackupPassword" -}}
 {{- if and .Values.galera.mariabackup.forcePassword (empty .Values.galera.mariabackup.password) -}}
 mariadb-galera: galera.mariabackup.password
-    A MariaBackup Password is required (`galera.mariabackup.forcePassword=true` is set)
+    A MariaBackup Password is required ("galera.mariabackup.forcePassword=true" is set)
     Please set a password (--set galera.mariabackup.password="xxxx")
 {{- end -}}
 {{- end -}}
@@ -198,14 +198,14 @@ mariadb-galera: galera.mariabackup.password
 {{- define "mariadb-galera.validateValues.ldap" -}}
 {{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.binddn) (empty .Values.ldap.bindpw)) -}}
 mariadb-galera: LDAP
-    Invalid LDAP configuration. When enabling LDAP support, the parameters `ldap.uri`,
-    `ldap.base`, `ldap.binddn`, and `ldap.bindpw` are mandatory. Please provide them:
+    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.uri",
+    "ldap.base", "ldap.binddn", and "ldap.bindpw" are mandatory. Please provide them:
 
     $ helm install --name {{ .Release.Name }} bitnami/mariadb-galera \
       --set ldap.enabled=true \
       --set ldap.uri="ldap://my_ldap_server" \
-      --set ldap.base="dc=example\,dc=org" \
-      --set ldap.binddn="cn=admin\,dc=example\,dc=org" \
+      --set ldap.base="dc=example,dc=org" \
+      --set ldap.binddn="cn=admin,dc=example,dc=org" \
       --set ldap.bindpw="admin"
 {{- end -}}
 {{- end -}}
