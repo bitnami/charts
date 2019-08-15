@@ -41,7 +41,7 @@ $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
 
 > **IMPORTANT** This assumes an insecure Helm installation, which is not recommended in production. See [the documentation to learn how to secure Helm and Kubeapps in production](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
 
-These commands deploy Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Caveat**: Only one Kubeapps installation is supported per namespace
 
@@ -155,6 +155,8 @@ helm install \
 Learn more about how to secure your Kubeapps installation [here](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
 
 ### Exposing Externally
+
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service, so when when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed on that network. See [#1111](https://github.com/kubeapps/kubeapps/issues/1111) for more details.
 
 #### LoadBalancer Service
 
