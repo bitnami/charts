@@ -128,23 +128,11 @@ spec:
               key: mariadb-galera-mariabackup-password
         {{- if .Values.ldap.enabled }}
         - name: MARIADB_LDAP_URI
-          {{- if .Values.ldap.uri }}
           value: {{ .Values.ldap.uri }}
-          {{ else }}
-          value: {{ required "LDAP uri is required!" .Values.ldap.uri }}
-          {{- end }}
         - name: MARIADB_LDAP_BASE
-          {{- if .Values.ldap.base }}
           value: {{ .Values.ldap.base }}
-          {{ else }}
-          value: {{ required "LDAP base is required!" .Values.ldap.base }}
-          {{- end }}
         - name: MARIADB_LDAP_BIND_DN
-          {{- if .Values.ldap.binddn }}
           value: {{ .Values.ldap.binddn }}
-          {{ else }}
-          value: {{ required "LDAP binddn is required!" .Values.ldap.binddn }}
-          {{- end }}
         - name: MARIADB_LDAP_BIND_PASSWORD
           valueFrom:
             secretKeyRef:

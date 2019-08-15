@@ -121,24 +121,24 @@ Also, we can not use a single if because lazy evaluation is not an option
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
 {{- end -}}
 {{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
-{{- end }}
+{{- end -}}
 {{- range .Values.metrics.image.pullSecrets }}
   - name: {{ . }}
-{{- end }}
+{{- end -}}
+{{- end -}}
+{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets }}
+imagePullSecrets:
+{{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end -}}
+{{- range .Values.metrics.image.pullSecrets }}
+  - name: {{ . }}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -147,5 +147,65 @@ imagePullSecrets:
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "mariadb-galera.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "mariadb-galera.validateValues.rootPassword" .) -}}
+{{- $messages := append $messages (include "mariadb-galera.validateValues.password" .) -}}
+{{- $messages := append $messages (include "mariadb-galera.validateValues.mariadbBackupPassword" .) -}}
+{{- $messages := append $messages (include "mariadb-galera.validateValues.ldap" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MariaDB Galera - must provide passwords when forced */}}
+{{- define "mariadb-galera.validateValues.rootPassword" -}}
+{{- if and .Values.rootUser.forcePassword (empty .Values.rootUser.password) -}}
+mariadb-galera: rootUser.password
+    A MariaDB Database Root Password is required (`rootUser.forcePassword=true` is set)
+    Please set a password (--set rootUser.password="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MariaDB Galera - must provide passwords when forced */}}
+{{- define "mariadb-galera.validateValues.password" -}}
+{{- if and .Values.db.forcePassword (empty .Values.db.password) -}}
+mariadb-galera: db.password
+    A MariaDB Database Password is required (`db.forcePassword=true` is set)
+    Please set a password (--set db.password="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MariaDB Galera - must provide passwords when forced */}}
+{{- define "mariadb-galera.validateValues.mariadbBackupPassword" -}}
+{{- if and .Values.galera.mariabackup.forcePassword (empty .Values.galera.mariabackup.password) -}}
+mariadb-galera: galera.mariabackup.password
+    A MariaBackup Password is required (`galera.mariabackup.forcePassword=true` is set)
+    Please set a password (--set galera.mariabackup.password="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MariaDB Galera - must provide mandatory LDAP paremeters when LDAP is enabled */}}
+{{- define "mariadb-galera.validateValues.ldap" -}}
+{{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.binddn) (empty .Values.ldap.bindpw)) -}}
+mariadb-galera: LDAP
+    Invalid LDAP configuration. When enabling LDAP support, the parameters `ldap.uri`,
+    `ldap.base`, `ldap.binddn`, and `ldap.bindpw` are mandatory. Please provide them:
+
+    $ helm install --name {{ .Release.Name }} bitnami/mariadb-galera \
+      --set ldap.enabled=true \
+      --set ldap.uri="ldap://my_ldap_server" \
+      --set ldap.base="dc=example\,dc=org" \
+      --set ldap.binddn="cn=admin\,dc=example\,dc=org" \
+      --set ldap.bindpw="admin"
+{{- end -}}
 {{- end -}}
