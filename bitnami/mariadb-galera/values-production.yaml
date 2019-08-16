@@ -158,11 +158,14 @@ ldap:
   ## Enable LDAP support
   ##
   enabled: false
-  # uri:
-  # base:
-  # binddn:
-  # bindpw:
-  # bslookup:
+  uri:
+  base:
+  binddn:
+  bindpw:
+  bslookup:
+  nss_initgroups_ignoreusers: root,nslcd
+  scope:
+  tls_reqcert:
 
 ## Configure MariaDB with a custom my.cnf file
 ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file

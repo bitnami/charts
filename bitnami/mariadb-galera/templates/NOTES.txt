@@ -59,4 +59,5 @@ To upgrade this helm chart:
       {{ if .Values.db.user }}--set db.user={{ .Values.db.user }} --set db.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode) {{ end }}--set db.name={{ .Values.db.name }} \
       --set galera.mariabackup.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-galera-mariabackup-password}" | base64 --decode)
 
+{{ include "mariadb-galera.validateValues" . }}
 {{ include "mariadb-galera.checkRollingTags" . }}

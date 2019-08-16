@@ -101,6 +101,9 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `ldap.binddn`                        | LDAP bind DN                                                                                                                                                | `nil`                                                             |
 | `ldap.bindpw`                        | LDAP bind password                                                                                                                                          | `nil`                                                             |
 | `ldap.bslookup`                      | LDAP base lookup                                                                                                                                            | `nil`                                                             |
+| `ldap.nss_initgroups_ignoreusers`    | LDAP ignored users                                                                                                                                          | `root,nslcd`                                                      |
+| `ldap.scope`                         | LDAP search scope                                                                                                                                           | `nil`                                                             |
+| `ldap.tls_reqcert`                   | LDAP TLS check on server certificates                                                                                                                       | `nil`                                                             |
 | `mariadbConfiguration`               | Configuration for the MariaDB server                                                                                                                        | `_default values in the values.yaml file_`                        |
 | `configurationConfigMap`             | ConfigMap with the MariaDB configuration files (Note: Overrides `mariadbConfiguration`). The value is evaluated as a template.                              | `nil`                                                             |
 | `initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                | `nil`                                                             |
@@ -183,17 +186,23 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 - `ldap.binddn`: LDAP bind DN. No defaults.
 - `ldap.bindpw`: LDAP bind password. No defaults.
 - `ldap.bslookup`: LDAP base lookup. No defaults.
+- `ldap.nss_initgroups_ignoreusers`: LDAP ignored users. `root,nslcd`.
+- `ldap.scope`: LDAP search scope. No defaults.
+- `ldap.tls_reqcert`: LDAP TLS check on server certificates. No defaults.
 
 For example:
 
 ```bash
 $ helm install --name my-release bitnami/mariadb-galera \
     --set ldap.enabled="true" \
-    --set ldap.url="ldap://my_ldap_server" \
+    --set ldap.uri="ldap://my_ldap_server" \
     --set ldap.base="dc=example,dc=org" \
     --set ldap.binddn="cn=admin,dc=example,dc=org" \
     --set ldap.bindpw="admin" \
-    --set ldap.bslookup="ou=group-ok,dc=example,dc=org"
+    --set ldap.bslookup="ou=group-ok,dc=example,dc=org" \
+    --set ldap.nss_initgroups_ignoreusers="root,nslcd" \
+    --set ldap.scope="sub" \
+    --set ldap.tls_reqcert="demand"
 ```
 
 Next, login to the MariaDB server using the `mysql` client and add the PAM authenticated LDAP users.
