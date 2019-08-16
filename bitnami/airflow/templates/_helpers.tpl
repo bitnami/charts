@@ -285,3 +285,20 @@ WARNING: Rolling tag detected ({{ .Values.git.repository }}:{{ .Values.git.tag }
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 {{- end }}
 {{- end -}}
+
+{{/*
+Return  the proper Storage Class
+*/}}
+{{- define "airflow.storageClass" -}}
+{{- $storageClass := "" }}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- $storageClass = .Values.global.storageClass -}}
+    {{- end -}}
+{{- end -}}
+{{- if (eq "-" $storageClass) -}}
+    {{- printf "\"\"" -}}
+{{- else }}
+    {{- printf "%s" $storageClass -}}
+{{- end -}}
+{{- end -}}

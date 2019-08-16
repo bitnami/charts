@@ -11,6 +11,7 @@ global:
 #  imageRegistry: myRegistryName
 #  imagePullSecrets:
 #    - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 ## Bitnami MinIO image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/

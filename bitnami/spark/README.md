@@ -46,6 +46,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | ------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`                      | Global Docker image registry                                                                | `nil`                                                   |
 | `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                            | spark image registry                                                                        | `docker.io`                                             |
 | `image.repository`                          | spark Image name                                                                            | `bitnami/spark`                                         |
 | `image.tag`                                 | spark Image tag                                                                             | `{TAG_NAME}`                                            |

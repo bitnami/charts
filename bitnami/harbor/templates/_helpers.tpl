@@ -696,3 +696,72 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return  the proper Storage Class for chartmuseum
+*/}}
+{{- define "harbor.chartmuseum.storageClass" -}}
+{{- $persistence := .Values.persistence -}}
+{{- $chartmuseum := $persistence.persistentVolumeClaim.chartmuseum -}}
+{{- $storageClass := "" }}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- $storageClass = .Values.global.storageClass -}}
+    {{- else if $chartmuseum.storageClass -}}
+        {{- $storageClass = $chartmuseum.storageClass -}}
+    {{- end -}}
+{{- else if $chartmuseum.storageClass -}}
+    {{- $storageClass = $chartmuseum.storageClass -}}
+{{- end -}}
+{{- if (eq "-" $storageClass) -}}
+    {{- printf "\"\"" -}}
+{{- else }}
+    {{- printf "%s" $storageClass -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return  the proper Storage Class for jobservice
+*/}}
+{{- define "harbor.jobservice.storageClass" -}}
+{{- $persistence := .Values.persistence -}}
+{{- $jobservice := $persistence.persistentVolumeClaim.jobservice -}}
+{{- $storageClass := "" }}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- $storageClass = .Values.global.storageClass -}}
+    {{- else if $jobservice.storageClass -}}
+        {{- $storageClass = $jobservice.storageClass -}}
+    {{- end -}}
+{{- else if $jobservice.storageClass -}}
+    {{- $storageClass = $jobservice.storageClass -}}
+{{- end -}}
+{{- if (eq "-" $storageClass) -}}
+    {{- printf "\"\"" -}}
+{{- else }}
+    {{- printf "%s" $storageClass -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return  the proper Storage Class for registry
+*/}}
+{{- define "harbor.registry.storageClass" -}}
+{{- $persistence := .Values.persistence -}}
+{{- $registry := $persistence.persistentVolumeClaim.registry -}}
+{{- $storageClass := "" }}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- $storageClass = .Values.global.storageClass -}}
+    {{- else if $registry.storageClass -}}
+        {{- $storageClass = $registry.storageClass -}}
+    {{- end -}}
+{{- else if $registry.storageClass -}}
+    {{- $storageClass = $registry.storageClass -}}
+{{- end -}}
+{{- if (eq "-" $storageClass) -}}
+    {{- printf "\"\"" -}}
+{{- else }}
+    {{- printf "%s" $storageClass -}}
+{{- end -}}
+{{- end -}}

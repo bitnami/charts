@@ -115,6 +115,10 @@ The following table lists the configurable parameters of the Harbor chart and th
 
 | Parameter                                                                   | Description                                                              | Default                                                 |
 | --------------------------------------------------------------------------- |  ----------------------------------------------------------------------- | ------------------------------------------------------- |
+| **Global**                                                                  |
+| `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | **Expose**                                                                  |
 | `service.type`                                                              | The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer` | `ingress`                                |
 | `service.tls.enabled`                                                       | Enable the tls or not                                                                   | `true`                                                  |

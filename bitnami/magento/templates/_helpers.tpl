@@ -163,3 +163,24 @@ imagePullSecrets:
 {{- end }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return  the proper Storage Class for the master
+*/}}
+{{- define "magento.storageClass" -}}
+{{- $storageClass := "" }}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- $storageClass = .Values.global.storageClass -}}
+    {{- else if .Values.persistence.magento.storageClass -}}
+        {{- $storageClass = .Values.persistence.magento.storageClass -}}
+    {{- end -}}
+{{- else if .Values.persistence.magento.storageClass -}}
+    {{- $storageClass = .Values.persistence.magento.storageClass -}}
+{{- end -}}
+{{- if (eq "-" $storageClass) -}}
+    {{- printf "\"\"" -}}
+{{- else }}
+    {{- printf "%s" $storageClass -}}
+{{- end -}}
+{{- end -}}

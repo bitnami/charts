@@ -50,6 +50,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | ----------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`                    | Global Docker image registry                                                                | `nil`                                                        |
 | `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                          | Airflow image registry                                                                      | `docker.io`                                                  |
 | `image.repository`                        | Airflow image name                                                                          | `bitnami/airflow`                                            |
 | `image.tag`                               | Airflow image tag                                                                           | `{TAG_NAME}`                                                 |

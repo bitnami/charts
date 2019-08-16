@@ -52,6 +52,7 @@ Parameter | Description | Default
 --- | --- | ---
 `global.imageRegistry` | Global Docker image registry | `nil`
 `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 `name` | Name of the controller component | `controller`
 `image.registry` | Name of the container image registry | `docker.io`
 `image.repository` | Controller container image repository | `bitnami/nginx-ingress-controller`

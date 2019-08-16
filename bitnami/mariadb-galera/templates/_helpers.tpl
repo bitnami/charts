@@ -209,3 +209,24 @@ mariadb-galera: LDAP
       --set ldap.bindpw="admin"
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return  the proper Storage Class
+*/}}
+{{- define "mariadb-galera.storageClass" -}}
+{{- $storageClass := "" }}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- $storageClass = .Values.global.storageClass -}}
+    {{- else if .Values.persistence.storageClass -}}
+        {{- $storageClass = .Values.persistence.storageClass -}}
+    {{- end -}}
+{{- else if .Values.persistence.storageClass -}}
+    {{- $storageClass = .Values.persistence.storageClass -}}
+{{- end -}}
+{{- if (eq "-" $storageClass) -}}
+    {{- printf "\"\"" -}}
+{{- else }}
+    {{- printf "%s" $storageClass -}}
+{{- end -}}
+{{- end -}}

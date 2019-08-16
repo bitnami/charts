@@ -48,6 +48,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | -------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
 | `global.imageRegistry`           | Global Docker image registry                     | `nil`                                                        |
 | `global.imagePullSecrets`        | Global Docker registry secret names as an array  | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                 | NGINX image registry                             | `docker.io`                                                  |
 | `image.repository`               | NGINX Image name                                 | `bitnami/nginx`                                              |
 | `image.tag`                      | NGINX Image tag                                  | `{TAG_NAME}`                                                 |

@@ -110,3 +110,24 @@ imagePullSecrets:
 {{- end }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return  the proper Storage Class
+*/}}
+{{- define "jenkins.storageClass" -}}
+{{- $storageClass := "" }}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- $storageClass = .Values.global.storageClass -}}
+    {{- else if .Values.persistence.storageClass -}}
+        {{- $storageClass = .Values.persistence.storageClass -}}
+    {{- end -}}
+{{- else if .Values.persistence.storageClass -}}
+    {{- $storageClass = .Values.persistence.storageClass -}}
+{{- end -}}
+{{- if (eq "-" $storageClass) -}}
+    {{- printf "\"\"" -}}
+{{- else }}
+    {{- printf "%s" $storageClass -}}
+{{- end -}}
+{{- end -}}
