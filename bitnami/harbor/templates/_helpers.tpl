@@ -701,8 +701,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return  the proper Storage Class for chartmuseum
 */}}
 {{- define "harbor.chartmuseum.storageClass" -}}
-{{- $persistence := .Values.persistence -}}
-{{- $chartmuseum := $persistence.persistentVolumeClaim.chartmuseum -}}
+{{- $chartmuseum := .Values.persistence.persistentVolumeClaim.chartmuseum -}}
 {{- $storageClass := "" }}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
@@ -724,8 +723,7 @@ Return  the proper Storage Class for chartmuseum
 Return  the proper Storage Class for jobservice
 */}}
 {{- define "harbor.jobservice.storageClass" -}}
-{{- $persistence := .Values.persistence -}}
-{{- $jobservice := $persistence.persistentVolumeClaim.jobservice -}}
+{{- $jobservice := .Values.persistence.persistentVolumeClaim.jobservice -}}
 {{- $storageClass := "" }}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
@@ -747,8 +745,7 @@ Return  the proper Storage Class for jobservice
 Return  the proper Storage Class for registry
 */}}
 {{- define "harbor.registry.storageClass" -}}
-{{- $persistence := .Values.persistence -}}
-{{- $registry := $persistence.persistentVolumeClaim.registry -}}
+{{- $registry := .Values.persistence.persistentVolumeClaim.registry -}}
 {{- $storageClass := "" }}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}

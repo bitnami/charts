@@ -51,7 +51,6 @@ The following tables lists the configurable parameters of the Memcached chart an
 |-----------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`      | Global Docker image registry                                                                           | `nil`                                                   |
 | `global.imagePullSecrets`   | Global Docker registry secret names as an array                                                        | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`            | Memcached image registry                                                                               | `docker.io`                                             |
 | `image.repository`          | Memcached Image name                                                                                   | `bitnami/memcached`                                     |
 | `image.tag`                 | Memcached Image tag                                                                                    | `{TAG_NAME}`                                            |

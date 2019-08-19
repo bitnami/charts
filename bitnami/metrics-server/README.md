@@ -51,7 +51,6 @@ The following tables lists the configurable parameters of the Metrics Server cha
 |--------------------------|-----------------------------------------------------------------------------|----------------------------------------|
 | `global.imageRegistry`   | Global Docker image registry                                                | `nil`                                  |
 | `global.imagePullSecrets`| Global Docker registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`         | Metrics Server image registry                                               | `docker.io`                            |
 | `image.repository`       | Metrics Server image name                                                   | `bitnami/metrics-server`               |
 | `image.tag`              | Metrics Server image tag                                                    | `{TAG_NAME}`                           |

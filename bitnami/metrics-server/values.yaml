@@ -6,7 +6,6 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
-#   storageClass: myStorageClass
 
 ## Bitnami Metrics Server image version
 ## ref: https://hub.docker.com/r/bitnami/metrics-server/tags/
