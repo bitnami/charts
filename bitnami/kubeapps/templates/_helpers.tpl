@@ -177,4 +177,3 @@ imagePullSecrets:
 {{- end -}}
 {{- end -}}
 {{- end -}}
-

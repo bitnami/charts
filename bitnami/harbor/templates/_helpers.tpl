@@ -703,14 +703,13 @@ Return  the proper Storage Class for chartmuseum
 {{- define "harbor.chartmuseum.storageClass" -}}
 {{- $chartmuseum := .Values.persistence.persistentVolumeClaim.chartmuseum -}}
 {{- $storageClass := "" }}
+{{- if $chartmuseum.storageClass -}}
+    {{- $storageClass = $chartmuseum.storageClass -}}
+{{- end -}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
         {{- $storageClass = .Values.global.storageClass -}}
-    {{- else if $chartmuseum.storageClass -}}
-        {{- $storageClass = $chartmuseum.storageClass -}}
     {{- end -}}
-{{- else if $chartmuseum.storageClass -}}
-    {{- $storageClass = $chartmuseum.storageClass -}}
 {{- end -}}
 {{- if (eq "-" $storageClass) -}}
     {{- printf "\"\"" -}}
@@ -725,14 +724,13 @@ Return  the proper Storage Class for jobservice
 {{- define "harbor.jobservice.storageClass" -}}
 {{- $jobservice := .Values.persistence.persistentVolumeClaim.jobservice -}}
 {{- $storageClass := "" }}
+{{- if $jobservice.storageClass -}}
+    {{- $storageClass = $jobservice.storageClass -}}
+{{- end -}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
         {{- $storageClass = .Values.global.storageClass -}}
-    {{- else if $jobservice.storageClass -}}
-        {{- $storageClass = $jobservice.storageClass -}}
     {{- end -}}
-{{- else if $jobservice.storageClass -}}
-    {{- $storageClass = $jobservice.storageClass -}}
 {{- end -}}
 {{- if (eq "-" $storageClass) -}}
     {{- printf "\"\"" -}}
@@ -747,14 +745,13 @@ Return  the proper Storage Class for registry
 {{- define "harbor.registry.storageClass" -}}
 {{- $registry := .Values.persistence.persistentVolumeClaim.registry -}}
 {{- $storageClass := "" }}
+{{- if $registry.storageClass -}}
+    {{- $storageClass = $registry.storageClass -}}
+{{- end -}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
         {{- $storageClass = .Values.global.storageClass -}}
-    {{- else if $registry.storageClass -}}
-        {{- $storageClass = $registry.storageClass -}}
     {{- end -}}
-{{- else if $registry.storageClass -}}
-    {{- $storageClass = $registry.storageClass -}}
 {{- end -}}
 {{- if (eq "-" $storageClass) -}}
     {{- printf "\"\"" -}}

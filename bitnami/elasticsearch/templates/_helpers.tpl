@@ -228,14 +228,13 @@ Return  the proper Storage Class
 */}}
 {{- define "elasticsearch.data.storageClass" -}}
 {{- $storageClass := "" }}
+{{- if .Values.data.persistence.storageClass -}}
+    {{- $storageClass = .Values.data.persistence.storageClass -}}
+{{- end -}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
         {{- $storageClass = .Values.global.storageClass -}}
-    {{- else if .Values.data.persistence.storageClass -}}
-        {{- $storageClass = .Values.data.persistence.storageClass -}}
     {{- end -}}
-{{- else if .Values.data.persistence.storageClass -}}
-    {{- $storageClass = .Values.data.persistence.storageClass -}}
 {{- end -}}
 {{- if (eq "-" $storageClass) -}}
     {{- printf "\"\"" -}}

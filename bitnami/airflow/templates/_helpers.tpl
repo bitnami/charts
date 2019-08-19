@@ -285,4 +285,3 @@ WARNING: Rolling tag detected ({{ .Values.git.repository }}:{{ .Values.git.tag }
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 {{- end }}
 {{- end -}}
-

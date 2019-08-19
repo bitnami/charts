@@ -176,14 +176,13 @@ Return  the proper Storage Class
 */}}
 {{- define "node.storageClass" -}}
 {{- $storageClass := "" }}
+{{- if .Values.persistence.storageClass -}}
+    {{- $storageClass = .Values.persistence.storageClass -}}
+{{- end -}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
         {{- $storageClass = .Values.global.storageClass -}}
-    {{- else if .Values.persistence.storageClass -}}
-        {{- $storageClass = .Values.persistence.storageClass -}}
     {{- end -}}
-{{- else if .Values.persistence.storageClass -}}
-    {{- $storageClass = .Values.persistence.storageClass -}}
 {{- end -}}
 {{- if (eq "-" $storageClass) -}}
     {{- printf "\"\"" -}}
