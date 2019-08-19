@@ -58,6 +58,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `nameOverride`           | String to partially override metrics-server.fullname template with a string (will prepend the release name) | `nil`  |
 | `fullnameOverride`       | String to fully override metrics-server.fullname template with a string                                     | `nil`  |
 | `securePort`             | Port where metrics-server will be running                                   | `8443`                                 |
+| `extraArgumentss`        | Extra arguments to pass to metrics-server on start up                       | []                                     |
 | `service.type`           | Kubernetes Service type                                                     | `ClusterIP`                            |
 | `service.port`           | Kubernetes Service port                                                     | `443`                                  |
 | `service.annotations`    | Annotations for the Service                                                 | {}                                     |

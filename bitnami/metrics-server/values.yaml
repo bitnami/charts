@@ -57,6 +57,10 @@ apiService:
 ##
 securePort: 8443
 
+## A list of extra arguments to pass to the metrics-server
+##
+extraArguments: []
+
 service:
   type: ClusterIP
   port: 443
