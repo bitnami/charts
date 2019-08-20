@@ -57,9 +57,13 @@ apiService:
 ##
 securePort: 8443
 
-## A list of extra arguments to pass to the metrics-server
+## Extra arguments to pass to the metrics-server
 ##
-extraArguments: []
+extraArgs: {}
+  # To specify extra arguments, uncomment the following lines, adjust them as necessary,
+  # and remove the curly braces after 'extraArgs:'.
+  # kubelet-insecure-tls: true
+  # kubelet-preferred-address-types: InternalIP
 
 service:
   type: ClusterIP

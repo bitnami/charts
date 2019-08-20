@@ -36,6 +36,6 @@ spec:
         command:
         - metrics-server
         - --secure-port={{ .Values.securePort }}
-{{- if .Values.extraArguments }}
-{{ toYaml .Values.extraArguments | indent 8 }}
-{{- end }}
+      {{- range $key, $value := .Values.extraArgs }}
+        - --{{ $key }}={{ $value }}
+      {{- end }}
