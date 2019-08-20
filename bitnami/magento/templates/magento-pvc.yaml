@@ -14,11 +14,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.magento.size | quote }}
-{{- if .Values.persistence.magento.storageClass }}
-{{- if (eq "-" .Values.persistence.magento.storageClass) }}
-  storageClassName: ""
-{{- else }}
-  storageClassName: "{{ .Values.persistence.magento.storageClass }}"
-{{- end }}
-{{- end }}
+  storageClassName: {{ include "magento.storageClass" . }}
 {{- end -}}

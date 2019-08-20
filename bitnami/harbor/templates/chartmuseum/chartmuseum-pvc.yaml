@@ -19,13 +19,7 @@ spec:
   resources:
     requests:
       storage: {{ $chartmuseum.size }}
-  {{- if $chartmuseum.storageClass }}
-  {{- if eq "-" $chartmuseum.storageClass }}
-  storageClassName: ""
-  {{- else }}
-  storageClassName: {{ $chartmuseum.storageClass }}
-  {{- end }}
-  {{- end }}
+  storageClassName: {{ include "harbor.chartmuseum.storageClass" . }}
 {{- end }}
 {{- end }}
 {{- end }}

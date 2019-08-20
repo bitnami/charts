@@ -18,12 +18,6 @@ spec:
   resources:
     requests:
       storage: {{ $registry.size }}
-  {{- if $registry.storageClass }}
-    {{- if eq "-" $registry.storageClass }}
-  storageClassName: ""
-    {{- else }}
-  storageClassName: {{ $registry.storageClass }}
-    {{- end }}
-  {{- end }}
+  storageClassName: {{ include "harbor.registry.storageClass" . }}
 {{- end }}
 {{- end }}

@@ -18,12 +18,6 @@ spec:
   resources:
     requests:
       storage: {{ $jobservice.size }}
-  {{- if $jobservice.storageClass }}
-    {{- if eq "-" $jobservice.storageClass }}
-  storageClassName: ""
-    {{- else }}
-  storageClassName: {{ $jobservice.storageClass }}
-    {{- end }}
-  {{- end }}
+  storageClassName: {{ include "harbor.jobservice.storageClass" . }}
 {{- end }}
 {{- end }}
