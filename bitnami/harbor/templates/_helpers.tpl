@@ -702,19 +702,34 @@ Return  the proper Storage Class for chartmuseum
 */}}
 {{- define "harbor.chartmuseum.storageClass" -}}
 {{- $chartmuseum := .Values.persistence.persistentVolumeClaim.chartmuseum -}}
-{{- $storageClass := "" }}
-{{- if $chartmuseum.storageClass -}}
-    {{- $storageClass = $chartmuseum.storageClass -}}
-{{- end -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
-        {{- $storageClass = .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "\"\"" -}}
+        {{- else }}
+            {{- printf "%s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if $chartmuseum.storageClass -}}
+              {{- if (eq "-" $chartmuseum.storageClass) -}}
+                  {{- printf "\"\"" -}}
+              {{- else }}
+                  {{- printf "%s" $chartmuseum.storageClass -}}
+              {{- end -}}
+        {{- end -}}
     {{- end -}}
-{{- end -}}
-{{- if (eq "-" $storageClass) -}}
-    {{- printf "\"\"" -}}
-{{- else }}
-    {{- printf "%s" $storageClass -}}
+{{- else -}}
+    {{- if $chartmuseum.storageClass -}}
+        {{- if (eq "-" $chartmuseum.storageClass) -}}
+            {{- printf "\"\"" -}}
+        {{- else }}
+            {{- printf "%s" $chartmuseum.storageClass -}}
+        {{- end -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -723,19 +738,34 @@ Return  the proper Storage Class for jobservice
 */}}
 {{- define "harbor.jobservice.storageClass" -}}
 {{- $jobservice := .Values.persistence.persistentVolumeClaim.jobservice -}}
-{{- $storageClass := "" }}
-{{- if $jobservice.storageClass -}}
-    {{- $storageClass = $jobservice.storageClass -}}
-{{- end -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
-        {{- $storageClass = .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "\"\"" -}}
+        {{- else }}
+            {{- printf "%s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if $jobservice.storageClass -}}
+              {{- if (eq "-" $jobservice.storageClass) -}}
+                  {{- printf "\"\"" -}}
+              {{- else }}
+                  {{- printf "%s" $jobservice.storageClass -}}
+              {{- end -}}
+        {{- end -}}
     {{- end -}}
-{{- end -}}
-{{- if (eq "-" $storageClass) -}}
-    {{- printf "\"\"" -}}
-{{- else }}
-    {{- printf "%s" $storageClass -}}
+{{- else -}}
+    {{- if $jobservice.storageClass -}}
+        {{- if (eq "-" $jobservice.storageClass) -}}
+            {{- printf "\"\"" -}}
+        {{- else }}
+            {{- printf "%s" $jobservice.storageClass -}}
+        {{- end -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -744,18 +774,33 @@ Return  the proper Storage Class for registry
 */}}
 {{- define "harbor.registry.storageClass" -}}
 {{- $registry := .Values.persistence.persistentVolumeClaim.registry -}}
-{{- $storageClass := "" }}
-{{- if $registry.storageClass -}}
-    {{- $storageClass = $registry.storageClass -}}
-{{- end -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
-        {{- $storageClass = .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "\"\"" -}}
+        {{- else }}
+            {{- printf "%s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if $registry.storageClass -}}
+              {{- if (eq "-" $registry.storageClass) -}}
+                  {{- printf "\"\"" -}}
+              {{- else }}
+                  {{- printf "%s" $registry.storageClass -}}
+              {{- end -}}
+        {{- end -}}
     {{- end -}}
-{{- end -}}
-{{- if (eq "-" $storageClass) -}}
-    {{- printf "\"\"" -}}
-{{- else }}
-    {{- printf "%s" $storageClass -}}
+{{- else -}}
+    {{- if $registry.storageClass -}}
+        {{- if (eq "-" $registry.storageClass) -}}
+            {{- printf "\"\"" -}}
+        {{- else }}
+            {{- printf "%s" $registry.storageClass -}}
+        {{- end -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
