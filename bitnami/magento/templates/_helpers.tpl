@@ -168,18 +168,33 @@ imagePullSecrets:
 Return  the proper Storage Class for the master
 */}}
 {{- define "magento.storageClass" -}}
-{{- $storageClass := "" }}
-{{- if .Values.persistence.magento.storageClass -}}
-    {{- $storageClass = .Values.persistence.magento.storageClass -}}
-{{- end -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
 {{- if .Values.global -}}
     {{- if .Values.global.storageClass -}}
-        {{- $storageClass = .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "\"\"" -}}
+        {{- else }}
+            {{- printf "%s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if .Values.persistence.magento.storageClass -}}
+              {{- if (eq "-" .Values.persistence.magento.storageClass) -}}
+                  {{- printf "\"\"" -}}
+              {{- else }}
+                  {{- printf "%s" .Values.persistence.magento.storageClass -}}
+              {{- end -}}
+        {{- end -}}
     {{- end -}}
-{{- end -}}
-{{- if (eq "-" $storageClass) -}}
-    {{- printf "\"\"" -}}
-{{- else }}
-    {{- printf "%s" $storageClass -}}
+{{- else -}}
+    {{- if .Values.persistence.magento.storageClass -}}
+        {{- if (eq "-" .Values.persistence.magento.storageClass) -}}
+            {{- printf "\"\"" -}}
+        {{- else }}
+            {{- printf "%s" .Values.persistence.magento.storageClass -}}
+        {{- end -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
