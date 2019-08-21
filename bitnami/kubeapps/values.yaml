@@ -6,7 +6,6 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
-#   storageClass: myStorageClass
 
 # The frontend service is the main reverse proxy used to access the Kubeapps UI
 # To expose Kubeapps externally either configure the ingress object below or
