@@ -16,5 +16,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.size | quote }}
-  storageClassName: {{ include "mxnet.storageClass" . }}
+  {{ include "mxnet.storageClass" . }}
 {{- end }}

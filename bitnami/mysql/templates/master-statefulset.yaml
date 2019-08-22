@@ -214,7 +214,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.master.persistence.size | quote }}
-        storageClassName: {{ include "mysql.master.storageClass" . }}
+        {{ include "mysql.master.storageClass" . }}
 {{- else }}
         - name: "data"
           emptyDir: {}
