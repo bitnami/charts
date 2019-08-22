@@ -332,5 +332,5 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        storageClassName: {{ include "kafka.storageClass" . }}
+        {{ include "kafka.storageClass" . }}
 {{- end }}

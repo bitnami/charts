@@ -176,7 +176,7 @@ spec:
       {{- end }}
     spec:
       accessModes: {{ toYaml .Values.persistence.accessModes | nindent 8 }}
-      storageClassName: {{ include "minio.storageClass" . }}
+      {{ include "minio.storageClass" . }}
       resources:
         requests:
           storage: {{ .Values.persistence.size | quote }}

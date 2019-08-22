@@ -274,5 +274,5 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        storageClassName: {{ include "mariadb-galera.storageClass" . }}
+        {{ include "mariadb-galera.storageClass" . }}
 {{- end }}

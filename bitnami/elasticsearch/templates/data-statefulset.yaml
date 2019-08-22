@@ -163,7 +163,7 @@ spec:
     spec:
       accessModes:
 {{ toYaml .Values.data.persistence.accessModes | indent 8 }}
-      storageClassName: {{ include "elasticsearch.data.storageClass" . }}
+      {{ include "elasticsearch.data.storageClass" . }}
       resources:
         requests:
           storage: {{ .Values.data.persistence.size | quote }}
