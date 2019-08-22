@@ -15,7 +15,7 @@ spec:
   type: {{ .Values.metrics.service.type | quote }}
   ports:
   - name: metrics
-    port: 9108
+    port: 9114
     targetPort: metrics
   selector:
     app: {{ template "elasticsearch.name" . }}
