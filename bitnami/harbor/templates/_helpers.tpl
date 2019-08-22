@@ -227,8 +227,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.redis.rawPassword" -}}
-  {{- if and (eq .Values.redis.enabled false) .Values.externalRedis.password -}}
+  {{- if and (not .Values.redis.enabled) .Values.externalRedis.password -}}
     {{- .Values.externalRedis.password -}}
+  {{- end -}}
+  {{- if and .Values.redis.enabled .Values.redis.password -}}
+    {{- .Values.redis.password -}}
   {{- end -}}
 {{- end -}}
 
