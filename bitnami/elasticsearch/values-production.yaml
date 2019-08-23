@@ -348,7 +348,7 @@ metrics:
   podAnnotations: {}
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9108"
+    prometheus.io/port: "9114"
   service:
     type: ClusterIP
   resources:
