@@ -24,6 +24,7 @@ spec:
         {{ toYaml .Values.chartmuseum.podAnnotations | indent 8 }}
         {{- end }}
     spec:
+{{- include "harbor.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -42,10 +43,6 @@ spec:
       - name: chartmuseum
         image: "{{ template "harbor.chartMuseumImage" . }}"
         imagePullPolicy: {{ .Values.chartMuseumImage.imagePullPolicy | quote }}
-        imagePullSecrets:
-        {{- range .Values.chartMuseumImage.pullSecrets }}
-          - name: {{ . }}
-        {{- end }}
         {{- if .Values.chartmuseum.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
