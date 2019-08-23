@@ -568,9 +568,9 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.harbor.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.harbor.coreImage.pullSecrets }}
+{{- range .Values.coreImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.portalImage.pullSecrets }}
@@ -598,9 +598,9 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if or .Values.harbor.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.harbor.coreImage.pullSecrets }}
+{{- range .Values.coreImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.portalImage.pullSecrets }}
