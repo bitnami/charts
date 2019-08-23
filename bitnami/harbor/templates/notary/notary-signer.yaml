@@ -17,6 +17,7 @@ spec:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/notary/notary-cm.yaml") . | sha256sum }}
     spec:
+{{- include "harbor.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}

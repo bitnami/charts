@@ -22,10 +22,7 @@ spec:
         {{ toYaml .Values.clair.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+{{- include "harbor.imagePullSecrets" . | indent 6 }}
       containers:
       - name: clair
         image:  "{{ template "harbor.clairImage" . }}"
