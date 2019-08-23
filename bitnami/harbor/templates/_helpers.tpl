@@ -230,7 +230,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if and (not .Values.redis.enabled) .Values.externalRedis.password -}}
     {{- .Values.externalRedis.password -}}
   {{- end -}}
-  {{- if and .Values.redis.enabled .Values.redis.password -}}
+  {{- if and .Values.redis.enabled .Values.redis.password .Values.redis.usePassword -}}
     {{- .Values.redis.password -}}
   {{- end -}}
 {{- end -}}
