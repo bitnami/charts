@@ -36,7 +36,7 @@ spec:
         args: [ "-es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
         ports:
         - name: metrics
-          containerPort: 9108
+          containerPort: 9114
         livenessProbe:
           httpGet:
             path: /metrics
