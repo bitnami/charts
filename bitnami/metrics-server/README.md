@@ -5,6 +5,7 @@
 ## TL;DR;
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/metrics-server
 ```
 
@@ -24,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/metrics-server
 ```
 
-The command deploys Metrics Server on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Metrics Server on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -56,6 +58,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `nameOverride`           | String to partially override metrics-server.fullname template with a string (will prepend the release name) | `nil`  |
 | `fullnameOverride`       | String to fully override metrics-server.fullname template with a string                                     | `nil`  |
 | `securePort`             | Port where metrics-server will be running                                   | `8443`                                 |
+| `extraArgs`              | Extra arguments to pass to metrics-server on start up                       | {}                                     |
 | `service.type`           | Kubernetes Service type                                                     | `ClusterIP`                            |
 | `service.port`           | Kubernetes Service port                                                     | `443`                                  |
 | `service.annotations`    | Annotations for the Service                                                 | {}                                     |

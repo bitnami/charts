@@ -6,6 +6,7 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 ## Bitnami HashiCorp Consul image version
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
@@ -242,8 +243,8 @@ metrics:
   enabled: false
   image:
     registry: docker.io
-    repository: prom/consul-exporter
-    tag: v0.3.0
+    repository: bitnami/consul-exporter
+    tag: 0.5.0-debian-9-r3
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

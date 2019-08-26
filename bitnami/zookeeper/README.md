@@ -5,6 +5,7 @@
 ## TL;DR;
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/zookeeper
 ```
 
@@ -24,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/zookeeper
 ```
 
-The command deploys Zookeeper on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Zookeeper on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -49,6 +51,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                        |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                     | Zookeeper image registry                                                                                                                                  | `docker.io`                                                  |
 | `image.repository`                   | Zookeeper Image name                                                                                                                                      | `bitnami/zookeeper`                                          |
 | `image.tag`                          | Zookeeper Image tag                                                                                                                                       | `{TAG_NAME}`                                                 |
@@ -115,8 +118,8 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | 1                                                            |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                                                                                                                      | `false`                                                      |
 | `metrics.image.registry`             | ZooKeeper exporter image registry                                                                                                                         | `docker.io`                                                  |
-| `metrics.image.repository`           | ZooKeeper exporter image name                                                                                                                             | `javsalgar/zookeeper-exporter`                               |
-| `metrics.image.tag`                  | ZooKeeper exporter image tag                                                                                                                              | `latest`                                                     |
+| `metrics.image.repository`           | ZooKeeper exporter image name                                                                                                                             | `bitnami/zookeeper-exporter`                                 |
+| `metrics.image.tag`                  | ZooKeeper exporter image tag                                                                                                                              | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`           | Image pull policy                                                                                                                                         | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                                                                                          | `nil`                                                        |
 | `metrics.podLabels`                  | Additional labels for Metrics exporter pod                                                                                                                | `{}`                                                         |

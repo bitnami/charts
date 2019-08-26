@@ -1,0 +1,108 @@
+{{- if .Values.chartmuseum.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "harbor.chartmuseum" . }}-envvars"
+  labels:  {{ include "harbor.labels" . | nindent 4 }}
+    app.kubernetes.io/component: chartmuseum
+data:
+  PORT: {{ .Values.chartmuseum.port | quote }}
+  {{- if .Values.chartmuseum.useRedisCache }}
+  CACHE: "redis"
+  CACHE_REDIS_ADDR: "{{ include "harbor.redis.host" . }}:{{ include "harbor.redis.port" . }}"
+  CACHE_REDIS_DB: "{{ include "harbor.redis.chartmuseumDatabaseIndex" . }}"
+  {{- end }}
+  # The user is hardcoded because the core binary has it hardcoded so it is not configurable.
+  BASIC_AUTH_USER: "chart_controller"
+  {{- if .Values.chartmuseum.absoluteUrl }}
+  CHART_URL: "{{ .Values.externalURL }}/{{ .Values.chartmuseum.chartRepoName }}"
+  {{- end }}
+  DEPTH: {{ .Values.chartmuseum.depth | quote }}
+  {{- if or (eq .Values.logLevel "debug") .Values.chartMuseumImage.debug }}
+  DEBUG: "1"
+  {{- else }}
+  DEBUG: "0"
+  {{- end }}
+  LOG_JSON: {{ .Values.chartmuseum.logJson | quote }}
+  DISABLE_METRICS: {{ .Values.chartmuseum.disableMetrics | quote }}
+  DISABLE_API: {{ .Values.chartmuseum.disableApi | quote }}
+  DISABLE_STATEFILES: {{ .Values.chartmuseum.disableStatefiles | quote }}
+  ALLOW_OVERWRITE: {{ .Values.chartmuseum.allowOverwrite | quote }}
+  AUTH_ANONYMOUS_GET: {{ .Values.chartmuseum.anonymousGet | quote }}
+  {{- if .Values.chartmuseum.contextPath }}
+  CONTEXT_PATH: {{ .Values.chartmuseum.contextPath | quote }}
+  {{- end }}
+  {{- if .Values.chartmuseum.indexLimit }}
+  INDEX_LIMIT: {{ .Values.chartmuseum.indexLimit | quote }}
+  {{- end }}
+  {{- if .Values.chartmuseum.chartPostFormFieldName }}
+  CHART_POST_FORM_FIELD_NAME: {{ .Values.chartmuseum.chartPostFormFieldName | quote }}
+  {{- end }}
+  {{- if .Values.chartmuseum.provPostFormFieldName }}
+  PROV_POST_FORM_FIELD_NAME: {{ .Values.chartmuseum.provPostFormFieldName | quote }}
+  {{- end }}
+  {{- $storage := .Values.persistence.imageChartStorage }}
+  {{- $storageType := $storage.type }}
+  {{- if eq $storageType "filesystem" }}
+  STORAGE: "local"
+  STORAGE_LOCAL_ROOTDIR: "/bitnami/data"
+  {{- else if eq $storageType "azure" }}
+  STORAGE: "microsoft"
+  STORAGE_MICROSOFT_CONTAINER: {{ $storage.azure.container }}
+  AZURE_STORAGE_ACCOUNT: {{ $storage.azure.accountname }}
+  STORAGE_MICROSOFT_PREFIX: {{ $storage.azure.storagePrefix }}
+  {{- else if eq $storageType "gcs" }}
+  STORAGE: "google"
+  STORAGE_GOOGLE_BUCKET: {{ $storage.gcs.bucket }}
+  GOOGLE_APPLICATION_CREDENTIALS: /etc/chartmuseum/gcs-key.json
+  {{- if $storage.gcs.rootdirectory }}
+  STORAGE_GOOGLE_PREFIX: {{ $storage.gcs.rootdirectory }}
+  {{- end }}
+  {{- else if eq $storageType "s3" }}
+  STORAGE: "amazon"
+  STORAGE_AMAZON_BUCKET: {{ $storage.s3.bucket }}
+  {{- if $storage.s3.rootdirectory }}
+  STORAGE_AMAZON_PREFIX: {{ $storage.s3.rootdirectory }}
+  {{- end }}
+  STORAGE_AMAZON_REGION: {{ $storage.s3.region }}
+  {{- if $storage.s3.regionendpoint }}
+  STORAGE_AMAZON_ENDPOINT: {{ $storage.s3.regionendpoint }}
+  {{- end }}
+  {{- if $storage.s3.accesskey }}
+  AWS_ACCESS_KEY_ID: {{ $storage.s3.accesskey }}
+  {{- end }}
+  {{- else if eq $storageType "swift" }}
+  STORAGE: "openstack"
+  STORAGE_OPENSTACK_CONTAINER: {{ $storage.swift.container }}
+  {{- if $storage.swift.secretkey }}
+  STORAGE_OPENSTACK_PREFIX: {{ $storage.swift.prefix }}
+  {{- end }}
+  {{- if $storage.swift.secretkey }}
+  STORAGE_OPENSTACK_REGION: {{ $storage.swift.region }}
+  {{- end }}
+  OS_AUTH_URL: {{ $storage.swift.authurl }}
+  OS_USERNAME: {{ $storage.swift.username }}
+  {{- if $storage.swift.secretkey }}
+  OS_PROJECT_ID: {{ $storage.swift.tenantid }}
+  {{- end }}
+  {{- if $storage.swift.secretkey }}
+  OS_PROJECT_NAME: {{ $storage.swift.tenant }}
+  {{- end }}
+  {{- if $storage.swift.secretkey }}
+  OS_DOMAIN_ID: {{ $storage.swift.domainid }}
+  {{- end }}
+  {{- if $storage.swift.secretkey }}
+  OS_DOMAIN_NAME: {{ $storage.swift.domain }}
+  {{- end }}
+  {{- else if eq $storageType "oss" }}
+  STORAGE: "alibaba"
+  STORAGE_ALIBABA_BUCKET: {{ $storage.oss.bucket }}
+  {{- if $storage.oss.secretkey }}
+  STORAGE_ALIBABA_PREFIX: {{ $storage.oss.rootdirectory }}
+  {{- end }}
+  {{- if $storage.oss.secretkey }}
+  STORAGE_ALIBABA_ENDPOINT: {{ $storage.oss.endpoint }}
+  {{- end }}
+  ALIBABA_CLOUD_ACCESS_KEY_ID: {{ $storage.oss.accesskeyid }}
+  {{- end }}
+{{- end }}

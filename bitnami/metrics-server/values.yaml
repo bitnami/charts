@@ -57,6 +57,15 @@ apiService:
 ##
 securePort: 8443
 
+## Extra arguments to pass to the metrics-server
+## ref: https://github.com/kubernetes-incubator/metrics-server/blob/master/README.md#flags
+##
+## extraArgs:
+##   kubelet-insecure-tls: true
+##   kubelet-preferred-address-types: InternalIP
+##
+extraArgs: {}
+
 service:
   type: ClusterIP
   port: 443

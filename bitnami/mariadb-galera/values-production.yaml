@@ -1,0 +1,438 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Bitnami MariaDB Galera image
+## ref: https://hub.docker.com/r/bitnami/mariadb-galera/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/mariadb-galera
+  tag: 10.3.17-debian-9-r8
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH debugging in minideb-extras-base
+  ##
+  debug: false
+
+## String to partially override mariadb-galera.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override mariadb-galera.fullname template
+##
+# fullnameOverride:
+
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName:
+
+## MariaDB Gallera K8s svc properties
+##
+service:
+  ## Kubernetes service type and port number
+  ##
+  type: ClusterIP
+  port: 3306
+  # clusterIP: None
+
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort: 30001
+
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  # loadBalancerIP:
+
+  ## Load Balancer sources
+  ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ##
+  # loadBalancerSourceRanges:
+  # - 10.10.10.0/24
+
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: false
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the mariadb.fullname template
+  # name:
+
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  create: false
+
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: false
+  fsGroup: 1001
+  runAsUser: 1001
+
+## Use existing secret (ignores rootUser.password, db.password, and galera.mariabackup.password)
+##
+# existingSecret:
+
+rootUser:
+  ## MariaDB admin password
+  ## Password is ignored if existingSecret is specified.
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-the-root-password-on-first-run
+  ##
+  password:
+  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
+  ## If it is not force, a random password will be generated.
+  ##
+  forcePassword: true
+
+## Custom db configuration
+##
+db:
+  ## MariaDB username and password
+  ## Password is ignored if existingSecret is specified.
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#creating-a-database-user-on-first-run
+  ##
+  user:
+  password:
+  ## Database to create
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#creating-a-database-on-first-run
+  ##
+  name: my_database
+  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
+  ## If it is not force, a random password will be generated.
+  ##
+  forcePassword: true
+
+## Galera configuration
+##
+galera:
+  ## Galera cluster name
+  ##
+  name: galera
+
+  mariabackup:
+    ## MariaBackup username and password
+    ## Password is ignored if existingSecret is specified.
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-up-a-multi-master-cluster
+    ##
+    user: mariabackup
+    password:
+    ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
+    ## If it is not force, a random password will be generated.
+    ##
+    forcePassword: true
+
+## LDAP configuration
+##
+ldap:
+  ## Enable LDAP support
+  ##
+  enabled: false
+  uri:
+  base:
+  binddn:
+  bindpw:
+  bslookup:
+  nss_initgroups_ignoreusers: root,nslcd
+  scope:
+  tls_reqcert:
+
+## Configure MariaDB with a custom my.cnf file
+## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
+## Alternatively, you can put your my.cnf under the files/ directory
+##
+mariadbConfiguration: |-
+  [client]
+  port=3306
+  socket=/opt/bitnami/mariadb/tmp/mysql.sock
+
+  [mysqld]
+  default-storage-engine=InnoDB
+  basedir=/opt/bitnami/mariadb
+  datadir=/bitnami/mariadb/data
+  tmpdir=/opt/bitnami/mariadb/tmp
+  socket=/opt/bitnami/mariadb/tmp/mysql.sock
+  pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+  bind-address=0.0.0.0
+
+  ## Character set
+  collation-server=utf8_unicode_ci
+  init-connect='SET NAMES utf8'
+  character-set-server=utf8
+
+  ## MyISAM
+  key-buffer-size=32M
+  myisam-recover-options=FORCE,BACKUP
+
+  ## safety
+  skip-host-cache
+  skip-name-resolve
+  max-allowed-packet=16M
+  max-connect-errors=1000000
+  sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY
+  sysdate-is-now=1
+  innodb=FORCE
+  innodb-strict-mode=1
+  innodb_file_per_table=1
+  # Mandatory per https://github.com/codership/documentation/issues/25
+  innodb-autoinc-lock-mode=2
+  # Per https://www.percona.com/blog/2006/08/04/innodb-double-write/
+  innodb-doublewrite=1
+  # Not fully ACID compliant, up to 1sec transaction loss in the event of total cluster failure (across both regions)
+  # Enabled for performance per https://mariadb.com/kb/en/mariadb/getting-started-with-mariadb-galera-cluster/
+  innodb_flush_log_at_trx_commit=0
+
+  ## binary logging
+  log-bin=mysql-bin
+  expire-logs-days=14
+  # Disabling for performance per http://severalnines.com/blog/9-tips-going-production-galera-cluster-mysql
+  sync-binlog=0
+  # Required for Galera
+  binlog-format=row
+  ## Caches and limits
+  tmp-table-size=32M
+  max-heap-table-size=32M
+  # Re-enabling as now works with Maria 10.1.2
+  query-cache-type=1
+  query-cache-limit=4M
+  query-cache-size=256M
+  max-connections=500
+  thread-cache-size=50
+  open-files-limit=65535
+  table-definition-cache=4096
+  table-open-cache=4096
+  ## innodb
+  innodb-flush-method=O_DIRECT
+  innodb-log-files-in-group=2
+  innodb-log-file-size=128M
+  innodb-flush-log-at-trx-commit=1
+  innodb-file-per-table=1
+  # 80% Memory is default reco.
+  # Need to re-evaluate when DB size grows
+  innodb-buffer-pool-size=2G
+  innodb_file_format=Barracuda
+
+  ## logging
+  log-error=/opt/bitnami/mariadb/logs/mysqld.log
+  slow-query-log-file=/opt/bitnami/mariadb/logs/mysqld.log
+  log-queries-not-using-indexes=1
+  slow-query-log=1
+
+  [galera]
+  wsrep_on=ON
+  wsrep_provider=/opt/bitnami/mariadb/lib/libgalera_smm.so
+  wsrep_sst_method=mariabackup
+  wsrep_slave_threads=4
+  wsrep_cluster_address=gcomm://
+  wsrep_cluster_name=galera
+  wsrep_sst_auth="root:"
+  innodb-flush-log-at-trx-commit=2
+  # MYISAM REPLICATION SUPPORT #
+  wsrep_replicate_myisam=ON
+
+  [mariadb]
+  plugin_load_add=auth_pam
+
+## ConfigMap with MariaDB configuration
+## NOTE: This will override mariadbConfiguration
+# configurationConfigMap:
+
+## initdb scripts
+## Specify dictionary of scripts to be run at first boot
+## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+##
+# initdbScripts:
+#   my_init_script.sh: |
+#      #!/bin/sh
+#      echo "Do something."
+
+## ConfigMap with scripts to be run at first boot
+## Note: This will override initdbScripts
+# initdbScriptsConfigMap:
+
+## MariaDB additional command line flags
+## Can be used to specify command line flags, for example:
+##
+## extraFlags: "--max-connect-errors=1000 --max_connections=155"
+
+## Mariadb Master additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+# annotations:
+#   - key: key1
+#     value: value1
+
+## Desired number of cluster nodes
+##
+replicaCount: 3
+
+## updateStrategy for MariaDB Master StatefulSet
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  type: RollingUpdate
+
+## Node Affinity. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+##
+nodeAffinity: {}
+
+## Pod AntiAffinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+podAntiAffinity: soft
+
+## Pod Affinity. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+podAffinity: {}
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+  ##
+  enabled: true
+  # Enable persistence using an existing PVC
+  # existingClaim:
+  # Subdirectory of the volume to mount
+  # subPath:
+  mountPath: /bitnami/mariadb
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ## Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## Persistent Volume Access Mode
+  ##
+  accessModes:
+  - ReadWriteOnce
+  ## Persistent Volume size
+  ##
+  size: 8Gi
+  ##
+
+## Additional init containers
+##
+# extraInitContainers: |
+# - name: do-something
+#   image: busybox
+#   command: ['do', 'something']
+
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}
+
+## Liveness and readiness probes configuration
+##
+livenessProbe:
+  enabled: true
+  ## Initializing the database could take some time
+  ##
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+
+## Pod disruption budget configuration
+##
+podDisruptionBudget:
+  ## Specifies whether a Pod disruption budget should be created
+  ##
+  create: false
+  minAvailable: 1
+  # maxUnavailable: 1
+
+## Prometheus exporter configuration
+##
+metrics:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/mysqld-exporter
+    tag: 0.12.1-debian-9-r14
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
+  service:
+    type: ClusterIP
+    port: 9104
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9104"
+
+  # Enable this if you're using https://github.com/coreos/prometheus-operator
+  serviceMonitor:
+    enabled: false
+    ## Specify a namespace if needed
+    # namespace: monitoring
+    # fallback to the prometheus default unless specified
+    # interval: 10s
+    # scrapeTimeout: 10s
+    ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/helm/charts/tree/master/stable/prometheus-operator#tldr)
+    ## [Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#prometheus-operator-1)
+    ## [Kube Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#exporters)
+    selector:
+      prometheus: kube-prometheus

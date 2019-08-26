@@ -5,6 +5,7 @@
 ## TL;DR;
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/kafka
 ```
 
@@ -24,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/kafka
 ```
 
-The command deploys Kafka on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Kafka on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -49,6 +51,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | `global.imageRegistry`                  | Global Docker image registry                                                                                                                              | `nil`                                                              |
 | `global.imagePullSecrets`               | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)            |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                        | Kafka image registry                                                                                                                                      | `docker.io`                                                        |
 | `image.repository`                      | Kafka Image name                                                                                                                                          | `bitnami/kafka`                                                    |
 | `image.tag`                             | Kafka Image tag                                                                                                                                           | `{VERSION}`                                                        |
@@ -142,8 +145,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | 1                                                                  |
 | `metrics.kafka.enabled`                 | Whether or not to create a separate Kafka exporter                                                                                                        | `false`                                                            |
 | `metrics.kafka.image.registry`          | Kafka exporter image registry                                                                                                                             | `docker.io`                                                        |
-| `metrics.kafka.image.repository`        | Kafka exporter image name                                                                                                                                 | `danielqsj/kafka-exporter`                                         |
-| `metrics.kafka.image.tag`               | Kafka exporter image tag                                                                                                                                  | `v1.0.1`                                                           |
+| `metrics.kafka.image.repository`        | Kafka exporter image name                                                                                                                                 | `bitnami/kafka-exporter`                                           |
+| `metrics.kafka.image.tag`               | Kafka exporter image tag                                                                                                                                  | `{TAG_NAME}`                                                       |
 | `metrics.kafka.image.pullPolicy`        | Kafka exporter image pull policy                                                                                                                          | `IfNotPresent`                                                     |
 | `metrics.kafka.image.pullSecrets`       | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)            |
 | `metrics.kafka.interval`                | Interval that Prometheus scrapes Kafka metrics when using Prometheus Operator                                                                             | `10s`                                                              |
@@ -152,8 +155,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.jmx.resources`                 | Allows setting resource limits for jmx sidecar container                                                                                                  | `{}`                                                               |
 | `metrics.jmx.enabled`                   | Whether or not to expose JMX metrics to Prometheus                                                                                                        | `false`                                                            |
 | `metrics.jmx.image.registry`            | JMX exporter image registry                                                                                                                               | `docker.io`                                                        |
-| `metrics.jmx.image.repository`          | JMX exporter image name                                                                                                                                   | `solsson/kafka-prometheus-jmx-exporter@sha256`                     |
-| `metrics.jmx.image.tag`                 | JMX exporter image tag                                                                                                                                    | `a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8` |
+| `metrics.jmx.image.repository`          | JMX exporter image name                                                                                                                                   | `bitnami/jmx-exporter`                                             |
+| `metrics.jmx.image.tag`                 | JMX exporter image tag                                                                                                                                    | `{TAG_NAME}`                                                       |
 | `metrics.jmx.image.pullPolicy`          | JMX exporter image pull policy                                                                                                                            | `IfNotPresent`                                                     |
 | `metrics.jmx.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)            |
 | `metrics.jmx.interval`                  | Interval that Prometheus scrapes JMX metrics when using Prometheus Operator                                                                               | `10s`                                                              |

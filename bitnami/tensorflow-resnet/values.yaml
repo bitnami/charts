@@ -16,7 +16,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-serving
-    tag: 1.13.0-debian-9-r102
+    tag: 1.14.0-debian-9-r36
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -29,6 +29,7 @@ server:
     # pullSecrets:
     #   - myRegistryKeySecretName
   port: 8500
+  restApiPort: 8501
 
 ## TensorFlow ResNet image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-resnet/tags/
@@ -86,44 +87,11 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
-## Prometheus Exporter / Metrics
+## Add the corresponding annotations so Prometheus can collect Tensorflow Serving metrics
 ##
 metrics:
   enabled: false
-  image:
-    registry: docker.io
-    repository: ynqa/tensorflow-serving-exporter
-    tag: latest
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  port: 9118
-  ## Configure extra options for liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 15
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 2
-    successThreshold: 1
-
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 1
-    failureThreshold: 6
-    successThreshold: 1
-  ## Metrics exporter pod Annotation and Labels
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9118"
-    ## Metrics exporter resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
-  # resources: {}
+    prometheus.io/path: "/monitoring/prometheus/metrics"
+    prometheus.io/port: "8501"

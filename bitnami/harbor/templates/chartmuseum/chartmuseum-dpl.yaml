@@ -1,0 +1,132 @@
+{{- if .Values.chartmuseum.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ template "harbor.chartmuseum" . }}"
+  labels: {{ include "harbor.labels" . | nindent 4 }}
+    app.kubernetes.io/component: chartmuseum
+spec:
+  replicas: {{ .Values.chartmuseum.replicas }}
+  selector:
+    matchLabels:
+      {{ include "harbor.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: chartmuseum
+  template:
+    metadata:
+      labels:
+        {{ include "harbor.matchLabels" . | nindent 8 }}
+        app.kubernetes.io/component: chartmuseum
+      annotations:
+        checksum/configmap-envvars: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-cm-envvars.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-secret.yaml") . | sha256sum }}
+        checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
+        {{- if .Values.chartmuseum.podAnnotations }}
+        {{ toYaml .Values.chartmuseum.podAnnotations | indent 8 }}
+        {{- end }}
+    spec:
+{{- include "harbor.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      {{- with .Values.chartmuseum.nodeSelector }}
+      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.chartmuseum.affinity }}
+      affinity: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      {{- with .Values.chartmuseum.tolerations }}
+      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: chartmuseum
+        image: "{{ template "harbor.chartMuseumImage" . }}"
+        imagePullPolicy: {{ .Values.chartMuseumImage.imagePullPolicy | quote }}
+        {{- if .Values.chartmuseum.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+            {{- if .Values.chartmuseum.enableTLS }}
+            scheme: "HTTPS"
+            {{- end }}
+          initialDelaySeconds: {{ .Values.chartmuseum.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.chartmuseum.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.chartmuseum.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.chartmuseum.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.chartmuseum.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.chartmuseum.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+            {{- if .Values.chartmuseum.enableTLS }}
+            scheme: "HTTPS"
+            {{- end }}
+          initialDelaySeconds: {{ .Values.chartmuseum.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.chartmuseum.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.chartmuseum.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.chartmuseum.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.chartmuseum.readinessProbe.failureThreshold }}
+        {{- end }}
+        envFrom:
+        - configMapRef:
+            name: "{{ template "harbor.chartmuseum" . }}-envvars"
+        - secretRef:
+            name: "{{ template "harbor.chartmuseum" . }}-secret"
+        env:
+        - name: DEBUG
+          value: {{ ternary "1" "0" .Values.chartMuseumImage.debug | quote }}
+        {{- if .Values.extraEnvVars }}
+        {{ toYaml .Values.extraEnvVars | indent 8 }}
+        {{- end }}
+        - name: BASIC_AUTH_PASS
+          valueFrom:
+            secretKeyRef:
+              # Take the password from the core component secret
+              name: {{ template "harbor.core" . }}
+              key: secret
+        ports:
+        - containerPort: {{ .Values.chartmuseum.port }}
+          name: http
+        volumeMounts:
+        - name: chartmuseum-data
+          mountPath: /bitnami/data
+        {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+        - name: gcs-key
+          mountPath: /etc/chartmuseum/gcs-key.json
+          subPath: gcs-key.json
+        {{- end }}
+        {{- if .Values.chartmuseum.enableTLS }}
+        - name: tls-certs
+          mountPath: /bitnami/certs
+        {{- end }}
+      volumes:
+      - name: chartmuseum-data
+      {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "filesystem") }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.persistentVolumeClaim.chartmuseum.existingClaim | default (include "harbor.chartmuseum" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+      - name: gcs-key
+        secret:
+          secretName: "{{ template "harbor.chartmuseum" . }}-secret"
+          items:
+            - key: GCS_KEY_DATA
+              path: gcs-key.json
+      {{- end }}
+      {{- if .Values.chartmuseum.enableTLS }}
+      - name: tls-certs
+        secret:
+          secretName: "{{ template "harbor.chartmuseum" . }}-secret"
+          items:
+            - key: TLS_CERT
+              path: server.crt
+            - key: TLS_KEY
+              path: server.key
+      {{- end }}
+{{- end }}

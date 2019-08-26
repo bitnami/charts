@@ -6,6 +6,7 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 ## Bitnami PyTorch image version
 ## ref: https://hub.docker.com/r/bitnami/pytorch/tags/
@@ -13,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/pytorch
-  tag: 1.1.0-debian-9-r32
+  tag: 1.2.0-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -37,7 +38,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.22.0-debian-9-r2
+  tag: 2.22.0-debian-9-r59
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

@@ -7,6 +7,7 @@ The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most p
 ## TL;DR
 
 ```bash
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/apache
 ```
 
@@ -23,10 +24,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/apache
 ```
 
-The command deploys Apache on the Kubernetes cluster in the default configuration.
+These commands deploy Apache on the Kubernetes cluster in the default configuration.
 
 > **Tip**: List all releases using `helm list`
 

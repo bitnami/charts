@@ -156,6 +156,8 @@ Learn more about how to secure your Kubeapps installation [here](https://github.
 
 ### Exposing Externally
 
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service, so when when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed on that network. See [#1111](https://github.com/kubeapps/kubeapps/issues/1111) for more details.
+
 #### LoadBalancer Service
 
 The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer type to the Kubeapps frontend Service. For example:

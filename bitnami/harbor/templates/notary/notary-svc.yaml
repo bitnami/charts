@@ -9,7 +9,8 @@ spec:
   type: NodePort
 {{- end }}
   ports:
-  - port: 4443
+  - name: notary-server
+    port: 4443
     targetPort: notary-server
   selector:
     {{ include "harbor.matchLabels" . | nindent 4 }}

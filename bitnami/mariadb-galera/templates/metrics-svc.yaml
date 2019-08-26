@@ -1,0 +1,21 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "mariadb-galera.fullname" . }}-metrics
+  labels:
+    app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
+    helm.sh/chart: {{ include "mariadb-galera.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations: {{ toYaml .Values.metrics.service.annotations | nindent 4 }}
+spec:
+  type: {{ .Values.metrics.service.type }}
+  ports:
+  - name: metrics
+    port: {{ .Values.metrics.service.port }}
+    targetPort: metrics
+  selector:
+    app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

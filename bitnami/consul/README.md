@@ -5,7 +5,7 @@
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/incubator
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/consul
 ```
 
@@ -25,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/consul
 ```
 
-The command deploys HashiCorp Consul on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy HashiCorp Consul on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -53,6 +54,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                     | HashiCorp Consul image registry                                                                                                                           | `docker.io`                                             |
 | `image.repository`                   | HashiCorp Consul image name                                                                                                                               | `bitnami/consul`                                        |
 | `image.tag`                          | HashiCorp Consul image tag                                                                                                                                | `{TAG_NAME}`                                            |
@@ -109,8 +111,8 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `ingress.secrets[0].key`             | TLS Secret Key                                                                                                                                            | `nil`                                                   |
 | `configmap`                          | HashiCorp Consul configuration to be injected as ConfigMap                                                                                                | `nil`                                                   |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                                                                                                                      | `false`                                                 |
-| `metrics.image`                      | Exporter image                                                                                                                                            | `prom/consul-exporter`                                  |
-| `metrics.imageTag`                   | Exporter image tag                                                                                                                                        | `v0.3.0`                                                |
+| `metrics.image`                      | Exporter image                                                                                                                                            | `bitnami/consul-exporter`                               |
+| `metrics.imageTag`                   | Exporter image tag                                                                                                                                        | `{TAG_NAME}`                                            |
 | `metrics.imagePullPolicy`            | Exporter image pull policy                                                                                                                                | `IfNotPresent`                                          |
 | `metrics.resources`                  | Exporter resource requests/limit                                                                                                                          | `{}`                                                    |
 | `metrics.podAnnotations`             | Exporter annotations                                                                                                                                      | `{}`                                                    |

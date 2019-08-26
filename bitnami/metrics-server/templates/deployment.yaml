@@ -36,3 +36,6 @@ spec:
         command:
         - metrics-server
         - --secure-port={{ .Values.securePort }}
+      {{- range $key, $value := .Values.extraArgs }}
+        - --{{ $key }}={{ $value }}
+      {{- end }}

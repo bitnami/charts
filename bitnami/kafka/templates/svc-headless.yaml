@@ -13,7 +13,7 @@ spec:
   clusterIP: None
   ports:
   - name: kafka
-    port: 9092
+    port: {{ .Values.service.port }}
     targetPort: kafka
   selector:
     app.kubernetes.io/name: {{ template "kafka.name" . }}

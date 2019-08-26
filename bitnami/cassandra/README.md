@@ -25,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/cassandra
 ```
 
-The command deploys one node with Cassandra on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy one node with Cassandra on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -50,6 +51,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`               | Global Docker Image registry                                                                                                                              | `nil`                                                        |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                     | Cassandra Image registry                                                                                                                                  | `docker.io`                                                  |
 | `image.repository`                   | Cassandra Image name                                                                                                                                      | `bitnami/cassandra`                                          |
 | `image.tag`                          | Cassandra Image tag                                                                                                                                       | `{TAG_NAME}`                                                 |
@@ -121,8 +123,8 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `networkPolicy.allowExternal`        | Don't require client label for connections                                                                                                                | `true`                                                       |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                                                                                                                      | `false`                                                      |
 | `metrics.image.registry`             | Cassandra exporter Image registry                                                                                                                         | `docker.io`                                                  |
-| `metrics.image.repository`           | Cassandra exporter Image name                                                                                                                             | `criteo/cassandra_exporter`                                  |
-| `metrics.image.tag`                  | Cassandra exporter Image tag                                                                                                                              | `2.0.4`                                                      |
+| `metrics.image.repository`           | Cassandra exporter Image name                                                                                                                             | `bitnami/cassandra-exporter`                                 |
+| `metrics.image.tag`                  | Cassandra exporter Image tag                                                                                                                              | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`           | Image pull policy                                                                                                                                         | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`             | Additional annotations for Metrics exporter                                                                                                               | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}` |

@@ -1,0 +1,18 @@
+{{ if and (or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration) (not .Values.configurationConfigMap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "mariadb-galera.fullname" . }}-configuration
+  labels:
+    app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
+    helm.sh/chart: {{ include "mariadb-galera.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+{{- if (.Files.Glob "files/my.cnf") }}
+{{ (.Files.Glob "files/my.cnf").AsConfig | indent 2 }}
+{{- else if .Values.mariadbConfiguration }}
+  my.cnf: |
+{{ .Values.mariadbConfiguration | indent 4 }}
+{{- end }}
+{{ end }}

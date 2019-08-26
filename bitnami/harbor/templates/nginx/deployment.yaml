@@ -29,6 +29,7 @@ spec:
         {{ toYaml .Values.nginx.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
+{{- include "harbor.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}

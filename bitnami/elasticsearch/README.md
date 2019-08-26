@@ -5,6 +5,7 @@
 ## TL;DR
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/elasticsearch
 ```
 
@@ -24,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/elasticsearch
 ```
 
-The command deploys Elasticsearch on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -53,6 +55,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`                            | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                                  | Elasticsearch image registry                                                                                                                              | `docker.io`                                             |
 | `image.repository`                                | Elasticsearch image repository                                                                                                                            | `bitnami/elasticsearch`                                 |
 | `image.tag`                                       | Elasticsearch image tag                                                                                                                                   | `{TAG_NAME}`                                            |

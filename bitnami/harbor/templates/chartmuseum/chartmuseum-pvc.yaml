@@ -1,0 +1,25 @@
+{{- if .Values.chartmuseum.enabled }}
+{{- $persistence := .Values.persistence -}}
+{{- if $persistence.enabled }}
+{{- $chartmuseum := $persistence.persistentVolumeClaim.chartmuseum -}}
+{{- if and (not $chartmuseum.existingClaim) (eq $persistence.imageChartStorage.type "filesystem") }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "harbor.chartmuseum" . }}
+  {{- if eq $persistence.resourcePolicy "keep" }}
+  annotations:
+    helm.sh/resource-policy: keep
+  {{- end }}
+  labels: {{ include "harbor.labels" . | nindent 4 }}
+    app.kubernetes.io/component: chartmuseum
+spec:
+  accessModes:
+    - {{ $chartmuseum.accessMode }}
+  resources:
+    requests:
+      storage: {{ $chartmuseum.size }}
+  {{ include "harbor.chartmuseum.storageClass" . }}
+{{- end }}
+{{- end }}
+{{- end }}

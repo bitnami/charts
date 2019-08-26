@@ -24,10 +24,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/airflow
 ```
 
-The command deploys Airflow on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Airflow on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -49,6 +50,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | ----------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`                    | Global Docker image registry                                                                | `nil`                                                        |
 | `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                          | Airflow image registry                                                                      | `docker.io`                                                  |
 | `image.repository`                        | Airflow image name                                                                          | `bitnami/airflow`                                            |
 | `image.tag`                               | Airflow image tag                                                                           | `{TAG_NAME}`                                                 |
@@ -141,8 +143,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `externalRedis.password`                  | External Redis password                                                                     | `nil`                                                        |
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                                        | `false`                                                      |
 | `metrics.image.registry`                  | Airflow exporter image registry                                                             | `docker.io`                                                  |
-| `metrics.image.repository`                | Airflow exporter image name                                                                 | `pbweb/airflow-prometheus-exporter`                          |
-| `metrics.image.tag`                       | Airflow exporter image tag                                                                  | `latest`                                                     |
+| `metrics.image.repository`                | Airflow exporter image name                                                                 | `bitnami/airflow-exporter`                                   |
+| `metrics.image.tag`                       | Airflow exporter image tag                                                                  | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`                | Image pull policy                                                                           | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                  | Additional annotations for Metrics exporter                                                 | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |

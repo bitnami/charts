@@ -5,6 +5,7 @@
 ## TL;DR;
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/etcd
 ```
 
@@ -24,10 +25,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/etcd
 ```
 
-The command deploys etcd on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy etcd on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -49,6 +51,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `global.imageRegistry`                    | Global Docker image registry                                                                                                                              | `nil`                                                       |
 | `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)     |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                          | etcd image registry                                                                                                                                       | `docker.io`                                                 |
 | `image.repository`                        | etcd image name                                                                                                                                           | `bitnami/etcd`                                              |
 | `image.tag`                               | etcd image tag                                                                                                                                            | `{TAG_NAME}`                                                |
