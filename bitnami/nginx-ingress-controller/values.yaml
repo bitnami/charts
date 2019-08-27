@@ -400,7 +400,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.0-debian-9-r46
+    tag: 1.16.1-debian-9-r13
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
