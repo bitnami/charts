@@ -214,6 +214,9 @@ affinity: {}
 ##
 tolerations: []
 
+entrypoint: "/app-entrypoint.sh"
+cmd: "/run.sh"
+
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
