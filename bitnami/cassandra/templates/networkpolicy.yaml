@@ -15,8 +15,10 @@ spec:
       release: {{ .Release.Name }}
   ingress:
     # Allow inbound connections
+    # CQL and Thrift ports
     - ports:
       - port: {{ .Values.service.port }}
+      - port: {{ .Values.service.thriftPort }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -26,7 +28,17 @@ spec:
         - podSelector:
             matchLabels:
               app: {{ template "cassandra.name" . }}
-              release: {{ .Release.Name }}
+              release: {{ .Release.Name }}      
+    # Internal ports
+    - ports:
+      - port: intra
+      - port: tls
+      - port: jmx
+      from:
+        - podSelector:
+            matchLabels:
+              app: {{ template "cassandra.name" . }}
+              release: {{ .Release.Name }}      
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
