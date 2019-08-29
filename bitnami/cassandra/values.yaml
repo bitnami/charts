@@ -214,6 +214,9 @@ affinity: {}
 ##
 tolerations: []
 
+##
+## Container entrypoint and cmd (useful for using different images)
+##
 entrypoint: "/app-entrypoint.sh"
 cmd: "/run.sh"
 

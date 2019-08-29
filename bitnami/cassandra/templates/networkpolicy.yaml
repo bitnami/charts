@@ -28,7 +28,7 @@ spec:
         - podSelector:
             matchLabels:
               app: {{ template "cassandra.name" . }}
-              release: {{ .Release.Name }}      
+              release: {{ .Release.Name }}
     # Internal ports
     - ports:
       - port: intra
@@ -38,7 +38,7 @@ spec:
         - podSelector:
             matchLabels:
               app: {{ template "cassandra.name" . }}
-              release: {{ .Release.Name }}      
+              release: {{ .Release.Name }}
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
