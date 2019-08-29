@@ -85,7 +85,7 @@ spec:
                 # Only node 0 will execute the startup initdb scripts
                 export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
-              /app-entrypoint.sh /run.sh
+              {{ .Values.entrypoint }} {{ .Values.cmd }}
         image: {{ template "cassandra.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         resources: {{ toYaml .Values.resources | nindent 10 }}

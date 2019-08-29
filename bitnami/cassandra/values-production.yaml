@@ -214,6 +214,12 @@ affinity: {}
 ##
 tolerations: []
 
+##
+## Container entrypoint and cmd (useful for using different images)
+##
+entrypoint: "/app-entrypoint.sh"
+cmd: "/run.sh"
+
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
