@@ -59,8 +59,12 @@ Parameter | Description | Default
 `image.pullPolicy` | Controller container image pull policy | `IfNotPresent`
 `nameOverride` | String to partially override nginx-ingress-controller.fullname template with a string (will prepend the release name) | `nil`
 `fullnameOverride` | String to fully override nginx-ingress-controller.fullname template with a string | `nil`
-`config` | Nginx ConfigMap entries | `use-geoip: "false", use-geoip2: "true"`
+`containerPort.http` | The port that the controller container listens on for HTTP connections. | `80`
+`containerPort.https` | The port that the controller container listens on for HTTPS connections. | `443`
+`config` | Nginx ConfigMap entries | `{}`
 `hostNetwork` | If the nginx deployment / daemonset should run on the host's network namespace. Do not set this when `service.externalIPs` is set and `kube-proxy` is used as there will be a port-conflict for port `80` | false
+`dnsPolicy` | If using `hostNetwork=true`, change to `ClusterFirstWithHostNet`. See [pod's dns policy](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy) for details | false
+`reportNodeInternalIp` | If using `hostNetwork=true`, setting `reportNodeInternalIp=true`, will pass the flag `report-node-internal-ip-address` to nginx-ingress. This sets the status of all Ingress objects to the internal IP address of all nodes running the NGINX Ingress controller. | `ClusterFirst`
 `defaultBackendService` | Default 404 backend service; required only if `defaultBackend.enabled = false` | `""`
 `electionID` | Election ID to use for the status update | `ingress-controller-leader`
 `extraEnvs` | Any additional environment variables to set in the pods | `{}`
@@ -78,10 +82,12 @@ Parameter | Description | Default
 `daemonset.hostPorts.https` | If `daemonset.useHostPort` is `true` and this is non-empty, it sets the hostPort | `"443"`
 `tolerations` | Node taints to tolerate (requires Kubernetes >=1.6) | `[]`
 `affinity` | Node/pod affinities (requires Kubernetes >=1.6) | `{}`
+`terminationGracePeriodSeconds` | How many seconds to wait before terminating a pod | `60`
 `minReadySeconds` | How many seconds a pod needs to be ready before killing the next, during update | `0`
 `nodeSelector` | Node labels for pod assignment | `{}`
 `podAnnotations` | Annotations to be added to pods | `{}`
 `podLabels` | Labels to add to the pod container metadata | `{}`
+`podSecurityContext` | Security context policies to add to the controller pod | `{}`
 `replicaCount` | Desired number of controller pods | `1`
 `minAvailable` | Minimum number of available controller pods for PodDisruptionBudget | `1`
 `resources` | Controller pod resource requests & limits | `{}`
@@ -92,6 +98,7 @@ Parameter | Description | Default
 `publishService.enabled` | If true, the controller will set the endpoint records on the ingress objects to reflect those on the service | `false`
 `publishService.pathOverride` | Override of the default publish-service name | `""`
 `service.clusterIP` | Internal controller cluster service IP | `""`
+`service.omitClusterIP` | To omit the `ClusterIP` from the controller service | `false`
 `service.externalIPs` | Controller service external IP addresses. Do not set this when `hostNetwork` is set to `true` and `kube-proxy` is used as there will be a port-conflict for port `80` | `[]`
 `service.externalTrafficPolicy` | If `service.type` is `NodePort` or `LoadBalancer`, set this to `Local` to enable [source IP preservation](https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typenodeport) | `"Cluster"`
 `service.healthCheckNodePort` | If `service.type` is `NodePort` or `LoadBalancer` and `service.externalTrafficPolicy` is set to `Local`, set this to [the managed health-check port the kube-proxy will expose](https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typenodeport). If blank, a random port in the `NodePort` range will be assigned | `""`
@@ -101,10 +108,14 @@ Parameter | Description | Default
 `service.enableHttps` | If port 443 should be opened for service | `true`
 `service.targetPorts.http` | Sets the targetPort that maps to the Ingress' port 80 | `80`
 `service.targetPorts.https` | Sets the targetPort that maps to the Ingress' port 443 | `443`
+`service.ports.http` | Sets service http port | `80`
+`service.ports.https` | Sets service https port | `443`
 `service.type` | Type of controller service to create | `LoadBalancer`
 `service.nodePorts.http` | If `service.type` is `NodePort` and this is non-empty, it sets the nodePort that maps to the Ingress' port 80 | `""`
 `service.nodePorts.https` | If `service.type` is `NodePort` and this is non-empty, it sets the nodePort that maps to the Ingress' port 443 | `""`
-`livenessProbe.initialDelaySeconds` | Delay before liveness probe is initiated | 10
+`service.nodePorts.tcp` | Sets the nodePort for an entry referenced by its key from `tcp` | `{}`
+`service.nodePorts.udp` | Sets the nodePort for an entry referenced by its key from `udp` | `{}`
+`livenessProbe.initialDelaySeconds` | Delay before liveness probe is initiated | 10`
 `livenessProbe.periodSeconds` | How often to perform the probe | 10
 `livenessProbe.timeoutSeconds` | When the probe times out | 5
 `livenessProbe.successThreshold` | Minimum consecutive successes for the probe to be considered successful after having failed. | 1
@@ -116,25 +127,31 @@ Parameter | Description | Default
 `readinessProbe.successThreshold` | Minimum consecutive successes for the probe to be considered successful after having failed. | 1
 `readinessProbe.failureThreshold` | Minimum consecutive failures for the probe to be considered failed after having succeeded. | 3
 `readinessProbe.port` | The port number that the readiness probe will listen on. | 10254
-`stats.enabled` | If `true`, enable "vts-status" page | `false`
-`stats.service.annotations` | Annotations for controller stats service | `{}`
-`stats.service.clusterIP` | Internal controller stats cluster service IP | `""`
-`stats.service.externalIPs` | Controller service stats external IP addresses | `[]`
-`stats.service.loadBalancerIP` | IP address to assign to load balancer (if supported) | `""`
-`stats.service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported) | `[]`
-`stats.service.type` | Type of controller stats service to create | `ClusterIP`
 `metrics.enabled` | If `true`, enable Prometheus metrics (`stats.enabled` must be `true` as well) | `false`
 `metrics.service.annotations` | Annotations for Prometheus metrics service | `{}`
 `metrics.service.clusterIP` | Cluster IP address to assign to service | `""`
+`metrics.service.omitClusterIP` | To omit the `ClusterIP` from the metrics service | `false`
 `metrics.service.externalIPs` | Prometheus metrics service external IP addresses | `[]`
 `metrics.service.loadBalancerIP` | IP address to assign to load balancer (if supported) | `""`
 `metrics.service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported) | `[]`
 `metrics.service.port` | Prometheus metrics service port | `9913`
 `metrics.service.type` | Type of Prometheus metrics service to create | `ClusterIP`
+`metrics.serviceMonitor.enabled` | Set this to `true` to create ServiceMonitor for Prometheus operator | `false`
+`metrics.serviceMonitor.additionalLabels` | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`
+`metrics.serviceMonitor.namespace` | namespace where servicemonitor resource should be created | `the same namespace as nginx ingress`
+`metrics.serviceMonitor.honorLabels` | honorLabels chooses the metric's labels on collisions with target labels. | `false`
+`metrics.prometheusRule.enabled` | Set this to `true` to create prometheusRules for Prometheus operator | `false`
+`metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus | `{}`
+`metrics.prometheusRule.namespace` | Namespace where prometheusRules resource should be created | `the same namespace as nginx ingress`
+`metrics.prometheusRule.rules` | Rules to be prometheus in YAML format, check values for an example. | `[]`
 `customTemplate.configMapName` | ConfigMap containing a custom nginx template | `""`
 `customTemplate.configMapKey` | ConfigMap key containing the nginx template | `""`
-`headers` | ConfigMap key:value pairs containing the [custom headers](https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers) for Nginx | `{}`
+`addHeaders` | ConfigMap key:value pairs containing [custom headers](https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers) added before sending response to the client | `{}`
+`proxySetHeaders` | ConfigMap key:value pairs containing [custom headers](https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers) added before sending request to the backends for Nginx | `{}`
 `updateStrategy` | Allows setting of RollingUpdate strategy | `{}`
+`configMapNamespace` | The nginx-configmap namespace name | `""`
+`tcp.configMapNamespace` | The tcp-services-configmap namespace name | `""`
+`udp.configMapNamespace` | The udp-services-configmap namespace name | `""`
 `defaultBackend.enabled` | If false, defaultBackendService must be provided | `true`
 `defaultBackend.name` | Name of the default backend component | `default-backend`
 `defaultBackend.image.repository` | Default backend container image repository | `k8s.gcr.io/defaultbackend`
