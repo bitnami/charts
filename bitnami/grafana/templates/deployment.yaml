@@ -1,0 +1,172 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grafana.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "grafana.name" . }}
+    helm.sh/chart: {{ include "grafana.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "grafana.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "grafana.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        helm.sh/chart: {{ include "grafana.chart" . }}
+{{- if .Values.podAnnotations }}
+      annotations:
+         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+         checksum/dashboard-provider: {{ include (print $.Template.BasePath "/dashboard-provider.yaml") . | sha256sum }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+    spec:
+      {{- if .Values.schedulerName }}
+      schedulerName: "{{ .Values.schedulerName }}"
+      {{- end }}
+{{- include "grafana.imagePullSecrets" . | indent 6 }}
+     {{- if .Values.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - configMapRef:
+            name: "{{ include "grafana.fullname" . }}-envvars"
+        - secretRef:
+            name: "{{ include "grafana.fullname" . }}-secret"
+        {{- if .Values.smtp.existingSecret }}
+        - name: GF_SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.smtp.existingSecret }}
+              key: {{ .Values.smtp.existingSecretUserKey | default "user" }}
+        - name: GF_SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.smtp.existingSecret }}
+              key: {{ .Values.smtp.existingSecretPasswordKey | default "password" }}
+        {{- end }}
+{{- if .Values.extraEnvVars }}
+{{ toYaml .Values.extraEnvVars | indent 8 }}
+{{- end }}
+        volumeMounts:
+        {{- if .Values.config.useGrafanaIniFile }}
+        - name: grafana-ini
+          mountPath: /opt/bitnami/grafana/conf/grafana.ini
+          subPath: grafana.ini
+        {{- end }}
+        {{- if .Values.config.useCustomIniFile }}
+        - name: custom-ini
+          mountPath: /opt/bitnami/grafana/conf/custom.ini
+          subPath: custom.ini
+        {{- end }}
+        - name: data
+          mountPath: /opt/bitnami/grafana/data
+        {{- if .Values.dashboardsProvider.enabled }}
+        - name: dashboards-provider
+          mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards
+        {{- end }}
+        {{- range .Values.dashboardsConfigMaps }}
+        - name: {{ . }}
+          mountPath: /opt/bitnami/grafana/dashboards
+        {{- end }}
+        {{- if .Values.datasources.secretName }}
+        - name: datasources
+          mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
+        {{- end }}
+        {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
+        - name: ldap
+          mountPath: /opt/bitnami/grafana/conf/ldap.toml
+          subPath: ldap.toml
+        {{- end }}
+        {{- range .Values.extraConfigmaps }}
+        - name: {{ .name }}
+          mountPath: {{ .mountPath }}
+          subPath: {{ .subPath | default "" }}
+          readOnly: {{ .readOnly }}
+        {{- end }}
+        ports:
+          - name: dashboard
+            containerPort: 3000
+            protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: dashboard
+{{ toYaml .Values.livenessProbe | indent 10 }}
+        readinessProbe:
+          tcpSocket:
+            port: dashboard
+{{ toYaml .Values.readinessProbe | indent 10 }}
+        resources:
+{{- toYaml .Values.resources | nindent 10 }}
+      volumes:
+      - name: data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default (include "grafana.fullname" .) }}
+      {{- end }}
+      {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
+      - name: ldap
+        configMap:
+          name: {{ .Values.ldap.configMapName }}
+      {{- end }}
+      {{- if .Values.dashboardsProvider.enabled }}
+      - name: dashboards-provider
+        configMap:
+          {{- if .Values.dashboardsProvider.configMapName }}
+          name: {{ .Values.dashboardsProvider.configMapName }}
+          {{- else }}
+          name: {{ include "grafana.fullname" . }}-provider
+          {{- end }}
+      {{- end }}
+      {{- range .Values.dashboardsConfigMaps }}
+      - name: {{ . }}
+        configMap:
+          name: {{ . }}
+      {{- end }}
+      {{- if .Values.datasources.secretName }}
+      - name: datasources
+        secret:
+          secretName: {{ .Values.datasources.secretName }}
+      {{- end }}
+      {{- if .Values.config.useGrafanaIniFile }}
+      - name: grafana-ini
+        configMap:
+          name: {{ required "A configmap containing the grafana.ini file is needed!!" .Values.config.grafanaIniConfigMap }}
+      {{- end }}
+      {{- if .Values.config.useCustomIniFile }}
+      - name: custom-ini
+        configMap:
+          name: {{ required "A configmap containing the custom.ini file is needed!!" .Values.config.customIniConfigMap }}
+      {{- end }}
+      {{- range .Values.extraConfigmaps }}
+      - name: {{ .name }}
+        configMap:
+          name: {{ .name }}
+      {{- end }}
+{{- with .Values.nodeSelector }}
+      nodeSelector:
+{{- toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.affinity }}
+      affinity:
+{{- toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.tolerations }}
+      tolerations:
+{{- toYaml . | indent 8 }}
+{{- end }}

@@ -1,0 +1,16 @@
+apiVersion: v1
+name: grafana
+version: 0.1.0
+appVersion: "6.3.3"
+description: Grafana is an open source metric analytics and visualization suite.
+keywords:
+- analitics
+- monitoring
+- metrics
+- logs
+home: https://grafana.com/
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://grafana.com/static/assets/img/grafana_logo.svg

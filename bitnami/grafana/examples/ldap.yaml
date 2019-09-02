@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ldap
+data:
+  ldap.toml: |-
+    [[servers]]
+    host = "127.0.0.1"
+    port = 389
+    use_ssl = false
+    start_tls = false
+    ssl_skip_verify = false
+    bind_dn = "cn=admin,dc=grafana,dc=org"
+    bind_password = 'grafana'
+    search_filter = "(cn=%s)"
+    search_base_dns = ["dc=grafana,dc=org"]
+
+    [servers.attributes]
+    name = "givenName"
+    surname = "sn"
+    username = "cn"
+    member_of = "memberOf"
+    email =  "email"
