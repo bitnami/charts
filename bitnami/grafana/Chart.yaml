@@ -1,16 +1,18 @@
 apiVersion: v1
 name: grafana
-version: 0.1.0
+version: 0.0.1
 appVersion: "6.3.3"
-description: Grafana is an open source metric analytics and visualization suite.
+description: Grafana is an open source, feature rich metrics dashboard and graph editor for Graphite, Elasticsearch, OpenTSDB, Prometheus and InfluxDB.
 keywords:
 - analitics
 - monitoring
 - metrics
 - logs
 home: https://grafana.com/
+sources:
+- https://github.com/bitnami/bitnami-docker-grafana
 maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
-icon: https://grafana.com/static/assets/img/grafana_logo.svg
+icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
