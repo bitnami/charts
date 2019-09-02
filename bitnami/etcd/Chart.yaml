@@ -1,7 +1,7 @@
 apiVersion: v1
 name: etcd
-version: 4.3.4
-appVersion: 3.3.15
+version: 4.3.5
+appVersion: 3.4.0
 description: etcd is a distributed key value store that provides a reliable way to store data across a cluster of machines
 keywords:
 - etcd
