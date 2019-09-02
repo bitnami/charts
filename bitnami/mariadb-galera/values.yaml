@@ -363,7 +363,7 @@ persistence:
 ##
 # extraInitContainers: |
 # - name: do-something
-#   image: bitnami/minideb:buster
+#   image: bitnami/minideb:stretch
 #   command: ['do', 'something']
 
 
