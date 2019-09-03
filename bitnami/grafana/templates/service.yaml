@@ -17,7 +17,7 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: dashboard
       protocol: TCP
       name: http
       {{- if .Values.service.nodePort }}

@@ -35,6 +35,7 @@ image:
 ##
 # fullnameOverride:
 
+# Number of grafana Pod replicas
 replicaCount: 1
 
 ## Set up update strategy for Grafana installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
@@ -46,7 +47,7 @@ replicaCount: 1
 ##    maxSurge: 25%
 ##    maxUnavailable: 25%
 updateStrategy:
-type: RollingUpdate
+  type: RollingUpdate
 
 ## Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/

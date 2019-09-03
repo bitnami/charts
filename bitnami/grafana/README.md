@@ -47,17 +47,17 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `global.imageRegistry`                      | Global Docker image registry                                                                | `nil`                                                   |
 | `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`                            | Grafana image registry                                                                      | `docker.io`                                             |
-| `image.repository`                          | Grafana Image name                                                                          | `bitnami/grafana`                                       |
-| `image.tag`                                 | Grafana Image tag                                                                           | `{TAG_NAME}`                                            |
+| `image.repository`                          | Grafana image name                                                                          | `bitnami/grafana`                                       |
+| `image.tag`                                 | Grafana image tag                                                                           | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                          | Grafana image pull policy                                                                   | `IfNotPresent`                                          |
 | `image.pullSecrets`                         | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods) |
 | `nameOverride`                              | String to partially override grafana.fullname template with a string (will prepend the release name) | `nil`                                          |
 | `fullnameOverride`                          | String to fully override grafana.fullname template with a string                            | `nil`                                                   |
 |`replicaCount`                               | Number of replicas of the Grafana Pod                                                       | `1`                                                     |
-| `updateStrategy.type`                       | Update strategy for deployment                                                              | `RollingUpdate`                                         |
+| `updateStrategy`                            | Update strategy for deployment                                                              | `{type: "RollingUpdate"}`                                       |
 | `schedulerName`                             | Alternative scheduler                                                                       | `nil`                                                   |
 | `admin.user`                                | Grafana admin username                                                                      | `admin`                                                 |
-| `admin.password`                            | Grafana admin password                                                                      | Randomly generated                                      |
+| `admin.password`                            | Grafana admin password                                                                      | Randomly generated                                               |
 | `smtp.enabled`                              | Enable SMTP configuration                                                                   | `false`                                                 |
 | `smtp.existingSecret`                       | Secret with SMTP credentials                                                                | `nil`                                                   |
 | `smtp.existingSecretUserKey`                | Key which value is the SMTP user in the SMTP secret                                         | `user`                                                  |
@@ -149,9 +149,10 @@ And now you need to pass the ConfigMap name, to the corresponding parameter:
 $ helm install bitnami/grafana --set config.useGrafanaIniFile=true,config.grafanaIniConfigMap=myconfig
 ```
 
-To provide dashboards on deployment time, Grafana needs a dashboards provider and the dashboards themselves. A default provider is created if enabled, or you can mount your own provider using a ConfigMap, but have in mind that the path to the dashboard folder must be `/opt/bitnami/grafana/dashboards`.
-To create a dashboard, it is needed to have a datasource for it. The datasources must be created mounting a secret with all the datasource files in it. In this case, it is not a ConfigMap because the datasource could contain sensitive information.
-To load the dashboards themselves you need to create a ConfigMap for each one containing the `json` file that defines the dashboard and set the array with the ConfigMap names into the `dashboardsConfigMaps` parameter.
+To provide dashboards on deployment time, Grafana needs a dashboards provider and the dashboards themselves.
+A default provider is created if enabled, or you can mount your own provider using a ConfigMap, but have in mind that the path to the dashboard folder must be `/opt/bitnami/grafana/dashboards`.
+  1. To create a dashboard, it is needed to have a datasource for it. The datasources must be created mounting a secret with all the datasource files in it. In this case, it is not a ConfigMap because the datasource could contain sensitive information.
+  2. To load the dashboards themselves you need to create a ConfigMap for each one containing the `json` file that defines the dashboard and set the array with the ConfigMap names into the `dashboardsConfigMaps` parameter.
 Note the difference between the datasources and the dashboards creation. For the datasources we can use just one secret with all of the files, while for the dashboards we need one ConfigMap per file.
 For example, after the creation of the dashboard and datasource ConfigMap in the same way that the explained for the `grafana.ini` file, execute the following to deploy Grafana with custom dashboards:
 
@@ -178,3 +179,10 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/grafana
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+## Persistence
+
+The [Bitnami Grafana](https://github.com/bitnami/bitnami-docker-grafana) image stores the Grafana data and configurations at the `/opt/bitnami/grafana/data` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
