@@ -182,8 +182,6 @@ Parameter | Description | Default
 `serviceAccount.create` | If `true`, create a service account | ``
 `serviceAccount.name` | The name of the service account to use. If not set and `create` is `true`, a name is generated using the fullname template. | ``
 `revisionHistoryLimit` | The number of old history to retain to allow rollback. | `10`
-`tcp` | TCP service key:value pairs | `{}`
-`udp` | UDP service key:value pairs | `{}`                                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
