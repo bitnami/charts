@@ -174,6 +174,13 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/grafana
 + ingress.enabled: true
 ```
 
+### Supporting HA (High Availability)
+
+To support HA Grafana just need an external database where store dashboards, users and other persistent data.
+To configure the external database provide a configuration file containing the [database section](https://grafana.com/docs/installation/configuration/#database)
+
+More information about Grafana HA [here](https://grafana.com/docs/tutorials/ha_setup/)
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
