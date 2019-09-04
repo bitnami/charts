@@ -288,6 +288,11 @@ slave:
     successThreshold: 1
     failureThreshold: 3
 
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
 metrics:
   enabled: false
   image:
