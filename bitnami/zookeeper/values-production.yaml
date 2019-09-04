@@ -101,6 +101,10 @@ syncLimit: 5
 ##
 maxClientCnxns: 60
 
+## A list of comma separated Four Letter Words commands to use
+##
+fourlwCommandsWhitelist: srvr, mntr
+
 ## Allow to accept connections from unauthenticated users
 ##
 allowAnonymousLogin: true
