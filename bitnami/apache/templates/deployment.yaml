@@ -137,4 +137,8 @@ spec:
       - name: vhosts
         configMap:
           name: {{ .Values.vhostsConfigMap }}
-      {{- end }}          
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}
