@@ -43,4 +43,3 @@ spec:
       affinity:
 {{ toYaml . | indent 8 }}
       {{- end }}
-
