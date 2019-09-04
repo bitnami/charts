@@ -38,4 +38,4 @@ request, mention that information here.-->
 - [ ] Title of the PR starts with chart name (e.g. `[bitnami/chart]`)
 - [ ] If the chart contains a `values-production.yaml` apart from `values.yaml`, ensure that you implement the changes in both files
 
-:warning: Keep in mind that if you want to make changes to the kubeapps chart, please implement them in the [kubeapps repository](https://github.com/kubeapps/kubeapps/tree/master/chart/kubeapps). This is only a syncrhonized mirror.
+:warning: Keep in mind that if you want to make changes to the kubeapps chart, please implement them in the [kubeapps repository](https://github.com/kubeapps/kubeapps/tree/master/chart/kubeapps). This is only a synchronized mirror.
