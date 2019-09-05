@@ -113,13 +113,11 @@ configMapNamespace: ""   # defaults to .Release.Namespace
 
 ## Allows customization of the tcp-services-configmap namespace
 ##
-tcp:
-  configMapNamespace: ""   # defaults to .Release.Namespace
+tcpConfigMapNamespace: ""   # defaults to .Release.Namespace
 
 ## Allows customization of the udp-services-configmap namespace
 ##
-udp:
-  configMapNamespace: ""   # defaults to .Release.Namespace
+udpConfigMapNamespace: ""   # defaults to .Release.Namespace
 
 ## Additional command line arguments to pass to nginx-ingress-controller
 ## E.g. to specify the default SSL certificate you can use

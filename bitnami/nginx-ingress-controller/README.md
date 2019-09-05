@@ -150,8 +150,8 @@ Parameter | Description | Default
 `proxySetHeaders` | ConfigMap key:value pairs containing [custom headers](https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers) added before sending request to the backends for Nginx | `{}`
 `updateStrategy` | Allows setting of RollingUpdate strategy | `{}`
 `configMapNamespace` | The nginx-configmap namespace name | `""`
-`tcp.configMapNamespace` | The tcp-services-configmap namespace name | `""`
-`udp.configMapNamespace` | The udp-services-configmap namespace name | `""`
+`tcpConfigMapNamespace` | The tcp-services-configmap namespace name | `""`
+`udpConfigMapNamespace` | The udp-services-configmap namespace name | `""`
 `defaultBackend.enabled` | If false, defaultBackendService must be provided | `true`
 `defaultBackend.name` | Name of the default backend component | `default-backend`
 `defaultBackend.image.repository` | Default backend container image repository | `k8s.gcr.io/defaultbackend`
@@ -183,7 +183,7 @@ Parameter | Description | Default
 `serviceAccount.name` | The name of the service account to use. If not set and `create` is `true`, a name is generated using the fullname template. | ``
 `revisionHistoryLimit` | The number of old history to retain to allow rollback. | `10`
 `tcp` | TCP service key:value pairs | `{}`
-`udp` | UDP service key:value pairs | `{}`                                                 |
+`udp` | UDP service key:value pairs | `{}`
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
