@@ -195,8 +195,8 @@ spec:
         - name: "data"
           emptyDir: {}
 {{- end }}
-{{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.slave.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
       {{- end }}
+{{- end }}
