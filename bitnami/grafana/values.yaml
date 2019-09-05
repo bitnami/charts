@@ -35,17 +35,18 @@ image:
 ##
 # fullnameOverride:
 
-# Number of grafana Pod replicas
+## Number of grafana Pod replicas
+##
 replicaCount: 1
 
 ## Set up update strategy for Grafana installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## Example:
-## updateStrategy:
-##  type: RollingUpdate
-##  rollingUpdate:
-##    maxSurge: 25%
-##    maxUnavailable: 25%
+# updateStrategy:
+#  type: RollingUpdate
+#  rollingUpdate:
+#    maxSurge: 25%
+#    maxUnavailable: 25%
 updateStrategy:
   type: RollingUpdate
 
@@ -56,13 +57,14 @@ updateStrategy:
 
 ## Admin access configuration
 ## If a password is not provided a random password will be generated
-#
+##
 admin:
   user: "admin"
   # password:
 
 ## SMTP configuration
 ## Use either a secret container the credentials or set the credentials through command line.
+##
 smtp:
   enabled: false
   # Provide credentials by command line
@@ -105,6 +107,7 @@ ldap:
 
 ## Parameters to override the default grafana.ini and custom.ini files.
 ## It is needed to create a configmap containing the grafana.ini and custom.ini files.
+##
 config:
   useGrafanaIniFile: false
   grafanaIniConfigMap:
@@ -113,6 +116,7 @@ config:
 
 ## Create dasboard provider to load dashboards, a default one is created to load
 ## dashboards from "/opt/bitnami/grafana/dashboards"
+##
 dashboardsProvider:
   enabled: false
   ## ConfigMap with a custom provider file.
@@ -126,15 +130,18 @@ dashboardsProvider:
 ## dashboardsConfigMaps:
 ##   - mydashboard
 ##   - myotherdashboard
+##
 dashboardsConfigMaps: []
 
 ## Create datasources from a custom secret
 ## The secret must contain the files
+##
 datasources:
   secretName:
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
 ##
 persistence:
   enabled: true
@@ -155,6 +162,7 @@ persistence:
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
 livenessProbe:
   initialDelaySeconds: 120
   periodSeconds: 10
@@ -168,7 +176,8 @@ readinessProbe:
   failureThreshold: 6
 successThreshold: 1
 
-# Service configuration
+## Service configuration
+##
 service:
   port: 3000
   type: ClusterIP
@@ -188,7 +197,8 @@ service:
   ##
   # loadBalancerIP:
 
-# Ingress configuration
+## Ingress configuration
+##
 ingress:
   enabled: false
   annotations: {}
@@ -203,8 +213,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-# SecurityContext configuration
-
+## SecurityContext configuration
+##
 securityContext:
   enabled: true
   runAsUser: 1001

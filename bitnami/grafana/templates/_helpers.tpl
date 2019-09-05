@@ -7,6 +7,24 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "grafana.labels" -}}
+app.kubernetes.io/name: {{ include "grafana.name" . }}
+helm.sh/chart: {{ include "grafana.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "grafana.matchLabels" -}}
+app.kubernetes.io/name: {{ include "grafana.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.

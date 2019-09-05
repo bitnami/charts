@@ -2,17 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "grafana.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "grafana.name" . }}
-    helm.sh/chart: {{ include "grafana.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{ include "grafana.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "grafana.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{ include "grafana.matchLabels" . | nindent 6 }}
   {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
@@ -39,6 +33,18 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       {{- end }}
+{{- with .Values.nodeSelector }}
+      nodeSelector:
+{{-  tpl (toYaml .) $ | indent 8 }}
+{{- end }}
+{{- with .Values.affinity }}
+      affinity:
+{{-  tpl (toYaml .) $ | indent 8 }}
+{{- end }}
+{{- with .Values.tolerations }}
+      tolerations:
+{{- tpl (toYaml .) $ | indent 8 }}
+{{- end }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -159,15 +165,3 @@ spec:
         configMap:
           name: {{ .name }}
       {{- end }}
-{{- with .Values.nodeSelector }}
-      nodeSelector:
-{{-  tpl (toYaml .) $ | indent 8 }}
-{{- end }}
-{{- with .Values.affinity }}
-      affinity:
-{{-  tpl (toYaml .) $ | indent 8 }}
-{{- end }}
-{{- with .Values.tolerations }}
-      tolerations:
-{{- tpl (toYaml .) $ | indent 8 }}
-{{- end }}
