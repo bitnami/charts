@@ -85,3 +85,7 @@ spec:
         resources:
   {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}

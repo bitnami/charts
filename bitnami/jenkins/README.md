@@ -100,6 +100,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `persistence.size`                   | PVC Storage Request for Jenkins volume                                                               | `8Gi`                                                        |
 | `resources`                          | CPU/Memory resource requests/limits                                                                  | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                     | Pod annotations                                                                                      | `{}`                                                         |
+| `affinity`                           | Map of node/pod affinities                                                                           | `{}`                                                         |
 | `metrics.enabled`                    | Start a side-car Jenkins prometheus exporter                                                         | `false`                                                      |
 | `metrics.image.registry`             | Jenkins exporter image registry                                                                      | `docker.io`                                                  |
 | `metrics.image.repository`           | Jenkins exporter image name                                                                          | `bitnami/jenkins-exporter`                                   |

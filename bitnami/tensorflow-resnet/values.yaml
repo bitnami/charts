@@ -87,6 +87,11 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
 ## Add the corresponding annotations so Prometheus can collect Tensorflow Serving metrics
 ##
 metrics:

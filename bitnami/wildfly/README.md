@@ -82,6 +82,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `persistence.accessMode`             | PVC Access Mode for WildFly volume                                                                                                                        | `ReadWriteOnce`                                         |
 | `persistence.size`                   | PVC Storage Request for WildFly volume                                                                                                                    | `8Gi`                                                   |
 | `resources`                          | CPU/Memory resource requests/limits                                                                                                                       | Memory: `512Mi`, CPU: `300m`                            |
+| `affinity`                           | Map of node/pod affinities                                                                                                                                | `{}`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 

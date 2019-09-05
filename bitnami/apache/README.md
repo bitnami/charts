@@ -78,6 +78,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `ingress.secrets[0].name`        | TLS Secret Name                                         | `nil`                                                        |
 | `ingress.secrets[0].certificate` | TLS Secret Certificate                                  | `nil`                                                        |
 | `ingress.secrets[0].key`         | TLS Secret Key                                          | `nil`                                                        |
+| `affinity`                       | Map of node/pod affinities                              | `{}`                                                         |
 | `metrics.enabled`                | Start a side-car prometheus exporter                    | `false`                                                      |
 | `metrics.image.registry`         | Apache exporter image registry                          | `docker.io`                                                  |
 | `metrics.image.repository`       | Apache exporter image name                              | `lusotycoon/apache-exporter`                                 |

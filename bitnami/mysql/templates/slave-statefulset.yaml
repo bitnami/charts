@@ -196,3 +196,7 @@ spec:
           emptyDir: {}
 {{- end }}
 {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}

@@ -104,6 +104,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `ingress.secrets[0].name`               | TLS Secret Name                                                                                                                                           | `nil`                                                   |
 | `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
 | `ingress.secrets[0].key`                | TLS Secret Key                                                                                                                                            | `nil`                                                   |
+| `affinity`                              | Map of node/pod affinities                                                                                                                                | `{}`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/node](http://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](http://github.com/bitnami/bitnami-docker-node) image documentation.
 
