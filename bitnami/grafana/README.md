@@ -53,7 +53,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `image.pullSecrets`                         | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods) |
 | `nameOverride`                              | String to partially override grafana.fullname template with a string (will prepend the release name) | `nil`                                          |
 | `fullnameOverride`                          | String to fully override grafana.fullname template with a string                            | `nil`                                                   |
-|`replicaCount`                               | Number of replicas of the Grafana Pod                                                       | `1`                                                     |
+| `replicaCount`                               | Number of replicas of the Grafana Pod                                                       | `1`                                                     |
 | `updateStrategy`                            | Update strategy for deployment                                                              | `{type: "RollingUpdate"}`                                       |
 | `schedulerName`                             | Alternative scheduler                                                                       | `nil`                                                   |
 | `admin.user`                                | Grafana admin username                                                                      | `admin`                                                 |
@@ -157,7 +157,7 @@ Note the difference between the datasources and the dashboards creation. For the
 For example, after the creation of the dashboard and datasource ConfigMap in the same way that the explained for the `grafana.ini` file, execute the following to deploy Grafana with custom dashboards:
 
 ```
-$ helm install bitnami/grafana --set "dashboardsProvider.enabled=true,datasources.secretName=datasource-secret,dashboardsConfigMaps[0]=mydashboard"
+$ helm install bitnami/grafana --set "dashboardsProvider.enabled=true,datasources.secretName=datasource-secret,dashboardsConfigMaps[0].configMapName=mydashboard,dashboardsConfigMaps[0].fileName=mydashboard.json"
 ```
 
 ### Production configuration
