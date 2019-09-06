@@ -217,7 +217,7 @@ tolerations: []
 ##
 ## Container entrypoint and cmd (useful for using different images)
 ##
-entrypoint: "/app-entrypoint.sh"
+entrypoint: "/entrypoint.sh"
 cmd: "/run.sh"
 
 ## Network policies

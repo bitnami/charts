@@ -250,9 +250,13 @@ This chart uses the [Bitnami cassandra](https://github.com/bitnami/bitnami-docke
 
 ## Upgrade
 
+### 4.0.0
+
+This release changes uses Bitnami Cassandra container 3.11.4-r188, based on Bash.
+
 ### 2.0.0
 
-This releases make it possible to specify custom initialization scripts in both cql and sh files.
+This release make it possible to specify custom initialization scripts in both cql and sh files.
 
 #### Breaking changes
 
