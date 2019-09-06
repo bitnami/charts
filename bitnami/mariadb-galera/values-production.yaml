@@ -289,8 +289,8 @@ mariadbConfiguration: |-
 ## Mariadb Master additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 # annotations:
-#   - key: key1
-#     value: value1
+#   key: key
+#   another-key: another-value
 
 ## Desired number of cluster nodes
 ##
