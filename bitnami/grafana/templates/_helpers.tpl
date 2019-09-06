@@ -135,3 +135,29 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
     {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Validate values for Grafana.
+*/}}
+{{- define "grafana.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "grafana.validateValues.database" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Function to validate the external database
+*/}}
+{{- define "grafana.validateValues.database" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- if gt $replicaCount 1 -}}
+WARNING: Using more than one replica requires using an external database to share data between Grafana instances.
+         By default Grafana uses an internal sqlite3 per instance but you can configure an external MySQL or PostgreSQL.
+         Please, ensure you provide a configuration file configuring the external database to share data between replicas.
+{{- end -}}
+{{- end -}}

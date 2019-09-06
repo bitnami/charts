@@ -19,11 +19,12 @@
     echo http://$SERVICE_IP:{{ .Values.service.port }}
 {{- else if contains "ClusterIP" .Values.service.type }}
     echo "Browse to http://127.0.0.1:8080"
-    kubectl port-forward svc/{{ include "grafana.fullname" . }} 8080:{{ .Values.service.port }}
+    kubectl port-forward svc/{{ include "grafana.fullname" . }} 8080:{{ .Values.service.port }} &
 {{- end }}
 
-2. Get the admin password:
+2. Get the admin credentials:
 
+    echo "User: {{ .Values.admin.user }}"
     echo "Password: $(kubectl get secret {{ include "grafana.fullname" . }}-secret -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)"
 
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
@@ -32,3 +33,5 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 
 {{- end }}
+
+{{ include "grafana.validateValues" . }}
