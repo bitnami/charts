@@ -62,7 +62,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.0-r99
+    tag: 1.16.1-r25
   service:
     port: 80
     type: ClusterIP
@@ -221,8 +221,11 @@ dashboard:
   replicaCount: 2
   image:
     registry: docker.io
+    # Once issue #1156 is fixed we can continue using kubeapps repository instead of bitnami fixed tags
+    # repository: bitnami/kubeapps-dashboard
+    # tag: 1.5.0-r0
     repository: bitnami/kubeapps-dashboard
-    tag: 1.5.0-r0
+    tag: 1.5.0-debian-9-r14
   service:
     port: 8080
   livenessProbe:
