@@ -1,0 +1,34 @@
+#!/bin/bash
+
+currentBranch="$(git rev-parse --abbrev-ref HEAD)"
+originCommit="$(git rev-parse --short "$(git merge-base master "$currentBranch")")"
+filesToBePushed="$(git diff --name-only "$originCommit")"
+failed=false
+
+for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
+    printf '\033[01;33mValidating %s:\n\033[0m' "$chartName"
+    chartPath="$(git rev-parse --show-toplevel)"/"$chartName"
+
+    printf '\033[0;34m- Running helm lint %s\n\033[0m' "$chartPath"
+    if helm lint "$chartPath"; then
+        printf '\033[0;32m\U2705 helm lint %s\n\n\033[0m' "$chartPath"
+    else
+        printf '\033[0;31m\U1F6AB helm lint %s failed. Pull Request cancelled.\n\n\033[0m' "$chartPath"
+        failed=true
+    fi
+    
+    printf '\033\033[0;34m- Running helm install --dry-run %s\n\033[0m' "$chartPath"
+    helm repo add bitnami https://charts.bitnami.com/bitnami >> /dev/null
+    helm dependency update "$chartPath" >> /dev/null
+    if helm install --dry-run "$chartPath"; then
+        printf '\033[0;32m\U2705 helm install --dry-run %s\n\n\033[0m' "$chartPath"
+    else
+        printf '\033[0;31m\U1F6AB helm install --dry-run %s failed. Pull Request cancelled.\n\n\033[0m' "$chartPath"
+        failed=true
+    fi
+done
+
+if $failed ; then
+    exit 1
+fi
+exit 0
