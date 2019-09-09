@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## TODO: Only check folders in the bitnami/ path
+
 currentBranch="$(git rev-parse --abbrev-ref HEAD)"
 originCommit="$(git rev-parse --short "$(git merge-base master "$currentBranch")")"
 filesToBePushed="$(git diff --name-only "$originCommit")"

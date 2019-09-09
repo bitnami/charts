@@ -1,9 +1,6 @@
 #!/bin/bash
 
-currentBranch="$(git rev-parse --abbrev-ref HEAD)"
-originCommit="$(git rev-parse --short "$(git merge-base master "$currentBranch")")"
-
-if git diff --name-only "$originCommit" | grep '/kubeapps/'; then
+if git diff --name-only --cached | grep '/kubeapps/'; then
     printf '\n\U1F6AB Pull Request cancelled\n\nKubeapps changes detected in this repository.\nPlease, implement them in the kubeapps repository (https://github.com/kubeapps/kubeapps/tree/master/chart/kubeapps).\n'
     exit 1
 fi
