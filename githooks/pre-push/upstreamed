@@ -2,9 +2,8 @@
 
 currentBranch="$(git rev-parse --abbrev-ref HEAD)"
 originCommit="$(git rev-parse --short "$(git merge-base master "$currentBranch")")"
-filesToBePushed="$(git diff --name-only "$originCommit")"
 
-if $filesToBePushed | grep '/upstreamed/'; then
+if git diff --name-only "$originCommit" | grep '/upstreamed/'; then
     printf '\n\U1F6AB Pull Request cancelled\n\nChanges detected in the "upstreamed" folder.\nPlease, implement them in the Helm Charts repository (https://github.com/helm/charts).\n'
     exit 1
 fi
