@@ -15,7 +15,7 @@ for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
         if helm lint "$chartPath"; then
             printf '\033[0;32m\U2705 helm lint %s\n\n\033[0m' "$chartPath"
         else
-            printf '\033[0;31m\U1F6AB helm lint %s failed. Pull Request cancelled.\n\n\033[0m' "$chartPath"
+            printf '\033[0;31m\U1F6AB helm lint %s failed. Push cancelled.\n\n\033[0m' "$chartPath"
             failed=1
         fi
 
@@ -25,7 +25,7 @@ for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
         if helm install --dry-run "$chartPath"; then
             printf '\033[0;32m\U2705 helm install --dry-run %s\n\n\033[0m' "$chartPath"
         else
-            printf '\033[0;31m\U1F6AB helm install --dry-run %s failed. Pull Request cancelled.\n\n\033[0m' "$chartPath"
+            printf '\033[0;31m\U1F6AB helm install --dry-run %s failed. Push cancelled.\n\n\033[0m' "$chartPath"
             failed=1
         fi
     fi
