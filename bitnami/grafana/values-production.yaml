@@ -178,7 +178,7 @@ readinessProbe:
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
-successThreshold: 1
+  successThreshold: 1
 
 ## Service configuration
 ##
