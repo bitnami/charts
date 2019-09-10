@@ -14,8 +14,8 @@ spec:
     metadata:
       labels: {{ include "grafana.labels" . | nindent 8 }}
       annotations:
-         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-         checksum/dashboard-provider: {{ include (print $.Template.BasePath "/dashboard-provider.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/dashboard-provider: {{ include (print $.Template.BasePath "/dashboard-provider.yaml") . | sha256sum }}
 {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations | indent 8 }}
 {{- end }}
