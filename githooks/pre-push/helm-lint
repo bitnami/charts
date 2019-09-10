@@ -3,7 +3,7 @@
 currentBranch="$(git rev-parse --abbrev-ref HEAD)"
 originCommit="$(git rev-parse --short "$(git merge-base master "$currentBranch")")"
 filesToBePushed="$(git diff --name-only "$originCommit")"
-failed=false
+failed=0
 
 for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
     # Avoid running 'helm lint|install' when modified dirs are not charts
@@ -16,7 +16,7 @@ for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
             printf '\033[0;32m\U2705 helm lint %s\n\n\033[0m' "$chartPath"
         else
             printf '\033[0;31m\U1F6AB helm lint %s failed. Pull Request cancelled.\n\n\033[0m' "$chartPath"
-            failed=true
+            failed=1
         fi
 
         printf '\033\033[0;34m- Running helm install --dry-run %s\n\033[0m' "$chartPath"
@@ -26,12 +26,9 @@ for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
             printf '\033[0;32m\U2705 helm install --dry-run %s\n\n\033[0m' "$chartPath"
         else
             printf '\033[0;31m\U1F6AB helm install --dry-run %s failed. Pull Request cancelled.\n\n\033[0m' "$chartPath"
-            failed=true
+            failed=1
         fi
     fi
 done
 
-if $failed ; then
-    exit 1
-fi
-exit 0
+exit $failed
