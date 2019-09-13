@@ -84,7 +84,7 @@ serviceAccount:
   ##
   create: false
   ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the mariadb.fullname template
+  ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
   # name:
 
 ## Role Based Access
