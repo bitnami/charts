@@ -101,7 +101,7 @@ Create the name of the service account to use
 */}}
 {{- define "mariadb-galera.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "mariadb.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "mariadb-galera.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
