@@ -29,6 +29,10 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH debugging in minideb-extras-base
+  ##
+  debug: false
 
 ## String to partially override cassandra.fullname template (will maintain the release name)
 ##
