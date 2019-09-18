@@ -136,6 +136,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Notable changes
 
+### 7.0.0
+
+This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, which is based on Bash instead of Node.js.
+
 ### 6.0.0
 
 This release allows you to use your custom static applicaton. In order to do so, check [this section](#deploying-your-custom-web-application).
