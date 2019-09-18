@@ -290,6 +290,10 @@ The chart can optionally start a metrics exporter endpoint on port `9107` for [p
 
 ## Upgrading
 
+### To 6.0.0
+
+This release changes uses Bitnami Consul container `1.6.1-debian-9-r6`, based on Bash.
+
 ### To 3.1.0
 
 Consul container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
