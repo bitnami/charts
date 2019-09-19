@@ -292,7 +292,7 @@ The chart can optionally start a metrics exporter endpoint on port `9107` for [p
 
 ### To 6.0.0
 
-This release changes uses Bitnami Consul container `1.6.1-debian-9-r6`, based on Bash.
+This release updates the Bitnami Consul container to `1.6.1-debian-9-r6`, which is based on Bash instead of Node.js.
 
 ### To 3.1.0
 
