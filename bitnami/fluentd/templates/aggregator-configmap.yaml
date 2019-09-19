@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fluentd.fullname" . }}-aggregator-cm
+  labels: {{ include "fluentd.labels" . | nindent 4 }}
+data:
+  aggregator.conf: |
+    # TCP input
+    <source>
+      @type forward
+      bind 0.0.0.0
+      port 24444
+    </source>
+
+    # HTTP input
+    <source>
+      @type http
+      bind 0.0.0.0
+      port 9880
+    </source>
+
+    <filter **>
+      @type stdout
+    </filter>

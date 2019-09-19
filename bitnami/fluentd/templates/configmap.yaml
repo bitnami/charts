@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fluentd.fullname" . }}-cm
+  labels: {{ include "fluentd.labels" . | nindent 4 }}
+data:
+  fluentd.conf: |
+    <match fluent.**>
+      @type null
+    </match>
+
+    @include conf.d/*.conf

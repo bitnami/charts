@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "fluentd.fullname" . }}
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "fluentd.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: aggregator
+  serviceName: {{ include "fluentd.fullname" . }}-headless
+  replicas: {{ .Values.aggregator.replicaCount }}
+  updateStrategy:
+    {{- toYaml .Values.aggregator.updateStrategy | nindent 4 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "fluentd.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: aggregator
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/aggregator-configmap.yaml") . | sha256sum }}
+        {{- if .Values.aggregator.podAnnotations }}
+        {{- toYaml .Values.aggregator.podAnnotations | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ include "fluentd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: FLUENTD_CONF
+              value: {{ default "fluentd.conf" .Values.forwarder.configFile }}
+            - name: FLUENTD_OPT
+              value: {{ .Values.aggregator.extraArgs }}
+            {{- if .Values.aggregator.extraEnv }}
+            {{- toYaml .Values.aggregator.extraEnv | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 9880
+              protocol: TCP
+            - name: tcp
+              containerPort: 24444
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+              port: 9880
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources: {{ toYaml .Values.aggregator.resources | nindent 12 }}
+          volumeMounts:
+            - name: fluentd-config-file
+              mountPath: /opt/bitnami/fluentd/conf/fluentd.conf
+              subPath: fluentd.conf
+            - name: fluentd-extra-config
+              mountPath: /opt/bitnami/fluentd/conf/conf.d
+            - name: buffer
+              mountPath: /opt/bitnami/fluentd/logs/buffers
+      volumes:
+        - name: fluentd-config-file
+          configMap:
+            name: {{ include "fluentd.fullname" . }}-cm
+        - name: fluentd-extra-config
+          configMap:
+            name: {{ include "fluentd.fullname" . }}-aggregator-cm
+        - name: buffer
+          emptyDir: {}
+      {{- with .Values.aggregator.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.aggregator.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.aggregator.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

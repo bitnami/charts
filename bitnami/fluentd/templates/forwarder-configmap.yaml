@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fluentd.fullname" . }}-forwarder-cm
+  labels: {{ include "fluentd.labels" . | nindent 4 }}
+data:
+  forwarder.conf: |
+    # TCP input
+    <source>
+      @type forward
+      port 24444
+    </source>
+
+    # HTTP input
+    <source>
+      @type http
+      port 9880
+    </source>
+
+    <source>
+      @type tail
+      @id in_tail_docker
+      path /var/log/docker.log
+      tag docker
+      <parse>
+        @type regexp
+        expression /^time="(?<time>[^)]*)" level=(?<severity>[^ ]*) msg="(?<message>[^"]*)"( err="(?<error>[^"]*)")?( statusCode=($<status_code>\d+))?/
+      </parse>
+    </source>
+
+    # Log Forwarding
+    <match **>
+      @type forward
+      {{- $fullName := (include "fluentd.fullname" .) }}
+      {{- $global := . }}
+      {{- $domain := .Values.clusterDomain }}
+      {{- range $i, $e := until (.Values.aggregator.replicaCount | int) }}
+      <server>
+        {{ printf "host %s-%d.%s-headless.%s.svc.%s" $fullName $i $fullName $global.Release.Namespace $domain }}
+        port 24444
+        {{- if ne $i 0 }}
+        standby
+        {{- end }}
+      </server>
+      {{- end}}
+
+      <buffer>
+        flush_interval 10s
+      </buffer>
+    </match>
