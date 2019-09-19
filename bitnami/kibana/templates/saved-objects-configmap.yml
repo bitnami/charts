@@ -1,0 +1,38 @@
+{{- if (include "kibana.importSavedObjects" .) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kibana.fullname" . }}-saved-objects
+  labels: {{ include "kibana.labels" . | nindent 4 }}
+data:
+  import-saved-objects.sh: |
+    #!/bin/bash
+    echo "==> Saved objects import"
+    {{- if .Values.savedObjects.urls }}
+    {{- $totalURLs := len .Values.savedObjects.urls }}
+    echo "Total saved objects NDJSON URLs to import: {{ $totalURLs }}"
+    {{- range $i, $url := .Values.savedObjects.urls }}
+    echo "Importing saved objects from NDJSON in url {{ add $i 1 }} out of {{ $totalURLs }}: {{ $url }}"
+    download_tmp_file="$(mktemp)"
+    curl "{{$url}}" > "${download_tmp_file}.ndjson"
+    curl -s --connect-timeout 60 --max-time 60 -XPOST localhost:5601/api/saved_objects/_import -H 'kbn-xsrf:true' --form file=@${download_tmp_file}.ndjson
+    {{- end }}
+    {{- end }}
+    {{- if .Values.savedObjects.configmap }}
+    echo "Searching for dashboard NDJSON files from ConfigMap mounted in /bitnami/kibana/saved-objects"
+    ndjson_file_list_tmp="$(mktemp)"
+    find /bitnami/kibana/saved-objects -type f -regex ".*\.ndjson" > $ndjson_file_list_tmp
+    while read -r f; do
+        case "$f" in
+            *.ndjson)
+                echo "Importing $f"
+                curl -s --connect-timeout 60 --max-time 60 -XPOST localhost:5601/api/saved_objects/_import -H 'kbn-xsrf:true' --form file=@${f}
+                ;;
+            *)
+                echo "Ignoring $f"
+                ;;
+        esac
+    done < $ndjson_file_list_tmp
+    {{- end }}
+    echo "==> End of Saved objects import"
+{{- end -}}

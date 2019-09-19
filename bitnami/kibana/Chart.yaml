@@ -1,0 +1,18 @@
+apiVersion: v1
+name: kibana
+appVersion: 7.3.2
+description: Kibana is an open source, browser based analytics and search dashboard for Elasticsearch.
+version: 0.0.1
+keywords:
+- analitics
+- monitoring
+- metrics
+- logs
+home: https://www.elastic.co/products/kibana
+sources:
+- https://github.com/bitnami/bitnami-docker-kibana
+maintainers:
+- name: Bitnami
+  email: containers@bitnami.com
+engine: gotpl
+icon: https://bitnami.com/assets/stacks/kibana/img/kibana-stack-220x234.png

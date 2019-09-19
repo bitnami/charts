@@ -1,0 +1,16 @@
+{{- if not .Values.configurationCM }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kibana.fullname" . }}-conf
+  labels: {{ include "kibana.labels" . | nindent 4 }}
+data:
+  kibana.yml: |
+    pid.file: /opt/bitnami/kibana/tmp/kibana.pid
+    server.host: 0.0.0.0
+    server.port: 5601
+    elasticsearch.hosts: [{{ include "kibana.elasticsearch.url" . }}]
+    {{- if .Values.extraConfiguration }}
+    {{- tpl (toYaml .Values.extraConfiguration) $ | nindent 4 }}
+    {{- end }}
+{{- end }}

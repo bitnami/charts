@@ -1,0 +1,18 @@
+{{- if .Values.plugins -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kibana.fullname" . }}-plugins
+  labels: {{ include "kibana.labels" . | nindent 4 }}
+data:
+  install-plugins.sh: |
+    #!/bin/bash
+    echo "==> Plugin installation"
+    {{- $totalPlugins := len .Values.plugins }}
+    echo "Total plugins defined in chart installation: {{ $totalPlugins }}"
+    {{- range $i, $plugin := .Values.plugins }}
+    echo "Installing plugin {{ add $i 1 }} out of {{ $totalPlugins }}: {{ $plugin }}"
+    kibana-plugin install "{{ $plugin }}"
+    {{- end }}
+    echo "==> End of Plugin installation"
+{{- end -}}

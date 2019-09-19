@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "kibana.fullname" . }}-test-connection"
+  labels:
+{{ include "kibana.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "kibana.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

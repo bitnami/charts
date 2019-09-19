@@ -1,0 +1,322 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Bitnami Kibana image version
+## ref: https://hub.docker.com/r/bitnami/kibana/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/kibana
+  tag: 7.3.2-debian-9-r7
+  pullPolicy: IfNotPresent
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## String to partially override kibana.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override kibana.fullname template
+##
+# fullnameOverride:
+
+## Number of Kibana Pod replicas
+##
+replicaCount: 1
+
+## Set up update strategy for Kibana installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods are destroyed first.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## Example:
+# updateStrategy:
+#  type: RollingUpdate
+#  rollingUpdate:
+#    maxSurge: 25%
+#    maxUnavailable: 25%
+updateStrategy:
+  type: RollingUpdate
+
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName:
+
+## List of plugins to install
+plugins:
+  # - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
+
+## Saved objects to import (NDJSON format)
+savedObjects:
+  ## List of saved objects URLs
+  urls:
+  # - www.example.com/dashboard.ndjson
+  ## ConfigMap with saved objects
+  configmap:
+
+## Extra configuration settings
+# extraConfiguration:
+
+## Configuration ConfigMap
+# configurationCM:
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: KIBANA_ELASTICSEARCH_URL
+##    value: test
+##
+# extraEnvVars:
+
+## An array to add extra configmaps:
+## For example:
+## extraEnvVarsCM:
+
+## An array to add extra configmaps:
+## For example:
+## extraEnvVarsSecret:
+
+## extraVolumes: {}
+
+## extraVolumeMounts: {}
+
+##
+## Init containers parameters:
+## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: stretch
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources: {}
+  # resources:
+  #   requests:
+  #     memory: 128Mi
+  #     cpu: 100m
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+##
+persistence:
+  enabled: true
+  ## wordpress data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ##
+  ## If you want to reuse an existing claim, you can pass the name of the PVC using
+  ## the existingClaim variable
+  # existingClaim: your-claim
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+## Force execution of init scripts
+forceInitScripts: false
+
+## Configmap with init scripts to execute
+# initScriptsCM:
+
+## Secret with init scripts to execute (for sensitive data)
+# initScriptsSecret:
+
+## Service configuration
+##
+service:
+  port: 80
+  type: ClusterIP
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+
+  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerIP:
+  ## Extra ports to expose (normally used with the `sidecar` value)
+  # extraPorts:
+
+## Configure the ingress resource that allows you to access the
+## Kibana web. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  enabled: false
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  certManager: false
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+
+  ## The list of hostnames to be covered with this ingress record.
+  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  hosts:
+    - host: kibana.local
+      paths: ["/"]
+
+  ## The tls configuration for the ingress
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+## SecurityContext configuration
+##
+securityContext:
+  enabled: true
+  runAsUser: 1001
+  fsGroup: 1001
+  runAsNonRoot: true
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## Example:
+## resources:
+##   requests:
+##     memory: 512Mi
+##     cpu: 300m
+##
+# resources:
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+sidecars:
+## Add sidecars to the pod.
+## e.g.
+# - name: your-image-name
+  # image: your-image
+  # imagePullPolicy: Always
+  # ports:
+  # - name: portname
+  #   containerPort: 1234
+
+initContainers:
+## Add init containers to the pod.
+## e.g.
+# - name: your-image-name
+  # image: your-image
+  # imagePullPolicy: Always
+  # ports:
+  # - name: portname
+  #   containerPort: 1234
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  enabled: true
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9112"
+
+  ## Metrics exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  # resources: {}
+
+  ## Metrics exporter labels and tolerations for pod assignment
+  # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
+  # tolerations: []
+
+  ## Metrics exporter pod Annotation and Labels
+  # podAnnotations: {}
+  # podLabels: {}
+
+
+metrics:
+  enabled: false
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "80"
+      prometheus.io/path: "_prometheus/metrics"
+
+## Properties for Elasticsearch
+elasticsearch:
+  useBundled: false
+  ## Properties when useBundled is false
+  external:
+    hosts:
+    # - elasticsearch-1
+    # - elasticsearch-2
+    port:
