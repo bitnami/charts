@@ -1,0 +1,165 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grafana.fullname" . }}
+  labels: {{ include "grafana.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: {{ include "grafana.matchLabels" . | nindent 6 }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{ include "grafana.labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/dashboard-provider: {{ include (print $.Template.BasePath "/dashboard-provider.yaml") . | sha256sum }}
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+    spec:
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+{{- include "grafana.imagePullSecrets" . | indent 6 }}
+     {{- if .Values.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+      {{- end }}
+{{- with .Values.nodeSelector }}
+      nodeSelector:
+{{-  tpl (toYaml .) $ | indent 8 }}
+{{- end }}
+{{- with .Values.affinity }}
+      affinity:
+{{-  tpl (toYaml .) $ | indent 8 }}
+{{- end }}
+{{- with .Values.tolerations }}
+      tolerations:
+{{- tpl (toYaml .) $ | indent 8 }}
+{{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ template "grafana.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "grafana.fullname" . }}-envvars
+        - secretRef:
+            name: {{ include "grafana.fullname" . }}-secret
+        {{- if .Values.smtp.existingSecret }}
+        - name: GF_SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.smtp.existingSecret }}
+              key: {{ .Values.smtp.existingSecretUserKey }}
+        - name: GF_SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.smtp.existingSecret }}
+              key: {{ .Values.smtp.existingSecretPasswordKey }}
+        {{- end }}
+{{- if .Values.extraEnvVars }}
+{{ toYaml .Values.extraEnvVars | indent 8 }}
+{{- end }}
+        volumeMounts:
+        {{- if .Values.config.useGrafanaIniFile }}
+        - name: grafana-ini
+          mountPath: /opt/bitnami/grafana/conf/grafana.ini
+          subPath: grafana.ini
+        {{- end }}
+        {{- if .Values.config.useCustomIniFile }}
+        - name: custom-ini
+          mountPath: /opt/bitnami/grafana/conf/custom.ini
+          subPath: custom.ini
+        {{- end }}
+        - name: data
+          mountPath: /opt/bitnami/grafana/data
+        {{- if .Values.dashboardsProvider.enabled }}
+        - name: dashboards-provider
+          mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards
+        {{- end }}
+        {{- range .Values.dashboardsConfigMaps }}
+        - name: {{ .configMapName }}
+          mountPath: /opt/bitnami/grafana/dashboards/{{ .fileName }}
+          subPath: {{ .fileName }}
+        {{- end }}
+        {{- if .Values.datasources.secretName }}
+        - name: datasources
+          mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
+        {{- end }}
+        {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
+        - name: ldap
+          mountPath: /opt/bitnami/grafana/conf/ldap.toml
+          subPath: ldap.toml
+        {{- end }}
+        {{- range .Values.extraConfigmaps }}
+        - name: {{ .name }}
+          mountPath: {{ .mountPath }}
+          subPath: {{ .subPath | default "" }}
+          readOnly: {{ .readOnly }}
+        {{- end }}
+        ports:
+          - name: dashboard
+            containerPort: 3000
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: dashboard
+{{ toYaml .Values.livenessProbe | indent 10 }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: dashboard
+{{ toYaml .Values.readinessProbe | indent 10 }}
+        resources: {{- toYaml .Values.resources | nindent 10 }}
+      volumes:
+      - name: data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default (include "grafana.fullname" .) }}
+      {{- end }}
+      {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
+      - name: ldap
+        configMap:
+          name: {{ .Values.ldap.configMapName }}
+      {{- end }}
+      {{- if .Values.dashboardsProvider.enabled }}
+      - name: dashboards-provider
+        configMap:
+          {{- if .Values.dashboardsProvider.configMapName }}
+          name: {{ .Values.dashboardsProvider.configMapName }}
+          {{- else }}
+          name: {{ include "grafana.fullname" . }}-provider
+          {{- end }}
+      {{- end }}
+      {{- range .Values.dashboardsConfigMaps }}
+      - name: {{ .configMapName }}
+        configMap:
+          name: {{ .configMapName }}
+      {{- end }}
+      {{- if .Values.datasources.secretName }}
+      - name: datasources
+        secret:
+          secretName: {{ .Values.datasources.secretName }}
+      {{- end }}
+      {{- if .Values.config.useGrafanaIniFile }}
+      - name: grafana-ini
+        configMap:
+          name: {{ required "A configmap containing the grafana.ini file is needed!!" .Values.config.grafanaIniConfigMap }}
+      {{- end }}
+      {{- if .Values.config.useCustomIniFile }}
+      - name: custom-ini
+        configMap:
+          name: {{ required "A configmap containing the custom.ini file is needed!!" .Values.config.customIniConfigMap }}
+      {{- end }}
+      {{- range .Values.extraConfigmaps }}
+      - name: {{ .name }}
+        configMap:
+          name: {{ .name }}
+      {{- end }}

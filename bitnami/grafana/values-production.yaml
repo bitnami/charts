@@ -1,0 +1,273 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Bitnami Grafana image version
+## ref: https://hub.docker.com/r/bitnami/grafana/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/grafana
+  tag: 6.3.3-debian-9-r12
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## String to partially override grafana.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override grafana.fullname template
+##
+# fullnameOverride:
+
+## Number of grafana Pod replicas
+##
+replicaCount: 1
+
+## Set up update strategy for Grafana installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## Example:
+# updateStrategy:
+#  type: RollingUpdate
+#  rollingUpdate:
+#    maxSurge: 25%
+#    maxUnavailable: 25%
+updateStrategy:
+  type: RollingUpdate
+
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName:
+
+## Admin access configuration
+## If a password is not provided a random password will be generated
+##
+admin:
+  user: "admin"
+  # password:
+
+## SMTP configuration
+## Use either a secret container the credentials or set the credentials through command line.
+##
+smtp:
+  enabled: false
+  # Provide credentials by command line
+  user: user
+  password: password
+  ## Existing secret with SMTP credentials (user and password)
+  # existingSecret:
+  ## User and password key on the existing secret ( "user" and "password" by default )
+  existingSecretUserKey: user
+  existingSecretPasswordKey: password
+
+## Grafana plugins that will be installed
+## Specify plugins as a list separated by commas ( you will need to scape them when specifying from command line )
+## Example:
+## plugins: grafana-kubernetes-app,grafana-example-app
+##
+# plugins:
+
+## Ldap configuration for Grafana
+##
+ldap:
+  enabled: false
+  allowSignUp: false
+  ## configMap with LDAP configuration file (ldap.toml)
+  # configMapName:
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: GF_DEFAULT_INSTANCE_NAME
+##    value: my-instance
+##
+# extraEnvVars:
+
+## An array to add extra configmaps:
+## For example:
+## extraConfigmaps:
+##   - name: myconfigmap
+##     mountPath: /opt/bitnami/desired-path
+##     subPath: file-name.extension (optional)
+##     readOnly: true
+
+## Parameters to override the default grafana.ini and custom.ini files.
+## It is needed to create a configmap containing the grafana.ini and custom.ini files.
+##
+config:
+  useGrafanaIniFile: false
+  grafanaIniConfigMap:
+  useCustomIniFile: false
+  customIniConfigMap:
+
+## Create dasboard provider to load dashboards, a default one is created to load
+## dashboards from "/opt/bitnami/grafana/dashboards"
+##
+dashboardsProvider:
+  enabled: false
+  ## ConfigMap with a custom provider file.
+  ## Important to set the Path to "/opt/bitnami/grafana/dashboards"
+  configMapName:
+
+## Create dashboards from a custom configMap that contains the file.
+## They will be mounted by the default dashboard provider if it is enabled
+## Use an array with the configMap names.
+## Example:
+## dashboardsConfigMaps:
+##   - configMapName: mydashboard
+##     fileName: mydashboard.json
+##   - configMapName: myotherdashboard
+##     fileName: myotherdashboard.json
+##
+dashboardsConfigMaps: []
+
+## Create datasources from a custom secret
+## The secret must contain the files
+##
+datasources:
+  secretName:
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+##
+persistence:
+  enabled: true
+  ## wordpress data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ##
+  ## If you want to reuse an existing claim, you can pass the name of the PVC using
+  ## the existingClaim variable
+  # existingClaim: your-claim
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+## Service configuration
+##
+service:
+  port: 3000
+  type: ClusterIP
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+
+  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerIP:
+
+## Configure the ingress resource that allows you to access the
+## Grafana web. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  enabled: true
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  certManager: false
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+
+  ## The list of hostnames to be covered with this ingress record.
+  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  hosts:
+    - host: grafana.local
+      paths: ["/"]
+
+  ## The tls configuration for the ingress
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+## SecurityContext configuration
+##
+securityContext:
+  enabled: true
+  runAsUser: 1001
+  fsGroup: 1001
+  runAsNonRoot: true
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## Example:
+## resources:
+##   requests:
+##     memory: 512Mi
+##     cpu: 300m
+##
+# resources:
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}

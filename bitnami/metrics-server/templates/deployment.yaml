@@ -39,3 +39,7 @@ spec:
       {{- range $key, $value := .Values.extraArgs }}
         - --{{ $key }}={{ $value }}
       {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}

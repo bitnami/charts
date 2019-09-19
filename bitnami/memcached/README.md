@@ -66,6 +66,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `serviceType`               | Kubernetes Service type                                                                                | `ClusterIP`                                             |
 | `resources`                 | CPU/Memory resource requests/limits                                                                    | Memory: `256Mi`, CPU: `250m`                            |
 | `clusterDomain`             | Kubernetes cluster domain                                                                              | `cluster.local`                                         |
+| `affinity`                  | Map of node/pod affinities                                                                             | `{}`                                                    |
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                   | `false`                                                 |
 | `metrics.image.registry`    | Memcached exporter image registry                                                                      | `docker.io`                                             |
 | `metrics.image.repository`  | Memcached exporter image name                                                                          | `bitnami/memcached-exporter`                            |

@@ -51,18 +51,21 @@ The following tables lists the configurable parameters of the cassandra chart an
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`               | Global Docker Image registry                                                                                                                              | `nil`                                                        |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                        |
 | `image.registry`                     | Cassandra Image registry                                                                                                                                  | `docker.io`                                                  |
 | `image.repository`                   | Cassandra Image name                                                                                                                                      | `bitnami/cassandra`                                          |
 | `image.tag`                          | Cassandra Image tag                                                                                                                                       | `{TAG_NAME}`                                                 |
 | `image.pullPolicy`                   | Image pull policy                                                                                                                                         | `IfNotPresent`                                               |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.debug`                        | Specify if debug logs should be enabled                                                                                                                   | `false`                                                      |
 | `nameOverride`                       | String to partially override cassandra.fullname template with a string (will prepend the release name)                                                    | `nil`                                                        |
 | `fullnameOverride`                   | String to fully override cassandra.fullname template with a string                                                                                        | `nil`                                                        |
+| `entrypoint`                         | Cassandra container entrypoint (in case you want to use a different image)                                                                                | `/app-entrypoint.sh`                                         |
+| `cmd`                                | Cassandra container cmd (in case you want to use a different image)                                                                                       | `/run.sh`                                                    |
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                     |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `stretch`                                                    |
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
 | `service.type`                       | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                                  |
@@ -242,11 +245,19 @@ kubectl create configmap init-db --from-file=path/to/scripts
 helm install bitnami/cassandra --set initDBConfigMap=init-db
 ```
 
+## Using a custom Cassandra image
+
+This chart uses the [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image by default. In case you want to use a different image, you can redefine the container entrypoint by setting the `entrypoint` and `cmd` values.
+
 ## Upgrade
+
+### 4.0.0
+
+This release changes uses Bitnami Cassandra container `3.11.4-debian-9-r188`, based on Bash.
 
 ### 2.0.0
 
-This releases make it possible to specify custom initialization scripts in both cql and sh files.
+This release make it possible to specify custom initialization scripts in both cql and sh files.
 
 #### Breaking changes
 

@@ -1,4 +1,4 @@
-{{- if and .Values.stats.enabled .Values.metrics.enabled }}
+{{- if .Values.metrics.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,6 +7,9 @@ metadata:
 {{ toYaml .Values.metrics.service.annotations | indent 4 }}
 {{- end }}
   labels:
+{{- if .Values.metrics.service.labels }}
+{{ toYaml .Values.metrics.service.labels | indent 4 }}
+{{- end }}
     app: {{ template "nginx-ingress.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: "{{ .Values.name }}"
@@ -14,7 +17,9 @@ metadata:
     release: {{ .Release.Name }}
   name: {{ template "nginx-ingress.fullname" . }}-metrics
 spec:
+{{- if not .Values.metrics.service.omitClusterIP }}
   clusterIP: "{{ .Values.metrics.service.clusterIP }}"
+{{- end }}
 {{- if .Values.metrics.service.externalIPs }}
   externalIPs:
 {{ toYaml .Values.metrics.service.externalIPs | indent 4 }}

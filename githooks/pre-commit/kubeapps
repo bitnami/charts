@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if git diff --name-only --cached | grep '/kubeapps/'; then
+    printf '\n\U1F6AB Commit cancelled\n\nKubeapps changes detected in this repository.\nPlease, implement them in the kubeapps repository (https://github.com/kubeapps/kubeapps/tree/master/chart/kubeapps).\n'
+    exit 1
+fi
+
+exit 0
