@@ -11,7 +11,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/kibana --set elasticsearch.external.hosts[0]=<Hostname of your ES instance> --set elasticsearch.external.port=<port of your ES instance>
 
 # Option 2: With a bundled Elasticsearch instance
-$ helm install bitnami/kibana --set elasticsearch.useBundled=true
+$ helm install bitnami/kibana --set elasticsearch.enabled=true
 ```
 
 ## Introduction
@@ -36,7 +36,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/kibana --set elasticsearch.external.hosts[0]=<Hostname of your ES instance> --set elasticsearch.external.port=<port of your ES instance>
 
 # Option 2: With a bundled Elasticsearch instance
-$ helm install bitnami/kibana --set elasticsearch.useBundled=true
+$ helm install bitnami/kibana --set elasticsearch.enabled=true
 ```
 
 These commands deploy kibana on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -130,7 +130,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `initContainers`                       | Add additional init containers to the pod                                       | `nil`                                                        |
 | `metrics.enabled`                | Start a side-car prometheus exporter                                          | `false`                                                      |
 | `metrics.service.annotations`                | Prometheus annotations for the Kibana service                                          | `{ prometheus.io/scrape: "true", prometheus.io/port: "80", prometheus.io/path: "_prometheus/metrics" }`                                                      |
-| `elasticsearch.useBundled`                | Use bundled Elasticsearch                                           | `false`                                                      |
+| `elasticsearch.enabled`                | Use bundled Elasticsearch                                           | `false`                                                      |
 | `elasticsearch.external.hosts`                | Array containing the hostnames for the already existing Elasticsearch instances                                          | `nil`                                                      |
 | `elasticsearch.external.port`                | Port for the accessing external Elasticsearch instances                                          | `nil`                                                      |
 
@@ -203,7 +203,7 @@ kubectl create secret generic special-scripts-sensitive --from-file=03_install_c
 Then use the `initScriptsCM` and `initScriptsSecret` values.
 
 ```console
-helm install bitnami/kibana elasticsearch.useBundled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 --set initScriptsCM=special-scripts --set initScriptsSecret=special-scripts-sensitive
+helm install bitnami/kibana elasticsearch.enabled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 --set initScriptsCM=special-scripts --set initScriptsSecret=special-scripts-sensitive
 ```
 
 ### Installing plugins
@@ -211,7 +211,7 @@ helm install bitnami/kibana elasticsearch.useBundled=false --set elasticsearch.e
 The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` value:
 
 ```console
-helm install bitnami/kibana elasticsearch.useBundled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 --set plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
+helm install bitnami/kibana elasticsearch.enabled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 --set plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 ```
 
 > **NOTE** Make sure that the plugin is available for the Kibana version you are deploying
@@ -267,14 +267,14 @@ initContainers:
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
 
 ```console
-$ helm install --name my-release -f ./values-production.yaml --set elasticsearch.useBundled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 bitnami/kibana
+$ helm install --name my-release -f ./values-production.yaml --set elasticsearch.enabled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 bitnami/kibana
 ```
 
 - Disable bundled Elasticsearch
 
 ```diff
-- elasticsearch.useBundled: true
-+ elasticsearch.useBundled: false
+- elasticsearch.enabled: true
++ elasticsearch.enabled: false
 ```
 
 - Enable metrics scraping

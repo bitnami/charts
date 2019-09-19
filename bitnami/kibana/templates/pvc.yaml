@@ -3,8 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "kibana.fullname" . }}
-  labels:
-{{ include "kibana.labels" . | indent 4 }}
+  labels: {{- include "kibana.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}

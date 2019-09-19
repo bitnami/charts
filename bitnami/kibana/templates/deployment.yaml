@@ -2,22 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "kibana.fullname" . }}
-  labels:
-{{ include "kibana.labels" . | indent 4 }}
+  labels: {{- include "kibana.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   {{- if .Values.updateStrategy }}
   strategy: {{- tpl (toYaml .Values.updateStrategy) $ | nindent 4 }}
   {{- end }}
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "kibana.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "kibana.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: {{ include "kibana.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+      labels: {{- include "kibana.labels" . | nindent 8 }}
     spec:
     {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
@@ -78,6 +73,7 @@ spec:
             - name: http
               containerPort: 5601
               protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /
@@ -87,6 +83,8 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /
@@ -96,9 +94,9 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.resources }}
-          resources:
-          {{- tpl (toYaml .Values.resources) $ | nindent 12 }}
+          resources: {{- tpl (toYaml .Values.resources) $ | nindent 12 }}
           {{- end }}
           volumeMounts:
           - name: kibana-data

@@ -57,10 +57,12 @@ updateStrategy:
 # schedulerName:
 
 ## List of plugins to install
+##
 plugins:
   # - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 
 ## Saved objects to import (NDJSON format)
+##
 savedObjects:
   ## List of saved objects URLs
   urls:
@@ -69,9 +71,11 @@ savedObjects:
   configmap:
 
 ## Extra configuration settings
+##
 # extraConfiguration:
 
-## Configuration ConfigMap
+## Configuration ConfigMap (for kibana.yml)
+##
 # configurationCM:
 
 ## An array to add extra env vars
@@ -82,16 +86,20 @@ savedObjects:
 ##
 # extraEnvVars:
 
-## An array to add extra configmaps:
-## For example:
+## Array to add extra configmaps:
+##
 ## extraEnvVarsCM:
 
-## An array to add extra configmaps:
-## For example:
+## Array to add extra configmaps:
+##
 ## extraEnvVarsSecret:
 
-## extraVolumes: {}
+## Array to add extra volumes
+##
+## extraVolumes:
 
+## Array to add extra mounts (normally used with extraVolumes)
+##
 ## extraVolumeMounts: {}
 
 ##
@@ -155,12 +163,15 @@ readinessProbe:
   successThreshold: 1
 
 ## Force execution of init scripts
+##
 forceInitScripts: false
 
 ## Configmap with init scripts to execute
+##
 # initScriptsCM:
 
 ## Secret with init scripts to execute (for sensitive data)
+##
 # initScriptsSecret:
 
 ## Service configuration
@@ -261,48 +272,31 @@ affinity: {}
 ##
 podAnnotations: {}
 
-sidecars:
-## Add sidecars to the pod.
-## e.g.
-# - name: your-image-name
-  # image: your-image
-  # imagePullPolicy: Always
-  # ports:
-  # - name: portname
-  #   containerPort: 1234
-
-initContainers:
-## Add init containers to the pod.
-## e.g.
-# - name: your-image-name
-  # image: your-image
-  # imagePullPolicy: Always
-  # ports:
-  # - name: portname
-  #   containerPort: 1234
-
-## Prometheus Exporter / Metrics
+## Add sidecars to the pod
 ##
-metrics:
-  enabled: false
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9112"
+sidecars:
+## e.g.
+# - name: your-image-name
+  # image: your-image
+  # imagePullPolicy: Always
+  # ports:
+  # - name: portname
+  #   containerPort: 1234
 
-  ## Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  # resources: {}
-
-  ## Metrics exporter labels and tolerations for pod assignment
-  # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
-  # tolerations: []
-
-  ## Metrics exporter pod Annotation and Labels
-  # podAnnotations: {}
-  # podLabels: {}
+## Add init containers to the pod
+##
+initContainers:
+## e.g.
+# - name: your-image-name
+  # image: your-image
+  # imagePullPolicy: Always
+  # ports:
+  # - name: portname
+  #   containerPort: 1234
 
 
+## Prometheus metrics (requires the kibana-prometheus-exporter plugin)
+##
 metrics:
   enabled: false
   service:
@@ -312,9 +306,10 @@ metrics:
       prometheus.io/path: "_prometheus/metrics"
 
 ## Properties for Elasticsearch
+##
 elasticsearch:
-  useBundled: true
-  ## Properties when useBundled is false
+  enabled: true
+  ## Properties when enabled is false
   external:
     hosts:
     # - elasticsearch-1
