@@ -1,7 +1,7 @@
 {{- if eq .Values.mode "distributed" }}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
 {{- if and (eq (mod $replicaCount 2) 0) (gt $replicaCount 3) (lt $replicaCount 33) }}
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "minio.fullname" . }}
