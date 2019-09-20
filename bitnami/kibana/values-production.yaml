@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.3.2-debian-9-r7
+  tag: 7.3.2-debian-9-r9
   pullPolicy: IfNotPresent
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
