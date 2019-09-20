@@ -54,6 +54,7 @@ $ helm search bitnami
 - [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
+- [Kibana](https://github.com/bitnami/charts/tree/master/bitnami/kibana)
 - [Kubeapps](https://github.com/bitnami/charts/tree/master/bitnami/kubeapps)
 - [Magento](https://github.com/bitnami/charts/tree/master/bitnami/magento)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
