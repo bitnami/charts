@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: busybox
+      image: bitnami/minideb
       command: ['wget']
       args:  ['{{ include "kibana.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

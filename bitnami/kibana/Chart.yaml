@@ -4,6 +4,7 @@ appVersion: 7.3.2
 description: Kibana is an open source, browser based analytics and search dashboard for Elasticsearch.
 version: 0.0.1
 keywords:
+- kibana
 - analitics
 - monitoring
 - metrics
