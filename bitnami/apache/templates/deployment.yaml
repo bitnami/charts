@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "apache.fullname" . }}
@@ -105,7 +105,7 @@ spec:
         {{- if .Values.vhostsConfigMap }}
         - name: vhosts
           mountPath: /vhosts
-        {{- end }}          
+        {{- end }}
       {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "apache.metrics.image" . }}

@@ -1,6 +1,6 @@
 {{- if eq .Values.kind "DaemonSet" }}
 {{- $useHostPort := .Values.daemonset.useHostPort -}}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:
