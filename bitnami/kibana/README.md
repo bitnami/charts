@@ -25,7 +25,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 This chart requires a Elasticsearch instance to work. The chart offers two options:
 
 - Use an already existing Elasticsearch instance.
-- Deploy a new Elasticsearch instance.
+- Deploy a new Elasticsearch instance together with Kibana. This is the default option when deploying the chart.
 
  To install the chart with the release name `my-release`:
 
@@ -33,10 +33,13 @@ This chart requires a Elasticsearch instance to work. The chart offers two optio
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 # Option 1: With an existing Elasticsearch instance
-$ helm install bitnami/kibana --set elasticsearch.external.hosts[0]=<Hostname of your ES instance> --set elasticsearch.external.port=<port of your ES instance>
+$ helm install bitnami/kibana --name my-release \
+  --set elasticsearch.external.hosts[0]=<Hostname of your ES instance> \
+  --set elasticsearch.external.port=<port of your ES instance>
 
 # Option 2: With a bundled Elasticsearch instance
-$ helm install bitnami/kibana --set elasticsearch.enabled=true
+$ helm install bitnami/kibana --name my-release \
+  --set elasticsearch.enabled=true
 ```
 
 These commands deploy kibana on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -51,7 +54,7 @@ To uninstall/delete the `my-release` statefulset:
 $ helm delete my-release
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
+The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
 
 ## Configuration
 
@@ -70,12 +73,12 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `nameOverride`                              | String to partially override kibana.fullname template with a string (will prepend the release name) | `nil`                                          |
 | `fullnameOverride`                          | String to fully override kibana.fullname template with a string                            | `nil`                                                   |
 | `replicaCount`                               | Number of replicas of the Kibana Pod                                                       | `1`                                                     |
-| `updateStrategy`                            | Update strategy for deployment                                                              | `{type: "RollingUpdate"}`                                       |
+| `updateStrategy`                            | Update strategy for deployment (evaluated as a template)                                                             | `{type: "RollingUpdate"}`                                       |
 | `schedulerName`                             | Alternative scheduler                                                                       | `nil`                                                   |
 | `plugins`                                   | Array containing the Kibana plugins to be installed in deployment                       | `[]`                                                   |
 | `savedObjects.urls`                                   | Array containing links to NDJSON files to be imported during Kibana initialization                       | `[]`                                                   |
-| `savedObjects.configmap`                                   | Configmap containing NDJSON files to be imported during Kibana initialization                        | `[]`                                                   |
-| `extraConfiguration`                              | Extra settings to be added to the default kibana.yml defined in the chart configuration.yaml file                    | `nil`                                                   |
+| `savedObjects.configmap`                                   | Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)                       | `[]`                                                   |
+| `extraConfiguration`                              | Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template                    | `nil`                                                   |
 | `configurationCM`                              | ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml                    | `nil`                                                   |
 | `extraEnvVars`                              | Array containing extra env vars to configure Kibana                                        | `nil`                                                   |
 | `extraEnvVarsCM`                              | ConfigMap containing extra env vars to configure Kibana                                        | `nil`                                                   |
@@ -106,13 +109,13 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `readinessProbe.successThreshold`           | Minimum consecutive successes for the probe to be considered successful after having failed.| `1`                                                     |
 | `service.type`                              | Kubernetes Service type                                                                     | | `ClusterIP`                                             |
 | `service.nodePort`                          | Port to bind to for NodePort service type (client port)                                     | `nil`                                                   |
-| `service.annotations`                       | Annotations for Kibana service                                                             | `{}`                                                    |
+| `service.annotations`                       | Annotations for Kibana service (evaluated as a template)                                                            | `{}`                                                    |
 | `service.externalTrafficPolicy`  | Enable client source IP preservation                                          | `Cluster`                                                    |
 | `service.loadBalancerIP`                    | loadBalancerIP if Kibana service type is `LoadBalancer`                                    | `nil`                                                   |
-| `service.extraPorts`             | Extra ports to expose in the service (normally used with the `sidecar` value) | `nil`                                                        |
+| `service.extraPorts`             | Extra ports to expose in the service (normally used with the `sidecar` value). Evaluated as a template. | `nil`                                                        |
 | `forceInitScripts`                       | Force the execution of the init scripts located in `/docker-entrypoint-initdb.d`                                                                          | `false`                                                  |
-| `initScriptsCM`                       | ConfigMap containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time                                                                          | `nil`                                                  |
-| `initScriptsSecret`                       | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (that contain sensitive data)                                                                         | `nil`                                                  |
+| `initScriptsCM`                       | ConfigMap containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (evaluated as a template)                                                                          | `nil`                                                  |
+| `initScriptsSecret`                       | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (that contain sensitive data). Evaluated as a template.                                                                        | `nil`                                                  |
 | `ingress.enabled`                           | Enable the use of the ingress controller to access the web UI                               | `false`                                                 |
 | `ingress.annotations`                       | Annotations for the Kibana Ingress                                                         | `{}`                                                    |
 | `ingress.hosts`                             | Add hosts to the ingress controller with name and path                                      | `name: kibana.local`, `path: /`                        |
@@ -120,17 +123,16 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `securityContext.enabled`                   | Enable securityContext on for Kibana deployment                                            | `true`                                                  |
 | `securityContext.runAsUser`                 | User for the security context                                                               | `1001`                                                  |
 | `securityContext.fsGroup`                   | Group to configure permissions for volumes                                                  | `1001`                                                  |
-| `securityContext.runAsNonRoot`              | Run containers as non-root users                                                            | `true`                                                  |
-| `resources`                                 | Configure resource requests and limits                                                      | `nil`                                                   |
-| `nodeSelector`                              | Node labels for pod assignment                                                              | `{}`                                                    |
-| `tolerations`                               | Tolerations for pod assignment                                                              | `[]`                                                    |
-| `affinity`                                  | Affinity for pod assignment                                                                 | `{}`                                                    |
-| `podAnnotations`                            | Pod annotations                                                                             | `{}`                                                    |
-| `sidecars`                       | Attach additional containers to the pod                                       | `nil`                                                        |
-| `initContainers`                       | Add additional init containers to the pod                                       | `nil`                                                        |
+| `resources`                                 | Configure resource requests and limits (evaluated as a template)                                                     | `nil`                                                   |
+| `nodeSelector`                              | Node labels for pod assignment (evaluated as a template)                                                             | `{}`                                                    |
+| `tolerations`                               | Tolerations for pod assignment (evaluated as a template)                                                             | `[]`                                                    |
+| `affinity`                                  | Affinity for pod assignment (evaluated as a template)                                                                | `{}`                                                    |
+| `podAnnotations`                            | Pod annotations (evaluated as a template)                                                                            | `{}`                                                    |
+| `sidecars`                       | Attach additional containers to the pod (evaluated as a template)                                      | `nil`                                                        |
+| `initContainers`                       | Add additional init containers to the pod (evaluated as a template)                                      | `nil`                                                        |
 | `metrics.enabled`                | Start a side-car prometheus exporter                                          | `false`                                                      |
 | `metrics.service.annotations`                | Prometheus annotations for the Kibana service                                          | `{ prometheus.io/scrape: "true", prometheus.io/port: "80", prometheus.io/path: "_prometheus/metrics" }`                                                      |
-| `elasticsearch.enabled`                | Use bundled Elasticsearch                                           | `false`                                                      |
+| `elasticsearch.enabled`                | Use bundled Elasticsearch                                           | `true`                                                      |
 | `elasticsearch.external.hosts`                | Array containing the hostnames for the already existing Elasticsearch instances                                          | `nil`                                                      |
 | `elasticsearch.external.port`                | Port for the accessing external Elasticsearch instances                                          | `nil`                                                      |
 
@@ -196,14 +198,23 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts.
 
 ```console
-kubectl create configmap special-scripts --from-file=01_install_kibana_theme.sh --from-file=02_add_special_agent.sh
-kubectl create secret generic special-scripts-sensitive --from-file=03_install_company_certificates.sh
+$ kubectl create configmap special-scripts \
+  --from-file=01_install_kibana_theme.sh \
+  --from-file=02_add_special_agent.sh
+
+$ kubectl create secret generic special-scripts-sensitive \
+  --from-file=03_install_company_certificates.sh
 ```
 
 Then use the `initScriptsCM` and `initScriptsSecret` values.
 
 ```console
-helm install bitnami/kibana elasticsearch.enabled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 --set initScriptsCM=special-scripts --set initScriptsSecret=special-scripts-sensitive
+$ helm install bitnami/kibana --name my-release \
+  --set elasticsearch.enabled=false \
+ --set elasticsearch.external.hosts[0]=elasticsearch-host \
+ --set elasticsearch.external.port=9200 \
+ --set initScriptsCM=special-scripts \
+ --set initScriptsSecret=special-scripts-sensitive
 ```
 
 ### Installing plugins
@@ -211,7 +222,11 @@ helm install bitnami/kibana elasticsearch.enabled=false --set elasticsearch.exte
 The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` value:
 
 ```console
-helm install bitnami/kibana elasticsearch.enabled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 --set plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
+$ helm install bitnami/kibana --name my-release \
+  --set elasticsearch.enabled=false \
+  --set elasticsearch.external.hosts[0]=elasticsearch-host \
+  --set elasticsearch.external.port=9200 \
+  --set plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 ```
 
 > **NOTE** Make sure that the plugin is available for the Kibana version you are deploying
@@ -221,19 +236,21 @@ helm install bitnami/kibana elasticsearch.enabled=false --set elasticsearch.exte
 If you have visualizations and dashboards (in NDJSON format) that you want to import to Kibana. You can create a ConfigMap that includes them.
 
 ```console
-kubectl create configmap my-import --from-file=my-exported-data.ndjson
+$ kubectl create configmap my-import --from-file=my-exported-data.ndjson
 ```
 
 Then install the chart with the `savedObjects.configmap` value:
 
 ```console
-helm install bitnami/kibana --set savedObjects.configmap=my-import
+helm install bitnami/kibana --name my-release \
+  --set savedObjects.configmap=my-import
 ```
 
 Alternatively, if it is available via URL, you can install the chart as follows
 
 ```console
-helm install bitnami/kibana --set savedObjects.urls[0]=www.my-site.com/import.ndjson
+helm install bitnami/kibana --name my-release \
+  --set savedObjects.urls[0]=www.my-site.com/import.ndjson
 ```
 
 ## Sidecars and Init Containers
