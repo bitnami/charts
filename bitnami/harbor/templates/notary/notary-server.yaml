@@ -30,7 +30,7 @@ spec:
       containers:
       - name: notary-server
         image: "{{ template "harbor.notaryServerImage" . }}"
-        imagePullPolicy: {{ .Values.notaryServerImage.pullPolicy }}
+        imagePullPolicy: {{ .Values.notaryServerImage.pullPolicy | quote }}
         {{- if .Values.notary.server.resources }}
         resources: {{ toYaml .Values.notary.server.resources | nindent 10 }}
         {{- end }}
