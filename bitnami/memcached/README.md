@@ -115,6 +115,12 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+## Notable changes
+
+### 3.0.0
+
+This release uses the new bash based `bitnami/memcached` container which uses bash scripts for the start up logic of the container and is smaller in size.
+
 ## Upgrading
 
 ### To 1.0.0
