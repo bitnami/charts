@@ -309,7 +309,11 @@ metrics:
 ## Properties for Elasticsearch
 ##
 elasticsearch:
+  ## Enable bundled Elasticsearch
   enabled: false
+  ## Enable sysctl image for the bundled Elasticsearch
+  sysctlImage:
+    enabled: false
   ## Properties when enabled is false
   external:
     hosts:
