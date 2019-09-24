@@ -84,7 +84,7 @@ config: |-
 #  socket.send.buffer.bytes=102400
 #  socket.receive.buffer.bytes=102400
 #  socket.request.max.bytes=104857600
-#  log.dirs=/opt/bitnami/kafka/data
+#  log.dirs=/bitnami/kafka/data
 #  num.partitions=1
 #  num.recovery.threads.per.data.dir=1
 #  offsets.topic.replication.factor=1
@@ -149,7 +149,7 @@ logSegmentBytes: _1073741824
 logMessageFormatVersion: ""
 
 ## A comma separated list of directories under which to store log files.
-logsDirs: /opt/bitnami/kafka/data
+logsDirs: /bitnami/kafka/data
 
 ## The largest record batch size allowed by Kafka
 maxMessageBytes: _1000012
