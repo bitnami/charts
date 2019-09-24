@@ -26,6 +26,7 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "fluentd.serviceAccountName" . }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
@@ -50,7 +51,7 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /fluentd.healthcheck?json=%7B%22daemonset%22%3A+%22pong%22%7D
+              path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
               port: 9880
             initialDelaySeconds: 5
             timeoutSeconds: 1
@@ -63,12 +64,28 @@ spec:
               mountPath: /opt/bitnami/fluentd/conf/conf.d
             - name: buffer
               mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- if .Values.tls.enabled }}
+            - name: {{ template "fluentd.fullname" . }}-certs
+              mountPath: /opt/bitnami/fluentd/certs
+            {{- end }}
             - name: varlog
               mountPath: /var/log
             - name: varlibdockercontainers
               mountPath: /var/lib/docker/containers
               readOnly: true
       volumes:
+        {{- if .Values.tls.enabled }}
+        - name: {{ template "fluentd.fullname" . }}-certs
+          secret:
+            secretName: {{ if .Values.tls.existingSecret }}{{ .Values.tls.existingSecret }}{{- else }}{{ template "fluentd.fullname" . }}-certs{{- end }}
+            items:
+            - key: ca_certificate.pem
+              path: ca_certificate.pem
+            - key: server_certificate.pem
+              path: server_certificate.pem
+            - key: server_key.pem
+              path: server_key.pem
+        {{- end }}
         - name: fluentd-config-file
           configMap:
             name: {{ include "fluentd.fullname" . }}-cm

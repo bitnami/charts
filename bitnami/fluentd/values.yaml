@@ -8,15 +8,13 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-clusterDomain: cluster.local
-
 ## Bitnami Fluentd image version
 ## ref: https://hub.docker.com/r/bitnami/fluentd/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.7.1-debian-9-r0
+  tag: 1.7.2-debian-9-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -36,6 +34,9 @@ image:
 ## String to fully override fluentd.fullname template
 ##
 # fullnameOverride:
+
+## Cluster Domain
+clusterDomain: cluster.local
 
 forwarder:
   ## Name of the config file that will be used by Fluentd at launch
@@ -111,7 +112,6 @@ forwarder:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
 
 aggregator:
   ## Number of aggregator replicas
@@ -192,10 +192,29 @@ aggregator:
   ##
   podAnnotations: {}
 
+tls:
+  enabled: false
+  caCertificate: |-
+  serverCertificate: |-
+  serverKey: |-
+  # existingSecret: name-of-existing-secret-to-certificates
 
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
+  # name:
 
-
-
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  create: true
 
 
 service:

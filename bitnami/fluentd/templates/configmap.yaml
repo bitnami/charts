@@ -5,8 +5,4 @@ metadata:
   labels: {{ include "fluentd.labels" . | nindent 4 }}
 data:
   fluentd.conf: |
-    <match fluent.**>
-      @type null
-    </match>
-
     @include conf.d/*.conf

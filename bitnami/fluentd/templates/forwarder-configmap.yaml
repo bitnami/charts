@@ -5,6 +5,10 @@ metadata:
   labels: {{ include "fluentd.labels" . | nindent 4 }}
 data:
   forwarder.conf: |
+    <match fluent.**>
+      @type null
+    </match>
+
     # TCP input
     <source>
       @type forward
@@ -19,21 +23,38 @@ data:
 
     <source>
       @type tail
-      @id in_tail_docker
-      path /var/log/docker.log
-      tag docker
+      path /var/log/containers/*.log
+      pos_file /opt/bitnami/fluentd/logs/buffers/fluentd-docker.pos
+      tag kubernetes.*
       <parse>
         @type regexp
-        expression /^time="(?<time>[^)]*)" level=(?<severity>[^ ]*) msg="(?<message>[^"]*)"( err="(?<error>[^"]*)")?( statusCode=($<status_code>\d+))?/
+        expression /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
       </parse>
     </source>
+
+    <match fluentd.healthcheck>
+      @type stdout
+    </match>
+
+    <match kubernetes.var.log.containers.**fluentd**.log>
+      @type null
+    </match>
+
+    <match kubernetes.var.log.containers.**kube-system**.log>
+      @type null
+    </match>
+
+    <filter kubernetes.**>
+      @type kubernetes_metadata
+    </filter>
 
     # Log Forwarding
     <match **>
       @type forward
       {{- $fullName := (include "fluentd.fullname" .) }}
       {{- $global := . }}
-      {{- $domain := .Values.clusterDomain }}
+      {{- $domain := default "cluster.local" .Values.clusterDomain }}
       {{- range $i, $e := until (.Values.aggregator.replicaCount | int) }}
       <server>
         {{ printf "host %s-%d.%s-headless.%s.svc.%s" $fullName $i $fullName $global.Release.Namespace $domain }}

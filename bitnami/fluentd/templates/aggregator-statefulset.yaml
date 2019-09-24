@@ -68,7 +68,23 @@ spec:
               mountPath: /opt/bitnami/fluentd/conf/conf.d
             - name: buffer
               mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- if .Values.tls.enabled }}
+            - name: {{ template "fluentd.fullname" . }}-certs
+              mountPath: /opt/bitnami/fluentd/certs
+            {{- end }}
       volumes:
+        {{- if .Values.tls.enabled }}
+        - name: {{ template "fluentd.fullname" . }}-certs
+          secret:
+            secretName: {{ if .Values.tls.existingSecret }}{{ .Values.tls.existingSecret }}{{- else }}{{ template "fluentd.fullname" . }}-certs{{- end }}
+            items:
+            - key: ca_certificate.pem
+              path: ca_certificate.pem
+            - key: server_certificate.pem
+              path: server_certificate.pem
+            - key: server_key.pem
+              path: server_key.pem
+        {{- end }}
         - name: fluentd-config-file
           configMap:
             name: {{ include "fluentd.fullname" . }}-cm
