@@ -133,6 +133,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.enabled`                | Start a side-car prometheus exporter                                          | `false`                                                      |
 | `metrics.service.annotations`                | Prometheus annotations for the Kibana service                                          | `{ prometheus.io/scrape: "true", prometheus.io/port: "80", prometheus.io/path: "_prometheus/metrics" }`                                                      |
 | `elasticsearch.enabled`                | Use bundled Elasticsearch                                           | `true`                                                      |
+| `elasticsearch.sysctlImage.enabled`                | Use sysctl image for bundled Elasticsearch                                           | `false`                                                      |
 | `elasticsearch.external.hosts`                | Array containing the hostnames for the already existing Elasticsearch instances                                          | `nil`                                                      |
 | `elasticsearch.external.port`                | Port for the accessing external Elasticsearch instances                                          | `nil`                                                      |
 
