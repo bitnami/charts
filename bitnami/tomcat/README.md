@@ -129,6 +129,12 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Notable changes
+
+### 5.0.0
+
+This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which is based on Bash instead of Node.js.
+
 ## Upgrading
 
 ### To 2.1.0
