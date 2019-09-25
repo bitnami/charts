@@ -12,7 +12,7 @@ data:
     # TCP input
     <source>
       @type forward
-      port 24444
+      port {{ .Values.forwarder.service.port }}
     </source>
 
     # HTTP input
@@ -24,25 +24,20 @@ data:
     <source>
       @type tail
       path /var/log/containers/*.log
+      # exclude Fluentd logs
+      exclude_path /var/log/containers/{{ include "fluentd.fullname" . }}*.log
       pos_file /opt/bitnami/fluentd/logs/buffers/fluentd-docker.pos
       tag kubernetes.*
+      read_from_head true
       <parse>
         @type regexp
         expression /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
         time_format %Y-%m-%dT%H:%M:%S.%NZ
       </parse>
     </source>
-
+    
     <match fluentd.healthcheck>
       @type stdout
-    </match>
-
-    <match kubernetes.var.log.containers.**fluentd**.log>
-      @type null
-    </match>
-
-    <match kubernetes.var.log.containers.**kube-system**.log>
-      @type null
     </match>
 
     <filter kubernetes.**>
@@ -55,10 +50,11 @@ data:
       {{- $fullName := (include "fluentd.fullname" .) }}
       {{- $global := . }}
       {{- $domain := default "cluster.local" .Values.clusterDomain }}
+      {{- $port := .Values.aggregator.port | int }}
       {{- range $i, $e := until (.Values.aggregator.replicaCount | int) }}
       <server>
         {{ printf "host %s-%d.%s-headless.%s.svc.%s" $fullName $i $fullName $global.Release.Namespace $domain }}
-        port 24444
+        {{ printf "port %d" $port }}
         {{- if ne $i 0 }}
         standby
         {{- end }}

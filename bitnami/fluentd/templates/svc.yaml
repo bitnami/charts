@@ -5,27 +5,27 @@ metadata:
   labels:
     {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
-{{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
+{{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.forwarder.service.annotations }}
   annotations:
   {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}
     {{- tpl (toYaml .Values.metrics.service.annotations) $ | nindent 4 }}
   {{- end }}
-  {{- if and .Values.service.annotations }}
-    {{- tpl (toYaml .Values.service.annotations) $ | nindent 4 }}
+  {{- if and .Values.forwarder.service.annotations }}
+    {{- tpl (toYaml .Values.forwarder.service.annotations) $ | nindent 4 }}
   {{- end }}
 {{- end }}
 spec:
-  type: {{ .Values.service.type }}
-  {{- if eq .Values.service.type "LoadBalancer" }} {{- if .Values.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  type: {{ .Values.forwarder.service.type }}
+  {{- if eq .Values.forwarder.service.type "LoadBalancer" }} {{- if .Values.forwarder.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.forwarder.service.loadBalancerIP }}
   {{- end }} {{- end }}
-  type: {{ .Values.service.type }}
+  type: {{ .Values.forwarder.service.type }}
   ports:
-    - name: http
-      targetPort: http
-      port: {{ .Values.service.port }}
-      {{- if .Values.service.nodePort }}
-      nodePort: {{ .Values.service.nodePort }}
+    - name: tcp
+      targetPort: tcp
+      port: {{ .Values.forwarder.service.port }}
+      {{- if .Values.forwarder.service.nodePort }}
+      nodePort: {{ .Values.forwarder.service.nodePort }}
       {{- end }}
     {{- if .Values.metrics.enabled }}
     - name: metrics

@@ -44,6 +44,24 @@ forwarder:
   ##
   # configFile: fluentd.conf
   
+  ## Service configuration
+  ##
+  service:
+    type: ClusterIP
+    ## Fluentd TCP forward port
+    port: 24224
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+    ##
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    # loadBalancerIP:
+
   ## String with extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
@@ -123,6 +141,10 @@ aggregator:
   ##
   # configFile: fluentd.conf
 
+  ## Port which the forwarders will connect to to send the logs
+  ##
+  port: 24224
+
   ## String with extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
@@ -192,13 +214,6 @@ aggregator:
   ##
   podAnnotations: {}
 
-tls:
-  enabled: false
-  caCertificate: |-
-  serverCertificate: |-
-  serverKey: |-
-  # existingSecret: name-of-existing-secret-to-certificates
-
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -230,7 +245,19 @@ metrics:
 
 service:
   type: ClusterIP
-  port: 80
+  ## Fluentd TCP forward port
+  port: 24224
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+  # loadBalancerIP:
 
 ingress:
   enabled: false
@@ -246,6 +273,12 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+tls:
+  enabled: false
+  caCertificate: |-
+  serverCertificate: |-
+  serverKey: |-
+  # existingSecret: name-of-existing-secret-to-certificates
 
 ## SecurityContext configuration
 ##

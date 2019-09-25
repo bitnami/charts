@@ -40,7 +40,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: FLUENTD_CONF
-              value: {{ default "fluentd.conf" .Values.forwarder.configFile }}
+              value: {{ default "fluentd.conf" .Values.aggregator.configFile }}
             - name: FLUENTD_OPT
               value: {{ .Values.aggregator.extraArgs }}
             {{- if .Values.aggregator.extraEnv }}
@@ -51,7 +51,7 @@ spec:
               containerPort: 9880
               protocol: TCP
             - name: tcp
-              containerPort: 24444
+              containerPort: {{ .Values.aggregator.port }}
               protocol: TCP
           livenessProbe:
             httpGet:

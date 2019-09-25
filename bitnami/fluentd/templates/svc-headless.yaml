@@ -10,7 +10,7 @@ spec:
   clusterIP: None
   ports:
     - name: tcp
-      port: 24444
+      port: {{ .Values.aggregator.port }}
       targetPort: tcp
   selector:
     app.kubernetes.io/name: {{ include "fluentd.name" . }}
