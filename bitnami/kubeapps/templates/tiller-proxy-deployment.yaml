@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.tiller-proxy.fullname" . }}
@@ -36,6 +36,9 @@ spec:
         - --tls
         {{- if .Values.tillerProxy.tls.verify }}
         - --tls-verify
+        {{- end }}
+        {{- if .Values.tillerProxy.timeout }}
+        - --timeout={{ .Values.tillerProxy.timeout }}
         {{- end }}
         volumeMounts:
         - name: tiller-certs
