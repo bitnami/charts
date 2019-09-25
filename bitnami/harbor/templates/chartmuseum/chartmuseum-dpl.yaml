@@ -42,7 +42,7 @@ spec:
       containers:
       - name: chartmuseum
         image: "{{ template "harbor.chartMuseumImage" . }}"
-        imagePullPolicy: {{ .Values.chartMuseumImage.imagePullPolicy | quote }}
+        imagePullPolicy: {{ .Values.chartMuseumImage.pullPolicy | quote }}
         {{- if .Values.chartmuseum.livenessProbe.enabled }}
         livenessProbe:
           httpGet:

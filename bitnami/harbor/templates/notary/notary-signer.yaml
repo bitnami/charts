@@ -26,7 +26,7 @@ spec:
       containers:
       - name: notary-signer
         image: "{{ template "harbor.notarySignerImage" . }}"
-        imagePullPolicy: {{ .Values.notarySignerImage.pullPolicy }}
+        imagePullPolicy: {{ .Values.notarySignerImage.pullPolicy | quote }}
         {{- if .Values.notary.signer.resources }}
         resources:
           {{ toYaml .Values.notary.signer.resources | nindent 10 }}
