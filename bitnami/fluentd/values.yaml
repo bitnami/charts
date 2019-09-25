@@ -211,11 +211,22 @@ serviceAccount:
   # name:
 
 ## Role Based Access
-## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
   create: true
 
+## Prometheus metrics 
+## ref: https://github.com/fluent/fluent-plugin-prometheus/blob/master/README.md
+##
+metrics:
+  enabled: false
+  service:
+    port: 24231
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "24231"
+      prometheus.io/path: "/metrics"
 
 service:
   type: ClusterIP

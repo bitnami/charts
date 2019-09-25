@@ -5,11 +5,17 @@ metadata:
   labels:
     {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
+{{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
+  annotations:
+  {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}
+    {{- tpl (toYaml .Values.metrics.service.annotations) $ | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.service.annotations }}
+    {{- tpl (toYaml .Values.service.annotations) $ | nindent 4 }}
+  {{- end }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if .Values.service.nodePort }}
-  nodePort: {{ .Values.service.nodePort }}
-  {{- end }}
   {{- if eq .Values.service.type "LoadBalancer" }} {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }} {{- end }}
@@ -17,8 +23,15 @@ spec:
   ports:
     - name: http
       targetPort: http
-      protocol: TCP
       port: {{ .Values.service.port }}
+      {{- if .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+    {{- if .Values.metrics.enabled }}
+    - name: metrics
+      port: {{ .Values.metrics.service.port }}
+      targetPort: metrics
+    {{- end }}
   selector:
     app.kubernetes.io/name: {{ include "fluentd.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

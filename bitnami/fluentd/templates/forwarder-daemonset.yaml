@@ -49,6 +49,11 @@ spec:
             - name: http
               containerPort: 9880
               protocol: TCP
+            {{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.metrics.service.port }}
+              protocol: TCP
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
