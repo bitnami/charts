@@ -175,6 +175,7 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/grafana
 ```
 
 ### LDAP configuration
+
 To enable LDAP authentication it is necessary to provide a ConfigMap with the Grafana LDAP configuration file. For instance:
 
 **configmap.yaml**:
