@@ -175,9 +175,11 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/grafana
 ```
 
 ### LDAP configuration
-To enable LDAP authentication it is needed to provide a ConfigMap with the Grafana LDAP configuration file. For instance:
+
+To enable LDAP authentication it is necessary to provide a ConfigMap with the Grafana LDAP configuration file. For instance:
 
 **configmap.yaml**:
+
 ```
 apiVersion: v1
 kind: ConfigMap
@@ -229,11 +231,13 @@ data:
 ```
 
 Create the ConfigMap into the cluster:
+
 ```bash
 $ kubectl create -f configmap.yaml
 ```
 
 And deploy the Grafana Helm Chart using the existing ConfigMap:
+
 ```bash
 $ helm install bitnami/grafana --set ldap.enabled=true,ldap.configMapName=ldap-config,ldap.allowSignUp=true
 ```
