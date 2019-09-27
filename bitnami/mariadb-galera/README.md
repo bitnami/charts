@@ -128,6 +128,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `persistence.accessModes`            | Persistent Volume Access Modes                                                                                                                              | `[ReadWriteOnce]`                                                 |
 | `persistence.size`                   | Persistent Volume Size                                                                                                                                      | `8Gi`                                                             |
 | `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `nil`                                                             |
+| `extraContainers`                    | Additional containers (this value is evaluated as a template)                                                                                               | `[]`                                                              |
 | `resources`                          | CPU/Memory resource requests/limits for node                                                                                                                | `{}`                                                              |
 | `livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                                              | `true`                                                            |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                    | `120`                                                             |
@@ -275,6 +276,35 @@ extraInitContainers: |
   command: ["/bin/sh", "-c"]
   args:
     - install_packages curl && curl http://api-service.local/db/starting;
+```
+
+## Extra Containers
+
+The feature allows for specifying additional containers in the pod. Usecases include situations when you need to run some sidecar containers. For example, you can observe if mysql in pod is running and report to some service discovery software like eureka. Example:
+`values.yaml`
+```yaml
+extraContainers:
+- name: '{{ .Chart.Name }}-eureka-sidecar'
+  image: 'image:tag'
+  env:
+  - name: SERVICE_NAME
+    value: '{{ template "mariadb-galera.fullname" . }}'
+  - name: EUREKA_APP_NAME
+    value: '{{ template "mariadb-galera.name" . }}'
+  - name: MARIADB_USER
+    value: '{{ .Values.db.user }}'
+  - name: MARIADB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: '{{ template "mariadb-galera.fullname" . }}'
+        key: mariadb-password
+  resources:
+    limits:
+      cpu: 100m
+      memory: 20Mi
+    requests:
+      cpu: 50m
+      memory: 10Mi
 ```
 
 ## Upgrading
