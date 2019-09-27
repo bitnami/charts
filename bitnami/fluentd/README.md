@@ -46,7 +46,6 @@ The following tables lists the configurable parameters of the kibana chart and t
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `global.imageRegistry`                          | Global Docker image registry                                                                                   | `nil`                                                                                                   |
 | `global.imagePullSecrets`                       | Global Docker registry secret names as an array                                                                | `[]` (does not add image pull secrets to deployed pods)                                                 |
-| `global.storageClass`                           | Global storage class for dynamic provisioning                                                                  | `nil`                                                                                                   |
 | `image.registry`                                | Fluentd image registry                                                                                         | `docker.io`                                                                                             |
 | `image.repository`                              | Fluentd image name                                                                                             | `bitnami/fluentd`                                                                                       |
 | `image.tag`                                     | Fluentd image tag                                                                                              | `{TAG_NAME}`                                                                                            |
@@ -134,6 +133,101 @@ $ helm install --name my-release -f values.yaml bitnami/fluentd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Forwarding the logs to another service
+
+By default, the aggregators in this chart will send the processed logs to the standard output. However, a common practice is to send them to another service, like Elasticsearch, instead. This can be achieved with this Helm Chart by mounting your own configuration files. For example:
+
+**configmap.yaml**
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-output
+data:
+  fluentd.conf: |
+    # Prometheus Exporter Plugin
+    # input plugin that exports metrics
+    <source>
+      @type prometheus
+      port {{ .Values.metrics.service.port }}
+    </source>
+
+    # input plugin that collects metrics from MonitorAgent
+    <source>
+      @type prometheus_monitor
+      <labels>
+        host ${hostname}
+      </labels>
+    </source>
+
+    # input plugin that collects metrics for output plugin
+    <source>
+      @type prometheus_output_monitor
+      <labels>
+        host ${hostname}
+      </labels>
+    </source>
+    {{- end }}
+    
+    # Ignore fluentd own events
+    <match fluent.**>
+      @type null
+    </match>
+
+    # TCP input to receive logs from the forwarders
+    <source>
+      @type forward
+      bind 0.0.0.0
+      port {{ .Values.aggregator.port }}
+    </source>
+
+    # HTTP input for the liveness and readiness probes
+    <source>
+      @type http
+      bind 0.0.0.0
+      port 9880
+    </source>
+
+    # Throw the healthcheck to the standard output instead of forwarding it
+    <match fluentd.healthcheck>
+      @type stdout
+    </match>
+
+    # Send the logs to the standard output
+    <match **>
+      @type elasticsearch
+      include_tag_key true
+      host "#{ENV['ELASTICSEARCH_HOST']}"
+      port "#{ENV['ELASTICSEARCH_PORT']}"
+      logstash_format true
+
+      <buffer>
+        @type file
+        path /opt/bitnami/fluentd/logs/buffers/logs.buffer
+        flush_thread_count 2
+        flush_interval 5s
+      </buffer>
+    </match>
+```
+
+Create the `ConfigMap` resource:
+
+```console
+$ kubectl create -f configmap.yaml
+```
+
+And then deploy the Fluentd chart with your configuration file and your Elasticsearch host and port:
+
+```console
+$ helm install bitnami/fluentd \
+    --set aggregator.configMap=elasticsearch-output \
+    --set aggregator.extraEnv[0].name=ELASTICSEARCH_HOST \
+    --set aggregator.extraEnv[0].value=your-ip-here \
+    --set aggregator.extraEnv[1].name=ELASTICSEARCH_PORT \
+    --set aggregator.extraEnv[1].value=your-port-here \
+```
 
 ## [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 

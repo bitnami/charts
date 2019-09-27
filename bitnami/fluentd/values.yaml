@@ -1,12 +1,11 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
-# global:
+global: {}
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
-#   storageClass: myStorageClass
 
 ## Bitnami Fluentd image version
 ## ref: https://hub.docker.com/r/bitnami/fluentd/tags/
@@ -56,7 +55,7 @@ forwarder:
   ## Extra environment variables to pass to the container
   ## extraEnv:
   ##   - name: MY_ENV_VAR
-  ##   - value: my_value
+  ##     value: my_value
   ##
   extraEnv: {}
 
@@ -78,7 +77,7 @@ forwarder:
     failureThreshold: 6
     successThreshold: 1
 
-  ## Set up update strategy. 
+  ## Set up update strategy.
   ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/#daemonset-update-strategy
   ## Example:
   # updateStrategy:
@@ -216,7 +215,7 @@ serviceAccount:
   ##
   create: true
   ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
+  ## If not set and create is true, a name is generated using the fluentd.fullname template
   # name:
 
 ## Role Based Access
@@ -225,14 +224,14 @@ serviceAccount:
 rbac:
   create: true
 
-## Prometheus metrics 
+## Prometheus metrics
 ## ref: https://github.com/fluent/fluent-plugin-prometheus/blob/master/README.md
 ##
 metrics:
   enabled: false
   service:
     type: ClusterIP
-    # loadBalancerIP: 
+    # loadBalancerIP:
     port: 24231
     ## Annotations for the Prometheus metrics service
     ##

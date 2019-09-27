@@ -61,12 +61,8 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
+{{- if .Values.global.imageRegistry }}
+    {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
@@ -81,7 +77,6 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
 Also, we can not use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
 {{- if .Values.global.imagePullSecrets }}
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
@@ -92,47 +87,6 @@ imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- end -}}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Storage Class for the forwarders
-*/}}
-{{- define "fluentd.forwarder.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.forwarder.persistence.storageClass -}}
-              {{- if (eq "-" .Values.forwarder.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.forwarder.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.forwarder.persistence.storageClass -}}
-        {{- if (eq "-" .Values.forwarder.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.forwarder.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -153,4 +107,59 @@ Create the name of the service account to use
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 {{- end }}
+{{- end -}}
+
+{{/*
+Validate data
+*/}}
+{{- define "fluentd.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "fluentd.validateValues.rbac" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+ {{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Fluentd - must create serviceAccount to create enable RBAC */}}
+{{- define "fluentd.validateValues.rbac" -}}
+{{- if and .Values.rbac.create (not .Values.serviceAccount.create) -}}
+fluentd: rbac.create
+    A ServiceAccount is required ("rbac.create=true" is set)
+    Please create a ServiceAccount (--set serviceAccount.create=true)
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the forwarder configmap name.
+*/}}
+{{- define "fluentd.forwarder.configMap" -}}
+{{- if .Values.forwarder.configMap -}}
+    {{- printf "%s" (tpl .Values.forwarder.configMap $) -}}
+{{- else -}}
+    {{- printf "%s-forwarder-cm" (include "fluentd.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the aggregator configmap name.
+*/}}
+{{- define "fluentd.aggregator.configMap" -}}
+{{- if .Values.aggregator.configMap -}}
+    {{- printf "%s" (tpl .Values.aggregator.configMap $) -}}
+{{- else -}}
+    {{- printf "%s-aggregator-cm" (include "fluentd.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the certificates secret name.
+*/}}
+{{- define "fluentd.tls.secretName" -}}
+{{- if .Values.tls.existingSecret -}}
+    {{- printf "%s" (tpl .Values.tls.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-certs" (include "fluentd.fullname" . ) -}}
+{{- end -}}
 {{- end -}}

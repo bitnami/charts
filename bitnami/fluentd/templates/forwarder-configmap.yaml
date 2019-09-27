@@ -3,11 +3,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "fluentd.fullname" . }}-forwarder-cm
-  labels: {{ include "fluentd.labels" . | nindent 4 }}
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
 data:
   fluentd.conf: |
-    {{- if .Values.metrics.enabled }}
+    {{- if .Values.metrics.enabled -}}
     # Prometheus Exporter Plugin
     # input plugin that exports metrics
     <source>
@@ -61,7 +61,7 @@ data:
       @type tail
       path /var/log/containers/*.log
       # exclude Fluentd logs
-      exclude_path /var/log/containers/{{ include "fluentd.fullname" . }}*.log
+      exclude_path /var/log/containers/*fluentd*.log
       pos_file /opt/bitnami/fluentd/logs/buffers/fluentd-docker.pos
       tag kubernetes.*
       read_from_head true
@@ -71,7 +71,8 @@ data:
         time_format %Y-%m-%dT%H:%M:%S.%NZ
       </parse>
     </source>
-    
+
+    # enrich with kubernetes metadata
     <filter kubernetes.**>
       @type kubernetes_metadata
     </filter>
@@ -94,7 +95,10 @@ data:
       {{- end}}
 
       <buffer>
-        flush_interval 10s
+        @type file
+        path /opt/bitnami/fluentd/logs/buffers/logs.buffer
+        flush_thread_count 2
+        flush_interval 5s
       </buffer>
     </match>
 {{- end -}}

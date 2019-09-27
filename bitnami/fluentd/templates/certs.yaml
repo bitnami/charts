@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ include "fluentd.fullname" . }}-certs
-  labels: {{ include "fluentd.labels" . | nindent 4 }}
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
 type: Opaque
 data:
   ca_certificate.pem:
