@@ -2,8 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "fluentd.fullname" . }}-headless
-  labels:
-    {{- include "fluentd.labels" . | nindent 4 }}
+  labels: {{ include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
 spec:
   type: ClusterIP
@@ -12,7 +11,5 @@ spec:
     - name: tcp
       port: {{ .Values.aggregator.port }}
       targetPort: tcp
-  selector:
-    app.kubernetes.io/name: {{ include "fluentd.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  selector: {{ include "fluentd.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator

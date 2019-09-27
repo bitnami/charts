@@ -42,6 +42,14 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
+Labels to use on daemonset.spec.selector.matchLabels, statefulset.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "fluentd.matchLabels" -}}
+app.kubernetes.io/name: {{ include "fluentd.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Return the proper Fluentd image name
 */}}
 {{- define "fluentd.image" -}}
@@ -137,4 +145,12 @@ Create the name of the service account to use
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
+{{- end -}}
+
+{{/* Check if there are rolling tags in the images */}}
+{{- define "fluentd.checkRollingTags" -}}
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
 {{- end -}}

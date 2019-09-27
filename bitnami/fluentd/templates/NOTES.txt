@@ -1,30 +1,14 @@
 ** Please be patient while the chart is being deployed **
 
-  Fluentd can be accessed within the cluster on port {{ .Values.forwarder.service.port }} at {{ template "fluentd.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+  To verify that Fluentd has started, run:
 
-  To access from outside the cluster execute the following commands:
+    kubectl get all -l "app.kubernetes.io/name={{ include "fluentd.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
 
-{{- if contains "NodePort" .Values.forwarder.service.type }}
+  Logs are captured on each node by the forwarder pods and then sent to the aggregator pods. By default, the aggregator pods send the logs to the standard output.
+  You can see all the logs by running this command:
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fluentd.fullname" . }})
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    curl http://$NODE_IP:$NODE_PORT/
-{{- else if contains "LoadBalancer" .Values.forwarder.service.type }}
+    kubectl logs -l "app.kubernetes.io/component=aggregator"
+  
+  You can mount your own configuration files to the aggregators and the forwarders. For example, this is useful if you want to forward the aggregated logs to Elasticsearch or another service.
 
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "fluentd.fullname" . }}'
-
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fluentd.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    curl http://$SERVICE_IP:{{ .Values.forwarder.service.port }}/
-{{- else if contains "ClusterIP"  .Values.forwarder.service.type }}
-
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "fluentd.fullname" . }} {{ .Values.forwarder.service.port }}:24224 &
-    curl http://127.0.0.1:24224/
-{{- end }}
-
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{ include "fluentd.checkRollingTags" . }}

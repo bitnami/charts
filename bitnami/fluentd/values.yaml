@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.7.2-debian-9-r3
+  tag: 1.7.2-debian-9-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -42,25 +42,11 @@ forwarder:
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
   ##
-  # configFile: fluentd.conf
-  
-  ## Service configuration
-  ##
-  service:
-    type: ClusterIP
-    ## Fluentd TCP forward port
-    port: 24224
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ##
-    # nodePort:
-    ##
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    annotations: {}
-    # loadBalancerIP:
+  configFile: fluentd.conf
+
+  ## Name of the configMap that contains the configuration files for fluentd
+  ## If not specified, one will be created by default
+  # configMap:
 
   ## String with extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
@@ -78,12 +64,14 @@ forwarder:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
+    enabled: true
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
   readinessProbe:
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -139,7 +127,11 @@ aggregator:
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
   ##
-  # configFile: fluentd.conf
+  configFile: fluentd.conf
+
+  ## Name of the configMap that contains the configuration files for fluentd
+  ## If not specified, one will be created by default
+  # configMap:
 
   ## Port which the forwarders will connect to to send the logs
   ##
@@ -161,12 +153,14 @@ aggregator:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
+    enabled: true
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
   readinessProbe:
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -237,14 +231,18 @@ rbac:
 metrics:
   enabled: false
   service:
+    type: ClusterIP
+    # loadBalancerIP: 
     port: 24231
     ## Annotations for the Prometheus metrics service
-    ## annotations:
-    ##   prometheus.io/scrape: "true"
-    ##   prometheus.io/port: "24231"
-    ##   prometheus.io/path: "/metrics"
-    annotations: {}
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "24231"
+      prometheus.io/path: "/metrics"
 
+## Mount TLS certificates
+##
 tls:
   enabled: false
   caCertificate: |-
