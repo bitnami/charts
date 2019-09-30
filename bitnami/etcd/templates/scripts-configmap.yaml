@@ -76,7 +76,7 @@ data:
         local -r min_endpoints=$((({{ $replicaCount }} + 1)/2))
 
         for e in "${endpoints_array[@]}"; do
-            if [[ "$e" != "$ETCD_ADVERTISE_CLIENT_URLS" ]] && (unset -v ETCDCTL_ENDPOINTS; exec etcdctl $AUTH_OPTIONS  endpoint health --endpoints="$e"); then
+            if [[ "$e" != "$ETCD_ADVERTISE_CLIENT_URLS" ]] && (unset -v ETCDCTL_ENDPOINTS; etcdctl $AUTH_OPTIONS  endpoint health --endpoints="$e"); then
                 active_endpoints=$((active_endpoints + 1))
             fi
         done
@@ -132,14 +132,12 @@ data:
               --initial-cluster-token $ETCD_INITIAL_CLUSTER_TOKEN \
               --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS 1>&3 2>&4
             store_member_id & 1>&3 2>&4
-
         else
             echo "==> There was no snapshot to perform data recovery!!" 1>&3 2>&4
             exit 1
         fi
 {{- else }}
         store_member_id & 1>&3 2>&4
-
         configure_rbac
 {{- end }}
     else
@@ -158,7 +156,6 @@ data:
                   --initial-cluster-token $ETCD_INITIAL_CLUSTER_TOKEN \
                   --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS 1>&3 2>&4
                 store_member_id & 1>&3 2>&4
-
             else
                 echo "==> There was no snapshot to perform data recovery!!" 1>&3 2>&4
                 exit 1
@@ -174,7 +171,6 @@ data:
             echo "==> Loading env vars of existing cluster..." 1>&3 2>&4
             source "$ETCD_DATA_DIR/new_member_envs" 1>&3 2>&4
             store_member_id & 1>&3 2>&4
-
         else
             echo "==> Updating member in existing cluster..." 1>&3 2>&4
             etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}" 1>&3 2>&4
