@@ -127,7 +127,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `persistence.storageClass`           | Persistent Volume Storage Class                                                                                                                             | `nil`                                                             |
 | `persistence.accessModes`            | Persistent Volume Access Modes                                                                                                                              | `[ReadWriteOnce]`                                                 |
 | `persistence.size`                   | Persistent Volume Size                                                                                                                                      | `8Gi`                                                             |
-| `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `nil`                                                             |
+| `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `[]`                                                              |
 | `extraContainers`                    | Additional containers (this value is evaluated as a template)                                                                                               | `[]`                                                              |
 | `resources`                          | CPU/Memory resource requests/limits for node                                                                                                                | `{}`                                                              |
 | `livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                                              | `true`                                                            |
@@ -270,7 +270,7 @@ The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-
 The feature allows for specifying a template string for a initContainer in the pod. Usecases include situations when you need some pre-run setup. For example, in IKS (IBM Cloud Kubernetes Service), non-root users do not have write permission on the volume mount path for NFS-powered file storage. So, you could use a initcontainer to `chown` the mount. See a example below, where we add an initContainer on the pod that reports to an external resource that the db is going to starting.
 `values.yaml`
 ```yaml
-extraInitContainers: |
+extraInitContainers:
 - name: initcontainer
   image: bitnami/minideb:stretch
   command: ["/bin/sh", "-c"]

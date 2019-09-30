@@ -76,7 +76,7 @@ spec:
 {{- include "mariadb-galera.imagePullSecrets" . | indent 6 }}
       {{- if .Values.extraInitContainers }}
       initContainers:
-{{ tpl .Values.extraInitContainers . | indent 6}}
+{{ tpl (toYaml .Values.extraInitContainers) . | indent 6 }}
       {{- end }}
       containers:
       - name: "mariadb-galera"
