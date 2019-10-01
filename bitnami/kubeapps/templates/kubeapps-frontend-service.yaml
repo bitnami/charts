@@ -13,6 +13,9 @@ metadata:
 {{- end }}
 spec:
   type: {{ .Values.frontend.service.type }}
+  {{- if and (.Values.frontend.service.loadBalancerIP) (eq .Values.frontend.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.frontend.service.loadBalancerIP }}
+  {{- end }}
   ports:
   - port: {{ .Values.frontend.service.port }}
   {{- if .Values.authProxy.enabled }}

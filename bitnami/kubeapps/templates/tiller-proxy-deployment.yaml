@@ -32,6 +32,7 @@ spec:
         args:
         - --host={{ .Values.tillerProxy.host }}
         - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
+        - --chartsvc-url=http://{{ template "kubeapps.chartsvc.fullname" . }}:{{ .Values.chartsvc.service.port }}
         {{- if .Values.tillerProxy.tls }}
         - --tls
         {{- if .Values.tillerProxy.tls.verify }}
