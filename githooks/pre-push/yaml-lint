@@ -14,8 +14,8 @@ render_and_yaml_lint() {
     local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2} }}"
     printf '\033[0;34m- Running yamllint on %s/%s\n\033[0m' "$display_path" "$path"
 
-    if ! helm template "$chart_path" -x "$path" | yamllint -d "$lint_rules" -; then
-        printf '\033[0;31m\\U0001F6AB (helm template %s -x %s | yamllint -d "%s" -) failed\n\n\033[0m' "$chart_path" "$path" "$lint_rules"
+    if ! helm template "$chart_path" -x "$path" | yamllint -s -d "$lint_rules" -; then
+        printf '\033[0;31m\\U0001F6AB (helm template %s -x %s | yamllint -s -d "%s" -) failed\n\n\033[0m' "$chart_path" "$path" "$lint_rules"
         false
     else
         printf '\033[0;32m\U00002705 %s/%s\n\n\033[0m' "$display_path" "$path"
@@ -28,8 +28,8 @@ yaml_lint_file() {
     local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2}}}"
     local -r display_path=${1#"$repo_path/"}
     printf '\033[0;34m- Running yamllint on %s\n' "$display_path"
-    if ! yamllint -d "$lint_rules" "$path"; then
-        printf '\033[0;31m\U0001F6AB yamllint -d "%s" %s failed\n\n\033[0m' "$lint_rules" "$path"
+    if ! yamllint -s -d "$lint_rules" "$path"; then
+        printf '\033[0;31m\U0001F6AB yamllint -s -d "%s" %s failed\n\n\033[0m' "$lint_rules" "$path"
         false
     else
         printf '\033[0;32m\U00002705 %s\n\n\033[0m' "$path"
