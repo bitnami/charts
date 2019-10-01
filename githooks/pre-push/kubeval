@@ -1,30 +1,30 @@
 #!/bin/bash
 
-currentBranch="$(git rev-parse --abbrev-ref HEAD)"
-originCommit="$(git rev-parse --short "$(git merge-base master "$currentBranch")")"
-filesToBePushed="$(git diff --name-only "$originCommit")"
+readonly current_branch="$(git rev-parse --abbrev-ref HEAD)"
+readonly origin_commit="$(git rev-parse --short "$(git merge-base master "$current_branch")")"
+readonly files_to_push="$(git diff --name-only "$origin_commit")"
 failed=0
 
-check-kubeval() {
+check_kubeval() {
     if ! command -v kubeval > /dev/null 2>&1; then
-        printf '\033[0;31m\U1F6ABkubeval is not installed\033[0m'
+        printf '\033[0;31m\U0001F6AB kubeval is not installed\033[0m'
         printf '  Install it from https://github.com/instrumenta/kubeval/releases'
         exit 1
     fi
 }
 
-for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
-    check-kubeval
+for chart_name in $( cut -d'/' -f1,2 <<< "$files_to_push" | uniq ); do
+    check_kubeval
     # Avoid running 'kubeval' when modified dirs are not charts
-    if [[ $chartName = bitnami/* ]]; then
-        printf '\033[01;33mValidating %s:\n\033[0m' "$chartName"
-        chartPath="$(git rev-parse --show-toplevel)"/"$chartName"
+    if [[ $chart_name = bitnami/* ]]; then
+        printf '\033[01;33mValidating %s with kubeval:\n\033[0m' "$chart_name"
+        chart_path="$(git rev-parse --show-toplevel)"/"$chart_name"
 
-        printf '\033[0;34m- Running helm template %s | kubeval\n\033[0m' "$chartPath"
-        if helm template "$chartPath" | kubeval; then
-            printf '\033[0;32m\U2705 helm template %s | kubeval\n\n\033[0m' "$chartPath"
+        printf '\033[0;34m- Running helm template %s | kubeval\n\033[0m' "$chart_path"
+        if helm template "$chart_path" | kubeval; then
+            printf '\033[0;32m\U00002705 helm template %s | kubeval\n\n\033[0m' "$chart_path"
         else
-            printf '\033[0;31m\U1F6AB helm template %s | kubeval failed. Push cancelled.\n\n\033[0m' "$chartPath"
+            printf '\033[0;31m\U0001F6AB helm template %s | kubeval failed. Push cancelled.\n\n\033[0m' "$chart_path"
             failed=1
         fi
     fi
