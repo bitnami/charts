@@ -1,0 +1,33 @@
+#!/bin/bash
+
+currentBranch="$(git rev-parse --abbrev-ref HEAD)"
+originCommit="$(git rev-parse --short "$(git merge-base master "$currentBranch")")"
+filesToBePushed="$(git diff --name-only "$originCommit")"
+failed=0
+
+check-kubeval() {
+    if ! command -v kubeval > /dev/null 2>&1; then
+        printf '\033[0;31m\U1F6ABkubeval is not installed\033[0m'
+        printf '  Install it from https://github.com/instrumenta/kubeval/releases'
+        exit 1
+    fi
+}
+
+for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
+    check-kubeval
+    # Avoid running 'kubeval' when modified dirs are not charts
+    if [[ $chartName = bitnami/* ]]; then
+        printf '\033[01;33mValidating %s:\n\033[0m' "$chartName"
+        chartPath="$(git rev-parse --show-toplevel)"/"$chartName"
+
+        printf '\033[0;34m- Running helm template %s | kubeval\n\033[0m' "$chartPath"
+        if helm template "$chartPath" | kubeval; then
+            printf '\033[0;32m\U2705 helm template %s | kubeval\n\n\033[0m' "$chartPath"
+        else
+            printf '\033[0;31m\U1F6AB helm template %s | kubeval failed. Push cancelled.\n\n\033[0m' "$chartPath"
+            failed=1
+        fi
+    fi
+done
+
+exit $failed
