@@ -241,7 +241,6 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
 {{ tpl (toYaml .Values.extraContainers) . | indent 6 }}
-
       volumes:
         {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
         - name: mariadb-galera-config

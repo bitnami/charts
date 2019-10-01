@@ -367,6 +367,7 @@ extraInitContainers: []
 #   command: ['do', 'something']
 
 ## Additional containers
+##
 extraContainers: []
 
 ## Configure resource requests and limits
