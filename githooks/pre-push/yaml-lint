@@ -1,45 +1,45 @@
 #!/bin/bash
 
-currentBranch="$(git rev-parse --abbrev-ref HEAD)"
-originCommit="$(git rev-parse --short "$(git merge-base master "$currentBranch")")"
-filesToBePushed="$(git diff --name-only "$originCommit")"
-repoPath="$(git rev-parse --show-toplevel)"
+readonly current_branch="$(git rev-parse --abbrev-ref HEAD)"
+readonly origin_commit="$(git rev-parse --short "$(git merge-base master "$current_branch")")"
+readonly files_to_push="$(git diff --name-only "$origin_commit")"
+readonly repo_path="$(git rev-parse --show-toplevel)"
 
 failed=0
 
-yaml-lint-file-render() {
+render_and_yaml_lint() {
     local -r chart_path="${1:?missing_chart}"
     local -r path="${2:?missing_file}"
-    local -r display_path=${1#"$repoPath/"}
+    local -r display_path=${1#"$repo_path/"}
     local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2} }}"
     printf '\033[0;34m- Running yamllint on %s/%s\n\033[0m' "$display_path" "$path"
 
     if ! helm template "$chart_path" -x "$path" | yamllint -d "$lint_rules" -; then
-        printf '\033[0;31m\U1F6AB (helm template %s -x %s | yamllint -d "%s" -) failed\n\n\033[0m' "$chart_path" "$path" "$lint_rules"
+        printf '\033[0;31m\\U0001F6AB (helm template %s -x %s | yamllint -d "%s" -) failed\n\n\033[0m' "$chart_path" "$path" "$lint_rules"
         false
     else
-        printf '\033[0;32m\U2705 %s/%s\n\n\033[0m' "$display_path" "$path"
+        printf '\033[0;32m\U00002705 %s/%s\n\n\033[0m' "$display_path" "$path"
         true
     fi
 }
 
-yaml-lint-file() {
+yaml_lint_file() {
     local -r path="${1:?missing_file}"
     local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2}}}"
-    local -r display_path=${1#"$repoPath/"}
+    local -r display_path=${1#"$repo_path/"}
     printf '\033[0;34m- Running yamllint on %s\n' "$display_path"
     if ! yamllint -d "$lint_rules" "$path"; then
-        printf '\033[0;31m\U1F6AB yamllint -d "%s" %s failed\n\n\033[0m' "$lint_rules" "$path"
+        printf '\033[0;31m\U0001F6AB yamllint -d "%s" %s failed\n\n\033[0m' "$lint_rules" "$path"
         false
     else
-        printf '\033[0;32m\U2705 %s\n\n\033[0m' "$path"
+        printf '\033[0;32m\U00002705 %s\n\n\033[0m' "$path"
         true
     fi
 }
 
-check-yaml-lint() {
+check_yaml_lint() {
     if ! command -v yamllint > /dev/null 2>&1; then
-        printf '\033[0;31m\U1F6AByamllint is not installed\033[0m'
+        printf '\033[0;31m\U0001F6AB yamllint is not installed\033[0m'
         printf '  Installation for Linux'
         printf '    pip install --user yamllint'
         printf '  Installation for Mac OS'
@@ -48,22 +48,22 @@ check-yaml-lint() {
     fi
 }
 
-for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
-    check-yaml-lint
+for chart_name in $( cut -d'/' -f1,2 <<< "$files_to_push" | uniq ); do
+    check_yaml_lint
     # Avoid running 'yamllint' when modified dirs are not charts
-    if [[ $chartName = bitnami/* ]]; then
-        printf '\033[01;33mLinting yaml of %s:\n\033[0m' "$chartName"
-        chartPath="$repoPath"/"$chartName"
+    if [[ $chart_name = bitnami/* ]]; then
+        printf '\033[01;33mLinting yaml of %s:\n\033[0m' "$chart_name"
+        chart_path="$repo_path"/"$chart_name"
 
         for yaml_file in values.yaml values-production.yaml requirements.yaml Chart.yaml; do
-            if [[ -f "$chartPath"/"$yaml_file" ]] && ! yaml-lint-file "$chartPath"/"$yaml_file"; then
+            if [[ -f "$chart_path"/"$yaml_file" ]] && ! yaml_lint_file "$chart_path"/"$yaml_file"; then
                 failed=1
             fi
         done
 
-        for yaml_file in "$chartPath"/templates/*.yaml; do
+        for yaml_file in "$chart_path"/templates/*.yaml; do
             path_basename=templates/$(basename "$yaml_file")
-            if ! yaml-lint-file-render "$chartPath" "$path_basename"; then
+            if ! render_and_yaml_lint "$chart_path" "$path_basename"; then
                 failed=1
             fi
         done
@@ -71,9 +71,9 @@ for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
 done
 
 if [[ "$failed" = "1" ]]; then
-    printf '\033[0;31m\U1F6ABYAML lint failed. Not pushing\n\n\033[0m'
+    printf '\033[0;31m\U0001F6AB YAML lint failed. Not pushing\n\n\033[0m'
 else
-    printf '\033[01;33mYAML lint succeeded\n\n\033[0m'
+    printf '\033[0;32m\U00002705 YAML lint succeeded\n\n\033[0m'
 fi
 
 exit $failed
