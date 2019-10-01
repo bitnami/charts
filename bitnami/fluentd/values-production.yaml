@@ -121,7 +121,7 @@ forwarder:
 aggregator:
   ## Number of aggregator replicas
   ##
-  replicaCount: 1
+  replicaCount: 2
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -228,7 +228,7 @@ rbac:
 ## ref: https://github.com/fluent/fluent-plugin-prometheus/blob/master/README.md
 ##
 metrics:
-  enabled: false
+  enabled: true
   service:
     type: ClusterIP
     # loadBalancerIP:

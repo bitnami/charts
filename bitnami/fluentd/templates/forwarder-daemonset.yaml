@@ -76,7 +76,7 @@ spec:
         - name: buffer
           mountPath: /opt/bitnami/fluentd/logs/buffers
         {{- if .Values.tls.enabled }}
-        - name: {{ template "fluentd.fullname" . }}-certs
+        - name: certs
           mountPath: /opt/bitnami/fluentd/certs
         {{- end }}
         - name: varlog
@@ -85,16 +85,14 @@ spec:
           mountPath: /var/lib/docker/containers
       volumes:
       {{- if .Values.tls.enabled }}
-      - name: {{ template "fluentd.fullname" . }}-certs
+      - name: certs
         secret:
           secretName: {{ template "fluentd.tls.secretName" . }}
           items:
-          - key: ca_certificate.pem
-            path: ca_certificate.pem
-          - key: server_certificate.pem
-            path: server_certificate.pem
-          - key: server_key.pem
-            path: server_key.pem
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key
       {{- end }}
       - name: fluentd-config
         configMap:

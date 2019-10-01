@@ -160,6 +160,6 @@ Get the certificates secret name.
 {{- if .Values.tls.existingSecret -}}
     {{- printf "%s" (tpl .Values.tls.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s-certs" (include "fluentd.fullname" . ) -}}
+    {{- printf "%s-tls" (include "fluentd.fullname" . ) -}}
 {{- end -}}
 {{- end -}}

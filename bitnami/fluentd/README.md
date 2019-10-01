@@ -229,7 +229,37 @@ $ helm install bitnami/fluentd \
     --set aggregator.extraEnv[1].value=your-port-here \
 ```
 
-## [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### Production configuration and horizontal scaling
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+
+```console
+$ helm install --name my-release -f ./values-production.yaml bitnami/fluentd
+```
+
+- Number of aggregator nodes:
+```diff
+- statefulset.replicaCount: 1
++ statefulset.replicaCount: 2
+```
+
+- Enable prometheus to access fluentd metrics endpoint:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
+
+To horizontally scale this chart once it has been deployed:
+
+```console
+$ helm upgrade my-release bitnami/fluentd \
+  -f ./values-production.yaml \
+  --set statefulset.replicaCount=3
+```
+
+> **Note**: Scaling the statefulset with `kubectl scale ...` command is discouraged. Use `helm upgrade ...` for horizontal scaling to ensure the forwarders configuration is refreshed and aware of the new pods.
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
