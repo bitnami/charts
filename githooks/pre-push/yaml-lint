@@ -1,11 +1,12 @@
 #!/bin/bash
 
-. ../functions/libkubeval.sh
+repo_path="$(git rev-parse --show-toplevel)"
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+origin_commit="$(git rev-parse --short "$(git merge-base master "$current_branch")")"
+files_to_push="$(git diff --name-only "$origin_commit")"
 
-readonly current_branch="$(git rev-parse --abbrev-ref HEAD)"
-readonly origin_commit="$(git rev-parse --short "$(git merge-base master "$current_branch")")"
-readonly files_to_push="$(git diff --name-only "$origin_commit")"
-failed=0
+# shellcheck source=../functions/libyamllint.sh
+. "${repo_path}/functions/libyamllint.sh"
 
 for chart_name in $( cut -d'/' -f1,2 <<< "$files_to_push" | uniq ); do
     check_yaml_lint
