@@ -22,7 +22,7 @@ run_kubeval_chart() {
         if helm template --values "$values_file" "$chart_path" | kubeval; then
             printf '\033[0;32m\U00002705 helm template --values %s %s | kubeval\n\n\033[0m' "$values_file_display" "$chart_name"
         else
-            printf '\033[0;31m\U0001F6AB helm template --values %s %s | kubeval failed. Push cancelled.\n\n\033[0m' "$values_file_display" "$chart_name"
+            printf '\033[0;31m\U0001F6AB helm template --values %s %s | kubeval failed.\n\n\033[0m' "$values_file_display" "$chart_name"
             test_failed=1
         fi
     done
