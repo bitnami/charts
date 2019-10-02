@@ -16,6 +16,9 @@ for chart_name in $( cut -d'/' -f1,2 <<< "$files_to_push" | uniq ); do
     if [[ $chart_name = bitnami/* ]]; then
         printf '\033[01;33mValidating %s with helm lint:\n\033[0m' "$chart_name"
         chart_path="$(git rev-parse --show-toplevel)"/"$chart_name"
+        if ! run_helm_lint_chart "$chart_name"; then
+            failed=1
+        fi
     fi
 done
 
