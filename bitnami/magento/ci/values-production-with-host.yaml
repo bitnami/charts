@@ -43,7 +43,7 @@ image:
 ## Magento host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoHost:
+magentoHost: magento.local
 
 ## loadBalancerIP for the Magento Service (optional, cloud specific)
 ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
@@ -95,7 +95,7 @@ allowEmptyPassword: "yes"
 ##
 externalDatabase:
   ## Database host
-  host:
+  host: database.local
 
   ## Database port
   port: 3306
@@ -334,7 +334,7 @@ affinity: {}
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
