@@ -6,7 +6,7 @@ render_and_yaml_lint() {
     local -r values="${3:?missing_values}"
     local -r repo_path="$(git rev-parse --show-toplevel)"
     local -r display_chart_path=${chart_path#"$repo_path/"}
-    local -r display_values=${values#"$chart_path/"}
+    local -r display_values=${values#"$repo_path/"}
     local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2} }}"
     printf '\033[0;34m- Running yamllint on %s/%s (values: %s)\n\033[0m' "$display_chart_path" "$path" "$display_values"
 
