@@ -197,8 +197,12 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/etcd
 To horizontally scale this chart once it has been deployed:
 
 ```console
-$ kubectl scale statefulset my-etcd --replicas=5
+$ helm upgrade my-release bitnami/etcd \
+  -f ./values-production.yaml \
+  --set statefulset.replicaCount=5
 ```
+
+> **Note**: Scaling the statefulset with `kubectl scale ...` command is highly discouraged. Use `helm upgrade ...` for horizontal scaling so you ensure all the environment variables used to configure the ectd cluster are properly updated.
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
@@ -234,24 +238,6 @@ $ helm install bitnami/etcd --set envVarsConfigMap=etcd-env-vars
 $ kubectl create configmap etcd-conf --from-file=etcd.conf.yml
 $ helm install bitnami/etcd --set configFileConfigMap=etcd-conf
 ```
-
-## Production and horizontal scaling
-
-The following repo contains the recommended production settings for etcd server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/etcd
-```
-
-To horizontally scale this chart once it has been deployed:
-
-```console
-$ helm upgrade my-release bitnami/etcd \
-  -f ./values-production.yaml
-  --set statefulset.replicaCount=5
-```
-
-> **Note**: Scaling the statefulset with `kubectl scale ...` command is highly discouraged. Use `helm upgrade ...` for horizontal scaling so you ensure all the environment variables used to configure the ectd cluster are properly updated.
 
 ## Enable security for etcd
 
