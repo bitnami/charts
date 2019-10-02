@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ../functions/libhelmlint.sh
+
 readonly current_branch="$(git rev-parse --abbrev-ref HEAD)"
 readonly origin_commit="$(git rev-parse --short "$(git merge-base master "$current_branch")")"
 readonly files_to_push="$(git diff --name-only "$origin_commit")"
@@ -10,30 +12,13 @@ for chart_name in $( cut -d'/' -f1,2 <<< "$files_to_push" | uniq ); do
     if [[ $chart_name = bitnami/* ]]; then
         printf '\033[01;33mValidating %s with helm lint:\n\033[0m' "$chart_name"
         chart_path="$(git rev-parse --show-toplevel)"/"$chart_name"
-        printf '\033[0;34m- Running helm lint %s\n\033[0m' "$chart_name"
-        if helm lint "$chart_path"; then
-            printf '\033[0;32m\U00002705 helm lint %s\n\n\033[0m' "$chart_name"
-        else
-            printf '\033[0;31m\U0001F6AB helm lint %s failed. Push cancelled.\n\n\033[0m' "$chart_name"
-            failed=1
-        fi
-        for values_file in "$chart_path"/values.yaml "$chart_path"/ci/*.yaml; do
-            if [[ ! -f "$values_file" ]];then
-                continue
-            fi
-            values_file_display=${values_file#$chart_path/}
-
-            printf '\033\033[0;34m- Running helm template --values %s %s\n\033[0m' "$values_file_display" "$chart_name"
-            helm repo add bitnami https://charts.bitnami.com/bitnami >> /dev/null
-            helm dependency update "$chart_path" >> /dev/null
-            if helm template --values "$values_file" "$chart_path" >> /dev/null; then
-                printf '\033[0;32m\U00002705 helm template --values %s %s\n\n\033[0m' "$values_file_display" "$chart_name"
-            else
-                printf '\033[0;31m\U0001F6AB helm template --values %s %s failed. Push cancelled.\n\n\033[0m' "$values_file_display" "$chart_path"
-                failed=1
-            fi
-        done
     fi
 done
+
+if [[ "$failed" = "1" ]]; then
+    printf '\033[0;31m\U0001F6AB Helm lint failed. Not pushing\n\n\033[0m'
+else
+    printf '\033[0;32m\U00002705 Helm lint succeeded\n\n\033[0m'
+fi
 
 exit $failed
