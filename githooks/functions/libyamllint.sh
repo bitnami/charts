@@ -49,23 +49,33 @@ run_yaml_lint_chart() {
     local -r chart_name="${1:?missing_chart_name}"
     local -r chart_path="$(git rev-parse --show-toplevel)"/"$chart_name"
     local test_failed=0
-    for yaml_file in "$chart_path"/values.yaml "$chart_path"/values-production.yaml "$chart_path"/requirements.yaml "$chart_path"/Chart.yaml "$chart_path"/ci/*; do
+
+    local -r ci_values_file_list=$(mktemp)
+    local -r template_yaml_file_list=$(mktemp)
+
+    find "$chart_path"/ci -type f -regex ".*\.yaml" > "$ci_values_file_list"
+    find "$chart_path"/templates -type f -regex ".*\.yaml" > "$template_yaml_file_list"
+
+    for yaml_file in "$chart_path"/values.yaml "$chart_path"/values-production.yaml "$chart_path"/requirements.yaml "$chart_path"/Chart.yaml $(< "$ci_values_file_list"); do
         if [[ -f "$yaml_file" ]] && ! yaml_lint_file "$yaml_file"; then
             test_failed=1
         fi
     done
 
-    for values_file in "$chart_path"/values.yaml "$chart_path"/ci/*.yaml; do
+    for values_file in "$chart_path"/values.yaml $(< "$ci_values_file_list"); do
         if [[ ! -f "$values_file" ]];then
             continue
         fi
-        for yaml_file in "$chart_path"/templates/*.yaml; do
+        for yaml_file in $(< "$template_yaml_file_list"); do
             path_basename=templates/$(basename "$yaml_file")
             if ! render_and_yaml_lint "$chart_path" "$path_basename" "$values_file"; then
                 test_failed=1
             fi
         done
     done
+
+    rm "$ci_values_file_list"
+    rm "$template_yaml_file_list"
 
     if [[ "$test_failed" = "1" ]]; then
         false
