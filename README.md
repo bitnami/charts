@@ -53,6 +53,7 @@ $ helm search bitnami
 - [Grafana](https://github.com/bitnami/charts/tree/master/bitnami/grafana)
 - [Harbor](https://github.com/bitnami/charts/tree/master/bitnami/harbor)
 - [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
+- [InfluxDB](https://github.com/bitnami/charts/tree/master/bitnami/influxdb)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
 - [Kibana](https://github.com/bitnami/charts/tree/master/bitnami/kibana)
