@@ -1,0 +1,31 @@
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ template "influxdb.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ include "influxdb.fullname" . }}
+  labels: {{ include "influxdb.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:  {{ include "influxdb.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: influxdb
+  policyTypes:
+    - Ingress
+  ingress:
+  # Allow inbound connections
+  - ports:
+    - port: 8086
+      protocol: TCP
+    - port: 8088
+      protocol: TCP
+    {{- if not .Values.networkPolicy.allowExternal }}
+    from:
+    - podSelector:
+        matchLabels:
+          {{ template "influxdb.fullname" . }}-client: "true"
+    {{- if eq .Values.architecture "high-availability" }}
+    - podSelector:
+        matchLabels: {{ include "influxdb.matchLabels" . | nindent 10 }}
+          app.kubernetes.io/component: relay
+    {{- end }}
+    {{- end }}
+{{- end }}

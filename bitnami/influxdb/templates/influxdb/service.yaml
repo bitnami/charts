@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "influxdb.fullname" . }}
+  labels: {{ include "influxdb.labels" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb
+spec:
+  type: {{ .Values.influxdb.service.type }}
+  {{- if and .Values.influxdb.service.loadBalancerIP (eq .Values.influxdb.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.influxdb.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.influxdb.service.type "LoadBalancer") .Values.influxdb.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{ with .Values.influxdb.service.loadBalancerSourceRanges }}
+{{ toYaml . | indent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.influxdb.service.type "ClusterIP") .Values.influxdb.service.clusterIP }}
+  clusterIP: {{ .Values.influxdb.service.clusterIP }}
+  {{- end }}
+  ports:
+  - port: {{ .Values.influxdb.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: http
+  - port: {{ .Values.influxdb.service.rcpPort }}
+    targetPort: rcp
+    protocol: TCP
+    name: rcp
+  selector: {{ include "influxdb.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb

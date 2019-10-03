@@ -1,0 +1,29 @@
+{{- if eq .Values.architecture "high-availability" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "influxdb.fullname" . }}-relay
+  labels: {{ include "influxdb.labels" . | nindent 4 }}
+    app.kubernetes.io/component: relay
+spec:
+  type: {{ .Values.relay.service.type }}
+  {{- if and .Values.relay.service.loadBalancerIP (eq .Values.relay.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.relay.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.relay.service.type "LoadBalancer") .Values.relay.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{ with .Values.relay.service.loadBalancerSourceRanges }}
+{{ toYaml . | indent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.relay.service.type "ClusterIP") .Values.relay.service.clusterIP }}
+  clusterIP: {{ .Values.relay.service.clusterIP }}
+  {{- end }}
+  ports:
+  - port: {{ .Values.relay.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector: {{ include "influxdb.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: relay
+  {{- end }}
