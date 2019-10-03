@@ -1,0 +1,256 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+global: {}
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+
+## Bitnami Fluentd image version
+## ref: https://hub.docker.com/r/bitnami/fluentd/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/fluentd
+  tag: 1.7.3-debian-9-r1
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## String to partially override fluentd.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override fluentd.fullname template
+##
+# fullnameOverride:
+
+## Cluster Domain
+clusterDomain: cluster.local
+
+forwarder:
+  ## Name of the config file that will be used by Fluentd at launch
+  ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
+  ##
+  configFile: fluentd.conf
+
+  ## Name of the configMap that contains the configuration files for fluentd
+  ## If not specified, one will be created by default
+  # configMap:
+
+  ## String with extra arguments for the Fluentd command line
+  ## ref: https://docs.fluentd.org/deployment/command-line-option
+  ##
+  extraArgs: ""
+
+  ## Extra environment variables to pass to the container
+  ## extraEnv:
+  ##   - name: MY_ENV_VAR
+  ##     value: my_value
+  ##
+  extraEnv: {}
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Set up update strategy.
+  ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/#daemonset-update-strategy
+  ## Example:
+  # updateStrategy:
+  #  type: RollingUpdate
+  #  rollingUpdate:
+  #    maxSurge: 25%
+  #    maxUnavailable: 25%
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     memory: 512Mi
+  ##     cpu: 300m
+  ##
+  # resources:
+
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+aggregator:
+  ## Number of aggregator replicas
+  ##
+  replicaCount: 2
+
+  ## Name of the config file that will be used by Fluentd at launch
+  ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
+  ##
+  configFile: fluentd.conf
+
+  ## Name of the configMap that contains the configuration files for fluentd
+  ## If not specified, one will be created by default
+  # configMap:
+
+  ## Port which the forwarders will connect to to send the logs
+  ##
+  port: 24224
+
+  ## String with extra arguments for the Fluentd command line
+  ## ref: https://docs.fluentd.org/deployment/command-line-option
+  ##
+  extraArgs: ""
+
+  ## Extra environment variables to pass to the container
+  ## extraEnv:
+  ##   - name: MY_ENV_VAR
+  ##   - value: my_value
+  ##
+  extraEnv: {}
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Set up update strategy.
+  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ## Example:
+  # updateStrategy:
+  #  type: RollingUpdate
+  #  rollingUpdate:
+  #    maxSurge: 25%
+  #    maxUnavailable: 25%
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     memory: 512Mi
+  ##     cpu: 300m
+  ##
+  # resources:
+
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the fluentd.fullname template
+  # name:
+
+## Role Based Access
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  create: true
+
+## Prometheus metrics
+## ref: https://github.com/fluent/fluent-plugin-prometheus/blob/master/README.md
+##
+metrics:
+  enabled: true
+  service:
+    type: ClusterIP
+    # loadBalancerIP:
+    port: 24231
+    ## Annotations for the Prometheus metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "24231"
+      prometheus.io/path: "/metrics"
+
+## Mount TLS certificates
+##
+tls:
+  enabled: false
+  certificate: |-
+  key: |-
+  # existingSecret: name-of-existing-secret-to-certificates
+
+## SecurityContext configuration
+##
+securityContext:
+  enabled: true
+  runAsUser: 1001
+  fsGroup: 1001
