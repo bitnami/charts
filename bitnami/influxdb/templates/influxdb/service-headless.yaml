@@ -8,13 +8,13 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-  - port: {{ .Values.influxdb.service.port }}
-    targetPort: http
-    protocol: TCP
-    name: http
-  - port: {{ .Values.influxdb.service.rcpPort }}
-    targetPort: rcp
-    protocol: TCP
-    name: rcp
+    - port: {{ .Values.influxdb.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.influxdb.service.rcpPort }}
+      targetPort: rcp
+      protocol: TCP
+      name: rcp
   selector: {{ include "influxdb.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb

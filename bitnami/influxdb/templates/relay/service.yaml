@@ -20,10 +20,15 @@ spec:
   clusterIP: {{ .Values.relay.service.clusterIP }}
   {{- end }}
   ports:
-  - port: {{ .Values.relay.service.port }}
-    targetPort: http
-    protocol: TCP
-    name: http
+    - port: {{ .Values.relay.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq .Values.relay.service.type "NodePort") (eq .Values.relay.service.type "LoadBalancer")) (not (empty .Values.relay.service.nodePort)))}}
+      nodePort: {{ .Values.relay.service.nodePort }}
+      {{- else if eq .Values.relay.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   selector: {{ include "influxdb.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: relay
   {{- end }}

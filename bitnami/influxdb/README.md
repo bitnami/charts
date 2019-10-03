@@ -1,6 +1,6 @@
 # InfluxDB
 
-[InfluxDB](ttps://www.influxdata.com/products/influxdb-overview/) is an open source time-series database designed to handle large write and read loads in real-time.
+[InfluxDB](https://www.influxdata.com/products/influxdb-overview/) is an open source time-series database designed to handle large write and read loads in real-time.
 
 ## TL;DR;
 
@@ -55,8 +55,8 @@ $ helm install --name my-release bitnami/minio --set architecture="high-availabi
 The standalone architecture installs a deployment with one InfluxDB server (it cannot be scaled):
 
 ```
-               ┌──────────────────┐                  
-               │     Ingress      │                  
+               ┌──────────────────┐
+               │     Ingress      │
                │    Controller    │
                └────────┬─────────┘
                         |
@@ -79,12 +79,12 @@ The standalone architecture installs a deployment with one InfluxDB server (it c
 The high availability install a statefulset with N InfluxDB servers and M InfluxDB Relay instances:
 
 ```
-               ┌──────────────────┐                  
-               │     Ingress      │                  
+               ┌──────────────────┐
+               │     Ingress      │
                │    Controller    │
                └───────┬─┬────────┘
-                       │ │          
-                       │ │          
+                       │ │
+                       │ │
           ┌────────────┘ └─────────────┐
           │                            │
           │ /write              /query │
@@ -135,23 +135,24 @@ The following tables lists the configurable parameters of the InfluxDB chart and
 | `architecture`                              | InfluxDB architecture (`standalone` or `high-availability`)                                                                                                                               | `standalone`                                            |
 | `database`                                  | Database to be created on first run                                                                                                                                                       | `my_database`                                           |
 | `authEnabled`                               | Enable/disable authentication                                                                                                                                                             | `true`                                                  |
-| `adminUser.user`                            | InfluxDB admin user                                                                                                                                                                       | `admin`                                                 |
+| `adminUser.name`                            | InfluxDB admin user name                                                                                                                                                                  | `admin`                                                 |
 | `adminUser.pwd`                             | InfluxDB admin user's password                                                                                                                                                            | `nil`                                                   |
 | `adminUser.usePasswordFile`                 | Mount admin user's password as file instead of environment variable                                                                                                                       | `false`                                                 |
-| `user.user`                                 | InfluxDB user with 'admin' privileges on the db specified at `database`                                                                                                                   | `nil`                                                   |
-| `user.pwd`                                  | InfluxDB password for `user.user` user                                                                                                                                                    | `nil`                                                   |
-| `user.usePasswordFile`                      | Mount `user.user` user's password as file instead of environment variable                                                                                                                 | `nil`                                                   |
-| `readUser.user`                             | InfluxDB user with 'read' privileges on the db specified at `database`                                                                                                                    | `nil`                                                   |
-| `readUser.pwd`                              | InfluxDB password for `readUser.user` user                                                                                                                                                | `nil`                                                   |
-| `readUser.usePasswordFile`                  | Mount `readUser.user` user's password as file instead of environment variable                                                                                                             | `nil`                                                   |
-| `writeUser.user`                            | InfluxDB user with 'write' privileges on the db specified at `database`                                                                                                                   | `nil`                                                   |
-| `writeUser.pwd`                             | InfluxDB password for `writeUser.user` user                                                                                                                                               | `nil`                                                   |
-| `writeUser.usePasswordFile`                 | Mount `writeUser.user` user's password as file instead of environment variable                                                                                                            | `nil`                                                   |
+| `user.name`                                 | Name for InfluxDB user with 'admin' privileges on the db specified at `database`                                                                                                          | `nil`                                                   |
+| `user.pwd`                                  | InfluxDB password for `user.name` user                                                                                                                                                    | `nil`                                                   |
+| `user.usePasswordFile`                      | Mount `user.name` user's password as file instead of environment variable                                                                                                                 | `nil`                                                   |
+| `readUser.name`                             | Name for InfluxDB user with 'read' privileges on the db specified at `database`                                                                                                           | `nil`                                                   |
+| `readUser.pwd`                              | InfluxDB password for `readUser.name` user                                                                                                                                                | `nil`                                                   |
+| `readUser.usePasswordFile`                  | Mount `readUser.name` user's password as file instead of environment variable                                                                                                             | `nil`                                                   |
+| `writeUser.name`                            | Name for InfluxDB user with 'write' privileges on the db specified at `database`                                                                                                          | `nil`                                                   |
+| `writeUser.pwd`                             | InfluxDB password for `writeUser.name` user                                                                                                                                               | `nil`                                                   |
+| `writeUser.usePasswordFile`                 | Mount `writeUser.name` user's password as file instead of environment variable                                                                                                            | `nil`                                                   |
 | `existingSecret`                            | Name of existing Secret object with InfluxDB credentials (`adminUser.password`, `user.password`, `readUser.password`, and `writeUser.pwd` will be ignored and picked up from this secret) | `nil`                                                   |
 | `influxdb.configuration`                    | Specify content for influxdb.conf                                                                                                                                                         | `nil (do not create influxdb.conf)`                     |
 | `influxdb.existingConfiguration`            | Name of existing ConfigMap object with the InfluxDB configuration (`influxdb.configuration` will be ignored).                                                                             | `nil`                                                   |
 | `influxdb.initdbScripts`                    | Dictionary of initdb scripts                                                                                                                                                              | `nil`                                                   |
 | `influxdb.initdbScriptsCM`                  | Name of existing ConfigMap object with the initdb scripts (`influxdb.initdbScripts` will be ignored).                                                                                     | `nil`                                                   |
+| `influxdb.initdbScriptsSecret`              | Secret with initdb scripts that contain sensitive information (Note: can be used with `initdbScriptsConfigMap` or `initdbScripts`).                                                       | `nil`                                                   |
 | `influxdb.extraEnvVars`                     | Array containing extra env vars to configure InfluxDB                                                                                                                                     | `nil`                                                   |
 | `influxdb.replicaCount`                     | The number of InfluxDB replicas to deploy                                                                                                                                                 | `1`                                                     |
 | `influxdb.antiAffinity`                     | Pod anti-affinity policy                                                                                                                                                                  | `soft`                                                  |
@@ -167,6 +168,8 @@ The following tables lists the configurable parameters of the InfluxDB chart and
 | `influxdb.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                                                                       | `ClusterIP`                                             |
 | `influxdb.service.port`                     | InfluxDB HTTP port                                                                                                                                                                        | `8086`                                                  |
 | `influxdb.service.rcpPort`                  | InfluxDB RCP port                                                                                                                                                                         | `8088`                                                  |
+| `influxdb.service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                                                                                 | `""`                                                    |
+| `influxdb.service.nodePorts.rcp`            | Kubernetes RCP node port                                                                                                                                                                  | `""`                                                    |
 | `influxdb.service.annotations`              | Annotations for InfluxDB service                                                                                                                                                          | `{}`                                                    |
 | `influxdb.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                                                                                          | `nil`                                                   |
 | `influxdb.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                                                                                     | `[]`                                                    |
@@ -191,6 +194,7 @@ The following tables lists the configurable parameters of the InfluxDB chart and
 | `relay.readinessProbe`                      | Readiness probe configuration for InfluxDB Relay                                                                                                                                          | `Check values.yaml file`                                |
 | `relay.service.type`                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                                                                       | `ClusterIP`                                             |
 | `relay.service.port`                        | InfluxDB Relay HTTP port                                                                                                                                                                  | `9096`                                                  |
+| `relay.service.nodePort`                    | Kubernetes HTTP node port                                                                                                                                                                 | `""`                                                    |
 | `relay.service.annotations`                 | Annotations for InfluxDB Relay service                                                                                                                                                    | `{}`                                                    |
 | `relay.service.loadBalancerIP`              | loadBalancerIP if service type is `LoadBalancer`                                                                                                                                          | `nil`                                                   |
 | `relay.service.loadBalancerSourceRanges`    | Address that are allowed when service is LoadBalancer                                                                                                                                     | `[]`                                                    |
@@ -223,7 +227,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name my-release \
-  --set adminUser.user=admin-user bitnami/influxdb
+  --set adminUser.name=admin-user bitnami/influxdb
 ```
 
 The above command sets the InfluxDB admin user to `admin-user`.
@@ -335,7 +339,7 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 
 ## Upgrade
 
-It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `adminUser.pwd`, `user.pwd`, `readUser.pwd` and `writeUser.pwd` parameters when upgrading the chart:
+It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `adminUser.pwd`, `user.pwd`, `readUser.pwd` and `writeUser.pwd` parameters when upgrading the chart:
 
 ```bash
 $ helm upgrade my-release bitnami/influxdb \

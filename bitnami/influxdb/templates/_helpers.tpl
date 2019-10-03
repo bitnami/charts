@@ -13,14 +13,14 @@ If release name contains chart name it will be used as a full name.
 */}}
 {{- define "influxdb.fullname" -}}
 {{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+    {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+    {{- $name := default .Chart.Name .Values.nameOverride -}}
+    {{- if contains $name .Release.Name -}}
+        {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -128,34 +128,34 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 Also, we can not use a single if because lazy evaluation is not an option
 */}}
 {{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
+    {{- if .Values.global.imagePullSecrets }}
 imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
+        {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
-{{- end }}
+        {{- end }}
+    {{- else if or .Values.image.pullSecrets .Values.relay.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+imagePullSecrets:
+        {{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+        {{- end }}
+        {{- range .Values.relay.image.pullSecrets }}
+  - name: {{ . }}
+        {{- end }}
+        {{- range .Values.volumePermissions.image.pullSecrets }}
+  - name: {{ . }}
+        {{- end }}
+    {{- end -}}
 {{- else if or .Values.image.pullSecrets .Values.relay.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
+    {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
-{{- end }}
-{{- range .Values.relay.image.pullSecrets }}
+    {{- end }}
+    {{- range .Values.relay.image.pullSecrets }}
   - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
+    {{- end }}
+    {{- range .Values.volumePermissions.image.pullSecrets }}
   - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.relay.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.relay.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
+    {{- end }}
 {{- end -}}
 {{- end -}}
 
@@ -182,7 +182,18 @@ Return the InfluxDB configuration configmap.
 {{- end -}}
 
 {{/*
-Return the InfluxDB configuration configmap.
+Return the InfluxDB PVC name.
+*/}}
+{{- define "influxdb.claimName" -}}
+{{- if .Values.persistence.existingClaim }}
+    {{- printf "%s" (tpl .Values.persistence.existingClaim $) -}}
+{{- else -}}
+    {{- printf "%s" (include "influxdb.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the InfluxDB initialization scripts configmap.
 */}}
 {{- define "influxdb.initdbScriptsConfigmapName" -}}
 {{- if .Values.influxdb.initdbScriptsCM -}}
@@ -190,6 +201,13 @@ Return the InfluxDB configuration configmap.
 {{- else -}}
     {{- printf "%s-initdb-scripts" (include "influxdb.fullname" .) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Get the InfluxDB initialization scripts secret.
+*/}}
+{{- define "influxdb.initdbScriptsSecret" -}}
+{{- printf "%s" (tpl .Values.influxdb.initdbScriptsSecret $) -}}
 {{- end -}}
 
 {{/*
@@ -288,7 +306,7 @@ influxdb: architecture
 {{- $replicaCount := int .Values.influxdb.replicaCount }}
 {{- if and (eq .Values.architecture "standalone") (gt $replicaCount 1) -}}
 influxdb: replicaCount
-    The standalone architecture doesn't allow to run more than 1 replica!!
+    The standalone architecture doesn't allow to run more than 1 replica.
     Please set a valid number of replicas (--set influxdb.replicaCount=1) or
     use the "high-availability" architecture (--set architecture="high-availability")
 {{- end -}}

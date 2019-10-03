@@ -12,5 +12,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.size | quote }}
-  {{ include "influxdb.storageClass" . }}
+{{- include "influxdb.storageClass" . | nindent 2 }}
 {{- end }}

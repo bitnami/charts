@@ -3,95 +3,95 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "influxdb.fullname" . }}-relay
-  labels: {{ include "influxdb.labels" . | nindent 4 }}
+  labels: {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: relay
 spec:
   replicas: 1
   selector:
-    matchLabels: {{ include "influxdb.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "influxdb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: relay
   template:
     metadata:
-      labels: {{ include "influxdb.labels" . | nindent 8 }}
+      labels: {{- include "influxdb.labels" . | nindent 8 }}
         app.kubernetes.io/component: relay
     spec:
-{{- include "influxdb.imagePullSecrets" . | indent 6 }}
+{{- include "influxdb.imagePullSecrets" . | nindent 6 }}
       affinity:
         {{- if eq .Values.relay.antiAffinity "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: "kubernetes.io/hostname"
-            labelSelector:
-              matchLabels: {{ include "influxdb.matchLabels" . | nindent 18 }}
-                app.kubernetes.io/component: relay
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels: {{- include "influxdb.matchLabels" . | nindent 20 }}
+                  app.kubernetes.io/component: relay
         {{- else if eq .Values.relay.antiAffinity "soft" }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels: {{ include "influxdb.matchLabels" . | nindent 18 }}
-                  app.kubernetes.io/component: relay
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels: {{- include "influxdb.matchLabels" . | nindent 20 }}
+                    app.kubernetes.io/component: relay
         {{- end }}
         {{- if .Values.relay.nodeAffinity }}
-        nodeAffinity: {{ toYaml .Values.relay.nodeAffinity | nindent 10 }}
+        nodeAffinity: {{- toYaml .Values.relay.nodeAffinity | nindent 10 }}
         {{- end }}
       {{- with .Values.relay.nodeSelector }}
-      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
+      nodeSelector: {{- tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
       {{- with .Values.relay.tolerations }}
-      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      tolerations: {{- tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
       {{- if .Values.relay.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.relay.securityContext.fsGroup }}
       {{- end }}
       containers:
-      - name: relay
-        image: {{ include "influxdb.relay.image" . }}
-        imagePullPolicy: {{ .Values.relay.image.pullPolicy | quote }}
-        {{- if .Values.relay.securityContext.enabled }}
-        securityContext:
-          runAsUser: {{ .Values.relay.securityContext.runAsUser }}
-        {{- end }}
-        command:
-        - /influxdb_relay
-        args:
-        - -config
-        - /conf/relay.toml
-        ports:
-        - name: http
-          containerPort: 9096
-          protocol: TCP
-        {{- if .Values.relay.livenessProbe.enabled }}
-        livenessProbe:
-          tcpSocket:
-            port: http
-          initialDelaySeconds: {{ .Values.relay.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.relay.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.relay.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.relay.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.relay.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.relay.readinessProbe.enabled }}
-        readinessProbe:
-          tcpSocket:
-            port: http
-          initialDelaySeconds: {{ .Values.relay.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.relay.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.relay.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.relay.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.relay.readinessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.relay.resources }}
-        resources: {{- toYaml .Values.relay.resources | nindent 10 }}
-        {{- end }}
-        volumeMounts:
-        - name: relay-config
-          mountPath: /conf
+        - name: relay
+          image: {{ include "influxdb.relay.image" . }}
+          imagePullPolicy: {{ .Values.relay.image.pullPolicy | quote }}
+          {{- if .Values.relay.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.relay.securityContext.runAsUser }}
+          {{- end }}
+          command:
+            - /influxdb_relay
+          args:
+            - -config
+            - /conf/relay.toml
+          ports:
+            - name: http
+              containerPort: 9096
+              protocol: TCP
+          {{- if .Values.relay.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: {{ .Values.relay.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.relay.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.relay.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.relay.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.relay.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.relay.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: {{ .Values.relay.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.relay.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.relay.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.relay.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.relay.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.relay.resources }}
+          resources: {{- toYaml .Values.relay.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: relay-config
+              mountPath: /conf
       volumes:
-      - name: relay-config
-        configMap:
-          name: {{ include "influxdb.relay.configmapName" . }}
+        - name: relay-config
+          configMap:
+            name: {{ include "influxdb.relay.configmapName" . }}
 {{- end }}

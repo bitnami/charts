@@ -15,22 +15,22 @@ metadata:
 spec:
   rules:
   {{- range .Values.ingress.hosts }}
-  - host: {{ .name }}
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: {{ include "influxdb.fullname" $ }}
-          servicePort: http
-      {{- if eq $architecture "high-availability" }}
-      - path: /write
-        backend:
-          serviceName: {{ include "influxdb.fullname" $ }}-relay
-          servicePort: http
-      {{- end }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ include "influxdb.fullname" $ }}
+              servicePort: http
+          {{- if eq $architecture "high-availability" }}
+          - path: /write
+            backend:
+              serviceName: {{ include "influxdb.fullname" $ }}-relay
+              servicePort: http
+          {{- end }}
   {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
-    {{ toYaml .Values.ingress.tls | nindent 4 }}
+    {{- toYaml .Values.ingress.tls | nindent 4 }}
   {{- end }}
 {{- end }}
