@@ -6,15 +6,16 @@ render_and_yaml_lint() {
     local -r values="${3:?missing_values}"
     local -r repo_path="$(git rev-parse --show-toplevel)"
     local -r display_chart_path=${chart_path#"$repo_path/"}
-    local -r display_values=${values#"$repo_path/"}
+    local -r display_values=${values#"$chart_path/"}
+    local -r basename_template_path=${path#"$chart_path/"}
     local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2} }}"
-    printf '\033[0;34m- Running yamllint on %s/%s (values: %s)\n\033[0m' "$display_chart_path" "$path" "$display_values"
+    printf '\033[0;34m- Running yamllint on %s/%s (values: %s)\n\033[0m' "$display_chart_path" "$basename_template_path" "$display_values"
 
-    if ! helm template --values "$values" "$chart_path" -x "$path" | yamllint -s -d "$lint_rules" -; then
-        printf '\033[0;31m\\U0001F6AB (helm template --values %s %s -x %s | yamllint -s -d "%s" -) failed\n\n\033[0m' "$display_values" "$display_chart_path" "$path" "$lint_rules"
+    if ! helm template --values "$values" "$chart_path" -x "$basename_template_path" | yamllint -s -d "$lint_rules" -; then
+        printf '\033[0;31m\U0001F6AB (helm template --values %s %s -x %s | yamllint -s -d "%s" -) failed\n\n\033[0m' "$display_values" "$display_chart_path" "$basename_template_path" "$lint_rules"
         false
     else
-        printf '\033[0;32m\U00002705 %s/%s (values: %s)\n\n\033[0m' "$display_chart_path" "$path" "$display_values"
+        printf '\033[0;32m\U00002705 %s/%s (values: %s)\n\n\033[0m' "$display_chart_path" "$basename_template_path" "$display_values"
         true
     fi
 }
@@ -53,7 +54,9 @@ run_yaml_lint_chart() {
     local -r ci_values_file_list=$(mktemp)
     local -r template_yaml_file_list=$(mktemp)
 
-    find "$chart_path"/ci -type f -regex ".*\.yaml" > "$ci_values_file_list"
+    if [[ -d "$chart_path"/ci ]]; then
+        find "$chart_path"/ci -type f -regex ".*\.yaml" > "$ci_values_file_list"
+    fi
     find "$chart_path"/templates -type f -regex ".*\.yaml" > "$template_yaml_file_list"
 
     for yaml_file in "$chart_path"/values.yaml "$chart_path"/values-production.yaml "$chart_path"/requirements.yaml "$chart_path"/Chart.yaml $(< "$ci_values_file_list"); do
@@ -67,8 +70,7 @@ run_yaml_lint_chart() {
             continue
         fi
         for yaml_file in $(< "$template_yaml_file_list"); do
-            path_basename=templates/$(basename "$yaml_file")
-            if ! render_and_yaml_lint "$chart_path" "$path_basename" "$values_file"; then
+            if ! render_and_yaml_lint "$chart_path" "$yaml_file" "$values_file"; then
                 test_failed=1
             fi
         done

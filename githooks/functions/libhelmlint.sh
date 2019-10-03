@@ -14,7 +14,10 @@ run_helm_lint_chart() {
     fi
 
     local -r ci_values_file_list=$(mktemp)
-    find "$chart_path"/ci -type f -regex ".*\.yaml" > "$ci_values_file_list"
+
+    if [[ -d "$chart_path"/ci ]]; then
+        find "$chart_path"/ci -type f -regex ".*\.yaml" > "$ci_values_file_list"
+    fi
 
     for values_file in "$chart_path"/values.yaml $(< "$ci_values_file_list"); do
         if [[ ! -f "$values_file" ]];then
