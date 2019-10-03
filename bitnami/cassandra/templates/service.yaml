@@ -12,9 +12,6 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
-{{- if .Values.service.nodePort }}
-  nodePort: {{ .Values.service.nodePort }}
-{{- end }}
 {{- if eq .Values.service.type "LoadBalancer" }} {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
 {{- end }} {{- end }}
@@ -23,6 +20,9 @@ spec:
   - name: cql
     port: {{ .Values.service.port }}
     targetPort: cql
+    {{- if .Values.service.nodePort }}
+    nodePort: {{ .Values.service.nodePort }}
+    {{- end }}
 {{- if .Values.cluster.enableRPC }}
   - name: thrift
     port: {{ .Values.service.thriftPort }}
