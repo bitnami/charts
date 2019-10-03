@@ -20,13 +20,20 @@ spec:
   - name: cql
     port: {{ .Values.service.port }}
     targetPort: cql
-    {{- if .Values.service.nodePort }}
-    nodePort: {{ .Values.service.nodePort }}
+    {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.cql)))}}
+    nodePort: {{ .Values.service.nodePorts.http }}
+    {{- else if eq .Values.service.type "ClusterIP" }}
+    nodePort: null
     {{- end }}
 {{- if .Values.cluster.enableRPC }}
   - name: thrift
     port: {{ .Values.service.thriftPort }}
     targetPort: thrift
+    {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.thrift)))}}
+    nodePort: {{ .Values.service.nodePorts.thrift }}
+    {{- else if eq .Values.service.type "ClusterIP" }}
+    nodePort: null
+    {{- end }}
 {{- end }}
   selector:
     app: {{ template "cassandra.name" . }}
