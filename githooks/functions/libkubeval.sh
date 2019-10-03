@@ -12,7 +12,11 @@ run_kubeval_chart() {
     local -r chart_name="${1:?missing_chart_name}"
     local -r chart_path="$(git rev-parse --show-toplevel)"/"$chart_name"
     local test_failed=0
-    for values_file in "$chart_path"/values.yaml "$chart_path"/ci/*.yaml; do
+
+    local -r ci_values_file_list=$(mktemp)
+    find "$chart_path"/ci -type f -regex ".*\.yaml" > "$ci_values_file_list"
+
+    for values_file in "$chart_path"/values.yaml $(< "$ci_values_file_list"); do
         if [[ ! -f "$values_file" ]];then
             continue
         fi
@@ -26,6 +30,9 @@ run_kubeval_chart() {
             test_failed=1
         fi
     done
+
+    rm "$ci_values_file_list"
+
     if [[ "$test_failed" = "1" ]]; then
         false
     else
