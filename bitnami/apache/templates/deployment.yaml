@@ -102,11 +102,11 @@ spec:
         - name: htdocs
           mountPath: /app
         {{- end }}
-        {{- if .Values.vhostsConfigMap }}
+        {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
         - name: vhosts
           mountPath: /vhosts
         {{- end }}
-        {{- if .Values.httpdConfConfigMap }}
+        {{- if or (.Files.Glob "files/httpd.conf") (.Values.httpdConfConfigMap) }}
         - name: httpd-conf
           mountPath: /opt/bitnami/apache/conf/httpd.conf
           subPath: httpd.conf
@@ -138,15 +138,15 @@ spec:
       - name: htdocs
         {{- include "apache.htdocsVolume" . | nindent 8 }}
       {{- end }}
-      {{- if .Values.vhostsConfigMap }}
+      {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
       - name: vhosts
         configMap:
-          name: {{ .Values.vhostsConfigMap }}
+          name: {{ include "apache.vhostsConfigMap" . }}
       {{- end }}
-      {{- if .Values.httpdConfConfigMap }}
+      {{- if or (.Files.Glob "files/httpd.conf") (.Values.httpdConfConfigMap) }}
       - name: httpd-conf
         configMap:
-          name: {{ .Values.httpdConfConfigMap }}
+          name: {{ include "apache.httpdConfConfigMap" . }}
       {{- end }}
       {{- with .Values.affinity }}
       affinity:
