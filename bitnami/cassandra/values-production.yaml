@@ -68,10 +68,15 @@ service:
   ## CQL Port
   port: 9042
   thriftPort: 9160
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  # nodePort: 30001
+  nodePorts:
+    cql: ""
+    thriftPort: ""
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
   # loadBalancerIP:
 
   ## Provide any additional annotations which may be required. This can be used to
