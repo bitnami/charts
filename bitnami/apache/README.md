@@ -47,7 +47,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the Apache chart and their default values.
 
 | Parameter                        | Description                                             | Default                                                      |
-|----------------------------------|---------------------------------------------------------|--------------------------------------------------------------|
+| -------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`           | Global Docker image registry                            | `nil`                                                        |
 | `global.imagePullSecrets`        | Global Docker registry secret names as an array         | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.registry`                 | Apache Docker image registry                            | `docker.io`                                                  |
@@ -63,6 +63,8 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `replicaCount`                   | Number of replicas of the Apache deployment             | `docker.io`                                                  |
 | `htdocsConfigMap`                | ConfigMap with the server static content                | `nil`                                                        |
 | `htdocsPVC`                      | PVC with the server static content                      | `nil`                                                        |
+| `vhostsConfigMap`                | ConfigMap with the virtual hosts content                | `nil`                                                        |
+| `httpdConfConfigMap`             | ConfigMap with the httpd.conf content                   | `nil`                                                        |
 | `cloneHtdocsFromGit.enabled`     | Get the server static content from a git repository     | `false`                                                      |
 | `cloneHtdocsFromGit.repository`  | Repository to clone static content from                 | `nil`                                                        |
 | `cloneHtdocsFromGit.branch`      | Branch inside the git repository                        | `nil`                                                        |

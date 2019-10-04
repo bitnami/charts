@@ -48,11 +48,22 @@ cloneHtdocsFromGit:
   # branch:
   interval: 60
 
+## Name of a config map with the server static content
+##
 # htdocsConfigMap:
 
+## Name of a PVC with the server static content
+##
 # htdocsPVC:
 
+## Name of a config map with the virtual hosts content
+##
 # vhostsConfigMap:
+
+## Name of a config map with the httpd.conf file contents
+##
+# httpdConfConfigMap:
+
 ## String to partially override apache.fullname template (will maintain the release name)
 ##
 # nameOverride:
