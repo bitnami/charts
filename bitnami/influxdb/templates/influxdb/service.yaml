@@ -4,6 +4,7 @@ metadata:
   name: {{ include "influxdb.fullname" . }}
   labels: {{ include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
+  annotations: {{- tpl (toYaml .Values.influxdb.service.annotations) $ | nindent 4 }}
 spec:
   type: {{ .Values.influxdb.service.type }}
   {{- if and .Values.influxdb.service.loadBalancerIP (eq .Values.influxdb.service.type "LoadBalancer") }}

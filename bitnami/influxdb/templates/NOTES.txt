@@ -1,22 +1,19 @@
 
 ** Please be patient while the chart is being deployed **
 
-{{- if eq .Values.architecture "high-availability" }}
 
 InfluxDB can be accessed through following DNS names from within your cluster:
 
-    InfluxDB Relay (write operations): {{ include "influxdb.fullname" . }}-relay.{{ .Release.Namespace }}.svc.cluster.local (port {{ .Values.relay.service.port }})
-    InfluxDB servers (read operations):  {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local (port {{ .Values.influxdb.service.port }})
+    {{- if eq .Values.architecture "high-availability" }}
+    InfluxDB Relay (write operations): {{ include "influxdb.fullname" . }}-relay.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.relay.service.port }})
+    InfluxDB servers (read operations):  {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.influxdb.service.port }})
+    {{- else }}
+    InfluxDB: {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.influxdb.service.port }})
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    InfluxDB Prometheus Metrics: {{ include "influxdb.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.metrics.service.port }})
+    {{- end }}
 
-InfluxDB Relay acts as a load balancer for InfluxDB and forwards POST requests to InfluxDB servers.
-
-{{- else }}
-
-InfluxDB server can be accessed on the following DNS name from within your cluster:
-
-    {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local (port {{ .Values.influxdb.service.port }})
-
-{{- end }}
 {{- if .Values.authEnabled }}
 
 To get the password for the {{ .Values.adminUser.name }} user, run:

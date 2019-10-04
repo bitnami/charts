@@ -42,6 +42,10 @@ image:
 ##
 # fullnameOverride:
 
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
 ## InfluxDB architecture. Allowed values: standalone or high-availability
 ##
 architecture: high-availability
@@ -275,8 +279,9 @@ relay:
         {{- $influxdbFullname := include "influxdb.fullname" . }}
         {{- $influxdbHeadlessServiceName := printf "%s-headless" (include "influxdb.fullname" .) }}
         {{- $releaseName := .Release.Namespace }}
+        {{- $clusterDomain:= .Values.clusterDomain }}
         {{- range $e, $i := until $influxdbReplicaCount }}
-        { name="{{ $influxdbFullname }}-{{ $i }}", location="http://{{ $influxdbFullname }}-{{ $i }}.{{ $influxdbHeadlessServiceName }}.{{ $releaseName }}.svc.cluster.local:8086/write", timeout="10s"},
+        { name="{{ $influxdbFullname }}-{{ $i }}", location="http://{{ $influxdbFullname }}-{{ $i }}.{{ $influxdbHeadlessServiceName }}.{{ $releaseName }}.svc.{{ $clusterDomain }}:8086/write", timeout="10s"},
         {{- end }}
     ]
 
@@ -429,6 +434,42 @@ ingress:
   # - name: influxdb.local-tls
   #   key:
   #   certificate:
+
+## Prometheus metrics
+## ref: https://docs.influxdata.com/influxdb/v1.7/administration/server_monitoring/#influxdb-metrics-http-endpoint
+##
+metrics:
+  enabled: true
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## InfluxDB Prometheus port
+    ##
+    port: 9122
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    # loadBalancerSourceRanges:
+    # - 10.10.10.0/24
+    ## Set the Cluster IP to use
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ##
+    # clusterIP: None
+    ## Annotations for the Prometheus metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.influxdb.service.port }}"
+      prometheus.io/path: "/metrics"
 
 ## NetworkPolicy paramaters
 ##

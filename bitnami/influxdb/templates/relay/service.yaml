@@ -5,6 +5,7 @@ metadata:
   name: {{ include "influxdb.fullname" . }}-relay
   labels: {{ include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: relay
+  annotations: {{- tpl (toYaml .Values.relay.service.annotations) $ | nindent 4 }}
 spec:
   type: {{ .Values.relay.service.type }}
   {{- if and .Values.relay.service.loadBalancerIP (eq .Values.relay.service.type "LoadBalancer") }}

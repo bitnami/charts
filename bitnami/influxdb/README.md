@@ -132,6 +132,7 @@ The following tables lists the configurable parameters of the InfluxDB chart and
 | `image.debug`                               | Specify if debug logs should be enabled                                                                                                                                                   | `false`                                                 |
 | `nameOverride`                              | String to partially override influxdb.fullname template with a string (will prepend the release name)                                                                                     | `nil`                                                   |
 | `fullnameOverride`                          | String to fully override influxdb.fullname template with a string                                                                                                                         | `nil`                                                   |
+| `clusterDomain`                             | Default Kubernetes cluster domain                                                                                                                                                         | `cluster.local`                                         |
 | `architecture`                              | InfluxDB architecture (`standalone` or `high-availability`)                                                                                                                               | `standalone`                                            |
 | `database`                                  | Database to be created on first run                                                                                                                                                       | `my_database`                                           |
 | `authEnabled`                               | Enable/disable authentication                                                                                                                                                             | `true`                                                  |
@@ -209,6 +210,14 @@ The following tables lists the configurable parameters of the InfluxDB chart and
 | `ingress.secrets[0].name`                   | TLS Secret Name                                                                                                                                                                           | `nil`                                                   |
 | `ingress.secrets[0].certificate`            | TLS Secret Certificate                                                                                                                                                                    | `nil`                                                   |
 | `ingress.secrets[0].key`                    | TLS Secret Key                                                                                                                                                                            | `nil`                                                   |
+| `metrics.enabled`                           | Enable the export of Prometheus metrics                                                                                                                                                   | `false`                                                 |
+| `metrics.service.type`                      | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                                                                       | `ClusterIP`                                             |
+| `metrics.service.port`                      | InfluxDB Prometheus port                                                                                                                                                                  | `9122`                                                  |
+| `metrics.service.nodePort`                  | Kubernetes HTTP node port                                                                                                                                                                 | `""`                                                    |
+| `metrics.service.annotations`               | Annotations for Prometheus metrics service                                                                                                                                                | `Check values.yaml file`                                |
+| `metrics.service.loadBalancerIP`            | loadBalancerIP if service type is `LoadBalancer`                                                                                                                                          | `nil`                                                   |
+| `metrics.service.loadBalancerSourceRanges`  | Address that are allowed when service is LoadBalancer                                                                                                                                     | `[]`                                                    |
+| `metrics.service.clusterIP`                 | Static clusterIP or None for headless services                                                                                                                                            | `nil`                                                   |
 | `networkPolicy.enabled`                     | Enable NetworkPolicy                                                                                                                                                                      | `false`                                                 |
 | `networkPolicy.allowExternal`               | Don't require client label for connections                                                                                                                                                | `true`                                                  |
 | `persistence.enabled`                       | Enable data persistence                                                                                                                                                                   | `true`                                                  |
@@ -274,6 +283,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 + influxdb.replicaCount: 3
 - relay.replicaCount: 1 # were actually ignored in standalone architecture
 + relay.replicaCount: 2
+```
+
+- Enable Prometheus metrics:
+
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
 ```
 
 - Enable Newtworkpolicy blocking external access:
