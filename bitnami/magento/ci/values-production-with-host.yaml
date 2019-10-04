@@ -1,4 +1,6 @@
 magentoHost: magento.local
+mariadb:
+  enabled: false
 externalDatabase:
   host: database.local
 metrics:
