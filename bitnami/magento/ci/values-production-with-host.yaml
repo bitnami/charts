@@ -1,6 +1,7 @@
-
 magentoHost: magento.local
 externalDatabase:
   host: database.local
 metrics:
+  enabled: true
+ingress:
   enabled: true

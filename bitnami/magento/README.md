@@ -95,6 +95,10 @@ The following table lists the configurable parameters of the Magento chart and t
 | `mariadb.db.name`                     | Database name to create                                                              | `bitnami_magento`                                            |
 | `mariadb.db.user`                     | Database user to create                                                              | `bn_magento`                                                 |
 | `mariadb.db.password`                 | Password for the database                                                            | _random 10 character long alphanumeric string_               |
+| `mariadb.replication.enabled`                     | MariaDB replication enabled                         | `true`                                                            |
+| `mariadb.master.persistence.enabled`              | Enable persistence using PVC                        | `true`                                                            |
+| `mariadb.master.persistence.accessMode`          | Persistent Volume Access Modes                      | `[ReadWriteOnce]`                                                 |
+| `mariadb.master.persistence.size`                 | Persistent Volume Size                              | `8Gi`                                                             |
 | `elasticsearch.enabled`               | Use the Elasticsearch chart as search engine                                         | `true`                                                       |
 | `elasticsearch.image.registry`        | Elasticsearch image registry                                                         | `docker.io`                                                  |
 | `elasticsearch.image.repository`      | Elasticsearch image name                                                             | `bitnami/elasticsearch`                                      |

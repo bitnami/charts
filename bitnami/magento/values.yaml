@@ -306,8 +306,8 @@ ingress:
       ## Useful when the Ingress controller supports www-redirection
       ## If not specified, the above host name will be used
       # tlsHosts:
-      # - www.magento.local
-      # - magento.local
+      #   - www.magento.local
+      #   - magento.local
 
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       tlsSecret: magento.local-tls

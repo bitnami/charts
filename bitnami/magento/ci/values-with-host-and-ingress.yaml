@@ -1,0 +1,8 @@
+magentoHost: magento.local
+ingress:
+  enabled: true
+  hosts:
+    - name: magento.local
+      path: /
+      tls: true
+      tlsSecret: magento.local-tls
