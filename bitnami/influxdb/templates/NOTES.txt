@@ -53,7 +53,7 @@ To connect to your database run the following commands:
     (write operations):
 
     kubectl run {{ include "influxdb.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} {{ if .Values.authEnabled }}--env="INFLUX_USERNAME={{ .Values.adminUser.name }}" --env="INFLUX_PASSWORD=$ADMIN_PASSWORD"{{ end }} \
-        {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "influxdb.fullname" . }}-client=true" {{ end }}--image bitnami/influxdb:1 \
+        {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "influxdb.fullname" . }}-client=true" {{ end }}--image {{ include "influxdb.image" . }} \
         --command -- influx -host {{ include "influxdb.fullname" . }}-relay -port {{ .Values.relay.service.port }}
 
     (read operations):
@@ -61,7 +61,7 @@ To connect to your database run the following commands:
     {{- end }}
 
     kubectl run {{ include "influxdb.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} {{ if .Values.authEnabled }}--env="INFLUX_USERNAME={{ .Values.adminUser.name }}" --env="INFLUX_PASSWORD=$ADMIN_PASSWORD"{{ end }} \
-        {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "influxdb.fullname" . }}-client=true" {{ end }}--image bitnami/influxdb:1 \
+        {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "influxdb.fullname" . }}-client=true" {{ end }}--image {{ include "influxdb.image" . }} \
         --command -- influx -host {{ include "influxdb.fullname" . }} -port {{ .Values.influxdb.service.port }}
 
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}

@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/component: influxdb
 data:
 {{- if (.Files.Glob "files/conf/influxdb.conf") }}
-{{ (.Files.Glob "iles/conf/influxdb.conf").AsConfig | indent 2 }}
-{{- else if .Values.influxdb.configuratio }}
+{{ (.Files.Glob "files/conf/influxdb.conf").AsConfig | indent 2 }}
+{{- else if .Values.influxdb.configuration }}
   influxdb.conf: |-
     # User-supplied configuration:
 {{ tpl .Values.influxdb.configuration . | indent 4 }}

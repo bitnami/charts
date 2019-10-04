@@ -10,7 +10,7 @@ spec:
   replicas: {{ .Values.influxdb.replicaCount }}
   updateStrategy:
     type: {{ .Values.influxdb.updateStrategy }}
-    {{- if (eq "Recreate" .Values.influxdb.updateStrategy) }}
+    {{- if (eq "OnDelete" .Values.influxdb.updateStrategy) }}
     rollingUpdate: null
     {{- end }}
   selector:
