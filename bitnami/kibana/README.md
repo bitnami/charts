@@ -134,6 +134,9 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.service.annotations`                | Prometheus annotations for the Kibana service                                          | `{ prometheus.io/scrape: "true", prometheus.io/port: "80", prometheus.io/path: "_prometheus/metrics" }`                                                      |
 | `elasticsearch.enabled`                | Use bundled Elasticsearch                                           | `true`                                                      |
 | `elasticsearch.sysctlImage.enabled`                | Use sysctl image for bundled Elasticsearch                                           | `false`                                                      |
+| `elasticsearch.master.replicas`       | Desired number of Elasticsearch master-eligible nodes                                | `1`                                                          |
+| `elasticsearch.coordinating.replicas` | Desired number of Elasticsearch coordinating-only nodes                              | `1`                                                          |
+| `elasticsearch.data.replicas`         | Desired number of Elasticsearch data nodes                                           | `1`                                                          |
 | `elasticsearch.external.hosts`                | Array containing the hostnames for the already existing Elasticsearch instances                                          | `nil`                                                      |
 | `elasticsearch.external.port`                | Port for the accessing external Elasticsearch instances                                          | `nil`                                                      |
 
@@ -293,6 +296,17 @@ $ helm install --name my-release -f ./values-production.yaml --set elasticsearch
 ```diff
 - elasticsearch.enabled: true
 + elasticsearch.enabled: false
+```
+
+- Increase the number of default Elasticsearch nodes (if manually enabled)
+
+```diff
+- elasticsearch.master.replicas: 1
++ elasticsearch.master.replicas: 2
+- elasticsearch.coordinating.replicas: 1
++ elasticsearch.coordinating.replicas: 2
+- elasticsearch.data.replicas: 1
++ elasticsearch.data.replicas: 2
 ```
 
 - Enable metrics scraping

@@ -314,6 +314,15 @@ elasticsearch:
   ## Enable sysctl image for the bundled Elasticsearch
   sysctlImage:
     enabled: false
+  ## Elasticsearch master-eligible node parameters
+  master:
+    replicas: 1
+  ## Elasticsearch coordinating-only node parameters
+  coordinating:
+    replicas: 1
+  ## Elasticsearch data node parameters
+  data:
+    replicas: 1
   ## Properties when enabled is false
   external:
     hosts:
