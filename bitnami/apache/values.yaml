@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.41-debian-9-r22
+  tag: 2.4.41-debian-9-r49
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -31,7 +31,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.23.0-debian-9-r17
+  tag: 2.23.0-debian-9-r42
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -48,11 +48,22 @@ cloneHtdocsFromGit:
   # branch:
   interval: 60
 
+## Name of a config map with the server static content
+##
 # htdocsConfigMap:
 
+## Name of a PVC with the server static content
+##
 # htdocsPVC:
 
+## Name of a config map with the virtual hosts content
+##
 # vhostsConfigMap:
+
+## Name of a config map with the httpd.conf file contents
+##
+# httpdConfConfigMap:
+
 ## String to partially override apache.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -108,7 +119,7 @@ ingress:
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
@@ -154,7 +165,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.7.0-debian-9-r43
+    tag: 0.7.0-debian-9-r67
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

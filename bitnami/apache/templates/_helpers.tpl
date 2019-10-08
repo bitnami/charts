@@ -195,3 +195,25 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Get the vhosts config map name.
+*/}}
+{{- define "apache.vhostsConfigMap" -}}
+{{- if .Values.vhostsConfigMap -}}
+    {{- printf "%s" (tpl .Values.vhostsConfigMap $) -}}
+{{- else -}}
+    {{- printf "%s-vhosts" (include "apache.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the httpd.conf config map name.
+*/}}
+{{- define "apache.httpdConfConfigMap" -}}
+{{- if .Values.httpdConfConfigMap -}}
+    {{- printf "%s" (tpl .Values.httpdConfConfigMap $) -}}
+{{- else -}}
+    {{- printf "%s-httpd-conf" (include "apache.fullname" . ) -}}
+{{- end -}}
+{{- end -}}

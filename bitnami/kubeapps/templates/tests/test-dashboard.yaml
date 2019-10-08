@@ -14,5 +14,5 @@ spec:
     command:
     - sh
     - -c
-    - curl $DASHBOARD_HOST | grep 'You need to enable JavaScript to run this app'
+    - curl -o /tmp/output $DASHBOARD_HOST && cat /tmp/output && cat /tmp/output | grep 'You need to enable JavaScript to run this app'
   restartPolicy: Never

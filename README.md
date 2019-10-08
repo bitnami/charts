@@ -49,11 +49,14 @@ $ helm search bitnami
 - [Cassandra](https://github.com/bitnami/charts/tree/master/bitnami/cassandra)
 - [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
 - [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
+- [Fluentd](https://github.com/bitnami/charts/tree/master/bitnami/fluentd)
 - [Grafana](https://github.com/bitnami/charts/tree/master/bitnami/grafana)
 - [Harbor](https://github.com/bitnami/charts/tree/master/bitnami/harbor)
 - [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
+- [InfluxDB](https://github.com/bitnami/charts/tree/master/bitnami/influxdb)
 - [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
 - [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
+- [Kibana](https://github.com/bitnami/charts/tree/master/bitnami/kibana)
 - [Kubeapps](https://github.com/bitnami/charts/tree/master/bitnami/kubeapps)
 - [Magento](https://github.com/bitnami/charts/tree/master/bitnami/magento)
 - [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
@@ -104,7 +107,7 @@ Useful Helm Client Commands:
 
 # License
 
-Copyright (c) 2018 Bitnami
+Copyright (c) 2018-2019 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

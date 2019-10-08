@@ -1,0 +1,141 @@
+
+** Please be patient while the chart is being deployed **
+
+
+InfluxDB can be accessed through following DNS names from within your cluster:
+
+    {{- if eq .Values.architecture "high-availability" }}
+    InfluxDB Relay (write operations): {{ include "influxdb.fullname" . }}-relay.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.relay.service.port }})
+    InfluxDB servers (read operations):  {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.influxdb.service.port }})
+    {{- else }}
+    InfluxDB: {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.influxdb.service.port }})
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    InfluxDB Prometheus Metrics: {{ include "influxdb.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.metrics.service.port }})
+    {{- end }}
+
+{{- if .Values.authEnabled }}
+
+To get the password for the {{ .Values.adminUser.name }} user, run:
+
+    export ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "influxdb.secretName" . }} -o jsonpath="{.data.admin-user-password}" | base64 --decode)
+
+{{- if .Values.user.name }}
+
+To get the password for the {{ .Values.user.name }} user, run:
+
+    export USER_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "influxdb.secretName" . }} -o jsonpath="{.data.user-password}" | base64 --decode)
+
+{{- end }}
+{{- if .Values.readUser.name }}
+
+To get the password for the {{ .Values.readUser.name }} user, run:
+
+    export READ_USER_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "influxdb.secretName" . }} -o jsonpath="{.data.read-user-password}" | base64 --decode)
+
+{{- end }}
+{{- if .Values.writeUser.name }}
+
+To get the password for the {{ .Values.writeUser.name }} user, run:
+
+    export WRITE_USER_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "influxdb.secretName" . }} -o jsonpath="{.data.write-user-password}" | base64 --decode)
+
+{{- end }}
+{{- end }}
+
+To connect to your database run the following commands:
+
+    {{- if eq .Values.architecture "high-availability" }}
+
+    (write operations):
+
+    kubectl run {{ include "influxdb.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} {{ if .Values.authEnabled }}--env="INFLUX_USERNAME={{ .Values.adminUser.name }}" --env="INFLUX_PASSWORD=$ADMIN_PASSWORD"{{ end }} \
+        {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "influxdb.fullname" . }}-client=true" {{ end }}--image {{ include "influxdb.image" . }} \
+        --command -- influx -host {{ include "influxdb.fullname" . }}-relay -port {{ .Values.relay.service.port }}
+
+    (read operations):
+
+    {{- end }}
+
+    kubectl run {{ include "influxdb.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} {{ if .Values.authEnabled }}--env="INFLUX_USERNAME={{ .Values.adminUser.name }}" --env="INFLUX_PASSWORD=$ADMIN_PASSWORD"{{ end }} \
+        {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "influxdb.fullname" . }}-client=true" {{ end }}--image {{ include "influxdb.image" . }} \
+        --command -- influx -host {{ include "influxdb.fullname" . }} -port {{ .Values.influxdb.service.port }}
+
+{{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "influxdb.fullname" . }}-client=true" will be able to connect to InfluxDB server(s).
+
+{{- end }}
+
+To connect to your database from outside the cluster execute the following commands:
+
+{{- if .Values.ingress.enabled }}
+{{- $ingressHost := first .Values.ingress.hosts }}
+
+  You should be able to access your new InfluxDB server(s) through:
+
+    {{- range .Values.ingress.hosts }}
+    {{ if .tls }}https{{- else }}http{{ end }}://{{ .name }}
+    {{- end }}
+
+  e.g.:
+
+    {{ if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.adminUser.name }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{ end }} influx -host {{ $ingressHost.name }} -port 80
+
+{{- else if contains "NodePort" .Values.influxdb.service.type }}
+
+  {{- if eq .Values.architecture "high-availability" }}
+
+  (write operations):
+
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "influxdb.fullname" . }}-relay)
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    {{- if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.adminUser.name }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{- end }} influx -host $NODE_IP -port $NODE_PORT
+
+  (read operations):
+
+    {{- end }}
+
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "influxdb.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    {{- if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.adminUser.name }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{- end }} influx -host $NODE_IP -port $NODE_PORT
+
+{{- else if contains "LoadBalancer" .Values.influxdb.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "influxdb.fullname" . }}-relay'
+
+  {{- if eq .Values.architecture "high-availability" }}
+
+  (write operations):
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "influxdb.fullname" . }}-relay -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    {{- if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.adminUser.name }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{- end }} influx -host $SERVICE_IP -port {{ .Values.relay.service.port }}
+
+  (read operations):
+
+  {{- end }}
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "influxdb.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    {{- if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.adminUser.name }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{- end }} influx -host $SERVICE_IP -port {{ .Values.influxdb.service.port }}
+
+{{- else if contains "ClusterIP" .Values.influxdb.service.type }}
+
+  {{- if eq .Values.architecture "high-availability" }}
+
+  (write operations):
+
+    kubectl port-forward svc/{{ include "influxdb.fullname" . }}-relay 9096:{{ .Values.relay.service.port }} &
+    {{- if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.adminUser.name }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{- end }} influx -host 127.0.0.1 -port 9096
+
+  (read operations):
+
+  {{- end }}
+
+    kubectl port-forward svc/{{ include "influxdb.fullname" . }} 8086:{{ .Values.influxdb.service.port }} &
+    {{- if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.adminUser.name }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{- end }} influx -host 127.0.0.1 -port 8086
+
+{{- end }}
+
+{{- include "influxdb.validateValues" . }}
+{{- include "influxdb.checkRollingTags" . }}

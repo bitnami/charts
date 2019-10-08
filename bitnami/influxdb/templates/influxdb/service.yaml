@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "influxdb.fullname" . }}
+  labels: {{ include "influxdb.labels" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb
+  annotations: {{- tpl (toYaml .Values.influxdb.service.annotations) $ | nindent 4 }}
+spec:
+  type: {{ .Values.influxdb.service.type }}
+  {{- if and .Values.influxdb.service.loadBalancerIP (eq .Values.influxdb.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.influxdb.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.influxdb.service.type "LoadBalancer") .Values.influxdb.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{- with .Values.influxdb.service.loadBalancerSourceRanges }}
+{{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.influxdb.service.type "ClusterIP") .Values.influxdb.service.clusterIP }}
+  clusterIP: {{ .Values.influxdb.service.clusterIP }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.influxdb.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq .Values.influxdb.service.type "NodePort") (eq .Values.influxdb.service.type "LoadBalancer")) (not (empty .Values.influxdb.service.nodePorts.http)))}}
+      nodePort: {{ .Values.influxdb.service.nodePorts.http }}
+      {{- else if eq .Values.influxdb.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.influxdb.service.rcpPort }}
+      targetPort: rcp
+      protocol: TCP
+      name: rcp
+      {{- if (and (or (eq .Values.influxdb.service.type "NodePort") (eq .Values.influxdb.service.type "LoadBalancer")) (not (empty .Values.influxdb.service.nodePorts.rcp)))}}
+      nodePort: {{ .Values.influxdb.service.nodePorts.rcp }}
+      {{- else if eq .Values.influxdb.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{ include "influxdb.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb

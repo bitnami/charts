@@ -1,5 +1,5 @@
 {{- if .Values.metrics.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "elasticsearch.metrics.fullname" . }}
@@ -33,7 +33,7 @@ spec:
       - name: {{ template "elasticsearch.metrics.fullname" . }}
         image:  {{ template "elasticsearch.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        args: [ "-es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "-es.all=true" ]
+        args: [ "--es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "--es.all" ]
         ports:
         - name: metrics
           containerPort: 9114
