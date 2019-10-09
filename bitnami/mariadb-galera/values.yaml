@@ -361,11 +361,14 @@ persistence:
 
 ## Additional init containers
 ##
-# extraInitContainers: |
+extraInitContainers: []
 # - name: do-something
 #   image: bitnami/minideb:stretch
 #   command: ['do', 'something']
 
+## Additional containers
+##
+extraContainers: []
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

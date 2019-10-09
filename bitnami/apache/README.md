@@ -47,7 +47,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the Apache chart and their default values.
 
 | Parameter                        | Description                                             | Default                                                      |
-|----------------------------------|---------------------------------------------------------|--------------------------------------------------------------|
+| -------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`           | Global Docker image registry                            | `nil`                                                        |
 | `global.imagePullSecrets`        | Global Docker registry secret names as an array         | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.registry`                 | Apache Docker image registry                            | `docker.io`                                                  |
@@ -63,6 +63,8 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `replicaCount`                   | Number of replicas of the Apache deployment             | `docker.io`                                                  |
 | `htdocsConfigMap`                | ConfigMap with the server static content                | `nil`                                                        |
 | `htdocsPVC`                      | PVC with the server static content                      | `nil`                                                        |
+| `vhostsConfigMap`                | ConfigMap with the virtual hosts content                | `nil`                                                        |
+| `httpdConfConfigMap`             | ConfigMap with the httpd.conf content                   | `nil`                                                        |
 | `cloneHtdocsFromGit.enabled`     | Get the server static content from a git repository     | `false`                                                      |
 | `cloneHtdocsFromGit.repository`  | Repository to clone static content from                 | `nil`                                                        |
 | `cloneHtdocsFromGit.branch`      | Branch inside the git repository                        | `nil`                                                        |
@@ -126,7 +128,9 @@ In the following example you can deploy a example web application using git:
 helm install bitnami/apache --set cloneHtdocsFromGit.enabled=true --set cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git --set cloneHtdocsFromGit.branch=master
 ```
 
-You may also want to mount different virtual host configurations. This can be done using the `vhostsConfigMap` value. This a pointer to a ConfigMap with the desired Apache virtual host configurations.
+To use your own `httpd.conf` file you can mount it using the `httpdConfConfigMap` parameter, which is the name of a Config Map with the contents of your `httpd.conf`. Additionaly, you can copy your `httpd.conf` to `/files/httpd.conf` in your current working directory to mount it to the container.
+
+You may also want to mount different virtual host configurations. This can be done using the `vhostsConfigMap` value. This is a pointer to a ConfigMap with the desired Apache virtual host configurations. You can also copy your virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a Config Map to the container.
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 

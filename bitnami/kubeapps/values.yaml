@@ -22,7 +22,7 @@ ingress:
 
   # Ingress annotations done as key:value pairs
   # For a full list of possible ingress annotations, please see
-  # ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  # ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   #
   # If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   annotations:
@@ -231,7 +231,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.5.1-debian-9-r0
+    tag: 1.5.1-debian-9-r2
   service:
     port: 8080
   livenessProbe:

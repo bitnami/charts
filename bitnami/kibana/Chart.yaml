@@ -2,7 +2,7 @@ apiVersion: v1
 name: kibana
 appVersion: 7.3.2
 description: Kibana is an open source, browser based analytics and search dashboard for Elasticsearch.
-version: 0.0.5
+version: 0.0.6
 keywords:
 - kibana
 - analitics

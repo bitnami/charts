@@ -48,11 +48,22 @@ cloneHtdocsFromGit:
   # branch:
   interval: 60
 
+## Name of a config map with the server static content
+##
 # htdocsConfigMap:
 
+## Name of a PVC with the server static content
+##
 # htdocsPVC:
 
+## Name of a config map with the virtual hosts content
+##
 # vhostsConfigMap:
+
+## Name of a config map with the httpd.conf file contents
+##
+# httpdConfConfigMap:
+
 ## String to partially override apache.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -108,7 +119,7 @@ ingress:
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
