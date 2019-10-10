@@ -76,6 +76,10 @@ service:
   ##
   annotations: {}
 
+## Specifies the Kubernetes Cluster's Domain Name.
+##
+clusterDomain: cluster.local
+
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##

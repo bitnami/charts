@@ -9,7 +9,7 @@ Tip:
 
 MariaDB can be accessed via port "{{ .Values.service.port }}" on the following DNS name from within your cluster:
 
-    {{ template "mariadb-galera.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    {{ template "mariadb-galera.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To obtain the password for the MariaDB "root" user run the following command:
 
