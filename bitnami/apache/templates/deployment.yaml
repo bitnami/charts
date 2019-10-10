@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "apache.fullname" . }}
@@ -102,10 +102,15 @@ spec:
         - name: htdocs
           mountPath: /app
         {{- end }}
-        {{- if .Values.vhostsConfigMap }}
+        {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
         - name: vhosts
           mountPath: /vhosts
-        {{- end }}          
+        {{- end }}
+        {{- if or (.Files.Glob "files/httpd.conf") (.Values.httpdConfConfigMap) }}
+        - name: httpd-conf
+          mountPath: /opt/bitnami/apache/conf/httpd.conf
+          subPath: httpd.conf
+        {{- end }}
       {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "apache.metrics.image" . }}
@@ -133,8 +138,17 @@ spec:
       - name: htdocs
         {{- include "apache.htdocsVolume" . | nindent 8 }}
       {{- end }}
-      {{- if .Values.vhostsConfigMap }}
+      {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
       - name: vhosts
         configMap:
-          name: {{ .Values.vhostsConfigMap }}
-      {{- end }}          
+          name: {{ include "apache.vhostsConfigMap" . }}
+      {{- end }}
+      {{- if or (.Files.Glob "files/httpd.conf") (.Values.httpdConfConfigMap) }}
+      - name: httpd-conf
+        configMap:
+          name: {{ include "apache.httpdConfConfigMap" . }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}

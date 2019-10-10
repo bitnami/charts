@@ -51,6 +51,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
 | `image.registry`                     | Tomcat image registry                                                                                                                                     | `docker.io`                                             |
 | `image.repository`                   | Tomcat Image name                                                                                                                                         | `bitnami/tomcat`                                        |
 | `image.tag`                          | Tomcat Image tag                                                                                                                                          | `{TAG_NAME}`                                            |
@@ -61,7 +62,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `stretch`                                               |
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 | `tomcatUsername`                     | Tomcat admin user                                                                                                                                         | `user`                                                  |
@@ -80,11 +81,12 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `persistence.accessMode`             | PVC Access Mode for Tomcat volume                                                                                                                         | `ReadWriteOnce`                                         |
 | `persistence.size`                   | PVC Storage Request for Tomcat volume                                                                                                                     | `8Gi`                                                   |
 | `resources`                          | CPU/Memory resource requests/limits                                                                                                                       | Memory: `512Mi`, CPU: `300m`                            |
-| `ingress.enabled` | Enable the ingress controller | `false` |
-| `ingress.certManager` | Add annotations for certManager | `false` |
-| `ingress.annotations` | Annotations to set in the ingress controller | - |
-| `ingress.hosts` | List of hostnames to be covered with the ingress | `tomcat.local` |
-| `ingress.tls` | List with TLS configuration for the ingress | `hosts: tomcat.local, secretName: tomcat.local-tls` | 
+| `ingress.enabled`                    | Enable the ingress controller                                                                                                                             | `false`                                                 |
+| `ingress.certManager`                | Add annotations for certManager                                                                                                                           | `false`                                                 |
+| `ingress.annotations`                | Annotations to set in the ingress controller                                                                                                              | -                                                       |
+| `ingress.hosts`                      | List of hostnames to be covered with the ingress                                                                                                          | `tomcat.local`                                          |
+| `ingress.tls`                        | List with TLS configuration for the ingress                                                                                                               | `hosts: tomcat.local, secretName: tomcat.local-tls`     |
+| `affinity`                           | Map of node/pod affinities                                                                                                                                | `{}`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
@@ -126,6 +128,12 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Notable changes
+
+### 5.0.0
+
+This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which is based on Bash instead of Node.js.
 
 ## Upgrading
 

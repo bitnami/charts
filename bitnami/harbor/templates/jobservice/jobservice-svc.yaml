@@ -5,7 +5,8 @@ metadata:
   labels: {{ include "harbor.labels" . | nindent 4 }}
 spec:
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: http
   selector:
     {{- include "harbor.matchLabels" . | nindent 4 }}

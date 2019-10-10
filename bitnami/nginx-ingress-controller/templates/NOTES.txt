@@ -65,8 +65,14 @@ If TLS is enabled for the Ingress, a Secret containing the certificate and key m
     tls.key: <base64 encoded key>
   type: kubernetes.io/tls
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+{{- if .Values.headers }}
+#################################################################################
+######   WARNING: `controller.headers` has been deprecated!                 #####
+######            It has been renamed to `controller.proxySetHeaders`.      #####
+#################################################################################
+{{- end }}
 
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 

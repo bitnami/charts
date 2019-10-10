@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.tiller-proxy.fullname" . }}
@@ -32,10 +32,14 @@ spec:
         args:
         - --host={{ .Values.tillerProxy.host }}
         - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
+        - --chartsvc-url=http://{{ template "kubeapps.chartsvc.fullname" . }}:{{ .Values.chartsvc.service.port }}
         {{- if .Values.tillerProxy.tls }}
         - --tls
         {{- if .Values.tillerProxy.tls.verify }}
         - --tls-verify
+        {{- end }}
+        {{- if .Values.tillerProxy.timeout }}
+        - --timeout={{ .Values.tillerProxy.timeout }}
         {{- end }}
         volumeMounts:
         - name: tiller-certs

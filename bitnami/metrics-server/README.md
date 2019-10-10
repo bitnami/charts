@@ -58,6 +58,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `nameOverride`           | String to partially override metrics-server.fullname template with a string (will prepend the release name) | `nil`  |
 | `fullnameOverride`       | String to fully override metrics-server.fullname template with a string                                     | `nil`  |
 | `securePort`             | Port where metrics-server will be running                                   | `8443`                                 |
+| `extraArgs`              | Extra arguments to pass to metrics-server on start up                       | {}                                     |
 | `service.type`           | Kubernetes Service type                                                     | `ClusterIP`                            |
 | `service.port`           | Kubernetes Service port                                                     | `443`                                  |
 | `service.annotations`    | Annotations for the Service                                                 | {}                                     |
@@ -67,6 +68,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `serviceAccount.create`  | Specifies whether a ServiceAccount should be created                        | `true`                                 |
 | `serviceAccount.name`    | The name of the ServiceAccount to create                                    | Generated using the fullname template  |
 | `apiService.create`      | Specifies whether the v1beta1.metrics.k8s.io API service should be created (This should not be necessary in k8s version >= 1.8)  | `false`                                 |
+| `affinity`               | Map of node/pod affinities                                                  | `{}`                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

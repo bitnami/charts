@@ -12,19 +12,23 @@ metadata:
   name: {{ template "nginx-ingress.fullname" . }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: {{ template "nginx-ingress.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
+{{- with .Values.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+        targetAverageUtilization: {{ . }}
+{{- end }}
+{{- with .Values.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+        targetAverageUtilization: {{ . }}
+{{- end }}
 {{- end }}
 {{- end }}

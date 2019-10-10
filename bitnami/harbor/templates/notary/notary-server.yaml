@@ -21,6 +21,7 @@ spec:
         {{ toYaml .Values.notary.podAnnotations | nindent 8 }}
         {{- end }}
     spec:
+{{- include "harbor.imagePullSecrets" . | indent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -29,7 +30,7 @@ spec:
       containers:
       - name: notary-server
         image: "{{ template "harbor.notaryServerImage" . }}"
-        imagePullPolicy: {{ .Values.notaryServerImage.pullPolicy }}
+        imagePullPolicy: {{ .Values.notaryServerImage.pullPolicy | quote }}
         {{- if .Values.notary.server.resources }}
         resources: {{ toYaml .Values.notary.server.resources | nindent 10 }}
         {{- end }}

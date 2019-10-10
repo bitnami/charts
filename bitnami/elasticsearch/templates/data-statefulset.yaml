@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "elasticsearch.data.fullname" . }}
@@ -72,7 +72,7 @@ spec:
       - name: sysctl
         image: {{ template "elasticsearch.sysctl.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        command: ['sh', '-c', 'install_packages systemd && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
+        command: ['sh', '-c', 'install_packages procps && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
         securityContext:
           privileged: true
       {{- end }}
@@ -163,13 +163,7 @@ spec:
     spec:
       accessModes:
 {{ toYaml .Values.data.persistence.accessModes | indent 8 }}
-{{- if .Values.data.persistence.storageClass }}
-{{- if (eq "-" .Values.data.persistence.storageClass) }}
-      storageClassName: ""
-{{- else }}
-      storageClassName: {{ .Values.data.persistence.storageClass | quote }}
-{{- end }}
-{{- end }}
+      {{ include "elasticsearch.data.storageClass" . }}
       resources:
         requests:
           storage: {{ .Values.data.persistence.size | quote }}

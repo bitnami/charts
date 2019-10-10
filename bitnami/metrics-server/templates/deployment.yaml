@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "metrics-server.fullname" . }}
@@ -36,3 +36,10 @@ spec:
         command:
         - metrics-server
         - --secure-port={{ .Values.securePort }}
+      {{- range $key, $value := .Values.extraArgs }}
+        - --{{ $key }}={{ $value }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}

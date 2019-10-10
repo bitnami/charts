@@ -227,8 +227,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.redis.rawPassword" -}}
-  {{- if and (eq .Values.redis.enabled false) .Values.externalRedis.password -}}
+  {{- if and (not .Values.redis.enabled) .Values.externalRedis.password -}}
     {{- .Values.externalRedis.password -}}
+  {{- end -}}
+  {{- if and .Values.redis.enabled .Values.redis.password .Values.redis.usePassword -}}
+    {{- .Values.redis.password -}}
   {{- end -}}
 {{- end -}}
 
@@ -565,15 +568,21 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.harbor.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.harbor.coreImage.pullSecrets }}
+{{- range .Values.coreImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.portalImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.jobserviceImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.notaryServerImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.notarySignerImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.registryImage.pullSecrets }}
@@ -589,15 +598,21 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if or .Values.harbor.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.harbor.coreImage.pullSecrets }}
+{{- range .Values.coreImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.portalImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.jobserviceImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.notaryServerImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.notarySignerImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.registryImage.pullSecrets }}
@@ -694,5 +709,113 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- end -}}
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Storage Class for chartmuseum
+*/}}
+{{- define "harbor.chartmuseum.storageClass" -}}
+{{- $chartmuseum := .Values.persistence.persistentVolumeClaim.chartmuseum -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if $chartmuseum.storageClass -}}
+              {{- if (eq "-" $chartmuseum.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+              {{- else }}
+                  {{- printf "storageClassName: %s" $chartmuseum.storageClass -}}
+              {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if $chartmuseum.storageClass -}}
+        {{- if (eq "-" $chartmuseum.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" $chartmuseum.storageClass -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Storage Class for jobservice
+*/}}
+{{- define "harbor.jobservice.storageClass" -}}
+{{- $jobservice := .Values.persistence.persistentVolumeClaim.jobservice -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if $jobservice.storageClass -}}
+              {{- if (eq "-" $jobservice.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+              {{- else }}
+                  {{- printf "storageClassName: %s" $jobservice.storageClass -}}
+              {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if $jobservice.storageClass -}}
+        {{- if (eq "-" $jobservice.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" $jobservice.storageClass -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Storage Class for registry
+*/}}
+{{- define "harbor.registry.storageClass" -}}
+{{- $registry := .Values.persistence.persistentVolumeClaim.registry -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if $registry.storageClass -}}
+              {{- if (eq "-" $registry.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+              {{- else }}
+                  {{- printf "storageClassName: %s" $registry.storageClass -}}
+              {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if $registry.storageClass -}}
+        {{- if (eq "-" $registry.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" $registry.storageClass -}}
+        {{- end -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}

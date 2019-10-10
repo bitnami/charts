@@ -49,9 +49,9 @@ data:
       }
 
       location ~* /api/chartsvc {
-        rewrite /api/chartsvc/(.*) /$1 break;
-        rewrite /api/chartsvc / break;
-        proxy_pass http://{{ template "kubeapps.chartsvc.fullname" . }}:{{ .Values.chartsvc.service.port }};
+        rewrite /api/chartsvc/(.*) /chartsvc/$1 break;
+        rewrite /api/chartsvc /chartsvc break;
+        proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
       }
 
       location ~* /api/tiller-deploy {

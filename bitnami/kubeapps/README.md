@@ -41,7 +41,7 @@ $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
 
 > **IMPORTANT** This assumes an insecure Helm installation, which is not recommended in production. See [the documentation to learn how to secure Helm and Kubeapps in production](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
 
-These commands deploy Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Caveat**: Only one Kubeapps installation is supported per namespace
 
@@ -156,6 +156,8 @@ Learn more about how to secure your Kubeapps installation [here](https://github.
 
 ### Exposing Externally
 
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service, so when when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed on that network. See [#1111](https://github.com/kubeapps/kubeapps/issues/1111) for more details.
+
 #### LoadBalancer Service
 
 The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer type to the Kubeapps frontend Service. For example:
@@ -182,7 +184,7 @@ Most likely you will only want to have one hostname that maps to this Kubeapps i
 
 ##### Annotations
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
 
 ##### TLS
 

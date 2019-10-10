@@ -53,6 +53,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | ------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
 | `global.imageRegistry`                | Global Docker image registry                                                         | `nil`                                                        |
 | `global.imagePullSecrets`             | Global Docker registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                      | Magento image registry                                                               | `docker.io`                                                  |
 | `image.repository`                    | Magento Image name                                                                   | `bitnami/magento`                                            |
 | `image.tag`                           | Magento Image tag                                                                    | `{TAG_NAME}`                                                 |
@@ -131,6 +132,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | `persistence.magento.size`            | PVC Storage Request for Magento volume                                               | `8Gi`                                                        |
 | `resources`                           | CPU/Memory resource requests/limits                                                  | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                      | Pod annotations                                                                      | `{}`                                                         |
+| `affinity`                            | Map of node/pod affinities                                                           | `{}`                                                         |
 | `metrics.enabled`                     | Start a side-car prometheus exporter                                                 | `false`                                                      |
 | `metrics.image.registry`              | Apache exporter image registry                                                       | `docker.io`                                                  |
 | `metrics.image.repository`            | Apache exporter image name                                                           | `bitnami/apache-exporter`                                    |

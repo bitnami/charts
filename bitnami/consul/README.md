@@ -54,6 +54,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                     | HashiCorp Consul image registry                                                                                                                           | `docker.io`                                             |
 | `image.repository`                   | HashiCorp Consul image name                                                                                                                               | `bitnami/consul`                                        |
 | `image.tag`                          | HashiCorp Consul image tag                                                                                                                                | `{TAG_NAME}`                                            |
@@ -64,7 +65,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `stretch`                                                |
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 | `replicas`                           | Number of replicas                                                                                                                                        | `3`                                                     |
@@ -202,7 +203,7 @@ HashiCorp Consul will be connected to at port 443.  The actual secret that
 However, please note that if TLS is enabled, the ingress record will not
 work until this secret exists.
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md).
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md).
 Not all annotations are supported by all ingress controllers, but this
 document does a good job of indicating which annotation is supported by
 many popular ingress controllers.
@@ -288,6 +289,10 @@ helm install bitnami/consul --set tlsEncryptionSecretName=consul-tls-encryption
 The chart can optionally start a metrics exporter endpoint on port `9107` for [prometheus](https://prometheus.io). The data exposed by the endpoint is intended to be consumed by a prometheus chart deployed within the cluster and as such the endpoint is not exposed outside the cluster.
 
 ## Upgrading
+
+### To 6.0.0
+
+This release updates the Bitnami Consul container to `1.6.1-debian-9-r6`, which is based on Bash instead of Node.js.
 
 ### To 3.1.0
 

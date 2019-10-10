@@ -1,8 +1,8 @@
 {{- if .Values.podSecurityPolicy.enabled}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ template "podSecurityPolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "nginx-ingress.fullname" . }} 
+  name: {{ template "nginx-ingress.fullname" . }}
   labels:
     app: {{ template "nginx-ingress.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
@@ -20,7 +20,7 @@ spec:
     #- 'projected'
     - 'secret'
     #- 'downwardAPI'
-  hostNetwork: false
+  hostNetwork: {{ .Values.hostNetwork }}
   hostIPC: false
   hostPID: false
   runAsUser:

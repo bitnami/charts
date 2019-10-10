@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: "{{ template "zookeeper.fullname" . }}"
@@ -82,12 +82,7 @@ spec:
               echo "Failed to get index from hostname $HOST"
               exit 1
             fi
-            . /opt/bitnami/base/functions
-            . /opt/bitnami/base/helpers
-            print_welcome_page
-            . /init.sh
-            nami_initialize zookeeper
-            exec tini -- /run.sh
+            exec /entrypoint.sh /run.sh
         resources: {{ toYaml .Values.resources | nindent 10 }}
         env:
         - name: ZOO_PORT_NUMBER
@@ -100,6 +95,8 @@ spec:
           value: {{ .Values.syncLimit | quote }}
         - name: ZOO_MAX_CLIENT_CNXNS
           value: {{ .Values.maxClientCnxns | quote }}
+        - name: ZOO_4LW_COMMANDS_WHITELIST
+          value: {{ .Values.fourlwCommandsWhitelist | quote }}
         - name: ZOO_SERVERS
           {{- $replicaCount := int .Values.replicaCount }}
           {{- $followerPort := int .Values.service.followerPort }}
@@ -194,13 +191,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-      {{- if .Values.persistence.storageClass }}
-      {{- if (eq "-" .Values.persistence.storageClass) }}
-        storageClassName: ""
-      {{- else }}
-        storageClassName: {{ .Values.persistence.storageClass | quote }}
-      {{- end }}
-      {{- end }}
+        {{ include "zookeeper.storageClass" . }}
 {{- else }}
         - name: data
           emptyDir: {}

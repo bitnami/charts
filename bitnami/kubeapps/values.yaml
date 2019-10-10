@@ -6,6 +6,7 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 # The frontend service is the main reverse proxy used to access the Kubeapps UI
 # To expose Kubeapps externally either configure the ingress object below or
@@ -21,7 +22,7 @@ ingress:
 
   # Ingress annotations done as key:value pairs
   # For a full list of possible ingress annotations, please see
-  # ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  # ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   #
   # If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   annotations:
@@ -61,10 +62,14 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.0-r99
+    tag: 1.16.1-debian-9-r52
   service:
     port: 80
     type: ClusterIP
+    # Set type to LoadBalancer and enable
+    # the parameter below with a value
+    # to have a static load balancer IP
+    #loadBalancerIP:
     annotations: {}
   livenessProbe:
     httpGet:
@@ -96,10 +101,12 @@ frontend:
 apprepository:
   # Running a single controller replica to avoid sync job duplication
   replicaCount: 1
+  # Schedule for syncing apprepositories. Every ten minutes by default
+  # crontab: "*/10 * * * *"
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.4.2-r0
+    tag: 1.5.1-scratch-r0
   # Image used to perform chart repository syncs
   syncImage:
     registry: docker.io
@@ -159,7 +166,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.4.2-r0
+    tag: 1.5.1-scratch-r0
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -179,6 +186,9 @@ tillerProxy:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  # It's possible to modify the default timeout for install/upgrade/rollback/delete apps
+  # (Default: 300s)
+  # timeout: 300
 
 # Chartsvc is used to serve chart metadata over a REST API.
 chartsvc:
@@ -221,7 +231,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.4.2-r0
+    tag: 1.5.1-debian-9-r2
   service:
     port: 8080
   livenessProbe:
@@ -293,7 +303,7 @@ testImage:
   # Image used for the tests. The only requirement is to include curl
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.0-r99
+  tag: 1.16.1-debian-9-r52
 
 # Auth Proxy for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md

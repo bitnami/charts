@@ -51,6 +51,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`               | Global Docker image registry                                                                         | `nil`                                                        |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                     | Jenkins image registry                                                                               | `docker.io`                                                  |
 | `image.repository`                   | Jenkins Image name                                                                                   | `bitnami/jenkins`                                            |
 | `image.tag`                          | Jenkins Image tag                                                                                    | `{TAG_NAME}`                                                 |
@@ -99,6 +100,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `persistence.size`                   | PVC Storage Request for Jenkins volume                                                               | `8Gi`                                                        |
 | `resources`                          | CPU/Memory resource requests/limits                                                                  | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                     | Pod annotations                                                                                      | `{}`                                                         |
+| `affinity`                           | Map of node/pod affinities                                                                           | `{}`                                                         |
 | `metrics.enabled`                    | Start a side-car Jenkins prometheus exporter                                                         | `false`                                                      |
 | `metrics.image.registry`             | Jenkins exporter image registry                                                                      | `docker.io`                                                  |
 | `metrics.image.repository`           | Jenkins exporter image name                                                                          | `bitnami/jenkins-exporter`                                   |

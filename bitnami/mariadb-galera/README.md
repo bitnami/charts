@@ -58,10 +58,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the MariaDB Galera chart and their default values.
 
-|              Parameter               |                   Description                                                                                                                               |                              Default                              |
+|              Parameter               |                                                                         Description                                                                         |                              Default                              |
 |--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                                | `nil`                                                             |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                             | `[]` (does not add image pull secrets to deployed pods)           |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                               | `nil`                                                             |
 | `image.registry`                     | MariaDB Galera image registry                                                                                                                               | `docker.io`                                                       |
 | `image.repository`                   | MariaDB Galera Image name                                                                                                                                   | `bitnami/mariadb-galera`                                          |
 | `image.tag`                          | MariaDB Galera Image tag                                                                                                                                    | `{TAG_NAME}`                                                      |
@@ -78,6 +79,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `service.loadBalancerIP`             | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                          | `nil`                                                             |
 | `service.loadBalancerSourceRanges`   | Address that are allowed when svc is `LoadBalancer`                                                                                                         | `[]`                                                              |
 | `service.annotations`                | Additional annotations for MariaDB Galera service                                                                                                           | `{}`                                                              |
+| `clusterDomain`                      | Kubernetes DNS Domain name to use                                                                                                                           | `cluster.local`                                                   |
 | `serviceAccount.create`              | Specify whether a ServiceAccount should be created                                                                                                          | `false`                                                           |
 | `serviceAccount.name`                | The name of the ServiceAccount to create                                                                                                                    | Generated using the mariadb-galera.fullname template              |
 | `rbac.create`                        | Specify whether RBAC resources should be created and used                                                                                                   | `false`                                                           |
@@ -101,6 +103,9 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `ldap.binddn`                        | LDAP bind DN                                                                                                                                                | `nil`                                                             |
 | `ldap.bindpw`                        | LDAP bind password                                                                                                                                          | `nil`                                                             |
 | `ldap.bslookup`                      | LDAP base lookup                                                                                                                                            | `nil`                                                             |
+| `ldap.nss_initgroups_ignoreusers`    | LDAP ignored users                                                                                                                                          | `root,nslcd`                                                      |
+| `ldap.scope`                         | LDAP search scope                                                                                                                                           | `nil`                                                             |
+| `ldap.tls_reqcert`                   | LDAP TLS check on server certificates                                                                                                                       | `nil`                                                             |
 | `mariadbConfiguration`               | Configuration for the MariaDB server                                                                                                                        | `_default values in the values.yaml file_`                        |
 | `configurationConfigMap`             | ConfigMap with the MariaDB configuration files (Note: Overrides `mariadbConfiguration`). The value is evaluated as a template.                              | `nil`                                                             |
 | `initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                | `nil`                                                             |
@@ -123,7 +128,8 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `persistence.storageClass`           | Persistent Volume Storage Class                                                                                                                             | `nil`                                                             |
 | `persistence.accessModes`            | Persistent Volume Access Modes                                                                                                                              | `[ReadWriteOnce]`                                                 |
 | `persistence.size`                   | Persistent Volume Size                                                                                                                                      | `8Gi`                                                             |
-| `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `nil`                                                             |
+| `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `[]`                                                              |
+| `extraContainers`                    | Additional containers (this value is evaluated as a template)                                                                                               | `[]`                                                              |
 | `resources`                          | CPU/Memory resource requests/limits for node                                                                                                                | `{}`                                                              |
 | `livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                                              | `true`                                                            |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                    | `120`                                                             |
@@ -183,17 +189,23 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 - `ldap.binddn`: LDAP bind DN. No defaults.
 - `ldap.bindpw`: LDAP bind password. No defaults.
 - `ldap.bslookup`: LDAP base lookup. No defaults.
+- `ldap.nss_initgroups_ignoreusers`: LDAP ignored users. `root,nslcd`.
+- `ldap.scope`: LDAP search scope. No defaults.
+- `ldap.tls_reqcert`: LDAP TLS check on server certificates. No defaults.
 
 For example:
 
 ```bash
 $ helm install --name my-release bitnami/mariadb-galera \
     --set ldap.enabled="true" \
-    --set ldap.url="ldap://my_ldap_server" \
+    --set ldap.uri="ldap://my_ldap_server" \
     --set ldap.base="dc=example,dc=org" \
     --set ldap.binddn="cn=admin,dc=example,dc=org" \
     --set ldap.bindpw="admin" \
-    --set ldap.bslookup="ou=group-ok,dc=example,dc=org"
+    --set ldap.bslookup="ou=group-ok,dc=example,dc=org" \
+    --set ldap.nss_initgroups_ignoreusers="root,nslcd" \
+    --set ldap.scope="sub" \
+    --set ldap.tls_reqcert="demand"
 ```
 
 Next, login to the MariaDB server using the `mysql` client and add the PAM authenticated LDAP users.
@@ -259,12 +271,41 @@ The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-
 The feature allows for specifying a template string for a initContainer in the pod. Usecases include situations when you need some pre-run setup. For example, in IKS (IBM Cloud Kubernetes Service), non-root users do not have write permission on the volume mount path for NFS-powered file storage. So, you could use a initcontainer to `chown` the mount. See a example below, where we add an initContainer on the pod that reports to an external resource that the db is going to starting.
 `values.yaml`
 ```yaml
-extraInitContainers: |
+extraInitContainers:
 - name: initcontainer
-  image: bitnami/minideb:latest
+  image: bitnami/minideb:stretch
   command: ["/bin/sh", "-c"]
   args:
     - install_packages curl && curl http://api-service.local/db/starting;
+```
+
+## Extra Containers
+
+The feature allows for specifying additional containers in the pod. Usecases include situations when you need to run some sidecar containers. For example, you can observe if mysql in pod is running and report to some service discovery software like eureka. Example:
+`values.yaml`
+```yaml
+extraContainers:
+- name: '{{ .Chart.Name }}-eureka-sidecar'
+  image: 'image:tag'
+  env:
+  - name: SERVICE_NAME
+    value: '{{ template "mariadb-galera.fullname" . }}'
+  - name: EUREKA_APP_NAME
+    value: '{{ template "mariadb-galera.name" . }}'
+  - name: MARIADB_USER
+    value: '{{ .Values.db.user }}'
+  - name: MARIADB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: '{{ template "mariadb-galera.fullname" . }}'
+        key: mariadb-password
+  resources:
+    limits:
+      cpu: 100m
+      memory: 20Mi
+    requests:
+      cpu: 50m
+      memory: 10Mi
 ```
 
 ## Upgrading

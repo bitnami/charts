@@ -51,6 +51,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `global.imageRegistry`                    | Global Docker image registry                                                                                                                              | `nil`                                                       |
 | `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)     |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
 | `image.registry`                          | etcd image registry                                                                                                                                       | `docker.io`                                                 |
 | `image.repository`                        | etcd image name                                                                                                                                           | `bitnami/etcd`                                              |
 | `image.tag`                               | etcd image tag                                                                                                                                            | `{TAG_NAME}`                                                |
@@ -62,7 +63,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `volumePermissions.enabled`               | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                     |
 | `volumePermissions.image.registry`        | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                 |
 | `volumePermissions.image.repository`      | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                           |
-| `volumePermissions.image.tag`             | Init container volume-permissions image tag                                                                                                               | `latest`                                                    |
+| `volumePermissions.image.tag`             | Init container volume-permissions image tag                                                                                                               | `stretch`                                                    |
 | `volumePermissions.image.pullPolicy`      | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                    |
 | `volumePermissions.resources`             | Init container resource requests/limit                                                                                                                    | `nil`                                                       |
 | `statefulset.updateStrategy`              | Update strategy for the stateful set                                                                                                                      | `RollingUpdate`                                             |
@@ -196,8 +197,12 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/etcd
 To horizontally scale this chart once it has been deployed:
 
 ```console
-$ kubectl scale statefulset my-etcd --replicas=5
+$ helm upgrade my-release bitnami/etcd \
+  -f ./values-production.yaml \
+  --set statefulset.replicaCount=5
 ```
+
+> **Note**: Scaling the statefulset with `kubectl scale ...` command is highly discouraged. Use `helm upgrade ...` for horizontal scaling so you ensure all the environment variables used to configure the ectd cluster are properly updated.
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
@@ -233,24 +238,6 @@ $ helm install bitnami/etcd --set envVarsConfigMap=etcd-env-vars
 $ kubectl create configmap etcd-conf --from-file=etcd.conf.yml
 $ helm install bitnami/etcd --set configFileConfigMap=etcd-conf
 ```
-
-## Production and horizontal scaling
-
-The following repo contains the recommended production settings for etcd server in an alternative [values file](values-production.yaml). Please read carefully the comments in the values-production.yaml file to set up your environment.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/etcd
-```
-
-To horizontally scale this chart once it has been deployed:
-
-```console
-$ helm upgrade my-release bitnami/etcd \
-  -f ./values-production.yaml
-  --set statefulset.replicaCount=5
-```
-
-> **Note**: Scaling the statefulset with `kubectl scale ...` command is highly discouraged. Use `helm upgrade ...` for horizontal scaling so you ensure all the environment variables used to configure the ectd cluster are properly updated.
 
 ## Enable security for etcd
 

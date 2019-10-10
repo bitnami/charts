@@ -6,6 +6,7 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 ## Bitnami MariaDB Galera image
 ## ref: https://hub.docker.com/r/bitnami/mariadb-galera/tags/
@@ -13,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.3.17-debian-9-r8
+  tag: 10.3.18-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,6 +76,10 @@ service:
   ##
   annotations: {}
 
+## Specifies the Kubernetes Cluster's Domain Name.
+##
+clusterDomain: cluster.local
+
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -83,7 +88,7 @@ serviceAccount:
   ##
   create: false
   ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the mariadb.fullname template
+  ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
   # name:
 
 ## Role Based Access
@@ -158,11 +163,14 @@ ldap:
   ## Enable LDAP support
   ##
   enabled: false
-  # uri:
-  # base:
-  # binddn:
-  # bindpw:
-  # bslookup:
+  uri:
+  base:
+  binddn:
+  bindpw:
+  bslookup:
+  nss_initgroups_ignoreusers: root,nslcd
+  scope:
+  tls_reqcert:
 
 ## Configure MariaDB with a custom my.cnf file
 ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
@@ -285,8 +293,8 @@ mariadbConfiguration: |-
 ## Mariadb Master additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 # annotations:
-#   - key: key1
-#     value: value1
+#   key: key
+#   another-key: another-value
 
 ## Desired number of cluster nodes
 ##
@@ -357,11 +365,14 @@ persistence:
 
 ## Additional init containers
 ##
-# extraInitContainers: |
+extraInitContainers: []
 # - name: do-something
-#   image: busybox
+#   image: bitnami/minideb:stretch
 #   command: ['do', 'something']
 
+## Additional containers
+##
+extraContainers: []
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -403,7 +414,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-9-r14
+    tag: 0.12.1-debian-9-r44
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

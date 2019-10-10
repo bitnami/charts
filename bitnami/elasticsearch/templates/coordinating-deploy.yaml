@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "elasticsearch.coordinating.fullname" . }}
@@ -62,7 +62,7 @@ spec:
       - name: sysctl
         image: {{ template "elasticsearch.sysctl.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        command: ['sh', '-c', 'install_packages systemd && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
+        command: ['sh', '-c', 'install_packages procps && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
         securityContext:
           privileged: true
       {{- end }}

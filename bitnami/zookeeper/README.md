@@ -1,6 +1,6 @@
-# Zookeeper
+# ZooKeeper
 
-[Zookeeper](https://zookeeper.apache.org/) is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or other by distributed applications.
+[ZooKeeper](https://zookeeper.apache.org/) is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or other by distributed applications.
 
 ## TL;DR;
 
@@ -11,7 +11,7 @@ $ helm install bitnami/zookeeper
 
 ## Introduction
 
-This chart bootstraps a [Zookeeper](https://github.com/bitnami/bitnami-docker-zookeeper) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [ZooKeeper](https://github.com/bitnami/bitnami-docker-zookeeper) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -29,7 +29,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/zookeeper
 ```
 
-These commands deploy Zookeeper on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy ZooKeeper on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,16 +45,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the Zookeeper chart and their default values.
+The following tables lists the configurable parameters of the ZooKeeper chart and their default values.
 
 | Parameter                            | Description                                                                                                                                               | Default                                                      |
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                        |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.registry`                     | Zookeeper image registry                                                                                                                                  | `docker.io`                                                  |
-| `image.repository`                   | Zookeeper Image name                                                                                                                                      | `bitnami/zookeeper`                                          |
-| `image.tag`                          | Zookeeper Image tag                                                                                                                                       | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                   | Zookeeper image pull policy                                                                                                                               | `IfNotPresent`                                               |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
+| `image.registry`                     | ZooKeeper image registry                                                                                                                                  | `docker.io`                                                  |
+| `image.repository`                   | ZooKeeper Image name                                                                                                                                      | `bitnami/zookeeper`                                          |
+| `image.tag`                          | ZooKeeper Image tag                                                                                                                                       | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                   | ZooKeeper image pull policy                                                                                                                               | `IfNotPresent`                                               |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.debug`                        | Specify if debug values should be set                                                                                                                     | `false`                                                      |
 | `nameOverride`                       | String to partially override zookeeper.fullname template with a string (will append the release name)                                                     | `nil`                                                        |
@@ -62,7 +63,7 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `latest`                                                     |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `stretch`                                                     |
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
 | `updateStrategy`                     | Update strategies                                                                                                                                         | `RollingUpdate`                                              |
@@ -75,15 +76,16 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `initLimit`                          | Time the ZooKeeper servers in quorum have to connect to a leader                                                                                          | `10`                                                         |
 | `syncLimit`                          | How far out of date a server can be from a leader                                                                                                         | `5`                                                          |
 | `maxClientCnxns`                     | Number of concurrent connections that a single client may make to a single member                                                                         | `60`                                                         |
+| `fourlwCommandsWhitelist`            | A list of comma separated Four Letter Words commands to use                                                                                               | `srvr, mntr`                                                 |
 | `allowAnonymousLogin`                | Allow to accept connections from unauthenticated users                                                                                                    | `yes`                                                        |
 | `auth.existingSecret`                | Use existing secret (ignores previous password)                                                                                                           | `nil`                                                        |
-| `auth.enabled`                       | Enable Zookeeper auth                                                                                                                                     | `false`                                                      |
-| `auth.clientUser`                    | User that will use Zookeeper clients to auth                                                                                                              | `nil`                                                        |
-| `auth.clientPassword`                | Password that will use Zookeeper clients to auth                                                                                                          | `nil`                                                        |
+| `auth.enabled`                       | Enable ZooKeeper auth                                                                                                                                     | `false`                                                      |
+| `auth.clientUser`                    | User that will use ZooKeeper clients to auth                                                                                                              | `nil`                                                        |
+| `auth.clientPassword`                | Password that will use ZooKeeper clients to auth                                                                                                          | `nil`                                                        |
 | `auth.serverUsers`                   | List of user to be created                                                                                                                                | `nil`                                                        |
 | `auth.serverPasswords`               | List of passwords to assign to users when created                                                                                                         | `nil`                                                        |
 | `heapSize`                           | Size in MB for the Java Heap options (Xmx and XMs)                                                                                                        | `[]`                                                         |
-| `logLevel`                           | Log level of Zookeeper server                                                                                                                             | `ERROR`                                                      |
+| `logLevel`                           | Log level of ZooKeeper server                                                                                                                             | `ERROR`                                                      |
 | `jvmFlags`                           | Default JVMFLAGS for the ZooKeeper process                                                                                                                | `nil`                                                        |
 | `config`                             | Configure ZooKeeper with a custom zoo.conf file                                                                                                           | `nil`                                                        |
 | `service.type`                       | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                                  |
@@ -95,9 +97,9 @@ The following tables lists the configurable parameters of the Zookeeper chart an
 | `securityContext.fsGroup`            | Group ID for the container (ZooKeeper master pod)                                                                                                         | `1001`                                                       |
 | `securityContext.runAsUser`          | User ID for the container (ZooKeeper master pod)                                                                                                          | `1001`                                                       |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                                                              | `true`                                                       |
-| `persistence.storageClass`           | PVC Storage Class for Zookeeper volume                                                                                                                    | `nil`                                                        |
-| `persistence.accessMode`             | PVC Access Mode for Zookeeper volume                                                                                                                      | `ReadWriteOnce`                                              |
-| `persistence.size`                   | PVC Storage Request for Zookeeper volume                                                                                                                  | `8Gi`                                                        |
+| `persistence.storageClass`           | PVC Storage Class for ZooKeeper volume                                                                                                                    | `nil`                                                        |
+| `persistence.accessMode`             | PVC Access Mode for ZooKeeper volume                                                                                                                      | `ReadWriteOnce`                                              |
+| `persistence.size`                   | PVC Storage Request for ZooKeeper volume                                                                                                                  | `8Gi`                                                        |
 | `persistence.annotations`            | Annotations for the PVC                                                                                                                                   | `{}`                                                         |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                                                            | `{}`                                                         |
 | `tolerations`                        | Toleration labels for pod assignment                                                                                                                      | `[]`                                                         |
@@ -173,11 +175,11 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Log level
 
-You can configure the Zookeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `ERROR` because of each readiness probe produce an `INFO` message on connection and a `WARN` message on disconnection.
+You can configure the ZooKeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `ERROR` because of each readiness probe produce an `INFO` message on connection and a `WARN` message on disconnection.
 
 ## Persistence
 
-The [Bitnami Zookeeper](https://github.com/bitnami/bitnami-docker-zookeeper) image stores the Zookeeper data and configurations at the `/bitnami/zookeeper` path of the container.
+The [Bitnami ZooKeeper](https://github.com/bitnami/bitnami-docker-zookeeper) image stores the ZooKeeper data and configurations at the `/bitnami/zookeeper` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
@@ -195,7 +197,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### To 3.0.0
 
-This new version of the chart includes the new Zookeeper major version 3.5.5. Note that to perform an automatic upgrade
+This new version of the chart includes the new ZooKeeper major version 3.5.5. Note that to perform an automatic upgrade
 of the application, each node will need to have at least one snapshot file created in the data directory. If not, the
 new version of the application won't be able to start the service. Please refer to [ZOOKEEPER-3056](https://issues.apache.org/jira/browse/ZOOKEEPER-3056)
 in order to find ways to workaround this issue in case you are facing it.

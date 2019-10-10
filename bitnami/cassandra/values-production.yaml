@@ -6,6 +6,7 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 ## Bitnami Cassandra image version
 ## ref: https://hub.docker.com/r/bitnami/cassandra/tags/
@@ -16,7 +17,7 @@ image:
   ## Bitnami Cassandra image tag
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 3.11.4-debian-9-r147
+  tag: 3.11.4-debian-9-r213
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -28,6 +29,10 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH debugging in minideb-extras-base
+  ##
+  debug: false
 
 ## String to partially override cassandra.fullname template (will maintain the release name)
 ##
@@ -45,7 +50,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/minideb
-    tag: latest
+    tag: stretch
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -63,10 +68,15 @@ service:
   ## CQL Port
   port: 9042
   thriftPort: 9160
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  # nodePort: 30001
+  nodePorts:
+    cql: ""
+    thriftPort: ""
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
   # loadBalancerIP:
 
   ## Provide any additional annotations which may be required. This can be used to
@@ -213,6 +223,12 @@ affinity: {}
 ##
 tolerations: []
 
+##
+## Container entrypoint and cmd (useful for using different images)
+##
+entrypoint: "/entrypoint.sh"
+cmd: "/run.sh"
+
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -237,7 +253,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.0-debian-9-r3
+    tag: 2.3.0-debian-9-r59
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

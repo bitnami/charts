@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana.fullname" . }}-envvars
+  labels: {{ include "grafana.labels" . | nindent 4 }}
+data:
+  GF_SECURITY_ADMIN_USER: {{ .Values.admin.user | quote }}
+  {{- if .Values.plugins }}
+  GF_INSTALL_PLUGINS: {{ .Values.plugins | quote }}
+  {{- end }}
+  GF_PATHS_PLUGINS: "/opt/bitnami/grafana/data/plugins"
+  GF_AUTH_LDAP_ENABLED: {{ .Values.ldap.enabled | quote }}
+  GF_AUTH_LDAP_CONFIG_FILE: "/opt/bitnami/grafana/conf/ldap.toml"
+  GF_AUTH_LDAP_ALLOW_SIGN_UP: {{ .Values.ldap.allowSignUp | quote }}
+  GF_PATHS_PROVISIONING: "/opt/bitnami/grafana/conf/provisioning"
+  GF_PATHS_CONFIG: "/opt/bitnami/grafana/conf/grafana.ini"
+  GF_PATHS_DATA: "/opt/bitnami/grafana/data"
+  GF_PATHS_LOGS: "/opt/bitnami/grafana/logs"
+  GF_PATHS_PLUGINS: "/opt/bitnami/grafana/data/plugins"

@@ -66,6 +66,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `serviceType`               | Kubernetes Service type                                                                                | `ClusterIP`                                             |
 | `resources`                 | CPU/Memory resource requests/limits                                                                    | Memory: `256Mi`, CPU: `250m`                            |
 | `clusterDomain`             | Kubernetes cluster domain                                                                              | `cluster.local`                                         |
+| `affinity`                  | Map of node/pod affinities                                                                             | `{}`                                                    |
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                   | `false`                                                 |
 | `metrics.image.registry`    | Memcached exporter image registry                                                                      | `docker.io`                                             |
 | `metrics.image.repository`  | Memcached exporter image name                                                                          | `bitnami/memcached-exporter`                            |
@@ -113,6 +114,12 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/memcached
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+## Notable changes
+
+### 3.0.0
+
+This release uses the new bash based `bitnami/memcached` container which uses bash scripts for the start up logic of the container and is smaller in size.
 
 ## Upgrading
 

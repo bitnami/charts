@@ -1,0 +1,13 @@
+{{- if and (.Files.Glob "files/vhosts/*.conf") (not .Values.vhostsConfigMap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "apache.fullname" . }}-vhosts
+  labels:
+    app.kubernetes.io/name: {{ include "apache.fullname" . }}
+    helm.sh/chart: {{ include "apache.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+{{ (.Files.Glob "files/vhosts/*.conf").AsConfig | indent 2 }}
+{{ end }}

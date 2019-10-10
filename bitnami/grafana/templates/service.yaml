@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "grafana.fullname" . }}
+  labels: {{ include "grafana.labels" . | nindent 4 }}
+  {{- if .Values.service.annotations }}
+  annotations: {{ toYaml .Values.service.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and .Values.service.loadBalancerIP (eq .Values.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: dashboard
+      protocol: TCP
+      name: http
+      {{- if .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+  selector: {{ include "grafana.matchLabels" . | nindent 4 }}

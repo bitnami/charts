@@ -1,5 +1,5 @@
 {{- if .Values.replication.enabled }}
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "mysql.slave.fullname" . }}
@@ -190,15 +190,13 @@ spec:
         resources:
           requests:
             storage: {{ .Values.slave.persistence.size | quote }}
-      {{- if .Values.slave.persistence.storageClass }}
-      {{- if (eq "-" .Values.slave.persistence.storageClass) }}
-        storageClassName: ""
-      {{- else }}
-        storageClassName: {{ .Values.slave.persistence.storageClass | quote }}
-      {{- end }}
-      {{- end }}
+        {{ include "mysql.slave.storageClass" . }}
 {{- else }}
         - name: "data"
           emptyDir: {}
 {{- end }}
+      {{- with .Values.slave.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}
 {{- end }}

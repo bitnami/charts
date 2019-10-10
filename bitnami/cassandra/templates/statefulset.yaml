@@ -85,11 +85,13 @@ spec:
                 # Only node 0 will execute the startup initdb scripts
                 export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
-              /app-entrypoint.sh /run.sh
+              {{ .Values.entrypoint }} {{ .Values.cmd }}
         image: {{ template "cassandra.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         resources: {{ toYaml .Values.resources | nindent 10 }}
         env:
+        - name: BITNAMI_DEBUG
+          value: {{ ternary "true" "false" .Values.image.debug | quote }}
         - name: CASSANDRA_CLUSTER_NAME
           value: {{ .Values.cluster.name }}
         - name: CASSANDRA_SEEDS
@@ -267,11 +269,5 @@ spec:
       resources:
         requests:
           storage: {{ .Values.persistence.size | quote }}
-    {{- if .Values.persistence.storageClass }}
-    {{- if (eq "-" .Values.persistence.storageClass) }}
-      storageClassName: ""
-    {{- else }}
-      storageClassName: {{ .Values.persistence.storageClass | quote }}
-    {{- end }}
-    {{- end }}
+      {{ include "cassandra.storageClass" . }}
 {{- end }}
