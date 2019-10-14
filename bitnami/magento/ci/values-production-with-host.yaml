@@ -1,0 +1,9 @@
+magentoHost: magento.local
+mariadb:
+  enabled: false
+externalDatabase:
+  host: database.local
+metrics:
+  enabled: true
+ingress:
+  enabled: true
