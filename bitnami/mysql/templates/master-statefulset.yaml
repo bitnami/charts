@@ -29,6 +29,10 @@ spec:
         component: "master"
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+        type: "cs"
+        workspace: {{ .Values.kinto.workspace }}
+        blockName: {{ .Values.kinto.blockName }}
+        envId: {{ .Values.kinto.envId }}
 {{- if or .Values.master.annotations .Values.metrics.enabled }}
       annotations:
   {{- if .Values.master.annotations }}

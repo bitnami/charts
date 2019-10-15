@@ -30,6 +30,10 @@ spec:
         component: "slave"
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+        type: "cs"
+        workspace: {{ .Values.kinto.workspace }}
+        blockName: {{ .Values.kinto.blockName }}
+        envId: {{ .Values.kinto.envId }}
 {{- if or .Values.slave.annotations .Values.metrics.enabled }}
       annotations:
   {{- if .Values.slave.annotations }}

@@ -1,3 +1,9 @@
+#kintohub
+kinto:
+  workspace:
+  envId:
+  blockName:
+
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
@@ -62,7 +68,7 @@ service:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 securityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
   runAsUser: 1001
 
@@ -79,7 +85,7 @@ root:
   ##
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
-  forcePassword: false
+  forcePassword: true
 
 db:
   ## MySQL username and password
@@ -95,7 +101,7 @@ db:
   name: my_database
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
-  forcePassword: false
+  forcePassword: true
 
 replication:
   ## Enable replication. This enables the creation of replicas of MySQL. If false, only a
