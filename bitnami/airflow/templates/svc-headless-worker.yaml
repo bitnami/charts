@@ -11,9 +11,9 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-  - name: worker
-    port: 8793
-    targetPort: worker
+    - name: worker
+      port: 8793
+      targetPort: worker
   selector:
     app.kubernetes.io/name: {{ include "airflow.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

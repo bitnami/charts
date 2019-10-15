@@ -140,6 +140,17 @@ airflow:
     port: 8793
     replicas: 3
 
+  ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
+  ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
+  ##
+  # extraEnvVars:
+  #   - name: AIRFLOW__SMTP__SMTP_HOST
+  #     value: "localhost"
+  #   - name: AIRFLOW__SMTP__SMTP_PORT
+  #     value: "25"
+  #   - name: AIRFLOW__SMTP__USER
+  #     value: ""
+
   auth:
     ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
     ## If it is not forced, a random password will be generated.
@@ -161,17 +172,6 @@ airflow:
     ## Use existing secret (ignores previous password and fernetKey)
     ##
     # existingSecret:
-
-  ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
-  ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
-  ##
-  # extraEnvVars:
-  #   - name: AIRFLOW__SMTP__SMTP_HOST
-  #     value: "localhost"
-  #   - name: AIRFLOW__SMTP__SMTP_PORT
-  #     value: "25"
-  #   - name: AIRFLOW__SMTP__USER
-  #     value: ""
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -222,15 +222,15 @@ ingress:
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
-  - name: airflow.local
-    path: /
+    - name: airflow.local
+      path: /
 
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   tls:
-  - hosts:
-      - airflow.local
-    secretName: airflow.local-tls
+    - hosts:
+        - airflow.local
+      secretName: airflow.local-tls
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -298,7 +298,7 @@ readinessProbe:
 postgresql:
   enabled: true
   postgresqlUsername: bn_airflow
-  #postgresqlPassword:
+  # postgresqlPassword:
   postgresqlDatabase: bitnami_airflow
 
 externalDatabase:
@@ -349,10 +349,6 @@ metrics:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9112"
-
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -363,5 +359,8 @@ metrics:
   # tolerations: []
 
   ## Metrics exporter pod Annotation and Labels
-  # podAnnotations: {}
   # podLabels: {}
+
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9112"
