@@ -7,72 +7,17 @@ Popular applications, provided by [Bitnami](https://bitnami.com), ready to launc
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm search bitnami
+$ helm install bitnami/<chart>
 ```
 
-## Upstreamed charts (contributed to [helm/charts](https://github.com/helm/charts))
+![Installing a chart](demo.gif)
 
-- [Dokuwiki](https://github.com/helm/charts/tree/master/stable/dokuwiki)
-- [Drupal](https://github.com/helm/charts/tree/master/stable/drupal)
-- [ExternalDNS](https://github.com/helm/charts/tree/master/stable/external-dns)
-- [Ghost](https://github.com/helm/charts/tree/master/stable/ghost)
-- [JasperReports](https://github.com/helm/charts/tree/master/stable/jasperreports)
-- [Joomla!](https://github.com/helm/charts/tree/master/stable/joomla)
-- [Kubewatch](https://github.com/helm/charts/tree/master/stable/kubewatch)
-- [MariaDB](https://github.com/helm/charts/tree/master/stable/mariadb)
-- [MediaWiki](https://github.com/helm/charts/tree/master/stable/mediawiki)
-- [MongoDB](https://github.com/helm/charts/tree/master/stable/mongodb)
-- [Moodle](https://github.com/helm/charts/tree/master/stable/moodle)
-- [NATS](https://github.com/helm/charts/tree/master/stable/nats)
-- [Odoo](https://github.com/helm/charts/tree/master/stable/odoo)
-- [OpenCart](https://github.com/helm/charts/tree/master/stable/opencart)
-- [OrangeHRM](https://github.com/helm/charts/tree/master/stable/orangehrm)
-- [Osclass](https://github.com/helm/charts/tree/master/stable/osclass)
-- [OwnCloud](https://github.com/helm/charts/tree/master/stable/owncloud)
-- [Parse](https://github.com/helm/charts/tree/master/stable/parse)
-- [Phabricator](https://github.com/helm/charts/tree/master/stable/phabricator)
-- [phpBB](https://github.com/helm/charts/tree/master/stable/phpbb)
-- [phpMyAdmin](https://github.com/helm/charts/tree/master/stable/phpmyadmin)
-- [PostgreSQL](https://github.com/helm/charts/tree/master/stable/postgresql)
-- [PrestaShop](https://github.com/helm/charts/tree/master/stable/prestashop)
-- [RabbitMQ](https://github.com/helm/charts/tree/master/stable/rabbitmq)
-- [Redis](https://github.com/helm/charts/tree/master/stable/redis)
-- [Redmine](https://github.com/helm/charts/tree/master/stable/redmine)
-- [SuiteCRM](https://github.com/helm/charts/tree/master/stable/suitecrm)
-- [TestLink](https://github.com/helm/charts/tree/master/stable/testlink)
-- [WordPress](https://github.com/helm/charts/tree/master/stable/wordpress)
+## Charts
 
-## Bitnami charts
+This repository contains:
 
-- [Apache](https://github.com/bitnami/charts/tree/master/bitnami/apache)
-- [Apache Airflow](https://github.com/bitnami/charts/tree/master/bitnami/airflow)
-- [Apache Spark](https://github.com/bitnami/charts/tree/master/bitnami/spark)
-- [Cassandra](https://github.com/bitnami/charts/tree/master/bitnami/cassandra)
-- [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch)
-- [etcd](https://github.com/bitnami/charts/tree/master/bitnami/etcd)
-- [Fluentd](https://github.com/bitnami/charts/tree/master/bitnami/fluentd)
-- [Grafana](https://github.com/bitnami/charts/tree/master/bitnami/grafana)
-- [Harbor](https://github.com/bitnami/charts/tree/master/bitnami/harbor)
-- [HashiCorp Consul](https://github.com/bitnami/charts/tree/master/bitnami/consul)
-- [InfluxDB](https://github.com/bitnami/charts/tree/master/bitnami/influxdb)
-- [Jenkins](https://github.com/bitnami/charts/tree/master/bitnami/jenkins)
-- [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
-- [Kibana](https://github.com/bitnami/charts/tree/master/bitnami/kibana)
-- [Kubeapps](https://github.com/bitnami/charts/tree/master/bitnami/kubeapps)
-- [Magento](https://github.com/bitnami/charts/tree/master/bitnami/magento)
-- [Memcached](https://github.com/bitnami/charts/tree/master/bitnami/memcached)
-- [MariaDB Galera](https://github.com/bitnami/charts/tree/master/bitnami/mariadb-galera)
-- [Metrics Server](https://github.com/bitnami/charts/tree/master/bitnami/metrics-server)
-- [Minio](https://github.com/bitnami/charts/tree/master/bitnami/minio)
-- [MXNet](https://github.com/bitnami/charts/tree/master/bitnami/mxnet)
-- [MySQL](https://github.com/bitnami/charts/tree/master/bitnami/mysql)
-- [nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx)
-- [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller)
-- [NodeJS](https://github.com/bitnami/charts/tree/master/bitnami/node)
-- [PyTorch](https://github.com/bitnami/charts/tree/master/bitnami/pytorch)
-- [TensorFlow ResNet](https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet)
-- [Tomcat](https://github.com/bitnami/charts/tree/master/bitnami/tomcat)
-- [WildFly](https://github.com/bitnami/charts/tree/master/bitnami/wildfly)
-- [ZooKeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper)
+* [Upstreamed charts](./upstreamed) (contributed to [helm/charts](https://github.com/helm/charts))
+* [Bitnami charts](./bitnami)
 
 ## Before you begin
 

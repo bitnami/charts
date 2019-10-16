@@ -17,6 +17,11 @@ This chart bootstraps a [NGINX Open Source](https://github.com/bitnami/bitnami-d
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
+## Prerequisites
+
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
+
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:

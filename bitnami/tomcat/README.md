@@ -84,8 +84,11 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `ingress.enabled`                    | Enable the ingress controller                                                                                                                             | `false`                                                 |
 | `ingress.certManager`                | Add annotations for certManager                                                                                                                           | `false`                                                 |
 | `ingress.annotations`                | Annotations to set in the ingress controller                                                                                                              | -                                                       |
-| `ingress.hosts`                      | List of hostnames to be covered with the ingress                                                                                                          | `tomcat.local`                                          |
-| `ingress.tls`                        | List with TLS configuration for the ingress                                                                                                               | `hosts: tomcat.local, secretName: tomcat.local-tls`     |
+| `ingress.hosts[0].name`             | Hostname to your opencart installation                           | `tomcat.local`                                            |
+| `ingress.hosts[0].path`             | Path within the url structure                                 | `/`                                                      |
+| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                | `false`                                                  |
+| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                               | `nil`                                                  |
+| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                     | `tomcat.local-tls`                                 |
 | `affinity`                           | Map of node/pod affinities                                                                                                                                | `{}`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.

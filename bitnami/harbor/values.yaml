@@ -298,7 +298,7 @@ service:
     notarySecretName: ""
     # The common name used to generate the certificate, it's necessary
     # when the type isn't "ingress" and "secretName" is null
-    commonName: ""
+    commonName: "harbor.local"
   ingress:
     hosts:
       core: core.harbor.domain
