@@ -146,12 +146,19 @@ ingress:
   - name: tomcat.local
     path: /
 
-  ## The tls configuration for the ingress
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  tls:
-  - hosts:
-      - tomcat.local
-    secretName: tomcat.local-tls
+    ## Set this to true in order to enable TLS on the ingress record
+    tls: false
+
+    ## Optionally specify the TLS hosts for the ingress record
+    ## Useful when the Ingress controller supports www-redirection
+    ## If not specified, the above host name will be used
+    # tlsHosts:
+    # - www.tomcat.local
+    # - tomcat.local
+
+    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+    tlsSecret: tomcat.local-tls
+
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
