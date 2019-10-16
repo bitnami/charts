@@ -15,6 +15,12 @@ This chart bootstraps a [Fluentd](https://github.com/bitnami/bitnami-docker-flue
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+## Prerequisites
+
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
+- PV provisioner support in the underlying infrastructure
+
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
@@ -170,7 +176,7 @@ data:
       </labels>
     </source>
     {{- end }}
-    
+
     # Ignore fluentd own events
     <match fluent.**>
       @type null

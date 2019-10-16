@@ -20,6 +20,13 @@ This chart bootstraps a [kibana](https://github.com/bitnami/bitnami-docker-kiban
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+## Prerequisites
+
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
+- PV provisioner support in the underlying infrastructure
+- ReadWriteMany volumes for deployment scaling
+
 ## Installing the Chart
 
 This chart requires a Elasticsearch instance to work. The chart offers two options:
