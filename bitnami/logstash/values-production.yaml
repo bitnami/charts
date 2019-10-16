@@ -41,9 +41,15 @@ image:
 ##
 clusterDomain: cluster.local
 
+## Logstash configuration file name. It must match the name of the configuration file mounted as a configmap
+##
 configFileName: logstash.conf
+## Whether to enable the Logstash Monitoring API or not  Kubernetes cluster domain
+##
 enableMonitoringAPI: true
-monitoringAPIPort: 9090
+## Logstash Monitoring API Port
+##
+monitoringAPIPort: 9600
 
 ## An array to add extra environment variables
 ## For example:
