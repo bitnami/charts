@@ -1,7 +1,7 @@
 apiVersion: v1
 name: tomcat
-version: 6.0.0
-appVersion: 9.0.26
+version: 6.0.1
+appVersion: 9.0.27
 description: Chart for Apache Tomcat
 keywords:
 - tomcat
