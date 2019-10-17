@@ -5,7 +5,7 @@ metadata:
   name: {{ include "logstash.fullname" . }}-metrics
   labels: {{ include "logstash.labels" . | nindent 4 }}
   {{- if .Values.metrics.service.annotations }}
-  annotations: {{- tpl (toYaml .Values.metrics.service.annotations) $ | nindent 4 }}
+  annotations: {{- include "logstash.tplValue" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}

@@ -17,7 +17,7 @@ spec:
     - host: {{ .name }}
       http:
         paths:
-          - path: /
+          - path: {{ default "/" .path }}
             backend:
               serviceName: {{ include "logstash.fullname" $ }}
               servicePort: http

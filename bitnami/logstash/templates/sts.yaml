@@ -40,11 +40,11 @@ spec:
         {{- if .Values.nodeAffinity }}
         nodeAffinity: {{- toYaml .Values.nodeAffinity | nindent 10 }}
         {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector: {{- tpl (toYaml .) $ | nindent 8 }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "logstash.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations: {{- tpl (toYaml .) $ | nindent 8 }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "logstash.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
@@ -70,7 +70,7 @@ spec:
             - name: LOGSTASH_API_PORT_NUMBER
               value: {{ .Values.monitoringAPIPort | quote }}
             {{- if .Values.extraEnvVars }}
-            {{- tpl (toYaml .Values.extraEnvVars) $ | nindent 12 }}
+            {{- include "logstash.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if .Values.containerPorts }}
           ports: {{ toYaml .Values.containerPorts | nindent 12 }}

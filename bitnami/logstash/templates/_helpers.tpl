@@ -142,6 +142,19 @@ Return the Logstash configuration configmap.
 {{- end -}}
 
 {{/*
+Renders a value that contains template.
+Usage:
+{{ include "logstash.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "logstash.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "logstash.checkRollingTags" -}}

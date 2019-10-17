@@ -14,7 +14,7 @@ To access Logstash from outside the cluster execute the following commands:
 {{- if .Values.ingress.enabled }}
 {{- $ingressHost := first .Values.ingress.hosts }}
 
-  You should be able to access your new InfluxDB server(s) through:
+  You should be able to access your new Logstash server(s) through:
 
     {{- range .Values.ingress.hosts }}
     {{ if .tls }}https{{- else }}http{{ end }}://{{ .name }}
