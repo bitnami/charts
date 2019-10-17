@@ -21,13 +21,23 @@ spec:
   - host: {{ .name }}
     http:
       paths:
-      - path: {{ default "/" .path }}
-        backend:
-          serviceName: "{{ template "airflow.fullname" $ }}"
-          servicePort: http
+        - path: {{ default "/" .path }}
+          backend:
+            serviceName: {{ template "airflow.fullname" $ }}
+            servicePort: http
   {{- end }}
-  {{- if .Values.ingress.tls }}
   tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
+  {{- range .Values.ingress.hosts }}
+  {{- if .tls }}
+  - hosts:
+  {{- if .tlsHosts }}
+  {{- range $host := .tlsHosts }}
+    - {{ $host }}
+  {{- end }}
+  {{- else }}
+    - {{ .name }}
+  {{- end }}
+    secretName: {{ .tlsSecret }}
+  {{- end }}
   {{- end }}
 {{- end }}
