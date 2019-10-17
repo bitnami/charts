@@ -1,0 +1,46 @@
+{{- if and (or .Values.metrics.kafka.enabled .Values.metrics.jmx.enabled) .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "kafka.fullname" . }}
+  {{- if .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  {{- end }}
+  labels:
+    app.kubernetes.io/name: {{ template "kafka.name" . }}
+    helm.sh/chart: {{ template "kafka.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: kafka
+    {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "kafka.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: kafka
+  endpoints:
+  {{- if .Values.metrics.kafka.enabled }}
+  - port: {{ .Values.metrics.kafka.exporterPort }}
+    {{- if .Values.metrics.serviceMonitor.interval }}
+    interval: {{ .Values.metrics.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.metrics.jmx.enabled }}
+  - port: {{ .Values.metrics.jmx.exporterPort }}
+    {{- if .Values.metrics.serviceMonitor.interval }}
+    interval: {{ .Values.metrics.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+    {{- end }}
+  {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+{{- end }}
