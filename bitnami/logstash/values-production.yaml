@@ -113,7 +113,7 @@ containerPorts:
     containerPort: 8080
     protocol: TCP
   - name: monitoring
-    containerPort: 9090
+    containerPort: 9600
     protocol: TCP
 
 ## Number of Logstash replicas to deploy
