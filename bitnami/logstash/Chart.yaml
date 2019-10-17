@@ -5,13 +5,13 @@ engine: gotpl
 home: https://www.elastic.co/products/logstash
 icon: https://bitnami.com/assets/stacks/logstash/img/logstash-stack-220x234.png
 keywords:
-- logstash
-- logging
-- elk
+  - logstash
+  - logging
+  - elk
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 name: logstash
 sources:
-- https://github.com/bitnami/bitnami-docker-logstash
+  - https://github.com/bitnami/bitnami-docker-logstash
 version: 0.1.0
