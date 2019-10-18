@@ -28,6 +28,11 @@ for chartName in $( cut -d'/' -f1,2 <<< "$filesToBePushed" | uniq ); do
             printf '\033[0;31m\U1F6AB helm template %s failed. Push cancelled.\n\n\033[0m' "$chartPath"
             failed=1
         fi
+
+        # Verify that the schema is still valid
+        if [[ -f "${chartPath}/values.schema.json" ]]; then
+            helm3 install --generate-name --dry-run $chartPath >> /dev/null
+        fi
     fi
 done
 
