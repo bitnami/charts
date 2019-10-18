@@ -76,6 +76,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `cloneHtdocsFromGit.interval`    | Interval for sidecar container pull from the repository | `60`                                                         |
 | `podAnnotations`                 | Pod annotations                                         | `{}`                                                         |
 | `ingress.enabled`                | Enable ingress controller resource                      | `false`                                                      |
+| `ingress.hostname`               | Default host for the ingress resource                   | `example.local`                                              |
 | `ingress.certManager`            | Add annotations for cert-manager                        | `false`                                                      |
 | `ingress.annotations`            | Ingress annotations                                     | `[]`                                                         |
 | `ingress.hosts[0].name`          | Hostname to your Apache installation                    | `example.local`                                              |
