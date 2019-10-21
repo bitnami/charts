@@ -451,4 +451,4 @@ externalZookeeper:
   ## This value is only used when zookeeper.enabled is set to false
 
   ## Server or list of external zookeeper servers to use.
-  # servers:
+  servers:
