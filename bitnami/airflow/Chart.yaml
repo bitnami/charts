@@ -1,6 +1,6 @@
 apiVersion: v1
 name: airflow
-version: 4.0.0
+version: 4.0.1
 appVersion: 1.10.5
 description: Apache Airflow is a platform to programmatically author, schedule and monitor workflows.
 keywords:
