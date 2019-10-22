@@ -187,8 +187,10 @@ spec:
           value: {{ .Values.logRetentionCheckIntervalMs | quote }}
         - name: KAFKA_CFG_LOG_RETENTION_HOURS
           value: {{ .Values.logRetentionHours | quote }}
+        {{- if .Values.logMessageFormatVersion }}
         - name: KAFKA_CFG_LOG_MESSAGE_FORMAT_VERSION
           value: {{ .Values.logMessageFormatVersion | quote }}
+        {{- end }}
         - name: KAFKA_CFG_MESSAGE_MAX_BYTES
           value: {{ .Values.maxMessageBytes | replace "_" "" | quote }}
         - name: KAFKA_CFG_LOG_SEGMENT_BYTES
