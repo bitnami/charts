@@ -25,6 +25,7 @@ rules:
   - list
   - update
   - watch
+  - delete
 - apiGroups:
   - batch
   resources:
