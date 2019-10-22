@@ -142,6 +142,12 @@ $ helm install --name my-release -f values.yaml bitnami/fluentd
 
 ## Configuration and installation details
 
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration and horizontal scaling
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
@@ -158,13 +164,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
-To horizontally scale this chart once it has been deployed you can upgrade the deployment using a new value for the `aggregator.replicaCount` parameter.
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `aggregator.replicaCount` parameter.
 
 ### Forwarding the logs to another service
 
@@ -244,19 +244,12 @@ data:
     </match>
 ```
 
-Create the `ConfigMap` resource:
+As an example, using the above configmap, you should specify the required parameters when upgrading or installing the chart:
 
 ```console
-$ kubectl create -f configmap.yaml
-```
-
-And then deploy the Fluentd chart with your configuration file and your Elasticsearch host and port:
-
-```console
-$ helm install bitnami/fluentd \
-    --set aggregator.configMap=elasticsearch-output \
-    --set aggregator.extraEnv[0].name=ELASTICSEARCH_HOST \
-    --set aggregator.extraEnv[0].value=your-ip-here \
-    --set aggregator.extraEnv[1].name=ELASTICSEARCH_PORT \
-    --set aggregator.extraEnv[1].value=your-port-here \
+aggregator.configMap=elasticsearch-output
+aggregator.extraEnv[0].name=ELASTICSEARCH_HOST
+aggregator.extraEnv[0].value=your-ip-here
+aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
+aggregator.extraEnv[1].value=your-port-here
 ```
