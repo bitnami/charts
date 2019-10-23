@@ -152,10 +152,6 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/grafana
-```
-
 - Enable ingress controller
 
 ```diff
