@@ -63,7 +63,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the kibana chart and their default values.
 
@@ -164,135 +164,17 @@ $ helm install --name my-release -f values.yaml bitnami/kibana
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-### Using custom configuration
+## Configuration and installation details
 
-The Bitnami Kibana chart supports using custom configuration settings. For example, to mount a custom `kibana.yml` you can create a ConfigMap like the following:
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: myconfig
-data:
-  kibana.yml: |-
-    # Raw text of the file
-```
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
-And now you need to pass the ConfigMap name, to the corresponding parameter:
-
-```console
-$ helm install bitnami/kibana --set configurationCM=myconfig
-```
-
-An alternative is to provide extra configuration settings to the default kibana.yml that the chart deploys. This is done using the `extraConfiguration` value:
-
-```yaml
-extraConfiguration:
-  "server.maxPayloadBytes": 1048576
-  "server.pingTimeout": 1500
-```
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: ELASTICSEARCH_VERSION
-    value: 6
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Using custom init scripts
-
-For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts.
-
-```console
-$ kubectl create configmap special-scripts \
-  --from-file=01_install_kibana_theme.sh \
-  --from-file=02_add_special_agent.sh
-
-$ kubectl create secret generic special-scripts-sensitive \
-  --from-file=03_install_company_certificates.sh
-```
-
-Then use the `initScriptsCM` and `initScriptsSecret` values.
-
-```console
-$ helm install bitnami/kibana --name my-release \
-  --set elasticsearch.enabled=false \
- --set elasticsearch.external.hosts[0]=elasticsearch-host \
- --set elasticsearch.external.port=9200 \
- --set initScriptsCM=special-scripts \
- --set initScriptsSecret=special-scripts-sensitive
-```
-
-### Installing plugins
-
-The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` value:
-
-```console
-$ helm install bitnami/kibana --name my-release \
-  --set elasticsearch.enabled=false \
-  --set elasticsearch.external.hosts[0]=elasticsearch-host \
-  --set elasticsearch.external.port=9200 \
-  --set plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
-```
-
-> **NOTE** Make sure that the plugin is available for the Kibana version you are deploying
-
-### Importing saved objects
-
-If you have visualizations and dashboards (in NDJSON format) that you want to import to Kibana. You can create a ConfigMap that includes them.
-
-```console
-$ kubectl create configmap my-import --from-file=my-exported-data.ndjson
-```
-
-Then install the chart with the `savedObjects.configmap` value:
-
-```console
-helm install bitnami/kibana --name my-release \
-  --set savedObjects.configmap=my-import
-```
-
-Alternatively, if it is available via URL, you can install the chart as follows
-
-```console
-helm install bitnami/kibana --name my-release \
-  --set savedObjects.urls[0]=www.my-site.com/import.ndjson
-```
-
-## Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as Kibana (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-   containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-   containerPort: 1234
-```
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 ```console
 $ helm install --name my-release -f ./values-production.yaml --set elasticsearch.enabled=false --set elasticsearch.external.hosts[0]=elasticsearch-host --set elasticsearch.external.port=9200 bitnami/kibana
@@ -323,13 +205,106 @@ $ helm install --name my-release -f ./values-production.yaml --set elasticsearch
 + metrics.enabled: true
 ```
 
+### Using custom configuration
+
+The Bitnami Kibana chart supports using custom configuration settings. For example, to mount a custom `kibana.yml` you can create a ConfigMap like the following:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfig
+data:
+  kibana.yml: |-
+    # Raw text of the file
+```
+
+And now you need to pass the ConfigMap name, to the corresponding parameter: `configurationCM=myconfig`
+
+An alternative is to provide extra configuration settings to the default kibana.yml that the chart deploys. This is done using the `extraConfiguration` value:
+
+```yaml
+extraConfiguration:
+  "server.maxPayloadBytes": 1048576
+  "server.pingTimeout": 1500
+```
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: ELASTICSEARCH_VERSION
+    value: 6
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Using custom init scripts
+
+For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the `initScriptsCM` and `initScriptsSecret` values.
+
+```console
+elasticsearch.enabled=false
+elasticsearch.external.hosts[0]=elasticsearch-host
+elasticsearch.external.port=9200
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
+```
+
+### Installing plugins
+
+The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` value:
+
+```console
+elasticsearch.enabled=false
+elasticsearch.external.hosts[0]=elasticsearch-host
+elasticsearch.external.port=9200
+plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
+```
+
+> **NOTE** Make sure that the plugin is available for the Kibana version you are deploying
+
+### Importing saved objects
+
+If you have visualizations and dashboards (in NDJSON format) that you want to import to Kibana. You can create a ConfigMap that includes them and then install the chart with the `savedObjects.configmap` value: `savedObjects.configmap=my-import`
+
+Alternatively, if it is available via URL, you can install the chart as follows: `savedObjects.urls[0]=www.my-site.com/import.ndjson`
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as Kibana (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+```
+
 ## Persistence
 
 The [Bitnami Kibana](https://github.com/bitnami/bitnami-docker-kibana) image can persist data. If enabled, the persisted path is `/bitnami/kibana` by default.
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
-## Adding extra volumes
+### Adding extra volumes
 
 The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets or configmaps) by using the `extraVolumes` and `extraVolumeMounts` property. This can be combined with advanced operations like adding extra init containers and sidecars.
 
@@ -341,9 +316,3 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.

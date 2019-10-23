@@ -54,7 +54,7 @@ $ helm delete --purge my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following table lists the configurable parameters of the MariaDB Galera chart and their default values.
 
@@ -179,52 +179,17 @@ $ helm install --name my-release -f values.yaml bitnami/mariadb-galera
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-### LDAP
+## Configuration and installation details
 
-LDAP support can be enabled in the chart by specifying the `ldap.` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
-- `ldap.enabled`: Enable LDAP support. Defaults to `false`.
-- `ldap.uri`: LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`. No defaults.
-- `ldap.base`: LDAP base DN. No defaults.
-- `ldap.binddn`: LDAP bind DN. No defaults.
-- `ldap.bindpw`: LDAP bind password. No defaults.
-- `ldap.bslookup`: LDAP base lookup. No defaults.
-- `ldap.nss_initgroups_ignoreusers`: LDAP ignored users. `root,nslcd`.
-- `ldap.scope`: LDAP search scope. No defaults.
-- `ldap.tls_reqcert`: LDAP TLS check on server certificates. No defaults.
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
-For example:
-
-```bash
-$ helm install --name my-release bitnami/mariadb-galera \
-    --set ldap.enabled="true" \
-    --set ldap.uri="ldap://my_ldap_server" \
-    --set ldap.base="dc=example,dc=org" \
-    --set ldap.binddn="cn=admin,dc=example,dc=org" \
-    --set ldap.bindpw="admin" \
-    --set ldap.bslookup="ou=group-ok,dc=example,dc=org" \
-    --set ldap.nss_initgroups_ignoreusers="root,nslcd" \
-    --set ldap.scope="sub" \
-    --set ldap.tls_reqcert="demand"
-```
-
-Next, login to the MariaDB server using the `mysql` client and add the PAM authenticated LDAP users.
-
-For example,
-
-```mysql
-CREATE USER 'bitnami'@'localhost' IDENTIFIED VIA pam USING 'mariadb';
-```
-
-With the above example, when the `bitnami` user attempts to login to the MariaDB server, he/she will be authenticated against the LDAP server.
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/mariadb-galera
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Force users to specify a password:
 
@@ -244,13 +209,45 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/mariadb-gal
 + metrics.enabled: true
 ```
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### LDAP
 
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+LDAP support can be enabled in the chart by specifying the `ldap.` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+- `ldap.enabled`: Enable LDAP support. Defaults to `false`.
+- `ldap.uri`: LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`. No defaults.
+- `ldap.base`: LDAP base DN. No defaults.
+- `ldap.binddn`: LDAP bind DN. No defaults.
+- `ldap.bindpw`: LDAP bind password. No defaults.
+- `ldap.bslookup`: LDAP base lookup. No defaults.
+- `ldap.nss_initgroups_ignoreusers`: LDAP ignored users. `root,nslcd`.
+- `ldap.scope`: LDAP search scope. No defaults.
+- `ldap.tls_reqcert`: LDAP TLS check on server certificates. No defaults.
 
-## Initialize a fresh instance
+For example:
+
+```console
+ldap.enabled="true"
+ldap.uri="ldap://my_ldap_server"
+ldap.base="dc=example,dc=org"
+ldap.binddn="cn=admin,dc=example,dc=org"
+ldap.bindpw="admin"
+ldap.bslookup="ou=group-ok,dc=example,dc=org"
+ldap.nss_initgroups_ignoreusers="root,nslcd"
+ldap.scope="sub"
+ldap.tls_reqcert="demand"
+```
+
+Next, login to the MariaDB server using the `mysql` client and add the PAM authenticated LDAP users.
+
+For example,
+
+```mysql
+CREATE USER 'bitnami'@'localhost' IDENTIFIED VIA pam USING 'mariadb';
+```
+
+With the above example, when the `bitnami` user attempts to login to the MariaDB server, he/she will be authenticated against the LDAP server.
+
+### Initialize a fresh instance
 
 The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
 
@@ -259,12 +256,6 @@ Alternatively, you can specify custom scripts using the `initdbScripts` paramete
 In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsConfigMap` parameter. Note that this will override the two previous options.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
-
-## Persistence
-
-The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
-
-The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
 
 ## Extra Init Containers
 
@@ -307,6 +298,12 @@ extraContainers:
       cpu: 50m
       memory: 10Mi
 ```
+
+## Persistence
+
+The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
+
+The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
 
 ## Upgrading
 
