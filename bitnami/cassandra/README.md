@@ -223,10 +223,6 @@ The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) ima
 initDBConfigMap=init-db
 ```
 
-### Using a custom Cassandra image
-
-This chart uses the [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image by default. In case you want to use a different image, you can redefine the container entrypoint by setting the `entrypoint` and `cmd` values.
-
 ## Persistence
 
 The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image stores the cassandra data at the `/bitnami/cassandra` path of the container.
