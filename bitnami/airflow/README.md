@@ -42,7 +42,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the Kafka chart and their default values.
 
@@ -170,13 +170,17 @@ $ helm install --name my-release -f values.yaml bitnami/airflow
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/airflow
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - URL used to access to airflow web ui:
 ```diff
@@ -202,45 +206,38 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/airflow
 + ingress.enabled: true
 ```
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-## Persistence
-
-The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
-
-## Generate a Fernet key
+### Generate a Fernet key
 
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
 
 Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
 
-## Load DAG files
+### Load DAG files
 
 There are three different ways to load your custom DAG files into the Airflow chart. All of them are compatible so you can use more than one at the same time.
 
-### Option 1: Load locally from the `files` folder
+#### Option 1: Load locally from the `files` folder
 
-If you plan to deploy the chart from your filesystem, you can copy your DAG files inside the `files/dags` directory. A config map will be created with those files and it will be mounted in all airflow nodes..
+If you plan to deploy the chart from your filesystem, you can copy your DAG files inside the `files/dags` directory. A config map will be created with those files and it will be mounted in all airflow nodes.
 
-### Option 2: Specify an existing config map
+#### Option 2: Specify an existing config map
 
-You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `--set airflow.dagsConfigMap`.
+You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `airflow.dagsConfigMap`.
 
-### Option 3: Get your DAG files from a git repository
+#### Option 3: Get your DAG files from a git repository
 
 You can store all your DAG files on a GitHub repository and then clone to the Airflow pods with an initContainer. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
 
 ```console
-helm install --name my-release bitnami/airflow \
-             --set airflow.cloneDagFilesFromGit.enabled=true \
-             --set airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY \
-             --set airflow.cloneDagFilesFromGit.branch=master
-             --set airflow.cloneDagFilesFromGit.interval=60
+airflow.cloneDagFilesFromGit.enabled=true
+airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
+airflow.cloneDagFilesFromGit.branch=master
+airflow.cloneDagFilesFromGit.interval=60
 ```
+
+## Persistence
+
+The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
 
 ## Notable changes
 

@@ -44,7 +44,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the cassandra chart and their default values.
 
@@ -154,13 +154,17 @@ $ helm install --name my-release -f values.yaml bitnami/cassandra
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/cassandra
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Number of Cassandra and seed nodes:
 ```diff
@@ -194,11 +198,34 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/cassandra
 + metrics.enabled: true
 ```
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### Enable TLS for Cassandra
 
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+You can enable TLS between client and server and between nodes. In order to do so, you need to set the following values:
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+ * For internode cluster encryption, set `cluster.internodeEncryption` to a value different from `none`. Available values are `all`, `dc` or `rack`.
+ * For client-server encryption, set `cluster.clientEncryption` to true.
+
+In addition to this, you **must** create a secret containing the *keystore* and *truststore* certificates and their corresponding protection passwords. Then, set the `tlsEncryptionSecretName`  when deploying the chart.
+
+You can create the secret (named for example `cassandra-tls`) using `--from-file=./keystore`, `--from-file=./truststore`, `--from-literal=keystore-password=PUT_YOUR_KEYSTORE_PASSWORD` and `--from-literal=truststore-password=PUT_YOUR_TRUSTSTORE_PASSWORD` options, assuming you have your certificates in your working directory (replace the PUT_YOUR_KEYSTORE_PASSWORD and PUT_YOUR_TRUSTSTORE_PASSWORD placeholders).To deploy Cassandra with TLS you can use those parameters:
+
+```console
+cluster.internodeEncryption=all
+cluster.clientEncryption=true
+tlsEncryptionSecretName=cassandra-tls
+```
+
+### Initializing the database
+
+The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image allows having initialization scripts mounted in `/docker-entrypoint.initdb`. This is done in the chart by adding files in the `files/docker-entrypoint-initdb.d` folder (in order to do so, clone this chart) or by setting the `initDBConfigMap` value with a `ConfigMap` (named, for example, `init-db`) that includes the necessary `sh` or `cql` scripts:
+
+```console
+initDBConfigMap=init-db
+```
+
+### Using a custom Cassandra image
+
+This chart uses the [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image by default. In case you want to use a different image, you can redefine the container entrypoint by setting the `entrypoint` and `cmd` values.
 
 ## Persistence
 
@@ -215,41 +242,6 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-## Enable TLS for Cassandra
-
-You can enable TLS between client and server and between nodes. In order to do so, you need to set the following values:
-
- * For internode cluster encryption, set `cluster.internodeEncryption` to a value different from `none`. Available values are `all`, `dc` or `rack`.
- * For client-server encryption, set `cluster.clientEncryption` to true.
-
-In addition to this, you **must** create a secret containing the *keystore* and *truststore* certificates and their corresponding protection passwords. Then, set the `tlsEncryptionSecretName`  when deploying the chart.
-
-You can create the secret with this command assuming you have your certificates in your working directory (replace the PUT_YOUR_KEYSTORE_PASSWORD and PUT_YOUR_TRUSTSTORE_PASSWORD placeholders):
-
-```console
-kubectl create secret generic casssandra-tls --from-file=./keystore --from-file=./truststore --from-literal=keystore-password=PUT_YOUR_KEYSTORE_PASSWORD --from-literal=truststore-password=PUT_YOUR_TRUSTSTORE_PASSWORD
-```
-
-As an example of Cassandra installed with TLS you can use this command:
-
-```console
-helm install --name my-release bitnami/cassandra --set cluster.internodeEncryption=all \
-             --set cluster.clientEncryption=true --set tlsEncryptionSecretName=cassandra-tls \
-```
-
-## Initializing the database
-
-The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image allows having initialization scripts mounted in `/docker-entrypoint.initdb`. This is done in the chart by adding files in the `files/docker-entrypoint-initdb.d` folder (in order to do so, clone this chart) or by setting the `initDBConfigMap` value with a `ConfigMap` that includes the necessary `sh` or `cql` scripts:
-
-```bash
-kubectl create configmap init-db --from-file=path/to/scripts
-helm install bitnami/cassandra --set initDBConfigMap=init-db
-```
-
-## Using a custom Cassandra image
-
-This chart uses the [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image by default. In case you want to use a different image, you can redefine the container entrypoint by setting the `entrypoint` and `cmd` values.
 
 ## Upgrade
 
