@@ -186,11 +186,11 @@ ingress:
 
 > TIP: you may want to install the osba chart setting the `modules.minStability=EXPERIMENTAL` to see all the available services.
 >
->            --set azure.subscriptionId=$AZURE_SUBSCRIPTION_ID
->            --set azure.tenantId=$AZURE_TENANT_ID
->            --set azure.clientId=$AZURE_CLIENT_ID
->            --set azure.clientSecret=$AZURE_CLIENT_SECRET
->            --set modules.minStability=EXPERIMENTAL
+>            azure.subscriptionId=$AZURE_SUBSCRIPTION_ID
+>            azure.tenantId=$AZURE_TENANT_ID
+>            azure.clientId=$AZURE_CLIENT_ID
+>            azure.clientSecret=$AZURE_CLIENT_SECRET
+>            modules.minStability=EXPERIMENTAL
 
 3. Create and deploy a ServiceInstance to provision a database server in Azure cloud.
 
