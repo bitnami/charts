@@ -30,7 +30,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/kafka
 ```
 
-These commands deploy Kafka on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Kafka on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -44,7 +44,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the Kafka chart and their default values.
 
@@ -193,13 +193,17 @@ $ helm install --name my-release -f values.yaml bitnami/kafka
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Number of Kafka nodes:
 ```diff
@@ -260,25 +264,14 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/kafka
 + zookeeper.metrics.enabled: true
 ```
 
-To horizontally scale this chart, first download the [values-production.yaml](values-production.yaml) file to your local folder, then:
+To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `replicaCount` parameter.
 
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/kafka
-$ kubectl scale statefulset my-kafka-slave --replicas=3
-```
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-## Setting custom parameters
+### Setting custom parameters
 
 Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`.
 In order to pass custom environment variables use the `extraEnvVars` property.
 
-## Enable security for Kafka and Zookeeper
+### Enable security for Kafka and Zookeeper
 
 If you enabled the authentication for Kafka, the SASL_SSL listener will be configured with your provided inputs. In particular you can set the following pair of credentials:
 
@@ -288,32 +281,32 @@ If you enabled the authentication for Kafka, the SASL_SSL listener will be confi
 
 In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.trustore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
 
-You can create the secret with this command assuming you have your certificates in your working directory:
+You can create the secret and deploy the chart with authentication using the following parameters:
 
 ```console
-kubectl create secret generic kafka-certificates --from-file=./kafka.keystore.jks --from-file=./kafka.truststore.jks
+auth.enabled=true
+auth.brokerUser=brokerUser
+auth.brokerPassword=brokerPassword
+auth.interBrokerUser=interBrokerUser
+auth.interBrokerPassword=interBrokerPassword
+auth.zookeeperUser=zookeeperUser
+auth.zookeeperPassword=zookeeperPassword
+zookeeper.auth.enabled=true
+zookeeper.auth.serverUsers=zookeeperUser
+zookeeper.auth.serverPasswords=zookeeperPassword
+zookeeper.auth.clientUser=zookeeperUser
+zookeeper.auth.clientPassword=zookeeperPassword
+auth.certificatesSecret=kafka-certificates
 ```
 
-As an example of Kafka installed with authentication you can use this command:
-
-```console
-helm install --name my-release bitnami/kafka --set auth.enabled=true \
-             --set auth.brokerUser=brokerUser --set auth.brokerPassword=brokerPassword \
-             --set auth.interBrokerUser=interBrokerUser --set auth.interBrokerPassword=interBrokerPassword \
-             --set auth.zookeeperUser=zookeeperUser --set auth.zookeeperPassword=zookeeperPassword \
-             --set zookeeper.auth.enabled=true --set zookeeper.auth.serverUsers=zookeeperUser --set zookeeper.auth.serverPasswords=zookeeperPassword \
-             --set zookeeper.auth.clientUser=zookeeperUser --set zookeeper.auth.clientPassword=zookeeperPassword \
-             --set auth.certificatesSecret=kafka-certificates
-```
-
-> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `--set auth.certificatesPassword` option to provide your password.
+> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.certificatesPassword` option to provide your password.
 
 ## Persistence
 
 The [Bitnami Kafka](https://github.com/bitnami/bitnami-docker-kafka) image stores the Kafka data at the `/bitnami/kafka` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Adjust permissions of persistent volume mountpoint
 

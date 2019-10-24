@@ -2,7 +2,7 @@
 
 [Node](https://www.nodejs.org) Event-driven I/O server-side JavaScript environment based on V8.
 
-## TL;DR
+## TL;DR;
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -33,7 +33,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/node
 ```
 
-These commands deploy Node.js on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
+These commands deploy Node.js on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
 
 Due that the Helm Chart clones the application on the /app volume while the container is initializing, a persistent volume is not required.
 
@@ -49,7 +49,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following table lists the configurable parameters of the Node chart and their default values.
 
@@ -128,51 +128,27 @@ $ helm install --name my-release -f values.yaml bitnami/node
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-## Persistence
+### Set up an Ingress controller
 
-The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores the Node application and configurations at the `/app`  path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-## Set up an Ingress controller
-
-First install the nginx-ingress controller via helm:
+First install the nginx-ingress controller and then deploy the node helm chart with the following parameters:
 
 ```console
-$ helm install stable/nginx-ingress
-```
-
-Now deploy the node helm chart:
-
-```console
-$ helm install --name my-release bitnami/node --set ingress.enabled=true,ingress.host=example.com,service.type=ClusterIP
+ingress.enabled=true
+ingress.host=example.com
+service.type=ClusterIP
 ```
 
 ### Configure TLS termination for your ingress controller
 
-You must manually create a secret containing the certificate and key for your domain. You can do it with this command:
-
-```console
-$ kubectl create secret tls my-tls-secret --cert=path/to/file.cert --key=path/to/file.key
-```
-
-Then ensure you deploy the Helm chart with the following ingress configuration:
+You must manually create a secret containing the certificate and key for your domain. Then ensure you deploy the Helm chart with the following ingress configuration:
 
 ```yaml
 ingress:
@@ -186,12 +162,16 @@ ingress:
         - example.com
 ```
 
-## Connect your application to an already existing database
+### Connect your application to an already existing database
 
-1. Create a secret containing your database credentials:
+1. Create a secret containing your database credentials (named `my-database-secret` as example), you can use the following options (set with `--from-literal`) to create the secret:
 
   ```console
-  $ kubectl create secret generic my-database-secret --from-literal=host=YOUR_DATABASE_HOST --from-literal=port=YOUR_DATABASE_PORT --from-literal=username=YOUR_DATABASE_USER  --from-literal=password=YOUR_DATABASE_PASSWORD --from-literal=database=YOUR_DATABASE_NAME
+  host=YOUR_DATABASE_HOST
+  port=YOUR_DATABASE_PORT
+  username=YOUR_DATABASE_USER
+  password=YOUR_DATABASE_PASSWORD
+  database=YOUR_DATABASE_NAME
   ```
 
   `YOUR_DATABASE_HOST`, `YOUR_DATABASE_PORT`, `YOUR_DATABASE_USER`, `YOUR_DATABASE_PASSWORD`, and `YOUR_DATABASE_NAME` are placeholders that must be replaced with correct values.
@@ -199,22 +179,22 @@ ingress:
 2. Deploy the node chart specifying the secret name
 
   ```console
-  $ helm install --name node-app --set mongodb.install=false,externaldb.secretName=my-database-secret bitnami/node
+  mongodb.install=false
+  externaldb.secretName=my-database-secret
   ```
 
-## Provision a database using the Open Service Broker for Azure
+### Provision a database using the Open Service Broker for Azure
 
 1. Install Service Catalog in your Kubernetes cluster following [this instructions](https://kubernetes.io/docs/tasks/service-catalog/install-service-catalog-using-helm/)
 2. Install the Open Service Broker for Azure in your Kubernetes cluster following [this instructions](https://github.com/Azure/open-service-broker-azure/tree/master/contrib/k8s/charts/open-service-broker-azure)
 
 > TIP: you may want to install the osba chart setting the `modules.minStability=EXPERIMENTAL` to see all the available services.
 >
->     $ helm install azure/open-service-broker-azure --name osba --namespace osba \
->            --set azure.subscriptionId=$AZURE_SUBSCRIPTION_ID \
->            --set azure.tenantId=$AZURE_TENANT_ID \
->            --set azure.clientId=$AZURE_CLIENT_ID \
->            --set azure.clientSecret=$AZURE_CLIENT_SECRET \
->            --set modules.minStability=EXPERIMENTAL
+>            azure.subscriptionId=$AZURE_SUBSCRIPTION_ID
+>            azure.tenantId=$AZURE_TENANT_ID
+>            azure.clientId=$AZURE_CLIENT_ID
+>            azure.clientSecret=$AZURE_CLIENT_SECRET
+>            modules.minStability=EXPERIMENTAL
 
 3. Create and deploy a ServiceInstance to provision a database server in Azure cloud.
 
@@ -238,14 +218,12 @@ ingress:
 
   Please update the `YOUR_AZURE_LOCATION` placeholder in the above example.
 
-  ```command
-  $ kubectl create -f mongodb-service-instance.yml
-  ```
-
 4. Deploy the helm chart:
 
     ```command
-    $ helm install --name node-app --set mongodb.install=false,externaldb.broker.serviceInstanceName=azure-mongodb-instance,externaldb.ssl=true bitnami/node
+    mongodb.install=false
+    externaldb.broker.serviceInstanceName=azure-mongodb-instance
+    externaldb.ssl=true
     ```
 
 Once the instance has been provisioned in Azure, a new secret should have been automatically created with the connection parameters for your application.
@@ -256,6 +234,22 @@ Deploying the helm chart enabling the Azure external database makes the followin
 - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
+
+## Persistence
+
+The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores the Node application and configurations at the `/app`  path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Notable changes
 

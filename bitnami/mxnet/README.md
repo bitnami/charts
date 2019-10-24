@@ -31,7 +31,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/mxnet
 ```
 
-These commands deploy MXNet on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured.
+These commands deploy MXNet on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,7 +45,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following table lists the configurable parameters of the MinIO chart and their default values.
 
@@ -139,13 +139,17 @@ $ helm install --name my-release -f values.yaml bitnami/mxnet
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/mxnet
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Run MXNet in distributed mode:
 ```diff
@@ -165,13 +169,7 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/mxnet
 + workerCount: 4
 ```
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-## Loading your files
+### Loading your files
 
 The MXNet chart supports three different ways to load your files. In order of priority, they are:
 
@@ -181,54 +179,37 @@ The MXNet chart supports three different ways to load your files. In order of pr
 
 This means that if you specify a config map with your files, it won't look for the `files/` directory nor the git repository.
 
-In order to use use an existing config map:
+In order to use use an existing config map you can set the `configMap=my-config-map` parameter.
+
+To load your files from the `files/` directory you don't have to set any option. Just copy your files inside and don't specify a `ConfigMap`.
+
+Finally, if you want to clone a git repository you can use the following parameters:
 
 ```console
-$ helm install --name my-release \
-  --set configMap=my-config-map \
-  bitnami/mxnet
-```
-
-To load your files from the `files/` directory you don't have to set any option. Just copy your files inside and don't specify a `ConfigMap`:
-
-```console
-$ helm install --name my-release \
-  bitnami/mxnet
-```
-
-Finally, if you want to clone a git repository:
-
-```console
-$ helm install --name my-release \
-  --set cloneFilesFromGit.enabled=true \
-  --set cloneFilesFromGit.repository=https://github.com/my-user/my-repo \
-  --set cloneFilesFromGit.revision=master \
-  bitnami/mxnet
+cloneFilesFromGit.enabled=true
+cloneFilesFromGit.repository=https://github.com/my-user/my-repo
+cloneFilesFromGit.revision=master
 ```
 
 In case you want to add a file that includes sensitive information, pass a secret object using the `existingSecret` parameter. All the files in the secret will be mounted in the `/secrets` folder.
 
 ### Distributed training example
 
-We will use the gluon example from the [MXNet official repository](https://github.com/apache/incubator-mxnet/tree/master/example/gluon). Launch it with the following command:
+We will use the gluon example from the [MXNet official repository](https://github.com/apache/incubator-mxnet/tree/master/example/gluon). Launch it with the following values:
 
 ```console
-$ helm install --name my-release \
-  --set mode=distributed \
-  --set cloneFilesFromGit.enabled=true \
-  --set cloneFilesFromGit.repository=https://github.com/apache/incubator-mxnet.git \
-  --set cloneFilesFromGit.revision=master \
-  --set entrypoint.file=image_classification.py \
-  --set entrypoint.args="--dataset cifar10 --model vgg11 --epochs 1 --kvstore dist_sync" \
-  --set entrypoint.workDir=/app/example/gluon/ \
-  bitnami/mxnet
+mode=distributed
+cloneFilesFromGit.enabled=true
+cloneFilesFromGit.repository=https://github.com/apache/incubator-mxnet.git
+cloneFilesFromGit.revision=master
+entrypoint.file=image_classification.py
+entrypoint.args="--dataset cifar10 --model vgg11 --epochs 1 --kvstore dist_sync"
+entrypoint.workDir=/app/example/gluon/
 ```
 
 Check the logs of the worker node:
 
 ```console
-$ kubectl logs my-release-mxnet-worker-0 -f
-
 INFO:root:Starting new image-classification task:, Namespace(batch_norm=False, batch_size=32, builtin_profiler=0, data_dir='', dataset='cifar10', dtype='float32', epochs=1, gpus='', kvstore='dist_sync', log_interval=50, lr=0.1, lr_factor=0.1, lr_steps='30,60,90', mode=None, model='vgg11', momentum=0.9, num_workers=4, prefix='', profile=False, resume='', save_frequency=10, seed=123, start_epoch=0, use_pretrained=False, use_thumbnail=False, wd=0.0001)
 INFO:root:downloaded http://data.mxnet.io/mxnet/data/cifar10.zip into data/cifar10.zip successfully
 [10:05:40] src/io/iter_image_recordio_2.cc:172: ImageRecordIOParser2: data/cifar/train.rec, use 1 threads for decoding..
@@ -238,27 +219,20 @@ INFO:root:downloaded http://data.mxnet.io/mxnet/data/cifar10.zip into data/cifar
 If you want to increase the verbosity, set the environment variable `PS_VERBOSE=1` or `PS_VERBOSE=2` using the `commonEnvVars` value.
 
 ```console
-$ helm install --name my-release \
-  --set mode=distributed \
-  --set cloneFilesFromGit.enabled=true \
-  --set cloneFilesFromGit.repository=https://github.com/apache/incubator-mxnet.git \
-  --set cloneFilesFromGit.revision=master \
-  --set entrypoint.file=image_classification.py \
-  --set entrypoint.args="--dataset cifar10 --model vgg11 --epochs 1 --kvstore dist_sync" \
-  --set entrypoint.workDir=/app/example/gluon/ \
-  --set commonExtraEnvVars[0].name=PS_VERBOSE \
-  --set commonExtraEnvVars[0].value=1 \
-  bitnami/mxnet
+mode=distributed
+cloneFilesFromGit.enabled=true
+cloneFilesFromGit.repository=https://github.com/apache/incubator-mxnet.git
+cloneFilesFromGit.revision=master
+entrypoint.file=image_classification.py
+entrypoint.args="--dataset cifar10 --model vgg11 --epochs 1 --kvstore dist_sync"
+entrypoint.workDir=/app/example/gluon/
+commonExtraEnvVars[0].name=PS_VERBOSE
+commonExtraEnvVars[0].value=1
 ```
 
 You will now see log entries in the scheduler and server nodes.
 
 ```console
-$ kubectl logs my-release-mxnet-server-0
-[14:22:53] src/van.cc:290: Bind to role=server, ip=10.32.0.12, port=57099, is_recovery=0
-[14:22:53] src/van.cc:238: S[10] is connected to others
-
-$ kubectl logs my-release-mxnet-scheduler-67dbd4bb7c-px2wf
 [14:22:44] src/van.cc:290: Bind to role=scheduler, id=1, ip=10.32.0.11, port=9092, is_recovery=0
 [14:22:53] src/van.cc:56: assign rank=9 to node role=worker, ip=10.32.0.17, port=55423, is_recovery=0
 [14:22:53] src/van.cc:56: assign rank=11 to node role=worker, ip=10.32.0.16, port=60779, is_recovery=0
@@ -274,22 +248,7 @@ $ kubectl logs my-release-mxnet-scheduler-67dbd4bb7c-px2wf
 ...
 ```
 
-## Persistence
-
-The [Bitnami MXNet](https://github.com/bitnami/bitnami-docker-mxnet) image can persist data. If enabled, the persisted path is `/bitnami/mxnet` by default.
-
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-## Sidecars and Init Containers
+### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as MXNet (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
@@ -314,3 +273,18 @@ initContainers:
   - name: portname
    containerPort: 1234
 ```
+
+## Persistence
+
+The [Bitnami MXNet](https://github.com/bitnami/bitnami-docker-mxnet) image can persist data. If enabled, the persisted path is `/bitnami/mxnet` by default.
+
+The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.

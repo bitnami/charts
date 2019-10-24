@@ -31,7 +31,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/grafana
 ```
 
-These commands deploy grafana on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy grafana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,7 +45,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the grafana chart and their default values.
 
@@ -140,6 +140,25 @@ $ helm install --name my-release -f values.yaml bitnami/grafana
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+
+- Enable ingress controller
+
+```diff
+- ingress.enabled: false
++ ingress.enabled: true
+```
+
 ### Using custom configuration
 
 Grafana support multiples configuration files. Using kubernetes you can mount a file using a ConfigMap. For example, to mount a custom `grafana.ini` file or `custom.ini` file you can create a ConfigMap like the following:
@@ -154,36 +173,20 @@ data:
     # Raw text of the file
 ```
 
-And now you need to pass the ConfigMap name, to the corresponding parameter:
-
-```console
-$ helm install bitnami/grafana --set config.useGrafanaIniFile=true,config.grafanaIniConfigMap=myconfig
-```
+And now you need to pass the ConfigMap name, to the corresponding parameters: `config.useGrafanaIniFile=true` and `config.grafanaIniConfigMap=myconfig`.
 
 To provide dashboards on deployment time, Grafana needs a dashboards provider and the dashboards themselves.
 A default provider is created if enabled, or you can mount your own provider using a ConfigMap, but have in mind that the path to the dashboard folder must be `/opt/bitnami/grafana/dashboards`.
   1. To create a dashboard, it is needed to have a datasource for it. The datasources must be created mounting a secret with all the datasource files in it. In this case, it is not a ConfigMap because the datasource could contain sensitive information.
   2. To load the dashboards themselves you need to create a ConfigMap for each one containing the `json` file that defines the dashboard and set the array with the ConfigMap names into the `dashboardsConfigMaps` parameter.
 Note the difference between the datasources and the dashboards creation. For the datasources we can use just one secret with all of the files, while for the dashboards we need one ConfigMap per file.
-For example, after the creation of the dashboard and datasource ConfigMap in the same way that the explained for the `grafana.ini` file, execute the following to deploy Grafana with custom dashboards:
+For example, after the creation of the dashboard and datasource ConfigMap in the same way that the explained for the `grafana.ini` file, use the following parameters to deploy Grafana with custom dashboards:
 
 ```console
-$ helm install bitnami/grafana --set "dashboardsProvider.enabled=true,datasources.secretName=datasource-secret,dashboardsConfigMaps[0].configMapName=mydashboard,dashboardsConfigMaps[0].fileName=mydashboard.json"
-```
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/grafana
-```
-
-- Enable ingress controller
-
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
+dashboardsProvider.enabled=true
+datasources.secretName=datasource-secret
+dashboardsConfigMaps[0].configMapName=mydashboard
+dashboardsConfigMaps[0].fileName=mydashboard.json
 ```
 
 ### LDAP configuration
@@ -242,16 +245,12 @@ data:
       email =  "email"
 ```
 
-Create the ConfigMap into the cluster:
+Create the ConfigMap into the cluster and deploy the Grafana Helm Chart using the existing ConfigMap and the following parameters:
 
 ```console
-$ kubectl create -f configmap.yaml
-```
-
-And deploy the Grafana Helm Chart using the existing ConfigMap:
-
-```console
-$ helm install bitnami/grafana --set ldap.enabled=true,ldap.configMapName=ldap-config,ldap.allowSignUp=true
+ldap.enabled=true
+ldap.configMapName=ldap-config
+ldap.allowSignUp=true
 ```
 
 ### Supporting HA (High Availability)
@@ -261,15 +260,9 @@ To configure the external database provide a configuration file containing the [
 
 More information about Grafana HA [here](https://grafana.com/docs/tutorials/ha_setup/)
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
 ## Persistence
 
 The [Bitnami Grafana](https://github.com/bitnami/bitnami-docker-grafana) image stores the Grafana data and configurations at the `/opt/bitnami/grafana/data` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.

@@ -30,7 +30,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/etcd
 ```
 
-These commands deploy etcd on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy etcd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -44,7 +44,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the etcd chart and their default values.
 
@@ -151,13 +151,17 @@ $ helm install --name my-release -f values.yaml bitnami/etcd
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/etcd
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Number of etcd nodes:
 ```diff
@@ -195,27 +199,13 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/etcd
 + metrics.enabled: true
 ```
 
-To horizontally scale this chart once it has been deployed:
-
-```console
-$ helm upgrade my-release bitnami/etcd \
-  -f ./values-production.yaml \
-  --set statefulset.replicaCount=5
-```
-
-> **Note**: Scaling the statefulset with `kubectl scale ...` command is highly discouraged. Use `helm upgrade ...` for horizontal scaling so you ensure all the environment variables used to configure the ectd cluster are properly updated.
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `statefulset.replicaCount` parameter.
 
 ### Using custom configuration
 
 In order to use custom configuration parameters, two options are available:
 
-- Using environment variables: etcd allows setting environment variables that map to configuration settings. In order to set extra environment variables, use the `envVarsConfigMap` value to point to a ConfigMap that contains them. Example:
+- Using environment variables: etcd allows setting environment variables that map to configuration settings. In order to set extra environment variables, use the `envVarsConfigMap` value to point to a ConfigMap (shown in the below example) that contains them. This ConfigMap can be created with the `-f /tmp/configurationEnvVars.yaml` flag. Then deploy the chart with the `envVarsConfigMap=etcd-env-vars` parameter:
 
 ```console
 $ cat << EOF > /tmp/configurationEnvVars.yaml
@@ -228,69 +218,66 @@ data:
   ETCD_AUTO_COMPACTION_RETENTION: "0"
   ETCD_HEARTBEAT_INTERVAL: "150"
 EOF
-
-$ kubectl create -f /tmp/configurationEnvVars.yaml
-$ helm install bitnami/etcd --set envVarsConfigMap=etcd-env-vars
 ```
 
-- Using a custom `etcd.conf.yml`: The etcd chart allows mounting a custom etcd.conf.yml file using the `configFileConfigMap` value. Example:
+- Using a custom `etcd.conf.yml`: The etcd chart allows mounting a custom etcd.conf.yml file as ConfigMap (named, for example, etcd-conf) and deploy it using the `configFileConfigMap=etcd-conf` parameter.
+
+### Enable security for etcd
+
+#### Configure RBAC
+
+In order to enable [Role-based access control for etcd](https://coreos.com/etcd/docs/latest/op-guide/authentication.html) you can set the following parameters:
 
 ```console
-$ kubectl create configmap etcd-conf --from-file=etcd.conf.yml
-$ helm install bitnami/etcd --set configFileConfigMap=etcd-conf
-```
-
-## Enable security for etcd
-
-### Configure RBAC
-
-In order to enable [Role-based access control for etcd](https://coreos.com/etcd/docs/latest/op-guide/authentication.html) you can run the following command:
-
-```console
-$ helm install --name my-release --set auth.rbac.enabled --set auth.rbac.rootPassword=YOUR-PASSWORD bitnami/etcd
+auth.rbac.enabled=true
+auth.rbac.rootPassword=YOUR-PASSWORD
 ```
 
 The previous command will deploy etcd creating a `root` user with its associate `root` role with access to everything. The rest of users will use the `guest` role and won't have permissions to do anything.
 
-### Configure certificated for peer communication
+#### Configure certificated for peer communication
 
 In order to enable secure transport between peer nodes deploy the helm chart with these options:
 
 ```console
-$ helm install --name my-release --set auth.peer.secureTransport=true --set auth.peer.useAutoTLS=true bitnami/etcd
+auth.peer.secureTransport=true
+auth.peer.useAutoTLS=true
 ```
 
-### Configure certificates for client communication
+#### Configure certificates for client communication
 
 In order to enable secure transport between client and server you have to create a secret containing the cert and key files and the CA used to sign those client certificates.
 
-You can create that secret with this command:
+You can create that secret and deploy the helm chart with these options:
 
 ```console
-$ kubectl create secret generic etcd-client-certs --from-file=ca.crt=path/to/ca.crt --from-file=cert.pem=path/to/cert.pem --from-file=key.pem=path/to/key.pem
-```
-
-Once the secret is created, you can deploy the helm chart with these options:
-
-```console
-$ helm install --name my-release --set auth.client.secureTransport=true --set auth.client.enableAuthentication=true --set auth.client.existingSecret=etcd-client-certs bitnami/etcd
+auth.client.secureTransport=true
+auth.client.enableAuthentication=true
+auth.client.existingSecret=etcd-client-certs
 ```
 
 > Ref: [etcd security model](https://coreos.com/etcd/docs/latest/op-guide/security.html)
 >
 > Ref: [Generate self-signed certificagtes for etcd](https://coreos.com/os/docs/latest/generate-self-signed-certificates.html)
 
-## Persistence and Disaster recovery
+### Disaster recovery
 
-### Persistence
-
-The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the `/bitnami/etcd` path of the container. Persistent Volume Claims are used to keep the data across statefulsets. This is known to work in GCE, AWS, and Minikube. To enable persistence, deploy the helm chart with these options:
+You can enable auto disaster recovery by periodically snapshotting the keyspace. If the cluster permanently loses more than (N-1)/2 members, it tries to recover the cluster from a previous snapshot. You can enable it using the following parameters:
 
 ```console
-$ helm install --name my-release bitnami/etcd \
-  --set persistence.enable=true \
-  --set persistence.size=8Gi
+persistence.enable=true
+disasterRecovery.enabled=true
+disasterRecovery.pvc.size=2Gi
+disasterRecovery.pvc.storageClassName=nfs
 ```
+
+> **Note**: Disaster recovery feature requires using volumes with ReadWriteMany access mode. For instance, you can use the stable/nfs-server-provisioner chart to provide NFS PVCs.
+
+## Persistence
+
+The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the `/bitnami/etcd` path of the container. Persistent Volume Claims are used to keep the data across statefulsets.
+
+By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
 
 ### Adjust permissions of persistent volume mountpoint
 
@@ -300,25 +287,6 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### Disaster recovery
-
-You can enable auto disaster recovery by periodically snapshotting the keyspace. If the cluster permanently loses more than (N-1)/2 members, it tries to recover the cluster from a previous snapshot.
-
-```console
-$ helm install --name my-release bitnami/etcd \
-  --set persistence.enable=true \
-  --set disasterRecovery.enabled=true \
-  --set disasterRecovery.pvc.size=2Gi \
-  --set disasterRecovery.pvc.storageClassName=nfs
-```
-
-> **Note**: Disaster recovery feature requires using volumes with ReadWriteMany access mode. For instance, you can use the stable/nfs-server-provisioner chart to provide NFS PVCs:
-
-```console
-$ helm install --name nfs-server-provisioner stable/nfs-server-provisioner \
-  --set persistence.enabled=true --set persistence.size=10Gi
-```
 
 ## Upgrading
 

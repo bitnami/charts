@@ -31,7 +31,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/minio
 ```
 
-These commands deploy MinIO on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy MinIO on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,7 +45,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following table lists the configurable parameters of the MinIO chart and their default values.
 
@@ -123,8 +123,9 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `ingress.annotations`                | Ingress annotations                                                                                                                                       | `[]`                                                    |
 | `ingress.hosts[0].name`              | Hostname to your MinIO installation                                                                                                                       | `minio.local`                                           |
 | `ingress.hosts[0].path`              | Path within the url structure                                                                                                                             | `/`                                                     |
-| `ingress.tls[0].hosts[0]`            | TLS hosts                                                                                                                                                 | `minio.local`                                           |
-| `ingress.tls[0].secretName`          | TLS Secret (certificates)                                                                                                                                 | `minio.local-tls`                                       |
+| `ingress.hosts[0].tls`                    | Utilize TLS backend in ingress                                                                       | `false`                                                      |
+| `ingress.hosts[0].tlsHosts`               | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                 | `nil`                                                        |
+| `ingress.hosts[0].tlsSecret`              | TLS Secret (certificates)                                                                            | `minio.local-tls`                                          |
 | `ingress.secrets[0].name`            | TLS Secret Name                                                                                                                                           | `nil`                                                   |
 | `ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
 | `ingress.secrets[0].key`             | TLS Secret Key                                                                                                                                            | `nil`                                                   |
@@ -150,13 +151,17 @@ $ helm install --name my-release -f values.yaml bitnami/minio
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/minio
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - MinIO server mode:
 ```diff
@@ -200,29 +205,15 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/minio
 + networkPolicy.allowExternal: false
 ```
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### Distributed mode
 
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+You can start the MinIO chart in distributed mode with the following parameter: `mode=distributed`
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-## Distributed mode
-
-You can start the MinIO chart in distributed mode with the following command:
-
-```console
-$ helm install --name my-release bitnami/minio --set mode=distributed
-```
-
-This chart sets Minio server in distributed mode with 4 nodes by default. You can change the number of nodes setting the `statefulset.replicaCount` parameter:
-
-```console
-$ helm install --name my-release bitnami/minio --set mode=distributed --set statefulset.replicaCount=8
-```
+This chart sets Minio server in distributed mode with 4 nodes by default. You can change the number of nodes setting the `statefulset.replicaCount` parameter, for example to `statefulset.replicaCount=8`
 
 > Note: that the number of replicas must even, greater than 4 and lower than 32
 
-## Prometheus exporter
+### Prometheus exporter
 
 MinIO exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Prometheus collecting your MinIO metrics, modify the `values.yaml` adding the corresponding annotations:
 
