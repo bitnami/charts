@@ -4,7 +4,7 @@ The [Apache HTTP Server Project](https://httpd.apache.org/) is an effort to deve
 
 The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most popular web server on the Internet since April 1996. It has celebrated its 20th birthday as a project in February 2015.
 
-## TL;DR
+## TL;DR;
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

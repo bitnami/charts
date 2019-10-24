@@ -2,7 +2,7 @@
 
 [Elasticsearch](https://www.elastic.co/products/elasticsearch) is a highly scalable open-source full-text search and analytics engine. It allows you to store, search, and analyze big volumes of data quickly and in near real time.
 
-## TL;DR
+## TL;DR;
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
