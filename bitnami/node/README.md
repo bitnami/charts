@@ -33,7 +33,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/node
 ```
 
-These commands deploy Node.js on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
+These commands deploy Node.js on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
 
 Due that the Helm Chart clones the application on the /app volume while the container is initializing, a persistent volume is not required.
 
@@ -240,7 +240,7 @@ You can read more about the kubernetes service catalog at https://github.com/kub
 The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores the Node application and configurations at the `/app`  path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Adjust permissions of persistent volume mountpoint
 

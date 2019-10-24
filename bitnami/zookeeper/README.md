@@ -30,7 +30,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/zookeeper
 ```
 
-These commands deploy ZooKeeper on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy ZooKeeper on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -181,7 +181,7 @@ You can configure the ZooKeeper log level using the `ZOO_LOG_LEVEL` environment 
 The [Bitnami ZooKeeper](https://github.com/bitnami/bitnami-docker-zookeeper) image stores the ZooKeeper data and configurations at the `/bitnami/zookeeper` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Adjust permissions of persistent volume mountpoint
 

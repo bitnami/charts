@@ -30,7 +30,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/cassandra
 ```
 
-These commands deploy one node with Cassandra on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy one node with Cassandra on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -228,7 +228,7 @@ initDBConfigMap=init-db
 The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image stores the cassandra data at the `/bitnami/cassandra` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Adjust permissions of persistent volume mountpoint
 

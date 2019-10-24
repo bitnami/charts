@@ -30,7 +30,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/consul
 ```
 
-These commands deploy HashiCorp Consul on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy HashiCorp Consul on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -239,7 +239,7 @@ The chart can optionally start a metrics exporter endpoint on port `9107` for [p
 The [Bitnami HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) image stores the HashiCorp Consul data at the `/bitnami` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Adjust permissions of persistent volume mountpoint
 
