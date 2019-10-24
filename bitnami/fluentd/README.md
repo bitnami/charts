@@ -44,7 +44,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the kibana chart and their default values.
 
@@ -140,6 +140,32 @@ $ helm install --name my-release -f values.yaml bitnami/fluentd
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Production configuration and horizontal scaling
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+
+- Number of aggregator nodes:
+```diff
+- aggregator.replicaCount: 1
++ aggregator.replicaCount: 2
+```
+
+- Enable prometheus to access fluentd metrics endpoint:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
+
+To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `aggregator.replicaCount` parameter.
+
 ### Forwarding the logs to another service
 
 By default, the aggregators in this chart will send the processed logs to the standard output. However, a common practice is to send them to another service, like Elasticsearch, instead. This can be achieved with this Helm Chart by mounting your own configuration files. For example:
@@ -218,55 +244,12 @@ data:
     </match>
 ```
 
-Create the `ConfigMap` resource:
+As an example, using the above configmap, you should specify the required parameters when upgrading or installing the chart:
 
 ```console
-$ kubectl create -f configmap.yaml
+aggregator.configMap=elasticsearch-output
+aggregator.extraEnv[0].name=ELASTICSEARCH_HOST
+aggregator.extraEnv[0].value=your-ip-here
+aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
+aggregator.extraEnv[1].value=your-port-here
 ```
-
-And then deploy the Fluentd chart with your configuration file and your Elasticsearch host and port:
-
-```console
-$ helm install bitnami/fluentd \
-    --set aggregator.configMap=elasticsearch-output \
-    --set aggregator.extraEnv[0].name=ELASTICSEARCH_HOST \
-    --set aggregator.extraEnv[0].value=your-ip-here \
-    --set aggregator.extraEnv[1].name=ELASTICSEARCH_PORT \
-    --set aggregator.extraEnv[1].value=your-port-here \
-```
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/fluentd
-```
-
-- Number of aggregator nodes:
-```diff
-- statefulset.replicaCount: 1
-+ statefulset.replicaCount: 2
-```
-
-- Enable prometheus to access fluentd metrics endpoint:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-To horizontally scale this chart once it has been deployed:
-
-```console
-$ helm upgrade my-release bitnami/fluentd \
-  -f ./values-production.yaml \
-  --set statefulset.replicaCount=3
-```
-
-> **Note**: Scaling the statefulset with `kubectl scale ...` command is discouraged. Use `helm upgrade ...` for horizontal scaling to ensure the forwarders configuration is refreshed and aware of the new pods.
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.

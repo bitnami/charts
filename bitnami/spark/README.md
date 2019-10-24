@@ -43,7 +43,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the spark chart and their default values.
 
@@ -150,27 +150,17 @@ $ helm install --name my-release -f values.yaml bitnami/spark
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-### Using custom configuration
+## Configuration and installation details
 
-To use a custom configuration a ConfigMap should be created with the `spark-env.sh` file inside the ConfigMap. The ConfigMap name must be provided at deployment time, to set the configuration on the master use:
-```bash
-$ helm install bitnami/spark --set master.configurationConfigMap=configMapName
-```
-To set the configuration on the worker use:
-```bash
-$ helm install bitnami/spark --set worker.configurationConfigMap=configMapName
-```
-It can be set both at the same time with the same ConfigMap or using two ConfigMaps.
-Also, you can provide in the ConfigMap a `spark-defaults.conf` file.
-You can use both files without the other.
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/spark
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Enable ingress controller
 ```diff
@@ -236,11 +226,15 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/spark
 + worker.autoscaling.replicasMax: 10
 ```
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### Using custom configuration
 
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+To use a custom configuration a ConfigMap should be created with the `spark-env.sh` file inside the ConfigMap. The ConfigMap name must be provided at deployment time, to set the configuration on the master use: ` master.configurationConfigMap=configMapName`
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+To set the configuration on the worker use: `worker.configurationConfigMap=configMapName`
+
+It can be set both at the same time with the same ConfigMap or using two ConfigMaps.
+Also, you can provide in the ConfigMap a `spark-defaults.conf` file.
+You can use both files without the other.
 
 ### Submit an application
 
@@ -252,38 +246,32 @@ $ ./bin/spark-submit   --class org.apache.spark.examples.SparkPi   --master spar
 Where the master IP and port must be changed by you master IP address and port.
 > Be aware that currently is not possible to submit an application to a standalone cluster if RPC authentication is configured. More info about the issue [here](https://issues.apache.org/jira/browse/SPARK-25078).
 
-## Enable security for spark
+### Enable security for spark
 
-### Configure ssl communication
+#### Configure ssl communication
 
-In order to enable secure transport between workers and master deploy the helm chart with these options:
+In order to enable secure transport between workers and master deploy the helm chart with this options: `ssl.enabled=true`
 
-```console
-$ helm install --name my-release --set ssl.enabled=true  bitnami/spark
-
-```
-
-### How to create the certificates secret
+#### How to create the certificates secret
 
 It is needed to create two secrets to set the passwords and certificates. The name of the two secrets should be configured on `security.passwordsSecretName` and `security.certificatesSecretName`. To generate certificates for testing purpose you can use [this script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh).
 Into the certificates secret, the keys must be `spark-keystore.jks` and `spark-truststore.jks`, and the content must be text on JKS format.
 To generate the certificates secret, first it is needed to generate the two certificates and rename them as `spark-keystore.jks` and `spark-truststore.jks`.
-Once the certificates are created, to create the secret having the file names as keys, execute a command like the following:
-```bash
-$ kubectl create secret generic my-secret --from-file=./keystore/spark-keystore.jks --from-file=./truststore/spark-truststore.jks
-```
+Once the certificates are created, you can create the secret having the file names as keys.
 
 The second secret, the secret for passwords should have four keys: `rpc-authentication-secret`, `ssl-key-password`, `ssl-keystore-password` and `ssl-truststore-password`.
-To create this secret, execute a command like the following:
-```bash
-$ kubectl create secret generic my-passwords-secret --from-literal=rpc-authentication-secret=myRPCSecret --from-literal=ssl-key-password=mySSLKeyPassword --from-literal=ssl-keystore-password=password --from-literal=ssl-truststore-password=password
-```
 
 Now that the two secrets are created, deploy the chart enabling security configuration and setting the name for the certificates secret (`my-secret` in this case) at the `security.certificatesSecretName` and setting the name for the passwords secret (`my-passwords-secret` in this case) at `security.passwordsSecretName`.
 
-To deploy execute the following:
+To deploy chart, use the following parameters:
 ```bash
-$ helm install . --set security.certificatesSecretName=my-secret,security.passwordsSecretName=my-passwords-secret,security.rpc.authenticationEnabled=yes,security.rpc.encryptionEnabled=yes,security.storageEncrytionEnabled=yes,security.ssl.enabled=yes,security.ssl.needClientAuth=yes
+security.certificatesSecretName=my-secret
+security.passwordsSecretName=my-passwords-secret
+security.rpc.authenticationEnabled=yes
+security.rpc.encryptionEnabled=yes
+security.storageEncrytionEnabled=yes
+security.ssl.enabled=yes
+security.ssl.needClientAuth=yes
 ```
 
 > Be aware that currently is not possible to submit an application to a standalone cluster if RPC authentication is configured. More info about the issue [here](https://issues.apache.org/jira/browse/SPARK-25078).

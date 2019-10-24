@@ -1,6 +1,6 @@
 apiVersion: v1
 name: mariadb-galera
-version: 0.4.1
+version: 0.4.2
 appVersion: 10.3.18
 description: MariaDB Galera is a multi-master database cluster solution for synchronous replication and high availability.
 keywords:

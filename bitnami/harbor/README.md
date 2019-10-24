@@ -49,69 +49,7 @@ $ helm delete --purge my-release
 
 Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
 
-## Downloading the chart
-
-Download Harbor helm chart
-
-```bash
-$ git clone https://github.com/bitnami/charts
-```
-
-Change directory to Harbor code
-
-```bash
-$ cd charts/bitnami/harbor
-```
-
-## Configuration
-
-### Configure the way how to expose Harbor service:
-
-- **Ingress**: The ingress controller must be installed in the Kubernetes cluster.
-  **Notes:** if the TLS is disabled, the port must be included in the command when pulling/pushing images. Refer to issue [#5291](https://github.com/goharbor/harbor/issues/5291) for the detail.
-- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster.
-- **NodePort**: Exposes the service on each Node’s IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`.
-- **LoadBalancer**: Exposes the service externally using a cloud provider’s load balancer.
-
-### Configure the external URL:
-
-The external URL for Harbor core service is used to:
-
-1. populate the docker/helm commands showed on portal
-2. populate the token service URL returned to docker/notary client
-
-Format: `protocol://domain[:port]`. Usually:
-
-- if expose the service via `Ingress`, the `domain` should be the value of `service.ingress.hosts.core`
-- if expose the service via `ClusterIP`, the `domain` should be the value of `service.clusterIP.name`
-- if expose the service via `NodePort`, the `domain` should be the IP address of one Kubernetes node
-- if expose the service via `LoadBalancer`, set the `domain` as your own domain name and add a CNAME record to map the domain name to the one you got from the cloud provider
-
-If Harbor is deployed behind the proxy, set it as the URL of proxy.
-
-### Configure data persistence:
-
-- **Disable**: The data does not survive the termination of a pod.
-- **Persistent Volume Claim(default)**: A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `storageClass` or set `existingClaim` if you have already existing persistent volumes to use.
-- **External Storage(only for images and charts)**: For images and charts, the external storages are supported: `azure`, `gcs`, `s3` `swift` and `oss`.
-
-### Configure the secrets:
-
-- **Secret keys**: Secret keys are used for secure communication between components. Fill `core.secret`, `jobservice.secret` and `registry.secret` to configure.
-- **Certificates**: Used for token encryption/decryption. Fill `core.secretName` to configure.
-
-Secrets and certificates must be setup to avoid changes on every Helm upgrade (see: [#107](https://github.com/goharbor/harbor-helm/issues/107)).
-
-### Adjust permissions of persistent volume mountpoint
-
-As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### Configure the deployment options:
+## Parameters
 
 The following table lists the configurable parameters of the Harbor chart and the default values. They can be configured in `values.yaml` or set via `--set` flag during installation.
 
@@ -359,9 +297,18 @@ Alternatively, a YAML file that specifies the values for the above parameters ca
 ```console
 $ helm install --name my-release -f values.yaml bitnami/harbor
 ```
+
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer`:
 ```diff
@@ -393,11 +340,51 @@ This chart includes a `values-production.yaml` file where you can find some para
 + postgresql.replication.enabled: true
 ```
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### Configure the way how to expose Harbor service:
 
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+- **Ingress**: The ingress controller must be installed in the Kubernetes cluster.
+  **Notes:** if the TLS is disabled, the port must be included in the command when pulling/pushing images. Refer to issue [#5291](https://github.com/goharbor/harbor/issues/5291) for the detail.
+- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster.
+- **NodePort**: Exposes the service on each Node’s IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`.
+- **LoadBalancer**: Exposes the service externally using a cloud provider’s load balancer.
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+### Configure the external URL:
+
+The external URL for Harbor core service is used to:
+
+1. populate the docker/helm commands showed on portal
+2. populate the token service URL returned to docker/notary client
+
+Format: `protocol://domain[:port]`. Usually:
+
+- if expose the service via `Ingress`, the `domain` should be the value of `service.ingress.hosts.core`
+- if expose the service via `ClusterIP`, the `domain` should be the value of `service.clusterIP.name`
+- if expose the service via `NodePort`, the `domain` should be the IP address of one Kubernetes node
+- if expose the service via `LoadBalancer`, set the `domain` as your own domain name and add a CNAME record to map the domain name to the one you got from the cloud provider
+
+If Harbor is deployed behind the proxy, set it as the URL of proxy.
+
+### Configure data persistence:
+
+- **Disable**: The data does not survive the termination of a pod.
+- **Persistent Volume Claim(default)**: A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `storageClass` or set `existingClaim` if you have already existing persistent volumes to use.
+- **External Storage(only for images and charts)**: For images and charts, the external storages are supported: `azure`, `gcs`, `s3` `swift` and `oss`.
+
+### Configure the secrets:
+
+- **Secret keys**: Secret keys are used for secure communication between components. Fill `core.secret`, `jobservice.secret` and `registry.secret` to configure.
+- **Certificates**: Used for token encryption/decryption. Fill `core.secretName` to configure.
+
+Secrets and certificates must be setup to avoid changes on every Helm upgrade (see: [#107](https://github.com/goharbor/harbor-helm/issues/107)).
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrade
 
