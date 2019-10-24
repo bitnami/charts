@@ -28,13 +28,13 @@ spec:
       - name: volume-permissions
         image: "{{ template "kibana.volumePermissions.image" . }}"
         imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.mountPath }}"]
+        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/kibana"]
         securityContext:
           runAsUser: 0
         resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
         volumeMounts:
-        - name: data
-          mountPath: {{ .Values.persistence.mountPath }}
+        - name: kibana-data
+          mountPath: /bitnami/kibana
       {{- end }}
       {{- if .Values.initContainers }}
       {{- tpl (toYaml .Values.initContainers) $ | nindent 6 }}
