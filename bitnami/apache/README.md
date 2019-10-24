@@ -47,7 +47,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the Apache chart and their default values.
 
@@ -121,28 +121,33 @@ $ helm install --name my-release -f values.yaml bitnami/apache
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-## Deploying your custom web application
-The Apache chart allows you to deploy a custom web application using one of the following methods:
-
-  - Cloning from a git repository: Set `cloneHtdocsFromGit.enabled` to `true` and set the repository and branch using the `cloneHtdocsFromGit.repository` and  `cloneHtdocsFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneHtdocsFromGit.interval`.
-  - Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
-  - Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
-
-In the following example you can deploy a example web application using git:
-
-```
-helm install bitnami/apache --set cloneHtdocsFromGit.enabled=true --set cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git --set cloneHtdocsFromGit.branch=master
-```
-
-To use your own `httpd.conf` file you can mount it using the `httpdConfConfigMap` parameter, which is the name of a Config Map with the contents of your `httpd.conf`. Additionaly, you can copy your `httpd.conf` to `/files/httpd.conf` in your current working directory to mount it to the container.
-
-You may also want to mount different virtual host configurations. This can be done using the `vhostsConfigMap` value. This is a pointer to a ConfigMap with the desired Apache virtual host configurations. You can also copy your virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a Config Map to the container.
+## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Deploying your custom web application
+
+The Apache chart allows you to deploy a custom web application using one of the following methods:
+
+  - Cloning from a git repository: Set `cloneHtdocsFromGit.enabled` to `true` and set the repository and branch using the `cloneHtdocsFromGit.repository` and  `cloneHtdocsFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneHtdocsFromGit.interval`.
+  - Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
+  - Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
+
+You can deploy a example web application using git deploying the chart with the following parameters:
+
+```console
+cloneHtdocsFromGit.enabled=true
+cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
+cloneHtdocsFromGit.branch=master
+```
+
+To use your own `httpd.conf` file you can mount it using the `httpdConfConfigMap` parameter, which is the name of a Config Map with the contents of your `httpd.conf`. Additionaly, you can copy your `httpd.conf` to `/files/httpd.conf` in your current working directory to mount it to the container.
+
+You may also want to mount different virtual host configurations. This can be done using the `vhostsConfigMap` value. This is a pointer to a ConfigMap with the desired Apache virtual host configurations. You can also copy your virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a Config Map to the container.
 
 ## Notable changes
 
