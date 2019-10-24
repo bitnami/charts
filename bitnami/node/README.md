@@ -164,10 +164,14 @@ ingress:
 
 ### Connect your application to an already existing database
 
-1. Create a secret containing your database credentials (named `my-database-secret` as example), you can use the following options:
+1. Create a secret containing your database credentials (named `my-database-secret` as example), you can use the following options (set with `--from-literal`) to create the secret:
 
   ```console
-  --from-literal=host=YOUR_DATABASE_HOST --from-literal=port=YOUR_DATABASE_PORT --from-literal=username=YOUR_DATABASE_USER  --from-literal=password=YOUR_DATABASE_PASSWORD --from-literal=database=YOUR_DATABASE_NAME
+  host=YOUR_DATABASE_HOST
+  port=YOUR_DATABASE_PORT
+  username=YOUR_DATABASE_USER
+  password=YOUR_DATABASE_PASSWORD
+  database=YOUR_DATABASE_NAME
   ```
 
   `YOUR_DATABASE_HOST`, `YOUR_DATABASE_PORT`, `YOUR_DATABASE_USER`, `YOUR_DATABASE_PASSWORD`, and `YOUR_DATABASE_NAME` are placeholders that must be replaced with correct values.
