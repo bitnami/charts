@@ -31,7 +31,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/pytorch
 ```
 
-These commands deploy PyTorch on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured.
+These commands deploy PyTorch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
 
 > **Tip**: List all releases using `helm list`
 
