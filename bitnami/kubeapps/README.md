@@ -41,7 +41,7 @@ $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
 
 > **IMPORTANT** This assumes an insecure Helm installation, which is not recommended in production. See [the documentation to learn how to secure Helm and Kubeapps in production](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
 
-The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Caveat**: Only one Kubeapps installation is supported per namespace
 
@@ -49,48 +49,7 @@ The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespa
 
 Once you have installed Kubeapps follow the [Getting Started Guide](https://github.com/kubeapps/kubeapps/blob/master/docs/user/getting-started.md) for additional information on how to access and use Kubeapps.
 
-## Upgrading Kubeapps
-
-You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace in which Kubeapps is installed (`kubeapps` if you followed the instructions in this guide) and click on the "Upgrade" button. Select the new version and confirm.
-
-> NOTE: If the chart values were modified when deploying Kubeapps the first time, those values need to be set again when upgrading.
-
-You can also use the Helm CLI to upgrade Kubeapps, first ensure you have updated your local chart repository cache:
-
-```console
-$ helm repo update
-```
-
-Now upgrade Kubeapps:
-
-```console
-$ export RELEASE_NAME=kubeapps
-$ helm upgrade $RELEASE_NAME bitnami/kubeapps
-```
-
-If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
-
-## Uninstalling Kubeapps
-
-To uninstall/delete the `kubeapps` deployment:
-
-```console
-$ helm delete --purge kubeapps
-$ # Optional: Only if there are no more instances of Kubeapps
-$ kubectl delete crd apprepositories.kubeapps.com
-```
-
-The first command removes most of the Kubernetes components associated with the chart and deletes the release. After that, if there are no more instances of Kubeapps in the cluster you can manually delete the `apprepositories.kubeapps.com` CRD used by Kubeapps that is shared for the entire cluster.
-
-> **NOTE**: If you delete the CRD for `apprepositories.kubeapps.com` it will delete the repositories for **all** the installed instances of `kubeapps`. This will break existing installations of `kubeapps` if they exist.
-
-If you have dedicated a namespace only for Kubeapps you can completely clean remaining completed/failed jobs or any stale resources by deleting the namespace
-
-```console
-$ kubectl delete namespace kubeapps
-```
-
-## Configuration
+## Parameters
 
 For a full list of configuration parameters of the Kubeapps chart, see the [values.yaml](values.yaml) file.
 
@@ -110,47 +69,21 @@ Alternatively, a YAML file that specifies the values for parameters can be provi
 $ helm install --name kubeapps --namespace kubeapps -f custom-values.yaml bitnami/kubeapps
 ```
 
+## Configuration and installation details
+
 ### Configuring Initial Repositories
 
-By default, Kubeapps will track the [community Helm charts](https://github.com/helm/charts) and the [Kubernetes Service Catalog charts](https://github.com/kubernetes-incubator/service-catalog). To change these defaults, override the `apprepository.initialRepos` object:
-
-```console
-$ cat > custom-values.yaml <<EOF
-apprepository:
-  initialRepos:
-  - name: example
-    url: https://charts.example.com
-EOF
-$ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps -f custom-values.yaml
-```
+By default, Kubeapps will track the [community Helm charts](https://github.com/helm/charts) and the [Kubernetes Service Catalog charts](https://github.com/kubernetes-incubator/service-catalog). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](values.yaml) file.
 
 ### Configuring connection to a custom namespace Tiller instance
 
 By default, Kubeapps connects to the Tiller Service in the `kube-system` namespace, the default install location for Helm.
 
-If your instance of Tiller is running in a different namespace or you want to have different instances of Kubeapps connected to different Tiller instances, you can achieve it by setting `tillerProxy.host`:
-
-```console
-helm install \
-  --set tillerProxy.host=tiller-deploy.my-custom-namespace:44134 \
-  bitnami/kubeapps
-```
+If your instance of Tiller is running in a different namespace or you want to have different instances of Kubeapps connected to different Tiller instances, you can achieve it by setting the `tillerProxy.host` paramater. For example, you can set `tillerProxy.host=tiller-deploy.my-custom-namespace:44134`
 
 ### Configuring connection to a secure Tiller instance
 
 In production, we strongly recommend setting up a [secure installation of Tiller](https://docs.helm.sh/using_helm/#using-ssl-between-helm-and-tiller), the Helm server side component.
-
-In this case, set the following values to configure TLS:
-
-```console
-helm install \
-  --tls --tls-ca-cert ca.cert.pem --tls-cert helm.cert.pem --tls-key helm.key.pem \
-  --set tillerProxy.tls.verify=true \
-  --set tillerProxy.tls.ca="$(cat ca.cert.pem)" \
-  --set tillerProxy.tls.key="$(cat helm.key.pem)" \
-  --set tillerProxy.tls.cert="$(cat helm.cert.pem)" \
-  bitnami/kubeapps
-```
 
 Learn more about how to secure your Kubeapps installation [here](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
 
@@ -160,11 +93,7 @@ Learn more about how to secure your Kubeapps installation [here](https://github.
 
 #### LoadBalancer Service
 
-The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer type to the Kubeapps frontend Service. For example:
-
-```console
-$ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps --set frontend.service.type=LoadBalancer
-```
+The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer type to the Kubeapps frontend Service. For example, you can use the following parameter: `frontend.service.type=LoadBalancer`
 
 Wait for your cluster to assign a LoadBalancer IP or Hostname to the `kubeapps` Service and access it on that address:
 
@@ -190,15 +119,48 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 TLS can be configured using setting the `ingress.hosts[].tls` boolean of the corresponding hostname to true, then you can choose the TLS secret name setting `ingress.hosts[].tlsSecret`. Please see [this example](https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tls) for more information.
 
-You can provide your own certificates using the `ingress.secrets` object. If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `ingress.hosts[].certManager` boolean to true to enable the corresponding annotations for cert-manager as shown in the example below:
+You can provide your own certificates using the `ingress.secrets` object. If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `ingress.hosts[].certManager` boolean to true to enable the corresponding annotations for cert-manager. For a full list of configuration parameters related to configuring TLS can see the [values.yaml](values.yaml) file.
+
+
+## Upgrading Kubeapps
+
+You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace in which Kubeapps is installed (`kubeapps` if you followed the instructions in this guide) and click on the "Upgrade" button. Select the new version and confirm.
+
+> NOTE: If the chart values were modified when deploying Kubeapps the first time, those values need to be set again when upgrading.
+
+You can also use the Helm CLI to upgrade Kubeapps, first ensure you have updated your local chart repository cache:
 
 ```console
-helm install --name kubeapps --namespace kubeapps bitnami/kubeapps \
-  --set ingress.enabled=true \
-  --set ingress.certManager=true \
-  --set ingress.hosts[0].name=kubeapps.custom.domain \
-  --set ingress.hosts[0].tls=true \
-  --set ingress.hosts[0].tlsSecret=kubeapps-tls
+$ helm repo update
+```
+
+Now upgrade Kubeapps:
+
+```console
+$ export RELEASE_NAME=kubeapps
+$ helm upgrade $RELEASE_NAME bitnami/kubeapps
+```
+
+If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
+
+## Uninstalling the Chart
+
+To uninstall/delete the `kubeapps` deployment:
+
+```console
+$ helm delete --purge kubeapps
+$ # Optional: Only if there are no more instances of Kubeapps
+$ kubectl delete crd apprepositories.kubeapps.com
+```
+
+The first command removes most of the Kubernetes components associated with the chart and deletes the release. After that, if there are no more instances of Kubeapps in the cluster you can manually delete the `apprepositories.kubeapps.com` CRD used by Kubeapps that is shared for the entire cluster.
+
+> **NOTE**: If you delete the CRD for `apprepositories.kubeapps.com` it will delete the repositories for **all** the installed instances of `kubeapps`. This will break existing installations of `kubeapps` if they exist.
+
+If you have dedicated a namespace only for Kubeapps you can completely clean remaining completed/failed jobs or any stale resources by deleting the namespace
+
+```console
+$ kubectl delete namespace kubeapps
 ```
 
 ## Troubleshooting
