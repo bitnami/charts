@@ -1,7 +1,7 @@
 apiVersion: v1
 name: kafka
-version: 6.1.4
-appVersion: 2.3.0
+version: 6.1.5
+appVersion: 2.3.1
 description: Apache Kafka is a distributed streaming platform.
 keywords:
 - kafka
