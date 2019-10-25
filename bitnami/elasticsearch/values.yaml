@@ -30,7 +30,7 @@ image:
 ## Image that performs the sysctl operation
 ##
 sysctlImage:
-  enabled: false
+  enabled: true
   registry: docker.io
   repository: bitnami/minideb
   tag: stretch
