@@ -144,7 +144,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.enabled`                     | Start a side-car prometheus exporter                                                                                                                      | `false`                                                                                                 |
 | `metrics.service.annotations`         | Prometheus annotations for the Kibana service                                                                                                             | `{ prometheus.io/scrape: "true", prometheus.io/port: "80", prometheus.io/path: "_prometheus/metrics" }` |
 | `elasticsearch.enabled`               | Use bundled Elasticsearch                                                                                                                                 | `true`                                                                                                  |
-| `elasticsearch.sysctlImage.enabled`   | Use sysctl image for bundled Elasticsearch                                                                                                                | `false`                                                                                                 |
+| `elasticsearch.sysctlImage.enabled`   | Use sysctl image for bundled Elasticsearch                                                                                                                | `true`                                                                                                 |
 | `elasticsearch.master.replicas`       | Desired number of Elasticsearch master-eligible nodes                                                                                                     | `1`                                                                                                     |
 | `elasticsearch.coordinating.replicas` | Desired number of Elasticsearch coordinating-only nodes                                                                                                   | `1`                                                                                                     |
 | `elasticsearch.data.replicas`         | Desired number of Elasticsearch data nodes                                                                                                                | `1`                                                                                                     |
@@ -316,3 +316,16 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Notable changes
+
+### 2.0.0
+
+This version enabled by default an initContainer that modify some kernel settings to meet the Elasticsearch requirements.
+
+Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+
+- [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
+- [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
+
+You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=false` parameter.

@@ -105,7 +105,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | `elasticsearch.image.registry`          | Elasticsearch image registry                                                                         | `docker.io`                                                  |
 | `elasticsearch.image.repository`        | Elasticsearch image name                                                                             | `bitnami/elasticsearch`                                      |
 | `elasticsearch.image.tag`               | Elasticsearch image tag                                                                              | `{TAG_NAME}`                                                 |
-| `elasticsearch.sysctlImage.enabled`     | Enable kernel settings modifier image for Elasticsearch                                              | `false`                                                      |
+| `elasticsearch.sysctlImage.enabled`     | Enable kernel settings modifier image for Elasticsearch                                              | `true`                                                       |
 | `elasticsearch.master.replicas`         | Desired number of Elasticsearch master-eligible nodes                                                | `1`                                                          |
 | `elasticsearch.coordinating.replicas`   | Desired number of Elasticsearch coordinating-only nodes                                              | `1`                                                          |
 | `elasticsearch.data.replicas`           | Desired number of Elasticsearch data nodes                                                           | `1`                                                          |
@@ -205,6 +205,19 @@ This chart includes a `values-production.yaml` file where you can find some para
 The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image stores the Magento data and configurations at the `/bitnami/magento` and `/bitnami/apache` paths of the container.
 
  Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
+
+## Notable changes
+
+### 9.0.0
+
+This version enabled by default an initContainer that modify some kernel settings to meet the Elasticsearch requirements.
+
+Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+
+- [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
+- [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
+
+You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=false` parameter.
 
 ## Upgrading
 

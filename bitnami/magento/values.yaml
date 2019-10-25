@@ -181,7 +181,7 @@ elasticsearch:
     tag: 6.8.3-debian-9-r32
   ## Enable to perform the sysctl operation
   sysctlImage:
-    enabled: false
+    enabled: true
   ## Elasticsearch master-eligible node parameters
   master:
     replicas: 1

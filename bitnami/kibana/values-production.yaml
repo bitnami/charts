@@ -319,7 +319,7 @@ elasticsearch:
   enabled: false
   ## Enable sysctl image for the bundled Elasticsearch
   sysctlImage:
-    enabled: false
+    enabled: true
   ## Elasticsearch master-eligible node parameters
   master:
     replicas: 2
