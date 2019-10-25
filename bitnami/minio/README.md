@@ -71,13 +71,14 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `stretch`                                                |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `stretch`                                               |
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 | `mode`                               | MinIO server mode (`standalone` or `distributed`)                                                                                                         | `standalone`                                            |
 | `statefulset.replicaCount`           | Number of pods (only for Minio distributed mode). Should be 4 <= x <= 32                                                                                  | `4`                                                     |
 | `statefulset.updateStrategy`         | Statefulset update strategy policy                                                                                                                        | `RollingUpdate`                                         |
 | `statefulset.podManagementpolicy`    | Statefulset pods management policy                                                                                                                        | `Parallel`                                              |
+| `deployment.updateStrategy`          | Deployment update strategy policy                                                                                                                         | `Recreate`                                              |
 | `existingSecret`                     | Existing secret with MinIO credentials                                                                                                                    | `nil`                                                   |
 | `useCredentialsFile`                 | Have the secret mounted as a file instead of env vars                                                                                                     | `false`                                                 |
 | `accessKey.password`                 | MinIO Access Key. Ignored if existing secret is provided.                                                                                                 | _random 10 character alphanumeric string_               |
@@ -203,6 +204,16 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - networkPolicy.allowExternal: true
 + networkPolicy.allowExternal: false
+```
+
+- Set deployment updateStrategy to RollingUpdate:
+```diff
+- deployment:
+-   updateStrategy:
+-     type: Recreate
++ deployment:
++   updateStrategy:
++     type: RollingUpdate
 ```
 
 ### Distributed mode
