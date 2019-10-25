@@ -180,7 +180,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                                                    | `ClusterIP`                                             |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                                                  | `requests: { cpu: "25m" }`                              |
 | `metrics.podAnnotations`                          | Annotations for metrics pods.                                                                                                                             | `{}`                                                    |
-| `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                                                     | `false`                                                 |
+| `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                                                     | `true`                                                  |
 | `sysctlImage.registry`                            | Kernel settings modifier image registry                                                                                                                   | `docker.io`                                             |
 | `sysctlImage.repository`                          | Kernel settings modifier image repository                                                                                                                 | `bitnami/minideb`                                       |
 | `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                                                        | `stretch`                                                |
@@ -221,6 +221,12 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Production configuration
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+
+- Init container that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors):
+```diff
+- sysctlImage.enabled: true
++ sysctlImage.enabled: false
+```
 
 - Desired number of Elasticsearch master-eligible nodes:
 ```diff
@@ -374,14 +380,15 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
-### Troubleshooting
+### Default kernel settings
 
 Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
 
 - [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
 - [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
 
-You can use a **privileged** initContainer (using the `sysctlImage.enabled=true` parameter) to change those settings in the Kernel.
+This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
+You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
 ## Persistence
 
@@ -397,6 +404,13 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Notable changes
+
+### 7.0.0
+
+This version enabled by default the initContainer that modify some kernel settings to meet the Elasticsearch requirements. More info in the ["Default kernel settings"](#default-kernel-settings) section.
+You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
 ## Upgrading
 
