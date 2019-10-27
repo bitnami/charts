@@ -207,7 +207,7 @@ auth:
   enabled: false
 
   ##Enable SSL to be used with brokers and consumers
-  #ssl: true
+  #ssl: false
 
   ## Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser.
   #existingSecret:
