@@ -105,6 +105,8 @@ spec:
         - name: KAFKA_CFG_LISTENERS
           {{- if .Values.listeners }}
           value: {{ .Values.listeners }}
+          {{- else if and .Values.auth.ssl .Values.auth.enabled }}
+          value: "SASL_SSL://:$(KAFKA_PORT_NUMBER),SSL://:9093"
           {{- else if .Values.auth.enabled }}
           value: "SASL_SSL://:$(KAFKA_PORT_NUMBER)"
           {{- else }}
@@ -113,6 +115,8 @@ spec:
         - name: KAFKA_CFG_ADVERTISED_LISTENERS
           {{- if .Values.advertisedListeners }}
           value: {{ .Values.advertisedListeners }}
+          {{- else if and .Values.auth.ssl .Values.auth.enabled }}
+          value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER),SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:9093'
           {{- else if .Values.auth.enabled  }}
           value: 'SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)'
           {{- else }}
@@ -229,6 +233,10 @@ spec:
         ports:
         - name: kafka
           containerPort: {{ .Values.service.port }}
+        {{- if .Values.auth.ssl }}
+        - name: kafka-ssl
+          containerPort: 9093
+        {{- end }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           tcpSocket:
