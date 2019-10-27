@@ -206,6 +206,9 @@ auth:
   ## Switch to enable the kafka authentication.
   enabled: false
 
+  ##Enable SSL to be used with brokers and consumers
+  #ssl: true
+
   ## Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser.
   #existingSecret:
 
