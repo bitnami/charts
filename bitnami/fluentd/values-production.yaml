@@ -119,6 +119,7 @@ forwarder:
   podAnnotations: {}
 
 aggregator:
+  enabled: true
   ## Number of aggregator replicas
   ##
   replicaCount: 2
