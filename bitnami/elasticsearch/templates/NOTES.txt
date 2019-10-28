@@ -42,6 +42,17 @@
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.curator.enabled }}
+
+  A CronJob will run with schedule {{ .Values.curator.cronjob.schedule }}.
+
+  The Jobs will not be removed automagically when deleting this Helm chart.
+  To remove these jobs, run the following:
+
+    kubectl -n {{ .Release.Namespace }} delete job -l app={{ template "elasticsearch.name" . }},role=curator
+
+{{- end }}
+
   Elasticsearch can be accessed within the cluster on port {{ .Values.coordinating.service.port }} at {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
   To access from outside the cluster execute the following commands:

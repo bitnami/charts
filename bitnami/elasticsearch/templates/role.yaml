@@ -1,0 +1,24 @@
+{{- if and .Values.curator.enabled .Values.curator.rbac.enabled }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    role: "curator"
+    component: elasticsearch-curator-configmap
+  name: {{ template "elasticsearch.curator.name" . }}-role
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["update", "patch"]
+{{- if .Values.curator.psp.create }}
+- apiGroups: ["extensions"]
+  resources: ["podsecuritypolicies"]
+  verbs: ["use"]
+  resourceNames:
+  - {{ template "elasticsearch.curator.fullname" . }}-psp
+{{- end }}
+{{- end }}

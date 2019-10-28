@@ -1,0 +1,15 @@
+{{- if .Values.curator.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "elasticsearch.curator.fullname" . }}-config
+  labels:
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    role: "curator"
+data:
+  action_file.yml: {{ required "A valid .Values.curator.configMaps.action_file_yml entry is required!" (toYaml .Values.curator.configMaps.action_file_yml | indent 2) }}
+  config.yml: {{ required "A valid .Values.curator.configMaps.config_yml entry is required!" (tpl (toYaml .Values.curator.configMaps.config_yml | indent 2) $) }}
+{{- end }}
