@@ -1,3 +1,4 @@
+{{- if .Values.aggregator.enabled -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -108,3 +109,4 @@ spec:
       {{- with .Values.aggregator.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end -}}

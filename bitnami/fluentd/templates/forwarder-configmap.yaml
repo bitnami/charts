@@ -76,7 +76,7 @@ data:
     <filter kubernetes.**>
       @type kubernetes_metadata
     </filter>
-
+    {{ if .Values.aggregator.enabled }}
     # Forward all logs to the aggregators
     <match **>
       @type forward
@@ -101,4 +101,10 @@ data:
         flush_interval 5s
       </buffer>
     </match>
+    {{- else }}
+    # Send the logs to the standard output
+    <match **>
+      @type stdout
+    </match>
+    {{- end -}}
 {{- end -}}
