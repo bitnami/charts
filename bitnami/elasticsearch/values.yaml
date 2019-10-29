@@ -332,7 +332,7 @@ ingest:
 
 curator:
   enabled: false
-  name: curator # TODO: is it needed?
+  name: curator
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator

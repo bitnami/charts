@@ -171,6 +171,37 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `ingest.readinessProbe.timeoutSeconds`            | When the probe times out (ingest nodes pod)                                                                                                               | `5`                                                     |
 | `ingest.readinessProbe.successThreshold`          | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)                                            | `1`                                                     |
 | `ingest.readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                 | `5`                                                     |
+| `curator.enabled`                                 | Enable Elasticsearch Curator cron job                                                                                                                     | `false`                                                 |
+| `curator.name`                                    | Elasticsearch Curator pod name                                                                                                                            | `curator`                                               |
+| `curator.image.registry`                          | Elasticsearch Curator image registry                                                                                                                      | `docker.io`                                             |
+| `curator.image.repository`                        | Elasticsearch Curator image repository                                                                                                                    | `bitnami/elasticsearch-curator`                         |
+| `curator.image.tag`                               | Elasticsearch Curator image tag                                                                                                                           | `{TAG_NAME}`                                            |
+| `curator.image.pullPolicy`                        | Elasticsearch Curator image pull policy                                                                                                                   | `{TAG_NAME}`                                            |
+| `curator.cronjob.schedule`                        | Schedule for the CronJob                                                                                                                                  | `0 1 * * *`                                             |
+| `curator.cronjob.annotations`                     | Annotations to add to the cronjob                                                                                                                         | {}                                                      |
+| `curator.cronjob.concurrencyPolicy`               | `Allow|Forbid|Replace` concurrent jobs                                                                                                                    | `nil`                                                   |
+| `curator.cronjob.failedJobsHistoryLimit`          | Specify the number of failed Jobs to keep                                                                                                                 | `nil`                                                   |
+| `curator.cronjob.successfulJobsHistoryLimit`      | Specify the number of completed Jobs to keep                                                                                                              | `nil`                                                   |
+| `curator.cronjob.jobRestartPolicy`                | Control the Job restartPolicy                                                                                                                             | `Never`                                                 |
+| `curator.podAnnotations`                          | Annotations to add to the pod                                                                                                                             | {}                                                      |
+| `curator.rbac.enabled`                            | Enable RBAC resources                                                                                                                                     | `false`                                                 |
+| `curator.serviceAccount.create`                   | Create a default serviceaccount for elasticsearch curator                                                                                                 | `true`                                                  |
+| `curator.serviceAccount.name`                     | Name for elasticsearch curator serviceaccount                                                                                                             | `""`                                                    |
+| `curator.hooks`                                   | Whether to run job on selected hooks                                                                                                                      | `{ "install": false, "upgrade": false }`                |
+| `curator.psp.create`                              | Create pod security policy resources                                                                                                                      | `false`                                                 |
+| `curator.dryrun`                                  | Run Curator in dry-run mode                                                                                                                               | `false`                                                 |
+| `curator.command`                                 | Command to execute                                                                                                                                        | ["/curator/curator"]                                    |
+| `curator.env`                                     | Environment variables to add to the cronjob container                                                                                                     | {}                                                      |
+| `curator.configMaps.action_file_yml`              | Contents of the Curator action_file.yml                                                                                                                   | See values.yaml                                         |
+| `curator.configMaps.config_yml`                   | Contents of the Curator config.yml (overrides config)                                                                                                     | See values.yaml                                         |
+| `curator.resources`                               | Resource requests and limits                                                                                                                              | {}                                                      |
+| `curator.priorityClassName`                       | priorityClassName                                                                                                                                         | `nil`                                                   |
+| `curator.extraVolumes`                            | Extra volumes                                                                                                                                             |                                                         |
+| `curator.extraVolumeMounts`                       | Mount extra volume(s),                                                                                                                                    |                                                         |
+| `curator.extraInitContainers`                     | Init containers to add to the cronjob container                                                                                                           | {}                                                      |
+| `curator.envFromSecrets`                          | Environment variables from secrets to the cronjob container                                                                                               | {}                                                      |
+| `curator.envFromSecrets.*.from.secret`            | - `secretKeyRef.name` used for environment variable                                                                                                       |                                                         |
+| `curator.envFromSecrets.*.from.key`               | - `secretKeyRef.key` used for environment variable                                                                                                        |                                                         |
 | `metrics.enabled`                                 | Enable prometheus exporter                                                                                                                                | `false`                                                 |
 | `metrics.name`                                    | Metrics pod name                                                                                                                                          | `metrics`                                               |
 | `metrics.image.registry`                          | Metrics exporter image registry                                                                                                                           | `docker.io`                                             |
@@ -366,6 +397,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 +   timeoutSeconds: 5
 +   successThreshold: 1
 +   failureThreshold: 5
+```
+
+- Enable Elasticsearch Curator cron job:
+
+```diff
+- curator.enabled: false
++ curator.enabled: true
 ```
 
 - Enable prometheus exporter:
