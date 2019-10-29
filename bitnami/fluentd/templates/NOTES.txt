@@ -10,7 +10,7 @@
     kubectl logs -l "app.kubernetes.io/component=aggregator"
   
   You can mount your own configuration files to the aggregators and the forwarders. For example, this is useful if you want to forward the aggregated logs to Elasticsearch or another service.
-{{- else }}
+{{- else if and (not .Values.aggregator.enabled) (not .Values.forwarder.configMap) }}
   Logs are captured on each node by the forwarder pods and sent to the standard output
   You can see all the logs by running this command:
 
