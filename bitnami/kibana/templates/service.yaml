@@ -8,7 +8,7 @@ metadata:
   {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}
     {{- tpl (toYaml .Values.metrics.service.annotations) $ | nindent 4 }}
   {{- end }}
-  {{- if and .Values.service.annotations }}
+  {{- if .Values.service.annotations }}
     {{- tpl (toYaml .Values.service.annotations) $ | nindent 4 }}
   {{- end }}
 {{- end }}
