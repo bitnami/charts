@@ -3,9 +3,15 @@ kind: Service
 metadata:
   name: {{ include "grafana.fullname" . }}
   labels: {{ include "grafana.labels" . | nindent 4 }}
-  {{- if .Values.service.annotations }}
-  annotations: {{ toYaml .Values.service.annotations | nindent 4 }}
+{{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
+  annotations:
+  {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}
+    {{- toYaml .Values.metrics.service.annotations | nindent 4 }}
   {{- end }}
+  {{- if .Values.service.annotations }}
+    {{ toYaml .Values.service.annotations | nindent 4 }}
+  {{- end }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if and .Values.service.loadBalancerIP (eq .Values.service.type "LoadBalancer") }}
