@@ -79,7 +79,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           command:
-            - sh
+            - /bin/sh
             - -c
             - |
               mkdir -p {{ .Values.persistence.mountPath }}/data
