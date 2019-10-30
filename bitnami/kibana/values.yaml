@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.4.0-debian-9-r0
+  tag: 7.4.1-debian-9-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
