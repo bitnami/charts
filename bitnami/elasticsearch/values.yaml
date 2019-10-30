@@ -382,29 +382,29 @@ curator:
   env: {}
 
   configMaps:
-    # Delete indices older than 7 days
+    # Delete indices older than 90 days
     action_file_yml: |-
       ---
       actions:
-        #1:
-        #  action: delete_indices
-        #  description: "Clean up ES by deleting old indices"
-        #  options:
-        #    timeout_override:
-        #    continue_if_exception: False
-        #    disable_action: False
-        #    ignore_empty_list: True
-        #  filters:
-        #  - filtertype: age
-        #    source: name
-        #    direction: older
-        #    timestring: '%Y.%m.%d'
-        #    unit: days
-        #    unit_count: 7
-        #    field:
-        #    stats_result:
-        #    epoch:
-        #    exclude: False
+        1:
+          action: delete_indices
+          description: "Clean up ES by deleting old indices"
+          options:
+            timeout_override:
+            continue_if_exception: False
+            disable_action: False
+            ignore_empty_list: True
+          filters:
+          - filtertype: age
+            source: name
+            direction: older
+            timestring: '%Y.%m.%d'
+            unit: days
+            unit_count: 90
+            field:
+            stats_result:
+            epoch:
+            exclude: False
     # Default config (this value is evaluated as a template)
     config_yml: |-
       ---

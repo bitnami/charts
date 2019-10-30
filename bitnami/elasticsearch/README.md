@@ -399,13 +399,6 @@ This chart includes a `values-production.yaml` file where you can find some para
 +   failureThreshold: 5
 ```
 
-- Enable Elasticsearch Curator cron job:
-
-```diff
-- curator.enabled: false
-+ curator.enabled: true
-```
-
 - Enable prometheus exporter:
 ```diff
 - metrics.enabled: false
