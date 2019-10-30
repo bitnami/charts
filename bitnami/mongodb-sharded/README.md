@@ -287,10 +287,28 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
-- Switch to enable/disable replica set configuration:
+- Increase shards to 4:
 ```diff
-- replicaSet.enabled: false
-+ replicaSet.enabled: true
+- shards: 2
++ shards: 4
+```
+
+- Increase config server replicaset sive:
+```diff
+- configsvr.replicas: 1
++ configsvr.replicas: 3
+```
+
+- Increase data nodes per shard:
+```diff
+- shardsvr.dataNode.replicas: 1
++ shardsvr.dataNode.replicas: 2
+```
+
+- Enable arbiter node on each shard:
+```diff
+- shardsvr.arbiter.replicas: 0
++ shardsvr.arbiter.replicas: 1
 ```
 
 - Start a side-car prometheus exporter:
@@ -298,20 +316,6 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
-
-- Enable/disable the Liveness Check of Prometheus metrics exporter:
-```diff
-- metrics.livenessProbe.enabled: false
-+ metrics.livenessProbe.enabled: true
-```
-
-- Enable/disable the Readiness Check of Prometheus metrics exporter:
-```diff
-- metrics.readinessProbe.enabled: false
-+ metrics.readinessProbe.enabled: true
-```
-
-To horizontally scale this chart, you can use the `--replicas` flag to modify the number of secondary nodes in your MongoDB replica set.
 
 ### Sharding
 
