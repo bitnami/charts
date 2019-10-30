@@ -13,7 +13,7 @@ global: {}
 ##
 image:
   registry: docker.io
-  repository: javsalgar/mongodb-sharded
+  repository: bitnami/mongodb-sharded
   tag: "4.0"
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
