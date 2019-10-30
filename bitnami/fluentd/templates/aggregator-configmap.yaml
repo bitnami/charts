@@ -1,4 +1,4 @@
-{{- if not .Values.aggregator.configMap -}}
+{{- if and .Values.aggregator.enabled (not .Values.aggregator.configMap) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:

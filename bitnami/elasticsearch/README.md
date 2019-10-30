@@ -52,11 +52,11 @@ $ helm delete --purge my-release
 
 The following table lists the configurable parameters of the Elasticsearch chart and their default values.
 
-| Parameter                                         | Description                                                                                                                                               | Default                                                 |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|                     Parameter                     |                                                                        Description                                                                        |                         Default                         |
+|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                            | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
+| `global.storageClass`                             | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
 | `image.registry`                                  | Elasticsearch image registry                                                                                                                              | `docker.io`                                             |
 | `image.repository`                                | Elasticsearch image repository                                                                                                                            | `bitnami/elasticsearch`                                 |
 | `image.tag`                                       | Elasticsearch image tag                                                                                                                                   | `{TAG_NAME}`                                            |
@@ -211,15 +211,20 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                                                    | `ClusterIP`                                             |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                                                  | `requests: { cpu: "25m" }`                              |
 | `metrics.podAnnotations`                          | Annotations for metrics pods.                                                                                                                             | `{}`                                                    |
-| `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                                                     | `false`                                                 |
+| `metrics.serviceMonitor.enabled`                  | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                                                 |
+| `metrics.serviceMonitor.namespace`                | Namespace in which Prometheus is running                                                                                                                  | `nil`                                                   |
+| `metrics.serviceMonitor.interval`                 | Interval at which metrics should be scraped.                                                                                                              | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.scrapeTimeout`            | Timeout after which the scrape is ended                                                                                                                   | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.selector`                 | Prometheus instance selector labels                                                                                                                       | `nil`                                                   |
+| `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                                                     | `true`                                                  |
 | `sysctlImage.registry`                            | Kernel settings modifier image registry                                                                                                                   | `docker.io`                                             |
 | `sysctlImage.repository`                          | Kernel settings modifier image repository                                                                                                                 | `bitnami/minideb`                                       |
-| `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                                                        | `stretch`                                                |
+| `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                                                        | `stretch`                                               |
 | `sysctlImage.pullPolicy`                          | Kernel settings modifier image pull policy                                                                                                                | `Always`                                                |
 | `volumePermissions.enabled`                       | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`                | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
 | `volumePermissions.image.repository`              | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                               | `stretch`                                                |
+| `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                               | `stretch`                                               |
 | `volumePermissions.image.pullPolicy`              | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 
@@ -252,6 +257,12 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Production configuration
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+
+- Init container that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors):
+```diff
+- sysctlImage.enabled: true
++ sysctlImage.enabled: false
+```
 
 - Desired number of Elasticsearch master-eligible nodes:
 ```diff
@@ -405,14 +416,15 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
-### Troubleshooting
+### Default kernel settings
 
 Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
 
 - [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
 - [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
 
-You can use a **privileged** initContainer (using the `sysctlImage.enabled=true` parameter) to change those settings in the Kernel.
+This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
+You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
 ## Persistence
 
@@ -428,6 +440,13 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Notable changes
+
+### 7.0.0
+
+This version enabled by default the initContainer that modify some kernel settings to meet the Elasticsearch requirements. More info in the ["Default kernel settings"](#default-kernel-settings) section.
+You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
 ## Upgrading
 

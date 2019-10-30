@@ -1,5 +1,5 @@
 dependencies:
 - name: elasticsearch
-  version: 6.x.x
+  version: 7.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: elasticsearch.enabled
