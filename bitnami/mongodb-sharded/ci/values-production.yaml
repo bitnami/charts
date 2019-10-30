@@ -1,0 +1,13 @@
+shards: 4
+shardsvr:
+  dataNode:
+    replicas: 2
+  arbiter:
+    replicas: 1
+configsvr:
+  replicas: 3
+mongos:
+  replicas: 3
+metrics:
+  enabled: true
+usePasswordFile: true
