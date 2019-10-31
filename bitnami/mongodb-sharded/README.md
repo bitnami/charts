@@ -1,4 +1,4 @@
-# MongoDB
+# MongoDB Sharded
 
 [MongoDB Sharded](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
 
@@ -256,6 +256,10 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `metrics.readinessProbe.timeoutSeconds`       | Timeout for Readiness Check of Prometheus metrics exporter           | `1`                                                     |
 | `metrics.readinessProbe.failureThreshold`     | Failure Threshold for Readiness Check of Prometheus metrics exporter | `3`                                                     |
 | `metrics.readinessProbe.successThreshold`     | Success Threshold for Readiness Check of Prometheus metrics exporter | `1`                                                     |
+| `metrics.serviceMonitor.enabled`        | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`)                     | `false`                                                 |
+| `metrics.serviceMonitor.namespace`      | Namespace which Prometheus is running in                                                                                                                  | `monitoring`                                            |
+| `metrics.serviceMonitor.interval`       | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                    | `nil`                                                   |
+| `metrics.serviceMonitor.selector`       | Default to kube-prometheus install (CoreOS recommended), but should be set according to Prometheus install                                                | `{ prometheus: kube-prometheus }`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -330,21 +334,6 @@ The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) image a
 
 The allowed extensions are `.sh`, and `.js`.
 
-## Persistence
-
-The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) image stores the MongoDB data and configurations at the `/bitnami/mongodb` path of the container.
-
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
 ### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as Kibana (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter (available in the `mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`, `configsvr` and `common` sections). Simply define your container according to the Kubernetes container spec.
@@ -382,6 +371,21 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+## Persistence
+
+The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) image stores the MongoDB data and configurations at the `/bitnami/mongodb` path of the container.
+
+The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ### Adding extra volumes
 

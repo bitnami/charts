@@ -74,7 +74,6 @@ Create chart name and version as used by the chart label.
   {{- printf "%s-configsvr-0.%s-headless.%s.svc.%s" (include "mongodb-sharded.fullname" . ) (include "mongodb-sharded.fullname" .) .Release.Namespace .Values.clusterDomain -}}
 {{- end -}}
 
-
 {{- define "mongodb-sharded.mongos.configCM" -}}
   {{- if .Values.mongos.configCM -}}
     {{- .Values.mongos.configCM -}}
@@ -188,7 +187,6 @@ Return the proper image name (for the metrics image)
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
   {{- end -}}
 {{- end -}}
-
 
 {{/*
 Return the proper Docker Image Registry Secret Names
