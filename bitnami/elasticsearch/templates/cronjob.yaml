@@ -28,16 +28,16 @@ spec:
     metadata:
       labels:
         app: {{ template "elasticsearch.name" . }}
-        release: {{ .Release.Name }}
+        release: {{ .Release.Name | quote }}
     spec:
       template:
         metadata:
           labels:
             app: {{ template "elasticsearch.name" . }}
-            release: {{ .Release.Name }}
-{{- if .Values.podAnnotations }}
+            release: {{ .Release.Name | quote }}
+{{- if .Values.curator.podAnnotations }}
           annotations:
-{{ toYaml .Values.podAnnotations | indent 12 }}
+{{ toYaml .Values.curator.podAnnotations | indent 12 }}
 {{- end }}
         spec:
           volumes:
@@ -49,14 +49,14 @@ spec:
 {{- end }}
           restartPolicy: {{ .Values.curator.cronjob.jobRestartPolicy }}
 {{- if .Values.curator.priorityClassName }}
-          priorityClassName: "{{ .Values.priorityClassName }}"
+          priorityClassName: "{{ .Values.curator.priorityClassName }}"
 {{- end }}
 {{- include "elasticsearch.imagePullSecrets" . | indent 10 }}
 {{- if .Values.curator.extraInitContainers }}
           initContainers:
 {{- range $key, $value := .Values.curator.extraInitContainers }}
-          - name: "{{ $key }}"
-{{ toYaml $value | indent 12 }}
+            - name: "{{ $key }}"
+{{ toYaml $value | indent 14 }}
 {{- end }}
 {{- end }}
         {{- if .Values.curator.rbac.enabled }}
@@ -73,8 +73,7 @@ spec:
 {{ toYaml .Values.curator.extraVolumeMounts | indent 16 }}
 {{ end }}
 {{ if .Values.curator.command }}
-              command:
-{{ toYaml .Values.curator.command | indent 16 }}
+              command: {{ toYaml .Values.curator.command | nindent 16 }}
 {{- end }}
 {{- if .Values.curator.dryrun }}
               args: [ "--dry-run", "--config", "/etc/es-curator/config.yml", "/etc/es-curator/action_file.yml" ]
@@ -97,8 +96,9 @@ spec:
                     key: {{ $value.from.key | quote}}
 {{- end }}
 {{- end }}
-              resources:
-{{ toYaml .Values.curator.resources | indent 16 }}
+{{- if .Values.curator.resources }}
+              resources: {{ toYaml .Values.curator.resources | nindent 16 }}
+{{- end }}
     {{- with .Values.curator.nodeSelector }}
           nodeSelector:
 {{ toYaml . | indent 12 }}
