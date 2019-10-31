@@ -179,6 +179,18 @@ $ helm install --name my-release -f values.yaml bitnami/mariadb-galera
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Passing extra command-line flags to mysqld startup
+
+While the chart allows you to specify the server configuration using the `.mariadbConfiguration` chart parameter, some options for the MariaDB server can only be specified via command line flags. For such cases, the chart exposes the `.extraFlags` parameter.
+
+For example, if you want to enable the PAM cleartext plugin, specify the command line parameter while deploying the chart like so:
+
+```bash
+$ helm install --name my-release \
+  --set extraFlags="--pam-use-cleartext-plugin=ON" \
+  bitnami/mariadb-galera
+```
+
 ## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
