@@ -157,49 +157,20 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "elasticsearch.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
 {{- if .Values.global }}
 {{- if .Values.global.imagePullSecrets }}
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.curator.image.pullSecrets .Values.sysctlImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+{{- else }}
+{{- $imagePullSecrets := coalesce .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.curator.image.pullSecrets .Values.sysctlImage.pullSecrets .Values.volumePermissions.image.pullSecrets -}}
+{{- if $imagePullSecrets }}
 imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
+{{- range $imagePullSecrets }}
   - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.curator.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.sysctlImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
 {{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.curator.image.pullSecrets .Values.sysctlImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.sysctlImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -296,16 +267,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "elasticsearch.curator.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}-curator
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}-curator
-{{- end -}}
-{{- end -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.curator.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*

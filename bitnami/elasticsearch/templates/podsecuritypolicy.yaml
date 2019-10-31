@@ -19,7 +19,8 @@ spec:
   hostIPC: false
   hostPID: false
   runAsUser:
-    rule: 'RunAsAny'
+    # Require the container to run without root privileges.
+    rule: 'MustRunAsNonRoot'
   seLinux:
     rule: 'RunAsAny'
   supplementalGroups:
