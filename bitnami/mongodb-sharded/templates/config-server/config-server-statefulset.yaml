@@ -61,7 +61,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.securityContext.enabled }}
           securityContext:
-            runAsNonRoot: true
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
           ports:
@@ -216,7 +216,7 @@ spec:
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.securityContext.enabled }}
           securityContext:
-            runAsNonRoot: true
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
           env:

@@ -108,6 +108,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `securityContext.enabled`            | Enable security context                                                                                                                                   | `true`                                                   |
 | `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                   |
 | `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                   |
+| `securityContext.runAsNonRoot`       | Run containers as non-root users                                                                                                                          | `true`                                                   |
 | `persistence.enabled`                | Use a PVC to persist data                                                                                                                                 | `true`                                                   |
 | `persistence.mountPath`              | Path to mount the volume at                                                                                                                               | `/bitnami/mongodb`                                       |
 | `persistence.subPath`                | Subdirectory of the volume to mount at                                                                                                                    | `""`                                                     |
@@ -330,7 +331,7 @@ This chart deploys a sharded cluster by default. Some characteristics of this ch
 
 ### Initialize a fresh instance
 
-The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
+The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
 
 The allowed extensions are `.sh`, and `.js`.
 
@@ -374,7 +375,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ## Persistence
 
-The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) image stores the MongoDB data and configurations at the `/bitnami/mongodb` path of the container.
+The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image stores the MongoDB data and configurations at the `/bitnami/mongodb` path of the container.
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 

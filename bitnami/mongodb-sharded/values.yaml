@@ -588,6 +588,7 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+  runAsNonRoot: true
 
 ## Kubernetes Cluster Domain
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/#introduction
