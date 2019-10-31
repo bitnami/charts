@@ -9,10 +9,10 @@ metadata:
     release: {{ .Release.Name | quote }}
     role: "curator"
     component: elasticsearch-curator-configmap
-  name: {{ template "elasticsearch.curator.name" . }}-rolebinding
+  name: {{ template "elasticsearch.curator.name" . }}
 roleRef:
   kind: Role
-  name: {{ template "elasticsearch.curator.name" . }}-role
+  name: {{ template "elasticsearch.curator.name" . }}
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount

@@ -9,7 +9,7 @@ metadata:
     release: {{ .Release.Name | quote }}
     role: "curator"
     component: elasticsearch-curator-configmap
-  name: {{ template "elasticsearch.curator.name" . }}-role
+  name: {{ template "elasticsearch.curator.name" . }}
 rules:
 - apiGroups: [""]
   resources: ["configmaps"]
@@ -19,6 +19,6 @@ rules:
   resources: ["podsecuritypolicies"]
   verbs: ["use"]
   resourceNames:
-  - {{ template "elasticsearch.curator.fullname" . }}-psp
+  - {{ template "elasticsearch.curator.fullname" . }}
 {{- end }}
 {{- end }}

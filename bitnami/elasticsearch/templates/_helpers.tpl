@@ -163,6 +163,7 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
+{{- end }}
 {{- else }}
 {{- $imagePullSecrets := coalesce .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.curator.image.pullSecrets .Values.sysctlImage.pullSecrets .Values.volumePermissions.image.pullSecrets -}}
 {{- if $imagePullSecrets }}

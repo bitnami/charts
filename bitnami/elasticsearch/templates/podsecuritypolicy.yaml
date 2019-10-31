@@ -8,7 +8,7 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     role: "curator"
-  name: {{ template "elasticsearch.curator.fullname" . }}-psp
+  name: {{ template "elasticsearch.curator.fullname" . }}
 spec:
   privileged: true
   #requiredDropCapabilities:
