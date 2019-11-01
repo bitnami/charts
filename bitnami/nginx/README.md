@@ -139,6 +139,8 @@ serverBlock: |-
   }
 ```
 
+> Warning: The above example is not compatible with enabling Prometheus metrics since it affects the `/status` endpoint.
+
 ## Upgrading
 
 ### To 1.0.0
