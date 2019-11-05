@@ -1,0 +1,25 @@
+{{- if .Values.alertmanager.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "prometheus-operator.alertmanager.fullname" . }}
+  labels: {{- include "prometheus-operator.alertmanager.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {{- include "prometheus-operator.alertmanager.matchLabels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+  - port: http
+    {{- if .Values.alertmanager.serviceMonitor.interval }}
+    interval: {{ .Values.alertmanager.serviceMonitor.interval }}
+    {{- end }}
+    path: "/metrics"
+{{- if .Values.alertmanager.serviceMonitor.metricRelabelings }}
+    metricRelabelings: {{- include "prometheus-operator.tplValue" ( dict "value" .Values.alertmanager.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
+{{- end }}
+{{- if .Values.alertmanager.serviceMonitor.relabelings }}
+    relabelings: {{- toYaml .Values.alertmanager.serviceMonitor.relabelings | nindent 6 }}
+{{- end }}
+{{- end }}
