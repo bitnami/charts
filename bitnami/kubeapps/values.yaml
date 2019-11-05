@@ -130,6 +130,8 @@ apprepository:
   # Additional repositories
   # - name: chartmuseum
   #   url: https://chartmuseum.default:8080
+  #   nodeSelector:
+  #     somelabel: somevalue
   #   # Specify an Authorization Header if you are using an authentication method.
   #   authorizationHeader: "Bearer xrxNC..."
   #   # If you're providing your own certificates, please use this to add the certificates as secrets.
