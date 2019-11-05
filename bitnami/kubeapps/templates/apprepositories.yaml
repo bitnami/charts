@@ -27,7 +27,7 @@ spec:
             value: {{ $.Values.apprepository.initialReposProxy.no_proxy }}
   {{- end }}
   {{- if $.Values.securityContext.enabled }}
-        securityContext:
+      securityContext:
         runAsUser: {{ $.Values.securityContext.runAsUser }}
   {{- end }}
 {{- end }}

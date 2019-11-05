@@ -86,10 +86,7 @@ rules:
   resources:
   - apprepositories
   verbs:
-  - get
-  - create
-  - update
-  - delete
+  - "*"
 - apiGroups:
   - ""
   resources:

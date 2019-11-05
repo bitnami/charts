@@ -107,7 +107,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.6.0-scratch-r0
+    tag: 1.6.1-scratch-r0
   # Image used to perform chart repository syncs
   syncImage:
     registry: docker.io
@@ -167,7 +167,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.6.0-scratch-r0
+    tag: 1.6.1-scratch-r0
   service:
     port: 8080
   host: tiller-deploy.kube-system:44134
@@ -232,7 +232,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.6.0-debian-9-r2
+    tag: 1.6.1-debian-9-r0
   service:
     port: 8080
   livenessProbe:
