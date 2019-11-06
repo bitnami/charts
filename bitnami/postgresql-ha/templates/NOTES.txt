@@ -1,0 +1,60 @@
+** Please be patient while the chart is being deployed **
+
+PostgreSQL can be accessed through Pgpool via port {{ .Values.service.port }} on the following DNS name from within your cluster:
+
+    {{ include "postgresql-ha.pgpool" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+Pgpool acts as a load balancer for PostgreSQL and forward read/write connections to the primary node while read-only connections are forwarded to standby nodes.
+
+To get the password for {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} run:
+
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+
+To get the password for {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }} run:
+
+    export REPMGR_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.repmgr-password}" | base64 --decode)
+
+To connect to your database run the following command:
+
+    kubectl run {{ include "postgresql-ha.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image bitnami/postgresql:10 --env="PGPASSWORD=$POSTGRES_PASSWORD" {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "postgresql-ha.fullname" . }}-client=true" {{- end }} \
+        --command -- psql -h {{ include "postgresql-ha.pgpool" . }} -p {{ .Values.service.port }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+
+{{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
+
+{{- end }}
+
+To connect to your database from outside the cluster execute the following commands:
+
+{{- if .Values.ingress.enabled }}
+
+    You should be able to access your new PostgreSQL server through:
+
+    {{- range .Values.ingress.hosts }}
+    {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}
+    {{- end }}
+
+{{- else if contains "NodePort" .Values.service.type }}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "postgresql-ha.pgpool" . }}
+    PGPASSWORD="$POSTGRES_PASSWORD" psql -h $NODE_IP -p $NODE_PORT -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "postgresql-ha.pgpool" . }}
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.pgpool" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    PGPASSWORD="$POSTGRES_PASSWORD" psql -h $SERVICE_IP -p {{ .Values.service.port }}  -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+
+{{- else if contains "ClusterIP" .Values.service.type }}
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgresql-ha.pgpool" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+    psql -h 127.0.0.1 -p {{ .Values.service.port }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+
+{{- end }}
+
+{{- include "postgresql-ha.validateValues" . }}
+{{- include "postgresql-ha.checkRollingTags" . }}
