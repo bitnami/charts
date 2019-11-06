@@ -188,6 +188,10 @@ postgresql:
   # password:
   # database:
 
+  ## Upgrade repmgr extension in the database
+  ##
+  upgradeRepmgrExtension: false
+
   ## Configures pg_hba.conf to trust every user
   ##
   pgHbaTrustAll: false

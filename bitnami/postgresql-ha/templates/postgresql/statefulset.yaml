@@ -113,6 +113,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: REPMGR_UPGRADE_EXTENSION
+          value: {{ ternary "yes" "no" .Values.postgresql.upgradeRepmgrExtension | quote }}
         - name: REPMGR_PGHBA_TRUST_ALL
           value: {{ ternary "yes" "no" .Values.postgresql.pgHbaTrustAll | quote }}
         - name: REPMGR_MOUNTED_CONF_DIR

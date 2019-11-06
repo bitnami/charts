@@ -660,6 +660,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.ldap" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.ldapPgHba" .) -}}
+{{- $messages := append $messages (include "postgresql-ha.validateValues.upgradeRepmgrExtension" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -690,5 +691,18 @@ postgresql-ha: LDAP
 postgresql-ha: LDAP & pg_hba.conf
     PostgreSQL HBA configuration must trust every user when LDAP is enabled.
     Please configure HBA to trust every user (--set postgresql.pgHbaTrustAll=true)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of PostgreSQL HA - There must be an unique replica when upgrading repmgr extension */}}
+{{- define "postgresql-ha.validateValues.upgradeRepmgrExtension" -}}
+{{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
+{{- if and .Values.postgresql.upgradeRepmgrExtension (gt $postgresqlReplicaCount 1) }}
+postgresql-ha: Upgrade repmgr extension
+    There must be only one replica when upgrading repmgr extension:
+
+    $ helm upgrade {{ .Release.Name }} bitnami/postgresql-ha \
+      --set postgresql.replicaCount=1 \
+      --set postgresql.upgradeRepmgrExtension=true
 {{- end -}}
 {{- end -}}

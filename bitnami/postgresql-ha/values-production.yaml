@@ -193,6 +193,10 @@ postgresql:
   # password:
   # database:
 
+  ## Upgrade repmgr extension in the database
+  ##
+  upgradeRepmgrExtension: false
+
   ##
   pgHbaTrustAll: false
 
