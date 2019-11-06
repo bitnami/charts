@@ -1,4 +1,4 @@
-{{- if not .Values.forwarder.configMap -}}
+{{- if and .Values.forwarder.enabled (not .Values.forwarder.configMap) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
