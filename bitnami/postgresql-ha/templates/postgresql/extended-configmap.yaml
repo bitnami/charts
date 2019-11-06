@@ -1,0 +1,18 @@
+{{- if and (.Files.Glob "files/conf.d/*.conf") .Values.postgresql.extendedConf (not .Values.postgresql.extendedConfCM) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-extended-configuration" (include "postgresql-ha.postgresql" .) }}
+  labels: {{ include "postgresql-ha.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+data:
+{{- with .Files.Glob "files/conf.d/*.conf" }}
+{{ .AsConfig | indent 2 }}
+{{- end }}
+{{ with .Values.postgresql.extendedConf }}
+  override.conf: |
+{{- range $key, $value := . }}
+    {{ $key | snakecase }}={{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
