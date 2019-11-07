@@ -114,11 +114,21 @@ Validate data
 */}}
 {{- define "fluentd.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "fluentd.validateValues.deployment" .) -}}
 {{- $messages := append $messages (include "fluentd.validateValues.rbac" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
  {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Fluentd - forwarders and aggregators can't be disabled at the same time */}}
+{{- define "fluentd.validateValues.deployment" -}}
+{{- if and (not .Values.forwarder.enabled) (not .Values.aggregator.enabled) -}}
+fluentd:
+    You have disabled both the forwarders and the aggregators.
+    Please enable at least one of them (--set forwarder.enabled=true) (--set aggregator.enabled=true)
 {{- end -}}
 {{- end -}}
 

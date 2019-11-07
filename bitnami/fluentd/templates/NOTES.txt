@@ -26,4 +26,5 @@
   You can mount your own configuration files to the forwarders. For example, this is useful if you want to forward the logs to Elasticsearch or another service.
 {{- end }}
 
+{{- include "fluentd.validateValues" . }}
 {{- include "fluentd.checkRollingTags" . -}}
