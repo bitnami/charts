@@ -339,23 +339,7 @@ metrics:
 ## Properties for Elasticsearch
 ##
 elasticsearch:
-  ## Enable bundled Elasticsearch
-  enabled: false
-  ## Enable sysctl image for the bundled Elasticsearch
-  sysctlImage:
-    enabled: true
-  ## Elasticsearch master-eligible node parameters
-  master:
-    replicas: 2
-  ## Elasticsearch coordinating-only node parameters
-  coordinating:
-    replicas: 2
-  ## Elasticsearch data node parameters
-  data:
-    replicas: 2
-  ## Properties when enabled is false
-  external:
-    hosts:
-    # - elasticsearch-1
-    # - elasticsearch-2
-    port:
+  hosts:
+  # - elasticsearch-1
+  # - elasticsearch-2
+  port:
