@@ -32,123 +32,122 @@ spec:
     spec:
       {{- include "apache.imagePullSecrets" . | nindent 6 }}
       hostAliases:
-      - ip: "127.0.0.1"
-        hostnames:
-        - "status.localhost"
+        - ip: "127.0.0.1"
+          hostnames:
+            - "status.localhost"
       {{- if .Values.cloneHtdocsFromGit.enabled }}
       initContainers:
-      - name: git-clone-repository
-        image: "{{ template "git.image" . }}"
-        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-        command:
-        - /bin/bash
-        - -ec
-        - |
-          git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /app
-        volumeMounts:
-        - name: htdocs
-          mountPath: /app
+        - name: git-clone-repository
+          image: "{{ template "git.image" . }}"
+          imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /app
+          volumeMounts:
+            - name: htdocs
+              mountPath: /app
       containers:
-      - name: git-repo-syncer
-        image: "{{ template "git.image" . }}"
-        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-        command:
-        - /bin/bash
-        - -ec
-        - |
-          while true; do
-              cd /app && git pull origin {{ .Values.cloneHtdocsFromGit.branch }}
-              sleep {{ .Values.cloneHtdocsFromGit.interval }}
-          done
-        volumeMounts:
-        - name: htdocs
-          mountPath: /app
+        - name: git-repo-syncer
+          image: "{{ template "git.image" . }}"
+          imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              while true; do
+                  cd /app && git pull origin {{ .Values.cloneHtdocsFromGit.branch }}
+                  sleep {{ .Values.cloneHtdocsFromGit.interval }}
+              done
+          volumeMounts:
+            - name: htdocs
+              mountPath: /app
       {{- else }}
       containers:
       {{- end }}
-      - name: "{{ template "apache.fullname" . }}"
-        image: "{{ template "apache.image" . }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        ports:
-        - name: http
-          containerPort: 8080
-        - name: https
-          containerPort: 8443
-        {{- if .Values.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        - name: "{{ template "apache.fullname" . }}"
+          image: "{{ template "apache.image" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- if (include "apache.useHtdocs" .) }}
+            - name: htdocs
+              mountPath: /app
+            {{- end }}
+            {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
+            - name: vhosts
+              mountPath: /vhosts
+            {{- end }}
+            {{- if or (.Files.Glob "files/httpd.conf") (.Values.httpdConfConfigMap) }}
+            - name: httpd-conf
+              mountPath: /opt/bitnami/apache/conf/httpd.conf
+              subPath: httpd.conf
+            {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ template "apache.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          command: ['/bin/apache_exporter', '-scrape_uri', 'http://status.localhost:8080/server-status/?auto']
+          ports:
+            - name: metrics
+              containerPort: 9117
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-        {{- end }}
-        resources: {{ toYaml .Values.resources | nindent 10 }}
-        volumeMounts:
+      volumes:
         {{- if (include "apache.useHtdocs" .) }}
         - name: htdocs
-          mountPath: /app
+          {{- include "apache.htdocsVolume" . | nindent 10 }}
         {{- end }}
         {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
         - name: vhosts
-          mountPath: /vhosts
+          configMap:
+            name: {{ include "apache.vhostsConfigMap" . }}
         {{- end }}
         {{- if or (.Files.Glob "files/httpd.conf") (.Values.httpdConfConfigMap) }}
         - name: httpd-conf
-          mountPath: /opt/bitnami/apache/conf/httpd.conf
-          subPath: httpd.conf
+          configMap:
+            name: {{ include "apache.httpdConfConfigMap" . }}
         {{- end }}
-      {{- if .Values.metrics.enabled }}
-      - name: metrics
-        image: {{ template "apache.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        command: [ '/bin/apache_exporter', '-scrape_uri', 'http://status.localhost:8080/server-status/?auto']
-        ports:
-        - name: metrics
-          containerPort: 9117
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        resources: {{ toYaml .Values.metrics.resources | nindent 10 }}
-      {{- end }}
-      volumes:
-      {{- if (include "apache.useHtdocs" .) }}
-      - name: htdocs
-        {{- include "apache.htdocsVolume" . | nindent 8 }}
-      {{- end }}
-      {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
-      - name: vhosts
-        configMap:
-          name: {{ include "apache.vhostsConfigMap" . }}
-      {{- end }}
-      {{- if or (.Files.Glob "files/httpd.conf") (.Values.httpdConfConfigMap) }}
-      - name: httpd-conf
-        configMap:
-          name: {{ include "apache.httpdConfConfigMap" . }}
-      {{- end }}
       {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
+      affinity: {{- toYaml . | nindent 8 }}
       {{- end }}
