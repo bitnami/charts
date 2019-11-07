@@ -6,12 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-
-# Option 1: With an existing Elasticsearch instance
-$ helm install bitnami/kibana --set elasticsearch.external.hosts[0]=<Hostname of your ES instance> --set elasticsearch.external.port=<port of your ES instance>
-
-# Option 2: With a bundled Elasticsearch instance
-$ helm install bitnami/kibana --set elasticsearch.enabled=true
+$ helm install bitnami/kibana --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
 ```
 
 ## Introduction
@@ -29,24 +24,15 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Installing the Chart
 
-This chart requires a Elasticsearch instance to work. The chart offers two options:
-
-- Use an already existing Elasticsearch instance.
-- Deploy a new Elasticsearch instance together with Kibana. This is the default option when deploying the chart.
+This chart requires a Elasticsearch instance to work. You can use an already existing Elasticsearch instance.
 
  To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-
-# Option 1: With an existing Elasticsearch instance
 $ helm install bitnami/kibana --name my-release \
-  --set elasticsearch.external.hosts[0]=<Hostname of your ES instance> \
-  --set elasticsearch.external.port=<port of your ES instance>
-
-# Option 2: With a bundled Elasticsearch instance
-$ helm install bitnami/kibana --name my-release \
-  --set elasticsearch.enabled=true
+  --set elasticsearch.hosts[0]=<Hostname of your ES instance> \
+  --set elasticsearch.port=<port of your ES instance>
 ```
 
 These commands deploy kibana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -148,13 +134,8 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                                              | `nil` (Prometheus Operator default value)                                                               |             |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                                   | `nil` (Prometheus Operator default value)                                                               |             |
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                       | `nil`                                                                                                   |             |
-| `elasticsearch.enabled`                | Use bundled Elasticsearch                                                                                                                                 | `true`                                                                                                  |             |
-| `elasticsearch.sysctlImage.enabled`    | Use sysctl image for bundled Elasticsearch                                                                                                                | `true`                                                                                                  |             |
-| `elasticsearch.master.replicas`        | Desired number of Elasticsearch master-eligible nodes                                                                                                     | `1`                                                                                                     |             |
-| `elasticsearch.coordinating.replicas`  | Desired number of Elasticsearch coordinating-only nodes                                                                                                   | `1`                                                                                                     |             |
-| `elasticsearch.data.replicas`          | Desired number of Elasticsearch data nodes                                                                                                                | `1`                                                                                                     |             |
-| `elasticsearch.external.hosts`         | Array containing the hostnames for the already existing Elasticsearch instances                                                                           | `nil`                                                                                                   |             |
-| `elasticsearch.external.port`          | Port for the accessing external Elasticsearch instances                                                                                                   | `nil`                                                                                                   |             |
+| `elasticsearch.hosts`                  | Array containing the hostnames for the already existing Elasticsearch instances                                                                           | `nil`                                                                                                   |             |
+| `elasticsearch.port`                   | Port for the accessing external Elasticsearch instances                                                                                                   | `nil`                                                                                                   |             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -184,24 +165,6 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Production configuration
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Disable bundled Elasticsearch
-
-```diff
-- elasticsearch.enabled: true
-+ elasticsearch.enabled: false
-```
-
-- Increase the number of default Elasticsearch nodes (if manually enabled)
-
-```diff
-- elasticsearch.master.replicas: 1
-+ elasticsearch.master.replicas: 2
-- elasticsearch.coordinating.replicas: 1
-+ elasticsearch.coordinating.replicas: 2
-- elasticsearch.data.replicas: 1
-+ elasticsearch.data.replicas: 2
-```
 
 - Enable metrics scraping
 
@@ -251,9 +214,8 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the `initScriptsCM` and `initScriptsSecret` values.
 
 ```console
-elasticsearch.enabled=false
-elasticsearch.external.hosts[0]=elasticsearch-host
-elasticsearch.external.port=9200
+elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.port=9200
 initScriptsCM=special-scripts
 initScriptsSecret=special-scripts-sensitive
 ```
@@ -263,9 +225,8 @@ initScriptsSecret=special-scripts-sensitive
 The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` value:
 
 ```console
-elasticsearch.enabled=false
-elasticsearch.external.hosts[0]=elasticsearch-host
-elasticsearch.external.port=9200
+elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.port=9200
 plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 ```
 
@@ -324,13 +285,15 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Notable changes
 
-### 3.0.0
+### 4.0.0
 
-[bitnami/kibana] bump major version
+This version does not include Elasticsearch as a bundled dependency. From now on, you should specify an external Elasticsearch instance using the `elasticsearch.hosts[]` and `elasticsearch.port` [parameters](#parameters).
+
+### 3.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
-In 4dfac075aacf74405e31ae5b27df4369e84eb0b0 the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
+In [4dfac075aacf74405e31ae5b27df4369e84eb0b0](https://github.com/bitnami/charts/commit/4dfac075aacf74405e31ae5b27df4369e84eb0b0) the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
 
 This major version signifies this change.
 
