@@ -658,6 +658,7 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "postgresql-ha.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "postgresql-ha.validateValues.releaseName" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.ldap" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.ldapPgHba" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.upgradeRepmgrExtension" .) -}}
@@ -666,6 +667,14 @@ Compile all warnings into a single message, and call fail.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of PostgreSQL HA - the release name cannot be longer that 18 characters */}}
+{{- define "postgresql-ha.validateValues.releaseName" -}}
+{{- if gt (len .Release.Name) 18 -}}
+postgresql-ha: releaseName
+    The release name '{{ .Release.Name }}' exceeds the limit: 18 characters. Please set a shorter one.
 {{- end -}}
 {{- end -}}
 

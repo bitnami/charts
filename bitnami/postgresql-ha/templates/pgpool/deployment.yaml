@@ -51,13 +51,14 @@ spec:
       {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
       {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
       {{- $releaseName := .Release.Namespace }}
+      {{- $clusterDomain:= .Values.clusterDomain }}
       initContainers:
       - name: wait-for-backend-nodes
         image: {{ include "postgresql-ha.volumePermissionsImage" . }}
         imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
         env:
         - name: PGPOOL_BACKEND_NODES
-          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseName }}.svc.cluster.local:5432,{{ end }}
+          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseName }}.svc.{{ $clusterDomain }}:5432,{{ end }}
         command:
           - /bin/bash
           - -c
@@ -106,7 +107,7 @@ spec:
         - name: BITNAMI_DEBUG
           value: {{ ternary "true" "false" .Values.pgpoolImage.debug | quote }}
         - name: PGPOOL_BACKEND_NODES
-          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseName }}.svc.cluster.local:5432,{{ end }}
+          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseName }}.svc.{{ $clusterDomain }}:5432,{{ end }}
         - name: PGPOOL_SR_CHECK_USER
           value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
         {{- if .Values.postgresql.usePasswordFile }}

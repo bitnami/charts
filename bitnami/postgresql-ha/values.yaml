@@ -114,6 +114,10 @@ metricsImage:
 ##
 # fullnameOverride:
 
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
 ## PostgreSQL parameters
 ##
 postgresql:

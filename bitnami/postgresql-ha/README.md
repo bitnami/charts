@@ -78,6 +78,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | **General**                                    |                                                                                                                                                                      |                                                              |
 | `nameOverride`                                 | String to partially override postgres-ha.fullname template with a string                                                                                             | `nil`                                                        |
 | `fullnameOverride`                             | String to fully override postgres-ha.fullname template with a string                                                                                                 | `nil`                                                        |
+| `clusterDomain`                                | Default Kubernetes cluster domain                                                                                                                                    | `cluster.local`                                              |
 | **PostgreSQL with Repmgr**                     |                                                                                                                                                                      |                                                              |
 | `postgresqlImage.registry`                     | Registry for PostgreSQL with Repmgr image                                                                                                                            | `docker.io`                                                  |
 | `postgresqlImage.repository`                   | Repository for PostgreSQL with Repmgr image                                                                                                                          | `bitnami/postgresql-repmgr`                                  |
@@ -440,4 +441,3 @@ In this version, the chart will use PostgreSQL-Repmgr container images with the 
  - geos
  - proj
  - gdal
-
