@@ -6,12 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-
-# Option 1: With an existing Elasticsearch instance
-$ helm install bitnami/kibana --set elasticsearch.external.hosts[0]=<Hostname of your ES instance> --set elasticsearch.external.port=<port of your ES instance>
-
-# Option 2: With a bundled Elasticsearch instance
-$ helm install bitnami/kibana --set elasticsearch.enabled=true
+$ helm install bitnami/kibana
 ```
 
 ## Introduction
@@ -41,12 +36,12 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 # Option 1: With an existing Elasticsearch instance
 $ helm install bitnami/kibana --name my-release \
+  --set elasticsearch.enabled=false \
   --set elasticsearch.external.hosts[0]=<Hostname of your ES instance> \
   --set elasticsearch.external.port=<port of your ES instance>
 
 # Option 2: With a bundled Elasticsearch instance
-$ helm install bitnami/kibana --name my-release \
-  --set elasticsearch.enabled=true
+$ helm install bitnami/kibana --name my-release
 ```
 
 These commands deploy kibana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
