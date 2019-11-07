@@ -1,0 +1,220 @@
+{{- if $.Values.shardsvr.arbiter.replicas }}
+{{- $replicas := $.Values.shards | int }}
+{{- range $i, $e := until $replicas }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ printf "%s-shard%d-arbiter" (include "mongodb-sharded.fullname" $ ) $i }}
+  labels: {{- include "mongodb-sharded.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: shardsvr-arbiter
+spec:
+  selector:
+    matchLabels: {{- include "mongodb-sharded.matchLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: shardsvr-arbiter
+  updateStrategy: {{- toYaml $.Values.shardsvr.arbiter.updateStrategy | nindent 4 }}
+  serviceName: {{ include "mongodb-sharded.fullname" $ }}-headless
+  replicas: {{ $.Values.shardsvr.arbiter.replicas }}
+  template:
+    metadata:
+      labels: {{- include "mongodb-sharded.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: shardsvr-arbiter
+        {{- if $.Values.shardsvr.arbiter.podLabels }}
+          {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+      {{- if or $.Values.common.podAnnotations $.Values.shardsvr.arbiter.podAnnotations $.Values.metrics.enabled }}
+      annotations:
+        {{- if $.Values.common.podAnnotations }}
+           {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.podAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if $.Values.shardsvr.arbiter.podAnnotations }}
+          {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.podAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if $.Values.metrics.enabled }}
+           {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- if $.Values.common.schedulerName }}
+      schedulerName: {{ $.Values.common.schedulerName | quote }}
+      {{- end }}
+      nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.nodeSelector "context" $ ) | nindent 8 }}
+      affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.affinity "context" $ ) | nindent 8 }}
+      tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.tolerations "context" $ ) | nindent 8 }}
+      {{- if $.Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ $.Values.securityContext.fsGroup }}
+      {{- end }}
+      {{- include "mongodb-sharded.imagePullSecrets" $ | nindent 6 }}
+      containers:
+        - name: {{ include "mongodb-sharded.name" $ }}-arbiter
+          image: {{ include "mongodb-sharded.image" $ }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          {{- if $.Values.securityContext.enabled }}
+          securityContext:
+            runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ $.Values.securityContext.runAsUser }}
+          {{- end }}
+          ports:
+            - containerPort: {{ $.Values.service.port }}
+              name: mongodb
+          env:
+            {{- if $.Values.image.debug }}
+            - name: BITNAMI_DEBUG
+              value: "true"
+            {{- end }}
+            - name: MONGODB_SYSTEM_LOG_VERBOSITY
+              value: {{ $.Values.common.mongodbSystemLogVerbosity | quote }}
+            - name: MONGODB_DISABLE_SYSTEM_LOG
+              {{- if $.Values.common.mongodbDisableSystemLog }}
+              value: "yes"
+              {{- else }}
+              value: "no"
+              {{- end }}
+            - name: MONGODB_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MONGODB_MAX_TIMEOUT
+              value: {{ $.Values.common.mongodbMaxWaitTimeout | quote }}
+            - name: MONGODB_SHARDING_MODE
+              value: "shardsvr"
+            - name: MONGODB_REPLICA_SET_MODE
+              value: "arbiter"
+            - name: MONGODB_PRIMARY_HOST
+              value: {{ printf "%s-shard%d-data-0.%s-headless.%s.svc.%s" (include "mongodb-sharded.fullname" $ ) $i (include "mongodb-sharded.fullname" $ ) $.Release.Namespace $.Values.clusterDomain }}
+            - name: MONGODB_REPLICA_SET_NAME
+              value: {{ printf "%s-shard-%d" ( include "mongodb-sharded.fullname" $ ) $i }}
+            {{- if $.Values.common.useHostnames }}
+            - name: MONGODB_ADVERTISED_HOSTNAME
+              value: "$(MONGODB_POD_NAME).{{ include "mongodb-sharded.fullname" $ }}-headless.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}"
+            {{- end }}
+            - name: MONGODB_ENABLE_IPV6
+            {{- if $.Values.common.mongodbEnableIPv6 }}
+              value: "yes"
+            {{- else }}
+              value: "no"
+            {{- end }}
+            - name: MONGODB_ENABLE_DIRECTORY_PER_DB
+            {{- if $.Values.common.mongodbDirectoryPerDB }}
+              value: "yes"
+            {{- else }}
+              value: "no"
+            {{- end }}
+            {{- if $.Values.usePasswordFile }}
+            - name: MONGODB_PRIMARY_ROOT_PASSWORD_FILE
+              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+            - name: MONGODB_REPLICA_SET_KEY_FILE
+              value: "/bitnami/mongodb/secrets/mongodb-replica-set-key"
+            {{- else }}
+            - name: MONGODB_PRIMARY_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" $ }}
+                  key: mongodb-root-password
+            - name: MONGODB_REPLICA_SET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" $ }}
+                  key: mongodb-replica-set-key
+            {{- end }}
+            {{- if $.Values.shardsvr.arbiter.mongodbExtraFlags }}
+            - name: MONGODB_EXTRA_FLAGS
+              value: {{ $.Values.shardsvr.arbiter.mongodbExtraFlags | join " " | quote }}
+            {{- end }}
+          {{- if or $.Values.common.extraEnvVarsCM $.Values.common.extraEnvVarsSecret $.Values.shardsvr.arbiter.extraEnvVarsCM $.Values.shardsvr.arbiter.extraEnvVarsSecret }}
+          envFrom:
+            {{- if $.Values.common.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if $.Values.common.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+            {{- if $.Values.shardsvr.arbiter.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if $.Values.shardsvr.arbiter.extraEnvVarsSecret }}
+            - configMapRef:
+                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
+          {{- if $.Values.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: mongodb
+            initialDelaySeconds: {{ $.Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ $.Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ $.Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ $.Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if $.Values.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: mongodb
+            initialDelaySeconds: {{ $.Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ $.Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ $.Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ $.Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          volumeMounts:
+            {{- if or $.Values.shardsvr.arbiter.config $.Values.shardsvr.arbiter.configCM }}
+            - name: config
+              mountPath: /bitnami/mongodb/conf/
+            {{- end }}
+            {{- if $.Values.usePasswordFile }}
+            - name: secrets
+              mountPath: /bitnami/mongodb/secrets/
+            {{- end }}
+            {{- if $.Values.common.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/cm
+            {{- end }}
+            {{- if $.Values.common.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/secret
+            {{- end }}
+            {{- if $.Values.common.extraVolumeMounts }}
+              {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if $.Values.shardsvr.arbiter.extraVolumeMounts }}
+              {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+          resources: {{- toYaml $.Values.shardsvr.arbiter.resources | nindent 12 }}
+      volumes:
+        {{- if or $.Values.shardsvr.arbiter.config $.Values.shardsvr.arbiter.configCM }}
+        - name: config
+          configMap:
+            name: {{ include "mongodb-sharded.shardsvr.arbiter.configCM" $ }}
+        {{- end }}
+        {{- if $.Values.usePasswordFile }}
+        - name: secrets
+          secret:
+            secretName: {{ include "mongodb-sharded.secret" $ }}
+        {{- end }}
+        {{- if $.Values.common.initScriptsCM }}
+        - name: custom-init-scripts-configmap
+          configMap:
+            name: {{ include "mongodb-sharded.initScriptsCM" . }}
+            defaultMode: 0755
+        {{- end }}
+        {{- if $.Values.common.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            name: {{ include "mongodb-sharded.initScriptsSecret" . }}
+            defaultMode: 0755
+        {{- end }}
+      {{- if $.Values.common.extraVolumes }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraVolumes "context" $ ) | nindent 8 }}
+      {{- end }}
+      {{- if $.Values.shardsvr.arbiter.extraVolumes }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraVolumes "context" $ ) | nindent 8 }}
+      {{- end }}
+{{- if lt $i (sub $replicas 1) }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

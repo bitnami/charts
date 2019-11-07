@@ -15,6 +15,12 @@ This chart bootstraps a [Fluentd](https://github.com/bitnami/bitnami-docker-flue
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+## Prerequisites
+
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
+- PV provisioner support in the underlying infrastructure
+
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
@@ -24,7 +30,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/fluentd --name my-release
 ```
 
-These commands deploy Fluentd on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Fluentd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -38,12 +44,12 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the kibana chart and their default values.
 
-| Parameter                                       | Description                                                                                                    | Default                                                                                                 |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+|                    Parameter                    |                                                  Description                                                   |                                                 Default                                                 |
+|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | `global.imageRegistry`                          | Global Docker image registry                                                                                   | `nil`                                                                                                   |
 | `global.imagePullSecrets`                       | Global Docker registry secret names as an array                                                                | `[]` (does not add image pull secrets to deployed pods)                                                 |
 | `image.registry`                                | Fluentd image registry                                                                                         | `docker.io`                                                                                             |
@@ -76,6 +82,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `forwarder.tolerations`                         | Tolerations for pod assignment                                                                                 | `[]`                                                                                                    |
 | `forwarder.affinity`                            | Affinity for pod assignment                                                                                    | `{}`                                                                                                    |
 | `forwarder.podAnnotations`                      | Pod annotations                                                                                                | `{}`                                                                                                    |
+| `aggregator.enabled`                            | Enable Fluentd aggregator                                                                                      | `true`                                                                                                  |
 | `aggregator.replicaCount`                       | Number of aggregator pods to deploy in the Stateful Set                                                        | `2`                                                                                                     |
 | `aggregator.configFile`                         | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory | `fluentd.conf`                                                                                          |
 | `aggregator.configMap`                          | Name of the config map that contains the Fluentd configuration files                                           | `nil`                                                                                                   |
@@ -108,6 +115,11 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.service.loadBalancerIP`                | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`                                       | `nil`                                                                                                   |
 | `metrics.service.port`                          | Prometheus metrics service port                                                                                | `24231`                                                                                                 |
 | `metrics.service.annotations`                   | Annotations for Prometheus metrics service                                                                     | `{ prometheus.io/scrape: "true", prometheus.io/port: "80", prometheus.io/path: "_prometheus/metrics" }` |
+| `metrics.serviceMonitor.enabled`                | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)         | `false`                                                                                                 |
+| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                                       | `nil`                                                                                                   |
+| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped.                                                                   | `nil` (Prometheus Operator default value)                                                               |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                        | `nil` (Prometheus Operator default value)                                                               |
+| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                            | `nil`                                                                                                   |
 | `tls.enabled`                                   | Enable the addition of TLS certificates                                                                        | `false`                                                                                                 |
 | `tls.caCertificate`                             | Ca certificate                                                                                                 | Certificate Authority (CA) bundle content                                                               |
 | `tls.serverCertificate`                         | Server certificate                                                                                             | Server certificate content                                                                              |
@@ -133,6 +145,32 @@ $ helm install --name my-release -f values.yaml bitnami/fluentd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Production configuration and horizontal scaling
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+
+- Number of aggregator nodes:
+```diff
+- aggregator.replicaCount: 1
++ aggregator.replicaCount: 2
+```
+
+- Enable prometheus to access fluentd metrics endpoint:
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
+
+To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `aggregator.replicaCount` parameter.
 
 ### Forwarding the logs to another service
 
@@ -170,7 +208,7 @@ data:
       </labels>
     </source>
     {{- end }}
-    
+
     # Ignore fluentd own events
     <match fluent.**>
       @type null
@@ -212,55 +250,12 @@ data:
     </match>
 ```
 
-Create the `ConfigMap` resource:
+As an example, using the above configmap, you should specify the required parameters when upgrading or installing the chart:
 
 ```console
-$ kubectl create -f configmap.yaml
+aggregator.configMap=elasticsearch-output
+aggregator.extraEnv[0].name=ELASTICSEARCH_HOST
+aggregator.extraEnv[0].value=your-ip-here
+aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
+aggregator.extraEnv[1].value=your-port-here
 ```
-
-And then deploy the Fluentd chart with your configuration file and your Elasticsearch host and port:
-
-```console
-$ helm install bitnami/fluentd \
-    --set aggregator.configMap=elasticsearch-output \
-    --set aggregator.extraEnv[0].name=ELASTICSEARCH_HOST \
-    --set aggregator.extraEnv[0].value=your-ip-here \
-    --set aggregator.extraEnv[1].name=ELASTICSEARCH_PORT \
-    --set aggregator.extraEnv[1].value=your-port-here \
-```
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/fluentd
-```
-
-- Number of aggregator nodes:
-```diff
-- statefulset.replicaCount: 1
-+ statefulset.replicaCount: 2
-```
-
-- Enable prometheus to access fluentd metrics endpoint:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-To horizontally scale this chart once it has been deployed:
-
-```console
-$ helm upgrade my-release bitnami/fluentd \
-  -f ./values-production.yaml \
-  --set statefulset.replicaCount=3
-```
-
-> **Note**: Scaling the statefulset with `kubectl scale ...` command is discouraged. Use `helm upgrade ...` for horizontal scaling to ensure the forwarders configuration is refreshed and aware of the new pods.
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.

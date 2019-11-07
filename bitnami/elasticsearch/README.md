@@ -2,7 +2,7 @@
 
 [Elasticsearch](https://www.elastic.co/products/elasticsearch) is a highly scalable open-source full-text search and analytics engine. It allows you to store, search, and analyze big volumes of data quickly and in near real time.
 
-## TL;DR
+## TL;DR;
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -17,7 +17,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.6+ with Beta APIs enabled
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -29,7 +30,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/elasticsearch
 ```
 
-These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -47,15 +48,15 @@ The command removes all the Kubernetes components associated with the chart and 
 $ helm delete --purge my-release
 ```
 
-## Configuration
+## Parameters
 
 The following table lists the configurable parameters of the Elasticsearch chart and their default values.
 
-| Parameter                                         | Description                                                                                                                                               | Default                                                 |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|                     Parameter                     |                                                                        Description                                                                        |                         Default                         |
+|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                            | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
+| `global.storageClass`                             | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
 | `image.registry`                                  | Elasticsearch image registry                                                                                                                              | `docker.io`                                             |
 | `image.repository`                                | Elasticsearch image repository                                                                                                                            | `bitnami/elasticsearch`                                 |
 | `image.tag`                                       | Elasticsearch image tag                                                                                                                                   | `{TAG_NAME}`                                            |
@@ -170,6 +171,37 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `ingest.readinessProbe.timeoutSeconds`            | When the probe times out (ingest nodes pod)                                                                                                               | `5`                                                     |
 | `ingest.readinessProbe.successThreshold`          | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)                                            | `1`                                                     |
 | `ingest.readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                 | `5`                                                     |
+| `curator.enabled`                                 | Enable Elasticsearch Curator cron job                                                                                                                     | `false`                                                 |
+| `curator.name`                                    | Elasticsearch Curator pod name                                                                                                                            | `curator`                                               |
+| `curator.image.registry`                          | Elasticsearch Curator image registry                                                                                                                      | `docker.io`                                             |
+| `curator.image.repository`                        | Elasticsearch Curator image repository                                                                                                                    | `bitnami/elasticsearch-curator`                         |
+| `curator.image.tag`                               | Elasticsearch Curator image tag                                                                                                                           | `{TAG_NAME}`                                            |
+| `curator.image.pullPolicy`                        | Elasticsearch Curator image pull policy                                                                                                                   | `{TAG_NAME}`                                            |
+| `curator.cronjob.schedule`                        | Schedule for the CronJob                                                                                                                                  | `0 1 * * *`                                             |
+| `curator.cronjob.annotations`                     | Annotations to add to the cronjob                                                                                                                         | {}                                                      |
+| `curator.cronjob.concurrencyPolicy`               | `Allow|Forbid|Replace` concurrent jobs                                                                                                                    | `nil`                                                   |
+| `curator.cronjob.failedJobsHistoryLimit`          | Specify the number of failed Jobs to keep                                                                                                                 | `nil`                                                   |
+| `curator.cronjob.successfulJobsHistoryLimit`      | Specify the number of completed Jobs to keep                                                                                                              | `nil`                                                   |
+| `curator.cronjob.jobRestartPolicy`                | Control the Job restartPolicy                                                                                                                             | `Never`                                                 |
+| `curator.podAnnotations`                          | Annotations to add to the pod                                                                                                                             | {}                                                      |
+| `curator.rbac.enabled`                            | Enable RBAC resources                                                                                                                                     | `false`                                                 |
+| `curator.serviceAccount.create`                   | Create a default serviceaccount for elasticsearch curator                                                                                                 | `true`                                                  |
+| `curator.serviceAccount.name`                     | Name for elasticsearch curator serviceaccount                                                                                                             | `""`                                                    |
+| `curator.hooks`                                   | Whether to run job on selected hooks                                                                                                                      | `{ "install": false, "upgrade": false }`                |
+| `curator.psp.create`                              | Create pod security policy resources                                                                                                                      | `false`                                                 |
+| `curator.dryrun`                                  | Run Curator in dry-run mode                                                                                                                               | `false`                                                 |
+| `curator.command`                                 | Command to execute                                                                                                                                        | ["/curator/curator"]                                    |
+| `curator.env`                                     | Environment variables to add to the cronjob container                                                                                                     | {}                                                      |
+| `curator.configMaps.action_file_yml`              | Contents of the Curator action_file.yml                                                                                                                   | See values.yaml                                         |
+| `curator.configMaps.config_yml`                   | Contents of the Curator config.yml (overrides config)                                                                                                     | See values.yaml                                         |
+| `curator.resources`                               | Resource requests and limits                                                                                                                              | {}                                                      |
+| `curator.priorityClassName`                       | priorityClassName                                                                                                                                         | `nil`                                                   |
+| `curator.extraVolumes`                            | Extra volumes                                                                                                                                             |                                                         |
+| `curator.extraVolumeMounts`                       | Mount extra volume(s),                                                                                                                                    |                                                         |
+| `curator.extraInitContainers`                     | Init containers to add to the cronjob container                                                                                                           | {}                                                      |
+| `curator.envFromSecrets`                          | Environment variables from secrets to the cronjob container                                                                                               | {}                                                      |
+| `curator.envFromSecrets.*.from.secret`            | - `secretKeyRef.name` used for environment variable                                                                                                       |                                                         |
+| `curator.envFromSecrets.*.from.key`               | - `secretKeyRef.key` used for environment variable                                                                                                        |                                                         |
 | `metrics.enabled`                                 | Enable prometheus exporter                                                                                                                                | `false`                                                 |
 | `metrics.name`                                    | Metrics pod name                                                                                                                                          | `metrics`                                               |
 | `metrics.image.registry`                          | Metrics exporter image registry                                                                                                                           | `docker.io`                                             |
@@ -179,15 +211,20 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                                                    | `ClusterIP`                                             |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                                                  | `requests: { cpu: "25m" }`                              |
 | `metrics.podAnnotations`                          | Annotations for metrics pods.                                                                                                                             | `{}`                                                    |
-| `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                                                     | `false`                                                 |
+| `metrics.serviceMonitor.enabled`                  | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                                                 |
+| `metrics.serviceMonitor.namespace`                | Namespace in which Prometheus is running                                                                                                                  | `nil`                                                   |
+| `metrics.serviceMonitor.interval`                 | Interval at which metrics should be scraped.                                                                                                              | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.scrapeTimeout`            | Timeout after which the scrape is ended                                                                                                                   | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.selector`                 | Prometheus instance selector labels                                                                                                                       | `nil`                                                   |
+| `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                                                     | `true`                                                  |
 | `sysctlImage.registry`                            | Kernel settings modifier image registry                                                                                                                   | `docker.io`                                             |
 | `sysctlImage.repository`                          | Kernel settings modifier image repository                                                                                                                 | `bitnami/minideb`                                       |
-| `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                                                        | `stretch`                                                |
+| `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                                                        | `stretch`                                               |
 | `sysctlImage.pullPolicy`                          | Kernel settings modifier image pull policy                                                                                                                | `Always`                                                |
 | `volumePermissions.enabled`                       | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`                | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
 | `volumePermissions.image.repository`              | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                               | `stretch`                                                |
+| `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                               | `stretch`                                               |
 | `volumePermissions.image.pullPolicy`              | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 
@@ -209,12 +246,22 @@ $ helm install --name my-release -f values.yaml bitnami/elasticsearch
 
 > **Tip**: You can use the default [values.yaml](values.yaml).
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/elasticsearch
+- Init container that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors):
+```diff
+- sysctlImage.enabled: true
++ sysctlImage.enabled: false
 ```
 
 - Desired number of Elasticsearch master-eligible nodes:
@@ -369,17 +416,21 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/elasticsear
 + metrics.enabled: true
 ```
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### Default kernel settings
 
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+- [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
+- [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
+
+This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
+You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
 ## Persistence
 
 The [Bitnami Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
 
-By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Configuration](#configuration) section to configure the PVC.
+By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
 
 ### Adjust permissions of persistent volume mountpoint
 
@@ -390,20 +441,12 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Troubleshooting
+## Notable changes
 
-Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+### 7.0.0
 
-- [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
-- [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
-
-You can use a **privileged** initContainer to changes those settings in the Kernel by enabling the `sysctlImage.enabled`:
-
-```console
-$ helm install --name my-release \
-  --set sysctlImage.enabled=true \
-  bitnami/elasticsearch
-```
+This version enabled by default the initContainer that modify some kernel settings to meet the Elasticsearch requirements. More info in the ["Default kernel settings"](#default-kernel-settings) section.
+You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
 ## Upgrading
 

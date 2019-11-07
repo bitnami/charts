@@ -163,6 +163,7 @@ master:
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
+    plugin_dir=/opt/bitnami/mysql/plugin
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     tmpdir=/opt/bitnami/mysql/tmp
@@ -177,6 +178,7 @@ master:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
+    plugin_dir=/opt/bitnami/mysql/plugin
 
     [manager]
     port=3306

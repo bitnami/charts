@@ -1,0 +1,145 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: {{ template "prometheus-operator.prometheus.fullname" . }}
+  labels: {{- include "prometheus-operator.prometheus.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.prometheus.replicaCount }}
+  serviceAccountName: {{ template "prometheus-operator.prometheus.serviceAccountName" . }}
+  {{- if .Values.prometheus.serviceMonitorSelector }}
+  serviceMonitorSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.serviceMonitorSelector "context" $) | nindent 4 }}
+  {{- else }}
+  serviceMonitorSelector: {}
+  {{- end }}
+  alerting:
+    alertmanagers:
+    {{- if .Values.prometheus.externalLabels }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.externalLabels "context" $) | indent 6 }}
+    {{- else }}
+    {{- if .Values.alertmanager.enabled }}
+      - namespace: {{ .Release.Namespace }}
+        name: {{ template "prometheus-operator.alertmanager.fullname" . }}
+        port: http
+        pathPrefix: "/"
+    {{- else }}
+      []
+    {{- end }}
+    {{- end }}
+  {{- if .Values.prometheus.image }}
+  baseImage: {{ template "prometheus-operator.prometheus.baseImage" . }}
+  version: {{ .Values.prometheus.image.tag }}
+  {{- end }}
+  {{- if .Values.prometheus.externalLabels }}
+  externalLabels: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.externalLabels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.prometheusExternalLabelNameClear }}
+  prometheusExternalLabelName: ""
+  {{- else if .Values.prometheus.prometheusExternalLabelName }}
+  prometheusExternalLabelName: "{{ .Values.prometheus.prometheusExternalLabelName }}"
+  {{- end }}
+  {{- if .Values.prometheus.replicaExternalLabelNameClear }}
+  replicaExternalLabelName: ""
+  {{- else if .Values.prometheus.replicaExternalLabelName }}
+  replicaExternalLabelName: "{{ .Values.prometheus.replicaExternalLabelName }}"
+  {{- end }}
+  {{- if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
+  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}/
+  {{- else }}
+  externalUrl: http://{{ template "prometheus-operator.prometheus.fullname" . }}.{{ .Release.Namespace }}:9090
+  {{- end }}
+  paused: {{ .Values.prometheus.paused }}
+  logLevel: {{ .Values.prometheus.logLevel }}
+  logFormat: {{ .Values.prometheus.logFormat }}
+  listenLocal: {{ .Values.prometheus.listenLocal }}
+  enableAdminAPI: {{ .Values.prometheus.enableAdminAPI }}
+  {{- if .Values.prometheus.scrapeInterval }}
+  scrapeInterval: {{ .Values.prometheus.scrapeInterval }}
+  {{- end }}
+  {{- if .Values.prometheus.evaluationInterval }}
+  evaluationInterval: {{ .Values.prometheus.evaluationInterval }}
+  {{- end }}
+  resources: {{- toYaml .Values.alertmanager.resources | nindent 4 }}
+  retention: {{ .Values.prometheus.retention }}
+  {{- if .Values.prometheus.retentionSize }}
+  retentionSize: {{ .Values.prometheus.retentionSize }}
+  {{- end }}
+  {{- if .Values.prometheus.walCompression }}
+  walCompression: {{ .Values.prometheus.walCompression }}
+  {{- end }}
+  routePrefix: "/"
+  {{- if .Values.prometheus.secrets }}
+  secrets: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.secrets "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.configMaps }}
+  configMaps: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.configMaps "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.serviceMonitorNamespaceSelector }}
+  serviceMonitorNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.serviceMonitorNamespaceSelector "context" $) | nindent 4 }}
+  {{- else }}
+  serviceMonitorNamespaceSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.remoteRead }}
+  remoteRead: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.remoteRead "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.remoteWrite }}
+  remoteWrite: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.remoteWrite "context" $) | nindent 4 }}
+  {{- end }}
+{{- if .Values.prometheus.securityContext.enabled }}
+securityContext:
+  runAsUser: {{ .Values.prometheus.securityContext.runAsUser }}
+  fsGroup: {{ .Values.prometheus.securityContext.fsGroup }}
+{{- end }}
+  {{- if .Values.prometheus.ruleNamespaceSelector }}
+  ruleNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.ruleNamespaceSelector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.ruleSelector }}
+  ruleSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.ruleSelector "context" $) | nindent 4 }}
+  {{- else }}
+  ruleSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.storageSpec }}
+  storage: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.storageSpec "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.podMetadata }}
+  podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.querySpec }}
+  query: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.querySpec "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.nodeSelector }}
+  nodeSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.nodeSelector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.tolerations }}
+  tolerations: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.tolerations "context" $) | nindent 4 }}
+  {{- end }}
+  affinity:
+    {{- if .Values.prometheus.nodeAffinity }}
+    nodeAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.nodeAffinity "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if eq .Values.prometheus.podAntiAffinity "hard" }}
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - topologyKey: "kubernetes.io/hostname"
+        labelSelector:
+          matchLabels: {{- include "prometheus-operator.prometheus.matchLabels" . | nindent 12 }}
+    {{- else if eq .Values.prometheus.podAntiAffinity "soft" }}
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels: {{- include "prometheus-operator.prometheus.matchLabels" . | nindent 14 }}
+    {{- end }}
+    {{- if .Values.prometheus.podAffinity }}
+    podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podAffinity "context" $) | nindent 6 }}
+    {{- end }}
+{{- include "prometheus-operator.prometheus.imagePullSecrets" . | indent 2 }}
+  {{- if .Values.prometheus.containers }}
+  containers: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.priorityClassName }}
+  priorityClassName: {{ .Values.prometheus.priorityClassName }}
+  {{- end }}
+{{- end }}

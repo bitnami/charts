@@ -180,11 +180,13 @@ mariadbConfiguration: |-
   [client]
   port=3306
   socket=/opt/bitnami/mariadb/tmp/mysql.sock
+  plugin_dir=/opt/bitnami/mariadb/plugin
 
   [mysqld]
   default-storage-engine=InnoDB
   basedir=/opt/bitnami/mariadb
   datadir=/bitnami/mariadb/data
+  plugin_dir=/opt/bitnami/mariadb/plugin
   tmpdir=/opt/bitnami/mariadb/tmp
   socket=/opt/bitnami/mariadb/tmp/mysql.sock
   pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid

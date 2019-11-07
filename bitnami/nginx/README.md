@@ -17,6 +17,11 @@ This chart bootstraps a [NGINX Open Source](https://github.com/bitnami/bitnami-d
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
+## Prerequisites
+
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
+
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
@@ -40,7 +45,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the NGINX Open Source chart and their default values.
 
@@ -109,6 +114,8 @@ $ helm install --name my-release -f values.yaml bitnami/nginx
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -118,7 +125,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Providing a custom server block
 
 You can use the `serverBlock` value to provide a custom server block for NGINX to use.
-To do this, create a values files with your server block:
+To do this, create a values files with your server block and install the chart using it:
 
 _custom-server-block.yaml_
 
@@ -132,11 +139,7 @@ serverBlock: |-
   }
 ```
 
-Install the chart with this value:
-
-```console
-$ helm install --name my-release -f custom-server-block.yaml bitnami/nginx
-```
+> Warning: The above example is not compatible with enabling Prometheus metrics since it affects the `/status` endpoint.
 
 ## Upgrading
 

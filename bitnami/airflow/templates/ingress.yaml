@@ -17,18 +17,27 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{- range .Values.ingress.hosts }}
+  {{- range .Values.ingress.hosts }}
     - host: {{ .name }}
       http:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: "{{ template "airflow.fullname" $ }}"
+              serviceName: {{ template "airflow.fullname" $ }}
               servicePort: http
+  {{- end }}
+  tls:
+  {{- range .Values.ingress.hosts }}
+  {{- if .tls }}
+    - hosts:
+    {{- if .tlsHosts }}
+      {{- range $host := .tlsHosts }}
+        - {{ $host }}
+      {{- end }}
+    {{- else }}
+        - {{ .name }}
     {{- end }}
-  {{- if .Values.ingress.tls }}
-  # Note: toYaml does not indent arrays
-  # yamllint disable rule:indentation
-  tls: {{- toYaml .Values.ingress.tls | nindent 4 }}
+      secretName: {{ .tlsSecret }}
+    {{- end }}
   {{- end }}
 {{- end }}

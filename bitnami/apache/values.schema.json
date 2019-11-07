@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "ingress": {
+      "type": "object",
+      "form": true,
+      "title": "Ingress Details",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Use a custom hostname",
+          "description": "Enable the ingress resource that allows you to access the WordPress installation."
+        },
+        "certManager": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable TLS annotations via cert-manager",
+          "description": "Set this to true in order to add the corresponding annotations for cert-manager",
+          "hidden": {
+            "condition": false,
+            "value": "ingress.enabled"
+          }
+        },
+        "hostname": {
+          "type": "string",
+          "form": true,
+          "title": "Hostname",
+          "hidden": {
+            "condition": false,
+            "value": "ingress.enabled"
+          }
+        }
+      }
+    },
+    "replicaCount": {
+      "type": "integer",
+      "form": true,
+      "title": "Number of Replicas"
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Configure metrics exporter",
+          "form": true
+        }
+      }
+    }
+  }
+}

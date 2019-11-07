@@ -17,8 +17,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.4+ with Beta APIs enabled
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
+- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -29,7 +31,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/tomcat
 ```
 
-These commands deploy Tomcat on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Tomcat on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -43,7 +45,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the Tomcat chart and their default values.
 
@@ -84,8 +86,11 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `ingress.enabled`                    | Enable the ingress controller                                                                                                                             | `false`                                                 |
 | `ingress.certManager`                | Add annotations for certManager                                                                                                                           | `false`                                                 |
 | `ingress.annotations`                | Annotations to set in the ingress controller                                                                                                              | -                                                       |
-| `ingress.hosts`                      | List of hostnames to be covered with the ingress                                                                                                          | `tomcat.local`                                          |
-| `ingress.tls`                        | List with TLS configuration for the ingress                                                                                                               | `hosts: tomcat.local, secretName: tomcat.local-tls`     |
+| `ingress.hosts[0].name`             | Hostname to your opencart installation                           | `tomcat.local`                                            |
+| `ingress.hosts[0].path`             | Path within the url structure                                 | `/`                                                      |
+| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                | `false`                                                  |
+| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                               | `nil`                                                  |
+| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                     | `tomcat.local-tls`                                 |
 | `affinity`                           | Map of node/pod affinities                                                                                                                                | `{}`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
@@ -107,6 +112,8 @@ $ helm install --name my-release -f values.yaml bitnami/tomcat
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -118,7 +125,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 The [Bitnami Tomcat](https://github.com/bitnami/bitnami-docker-tomcat) image stores the Tomcat data and configurations at the `/bitnami/tomcat` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Configuration](#configuration) section to configure the PVC or to disable persistence.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Adjust permissions of persistent volume mountpoint
 

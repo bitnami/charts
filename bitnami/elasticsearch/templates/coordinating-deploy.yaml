@@ -12,7 +12,7 @@ spec:
   selector:
     matchLabels:
       app: {{ template "elasticsearch.name" . }}
-      release: "{{ .Release.Name }}"
+      release: {{ .Release.Name | quote }}
       role: "coordinating-only"
   replicas: {{ .Values.coordinating.replicas }}
   template:

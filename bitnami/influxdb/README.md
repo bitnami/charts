@@ -15,6 +15,13 @@ This chart bootstraps a [influxdb](https://github.com/bitnami/bitnami-docker-inf
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+## Prerequisites
+
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
+- PV provisioner support in the underlying infrastructure
+- ReadWriteMany volumes for deployment scaling
+
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
@@ -24,7 +31,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/influxdb
 ```
 
-These commands deploy influxdb on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy influxdb on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -38,89 +45,12 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
 
-## Standalone vs High Availability architecture
-
-You can install the InfluxDB chart with two different architecture setups: `standalone` or `high-availability`
-
-```console
-$ helm install --name my-release bitnami/minio --set architecture="standalone"
-```
-
-or
-
-```console
-$ helm install --name my-release bitnami/minio --set architecture="high-availability"
-```
-
-The standalone architecture installs a deployment with one InfluxDB server (it cannot be scaled):
-
-```
-               ┌──────────────────┐
-               │     Ingress      │
-               │    Controller    │
-               └────────┬─────────┘
-                        |
-                        │ /query
-                        │ /write
-                        ▼
-                ┌────────────────┐
-                │    InfluxDB    │
-                |      svc       │
-                └───────┬────────┘
-                        │
-                        ▼
-                  ┌──────────┐
-                  │ InfluxDB │
-                  │  Server  │
-                  │   Pod    │
-                  └──────────┘
-```
-
-The high availability install a statefulset with N InfluxDB servers and M InfluxDB Relay instances:
-
-```
-               ┌──────────────────┐
-               │     Ingress      │
-               │    Controller    │
-               └───────┬─┬────────┘
-                       │ │
-                       │ │
-          ┌────────────┘ └─────────────┐
-          │                            │
-          │ /write              /query │
-          ▼                            ▼
-      ┌────────────────┐  ┌────────────────┐
-      │ InfluxDB Relay │  │    InfluxDB    │
-      │      svc       │  │      svc       │
-      └───────┬─┬──────┘  └─────┬─┬────────┘
-      ┌────── │─|───────────────|─│───────┐
-      |       │ |               | │       ▼
-┌─────┴────┐  │ |               | │  ┌──────────┐
-│ InfluxDB │  │ |               | │  │ InfluxDB │
-│  Relay   │◀─┘ |               | └─▶│  Server  │
-│   Pod    │    │               │    │   Pod    │
-└─────┬────┘    │               │    └──────────┘
-      |         │               │           ▲
-      └─────────│───────────────│─────┐     |
-                │               │     |     |
-  ┌──────────── │───────────────│───────────┘
-  |             │               │     |
-  |             │               │     ▼
-┌─┴────────┐    │               │   ┌──────────┐
-│ InfluxDB │    │               │   │ InfluxDB │
-│  Relay   │◀───┘               └──▶│  Server  │
-│   Pod    │                        │   Pod    │
-└─────┬────┘                        └──────────┘
-      |                                   ▲
-      └───────────────────────────────────┘
-```
-
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the InfluxDB chart and their default values.
 
-| Parameter                                   | Description                                                                                                                                                                               | Default                                                 |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|                  Parameter                  |                                                                                        Description                                                                                        |                         Default                         |
+|---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                      | Global Docker image registry                                                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                       | Global storage class for dynamic provisioning                                                                                                                                             | `nil`                                                   |
@@ -218,6 +148,11 @@ The following tables lists the configurable parameters of the InfluxDB chart and
 | `metrics.service.loadBalancerIP`            | loadBalancerIP if service type is `LoadBalancer`                                                                                                                                          | `nil`                                                   |
 | `metrics.service.loadBalancerSourceRanges`  | Address that are allowed when service is LoadBalancer                                                                                                                                     | `[]`                                                    |
 | `metrics.service.clusterIP`                 | Static clusterIP or None for headless services                                                                                                                                            | `nil`                                                   |
+| `metrics.serviceMonitor.enabled`            | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                                                    | `false`                                                 |
+| `metrics.serviceMonitor.namespace`          | Namespace in which Prometheus is running                                                                                                                                                  | `nil`                                                   |
+| `metrics.serviceMonitor.interval`           | Interval at which metrics should be scraped.                                                                                                                                              | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.scrapeTimeout`      | Timeout after which the scrape is ended                                                                                                                                                   | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.selector`           | Prometheus instance selector labels                                                                                                                                                       | `nil`                                                   |
 | `networkPolicy.enabled`                     | Enable NetworkPolicy                                                                                                                                                                      | `false`                                                 |
 | `networkPolicy.allowExternal`               | Don't require client label for connections                                                                                                                                                | `true`                                                  |
 | `persistence.enabled`                       | Enable data persistence                                                                                                                                                                   | `true`                                                  |
@@ -249,25 +184,17 @@ $ helm install --name my-release -f values.yaml bitnami/influxdb
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-### Configure the way how to expose InfluxDB
+## Configuration and installation details
 
-- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose InfluxDB through Ingress.
-- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `influxdb.service.type=ClusterIP` to choose this service type.
-- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `influxdb.service.type=NodePort` to choose this service type.
-- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `influxdb.service.type=LoadBalancer` to choose this service type.
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
-### Adjust permissions of persistent volume mountpoint
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
-As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Use the `high-availability` architecture:
 
@@ -301,22 +228,91 @@ This chart includes a `values-production.yaml` file where you can find some para
 + networkPolicy.allowExternal: false
 ```
 
-To horizontally scale this chart once it has been deployed (only available in the `high-availability` architecture):
+To horizontally scale this chart once it has been deployed (only available in the `high-availability` architecture), you can use the following parameters:
 
 ```console
-$ helm upgrade my-release bitnami/influxdb \
-  -f ./values-production.yaml \
-  --set influxdb.replicaCount=3 \
-  --set relay.replicaCount=2
+influxdb.replicaCount=3
+relay.replicaCount=2
 ```
 
-> **Note**: Scaling the statefulset with `kubectl scale ...` command is discouraged. Use `helm upgrade ...` for horizontal scaling to ensure the InfluxDB Relay configuration is refreshed and aware of the new pods.
+## Standalone vs High Availability architecture
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+You can install the InfluxDB chart with two different architecture setups: "standalone" or "high-availability", you can use the `architecture` parameter:
 
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+```console
+architecture="standalone"
+architecture="high-availability"
+```
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+The standalone architecture installs a deployment with one InfluxDB server (it cannot be scaled):
+
+```
+               ┌──────────────────┐
+               │     Ingress      │
+               │    Controller    │
+               └────────┬─────────┘
+                        |
+                        │ /query
+                        │ /write
+                        ▼
+                ┌────────────────┐
+                │    InfluxDB    │
+                |      svc       │
+                └───────┬────────┘
+                        │
+                        ▼
+                  ┌──────────┐
+                  │ InfluxDB │
+                  │  Server  │
+                  │   Pod    │
+                  └──────────┘
+```
+
+The high availability install a statefulset with N InfluxDB servers and M InfluxDB Relay instances:
+
+```
+               ┌──────────────────┐
+               │     Ingress      │
+               │    Controller    │
+               └───────┬─┬────────┘
+                       │ │
+                       │ │
+          ┌────────────┘ └─────────────┐
+          │                            │
+          │ /write              /query │
+          ▼                            ▼
+      ┌────────────────┐  ┌────────────────┐
+      │ InfluxDB Relay │  │    InfluxDB    │
+      │      svc       │  │      svc       │
+      └───────┬─┬──────┘  └─────┬─┬────────┘
+      ┌────── │─|───────────────|─│───────┐
+      |       │ |               | │       ▼
+┌─────┴────┐  │ |               | │  ┌──────────┐
+│ InfluxDB │  │ |               | │  │ InfluxDB │
+│  Relay   │◀─┘ |               | └─▶│  Server  │
+│   Pod    │    │               │    │   Pod    │
+└─────┬────┘    │               │    └──────────┘
+      |         │               │           ▲
+      └─────────│───────────────│─────┐     |
+                │               │     |     |
+  ┌──────────── │───────────────│───────────┘
+  |             │               │     |
+  |             │               │     ▼
+┌─┴────────┐    │               │   ┌──────────┐
+│ InfluxDB │    │               │   │ InfluxDB │
+│  Relay   │◀───┘               └──▶│  Server  │
+│   Pod    │                        │   Pod    │
+└─────┬────┘                        └──────────┘
+      |                                   ▲
+      └───────────────────────────────────┘
+```
+
+### Configure the way how to expose InfluxDB
+
+- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose InfluxDB through Ingress.
+- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `influxdb.service.type=ClusterIP` to choose this service type.
+- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `influxdb.service.type=NodePort` to choose this service type.
+- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `influxdb.service.type=LoadBalancer` to choose this service type.
 
 ### Using custom configuration
 
@@ -348,10 +344,19 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 The allowed extensions are `.sh`, and `.txt`.
 
-### Persistence
+## Persistence
 
 The data is persisted by default using PVC(s). You can disable the persistence setting the `persistence.enabled` parameter to `false`.
 A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrade
 

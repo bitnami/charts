@@ -17,8 +17,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.4+ with Beta APIs enabled
-- PV provisioner support in the underlying infrastructure
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
 
 ## Get this chart
 
@@ -39,7 +39,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name my-release bitnami/tensorflow-resnet
 ```
 
-These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -58,7 +58,7 @@ $ helm list
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Configuration
+## Parameters
 
 The following tables lists the configurable parameters of the TensorFlow ResNet chart and their default values.
 
@@ -111,6 +111,8 @@ $ helm install --name my-release -f values.yaml bitnami/tensorflow-resnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 

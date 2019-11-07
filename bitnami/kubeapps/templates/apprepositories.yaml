@@ -13,7 +13,7 @@ metadata:
 spec:
   type: helm
   url: {{ .url }}
-{{- if or $.Values.securityContext.enabled $.Values.apprepository.initialReposProxy.enabled}}
+{{- if or $.Values.securityContext.enabled $.Values.apprepository.initialReposProxy.enabled .nodeSelector }}
   syncJobPodTemplate:
     spec:
   {{- if $.Values.apprepository.initialReposProxy.enabled }}
@@ -27,8 +27,12 @@ spec:
             value: {{ $.Values.apprepository.initialReposProxy.no_proxy }}
   {{- end }}
   {{- if $.Values.securityContext.enabled }}
-        securityContext:
+      securityContext:
         runAsUser: {{ $.Values.securityContext.runAsUser }}
+  {{- end }}
+  {{- if .nodeSelector }}
+      nodeSelector:
+{{ toYaml .nodeSelector | indent 8 }}
   {{- end }}
 {{- end }}
   {{- if or .caCert .authorizationHeader }}
