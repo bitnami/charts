@@ -1,18 +1,18 @@
 apiVersion: v1
 name: airflow
-version: 4.0.10
+version: 4.0.11
 appVersion: 1.10.5
 description: Apache Airflow is a platform to programmatically author, schedule and monitor workflows.
 keywords:
-- apache
-- airflow
-- workflow
-- dag
+  - apache
+  - airflow
+  - workflow
+  - dag
 home: https://airflow.apache.org/
 sources:
-- https://github.com/bitnami/bitnami-docker-airflow
+  - https://github.com/bitnami/bitnami-docker-airflow
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/airflow/img/airflow-stack-110x117.png
