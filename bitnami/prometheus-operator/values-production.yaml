@@ -110,6 +110,9 @@ operator:
   ## Create a servicemonitor for the operator
   ##
   serviceMonitor:
+    ## Creates a ServiceMonitor to monitor Prometheus Operator
+    enabled: true
+
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
