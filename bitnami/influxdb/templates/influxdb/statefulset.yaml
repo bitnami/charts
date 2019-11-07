@@ -154,6 +154,7 @@ spec:
               containerPort: 8088
               protocol: TCP
           {{- if .Values.influxdb.livenessProbe.enabled }}
+          {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe:
             exec:
               command:
@@ -163,7 +164,7 @@ spec:
                   if [[ -f "${INFLUXDB_ADMIN_USER_PASSWORD_FILE:-}" ]]; then
                       export INFLUXDB_ADMIN_USER_PASSWORD="$(< "${INFLUXDB_ADMIN_USER_PASSWORD_FILE}")"
                   fi
-                  {{ if .Values.authEnabled }}INFLUX_USERNAME="$INFLUXDB_ADMIN_USER" INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"{{ end }} influx -host 127.0.0.1 -port 8086 -execute "SHOW DATABASES"
+                  {{ if .Values.authEnabled }}INFLUX_USERNAME="$INFLUXDB_ADMIN_USER" INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"{{ end }} timeout {{ $livenessTimeout }}s influx -host 127.0.0.1 -port 8086 -execute "SHOW DATABASES"
             initialDelaySeconds: {{ .Values.influxdb.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.influxdb.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.influxdb.livenessProbe.timeoutSeconds }}
@@ -171,6 +172,7 @@ spec:
             failureThreshold: {{ .Values.influxdb.livenessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.influxdb.readinessProbe.enabled }}
+          {{- $readinessTimeout := sub (int .Values.influxdb.readinessProbe.timeoutSeconds) 1 }}
           readinessProbe:
             exec:
               command:
@@ -180,7 +182,7 @@ spec:
                   if [[ -f "${INFLUXDB_ADMIN_USER_PASSWORD_FILE:-}" ]]; then
                       export INFLUXDB_ADMIN_USER_PASSWORD="$(< "${INFLUXDB_ADMIN_USER_PASSWORD_FILE}")"
                   fi
-                  {{ if .Values.authEnabled }}INFLUX_USERNAME="$INFLUXDB_ADMIN_USER" INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"{{ end }} influx -host 127.0.0.1 -port 8086 -execute "SHOW DATABASES"
+                  {{ if .Values.authEnabled }}INFLUX_USERNAME="$INFLUXDB_ADMIN_USER" INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"{{ end }} timeout {{ $readinessTimeout }}s influx -host 127.0.0.1 -port 8086 -execute "SHOW DATABASES"
             initialDelaySeconds: {{ .Values.influxdb.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.influxdb.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.influxdb.readinessProbe.timeoutSeconds }}
