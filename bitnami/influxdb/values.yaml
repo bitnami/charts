@@ -195,14 +195,14 @@ influxdb:
     enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 15
     successThreshold: 1
     failureThreshold: 6
   readinessProbe:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 15
     successThreshold: 1
     failureThreshold: 6
 
