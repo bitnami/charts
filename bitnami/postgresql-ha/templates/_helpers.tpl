@@ -658,7 +658,7 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "postgresql-ha.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "postgresql-ha.validateValues.releaseName" .) -}}
+{{- $messages := append $messages (include "postgresql-ha.validateValues.nodesHostnames" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.ldap" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.ldapPgHba" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.upgradeRepmgrExtension" .) -}}
@@ -670,11 +670,18 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of PostgreSQL HA - the release name cannot be longer that 18 characters */}}
-{{- define "postgresql-ha.validateValues.releaseName" -}}
-{{- if gt (len .Release.Name) 18 -}}
-postgresql-ha: releaseName
-    The release name '{{ .Release.Name }}' exceeds the limit: 18 characters. Please set a shorter one.
+{{/* Validate values of PostgreSQL HA - PostgreSQL nodes hostnames cannot be longer than 128 characters */}}
+{{- define "postgresql-ha.validateValues.nodesHostnames" -}}
+{{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
+{{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain:= .Values.clusterDomain }}
+{{- $nodeHostname := printf "%s-00.%s.%s.svc.%s:1234" $postgresqlFullname $postgresqlHeadlessServiceName $releaseNamespace $clusterDomain }}
+{{- if gt (len $nodeHostname) 128 -}}
+postgresql-ha: Nodes hostnames
+    PostgreSQL nodes hostnames exceeds the characters limit for Pgpool: 128.
+    Consider using a shorter release name or namespace.
+    {{ $nodeHostname }}
 {{- end -}}
 {{- end -}}
 

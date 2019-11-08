@@ -83,7 +83,7 @@ spec:
         {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
         {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
         {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
-        {{- $releaseName := .Release.Namespace }}
+        {{- $releaseNamespace := .Release.Namespace }}
         {{- $clusterDomain:= .Values.clusterDomain }}
         env:
         - name: BITNAMI_DEBUG
@@ -121,7 +121,7 @@ spec:
         - name: REPMGR_MOUNTED_CONF_DIR
           value: "/bitnami/repmgr/conf"
         - name: REPMGR_PARTNER_NODES
-          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseName }}.svc.{{ $clusterDomain }},{{ end }}
+          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},{{ end }}
         - name: REPMGR_PRIMARY_HOST
           value: {{ printf "%s-0.%s.%s.svc.%s" $postgresqlFullname $postgresqlHeadlessServiceName .Release.Namespace $clusterDomain | quote }}
         - name: REPMGR_NODE_NAME
