@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.7.4-debian-9-r0
+  tag: 1.7.4-debian-9-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -38,6 +38,7 @@ image:
 clusterDomain: cluster.local
 
 forwarder:
+  enabled: true
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
   ##
@@ -58,6 +59,68 @@ forwarder:
   ##     value: my_value
   ##
   extraEnv: {}
+
+  containerPorts:
+    - name: http
+      containerPort: 9880
+      protocol: TCP
+    # - name: syslog-tcp
+    #   containerPort: 5140
+    #   protocol: TCP
+    # - name: syslog-udp
+    #   containerPort: 5140
+    #   protocol: UDP
+    # - name: tcp
+    #   containerPort: 24224
+    #   protocol: TCP
+
+  ## Service parameters
+  ##
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+
+    ## Service ports
+    ##
+    ports:
+      # http:
+      #   port: 9880
+      #   targetPort: http
+      #   protocol: TCP
+      # syslog-udp:
+      #   port: 5140
+      #   targetPort: syslog-udp
+      #   protocol: UDP
+      #   nodePort: 31514
+      # syslog-tcp:
+      #   port: 5140
+      #   targetPort: syslog-tcp
+      #   protocol: TCP
+      #   nodePort: 31514
+      # tcp:
+      #   port: 24224
+      #   targetPort: tcp
+      #   protocol: TCP
+
+    ## loadBalancerIP for the forwarders service (optional, cloud specific)
+    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    # loadBalancerIP:
+
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    # loadBalancerSourceRanges:
+    #   - 10.10.10.0/24
+
+    ## Set the Cluster IP to use
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ##
+    # clusterIP: None
+
+    ## Provide any additional annotations which may be required
+    ##
+    annotations: {}
 
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -133,7 +196,8 @@ aggregator:
   ## If not specified, one will be created by default
   # configMap:
 
-  ## Port which the forwarders will connect to to send the logs
+  ## Port the aggregator container will listen for logs. Leave it blank to ignore.
+  ## You can specify other ports in the aggregator.containerPorts parameter
   ##
   port: 24224
 
@@ -148,6 +212,53 @@ aggregator:
   ##   - value: my_value
   ##
   extraEnv: {}
+
+  containerPorts:
+    # - name: my-port
+    #   containerPort: 24222
+    #   protocol: TCP
+    - name: http
+      containerPort: 9880
+      protocol: TCP
+
+  ## Service parameters
+  ##
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+
+    ## Service ports
+    ##
+    ports:
+      tcp:
+        port: 24224
+        targetPort: tcp
+        protocol: TCP
+      # http:
+      #   port: 9880
+      #   targetPort: http
+      #   protocol: TCP
+
+    ## loadBalancerIP for the forwarders service (optional, cloud specific)
+    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ##
+    # loadBalancerIP:
+
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    # loadBalancerSourceRanges:
+    #   - 10.10.10.0/24
+
+    ## Set the Cluster IP to use
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ##
+    # clusterIP: None
+
+    ## Provide any additional annotations which may be required
+    ##
+    annotations: {}
 
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)

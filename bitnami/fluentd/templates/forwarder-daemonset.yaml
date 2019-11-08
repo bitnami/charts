@@ -1,3 +1,4 @@
+{{- if .Values.forwarder.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -16,7 +17,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/forwarder-configmap.yaml") . | sha256sum }}
         {{- if .Values.forwarder.podAnnotations }}
-        {{- toYaml .Values.forwarder.podAnnotations | nindent 8 }}
+        {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
@@ -39,9 +40,9 @@ spec:
         {{- toYaml .Values.forwarder.extraEnv | nindent 8 }}
         {{- end }}
         ports:
-        - name: http
-          containerPort: 9880
-          protocol: TCP
+        {{- if .Values.forwarder.containerPorts }}
+        {{- toYaml .Values.forwarder.containerPorts | nindent 8 }}
+        {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           containerPort: {{ .Values.metrics.service.port }}
@@ -114,3 +115,4 @@ spec:
       {{- with .Values.forwarder.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
