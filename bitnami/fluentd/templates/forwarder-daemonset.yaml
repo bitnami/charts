@@ -17,7 +17,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/forwarder-configmap.yaml") . | sha256sum }}
         {{- if .Values.forwarder.podAnnotations }}
-        {{- toYaml .Values.forwarder.podAnnotations | nindent 8 }}
+        {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}

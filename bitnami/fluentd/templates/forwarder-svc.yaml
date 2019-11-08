@@ -6,7 +6,7 @@ metadata:
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
   {{- if .Values.forwarder.service.annotations }}
-  annotations: {{- tpl (toYaml .Values.forwarder.service.annotations) $ | nindent 4 }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.forwarder.service.type }}

@@ -6,7 +6,7 @@ metadata:
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
   {{- if .Values.aggregator.service.annotations }}
-  annotations: {{- tpl (toYaml .Values.aggregator.service.annotations) $ | nindent 4 }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.aggregator.service.type }}

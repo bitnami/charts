@@ -173,3 +173,16 @@ Get the certificates secret name.
     {{- printf "%s-tls" (include "fluentd.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "fluentd.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "fluentd.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}

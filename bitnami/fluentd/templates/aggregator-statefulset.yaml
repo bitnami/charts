@@ -19,7 +19,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/aggregator-configmap.yaml") . | sha256sum }}
         {{- if .Values.aggregator.podAnnotations }}
-        {{- toYaml .Values.aggregator.podAnnotations | nindent 8 }}
+        {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
