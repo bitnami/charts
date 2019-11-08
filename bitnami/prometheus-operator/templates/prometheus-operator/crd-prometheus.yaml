@@ -6,7 +6,6 @@ metadata:
   labels: {{- include "prometheus-operator.operator.labels" . | nindent 4}}
   annotations:
     "helm.sh/hook": crd-install
-    "helm.sh/hook-delete-policy": "before-hook-creation"
 spec:
   group: monitoring.coreos.com
   names:
