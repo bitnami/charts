@@ -681,7 +681,6 @@ Compile all warnings into a single message, and call fail.
 postgresql-ha: Nodes hostnames
     PostgreSQL nodes hostnames exceeds the characters limit for Pgpool: 128.
     Consider using a shorter release name or namespace.
-    {{ $nodeHostname }}
 {{- end -}}
 {{- end -}}
 
