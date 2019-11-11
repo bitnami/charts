@@ -85,6 +85,8 @@ spec:
           {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
           {{- $replicas := int .Values.master.replicas }}
           value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
+        - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
+          value: {{ add (div .Values.master.replicas 2) 1 | quote }}
         {{- if .Values.plugins }}
         - name: ELASTICSEARCH_PLUGINS
           value: {{ .Values.plugins | quote }}
