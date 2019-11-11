@@ -39,6 +39,15 @@ clusterDomain: cluster.local
 
 forwarder:
   enabled: true
+
+  ## K8s Security Context for forwarder pods
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    runAsUser: 0
+    fsGroup: 0
+
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
   ##
@@ -186,6 +195,14 @@ aggregator:
   ## Number of aggregator replicas
   ##
   replicaCount: 1
+
+  ## K8s Security Context for aggregator pods
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    runAsUser: 1001
+    fsGroup: 1001
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -383,10 +400,3 @@ tls:
   certificate: |-
   key: |-
   # existingSecret: name-of-existing-secret-to-certificates
-
-## SecurityContext configuration
-##
-securityContext:
-  enabled: true
-  runAsUser: 1001
-  fsGroup: 1001
