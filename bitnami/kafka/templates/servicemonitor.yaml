@@ -23,22 +23,22 @@ spec:
       app.kubernetes.io/component: kafka
   endpoints:
   {{- if .Values.metrics.kafka.enabled }}
-  - port: {{ .Values.metrics.kafka.port }}
-    {{- if .Values.metrics.serviceMonitor.interval }}
-    interval: {{ .Values.metrics.serviceMonitor.interval }}
-    {{- end }}
-    {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
-    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
-    {{- end }}
+    - port: kafka-port
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
   {{- end }}
   {{- if .Values.metrics.jmx.enabled }}
-  - port: {{ .Values.metrics.jmx.exporterPort }}
-    {{- if .Values.metrics.serviceMonitor.interval }}
-    interval: {{ .Values.metrics.serviceMonitor.interval }}
-    {{- end }}
-    {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
-    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
-    {{- end }}
+    - port: jmx-port
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
   {{- end }}
   namespaceSelector:
     matchNames:
