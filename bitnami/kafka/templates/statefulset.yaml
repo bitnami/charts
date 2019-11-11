@@ -287,7 +287,8 @@ spec:
         - {{ .Values.metrics.jmx.exporterPort | quote }}
         - /etc/jmx-kafka/jmx-kafka-prometheus.yml
         ports:
-        - containerPort: {{ .Values.metrics.jmx.exporterPort }}
+        - name: jmx-port
+          containerPort: {{ .Values.metrics.jmx.exporterPort }}
         resources:
 {{ toYaml .Values.metrics.jmx.resources | indent 10 }}
         volumeMounts:

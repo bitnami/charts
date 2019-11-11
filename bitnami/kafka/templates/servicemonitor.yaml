@@ -23,7 +23,7 @@ spec:
       app.kubernetes.io/component: kafka
   endpoints:
   {{- if .Values.metrics.kafka.enabled }}
-  - port: {{ .Values.metrics.kafka.port }}
+  - port: kafka-port
     {{- if .Values.metrics.serviceMonitor.interval }}
     interval: {{ .Values.metrics.serviceMonitor.interval }}
     {{- end }}
@@ -32,7 +32,7 @@ spec:
     {{- end }}
   {{- end }}
   {{- if .Values.metrics.jmx.enabled }}
-  - port: {{ .Values.metrics.jmx.exporterPort }}
+  - port: jmx-port
     {{- if .Values.metrics.serviceMonitor.interval }}
     interval: {{ .Values.metrics.serviceMonitor.interval }}
     {{- end }}

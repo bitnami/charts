@@ -34,7 +34,8 @@ spec:
           - --kafka.server={{ template "kafka.fullname" . }}:{{ .Values.service.port }}
           - --web.listen-address=:{{ .Values.metrics.kafka.port }}
         ports:
-          - containerPort: {{ .Values.metrics.kafka.port }}
+        - name: kafka-port
+          containerPort: {{ .Values.metrics.kafka.port }}
         resources:
 {{ toYaml .Values.metrics.kafka.resources | indent 10 }}
 {{- end }}
