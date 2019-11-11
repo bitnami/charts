@@ -1,8 +1,9 @@
+{{- $clusterDomain:= .Values.clusterDomain }}
 ** Please be patient while the chart is being deployed **
 
 PostgreSQL can be accessed through Pgpool via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
-    {{ include "postgresql-ha.pgpool" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    {{ include "postgresql-ha.pgpool" . }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}
 
 Pgpool acts as a load balancer for PostgreSQL and forward read/write connections to the primary node while read-only connections are forwarded to standby nodes.
 
