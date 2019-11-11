@@ -78,6 +78,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | **General**                                    |                                                                                                                                                                      |                                                              |
 | `nameOverride`                                 | String to partially override postgres-ha.fullname template with a string                                                                                             | `nil`                                                        |
 | `fullnameOverride`                             | String to fully override postgres-ha.fullname template with a string                                                                                                 | `nil`                                                        |
+| `clusterDomain`                                | Default Kubernetes cluster domain                                                                                                                                    | `cluster.local`                                              |
 | **PostgreSQL with Repmgr**                     |                                                                                                                                                                      |                                                              |
 | `postgresqlImage.registry`                     | Registry for PostgreSQL with Repmgr image                                                                                                                            | `docker.io`                                                  |
 | `postgresqlImage.repository`                   | Repository for PostgreSQL with Repmgr image                                                                                                                          | `bitnami/postgresql-repmgr`                                  |
@@ -103,6 +104,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `postgresql.username`                          | PostgreSQL username                                                                                                                                                  | `postgres`                                                   |
 | `postgresql.password`                          | PostgreSQL password                                                                                                                                                  | `nil`                                                        |
 | `postgresql.database`                          | PostgreSQL database                                                                                                                                                  | `nil`                                                        |
+| `postgresql.upgradeRepmgrExtension`            | Upgrade repmgr extension in the database                                                                                                                             | `false`                                                      |
 | `postgresql.pgHbaTrustAll`                     | Configures PostgreSQL HBA to trust every user                                                                                                                        | `false`                                                      |
 | `postgresql.repmgrUsername`                    | PostgreSQL repmgr username                                                                                                                                           | `repmgr`                                                     |
 | `postgresql.repmgrPassword`                    | PostgreSQL repmgr password                                                                                                                                           | `nil`                                                        |
@@ -404,10 +406,34 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
+## 1.0.0
+
+A new major version of repmgr (5.0.0) was included. To upgrade to this major version, it's necessary to upgrade the repmgr extension installed on the database. To do so, follow the steps below:
+
+- Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `1.0.0`, enabling the repmgr extension upgrade:
+
+```bash
+$ helm upgrade my-release --version 1.0.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=1 \
+    --set postgresql.upgradeRepmgrExtension=true
+```
+
+- Scale your PostgreSQL setup to the original number of replicas:
+
+```bash
+$ helm upgrade my-release --version 1.0.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
+```
+
+> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
 ## 0.4.0
 
-In this version, the chart will use PostgreSQL-Repmgr container images with the Postgis extension included.  The version used in Postgresql version 10, 11 and 12 is Postgis 2.5, and in Pôstgresql 9.6 is Postgis 2.3. 
-Postgis has been compiled with the following dependencies:
+In this version, the chart will use PostgreSQL-Repmgr container images with the Postgis extension included. The version used in Postgresql version 10, 11 and 12 is Postgis 2.5, and in Postgresql 9.6 is Postgis 2.3. Postgis has been compiled with the following dependencies:
 
  - protobuf
  - protobuf-c
@@ -415,4 +441,3 @@ Postgis has been compiled with the following dependencies:
  - geos
  - proj
  - gdal
-

@@ -1,6 +1,6 @@
 apiVersion: v1
 name: mongodb-sharded
-version: 0.1.0
+version: 0.1.1
 appVersion: 4.0.13
 description: NoSQL document-oriented database that stores JSON-like documents with dynamic schemas, simplifying the integration of data in content-driven applications. Sharded topology.
 keywords:
