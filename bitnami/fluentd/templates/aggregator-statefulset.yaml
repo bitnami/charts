@@ -38,7 +38,7 @@ spec:
         - name: FLUENTD_OPT
           value: {{ .Values.aggregator.extraArgs | quote }}
         {{- if .Values.aggregator.extraEnv }}
-        {{- toYaml .Values.aggregator.extraEnv | nindent 12 }}
+        {{- toYaml .Values.aggregator.extraEnv | nindent 8 }}
         {{- end }}
         ports:
         {{- if .Values.aggregator.port }}
