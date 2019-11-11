@@ -45,8 +45,8 @@ forwarder:
   ##
   securityContext:
     enabled: true
-    runAsUser: 1001
-    fsGroup: 1001
+    runAsUser: 0
+    fsGroup: 0
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
