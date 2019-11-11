@@ -15,7 +15,6 @@ metadata:
   annotations:
     "helm.sh/hook": post-{{ $kind }}
     "helm.sh/hook-weight": "1"
-    "helm.sh/hook-delete-policy": before-hook-creation
 {{- if $.Values.cronjob.annotations }}
 {{ toYaml $.Values.cronjob.annotations | indent 4 }}
 {{- end }}
