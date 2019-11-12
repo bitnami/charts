@@ -27,11 +27,7 @@ spec:
     {{- end }}
   template:
     metadata:
-      {{ if .Values.metrics.jmx.enabled }}
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: {{ .Values.metrics.jmx.exporterPort | quote }}
-      {{- end }}
       name: "{{ template "kafka.fullname" . }}"
       labels:
         app.kubernetes.io/name: {{ template "kafka.name" . }}
@@ -261,17 +257,17 @@ spec:
         {{- if .Values.persistence.enabled }}
         - name: data
           mountPath: /bitnami/kafka
-        {{ end }}
-        {{ if .Values.config }}
+        {{- end }}
+        {{- if .Values.config }}
         - name: kafka-config
           mountPath: /opt/bitnami/kafka/conf/server.properties
           subPath: server.properties
-        {{ end }}
-        {{ if .Values.auth.enabled }}
+        {{- end }}
+        {{- if .Values.auth.enabled }}
         - name: kafka-certificates
           mountPath: /opt/bitnami/kafka/conf/certs/
           readOnly: true
-        {{ end }}
+        {{- end }}
       {{ if .Values.metrics.jmx.enabled }}
       - name: jmx-exporter
         image: "{{ template "kafka.metrics.jmx.image" . }}"
@@ -287,10 +283,11 @@ spec:
         - {{ .Values.metrics.jmx.exporterPort | quote }}
         - /etc/jmx-kafka/jmx-kafka-prometheus.yml
         ports:
-          - name: jmx-port
+          - name: metrics
             containerPort: {{ .Values.metrics.jmx.exporterPort }}
-        resources:
-{{ toYaml .Values.metrics.jmx.resources | indent 10 }}
+        {{- if .Values.metrics.jmx.resources }}
+        resources: {{ toYaml .Values.metrics.jmx.resources | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: jmx-config
           mountPath: /etc/jmx-kafka
