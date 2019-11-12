@@ -1,5 +1,5 @@
 {{- if .Values.chartmuseum.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ template "deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: "{{ template "harbor.chartmuseum" . }}"
