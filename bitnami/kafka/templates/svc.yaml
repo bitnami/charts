@@ -8,10 +8,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: kafka
-  annotations:
-    {{- range $key, $value := .Values.service.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+  annotations: {{ include "kafka.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   {{- if eq .Values.service.type "LoadBalancer" }}

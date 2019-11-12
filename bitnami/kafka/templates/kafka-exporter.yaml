@@ -13,29 +13,29 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ template "kafka.name" . }}
-      release: "{{ .Release.Name }}"
+      app.kubernetes.io/name: {{ template "kafka.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: metrics
   template:
     metadata:
-      annotations:
-        {{- if and .Values.metrics.kafka.enabled }}
-        prometheus.io/scrape: "true"
-        prometheus.io/port: {{ .Values.metrics.kafka.port | quote }}
-        {{- end }}
       labels:
-        app: {{ template "kafka.name" . }}
-        release: "{{ .Release.Name }}"
+        app.kubernetes.io/name: {{ template "kafka.name" . }}
+        helm.sh/chart: {{ template "kafka.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/component: metrics
     spec:
 {{- include "kafka.imagePullSecrets" . | indent 6 }}
       containers:
-      - image: {{ template  "kafka.metrics.kafka.image" . }}
-        name: kafka-exporter
-        args:
-          - --kafka.server={{ template "kafka.fullname" . }}:{{ .Values.service.port }}
-          - --web.listen-address=:{{ .Values.metrics.kafka.port }}
-        ports:
-          - name: kafka-port
-            containerPort: {{ .Values.metrics.kafka.port }}
-        resources:
-{{ toYaml .Values.metrics.kafka.resources | indent 10 }}
+        - image: {{ template  "kafka.metrics.kafka.image" . }}
+          name: kafka-exporter
+          args:
+            - --kafka.server={{ template "kafka.fullname" . }}:{{ .Values.service.port }}
+            - --web.listen-address=:{{ .Values.metrics.kafka.port }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.kafka.port }}
+          {{- if .Values.metrics.kafka.resources }}
+          resources: {{ toYaml .Values.metrics.kafka.resources | nindent 12 }}
+          {{- end }}
 {{- end }}
