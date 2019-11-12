@@ -6,20 +6,14 @@ metadata:
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
-  labels:
-    app.kubernetes.io/name: {{ template "kafka.name" . }}
-    helm.sh/chart: {{ template "kafka.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: metrics
     {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ template "kafka.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "kafka.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: metrics
   endpoints:
     - port: metrics
