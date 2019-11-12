@@ -163,8 +163,7 @@ data:
                 exit 1
             fi
 {{- else }}
-            echo "==> Disaster recovery is disabled, the cluster cannot be recovered!" 1>&3 2>&4
-            exit 1
+            echo "==> Disaster recovery is disabled, the cluster will try to recover on it's own..." 1>&3 2>&4
 {{- end }}
         elif should_add_new_member; then
             echo "==> Adding new member to existing cluster..." 1>&3 2>&4
