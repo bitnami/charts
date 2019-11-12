@@ -23,10 +23,10 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.securityContext.enabled }}
+      {{- if .Values.aggregator.securityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.aggregator.securityContext.runAsUser }}
+        fsGroup: {{ .Values.aggregator.securityContext.fsGroup }}
       {{- end }}
       containers:
       - name: fluentd

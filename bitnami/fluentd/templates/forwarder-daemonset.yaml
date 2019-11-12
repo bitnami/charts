@@ -22,10 +22,10 @@ spec:
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "fluentd.serviceAccountName" . }}
-      {{- if .Values.securityContext.enabled }}
+      {{- if .Values.forwarder.securityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.forwarder.securityContext.runAsUser }}
+        fsGroup: {{ .Values.forwarder.securityContext.fsGroup }}
       {{- end }}
       containers:
       - name: fluentd

@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.7.4-debian-9-r9
+  tag: 1.7.4-debian-9-r13
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,6 +39,15 @@ clusterDomain: cluster.local
 
 forwarder:
   enabled: true
+
+  ## K8s Security Context for forwarder pods
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    runAsUser: 0
+    fsGroup: 0
+
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
   ##
@@ -186,6 +195,14 @@ aggregator:
   ## Number of aggregator replicas
   ##
   replicaCount: 2
+
+  ## K8s Security Context for forwarder pods
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    runAsUser: 1001
+    fsGroup: 1001
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -383,10 +400,3 @@ tls:
   certificate: |-
   key: |-
   # existingSecret: name-of-existing-secret-to-certificates
-
-## SecurityContext configuration
-##
-securityContext:
-  enabled: true
-  runAsUser: 1001
-  fsGroup: 1001
