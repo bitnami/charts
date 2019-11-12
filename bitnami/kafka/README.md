@@ -331,6 +331,16 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrading
 
+### To 7.0.0
+
+Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless you modify the labels used on the exporter deployments.
+Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
+
+```console
+$ kubectl upgrade kafka bitnami/kafka --version 6.1.8 --set metrics.kafka.enabled=false
+$ kubectl upgrade kafka bitnami/kafka --version 7.0.0 --set metrics.kafka.enabled=true
+```
+
 ### To 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
