@@ -37,12 +37,14 @@ data:
       @type null
     </match>
 
-    # TCP input to receive logs from the forwarders
+    # TCP input to receive logs from
+    {{- if and .Values.aggregator.port }}
     <source>
       @type forward
       bind 0.0.0.0
       port {{ .Values.aggregator.port }}
     </source>
+    {{- end }}
 
     # HTTP input for the liveness and readiness probes
     <source>

@@ -144,7 +144,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `readinessProbe.timeoutSeconds`         | When the probe times out                                                                                                                                  | 5                                                       |
 | `readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | 6                                                       |
 | `readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | 1                                                       |
-| `metrics.kafka.enabled`                 | Whether or not to create a separate Kafka exporter                                                                                                        | `false`                                                 |
+| `metrics.kafka.enabled`                 | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                                              | `false`                                                 |
 | `metrics.kafka.image.registry`          | Kafka exporter image registry                                                                                                                             | `docker.io`                                             |
 | `metrics.kafka.image.repository`        | Kafka exporter image name                                                                                                                                 | `bitnami/kafka-exporter`                                |
 | `metrics.kafka.image.tag`               | Kafka exporter image tag                                                                                                                                  | `{TAG_NAME}`                                            |
@@ -153,7 +153,12 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.interval`                | Interval that Prometheus scrapes Kafka metrics when using Prometheus Operator                                                                             | `10s`                                                   |
 | `metrics.kafka.port`                    | Kafka Exporter Port which exposes metrics in Prometheus format for scraping                                                                               | `9308`                                                  |
 | `metrics.kafka.resources`               | Allows setting resource limits for kafka-exporter pod                                                                                                     | `{}`                                                    |
-| `metrics.jmx.resources`                 | Allows setting resource limits for jmx sidecar container                                                                                                  | `{}`                                                    |
+| `metrics.kafka.service.type`            | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                                                    | `ClusterIP`                                             |
+| `metrics.kafka.service.port`            | Kafka Exporter Prometheus port                                                                                                                            | `9308`                                                  |
+| `metrics.kafka.service.nodePort`        | Kubernetes HTTP node port                                                                                                                                 | `""`                                                    |
+| `metrics.kafka.service.annotations`     | Annotations for Prometheus metrics service                                                                                                                | `Check values.yaml file`                                |
+| `metrics.kafka.service.loadBalancerIP`  | loadBalancerIP if service type is `LoadBalancer`                                                                                                          | `nil`                                                   |
+| `metrics.kafka.service.clusterIP`       | Static clusterIP or None for headless services                                                                                                            | `nil`                                                   |
 | `metrics.jmx.enabled`                   | Whether or not to expose JMX metrics to Prometheus                                                                                                        | `false`                                                 |
 | `metrics.jmx.image.registry`            | JMX exporter image registry                                                                                                                               | `docker.io`                                             |
 | `metrics.jmx.image.repository`          | JMX exporter image name                                                                                                                                   | `bitnami/jmx-exporter`                                  |
@@ -162,6 +167,13 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.jmx.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `metrics.jmx.interval`                  | Interval that Prometheus scrapes JMX metrics when using Prometheus Operator                                                                               | `10s`                                                   |
 | `metrics.jmx.exporterPort`              | JMX Exporter Port which exposes metrics in Prometheus format for scraping                                                                                 | `5556`                                                  |
+| `metrics.jmx.resources`                 | Allows setting resource limits for jmx sidecar container                                                                                                  | `{}`                                                    |
+| `metrics.jmx.service.type`              | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for JMX Exporter                                                                      | `ClusterIP`                                             |
+| `metrics.jmx.service.port`              | JMX Exporter Prometheus port                                                                                                                              | `5556`                                                  |
+| `metrics.jmx.service.nodePort`          | Kubernetes HTTP node port                                                                                                                                 | `""`                                                    |
+| `metrics.jmx.service.annotations`       | Annotations for Prometheus metrics service                                                                                                                | `Check values.yaml file`                                |
+| `metrics.jmx.service.loadBalancerIP`    | loadBalancerIP if service type is `LoadBalancer`                                                                                                          | `nil`                                                   |
+| `metrics.jmx.service.clusterIP`         | Static clusterIP or None for headless services                                                                                                            | `nil`                                                   |
 | `metrics.jmx.configMap.enabled`         | Enable the default ConfigMap for JMX                                                                                                                      | `true`                                                  |
 | `metrics.jmx.configMap.overrideConfig`  | Allows config file to be generated by passing values to ConfigMap                                                                                         | `{}`                                                    |
 | `metrics.jmx.configMap.overrideName`    | Allows setting the name of the ConfigMap to be used                                                                                                       | `""`                                                    |
@@ -318,6 +330,16 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 7.0.0
+
+Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless you modify the labels used on the exporter deployments.
+Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
+
+```console
+$ helm upgrade kafka bitnami/kafka --version 6.1.8 --set metrics.kafka.enabled=false
+$ helm upgrade kafka bitnami/kafka --version 7.0.0 --set metrics.kafka.enabled=true
+```
 
 ### To 2.0.0
 

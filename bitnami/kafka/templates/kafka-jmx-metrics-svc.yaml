@@ -1,0 +1,28 @@
+{{- if .Values.metrics.jmx.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kafka.fullname" . }}-jmx-metrics
+  labels: {{- include "kafka.labels" . | nindent 4 }}
+    app.kubernetes.io/component: kafka
+  annotations: {{ include "kafka.tplValue" ( dict "value" .Values.metrics.jmx.service.annotations "context" $) | nindent 4 }}
+spec:
+  type: {{ .Values.metrics.jmx.service.type }}
+  {{- if and .Values.metrics.jmx.service.loadBalancerIP (eq .Values.metrics.jmx.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.metrics.jmx.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.metrics.jmx.service.type "ClusterIP") .Values.metrics.jmx.service.clusterIP }}
+  clusterIP: {{ .Values.metrics.jmx.service.clusterIP }}
+  {{- end }}
+  ports:
+    - name: metrics
+      port: {{ .Values.metrics.jmx.service.port }}
+      targetPort: metrics
+      {{- if (and (or (eq .Values.metrics.jmx.service.type "NodePort") (eq .Values.metrics.jmx.service.type "LoadBalancer")) (not (empty .Values.metrics.jmx.service.nodePort)))}}
+      nodePort: {{ .Values.metrics.jmx.service.nodePort }}
+      {{- else if eq .Values.metrics.jmx.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "kafka.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: kafka
+{{- end }}

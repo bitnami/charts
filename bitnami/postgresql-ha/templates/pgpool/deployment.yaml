@@ -46,6 +46,55 @@ spec:
       securityContext:
         fsGroup: {{ .Values.pgpool.securityContext.fsGroup }}
       {{- end }}
+      # Auxiliar vars to populate environment variables
+      {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
+      {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
+      {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
+      {{- $releaseNamespace := .Release.Namespace }}
+      {{- $clusterDomain:= .Values.clusterDomain }}
+      initContainers:
+      - name: wait-for-backend-nodes
+        image: {{ include "postgresql-ha.volumePermissionsImage" . }}
+        imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
+        env:
+        - name: PGPOOL_BACKEND_NODES
+          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
+        command:
+          - /bin/bash
+          - -c
+          - |
+            dns_lookup() {
+                local host="${1:?host is missing}"
+                getent ahosts "$host" | awk '/STREAM/ {print $1 }'
+            }
+            is_hostname_resolved() {
+                local -r host="${1:?missing value}"
+                if [[ -n "$(dns_lookup "$host")" ]]; then
+                    true
+                else
+                    false
+                fi
+            }
+            read -r -a nodes <<< "$(tr ',;' ' ' <<< "${PGPOOL_BACKEND_NODES}")"
+            declare -i node_counter=0
+            for node in "${nodes[@]}"; do
+                read -r -a fields <<< "$(tr ':' ' ' <<< "${node}")"
+                host="${fields[1]:?field host is needed}"
+                for ((i = 1 ; i <= 10 ; i+=1 )); do
+                    is_hostname_resolved "$host" && node_counter+=1 && break
+                    sleep 5
+                done
+            done
+            if [[ $node_counter -ne ${#nodes[@]} ]]; then
+                echo "Not enough active backend nodes!"
+                exit 1
+            fi
+            echo "Every backend node is active!"
+            exit 0
+        {{- if .Values.pgpool.securityContext.enabled }}
+        securityContext:
+          runAsUser: {{ .Values.pgpool.securityContext.runAsUser }}
+        {{- end }}
       containers:
       - name: pgpool
         image: {{ include "postgresql-ha.pgpoolImage" . }}
@@ -54,16 +103,11 @@ spec:
         securityContext:
           runAsUser: {{ .Values.pgpool.securityContext.runAsUser }}
         {{- end }}
-        # Auxiliar vars to populate environment variables
-        {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
-        {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
-        {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
-        {{- $releaseName := .Release.Namespace }}
         env:
         - name: BITNAMI_DEBUG
           value: {{ ternary "true" "false" .Values.pgpoolImage.debug | quote }}
         - name: PGPOOL_BACKEND_NODES
-          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseName }}.svc.cluster.local:5432,{{ end }}
+          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
         - name: PGPOOL_SR_CHECK_USER
           value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
         {{- if .Values.postgresql.usePasswordFile }}

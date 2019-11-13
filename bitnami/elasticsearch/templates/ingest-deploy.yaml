@@ -128,6 +128,9 @@ spec:
         {{- end }}
         - name: "data"
           mountPath: "/bitnami/elasticsearch/data/"
+        {{- if .Values.extraVolumeMounts }}
+        {{ toYaml .Values.extraVolumeMounts | indent 8 }}
+        {{ end }}
       volumes:
       {{- if .Values.config }}
       - name: "config"
@@ -136,4 +139,7 @@ spec:
       {{- end }}
       - name: "data"
         emptyDir: {}
+      {{- if .Values.extraVolumes }}
+      {{- toYaml .Values.extraVolumes | nindent 6 }}
+      {{- end }}
 {{- end }}

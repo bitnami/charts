@@ -83,7 +83,8 @@ spec:
         {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
         {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
         {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
-        {{- $releaseName := .Release.Namespace }}
+        {{- $releaseNamespace := .Release.Namespace }}
+        {{- $clusterDomain:= .Values.clusterDomain }}
         env:
         - name: BITNAMI_DEBUG
           value: {{ ternary "true" "false" .Values.postgresqlImage.debug | quote }}
@@ -113,18 +114,20 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: REPMGR_UPGRADE_EXTENSION
+          value: {{ ternary "yes" "no" .Values.postgresql.upgradeRepmgrExtension | quote }}
         - name: REPMGR_PGHBA_TRUST_ALL
           value: {{ ternary "yes" "no" .Values.postgresql.pgHbaTrustAll | quote }}
         - name: REPMGR_MOUNTED_CONF_DIR
           value: "/bitnami/repmgr/conf"
         - name: REPMGR_PARTNER_NODES
-          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseName }}.svc.cluster.local,{{ end }}
+          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},{{ end }}
         - name: REPMGR_PRIMARY_HOST
-          value: {{ printf "%s-0.%s.%s.svc.cluster.local" $postgresqlFullname $postgresqlHeadlessServiceName .Release.Namespace | quote }}
+          value: {{ printf "%s-0.%s.%s.svc.%s" $postgresqlFullname $postgresqlHeadlessServiceName .Release.Namespace $clusterDomain | quote }}
         - name: REPMGR_NODE_NAME
           value: "$(MY_POD_NAME)"
         - name: REPMGR_NODE_NETWORK_NAME
-          value: "$(MY_POD_NAME).{{ $postgresqlHeadlessServiceName }}.{{ .Release.Namespace }}.svc.cluster.local"
+          value: "$(MY_POD_NAME).{{ $postgresqlHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}"
         - name: REPMGR_LOG_LEVEL
           value: {{ .Values.postgresql.repmgrLogLevel | quote }}
         - name: REPMGR_CONNECT_TIMEOUT

@@ -47,164 +47,163 @@ spec:
       {{- end }}
       {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
       initContainers:
-      - name: git-clone-repository
-        image: "{{ template "git.image" . }}"
-        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-        command:
-        - /bin/bash
-        - -ec
-        - |
-          git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
-        volumeMounts:
-        - name: git-cloned-dag-files
-          mountPath: /dags
+        - name: git-clone-repository
+          image: "{{ template "git.image" . }}"
+          imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
+          volumeMounts:
+            - name: git-cloned-dag-files
+              mountPath: /dags
       containers:
-      - name: git-repo-syncer
-        image: "{{ template "git.image" . }}"
-        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-        command:
-        - /bin/bash
-        - -ec
-        - |
-          while true; do
-              cd /dags && git pull origin {{ .Values.airflow.cloneDagFilesFromGit.branch }}
-              sleep {{ default "60" .Values.airflow.cloneDagFilesFromGit.interval }}
-          done
-        volumeMounts:
-        - name: git-cloned-dag-files
-          mountPath: /dags
+        - name: git-repo-syncer
+          image: "{{ template "git.image" . }}"
+          imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              while true; do
+                  cd /dags && git pull origin {{ .Values.airflow.cloneDagFilesFromGit.branch }}
+                  sleep {{ default "60" .Values.airflow.cloneDagFilesFromGit.interval }}
+              done
+          volumeMounts:
+            - name: git-cloned-dag-files
+              mountPath: /dags
       {{- else }}
       containers:
       {{- end }}
-      - name: airflow-scheduler
-        image: {{ template "airflow.schedulerImage" . }}
-        imagePullPolicy: {{ .Values.schedulerImage.pullPolicy | quote }}
-        env:
-        {{- if .Values.schedulerImage.debug }}
-        - name: BASH_DEBUG
-          value: "1"
-        - name: NAMI_DEBUG
-          value: "1"
-        - name: NAMI_LOG_LEVEL
-          value: "trace8"
-        {{- end }}
-        - name: AIRFLOW_DATABASE_NAME
-          {{- if .Values.postgresql.enabled }}
-          value: {{ .Values.postgresql.postgresqlDatabase }}
-          {{- else }}
-          value: {{ .Values.externalDatabase.database | quote }}
-          {{- end }}
-        - name: AIRFLOW_DATABASE_USERNAME
-          {{- if .Values.postgresql.enabled }}
-          value: {{ .Values.postgresql.postgresqlUsername }}
-          {{- else }}
-          value: {{ .Values.externalDatabase.user | quote }}
-          {{- end }}
-        - name: AIRFLOW_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-            {{- if .Values.postgresql.enabled }}
-              name: {{ template "airflow.postgresql.fullname" . }}
-              key: postgresql-password
-            {{- else }}
-              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-              key: db-password
+        - name: airflow-scheduler
+          image: {{ template "airflow.schedulerImage" . }}
+          imagePullPolicy: {{ .Values.schedulerImage.pullPolicy | quote }}
+          env:
+          {{- if .Values.schedulerImage.debug }}
+            - name: BASH_DEBUG
+              value: "1"
+            - name: NAMI_DEBUG
+              value: "1"
+            - name: NAMI_LOG_LEVEL
+              value: "trace8"
             {{- end }}
-        - name: AIRFLOW_DATABASE_HOST
-          {{- if .Values.postgresql.enabled }}
-          value: {{ template "airflow.postgresql.fullname" . }}
-          {{- else }}
-          value: {{ .Values.externalDatabase.host | quote }}
-          {{- end }}
-        - name: AIRFLOW_DATABASE_PORT_NUMBER
-          {{- if .Values.postgresql.enabled }}
-          value: "5432"
-          {{- else }}
-          value: {{ .Values.externalDatabase.port | quote }}
-          {{- end }}
-        - name: REDIS_HOST
-          {{- if .Values.redis.enabled }}
-          value: {{ template "airflow.redis.fullname" . }}
-          {{- else }}
-          value: {{ .Values.externalRedis.host | quote }}
-          {{- end }}
-        - name: REDIS_PORT_NUMBER
-          {{- if .Values.redis.enabled }}
-          value: "6379"
-          {{- else }}
-          value: {{ .Values.externalRedis.port | quote }}
-          {{- end }}
-        - name: REDIS_PASSWORD
-          valueFrom:
-            secretKeyRef:
-            {{- if .Values.redis.enabled }}
-              name: {{ template "airflow.redis.secretName" . }}
-              key: redis-password
-            {{- else }}
-              name: {{ printf "%s-%s" .Release.Name "externalredis" }}
-              key: redis-password
+            - name: AIRFLOW_DATABASE_NAME
+              {{- if .Values.postgresql.enabled }}
+              value: {{ .Values.postgresql.postgresqlDatabase }}
+              {{- else }}
+              value: {{ .Values.externalDatabase.database | quote }}
+              {{- end }}
+            - name: AIRFLOW_DATABASE_USERNAME
+              {{- if .Values.postgresql.enabled }}
+              value: {{ .Values.postgresql.postgresqlUsername }}
+              {{- else }}
+              value: {{ .Values.externalDatabase.user | quote }}
+              {{- end }}
+            - name: AIRFLOW_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                {{- if .Values.postgresql.enabled }}
+                  name: {{ template "airflow.postgresql.fullname" . }}
+                  key: postgresql-password
+                {{- else }}
+                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+                  key: db-password
+                {{- end }}
+            - name: AIRFLOW_DATABASE_HOST
+              {{- if .Values.postgresql.enabled }}
+              value: {{ template "airflow.postgresql.fullname" . }}
+              {{- else }}
+              value: {{ .Values.externalDatabase.host | quote }}
+              {{- end }}
+            - name: AIRFLOW_DATABASE_PORT_NUMBER
+              {{- if .Values.postgresql.enabled }}
+              value: "5432"
+              {{- else }}
+              value: {{ .Values.externalDatabase.port | quote }}
+              {{- end }}
+            - name: REDIS_HOST
+              {{- if .Values.redis.enabled }}
+              value: {{ template "airflow.redis.fullname" . }}
+              {{- else }}
+              value: {{ .Values.externalRedis.host | quote }}
+              {{- end }}
+            - name: REDIS_PORT_NUMBER
+              {{- if .Values.redis.enabled }}
+              value: "6379"
+              {{- else }}
+              value: {{ .Values.externalRedis.port | quote }}
+              {{- end }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                {{- if .Values.redis.enabled }}
+                  name: {{ template "airflow.redis.secretName" . }}
+                  key: redis-password
+                {{- else }}
+                  name: {{ printf "%s-%s" .Release.Name "externalredis" }}
+                  key: redis-password
+                {{- end }}
+            - name: AIRFLOW_EXECUTOR
+              value: "CeleryExecutor"
+            - name: AIRFLOW_FERNET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
+                  key: airflow-fernetKey
+            - name: AIRFLOW_WEBSERVER_HOST
+              value: {{ template "airflow.fullname" . }}
+            - name: AIRFLOW_LOAD_EXAMPLES
+              {{- if .Values.airflow.loadExamples }}
+              value: "yes"
+              {{- else }}
+              value: "no"
+              {{- end }}
+            {{- if .Values.airflow.extraEnvVars }}
+              {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
             {{- end }}
-        - name: AIRFLOW_EXECUTOR
-          value: "CeleryExecutor"
-        - name: AIRFLOW_FERNET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
-              key: airflow-fernetKey
-        - name: AIRFLOW_WEBSERVER_HOST
-          value: {{ template "airflow.fullname" . }}
-        - name: AIRFLOW_LOAD_EXAMPLES
-          {{- if .Values.airflow.loadExamples }}
-          value: "yes"
-          {{- else }}
-          value: "no"
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
           {{- end }}
-        {{- if .Values.airflow.extraEnvVars }}
-          {{ toYaml .Values.airflow.extraEnvVars | nindent 8 }}
-        {{- end }}
-        {{- if .Values.livenessProbe.enabled }}
-        livenessProbe:
-        {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
-        readinessProbe:
-        {{- end }}
-        volumeMounts:
-        {{- if .Files.Glob "files/dags/*.py" }}
-        - name: local-dag-files
-          mountPath: /opt/bitnami/airflow/dags/local
-        {{- end }}
-        {{- if .Values.airflow.dagsConfigMap }}
-        - name: external-dag-files
-          mountPath: /opt/bitnami/airflow/dags/external
-        {{- end }}
-        {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-        - name: git-cloned-dag-files
-          mountPath: /opt/bitnami/airflow/dags/git
-        {{- end }}
-        {{- if .Values.airflow.configurationConfigMap }}
-        - name: custom-configuration-file
-          mountPath: /opt/bitnami/airflow/airflow.cfg
-          subPath: airflow.cfg
-        {{- end }}
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+          {{- end }}
+          volumeMounts:
+          {{- if .Files.Glob "files/dags/*.py" }}
+            - name: local-dag-files
+              mountPath: /opt/bitnami/airflow/dags/local
+          {{- end }}
+          {{- if .Values.airflow.dagsConfigMap }}
+            - name: external-dag-files
+              mountPath: /opt/bitnami/airflow/dags/external
+          {{- end }}
+          {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+            - name: git-cloned-dag-files
+              mountPath: /opt/bitnami/airflow/dags/git
+          {{- end }}
+          {{- if .Values.airflow.configurationConfigMap }}
+            - name: custom-configuration-file
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: airflow.cfg
+          {{- end }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
       volumes:
       {{- if .Files.Glob "files/dags/*.py" }}
-      - name: local-dag-files
-        configMap:
-          name: {{ template "airflow.fullname" . }}-dag-files
+        - name: local-dag-files
+          configMap:
+            name: {{ template "airflow.fullname" . }}-dag-files
       {{- end }}
       {{- if .Values.airflow.dagsConfigMap }}
-      - name: external-dag-files
-        configMap:
-          name: {{ .Values.airflow.dagsConfigMap }}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.airflow.dagsConfigMap }}
       {{- end }}
       {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-      - name: git-cloned-dag-files
-        emptyDir: {}
+        - name: git-cloned-dag-files
+          emptyDir: {}
       {{- end }}
       {{- if .Values.airflow.configurationConfigMap }}
-      - name: custom-configuration-file
-        configMap:
-          name: {{ .Values.airflow.configurationConfigMap }}
+        - name: custom-configuration-file
+          configMap:
+            name: {{ .Values.airflow.configurationConfigMap }}
       {{- end }}
