@@ -2,7 +2,7 @@
 
 [Prometheus Operator](https://github.com/coreos/prometheus-operator/) provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 
-## TL;DR
+## TL;DR;
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -48,11 +48,11 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the flag `--purge` to delete all history too.
 
-## Configuration
+## Parameters
 
 The following table lists the configurable parameters of the Prometheus Operator chart and their default values.
 
-### Global Configuration
+### Global Parameters
 
 |         Parameter         |                                                  Description                                                   |                         Default                         |
 |---------------------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -66,7 +66,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `rbac.apiVersion`         | Version of the RBAC API                                                                                        | `v1beta1`                                               |
 | `rbac.pspEnabled`         | PodSecurityPolicy                                                                                              | `true`                                                  |
 
-### Prometheus Operator Configuration
+### Prometheus Operator Parameters
 
 |                       Parameter                       |                                     Description                                      |                               Default                                |
 |-------------------------------------------------------|--------------------------------------------------------------------------------------|----------------------------------------------------------------------|
@@ -127,7 +127,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `operator.prometheusConfigReloader.image.pullPolicy`  | Prometheus Config Reloader image pull policy                                         | `IfNotPresent`                                                       |
 | `operator.prometheusConfigReloader.image.pullSecrets` | Specify docker-registry secret names as an array                                     | `[]` (does not add image pull secrets to deployed pods)              |
 
-### Prometheus Configuration
+### Prometheus Parameters
 
 |                   Parameter                   |                                     Description                                      |                                Default                                 |
 |-----------------------------------------------|--------------------------------------------------------------------------------------|------------------------------------------------------------------------|
@@ -199,7 +199,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `prometheus.containers`                       | Containers allows injecting additional containers                                    | `[]`                                                                   |
 | `prometheus.additionalScrapeConfigsExternal`  | Enable additional scrape configs that are managed externally to this chart           | `false`                                                                |
 
-### Alertmanager Configuration
+### Alertmanager Parameters
 
 |                    Parameter                    |                                                    Description                                                     |                                                                                                                       Default                                                                                                                       |
 |-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -275,13 +275,17 @@ $ helm install --name my-release -f values.yaml bitnami/prometheus-operator
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
-
-```console
-$ helm install --name my-release -f ./values-production.yaml bitnami/prometheus-operator
-```
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Modify the Log level for Prometheus Operator:
 
@@ -324,12 +328,6 @@ $ helm install --name my-release -f ./values-production.yaml bitnami/prometheus-
 -   logLevel: info
 +   logLevel: error
 ```
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Upgrading
 
