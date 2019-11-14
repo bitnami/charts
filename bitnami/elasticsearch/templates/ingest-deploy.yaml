@@ -2,144 +2,126 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "elasticsearch.ingest.fullname" . }}
-  labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ template "elasticsearch.chart" . }}
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    role: "ingest"
+  name: {{ include "elasticsearch.ingest.fullname" . }}
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+    role: ingest
 spec:
   selector:
-    matchLabels:
-      app: {{ template "elasticsearch.name" . }}
-      release: "{{ .Release.Name }}"
-      role: "ingest"
+    matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
+      role: ingest
   replicas: {{ .Values.ingest.replicas }}
   template:
     metadata:
-      labels:
-        app: {{ template "elasticsearch.name" . }}
-        release: {{ .Release.Name | quote }}
-        role: "ingest"
-{{- with .Values.ingest.podAnnotations }}
-      annotations:
-{{ toYaml . | indent 8 }}
-{{- end }}
+      labels: {{- include "elasticsearch.labels" . | nindent 8 }}
+        role: ingest
+      {{- with .Values.ingest.podAnnotations }}
+      annotations: {{- toYaml . | nindent 10 }}
+      {{- end }}
     spec:
-      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.securityContext.enabled }}
+{{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.ingest.affinity }}
+      affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.ingest.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.nodeSelector }}
+      nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.ingest.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.tolerations }}
+      tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.ingest.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.securityContext.enabled }}
       securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        fsGroup: {{ .Values.ingest.securityContext.fsGroup }}
       {{- end }}
-      affinity:
-      {{- if eq .Values.ingest.antiAffinity "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchLabels:
-                  app: {{ template "elasticsearch.name" . }}
-                  release: {{ .Release.Name | quote }}
-                  role: "ingest"
-      {{- else if eq .Values.ingest.antiAffinity "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  app: {{ template "elasticsearch.name" . }}
-                  release: {{ .Release.Name | quote }}
-                  role: "ingest"
-      {{- end }}
-      {{- if .Values.ingest.nodeAffinity }}
-{{ toYaml .Values.ingest.nodeAffinity | indent 8 }}
-      {{- end }}
-{{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
       {{- if .Values.sysctlImage.enabled }}
       ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
       initContainers:
-      - name: sysctl
-        image: {{ template "elasticsearch.sysctl.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        command: ['sh', '-c', 'install_packages procps && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
-        securityContext:
-          privileged: true
+        - name: sysctl
+          image: {{ include "elasticsearch.sysctl.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              install_packages procps
+              sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+          securityContext:
+            privileged: true
       {{- end }}
       containers:
-      - name: "elasticsearch"
-        image: {{ template "elasticsearch.image" . }}
-        {{- if .Values.securityContext.enabled }}
-        securityContext:
-          runAsUser: {{ .Values.securityContext.runAsUser }}
-        {{- end }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        env:
-        - name: ELASTICSEARCH_CLUSTER_NAME
-          value: {{ .Values.name | quote }}
-        - name: ELASTICSEARCH_CLUSTER_HOSTS
-          value: {{ template "elasticsearch.discovery.fullname" . }}
-        {{- if .Values.plugins }}
-        - name: ELASTICSEARCH_PLUGINS
-          value: {{ .Values.plugins | quote }}
-        {{- end }}
-        - name: ELASTICSEARCH_HEAP_SIZE
-          value: {{ .Values.ingest.heapSize | quote }}
-        - name: ELASTICSEARCH_IS_DEDICATED_NODE
-          value: "yes"
-        - name: ELASTICSEARCH_NODE_TYPE
-          value: "ingest"
-        ports:
-        - name: transport
-          containerPort: 9300
-        {{- if .Values.ingest.livenessProbe.enabled }}
-        livenessProbe:
-          initialDelaySeconds: {{ .Values.ingest.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.ingest.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.ingest.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.ingest.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.ingest.livenessProbe.failureThreshold }}
-          httpGet:
-            path: /_cluster/health?local=true
-            port: 9200
-          initialDelaySeconds: 90
-        {{- end }}
-        {{- if .Values.ingest.readinessProbe.enabled}}
-        readinessProbe:
-          initialDelaySeconds: {{ .Values.ingest.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.ingest.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.ingest.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.ingest.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.ingest.readinessProbe.failureThreshold }}
-          httpGet:
-            path: /_cluster/health?local=true
-            port: 9200
-          initialDelaySeconds: 5
-        {{- end}}
-        resources:
-{{ toYaml .Values.ingest.resources | indent 10 }}
-        volumeMounts:
-        {{- if .Values.config }}
-        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
-          name: "config"
-          subPath: elasticsearch.yml
-        {{- end }}
-        - name: "data"
-          mountPath: "/bitnami/elasticsearch/data/"
-        {{- if .Values.extraVolumeMounts }}
-        {{ toYaml .Values.extraVolumeMounts | indent 8 }}
-        {{ end }}
+        - name: elasticsearch
+          image: {{ include "elasticsearch.image" . }}
+          {{- if .Values.ingest.securityContext.enabled }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          securityContext:
+            runAsUser: {{ .Values.ingest.securityContext.runAsUser }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: ELASTICSEARCH_CLUSTER_NAME
+              value: {{ .Values.name | quote }}
+            - name: ELASTICSEARCH_CLUSTER_HOSTS
+              value: {{ template "elasticsearch.discovery.fullname" . }}
+            {{- if .Values.plugins }}
+            - name: ELASTICSEARCH_PLUGINS
+              value: {{ .Values.plugins | quote }}
+            {{- end }}
+            - name: ELASTICSEARCH_HEAP_SIZE
+              value: {{ .Values.ingest.heapSize | quote }}
+            - name: ELASTICSEARCH_IS_DEDICATED_NODE
+              value: "yes"
+            - name: ELASTICSEARCH_NODE_TYPE
+              value: "ingest"
+          ports:
+            - name: transport
+              containerPort: 9300
+          {{- if .Values.ingest.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.ingest.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ingest.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.ingest.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.ingest.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.ingest.livenessProbe.failureThreshold }}
+            httpGet:
+              path: /_cluster/health?local=true
+              port: 9200
+            initialDelaySeconds: 90
+          {{- end }}
+          {{- if .Values.ingest.readinessProbe.enabled}}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.ingest.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ingest.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.ingest.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.ingest.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.ingest.readinessProbe.failureThreshold }}
+            httpGet:
+              path: /_cluster/health?local=true
+              port: 9200
+            initialDelaySeconds: 5
+          {{- end}}
+          {{- if .Values.ingest.resources }}
+          resources: {{- toYaml .Values.ingest.resources | nindent 12 }}
+          {{- end}}
+          volumeMounts:
+            {{- if .Values.config }}
+            - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
+              name: "config"
+              subPath: elasticsearch.yml
+            {{- end }}
+            - name: "data"
+              mountPath: "/bitnami/elasticsearch/data/"
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
-      {{- if .Values.config }}
-      - name: "config"
-        configMap:
-          name: {{ template "elasticsearch.fullname" . }}
-      {{- end }}
-      - name: "data"
-        emptyDir: {}
-      {{- if .Values.extraVolumes }}
-      {{- toYaml .Values.extraVolumes | nindent 6 }}
-      {{- end }}
+        {{- if .Values.config }}
+        - name: config
+          configMap:
+            name: {{ include "elasticsearch.fullname" . }}
+        {{- end }}
+        - name: data
+          emptyDir: {}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
 {{- end }}

@@ -1,14 +1,10 @@
 {{- if and .Values.curator.enabled .Values.curator.psp.create }}
-apiVersion: {{ template "podsecuritypolicy.apiVersion" . }}
+apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ template "elasticsearch.chart" . }}
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    role: "curator"
-  name: {{ template "elasticsearch.curator.fullname" . }}
+  name: {{ include "elasticsearch.curator.name" . }}
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+    role: curator
 spec:
   privileged: true
   #requiredDropCapabilities:

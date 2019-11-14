@@ -26,8 +26,21 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+  ## Set to true if you would like to see extra information on logs
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
+  debug: false
 
-## Image that performs the sysctl operation
+## String to partially override elasticsearch.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override elasticsearch.fullname template
+##
+# fullnameOverride:
+
+## Bitnami Minideb image version
+## ref: https://hub.docker.com/r/bitnami/minideb/tags/
 ##
 sysctlImage:
   enabled: true
@@ -62,19 +75,33 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
-## String to partially override elasticsearch.fullname template (will maintain the release name)
+## Cluster domain
 ##
-# nameOverride:
-
-## String to fully override elasticsearch.fullname template
-##
-# fullnameOverride:
+clusterDomain: cluster.local
 
 ## Elasticsearch cluster name
 ##
 name: elastic
+
+## Elasticsearch discovery node parameters
+##
+discovery:
+  name: discovery
 
 ## Comma, semi-colon or space separated list of plugins to install at initialization
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
@@ -86,8 +113,8 @@ name: elastic
 ##
 # config:
 
-# extraVolumes and extraVolumeMounts allows you to mount other volumes
-# Example Use Case: mount ssl certificates when elasticsearch has tls enabled
+## extraVolumes and extraVolumeMounts allows you to mount other volumes
+## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
 # extraVolumes:
 #   - name: es-certs
 #     secret:
@@ -102,108 +129,131 @@ name: elastic
 ##
 master:
   name: master
+  ## Number of master-eligible node(s) replicas to deploy
+  ##
   replicas: 2
   heapSize: 128m
-  antiAffinity: "soft"
-  ## Node Affinity
-  # nodeAffinity:
+  ## Provide annotations for master-eligible pods.
+  ##
+  podAnnotations: {}
+  ## Pod Security Context for master-eligible pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  ## Affinity for pod assignment.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: {}
+  ## Elasticsearch master-eligible container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 256Mi
+  ## Elasticsearch master-eligible container's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
+  readinessProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
+  ## Service parameters for master-eligible node(s)
+  ##
   service:
     ## master-eligible service type
+    ##
     type: ClusterIP
     ## Elasticsearch transport port
+    ##
     port: 9300
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     # nodePort:
-
     ## Provide any additional annotations which may be required. This can be used to
     ## set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     annotations: {}
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
     # loadBalancerIP:
-
-  ## Provide annotations for the master pods.
-  podAnnotations: {}
-
-  ## Configure resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    requests:
-      cpu: 25m
-      memory: "256Mi"
-  ## Elasticsearch master-eligible Liveness Probe
-  livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
-  ## Elasticsearch master-eligible Readiness Probe
-  readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
-
-## Elasticsearch discovery node parameters
-##
-discovery:
-  name: discovery
-
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
-
-# Cluster domain
-clusterDomain: cluster.local
 
 ## Elasticsearch coordinating-only node parameters
 ##
 coordinating:
   name: coordinating-only
+  ## Number of coordinating-only node(s) replicas to deploy
+  ##
   replicas: 2
   heapSize: 128m
-  antiAffinity: "soft"
-  ## node affinity
-  # nodeAffinity:
-  service:
-    ## coordinating-only service type
-    type: ClusterIP
-    ## Elasticsearch REST API port
-    port: 9200
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ##
-    # nodePort:
-
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    annotations: {}
-    # loadBalancerIP:
-
-  ## Provide annotations for the coordinating pods.
+  ## Provide annotations for the coordinating-only pods.
+  ##
   podAnnotations: {}
-
-  ## Configure resource requests and limits
+  ## Pod Security Context for coordinating-only pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  ## Affinity for pod assignment.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: {}
+  ## Elasticsearch coordinating-only container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
     requests:
       cpu: 25m
-      memory: "256Mi"
-  ## Elasticsearch master-eligible Liveness Probe
+      memory: 256Mi
+  ## Elasticsearch coordinating-only container's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -211,7 +261,6 @@ coordinating:
   #  timeoutSeconds: 5
   #  successThreshold: 1
   #  failureThreshold: 5
-  ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -219,31 +268,81 @@ coordinating:
   #  timeoutSeconds: 5
   #  successThreshold: 1
   #  failureThreshold: 5
+  ## Service parameters for coordinating-only node(s)
+  ##
+  service:
+    ## coordinating-only service type
+    ##
+    type: ClusterIP
+    ## Elasticsearch tREST API port
+    ##
+    port: 9200
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
 
 ## Elasticsearch data node parameters
 ##
 data:
   name: data
+  ## Number of data node(s) replicas to deploy
+  ##
   replicas: 2
   ## updateStrategy for ElasticSearch Data statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
   updateStrategy:
     type: RollingUpdate
     # rollingUpdatePartition
-  heapSize: 1024m
-  antiAffinity: "soft"
-  ## node affinity
-  # nodeAffinity:
+  heapSize: 128m
   ## Provide annotations for the data pods.
+  ##
   podAnnotations: {}
-  ## Configure resource requests and limits
+  ## Pod Security Context for data pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  ## Affinity for pod assignment.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: {}
+  ## Elasticsearch data container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
     requests:
       cpu: 25m
-      memory: "1152Mi"
-  ## Elasticsearch master-eligible Liveness Probe
+      memory: 1152Mi
+  ## Elasticsearch data container's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -251,7 +350,6 @@ data:
   #  timeoutSeconds: 5
   #  successThreshold: 1
   #  failureThreshold: 5
-  ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -266,11 +364,6 @@ data:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
     enabled: true
-
-    ## Persistent Volume Claim annotations
-    ##
-    annotations: {}
-
     ## Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -279,11 +372,13 @@ data:
     ##   GKE, AWS & OpenStack)
     ##
     # storageClass: "-"
-
+    ## Persistent Volume Claim annotations
+    ##
+    annotations: {}
     ## Persistent Volume Access Mode
+    ##
     accessModes:
-    - ReadWriteOnce
-
+      - ReadWriteOnce
     ## Persistent Volume size
     ##
     size: 8Gi
@@ -293,39 +388,48 @@ data:
 ingest:
   enabled: false
   name: ingest
+  ## Number of ingest node(s) replicas to deploy
+  ##
   replicas: 2
   heapSize: 128m
-  antiAffinity: "soft"
-  ## node affinity
-  # nodeAffinity:
-  service:
-    ## ingest service type
-    type: ClusterIP
-    ## Elasticsearch transport port
-    port: 9300
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ##
-    # nodePort:
-
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    annotations: {}
-    # loadBalancerIP:
-
   ## Provide annotations for the ingest pods.
+  ##
   podAnnotations: {}
-
-  ## Configure resource requests and limits
+  ## Pod Security Context for ingest pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  ## Affinity for pod assignment.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: {}
+  ## Elasticsearch ingest container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
     requests:
       cpu: 25m
-      memory: "256Mi"
-  ## Elasticsearch master-eligible Liveness Probe
+      memory: 256Mi
+  ## Elasticsearch ingest container's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -333,7 +437,6 @@ ingest:
   #  timeoutSeconds: 5
   #  successThreshold: 1
   #  failureThreshold: 5
-  ## Elasticsearch master-eligible Readiness Probe
   readinessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -341,7 +444,31 @@ ingest:
   #  timeoutSeconds: 5
   #  successThreshold: 1
   #  failureThreshold: 5
+  ## Service parameters for ingest node(s)
+  ##
+  service:
+    ## ingest service type
+    ##
+    type: ClusterIP
+    ## Elasticsearch transport port
+    ##
+    port: 9300
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
 
+## Elasticsearch curator parameters
+##
 curator:
   enabled: false
   name: curator
@@ -501,6 +628,9 @@ curator:
     #       }
     #     }
 
+## Elasticsearch Prometheus exporter configuration
+## ref: https://hub.docker.com/r/bitnami/elasticsearch-exporter/tags/
+##
 metrics:
   enabled: false
   name: metrics
@@ -515,16 +645,37 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  ## Provide annotations for the metrics pods.
-  podAnnotations: {}
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9114"
+  ## Elasticsearch Prometheus exporter service type
+  ##
   service:
     type: ClusterIP
+    ## Provide any additional annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9114"
+  ## Elasticsearch Prometheus exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
   resources:
-    # requests:
-    #   cpu: 25m
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+  ## Metrics exporter pod Annotation and Labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
 
   ## Prometheus Operator ServiceMonitor configuration
   ##

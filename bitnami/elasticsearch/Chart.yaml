@@ -1,15 +1,15 @@
 apiVersion: v1
 name: elasticsearch
-version: 8.2.4
+version: 8.2.5
 appVersion: 7.4.2
 description: A highly scalable open-source full-text search and analytics engine
 keywords:
-- elasticsearch
+  - elasticsearch
 home: https://www.elastic.co/products/elasticsearch
 sources:
-- https://github.com/bitnami/bitnami-docker-elasticsearch
+  - https://github.com/bitnami/bitnami-docker-elasticsearch
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-110x117.png

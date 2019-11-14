@@ -1,142 +1,125 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "elasticsearch.coordinating.fullname" . }}
-  labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ template "elasticsearch.chart" . }}
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    role: "coordinating-only"
+  name: {{ include "elasticsearch.coordinating.fullname" . }}
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+    role: coordinating-only
 spec:
   selector:
-    matchLabels:
-      app: {{ template "elasticsearch.name" . }}
-      release: {{ .Release.Name | quote }}
-      role: "coordinating-only"
+    matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
+      role: coordinating-only
   replicas: {{ .Values.coordinating.replicas }}
   template:
     metadata:
-      labels:
-        app: {{ template "elasticsearch.name" . }}
-        release: {{ .Release.Name | quote }}
-        role: "coordinating-only"
-{{- with .Values.coordinating.podAnnotations }}
-      annotations:
-{{ toYaml . | indent 8 }}
-{{- end }}
+      labels: {{- include "elasticsearch.labels" . | nindent 8 }}
+        role: coordinating-only
+      {{- with .Values.coordinating.podAnnotations }}
+      annotations: {{- toYaml . | nindent 10 }}
+      {{- end }}
     spec:
-      {{- if .Values.securityContext.enabled }}
+{{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.coordinating.affinity }}
+      affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.coordinating.nodeSelector }}
+      nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.coordinating.tolerations }}
+      tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.coordinating.securityContext.enabled }}
       securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        fsGroup: {{ .Values.coordinating.securityContext.fsGroup }}
       {{- end }}
-      affinity:
-      {{- if eq .Values.coordinating.antiAffinity "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchLabels:
-                  app:  {{ template "elasticsearch.name" . }}
-                  release: {{ .Release.Name | quote }}
-                  role: "coordinating-only"
-      {{- else if eq .Values.coordinating.antiAffinity "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  app: {{ template "elasticsearch.name" . }}
-                  release: {{ .Release.Name | quote }}
-                  role: "coordinating-only"
-      {{- end }}
-      {{- if .Values.coordinating.nodeAffinity }}
-{{ toYaml .Values.coordinating.nodeAffinity | indent 8 }}
-      {{- end }}
-      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.sysctlImage.enabled }}
       ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
       initContainers:
-      - name: sysctl
-        image: {{ template "elasticsearch.sysctl.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        command: ['sh', '-c', 'install_packages procps && sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536']
-        securityContext:
-          privileged: true
+        - name: sysctl
+          image: {{ include "elasticsearch.sysctl.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              install_packages procps
+              sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+          securityContext:
+            privileged: true
       {{- end }}
       containers:
-      - name: "elasticsearch"
-        {{- if .Values.securityContext.enabled }}
-        securityContext:
-          runAsUser: {{ .Values.securityContext.runAsUser }}
-        {{- end }}
-        image: {{ template "elasticsearch.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        env:
-        - name: ELASTICSEARCH_CLUSTER_NAME
-          value: {{ .Values.name | quote }}
-        - name: ELASTICSEARCH_CLUSTER_HOSTS
-          value: {{ template "elasticsearch.discovery.fullname" . }}
-        {{- if .Values.plugins }}
-        - name: ELASTICSEARCH_PLUGINS
-          value: {{ .Values.plugins | quote }}
-        {{- end }}
-        - name: ELASTICSEARCH_HEAP_SIZE
-          value: {{ .Values.coordinating.heapSize | quote }}
-        - name: ELASTICSEARCH_IS_DEDICATED_NODE
-          value: "yes"
-        - name: ELASTICSEARCH_NODE_TYPE
-          value: "coordinating"
-        ports:
-        - name: http
-          containerPort: 9200
-        - name: transport
-          containerPort: 9300
-        {{- if .Values.coordinating.livenessProbe.enabled }}
-        livenessProbe:
-          initialDelaySeconds: {{ .Values.coordinating.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.coordinating.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.coordinating.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.coordinating.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.coordinating.livenessProbe.failureThreshold }}
-          httpGet:
-            path: /_cluster/health?local=true
-            port: http
-        {{- end }}
-        {{- if .Values.coordinating.readinessProbe.enabled}}
-        readinessProbe:
-          initialDelaySeconds: {{ .Values.coordinating.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.coordinating.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.coordinating.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.coordinating.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.coordinating.readinessProbe.failureThreshold }}
-          httpGet:
-            path: /_cluster/health?local=true
-            port: http
-        {{- end }}
-        resources:
-{{ toYaml .Values.coordinating.resources | indent 10 }}
-        volumeMounts:
-        {{- if .Values.config }}
-        - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
-          name: "config"
-          subPath: elasticsearch.yml
-        {{- end }}
-        - name: "data"
-          mountPath: "/bitnami/elasticsearch/data/"
-        {{- if .Values.extraVolumeMounts }}
-        {{ toYaml .Values.extraVolumeMounts | indent 8 }}
-        {{ end }}
+        - name: elasticsearch
+          image: {{ include "elasticsearch.image" . }}
+          {{- if .Values.coordinating.securityContext.enabled }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          securityContext:
+            runAsUser: {{ .Values.coordinating.securityContext.runAsUser }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: ELASTICSEARCH_CLUSTER_NAME
+              value: {{ .Values.name | quote }}
+            - name: ELASTICSEARCH_CLUSTER_HOSTS
+              value: {{ template "elasticsearch.discovery.fullname" . }}
+            {{- if .Values.plugins }}
+            - name: ELASTICSEARCH_PLUGINS
+              value: {{ .Values.plugins | quote }}
+            {{- end }}
+            - name: ELASTICSEARCH_HEAP_SIZE
+              value: {{ .Values.coordinating.heapSize | quote }}
+            - name: ELASTICSEARCH_IS_DEDICATED_NODE
+              value: "yes"
+            - name: ELASTICSEARCH_NODE_TYPE
+              value: "coordinating"
+          ports:
+            - name: http
+              containerPort: 9200
+            - name: transport
+              containerPort: 9300
+          {{- if .Values.coordinating.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.coordinating.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.coordinating.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.coordinating.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.coordinating.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.coordinating.livenessProbe.failureThreshold }}
+            httpGet:
+              path: /_cluster/health?local=true
+              port: http
+          {{- end }}
+          {{- if .Values.coordinating.readinessProbe.enabled}}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.coordinating.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.coordinating.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.coordinating.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.coordinating.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.coordinating.readinessProbe.failureThreshold }}
+            httpGet:
+              path: /_cluster/health?local=true
+              port: http
+          {{- end }}
+          {{- if .Values.coordinating.resources }}
+          resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}
+          {{- end}}
+          volumeMounts:
+            {{- if .Values.config }}
+            - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
+              name: config
+              subPath: elasticsearch.yml
+            {{- end }}
+            - name: data
+              mountPath: "/bitnami/elasticsearch/data/"
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
-      {{- if .Values.config }}
-      - name: "config"
-        configMap:
-          name: {{ template "elasticsearch.fullname" . }}
-      {{- end }}
-      - name: "data"
-        emptyDir: {}
-      {{- if .Values.extraVolumes }}
-      {{- toYaml .Values.extraVolumes | nindent 6 }}
-      {{- end }}
+        {{- if .Values.config }}
+        - name: config
+          configMap:
+            name: {{ include "elasticsearch.fullname" . }}
+        {{- end }}
+        - name: data
+          emptyDir: {}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}

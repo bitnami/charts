@@ -2,23 +2,19 @@
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ template "elasticsearch.chart" . }}
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    role: "curator"
+  name: {{ include "elasticsearch.curator.name" . }}
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+    role: curator
     component: elasticsearch-curator-configmap
-  name: {{ template "elasticsearch.curator.name" . }}
 rules:
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["update", "patch"]
-{{- if .Values.curator.psp.create }}
-- apiGroups: ["extensions"]
-  resources: ["podsecuritypolicies"]
-  verbs: ["use"]
-  resourceNames:
-  - {{ template "elasticsearch.curator.fullname" . }}
-{{- end }}
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["update", "patch"]
+  {{- if .Values.curator.psp.create }}
+  - apiGroups: ["extensions"]
+    resources: ["podsecuritypolicies"]
+    verbs: ["use"]
+    resourceNames:
+      - {{ include "elasticsearch.curator.fullname" . }}
+  {{- end }}
 {{- end }}

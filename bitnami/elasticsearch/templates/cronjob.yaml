@@ -3,16 +3,11 @@ apiVersion: {{ template "cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
   name: {{ template "elasticsearch.curator.fullname" . }}
-  labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ template "elasticsearch.chart" . }}
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    role: "curator"
-{{- if .Values.curator.cronjob.annotations }}
-  annotations:
-{{ toYaml .Values.curator.cronjob.annotations | indent 4 }}
-{{- end }}
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+    role: curator
+  {{- if .Values.curator.cronjob.annotations }}
+  annotations: {{- toYaml .Values.curator.cronjob.annotations | indent 4 }}
+  {{- end }}
 spec:
   schedule: "{{ .Values.curator.cronjob.schedule }}"
   {{- with .Values.curator.cronjob.concurrencyPolicy }}
@@ -35,33 +30,44 @@ spec:
           labels:
             app: {{ template "elasticsearch.name" . }}
             release: {{ .Release.Name | quote }}
-{{- if .Values.curator.podAnnotations }}
-          annotations:
-{{ toYaml .Values.curator.podAnnotations | indent 12 }}
-{{- end }}
+          {{- if .Values.curator.podAnnotations }}
+          annotations: {{- toYaml .Values.curator.podAnnotations | nindent 12 }}
+          {{- end }}
         spec:
           volumes:
             - name: config-volume
               configMap:
                 name: {{ template "elasticsearch.curator.fullname" . }}
-{{- if .Values.curator.extraVolumes }}
-{{ toYaml .Values.curator.extraVolumes | indent 12 }}
-{{- end }}
+            {{- if .Values.curator.extraVolumes }}
+            {{- toYaml .Values.curator.extraVolumes | nindent 12 }}
+            {{- end }}
           restartPolicy: {{ .Values.curator.cronjob.jobRestartPolicy }}
-{{- if .Values.curator.priorityClassName }}
-          priorityClassName: "{{ .Values.curator.priorityClassName }}"
-{{- end }}
+          {{- if .Values.curator.priorityClassName }}
+          priorityClassName: {{ .Values.curator.priorityClassName | quote }}
+          {{- end }}
 {{- include "elasticsearch.imagePullSecrets" . | indent 10 }}
-{{- if .Values.curator.extraInitContainers }}
+          {{- if .Values.curator.extraInitContainers }}
           initContainers:
-{{- range $key, $value := .Values.curator.extraInitContainers }}
+            {{- range $key, $value := .Values.curator.extraInitContainers }}
             - name: "{{ $key }}"
-{{ toYaml $value | indent 14 }}
-{{- end }}
-{{- end }}
-        {{- if .Values.curator.rbac.enabled }}
-          serviceAccountName: {{ template "elasticsearch.curator.serviceAccountName" .}}
-        {{- end }}
+            {{- toYaml $value | nindent 14 }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.curator.rbac.enabled }}
+          serviceAccountName: {{ include "elasticsearch.curator.serviceAccountName" . }}
+          {{- end }}
+          {{- if .Values.curator.affinity }}
+          affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.affinity "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.curator.nodeSelector }}
+          nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.curator.tolerations }}
+          tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.tolerations "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.curator.securityContext }}
+          securityContext: {{- toYaml .Values.curator.securityContext | nindent 12 }}
+          {{- end }}
           containers:
             - name: {{ template "elasticsearch.curator.fullname" . }}
               image: {{ template "elasticsearch.curator.image" . }}
@@ -69,50 +75,34 @@ spec:
               volumeMounts:
                 - name: config-volume
                   mountPath: /etc/es-curator
-{{- if .Values.curator.extraVolumeMounts }}
-{{ toYaml .Values.curator.extraVolumeMounts | indent 16 }}
-{{ end }}
-{{ if .Values.curator.command }}
+                {{- if .Values.curator.extraVolumeMounts }}
+                {{- toYaml .Values.curator.extraVolumeMounts | nindent 16 }}
+                {{- end }}
+              {{ if .Values.curator.command }}
               command: {{ toYaml .Values.curator.command | nindent 16 }}
-{{- end }}
-{{- if .Values.curator.dryrun }}
+              {{- end }}
+              {{- if .Values.curator.dryrun }}
               args: [ "--dry-run", "--config", "/etc/es-curator/config.yml", "/etc/es-curator/action_file.yml" ]
-{{- else }}
+              {{- else }}
               args: [ "--config", "/etc/es-curator/config.yml", "/etc/es-curator/action_file.yml" ]
-{{- end }}
+              {{- end }}
               env:
-{{- if .Values.curator.env }}
-{{- range $key,$value := .Values.curator.env }}
-              - name: {{ $key | upper | quote}}
-                value: {{ $value | quote}}
-{{- end }}
-{{- end }}
-{{- if .Values.curator.envFromSecrets }}
-{{- range $key,$value := .Values.curator.envFromSecrets }}
-              - name: {{ $key | upper | quote}}
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ $value.from.secret | quote}}
-                    key: {{ $value.from.key | quote}}
-{{- end }}
-{{- end }}
-{{- if .Values.curator.resources }}
-              resources: {{ toYaml .Values.curator.resources | nindent 16 }}
-{{- end }}
-    {{- with .Values.curator.nodeSelector }}
-          nodeSelector:
-{{ toYaml . | indent 12 }}
-    {{- end }}
-    {{- with .Values.curator.affinity }}
-          affinity:
-{{ toYaml . | indent 12 }}
-    {{- end }}
-    {{- with .Values.curator.tolerations }}
-          tolerations:
-{{ toYaml . | indent 12 }}
-    {{- end }}
-    {{- with .Values.curator.securityContext }}
-          securityContext:
-{{ toYaml . | indent 12 }}
-    {{- end }}
+                {{- if .Values.curator.env }}
+                {{- range $key,$value := .Values.curator.env }}
+                - name: {{ $key | upper | quote}}
+                  value: {{ $value | quote}}
+                {{- end }}
+                {{- end }}
+                {{- if .Values.curator.envFromSecrets }}
+                {{- range $key,$value := .Values.curator.envFromSecrets }}
+                - name: {{ $key | upper | quote}}
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $value.from.secret | quote}}
+                      key: {{ $value.from.key | quote}}
+                {{- end }}
+                {{- end }}
+              {{- if .Values.curator.resources }}
+              resources: {{- toYaml .Values.curator.resources | nindent 16 }}
+              {{- end }}
 {{- end }}
