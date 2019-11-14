@@ -2,29 +2,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "consul.fullname" . }}-ui"
-  labels:
-    app: "{{ template "consul.name" . }}"
-    chart: {{ template "consul.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
-    component: ui
-{{- with .Values.ui.service.annotations }}
-  annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+  name: {{ include "consul.fullname" . }}-ui
+  labels: {{- include "consul.labels" . | nindent 4 }}
+  annotations: {{- include "consul.tplValue" ( dict "value" .Values.ui.service.annotations "context" $) | nindent 4 }}
 spec:
-  ports:
-  - name: http
-    port: {{ .Values.service.uiPort }}
-    targetPort: http
-  type: "{{ .Values.ui.service.type }}"
-  {{- if and (eq .Values.ui.service.type "LoadBalancer") .Values.ui.service.loadBalancerIP }}
+  type: {{ .Values.ui.service.type }}
+  {{- if and (eq .Values.ui.service.type "LoadBalancer") (not (empty .Values.ui.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.ui.service.loadBalancerIP }}
   {{- end }}
-  selector:
-    app: "{{ template "consul.name" . }}"
-    chart: {{ template "consul.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  ports:
+    - name: http
+      port: {{ .Values.service.uiPort }}
+      targetPort: http
+      {{- if and (or (eq .Values.ui.service.type "NodePort") (eq .Values.ui.service.type "LoadBalancer")) (not (empty .Values.ui.service.nodePort)) }}
+      nodePort: {{ .Values.ui.service.nodePort }}
+      {{- end }}
+  selector: {{- include "consul.matchLabels" . | nindent 4 }}
 {{- end }}

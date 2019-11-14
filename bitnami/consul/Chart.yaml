@@ -1,13 +1,13 @@
 apiVersion: v1
 name: consul
-version: 6.0.7
+version: 6.0.8
 appVersion: 1.6.1
 description: Highly available and distributed service discovery and key-value store designed with support for the modern data center to make distributed systems and configuration easy.
 home: https://www.consul.io/
 sources:
-- https://github.com/bitnami/bitnami-docker-consul
+  - https://github.com/bitnami/bitnami-docker-consul
 icon: https://bitnami.com/assets/stacks/consul/img/consul-stack-220x234.png
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl
