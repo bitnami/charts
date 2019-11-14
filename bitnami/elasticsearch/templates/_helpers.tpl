@@ -31,6 +31,24 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "elasticsearch.labels" -}}
+app: {{ include "elasticsearch.name" . }}
+chart: {{ include "elasticsearch.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "elasticsearch.matchLabels" -}}
+app: {{ include "elasticsearch.name" . }}
+release: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Return the proper ES image name
 */}}
 {{- define "elasticsearch.image" -}}
@@ -311,4 +329,17 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "elasticsearch.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "elasticsearch.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}

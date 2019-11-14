@@ -2,31 +2,24 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "elasticsearch.ingest.fullname" . }}
-  labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ template "elasticsearch.chart" . }}
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    role: "ingest"
-{{- with .Values.ingest.service.annotations }}
-  annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+  name: {{ include "elasticsearch.ingest.fullname" . }}
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+    role: ingest
+  annotations: {{ include "elasticsearch.tplValue" ( dict "value" .Values.ingest.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.ingest.service.type | quote }}
-  {{- if and (eq .Values.ingest.service.type "LoadBalancer") .Values.ingest.service.loadBalancerIP }}
+  {{- if and (eq .Values.ingest.service.type "LoadBalancer") (not (empty .Values.ingest.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.ingest.service.loadBalancerIP }}
   {{- end }}
   ports:
-  - name: transport
-    port: {{ .Values.ingest.service.port }}
-    targetPort: transport
-    {{- if .Values.ingest.service.nodePort }}
-    nodePort: {{ .Values.ingest.service.nodePort }}
-    {{- end }}
-  selector:
-    app: {{ template "elasticsearch.name" . }}
-    release: {{ .Release.Name | quote }}
-    role: "ingest"
+    - name: transport
+      port: {{ .Values.ingest.service.port }}
+      targetPort: transport
+      {{- if and (or (eq .Values.ingest.service.type "NodePort") (eq .Values.ingest.service.type "LoadBalancer")) (not (empty .Values.ingest.service.nodePort)) }}
+      nodePort: {{ .Values.ingest.service.nodePort }}
+      {{- else if eq .Values.ingest.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
+    role: ingest
 {{- end }}

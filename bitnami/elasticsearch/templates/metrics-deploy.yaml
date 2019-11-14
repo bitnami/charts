@@ -2,53 +2,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "elasticsearch.metrics.fullname" . }}
-  labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ template "elasticsearch.chart" . }}
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    role: "metrics"
+  name: {{ include "elasticsearch.metrics.fullname" . }}
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+    role: metrics
 spec:
   selector:
-    matchLabels:
-      app: {{ template "elasticsearch.name" . }}
-      release: "{{ .Release.Name }}"
-      role: "metrics"
+    matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
+      role: metrics
   replicas: 1
   template:
     metadata:
-      labels:
-        app: {{ template "elasticsearch.name" . }}
-        release: {{ .Release.Name | quote }}
-        chart: {{ template "elasticsearch.chart" . }}
-        role: "metrics"
-{{- with .Values.metrics.podAnnotations }}
-      annotations:
-{{ toYaml . | indent 8 }}
-{{- end }}
+      labels: {{- include "elasticsearch.labels" . | nindent 8 }}
+        role: metrics
+      {{- with .Values.metrics.podAnnotations }}
+      annotations: {{ toYaml . | nindent 8 }}
+      {{- end }}
     spec:
 {{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
       containers:
-      - name: {{ template "elasticsearch.metrics.fullname" . }}
-        image:  {{ template "elasticsearch.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        args: [ "--es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}", "--es.all" ]
-        ports:
         - name: metrics
-          containerPort: 9114
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        resources:
-{{ toYaml .Values.metrics.resources | indent 10 }}
+          image: {{ include "elasticsearch.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          args:
+            - --es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}
+            - --es.all
+          ports:
+            - name: metrics
+              containerPort: 9114
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
 {{- end }}
