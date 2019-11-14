@@ -2,12 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "cassandra.fullname" . }}-configuration
-  labels:
-    app: {{ template "cassandra.name" . }}
-    chart: {{ template "cassandra.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ include "cassandra.fullname" . }}-configuration
+  labels: {{- include "cassandra.labels" . | nindent 4 }}
 data:
 {{ (.Files.Glob "files/conf/*").AsConfig | indent 2 }}
 {{ end }}
