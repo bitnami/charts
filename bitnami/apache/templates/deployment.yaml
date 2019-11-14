@@ -1,26 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "apache.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ template "apache.fullname" . }}
-    helm.sh/chart: {{ include "apache.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ include "apache.fullname" . }}
+  labels: {{- include "apache.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ template "apache.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "apache.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: {{ template "apache.fullname" . }}
-        helm.sh/chart: {{ include "apache.chart" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/managed-by: {{ .Release.Service }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      labels: {{- include "apache.labels" . | nindent 8 }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
         {{- if .Values.podAnnotations }}
           {{- toYaml .Values.podAnnotations | nindent 8 }}
@@ -30,15 +20,24 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      {{- include "apache.imagePullSecrets" . | nindent 6 }}
+{{- include "apache.imagePullSecrets" . | nindent 6 }}
       hostAliases:
         - ip: "127.0.0.1"
           hostnames:
             - "status.localhost"
+      {{- if .Values.affinity }}
+      affinity: {{- include "apache.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "apache.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "apache.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.cloneHtdocsFromGit.enabled }}
       initContainers:
         - name: git-clone-repository
-          image: "{{ template "git.image" . }}"
+          image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           command:
             - /bin/bash
@@ -50,7 +49,7 @@ spec:
               mountPath: /app
       containers:
         - name: git-repo-syncer
-          image: "{{ template "git.image" . }}"
+          image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           command:
             - /bin/bash
@@ -66,9 +65,12 @@ spec:
       {{- else }}
       containers:
       {{- end }}
-        - name: "{{ template "apache.fullname" . }}"
-          image: "{{ template "apache.image" . }}"
+        - name: apache
+          image: {{ include "apache.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
           ports:
             - name: http
               containerPort: 8080
@@ -96,7 +98,9 @@ spec:
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- end }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if (include "apache.useHtdocs" .) }}
             - name: htdocs
@@ -131,7 +135,9 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
+          {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
         {{- end }}
       volumes:
         {{- if (include "apache.useHtdocs" .) }}
@@ -148,6 +154,3 @@ spec:
           configMap:
             name: {{ include "apache.httpdConfConfigMap" . }}
         {{- end }}
-      {{- with .Values.affinity }}
-      affinity: {{- toYaml . | nindent 8 }}
-      {{- end }}

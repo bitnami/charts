@@ -25,7 +25,12 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## Bitnami git image version
+  ## Set to true if you would like to see extra information on logs
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
+  debug: false
+
+## Bitnami Git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
 git:
@@ -40,8 +45,35 @@ git:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## String to partially override apache.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override apache.fullname template
+##
+# fullnameOverride:
+
+## Number of Apache replicas to deploy
+##
 replicaCount: 1
 
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: {}
+
+## Get the server static content from a git repository
+##
 cloneHtdocsFromGit:
   enabled: false
   # repository:
@@ -64,32 +96,29 @@ cloneHtdocsFromGit:
 ##
 # httpdConfConfigMap:
 
-## String to partially override apache.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override apache.fullname template
-##
-# fullnameOverride:
-
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
-## Configure resource requests and limits
+## Apache pods' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
-#  limits:
-#    cpu: 200m
-#    memory: 1Gi
-#  requests:
-#    memory: 256Mi
-#    cpu: 250m
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests: {}
+  #   cpu: 100m
+  #   memory: 128Mi
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Apache container's liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
 livenessProbe:
   enabled: true
   initialDelaySeconds: 180
@@ -97,7 +126,6 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 readinessProbe:
   enabled: true
   initialDelaySeconds: 30
@@ -106,18 +134,19 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
-## Configure the ingress resource that allows you to access the
-## Apache installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## Ingress paramaters
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
 
   ## When the ingress is enabled, a host pointing to this will be created
+  ##
   hostname: example.local
 
   ## Ingress annotations done as key:value pairs
@@ -126,7 +155,7 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations:
+  annotations: {}
   #  kubernetes.io/ingress.class: nginx
 
   ## The list of additional hostnames to be covered with this ingress record.
@@ -136,7 +165,8 @@ ingress:
   ##   path: /
 
   ## The tls configuration for the ingress
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ##
   tls:
     - hosts:
         - example.local
@@ -156,15 +186,13 @@ ingress:
   #   key:
   #   certificate:
 
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
-
 ## Prometheus Exporter / Metrics
 ##
 metrics:
   enabled: false
+  ## Bitnami Apache Prometheus Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/apache-exporter/tags/
+  ##
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
@@ -182,24 +210,49 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
-  ## Metrics exporter resource requests and limits
+  ## Apache Prometheus exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
+## Service paramaters
+##
 service:
-  type: LoadBalancer
-  # HTTP Port
-  port: 80
-  # HTTPS Port
-  httpsPort: 443
+  ## Service type
   ##
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
-  ## loadBalancerIP:
+  type: LoadBalancer
+  ## HTTP Port
+  ##
+  port: 80
+  ## HTTPS Port
+  ##
+  httpsPort: 443
+  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
   nodePorts:
     http: ""
     https: ""
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  # loadBalancerIP:
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+
   ## Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
