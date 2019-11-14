@@ -5,7 +5,7 @@ This Helm chart has been developed based on [stable/postgresql](https://github.c
 - A new deployment, service and ingress have been added to deploy [Pgpool-II](Pgpool-II) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
 - Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
 
-## TL;DR:
+## TL;DR;
 
 ```
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -18,8 +18,8 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](http
 
 ## Prerequisites
 
-- Kubernetes cluster 1.10+
-- Helm 2.8.0+
+- Kubernetes 1.12+
+- Helm 2.11+ or Helm 3.0-beta3+
 
 ## Installing the Chart
 
@@ -40,21 +40,7 @@ $ helm delete --purge my-release
 
 Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
 
-## Downloading the chart
-
-Download PostgreSQL HA helm chart
-
-```bash
-$ git clone https://github.com/bitnami/charts
-```
-
-Change directory to PostgreSQL code
-
-```bash
-$ cd charts/bitnami/postgresql-ha
-```
-
-## Configuration
+## Parameters
 
 The following table lists the configurable parameters of the PostgreSQL HA chart and the default values. They can be configured in `values.yaml` or set via `--set` flag during installation.
 
@@ -226,28 +212,39 @@ Alternatively, a YAML file that specifies the values for the above parameters ca
 $ helm install --name my-release -f values.yaml bitnami/postgresql-ha
 ```
 
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Production configuration and horizontal scaling
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
+
+- Enable Newtworkpolicy blocking external access:
+
+```diff
+- networkPolicy.enabled: false
++ networkPolicy.enabled: true
+- networkPolicy.allowExternal: true
++ networkPolicy.allowExternal: false
+```
+
+- Start a side-car prometheus exporter:
+
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
+```
+
+To horizontally scale this chart, you can use the `--replicaCount` flag to modify the number of nodes in your PostgreSQL deployment. Also you can use the `values-production.yaml` file or modify the parameters shown above.
+
 ### Change PostgreSQL version
 
-To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql/tags/) using the `--set image.tag` argument to `helm install`. For example,
-
-```console
-$ helm install --name my-release --set image.tag=9.6.15-centos-7-r9 bitnami/postgresql-ha
-```
-
-### Horizontal scaling
-
-To horizontally scale this chart once it has been deployed:
-
-```console
-$ helm upgrade my-release bitnami/postgresql-ha \
-  --set postgresql.password=[POSTGRESQL_PASSWORD] \
-  --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
-  --set postgresql.replicaCount=5
-```
-
-> Note: Scaling the statefulset with `kubectl scale ...` command is highly discouraged. Use `helm upgrade ...` for horizontal scaling so you ensure all the environment variables used to configure the PostgreSQL HA cluster are properly updated.
-
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql/tags/) using the `image.tag` parameter. For example, `image.tag=12.0.0-debian-9-r0`
 
 ### Configure the way how to expose PostgreSQL
 
@@ -282,47 +279,20 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 For example:
 
 ```bash
-$ helm install --name my-release bitnami/postgresql-ha \
-    --set ldap.enabled="true" \
-    --set ldap.uri="ldap://my_ldap_server" \
-    --set ldap.base="dc=example\,dc=org" \
-    --set ldap.binddn="cn=admin\,dc=example\,dc=org" \
-    --set ldap.bindpw="admin" \
-    --set ldap.bslookup="ou=group-ok\,dc=example\,dc=org" \
-    --set ldap.nss_initgroups_ignoreusers="root\,nslcd" \
-    --set ldap.scope="sub" \
-    --set ldap.tls_reqcert="demand"
+ldap.enabled="true"
+ldap.uri="ldap://my_ldap_server"
+ldap.base="dc=example\,dc=org"
+ldap.binddn="cn=admin\,dc=example\,dc=org"
+ldap.bindpw="admin"
+ldap.bslookup="ou=group-ok\,dc=example\,dc=org"
+ldap.nss_initgroups_ignoreusers="root\,nslcd"
+ldap.scope="sub"
+ldap.tls_reqcert="demand"
 ```
 
 Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
 
 > Note: Parameters including commas must be escaped as shown in the above example. More information at: https://github.com/helm/helm/blob/master/docs/using_helm.md#the-format-and-limitations-of---set
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
-
-- Enable Newtworkpolicy blocking external access:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-- Start a side-car prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### repmgr.conf / postgresql.conf / pg_hba.conf files as configMap
 
@@ -343,7 +313,7 @@ Alternatively, you can specify the extended configuration using the `postgresql.
 
 In addition to these options, you can also set an external ConfigMap with all the extra configuration files. This is done by setting the `postgresql.extendedConfCM` parameter. Note that this will override the two previous options.
 
-## Initialize a fresh instance
+### Initialize a fresh instance
 
 The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/bitnami-docker-postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
 
@@ -353,12 +323,7 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
-## Persistence
-
-The data is persisted by default using PVC templates in the PostgreSQL statefulset. You can disable the persistence setting the `persistence.enabled` parameter to `false`.
-A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
-
-## Use of global variables
+### Use of global variables
 
 In more complex scenarios, we may have the following tree of dependencies
 
@@ -380,19 +345,30 @@ In more complex scenarios, we may have the following tree of dependencies
 +--------------+    +---------------+  +---------------+
 ```
 
-The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be:
+The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
 
-```bash
-$ helm install chart1 --set postgresql.password=testtest --set subchart1.postgresql.password=testtest --set subchart2.postgresql.password=testtest --set postgresql.database=db1 --set subchart1.postgresql.database=db1 --set subchart1.postgresql.database=db1
+```
+postgresql.postgresqlPassword=testtest
+subchart1.postgresql.postgresqlPassword=testtest
+subchart2.postgresql.postgresqlPassword=testtest
+postgresql.postgresqlDatabase=db1
+subchart1.postgresql.postgresqlDatabase=db1
+subchart2.postgresql.postgresqlDatabase=db1
 ```
 
-If the number of dependent sub-charts increases, executing `helm install` can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
+If the number of dependent sub-charts increases, installing the chart with parameters can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
 
-```bash
-$ helm install chart1 --set global.postgresql.password=testtest --set global.postgresql.database=db1
+```
+global.postgresql.postgresqlPassword=testtest
+global.postgresql.postgresqlDatabase=db1
 ```
 
 This way, the credentials will be available in all of the subcharts.
+
+## Persistence
+
+The data is persisted by default using PVC templates in the PostgreSQL statefulset. You can disable the persistence setting the `persistence.enabled` parameter to `false`.
+A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
 
 ## Upgrade
 
