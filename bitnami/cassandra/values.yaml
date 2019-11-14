@@ -58,17 +58,34 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
-## Specify a service type
-## ref: http://kubernetes.io/docs/user-guide/services/
+## Service parameters
 ##
 service:
+  ## Service type
+  ##
   type: ClusterIP
-  ## CQL Port
+  ## CQL port
+  ##
   port: 9042
+  ## Thrift Client API port
+  ##
   thriftPort: 9160
-  ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
+  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
@@ -78,7 +95,6 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   # loadBalancerIP:
-
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -106,28 +122,34 @@ persistence:
   ## Persistent Volume Access Mode
   ##
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   ## Persistent Volume size
   ##
   size: 8Gi
 
-## Configure resource requests and limits
+## Cassandra pods' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## Minimum memory for development is 4GB and 2 CPU cores
 ## Minimum memory for production is 8GB and 4 CPU cores
 ## ref: http://docs.datastax.com/en/archived/cassandra/2.0/cassandra/architecture/architecturePlanningHardware_c.html
 ##
-resources: {}
-  # requests:
-  #   memory: 4Gi
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
   #   cpu: 2
-  # limits:
   #   memory: 4Gi
+  requests: {}
   #   cpu: 2
+  #   memory: 4Gi
 
 ## Secret with keystore, keystore password, truststore, truststore password
+##
 # tlsEncryptionSecretName:
 ## ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
+##
 # existingConfiguration:
 
 ## Cluster parameters
@@ -143,12 +165,15 @@ cluster:
   endpointSnitch: SimpleSnitch
   minimumAvailable: 1
   ## Encryption values. NOTE: They require tlsEncryptionSecretName
+  ##
   internodeEncryption: none
   clientEncryption: false
   domain: cluster.local
 
+## JVM Settings
+##
 jvm:
-  ## Extra JVM Settings
+  ## Extra JVM options
   ##
   extraOpts:
 
@@ -171,8 +196,8 @@ dbUser:
 ##
 # initDBConfigMap:
 
-## Liveness and Readiness probe values.
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+## Cassandra container's liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
   enabled: true
@@ -199,6 +224,21 @@ podAnnotations: {}
 ##
 podLabels: {}
 
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
 ## StatefulSet settings
 ##
 statefulset:
@@ -213,17 +253,6 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-##
 ## Container entrypoint and cmd (useful for using different images)
 ##
 entrypoint: "/entrypoint.sh"
@@ -244,8 +273,8 @@ networkPolicy:
   ##
   # allowExternal: true
 
-## Cassandra exporter configuration
-## Ref: https://github.com/criteo/cassandra_exporter
+## Cassandra Prometheus exporter configuration
+## ref: https://hub.docker.com/r/bitnami/cassandra-exporter/tags/
 ##
 metrics:
   enabled: false
@@ -260,7 +289,23 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  ## Cassandra Prometheus exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+  ## Metrics exporter pod Annotation and Labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"

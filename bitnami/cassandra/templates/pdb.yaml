@@ -1,17 +1,11 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "cassandra.fullname" . }}-headless
-  labels:
-    app: {{ template "cassandra.name" . }}
-    chart: {{ template "cassandra.chart" .  }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  name: {{ include "cassandra.fullname" . }}-headless
+  labels: {{- include "cassandra.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "cassandra.name" . }}
-      release: {{ .Release.Name }}
+    matchLabels: {{- include "cassandra.matchLabels" . | nindent 6 }}
   {{- if .Values.minAvailable }}
   minAvailable: {{ .Values.cluster.minimumAvailable }}
   {{- else }}
