@@ -2,25 +2,19 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "kafka.fullname" . }}-headless
-  labels:
-    app.kubernetes.io/name: {{ template "kafka.name" . }}
-    helm.sh/chart: {{ template "kafka.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: kafka
 spec:
   type: ClusterIP
   clusterIP: None
   ports:
-  - name: kafka
-    port: {{ .Values.service.port }}
-    targetPort: kafka
-  {{- if .Values.auth.ssl }}
-  - name: kafka-ssl
-    port: 9093
-    targetPort: kafka-ssl
-  {{- end }}
-  selector:
-    app.kubernetes.io/name: {{ template "kafka.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    - name: kafka
+      port: {{ .Values.service.port }}
+      targetPort: kafka
+    {{- if .Values.auth.ssl }}
+    - name: kafka-ssl
+      port: 9093
+      targetPort: kafka-ssl
+    {{- end }}
+  selector: {{- include "kafka.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka

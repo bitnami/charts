@@ -32,6 +32,24 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "kafka.labels" -}}
+app.kubernetes.io/name: {{ include "kafka.name" . }}
+helm.sh/chart: {{ include "kafka.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "kafka.matchLabels" -}}
+app.kubernetes.io/name: {{ include "kafka.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Return the proper Kafka image name
 */}}
 {{- define "kafka.image" -}}
@@ -216,4 +234,17 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
         {{- end -}}
     {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "kafka.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "kafka.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}

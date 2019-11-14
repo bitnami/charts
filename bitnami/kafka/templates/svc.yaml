@@ -2,16 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "kafka.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ template "kafka.name" . }}
-    helm.sh/chart: {{ template "kafka.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: kafka
-  annotations:
-    {{- range $key, $value := .Values.service.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+  annotations: {{ include "kafka.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   {{- if eq .Values.service.type "LoadBalancer" }}
@@ -20,18 +13,16 @@ spec:
   {{- end }}
   {{- end }}
   ports:
-  - name: kafka
-    port: {{ .Values.service.port }}
-    {{- if and .Values.service.nodePort (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
-    nodePort: {{ .Values.service.nodePort }}
+    - name: kafka
+      port: {{ .Values.service.port }}
+      {{- if and .Values.service.nodePort (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+      targetPort: kafka
+    {{- if .Values.auth.ssl }}
+    - name: kafka-ssl
+      port: 9093
+      targetPort: kafka-ssl
     {{- end }}
-    targetPort: kafka
-  {{- if .Values.auth.ssl }}
-  - name: kafka-ssl
-    port: 9093
-    targetPort: kafka-ssl
-  {{- end }}
-  selector:
-    app.kubernetes.io/name: {{ template "kafka.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  selector: {{- include "kafka.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka

@@ -3,15 +3,22 @@
   To verify that Fluentd has started, run:
 
     kubectl get all -l "app.kubernetes.io/name={{ include "fluentd.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
-{{ if and .Values.aggregator.enabled (not .Values.aggregator.configMap) }}
+{{ if and .Values.aggregator.enabled .Values.forwarder.enabled (not .Values.aggregator.configMap) }}
   Logs are captured on each node by the forwarder pods and then sent to the aggregator pods. By default, the aggregator pods send the logs to the standard output.
   You can see all the logs by running this command:
 
     kubectl logs -l "app.kubernetes.io/component=aggregator"
   
   You can mount your own configuration files to the aggregators and the forwarders. For example, this is useful if you want to forward the aggregated logs to Elasticsearch or another service.
+{{- else if and .Values.aggregator.enabled (not .Values.forwarder.enabled) }}
+  You have deployed Fluentd in aggregator-only mode. Logs received by the aggregator will be thrown to the standard output by default.
+  You can see all the logs by running this command:
+
+    kubectl logs -l "app.kubernetes.io/component=aggregator"
+
+  You can mount your own configuration files to the aggregators. For example, this is useful if you want to forward the logs to Elasticsearch or another service.
 {{- else if and (not .Values.aggregator.enabled) (not .Values.forwarder.configMap) }}
-  Logs are captured on each node by the forwarder pods and sent to the standard output
+  Logs are captured on each node by the forwarder pods and sent to the standard output by default.
   You can see all the logs by running this command:
 
     kubectl logs -l "app.kubernetes.io/component=forwarder"
@@ -19,4 +26,5 @@
   You can mount your own configuration files to the forwarders. For example, this is useful if you want to forward the logs to Elasticsearch or another service.
 {{- end }}
 
+{{- include "fluentd.validateValues" . }}
 {{- include "fluentd.checkRollingTags" . -}}

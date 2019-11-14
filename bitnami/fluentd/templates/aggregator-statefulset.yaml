@@ -19,14 +19,14 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/aggregator-configmap.yaml") . | sha256sum }}
         {{- if .Values.aggregator.podAnnotations }}
-        {{- toYaml .Values.aggregator.podAnnotations | nindent 8 }}
+        {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.securityContext.enabled }}
+      {{- if .Values.aggregator.securityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.aggregator.securityContext.runAsUser }}
+        fsGroup: {{ .Values.aggregator.securityContext.fsGroup }}
       {{- end }}
       containers:
       - name: fluentd
@@ -38,15 +38,17 @@ spec:
         - name: FLUENTD_OPT
           value: {{ .Values.aggregator.extraArgs | quote }}
         {{- if .Values.aggregator.extraEnv }}
-        {{- toYaml .Values.aggregator.extraEnv | nindent 12 }}
+        {{- toYaml .Values.aggregator.extraEnv | nindent 8 }}
         {{- end }}
         ports:
-        - name: http
-          containerPort: 9880
-          protocol: TCP
+        {{- if .Values.aggregator.port }}
         - name: tcp
           containerPort: {{ .Values.aggregator.port }}
           protocol: TCP
+        {{- end }}
+        {{- if .Values.aggregator.containerPorts }}
+        {{- toYaml .Values.aggregator.containerPorts | nindent 8 }}
+        {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           containerPort: {{ .Values.metrics.service.port }}

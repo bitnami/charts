@@ -3,7 +3,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "postgresql-ha.fullname" }}
+  name: {{ include "postgresql-ha.fullname" . }}
   labels: {{ include "postgresql-ha.labels" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}

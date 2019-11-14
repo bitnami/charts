@@ -1,0 +1,28 @@
+{{- if .Values.metrics.kafka.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kafka.fullname" . }}-metrics
+  labels: {{- include "kafka.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+  annotations: {{ include "kafka.tplValue" ( dict "value" .Values.metrics.kafka.service.annotations "context" $) | nindent 4 }}
+spec:
+  type: {{ .Values.metrics.kafka.service.type }}
+  {{- if and .Values.metrics.kafka.service.loadBalancerIP (eq .Values.metrics.kafka.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.metrics.kafka.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.metrics.kafka.service.type "ClusterIP") .Values.metrics.kafka.service.clusterIP }}
+  clusterIP: {{ .Values.metrics.kafka.service.clusterIP }}
+  {{- end }}
+  ports:
+    - name: metrics
+      port: {{ .Values.metrics.kafka.service.port }}
+      targetPort: metrics
+      {{- if (and (or (eq .Values.metrics.kafka.service.type "NodePort") (eq .Values.metrics.kafka.service.type "LoadBalancer")) (not (empty .Values.metrics.kafka.service.nodePort)))}}
+      nodePort: {{ .Values.metrics.kafka.service.nodePort }}
+      {{- else if eq .Values.metrics.kafka.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "kafka.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+{{- end }}
