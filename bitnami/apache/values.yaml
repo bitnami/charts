@@ -138,9 +138,9 @@ ingress:
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   tls:
-  - hosts:
-      - example.local
-    secretName: example.local-tls
+    - hosts:
+        - example.local
+      secretName: example.local-tls
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -185,7 +185,7 @@ metrics:
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  # resources: {}
+  resources: {}
 service:
   type: LoadBalancer
   # HTTP Port
