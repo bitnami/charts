@@ -324,6 +324,16 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Notable changes
 
+### 3.0.0
+
+[bitnami/kibana] bump major version
+
+Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
+
+In 4dfac075aacf74405e31ae5b27df4369e84eb0b0 the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
+
+This major version signifies this change.
+
 ### 2.0.0
 
 This version enabled by default an initContainer that modify some kernel settings to meet the Elasticsearch requirements.

@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ template "kibana.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "kibana.fullname" . }}
