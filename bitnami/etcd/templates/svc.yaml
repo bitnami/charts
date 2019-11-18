@@ -1,34 +1,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "etcd.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ template "etcd.name" . }}
-    helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ include "etcd.fullname" . }}
+  labels: {{- include "etcd.labels" . | nindent 4 }}
   {{- if .Values.service.annotations }}
-  annotations:
-{{ toYaml .Values.service.annotations | indent 4 }}
+  annotations: {{- include "etcd.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerIP }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-  - name: client
-    port: {{ .Values.service.port  }}
-    targetPort: client
-    {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort)) }}
-    nodePort: {{ .Values.service.nodePort  }}
-    {{- end }}
-  - name: peer
-    port: {{ .Values.service.peerPort  }}
-    targetPort: peer
-    {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.peerNodePort)) }}
-    nodePort: {{ .Values.service.peerNodePort  }}
-    {{- end }}
-  selector:
-    app.kubernetes.io/name: {{ template "etcd.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    - name: client
+      port: {{ .Values.service.port  }}
+      targetPort: client
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.clientPort)) }}
+      nodePort: {{ .Values.service.nodePorts.clientPort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: peer
+      port: {{ .Values.service.peerPort  }}
+      targetPort: peer
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.peerPort)) }}
+      nodePort: {{ .Values.service.nodePorts.peerPort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "etcd.matchLabels" . | nindent 4 }}
