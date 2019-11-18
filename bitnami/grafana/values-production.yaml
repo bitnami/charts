@@ -97,7 +97,7 @@ ldap:
 ##  - name: GF_DEFAULT_INSTANCE_NAME
 ##    value: my-instance
 ##
-# extraEnvVars:
+extraEnvVars: {}
 
 ## An array to add extra configmaps:
 ## For example:
@@ -106,6 +106,8 @@ ldap:
 ##     mountPath: /opt/bitnami/desired-path
 ##     subPath: file-name.extension (optional)
 ##     readOnly: true
+##
+extraConfigmaps: {}
 
 ## Parameters to override the default grafana.ini and custom.ini files.
 ## It is needed to create a configmap containing the grafana.ini and custom.ini files.
@@ -164,8 +166,8 @@ persistence:
   accessMode: ReadWriteOnce
   size: 10Gi
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Grafana containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
   enabled: true
@@ -182,26 +184,28 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
-## Service configuration
+## Service parameters
 ##
 service:
-  port: 3000
+  ## K8s service type
+  ##
   type: ClusterIP
+  ## Grafana service port
+  ##
+  port: 3000
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   # nodePort:
-
+  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerIP:
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
-  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
-  # loadBalancerIP:
 
 ## Configure the ingress resource that allows you to access the
 ## Grafana web. Set up the URL
@@ -250,15 +254,23 @@ securityContext:
   fsGroup: 1001
   runAsNonRoot: true
 
-## Configure resource requests and limits
+## Grafana containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## Example:
-## resources:
-##   requests:
-##     memory: 512Mi
-##     cpu: 300m
+## Minimum memory for development is 4GB and 2 CPU cores
+## Minimum memory for production is 8GB and 4 CPU cores
+## ref: http://docs.datastax.com/en/archived/cassandra/2.0/cassandra/architecture/architecturePlanningHardware_c.html
 ##
-# resources:
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 500m
+  #   memory: 1Gi
+  requests: {}
+  #   cpu: 250m
+  #   memory: 256Mi
 
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -283,7 +295,7 @@ podAnnotations: {}
 ## Prometheus metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
 
   ## Prometheus Operator ServiceMonitor configuration
   ##

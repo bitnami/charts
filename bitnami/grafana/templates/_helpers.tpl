@@ -161,3 +161,16 @@ WARNING: Using more than one replica requires using an external database to shar
          Please, ensure you provide a configuration file configuring the external database to share data between replicas.
 {{- end -}}
 {{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "grafana.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "grafana.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}

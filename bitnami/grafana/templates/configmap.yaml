@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "grafana.fullname" . }}-envvars
-  labels: {{ include "grafana.labels" . | nindent 4 }}
+  labels: {{- include "grafana.labels" . | nindent 4 }}
 data:
   GF_SECURITY_ADMIN_USER: {{ .Values.admin.user | quote }}
   {{- if .Values.plugins }}
@@ -16,4 +16,3 @@ data:
   GF_PATHS_CONFIG: "/opt/bitnami/grafana/conf/grafana.ini"
   GF_PATHS_DATA: "/opt/bitnami/grafana/data"
   GF_PATHS_LOGS: "/opt/bitnami/grafana/logs"
-  GF_PATHS_PLUGINS: "/opt/bitnami/grafana/data/plugins"

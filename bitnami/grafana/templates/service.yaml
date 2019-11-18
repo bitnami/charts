@@ -2,19 +2,19 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "grafana.fullname" . }}
-  labels: {{ include "grafana.labels" . | nindent 4 }}
-{{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
+  labels: {{- include "grafana.labels" . | nindent 4 }}
+  {{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
   annotations:
   {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}
-    {{- toYaml .Values.metrics.service.annotations | nindent 4 }}
+    {{- include "grafana.tplValue" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.service.annotations }}
-    {{ toYaml .Values.service.annotations | nindent 4 }}
+    {{- include "grafana.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
-{{- end }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if and .Values.service.loadBalancerIP (eq .Values.service.type "LoadBalancer") }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
@@ -22,7 +22,9 @@ spec:
       targetPort: dashboard
       protocol: TCP
       name: http
-      {{- if .Values.service.nodePort }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
       nodePort: {{ .Values.service.nodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
       {{- end }}
-  selector: {{ include "grafana.matchLabels" . | nindent 4 }}
+  selector: {{- include "grafana.matchLabels" . | nindent 4 }}

@@ -49,8 +49,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the grafana chart and their default values.
 
-|               Parameter                |                                              Description                                               |                         Default                         |
-|----------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| Parameter                              | Description                                                                                            | Default                                                 |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | `global.imageRegistry`                 | Global Docker image registry                                                                           | `nil`                                                   |
 | `global.imagePullSecrets`              | Global Docker registry secret names as an array                                                        | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`                       | Grafana image registry                                                                                 | `docker.io`                                             |
@@ -73,8 +73,8 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `ldap.enabled`                         | Enable LDAP for Grafana                                                                                | `false`                                                 |
 | `ldap.allowSignUp`                     | Allows LDAP sign up for Grafana                                                                        | `false`                                                 |
 | `ldap.configMapName`                   | Name of the ConfigMap with the LDAP configuration file for Grafana                                     | `nil`                                                   |
-| `extraEnvVars`                         | Array containing extra env vars to configure Grafana                                                   | `nil`                                                   |
-| `extraConfigmaps`                      | Array to mount extra ConfigMaps to configure Grafana                                                   | `nil`                                                   |
+| `extraEnvVars`                         | Array containing extra env vars to configure Grafana                                                   | `{}`                                                    |
+| `extraConfigmaps`                      | Array to mount extra ConfigMaps to configure Grafana                                                   | `{}`                                                    |
 | `config.useGrafanaIniFile`             | Allows to load a `grafana.ini` file                                                                    | `false`                                                 |
 | `config.grafanaIniConfigMap`           | Name of the ConfigMap containing the `grafana.ini` file                                                | `nil`                                                   |
 | `config.useCustomIniFile`              | Allows to load a `custom.ini` file                                                                     | `false`                                                 |
@@ -159,11 +159,18 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
-- Enable ingress controller
+- Enable ingress controller:
 
 ```diff
 - ingress.enabled: false
 + ingress.enabled: true
+```
+
+- Enable exposing Prometheus metrics:
+
+```diff
+- metrics.enabled: false
++ metrics.enabled: true
 ```
 
 ### Using custom configuration
