@@ -5,14 +5,14 @@ engine: gotpl
 home: https://www.influxdata.com/products/influxdb-overview/
 icon: https://bitnami.com/assets/stacks/influxdb/img/influxdb-stack-220x234.png
 keywords:
-- influxdb
-- tick
-- database
-- timeseries
+  - influxdb
+  - tick
+  - database
+  - timeseries
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 name: influxdb
 sources:
-- https://github.com/bitnami/bitnami-docker-influxdb
+  - https://github.com/bitnami/bitnami-docker-influxdb
 version: 0.2.1

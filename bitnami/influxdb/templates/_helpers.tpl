@@ -311,3 +311,16 @@ influxdb: replicaCount
     use the "high-availability" architecture (--set architecture="high-availability")
 {{- end -}}
 {{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "influxdb.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "influxdb.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}

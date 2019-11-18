@@ -3,7 +3,7 @@ kind: NetworkPolicy
 apiVersion: {{ template "influxdb.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ include "influxdb.fullname" . }}
-  labels: {{ include "influxdb.labels" . | nindent 4 }}
+  labels: {{- include "influxdb.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:  {{ include "influxdb.matchLabels" . | nindent 6 }}
@@ -24,7 +24,7 @@ spec:
               {{ template "influxdb.fullname" . }}-client: "true"
         {{- if eq .Values.architecture "high-availability" }}
         - podSelector:
-            matchLabels: {{ include "influxdb.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "influxdb.matchLabels" . | nindent 14 }}
               app.kubernetes.io/component: relay
         {{- end }}
       {{- end }}

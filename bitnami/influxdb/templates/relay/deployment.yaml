@@ -37,11 +37,11 @@ spec:
         {{- if .Values.relay.nodeAffinity }}
         nodeAffinity: {{- toYaml .Values.relay.nodeAffinity | nindent 10 }}
         {{- end }}
-      {{- with .Values.relay.nodeSelector }}
-      nodeSelector: {{- tpl (toYaml .) $ | nindent 8 }}
+      {{- if .Values.relay.nodeSelector }}
+      nodeSelector: {{- include "influxdb.tplValue" (dict "value" .Values.relay.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- with .Values.relay.tolerations }}
-      tolerations: {{- tpl (toYaml .) $ | nindent 8 }}
+      {{- if .Values.relay.tolerations }}
+      tolerations: {{- include "influxdb.tplValue" (dict "value" .Values.relay.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.relay.securityContext.enabled }}
       securityContext:
