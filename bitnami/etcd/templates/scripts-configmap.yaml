@@ -6,19 +6,15 @@
 {{- $etcdFullname := include "etcd.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
-{{- $dnsBase := .Values.service.dnsBase }}
+{{- $clusterDomain := .Values.clusterDomain }}
 {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
 {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
 {{- $initSnapshotFilename := .Values.startFromSnapshot.snapshotFilename }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  labels:
-    app.kubernetes.io/name: {{ template "etcd.name" . }}
-    helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-  name: {{ template "etcd.fullname" . }}-scripts
+  name: {{ include "etcd.fullname" . }}-scripts
+  labels: {{- include "etcd.labels" . | nindent 4 }}
 data:
   setup.sh: |-
     #!/bin/bash
@@ -42,7 +38,7 @@ data:
     # Constants
     HOSTNAME="$(hostname -s)"
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
@@ -167,14 +163,14 @@ data:
 {{- end }}
         elif should_add_new_member; then
             echo "==> Adding new member to existing cluster..." 1>&3 2>&4
-            etcdctl $AUTH_OPTIONS member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}" | grep "^ETCD_" > "$ETCD_DATA_DIR/new_member_envs" 1>&3 2>&4
+            etcdctl $AUTH_OPTIONS member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}" | grep "^ETCD_" > "$ETCD_DATA_DIR/new_member_envs" 1>&3 2>&4
             sed -ie 's/^/export /' "$ETCD_DATA_DIR/new_member_envs"
             echo "==> Loading env vars of existing cluster..." 1>&3 2>&4
             source "$ETCD_DATA_DIR/new_member_envs" 1>&3 2>&4
             store_member_id & 1>&3 2>&4
         else
             echo "==> Updating member in existing cluster..." 1>&3 2>&4
-            etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}" 1>&3 2>&4
+            etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}" 1>&3 2>&4
         fi
     fi
 
@@ -205,7 +201,7 @@ data:
     # Constants
     HOSTNAME="$(hostname -s)"
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
@@ -257,7 +253,7 @@ data:
 
     # Constants
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 

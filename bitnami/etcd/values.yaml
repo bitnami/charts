@@ -56,9 +56,27 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
+## Statefulset parameters
+##
 statefulset:
+  ## Number od replicas
+  ##
+  replicaCount: 1
   ## Update strategy, can be set to RollingUpdate or OnDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ##
@@ -71,9 +89,6 @@ statefulset:
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
-  ## Number od replicas
-  ##
-  replicaCount: 1
 
 ## ConfigMap that includes the etcd.conf.yml file
 ##
@@ -83,17 +98,15 @@ statefulset:
 ##
 # envVarsConfigMap:
 
-## etcd docker image available customizations
-## https://github.com/bitnami/bitnami-docker-etcd#configuration
-##
 ## Allow to use etcd without configuring RBAC authentication
+##
 allowNoneAuthentication: true
 
 ## Limits the number of operating system threads that can execute user-level
 ## Go code simultaneously by setting GOMAXPROCS environment variable
 ## ref: https://golang.org/pkg/runtime
 ##
-# maxProcs
+# maxProcs:
 
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-etcd#security
@@ -101,31 +114,40 @@ allowNoneAuthentication: true
 auth:
   rbac:
     enabled: true
-    ## etcd root user password. The root user is always `root`.
+    ## etcd root user password. The root user is always `root`
+    ##
     # rootPassword:
     ## Name of the existing secret containing credentials for the root user.
-    # existingSecret:
+    ##
+    # existingSecret: name-of-existing-secret
 
   client:
     ## Switch to encrypt client communication using TLS certificates
+    ##
     secureTransport: false
     ## Switch to automatically create the TLS certificates
+    ##
     useAutoTLS: false
     ## Switch to enable host authentication using TLS certificates. Requires existing secret.
+    ##
     enableAuthentication: false
     ## Name of the existing secret containing cert files for client communication.
-    # existingSecret:
+    ##
+    # existingSecret: name-of-existing-secret
 
   peer:
     ## Switch to encrypt peer communication using TLS certificates
+    ##
     secureTransport: false
     ## Switch to automatically create the TLS certificates
+    ##
     useAutoTLS: false
     ## Switch to enable host authentication using TLS certificates. Requires existing secret.
+    ##
     enableAuthentication: false
     ## Name of the existing secret containing cert files for peer communication.
-    # existingSecret:
-
+    ##
+    # existingSecret: name-of-existing-secret
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -135,104 +157,121 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## Service parameters
 ##
 service:
-  dnsBase: svc.cluster.local
+  ## K8s service type
+  ##
   type: ClusterIP
+  ## etcd client port
+  ##
   port: 2379
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types for the client port
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## etcd peer port
   ##
-  # nodePort:
   peerPort: 2380
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types for the peer port
+  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  # peerNodePort:
+  nodePorts:
+    clientPort: ""
+    peerPort: ""
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  # loadBalancerIP:
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-  ## Use loadBalancerIP to request a specific static IP,
-  ## otherwise leave blank
-  ##
-  # loadBalancerIP:
 
-## etcd data Persistent Volume Storage Class
-## If defined, storageClassName: <storageClass>
-## If set to "-", storageClassName: "", which disables dynamic provisioning
-## If undefined (the default) or set to null, no storageClassName spec is
-##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-##   GKE, AWS & OpenStack)
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+  ##
   enabled: true
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
   # storageClass: "-"
+  ## Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## Persistent Volume Access Mode
+  ##
   accessModes:
     - ReadWriteOnce
+  ## Persistent Volume size
+  ##
   size: 8Gi
-  annotations: {}
 
-## Configure resource requests and limits
+## Etcd containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## Minimum memory for development is 4GB and 2 CPU cores
+## Minimum memory for production is 8GB and 4 CPU cores
+## ref: http://docs.datastax.com/en/archived/cassandra/2.0/cassandra/architecture/architecturePlanningHardware_c.html
 ##
 resources:
-#  limits:
-#    cpu: 200m
-#    memory: 1Gi
-#  requests:
-#    memory: 256Mi
-#    cpu: 250m
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 500m
+  #   memory: 1Gi
+  requests: {}
+  #   cpu: 250m
+  #   memory: 256Mi
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Etcd containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
 livenessProbe:
-  enabled: false
-  initialDelaySeconds: 10
-  periodSeconds: 10
+  enabled: true
+  initialDelaySeconds: 60
+  periodSeconds: 30
   timeoutSeconds: 5
-  failureThreshold: 2
   successThreshold: 1
-
+  failureThreshold: 5
 readinessProbe:
-  enabled: false
-  initialDelaySeconds: 15
+  enabled: true
+  initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
-  failureThreshold: 6
   successThreshold: 1
+  failureThreshold: 5
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
-## Node Affinity. The value is evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
-nodeAffinity: {}
-## Pod Affinity. The value is evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-podAffinity: {}
-## Pod AntiAffinity
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-podAntiAffinity: soft
+affinity: {}
 
-## Node labels for pod assignment. The value is evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+## Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-## Tolerations for pod assignment. The value is evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
-##
-tolerations: {}
 
-## Add the corresponding annotations so Prometheus can collect etcd metrics
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Etcd Prometheus exporter configuration
 ##
 metrics:
   enabled: false

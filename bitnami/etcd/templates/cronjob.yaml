@@ -2,12 +2,8 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ template "etcd.fullname" . }}-snapshotter
-  labels:
-    app.kubernetes.io/name: {{ template "etcd.name" . }}
-    helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ include "etcd.fullname" . }}-snapshotter
+  labels: {{- include "etcd.labels" . | nindent 4 }}
 spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.disasterRecovery.cronjob.schedule | quote }}
@@ -16,14 +12,10 @@ spec:
     spec:
       template:
         metadata:
-          labels:
-            app.kubernetes.io/name: {{ template "etcd.name" . }}
-            helm.sh/chart: {{ template "etcd.chart" . }}
-            app.kubernetes.io/instance: {{ .Release.Name }}
-            app.kubernetes.io/managed-by: {{ .Release.Service }}
+          labels: {{- include "etcd.labels" . | nindent 12 }}
             app.kubernetes.io/component: snapshotter
           {{- if .Values.disasterRecovery.cronjob.podAnnotations }}
-          annotations: {{ toYaml .Values.disasterRecovery.cronjob.podAnnotations | nindent 12 }}
+          annotations: {{- include "etcd.tplValue" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
           restartPolicy: OnFailure
@@ -33,59 +25,59 @@ spec:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
           containers:
-          - name: etcd-snapshotter
-            image: "{{ template "etcd.image" . }}"
-            imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-            command:
-            - /scripts/save-snapshot.sh
-            env:
-            - name: ETCDCTL_API
-              value: "3"
-            {{- if .Values.auth.client.secureTransport }}
-            - name: ETCD_CERT_FILE
-              value: "/opt/bitnami/etcd/certs/client/cert.pem"
-            - name: ETCD_KEY_FILE
-              value: "/opt/bitnami/etcd/certs/client/key.pem"
-            {{- if .Values.auth.client.enableAuthentication }}
-            - name: ETCD_CLIENT_CERT_AUTH
-              value: "true"
-            - name: ETCD_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/client/ca.crt"
-            {{- end }}
-            {{- end }}
-            {{- if .Values.auth.rbac.enabled }}
-            - name: ETCD_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "etcd.fullname" . }}{{ end }}
-                  key: etcd-root-password
-            {{- end }}
-            {{- if .Values.disasterRecovery.cronjob.resources }}
-            resources: {{ toYaml .Values.disasterRecovery.cronjob.resources | nindent 14 }}
-            {{- end }}
-            volumeMounts:
-            - name: scripts
-              mountPath: /scripts/save-snapshot.sh
-              subPath: save-snapshot.sh
-            - name: snapshot-volume
-              mountPath: /snapshots
-           {{- if .Values.auth.client.secureTransport }}
-            - name: certs
-              mountPath: /opt/bitnami/etcd/certs/client
-              readOnly: true
-           {{- end }}
+            - name: etcd-snapshotter
+              image: {{ include "etcd.image" . }}
+              imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+              command:
+                - /scripts/save-snapshot.sh
+              env:
+              - name: ETCDCTL_API
+                value: "3"
+              {{- if .Values.auth.client.secureTransport }}
+              - name: ETCD_CERT_FILE
+                value: "/opt/bitnami/etcd/certs/client/cert.pem"
+              - name: ETCD_KEY_FILE
+                value: "/opt/bitnami/etcd/certs/client/key.pem"
+              {{- if .Values.auth.client.enableAuthentication }}
+              - name: ETCD_CLIENT_CERT_AUTH
+                value: "true"
+              - name: ETCD_TRUSTED_CA_FILE
+                value: "/opt/bitnami/etcd/certs/client/ca.crt"
+              {{- end }}
+              {{- end }}
+              {{- if .Values.auth.rbac.enabled }}
+              - name: ETCD_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ include "etcd.fullname" . }}{{ end }}
+                    key: etcd-root-password
+              {{- end }}
+              {{- if .Values.disasterRecovery.cronjob.resources }}
+              resources: {{- toYaml .Values.disasterRecovery.cronjob.resources | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts/save-snapshot.sh
+                  subPath: save-snapshot.sh
+                - name: snapshot-volume
+                  mountPath: /snapshots
+                {{- if .Values.auth.client.secureTransport }}
+                - name: certs
+                  mountPath: /opt/bitnami/etcd/certs/client
+                  readOnly: true
+                {{- end }}
           volumes:
-          {{- if .Values.auth.client.secureTransport }}
-          - name: certs
-            secret:
-              secretName: {{ required "A secret containinig the client certificates is required" .Values.auth.client.existingSecret }}
-              defaultMode: 256 
-          {{- end }}
-          - name: scripts
-            configMap:
-              name: {{ template "etcd.fullname" . }}-scripts
-              defaultMode: 0755
-          - name: snapshot-volume
-            persistentVolumeClaim:
-              claimName: {{ template "etcd.disasterRecovery.pvc.name" . }}
+            {{- if .Values.auth.client.secureTransport }}
+            - name: certs
+              secret:
+                secretName: {{ required "A secret containinig the client certificates is required" .Values.auth.client.existingSecret }}
+                defaultMode: 256
+            {{- end }}
+            - name: scripts
+              configMap:
+                name: {{ include "etcd.fullname" . }}-scripts
+                defaultMode: 0755
+            - name: snapshot-volume
+              persistentVolumeClaim:
+                claimName: {{ include "etcd.disasterRecovery.pvc.name" . }}
 {{- end }}

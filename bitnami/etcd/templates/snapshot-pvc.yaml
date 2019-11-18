@@ -2,12 +2,8 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "etcd.fullname" . }}-snapshotter
-  labels:
-    app.kubernetes.io/name: {{ template "etcd.name" . }}
-    helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  name: {{ include "etcd.fullname" . }}-snapshotter
+  labels: {{- include "etcd.labels" . | nindent 4 }}
 spec:
   accessModes:
     - ReadWriteMany
