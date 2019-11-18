@@ -5,13 +5,13 @@ metadata:
   name: {{ include "fluentd.fullname" . }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - "namespaces"
-  - "pods"
-  verbs:
-  - "get"
-  - "watch"
-  - "list"
+  - apiGroups:
+      - ""
+    resources:
+      - "namespaces"
+      - "pods"
+    verbs:
+      - "get"
+      - "watch"
+      - "list"
 {{- end }}

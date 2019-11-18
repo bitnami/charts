@@ -35,9 +35,14 @@ image:
 # fullnameOverride:
 
 ## Cluster Domain
+##
 clusterDomain: cluster.local
 
+## Forwarder parameters
+##
 forwarder:
+  ## Enable forwarder daemonset
+  ##
   enabled: true
 
   ## K8s Security Context for forwarder pods
@@ -55,6 +60,7 @@ forwarder:
 
   ## Name of the configMap that contains the configuration files for fluentd
   ## If not specified, one will be created by default
+  ##
   # configMap:
 
   ## String with extra arguments for the Fluentd command line
@@ -69,10 +75,9 @@ forwarder:
   ##
   extraEnv: {}
 
+  ## Forwarder containers' ports
+  ##
   containerPorts:
-    - name: http
-      containerPort: 9880
-      protocol: TCP
     # - name: syslog-tcp
     #   containerPort: 5140
     #   protocol: TCP
@@ -82,6 +87,9 @@ forwarder:
     # - name: tcp
     #   containerPort: 24224
     #   protocol: TCP
+    - name: http
+      containerPort: 9880
+      protocol: TCP
 
   ## Service parameters
   ##
@@ -93,10 +101,6 @@ forwarder:
     ## Service ports
     ##
     ports:
-      # http:
-      #   port: 9880
-      #   targetPort: http
-      #   protocol: TCP
       # syslog-udp:
       #   port: 5140
       #   targetPort: syslog-udp
@@ -111,9 +115,14 @@ forwarder:
       #   port: 24224
       #   targetPort: tcp
       #   protocol: TCP
+      http:
+        port: 9880
+        targetPort: http
+        protocol: TCP
 
     ## loadBalancerIP for the forwarders service (optional, cloud specific)
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ##
     # loadBalancerIP:
 
     ## Load Balancer sources
@@ -131,7 +140,7 @@ forwarder:
     ##
     annotations: {}
 
-  ## Configure extra options for liveness and readiness probes
+  ## Forwarder containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
@@ -160,15 +169,23 @@ forwarder:
   updateStrategy:
     type: RollingUpdate
 
-  ## Configure resource requests and limits
+  ## Forwarder containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     memory: 512Mi
-  ##     cpu: 300m
+  ## Minimum memory for development is 4GB and 2 CPU cores
+  ## Minimum memory for production is 8GB and 4 CPU cores
+  ## ref: http://docs.datastax.com/en/archived/cassandra/2.0/cassandra/architecture/architecturePlanningHardware_c.html
   ##
-  # resources:
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 500m
+    #   memory: 1Gi
+    requests: {}
+    #   cpu: 300m
+    #   memory: 512Mi
 
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -190,13 +207,17 @@ forwarder:
   ##
   podAnnotations: {}
 
+## Agregator parameters
+##
 aggregator:
+  ## Enable Aggregator daemonset
+  ##
   enabled: true
-  ## Number of aggregator replicas
+  ## Number of Aggregator replicas
   ##
   replicaCount: 2
 
-  ## K8s Security Context for forwarder pods
+  ## K8s Security Context for Aggregator pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
@@ -211,9 +232,10 @@ aggregator:
 
   ## Name of the configMap that contains the configuration files for fluentd
   ## If not specified, one will be created by default
+  ##
   # configMap:
 
-  ## Port the aggregator container will listen for logs. Leave it blank to ignore.
+  ## Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter
   ##
   port: 24224
@@ -230,6 +252,8 @@ aggregator:
   ##
   extraEnv: {}
 
+  ## Aggregator containers' ports
+  ##
   containerPorts:
     # - name: my-port
     #   containerPort: 24222
@@ -248,14 +272,14 @@ aggregator:
     ## Service ports
     ##
     ports:
-      tcp:
-        port: 24224
-        targetPort: tcp
-        protocol: TCP
       # http:
       #   port: 9880
       #   targetPort: http
       #   protocol: TCP
+      tcp:
+        port: 24224
+        targetPort: tcp
+        protocol: TCP
 
     ## loadBalancerIP for the forwarders service (optional, cloud specific)
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
@@ -306,15 +330,23 @@ aggregator:
   updateStrategy:
     type: RollingUpdate
 
-  ## Configure resource requests and limits
+  ## Aggregator containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     memory: 512Mi
-  ##     cpu: 300m
+  ## Minimum memory for development is 4GB and 2 CPU cores
+  ## Minimum memory for production is 8GB and 4 CPU cores
+  ## ref: http://docs.datastax.com/en/archived/cassandra/2.0/cassandra/architecture/architecturePlanningHardware_c.html
   ##
-  # resources:
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 500m
+    #   memory: 1Gi
+    requests: {}
+    #   cpu: 300m
+    #   memory: 512Mi
 
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -353,16 +385,24 @@ serviceAccount:
 rbac:
   create: true
 
-## Prometheus metrics
-## ref: https://github.com/fluent/fluent-plugin-prometheus/blob/master/README.md
+## Prometheus Exporter / Metrics
 ##
 metrics:
   enabled: true
+  ## Prometheus Exporter service parameters
+  ##
   service:
+    ## Service type
+    ##
     type: ClusterIP
-    # loadBalancerIP:
+    ## Service port
+    ##
     port: 24231
-    ## Annotations for the Prometheus metrics service
+    ## loadBalancerIP for the Prometheus Exporter service (optional, cloud specific)
+    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ##
+    # loadBalancerIP:
+    ## Annotations for the Prometheus Exporter service service
     ##
     annotations:
       prometheus.io/scrape: "true"
