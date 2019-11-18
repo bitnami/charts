@@ -567,15 +567,18 @@ curator:
       #   logformat: default
       #   blacklist: ['elasticsearch', 'urllib3']
 
-  resources: {}
+  ## Curator resources requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
+    limits: {}
     #  cpu: 100m
     #  memory: 128Mi
-    # requests:
+    requests: {}
     #  cpu: 100m
     #  memory: 128Mi
 
@@ -593,40 +596,41 @@ curator:
   #     mountPath: /certs
   #     readOnly: true
 
-  # Add your own init container or uncomment and modify the given example.
+  ## Add your own init container or uncomment and modify the given example.
+  ##
   extraInitContainers: {}
-    ## Don't configure S3 repository till Elasticsearch is reachable.
-    ## Ensure that it is available at http://elasticsearch:9200
-    ##
-    # elasticsearch-s3-repository:
-    #   image: bitnami/minideb:latest
-    #   imagePullPolicy: "IfNotPresent"
-    #   command:
-    #   - "/bin/bash"
-    #   - "-c"
-    #   args:
-    #   - |
-    #     ES_HOST=elasticsearch
-    #     ES_PORT=9200
-    #     ES_REPOSITORY=backup
-    #     S3_REGION=us-east-1
-    #     S3_BUCKET=bucket
-    #     S3_BASE_PATH=backup
-    #     S3_COMPRESS=true
-    #     S3_STORAGE_CLASS=standard
-    #     install_packages curl && \
-    #     ( counter=0; while (( counter++ < 120 )); do curl -s http://${ES_HOST}:${ES_PORT} >/dev/null 2>&1 && break; echo "Waiting for elasticsearch $counter/120"; sleep 1; done ) && \
-    #     cat <<EOF | curl -sS -XPUT -H "Content-Type: application/json" -d @- http://${ES_HOST}:${ES_PORT}/_snapshot/${ES_REPOSITORY} \
-    #     {
-    #       "type": "s3",
-    #       "settings": {
-    #         "bucket": "${S3_BUCKET}",
-    #         "base_path": "${S3_BASE_PATH}",
-    #         "region": "${S3_REGION}",
-    #         "compress": "${S3_COMPRESS}",
-    #         "storage_class": "${S3_STORAGE_CLASS}"
-    #       }
-    #     }
+  ## Don't configure S3 repository till Elasticsearch is reachable.
+  ## Ensure that it is available at http://elasticsearch:9200
+  ##
+  # elasticsearch-s3-repository:
+  #   image: bitnami/minideb:latest
+  #   imagePullPolicy: "IfNotPresent"
+  #   command:
+  #   - "/bin/bash"
+  #   - "-c"
+  #   args:
+  #   - |
+  #     ES_HOST=elasticsearch
+  #     ES_PORT=9200
+  #     ES_REPOSITORY=backup
+  #     S3_REGION=us-east-1
+  #     S3_BUCKET=bucket
+  #     S3_BASE_PATH=backup
+  #     S3_COMPRESS=true
+  #     S3_STORAGE_CLASS=standard
+  #     install_packages curl && \
+  #     ( counter=0; while (( counter++ < 120 )); do curl -s http://${ES_HOST}:${ES_PORT} >/dev/null 2>&1 && break; echo "Waiting for elasticsearch $counter/120"; sleep 1; done ) && \
+  #     cat <<EOF | curl -sS -XPUT -H "Content-Type: application/json" -d @- http://${ES_HOST}:${ES_PORT}/_snapshot/${ES_REPOSITORY} \
+  #     {
+  #       "type": "s3",
+  #       "settings": {
+  #         "bucket": "${S3_BUCKET}",
+  #         "base_path": "${S3_BASE_PATH}",
+  #         "region": "${S3_REGION}",
+  #         "compress": "${S3_COMPRESS}",
+  #         "storage_class": "${S3_STORAGE_CLASS}"
+  #       }
+  #     }
 
 ## Elasticsearch Prometheus exporter configuration
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch-exporter/tags/
