@@ -16,7 +16,7 @@ spec:
   podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
   replicas: {{ .Values.statefulset.replicaCount }}
   updateStrategy:
-    type: {{ .Values.statefulset.updateStratey }}
+    type: {{ .Values.statefulset.updateStrategy }}
     {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
     rollingUpdate: null
     {{- else if .Values.statefulset.rollingUpdatePartition }}
