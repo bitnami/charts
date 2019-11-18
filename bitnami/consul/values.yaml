@@ -125,10 +125,10 @@ raftMultiplier: '1'
 
 ## Extra configuration that will be added to the default one.
 ##
-#localConfig: |-
-#  {
-#    "key": "value"
-#  }
+# localConfig: |-
+#   {
+#     "key": "value"
+#   }
 
 ## Number of HashiCorp Consul replicas to deploy
 ##
