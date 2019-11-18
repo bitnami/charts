@@ -80,7 +80,7 @@ spec:
             failureThreshold: {{ .Values.forwarder.readinessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.forwarder.resources }}
-          resources: {{- toYaml .Values.forwarder.resources | nindent 10 }}
+          resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: fluentd-config
