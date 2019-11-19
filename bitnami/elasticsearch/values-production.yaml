@@ -173,11 +173,11 @@ master:
   ##
   livenessProbe:
     enabled: false
-    initialDelaySeconds: 90
-    periodSeconds: 10
-    timeoutSeconds: 5
-    successThreshold: 1
-    failureThreshold: 5
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   readinessProbe:
     enabled: false
     initialDelaySeconds: 90
@@ -185,6 +185,33 @@ master:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ##
+    enabled: true
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    ## Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## Persistent Volume size
+    ##
+    size: 8Gi
+
   ## Service parameters for master-eligible node(s)
   ##
   service:
