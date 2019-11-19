@@ -50,7 +50,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /bitnami/onsul/data
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /bitnami/consul/data
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
