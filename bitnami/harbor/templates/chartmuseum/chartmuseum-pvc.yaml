@@ -6,13 +6,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "harbor.chartmuseum" . }}
+  name: {{ include "harbor.chartmuseum" . }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
+    app.kubernetes.io/component: chartmuseum
   {{- if eq $persistence.resourcePolicy "keep" }}
   annotations:
     helm.sh/resource-policy: keep
   {{- end }}
-  labels: {{ include "harbor.labels" . | nindent 4 }}
-    app.kubernetes.io/component: chartmuseum
 spec:
   accessModes:
     - {{ $chartmuseum.accessMode }}
