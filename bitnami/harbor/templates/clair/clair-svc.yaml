@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "harbor.clair" . }}"
-  labels: {{ include "harbor.labels" . | nindent 4 }}
+  name: {{ include "harbor.clair" . }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
     app.kubernetes.io/component: clair
 spec:
   ports:
@@ -11,7 +11,6 @@ spec:
       port: 6060
     - name: health
       port: 6061
-  selector:
-    {{ include "harbor.matchLabels" . | nindent 4 }}
+  selector: {{- include "harbor.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: clair
 {{- end }}
