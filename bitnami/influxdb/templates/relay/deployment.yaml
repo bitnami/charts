@@ -62,7 +62,7 @@ spec:
             - /conf/relay.toml
           ports:
             - name: http
-              containerPort: {{ .Values.relay.service.port }}
+              containerPort: {{ .Values.relay.containerPorts.http }}
               protocol: TCP
           {{- if .Values.relay.livenessProbe.enabled }}
           livenessProbe:

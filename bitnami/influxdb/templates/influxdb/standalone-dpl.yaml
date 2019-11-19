@@ -142,10 +142,10 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.influxdb.service.port }}
+              containerPort: {{ .Values.influxdb.containerPorts.http }}
               protocol: TCP
             - name: rcp
-              containerPort: {{ .Values.influxdb.service.rcpPort }}
+              containerPort: {{ .Values.influxdb.containerPorts.rcp }}
               protocol: TCP
           {{- if .Values.influxdb.livenessProbe.enabled }}
           {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
