@@ -13,9 +13,9 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.influxdb.service.port }}
+        - port: {{ .Values.influxdb.containerPorts.http }}
           protocol: TCP
-        - port: {{ .Values.influxdb.service.rcpPort }}
+        - port: {{ .Values.influxdb.containerPorts.rcp }}
           protocol: TCP
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
