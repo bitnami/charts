@@ -32,9 +32,10 @@ spec:
       securityContext:
         fsGroup: {{ .Values.master.securityContext.fsGroup }}
       {{- end }}
-      {{- if .Values.sysctlImage.enabled }}
-      ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
+      {{- if or .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.master.persistence.enabled) }}
       initContainers:
+        {{- if .Values.sysctlImage.enabled }}
+        ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -46,6 +47,25 @@ spec:
               sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
           securityContext:
             privileged: true
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "elasticsearch.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} //bitnami/elasticsearch/data
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resource }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: "/bitnami/elasticsearch/data"
+        {{- end }}
       {{- end }}
       containers:
         - name: elasticsearch
@@ -113,7 +133,7 @@ spec:
               subPath: elasticsearch.yml
             {{- end }}
             - name: data
-              mountPath: "/bitnami/elasticsearch/data"
+              mountPath: /bitnami/elasticsearch/data
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
@@ -123,8 +143,23 @@ spec:
           configMap:
             name: {{ include "elasticsearch.fullname" . }}
         {{- end }}
-        - name: data
-          emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
+{{- if not .Values.master.persistence.enabled }}
+        - name: "data"
+          emptyDir: {}
+{{- else }}
+  volumeClaimTemplates:
+    - metadata:
+        name: "data"
+        {{- if .Values.master.persistence.annotations }}
+        annotations: {{- toYaml .Values.master.persistence.annotations | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes: {{- toYaml .Values.master.persistence.accessModes | nindent 10 }}
+        {{ include "elasticsearch.data.storageClass" . }}
+        resources:
+          requests:
+            storage: {{ .Values.master.persistence.size | quote }}
+{{- end }}
