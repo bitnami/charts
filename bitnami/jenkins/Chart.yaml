@@ -1,20 +1,20 @@
 apiVersion: v1
 name: jenkins
-version: 4.0.2
+version: 4.0.3
 appVersion: 2.190.2
 description: The leading open source automation server
 keywords:
-- jenkins
-- ci
-- cd
-- http
-- web
-- application
+  - jenkins
+  - ci
+  - cd
+  - http
+  - web
+  - application
 home: https://jenkins.io/
 sources:
-- https://github.com/bitnami/bitnami-docker-jenkins
+  - https://github.com/bitnami/bitnami-docker-jenkins
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/jenkins/img/jenkins-stack-110x117.png

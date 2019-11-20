@@ -206,6 +206,12 @@ influxdb:
     successThreshold: 1
     failureThreshold: 6
 
+  ## Container ports
+  ##
+  containerPorts:
+    http: 8086
+    rcp: 8088
+
   ## Service paramaters
   ##
   service:
@@ -359,6 +365,11 @@ relay:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+
+  ## Container ports
+  ##
+  containerPorts:
+    http: 9096
 
   ## Service paramaters
   ##
