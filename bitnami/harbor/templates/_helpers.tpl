@@ -837,9 +837,20 @@ Usage:
 {{ include "harbor.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
 */}}
 {{- define "harbor.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
+    {{- if typeIs "string" .value -}}
+        {{- tpl .value .context -}}
+    {{- else -}}
+        {{- tpl (.value | toYaml) .context -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Set the http prefix if the externalURl dont have it
+*/}}
+{{- define "harbor.externalUrl" -}}
+{{- if hasPrefix "http" .Values.externalURL -}}
+    {{- print .Values.externalURL -}}
+{{- else -}}
+    {{- printf "http://%s" .Values.externalURL -}}
+{{- end -}}
 {{- end -}}
