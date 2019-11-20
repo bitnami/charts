@@ -53,7 +53,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `global.imageRegistry`               | Global Docker image registry                                                                         | `nil`                                                        |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                        | `nil`                                                        |
 | `image.registry`                     | Jenkins image registry                                                                               | `docker.io`                                                  |
 | `image.repository`                   | Jenkins Image name                                                                                   | `bitnami/jenkins`                                            |
 | `image.tag`                          | Jenkins Image tag                                                                                    | `{TAG_NAME}`                                                 |
@@ -66,15 +66,13 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `jenkinsHome`                        | Jenkins home directory                                                                               | `/opt/bitnami/jenkins/jenkins_home`                          |
 | `disableInitialization`              | Allows to disable the initial Bitnami configuration for Jenkins                                      | `no`                                                         |
 | `javaOpts`                           | Customize JVM parameters                                                                             | `nil`                                                        |
-| `service.type`                       | Kubernetes Service type                                                                              | `LoadBalancer`                                               |
-| `service.port`                       | Service HTTP port                                                                                    | `80`                                                         |
-| `service.httpsPort`                  | Service HTTPS port                                                                                   | `443`                                                        |
-| `service.nodePorts.http`             | Kubernetes http node port                                                                            | `""`                                                         |
-| `service.nodePorts.https`            | Kubernetes https node port                                                                           | `""`                                                         |
-| `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                 | `Cluster`                                                    |
-| `service.loadBalancerIP`             | LoadBalancer service IP address                                                                      | `""`                                                         |
+| `persistence.enabled`                | Enable persistence using PVC                                                                         | `true`                                                       |
+| `persistence.storageClass`           | PVC Storage Class for Jenkins volume                                                                 | `nil` (uses alpha storage class annotation)                  |
+| `persistence.accessMode`             | PVC Access Mode for Jenkins volume                                                                   | `ReadWriteOnce`                                              |
+| `persistence.size`                   | PVC Storage Request for Jenkins volume                                                               | `8Gi`                                                        |
+| `resources`                          | CPU/Memory resource requests/limits                                                                  | `{}`                                                         |
 | `livenessProbe.enabled`              | Turn on and off liveness probe                                                                       | `true`                                                       |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                             | `180`                                                       |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                             | `180`                                                        |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                                       | `10`                                                         |
 | `livenessProbe.timeoutSeconds`       | When the probe times out                                                                             | `5`                                                          |
 | `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                                                          | `1`                                                          |
@@ -85,6 +83,17 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `readinessProbe.timeoutSeconds`      | When the probe times out                                                                             | `3`                                                          |
 | `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                                                          | `1`                                                          |
 | `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                                                           | `3`                                                          |
+| `podAnnotations`                     | Pod annotations                                                                                      | `{}`                                                         |
+| `affinity`                           | Map of node/pod affinities                                                                           | `{}` (The value is evaluated as a template)                  |
+| `nodeSelector`                       | Node labels for pod assignment                                                                       | `{}` (The value is evaluated as a template)                  |
+| `tolerations`                        | Tolerations for pod assignment                                                                       | `[]` (The value is evaluated as a template)                  |
+| `service.type`                       | Kubernetes Service type                                                                              | `LoadBalancer`                                               |
+| `service.port`                       | Service HTTP port                                                                                    | `80`                                                         |
+| `service.httpsPort`                  | Service HTTPS port                                                                                   | `443`                                                        |
+| `service.nodePorts.http`             | Kubernetes http node port                                                                            | `""`                                                         |
+| `service.nodePorts.https`            | Kubernetes https node port                                                                           | `""`                                                         |
+| `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                 | `Cluster`                                                    |
+| `service.loadBalancerIP`             | LoadBalancer service IP address                                                                      | `""`                                                         |
 | `ingress.enabled`                    | Enable ingress controller resource                                                                   | `false`                                                      |
 | `ingress.annotations`                | Ingress annotations                                                                                  | `[]`                                                         |
 | `ingress.certManager`                | Add annotations for cert-manager                                                                     | `false`                                                      |
@@ -96,13 +105,6 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `ingress.secrets[0].name`            | TLS Secret Name                                                                                      | `nil`                                                        |
 | `ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                               | `nil`                                                        |
 | `ingress.secrets[0].key`             | TLS Secret Key                                                                                       | `nil`                                                        |
-| `persistence.enabled`                | Enable persistence using PVC                                                                         | `true`                                                       |
-| `persistence.storageClass`           | PVC Storage Class for Jenkins volume                                                                 | `nil` (uses alpha storage class annotation)                  |
-| `persistence.accessMode`             | PVC Access Mode for Jenkins volume                                                                   | `ReadWriteOnce`                                              |
-| `persistence.size`                   | PVC Storage Request for Jenkins volume                                                               | `8Gi`                                                        |
-| `resources`                          | CPU/Memory resource requests/limits                                                                  | Memory: `512Mi`, CPU: `300m`                                 |
-| `podAnnotations`                     | Pod annotations                                                                                      | `{}`                                                         |
-| `affinity`                           | Map of node/pod affinities                                                                           | `{}`                                                         |
 | `metrics.enabled`                    | Start a side-car Jenkins prometheus exporter                                                         | `false`                                                      |
 | `metrics.image.registry`             | Jenkins exporter image registry                                                                      | `docker.io`                                                  |
 | `metrics.image.repository`           | Jenkins exporter image name                                                                          | `bitnami/jenkins-exporter`                                   |
@@ -111,7 +113,6 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod                                                      | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}` |
 | `metrics.resources`                  | Exporter resource requests/limit                                                                     | Memory: `256Mi`, CPU: `100m`                                 |
-
 
 The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.
 
