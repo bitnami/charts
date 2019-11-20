@@ -130,15 +130,10 @@ updateStrategy: RollingUpdate
 ##
 podManagementPolicy: OrderedReady
 
-## Pod AntiAffinity
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
-antiAffinity: soft
-
-## Node Affinity. The value is evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
-##
-nodeAffinity: {}
+affinity: {}
 
 ## Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/

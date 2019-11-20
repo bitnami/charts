@@ -13,10 +13,7 @@ spec:
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
   {{- end }}
   {{- if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges:
-  {{- with .Values.metrics.service.loadBalancerSourceRanges }}
-{{ toYaml . | nindent 4 }}
-  {{- end }}
+  loadBalancerSourceRanges: {{- toYaml .Values.metrics.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- if and (eq .Values.metrics.service.type "ClusterIP") .Values.metrics.service.clusterIP }}
   clusterIP: {{ .Values.metrics.service.clusterIP }}
