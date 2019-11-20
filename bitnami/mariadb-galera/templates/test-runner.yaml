@@ -16,8 +16,8 @@ spec:
           # copy bats to tools dir
           cp -R /usr/local/libexec/ /tools/bats/
       volumeMounts:
-      - mountPath: /tools
-        name: tools
+        - mountPath: /tools
+          name: tools
   containers:
     - name: mariadb-galera-test
       image: {{ template "mariadb-galera.image" . }}
@@ -34,15 +34,15 @@ spec:
             {{- end }}
               key: mariadb-galera-root-password
       volumeMounts:
-      - mountPath: /tests
-        name: tests
-        readOnly: true
-      - mountPath: /tools
-        name: tools
+        - mountPath: /tests
+          name: tests
+          readOnly: true
+        - mountPath: /tools
+          name: tools
   volumes:
-  - name: tests
-    configMap:
-      name: {{ template "mariadb-galera.fullname" . }}-tests
-  - name: tools
-    emptyDir: {}
+    - name: tests
+      configMap:
+        name: {{ template "mariadb-galera.fullname" . }}-tests
+    - name: tools
+      emptyDir: {}
   restartPolicy: Never
