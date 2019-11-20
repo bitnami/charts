@@ -56,7 +56,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} //bitnami/elasticsearch/data
+              chown -R {{ .Values.master.securityContext.runAsUser }}:{{ .Values.master.securityContext.fsGroup }} //bitnami/elasticsearch/data
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resource }}
