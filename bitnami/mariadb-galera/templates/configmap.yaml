@@ -3,11 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "mariadb-galera.fullname" . }}-configuration
-  labels:
-    app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
-    helm.sh/chart: {{ include "mariadb-galera.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "mariadb-galera.labels" . | nindent 4 }}
 data:
 {{- if (.Files.Glob "files/my.cnf") }}
 {{ (.Files.Glob "files/my.cnf").AsConfig | indent 2 }}
