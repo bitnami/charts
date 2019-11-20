@@ -172,14 +172,14 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
@@ -282,14 +282,14 @@ coordinating:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
@@ -371,14 +371,14 @@ data:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
@@ -458,14 +458,14 @@ ingest:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
@@ -510,7 +510,6 @@ curator:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-
 
   cronjob:
     # At 01:00 every day
