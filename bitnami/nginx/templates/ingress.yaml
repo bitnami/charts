@@ -8,6 +8,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- range $key, $value := .Values.ingress.labels }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
