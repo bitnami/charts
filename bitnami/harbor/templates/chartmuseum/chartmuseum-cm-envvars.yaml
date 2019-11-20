@@ -15,7 +15,7 @@ data:
   # The user is hardcoded because the core binary has it hardcoded so it is not configurable.
   BASIC_AUTH_USER: "chart_controller"
   {{- if .Values.chartmuseum.absoluteUrl }}
-  CHART_URL: "{{ .Values.externalURL }}/{{ .Values.chartmuseum.chartRepoName }}"
+  CHART_URL: "{{ template "harbor.externalUrl" . }}/{{ .Values.chartmuseum.chartRepoName }}"
   {{- end }}
   DEPTH: {{ .Values.chartmuseum.depth | quote }}
   {{- if or (eq .Values.logLevel "debug") .Values.chartMuseumImage.debug }}

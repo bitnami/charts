@@ -4,7 +4,7 @@
 
 {{- if contains "Ingress" .Values.service.type }}
 
-  You should be able to access your new Harbor installation through {{ .Values.externalURL }}
+  You should be able to access your new Harbor installation through {{ include "harbor.externalUrl" . }}
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 

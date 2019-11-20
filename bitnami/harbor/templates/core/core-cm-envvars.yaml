@@ -10,7 +10,7 @@ data:
   POSTGRESQL_USERNAME: "{{ .Values.postgresql.postgresqlUsername }}"
   POSTGRESQL_DATABASE: "registry"
   POSTGRESQL_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
-  EXT_ENDPOINT: "{{ .Values.externalURL }}"
+  EXT_ENDPOINT: "{{ template "harbor.externalUrl" . }}"
   CORE_URL: "http://{{ template "harbor.core" . }}"
   JOBSERVICE_URL: "http://{{ template "harbor.fullname" . }}-jobservice"
   REGISTRY_URL: "http://{{ template "harbor.registry" . }}:5000"
