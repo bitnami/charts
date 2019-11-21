@@ -83,8 +83,9 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `service.loadBalancerIP`         | LoadBalancer service IP address                  | `""`                                                         |
 | `service.annotations`            | Service annotations                              | `{}`                                                         |
 | `ingress.enabled`                | Enable ingress controller resource               | `false`                                                      |
-| `ingress.certManager`            | Add annotations for cert-manager                 | `false`                                                      |
-| `ingress.annotations`            | Ingress annotations                              | `[]`                                                         |
+| `ingress.certManager`            | Add annotations for cert-manager                 | `false`
+| `ingress.selectors`              | Ingress selectors for labelSelector option       | `[]`     
+| `ingress.annotations`            | Ingress annotations                              | `[]`                                 
 | `ingress.hosts[0].name`          | Hostname to your NGINX installation              | `nginx.local`                                                |
 | `ingress.hosts[0].path`          | Path within the url structure                    | `/`                                                          |
 | `ingress.tls[0].hosts[0]`        | TLS hosts                                        | `nginx.local`                                                |
