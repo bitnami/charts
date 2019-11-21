@@ -13,6 +13,16 @@ $ helm install bitnami/prometheus-operator
 
 This chart bootstraps [Prometheus Operator](https://github.com/bitnami/bitnami-docker-prometheus-operator) on [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
+In the default configuration the chart deploys the following components on the Kubernetes cluster:
+
+- [Prometheus Operator](https://github.com/coreos/prometheus-operator)
+- [Prometheus](https://github.com/prometheus/prometheus/)
+- [Alertmanager](https://github.com/prometheus/alertmanager)
+
+**IMPORTANT**
+
+Only one instance of the Prometheus Operator component should be running in the cluster. If you wish to deploy this chart to **manage multiple instances** of Prometheus in your Kubernetes cluster, you **have to disable** the installation of the Prometheus Operator component using the `operator.enabled=false` chart installation argument.
+
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
