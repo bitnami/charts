@@ -34,18 +34,8 @@ image:
 ##
 # fullnameOverride:
 
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
-
-## Specify a imagePullPolicy
-## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-##
-imagePullPolicy: IfNotPresent
+# Cluster domain
+clusterDomain: cluster.local
 
 ## Memcached admin user
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
@@ -57,36 +47,78 @@ imagePullPolicy: IfNotPresent
 ##
 # memcachedPassword:
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
+## Service parameters
 ##
-serviceType: ClusterIP
+##
+service:
+  ## Service type
+  ##
+  type: ClusterIP
+  ## Memcached port
+  ##
+  port: 11211
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePort: ""
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  # loadBalancerIP:
+  ## Annotations for the Memcached service
+  ##
+  annotations: {}
 
-## Configure resource requests and limits
+## Memcached containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 100m
+  #   memory: 128Mi
   requests:
     memory: 256Mi
     cpu: 250m
+
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
-# Cluster domain
-clusterDomain: cluster.local
-
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
 
+## Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: {}
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
   enabled: true
+  ## Bitnami Memcached Prometheus Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/memcached-exporter/tags/
+  ##
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
@@ -98,11 +130,58 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-   ## Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## Metrics exporter pod Annotation and Labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  # resources: {}
-   ## Metrics exporter pod Annotation
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9150"
+  ## Memcached Prometheus exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## Memcached Prometheus exporter port
+    ##
+    port: 9150
+    ## Annotations for the Prometheus metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    enabled: false
+    ## Namespace in which Prometheus is running
+    ##
+    # namespace: monitoring
+
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # interval: 10s
+
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # scrapeTimeout: 10s
+
+    ## ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # selector:
+    #   prometheus: my-prometheus

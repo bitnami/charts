@@ -24,6 +24,31 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "memcached.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "memcached.labels" -}}
+app.kubernetes.io/name: {{ include "memcached.name" . }}
+helm.sh/chart: {{ include "memcached.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "memcached.matchLabels" -}}
+app.kubernetes.io/name: {{ include "memcached.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "memcached.metrics.image" -}}
@@ -102,4 +127,17 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "memcached.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "memcached.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}
