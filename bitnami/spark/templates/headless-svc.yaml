@@ -12,4 +12,4 @@ spec:
   clusterIP: None
   selector:
     app.kubernetes.io/name: {{ include "spark.name" . }}
-    release: "{{ .Release.Name }}"
+    app.kubernetes.io/instance: {{ .Release.Name }}
