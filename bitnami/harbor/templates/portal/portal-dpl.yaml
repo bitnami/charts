@@ -33,7 +33,7 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
       containers:
-        - name: portal
+        - name: harbor
           image: {{ include "harbor.portalImage" . }}
           imagePullPolicy: {{ .Values.portalImage.pullPolicy | quote }}
           {{- if .Values.portal.resources }}
