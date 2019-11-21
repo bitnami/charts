@@ -70,6 +70,10 @@ ingress:
   ## Set this to true in order to add the corresponding annotations for cert-manager
   certManager: false
 
+  # Ingress lables. If you need to add specific lablel for labelSelector option
+  selectors:
+  #  traffic-type: external
+
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
