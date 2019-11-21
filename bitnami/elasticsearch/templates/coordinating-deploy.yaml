@@ -38,24 +38,13 @@ spec:
           image: {{ include "elasticsearch.sysctl.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
-            - /bin/bash
-            - -ec
-            - |
-              if ! [ -x "$(command -v sysctl)" ]; then
-                echo 'sysctl not installed. Installing it...'
-                distro=$(awk -F= '/^ID=/{print $2}' /etc/os-release | tr -d '"')
-                case $distro in
-                  ol | centos)
-                    yum install -y procps
-                    rm -rf /var/cache/yum;;
-                  ubuntu | debian)
-                    apt-get update -qq && apt-get install -y --no-install-recommends procps
-                    rm -rf /var/lib/apt/lists /var/cache/apt/archives;;
-                esac
-              fi
-              sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+            - /scripts/sysctl.sh
           securityContext:
             privileged: true
+          volumeMounts:
+            - name: initcontainer-script
+              mountPath: /scripts/sysctl.sh
+              subPath: sysctl.sh
       {{- end }}
       containers:
         - name: elasticsearch
@@ -124,6 +113,12 @@ spec:
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
       volumes:
+        {{- if .Values.sysctlImage.enabled }}
+        - name: initcontainer-script
+          configMap:
+            name: {{ include "elasticsearch.fullname" . }}-initcontainer
+            defaultMode: 0755
+        {{- end }}
         {{- if .Values.config }}
         - name: config
           configMap:
