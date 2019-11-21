@@ -107,6 +107,9 @@ operator:
     ##
     annotations: {}
 
+  ## Create Prometheus Operator CRDs
+  createCustomResource: true
+
   ## Create a servicemonitor for the operator
   ##
   serviceMonitor:
