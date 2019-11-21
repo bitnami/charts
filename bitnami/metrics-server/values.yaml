@@ -34,23 +34,31 @@ image:
 ##
 # fullnameOverride:
 
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
 rbac:
-  # Specifies whether RBAC resources should be created
-  create: true
+  ## Specifies whether RBAC rules should be created
+  ##
+  create: false
 
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
 serviceAccount:
-  # Specifies whether a ServiceAccount should be created
-  create: true
-  # The name of the ServiceAccount to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: false
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the metrics-server.fullname template
+  # name:
 
+## API service parameters
+##
 apiService:
-  # Specifies if the v1beta1.metrics.k8s.io API service should be created.
-  # This should not be necessary in k8s version >= 1.8
-  # If you disable API service creation you have to
-  # manage it outside of this chart for e.g horizontal pod autoscaling to
-  # work with this release.
+  ## Specifies whether the v1beta1.metrics.k8s.io API service should be created
+  ## This should not be necessary in k8s version >= 1.8
+  ##
   create: false
 
 ## Specify the secure port where metrics-server will be running
@@ -66,21 +74,46 @@ securePort: 8443
 ##
 extraArgs: {}
 
+## Additional pod annotations for MariaDB Galera pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Affinity for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: {}
+
+##  Metrics Server K8s svc properties
+##
 service:
+  ## Kubernetes service type and port number
+  ##
   type: ClusterIP
   port: 443
+
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  # nodePort:
-   ## Provide any additional annotations which may be required. This can be used to
+  # nodePort: 30001
+
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  # loadBalancerIP:
+
+  ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-  # loadBalancerIP:
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
