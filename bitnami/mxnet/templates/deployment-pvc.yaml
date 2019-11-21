@@ -3,11 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "mxnet.fullname" . }}{{ if eq .Values.mode "distributed" }}-scheduler{{ end }}
-  labels:
-    app.kubernetes.io/name: {{ include "mxnet.name" . }}
-    helm.sh/chart: {{ include "mxnet.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "mxnet.labels" . | nindent 4 }}
 spec:
   accessModes:
   {{- range .Values.persistence.accessModes }}
