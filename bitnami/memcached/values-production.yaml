@@ -86,7 +86,7 @@ affinity: {}
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter

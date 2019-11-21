@@ -2,88 +2,90 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "memcached.fullname" . }}
-  labels: {{- include "memcached.labels" . | nindent 4 }}
+  labels:
+    app: {{ template "memcached.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   selector:
-    matchLabels: {{- include "memcached.matchLabels" . | nindent 6 }}
+    matchLabels:
+      app: {{ template "memcached.fullname" . }}
+      release: "{{ .Release.Name }}"
   template:
     metadata:
-      labels: {{- include "memcached.labels" . | nindent 8 }}
-      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
+      labels:
+        app: {{ template "memcached.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+{{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
-        {{- if .Values.podAnnotations }}
-        {{- include "memcached.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-        {{- include "memcached.tplValue" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
-      {{- end }}
+  {{- if or .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+  {{- end }}
+{{- end }}
     spec:
-{{- include "memcached.imagePullSecrets" . | indent 6 }}
-      {{- if .Values.affinity }}
-      affinity: {{- include "memcached.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "memcached.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations: {{- include "memcached.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
-      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
+{{- include "memcached.imagePullSecrets" . | indent 6 }}
       containers:
-        - name: memcached
-          image: {{ template "memcached.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          env:
-            - name: MEMCACHED_USERNAME
-              value: {{ default "" .Values.memcachedUsername | quote }}
-            - name: MEMCACHED_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "memcached.fullname" . }}
-                  key: memcached-password
-          ports:
-            - name: memcache
-              containerPort: 11211
-          livenessProbe:
-            tcpSocket:
-              port: memcache
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 6
-          readinessProbe:
-            tcpSocket:
-              port: memcache
-            initialDelaySeconds: 5
-            timeoutSeconds: 3
-            periodSeconds: 5
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
-          {{- end }}
-        {{- if .Values.metrics.enabled }}
+      - name: memcached
+        image: "{{ template "memcached.image" . }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        env:
+        - name: MEMCACHED_USERNAME
+          value: {{ default "" .Values.memcachedUsername | quote }}
+        - name: MEMCACHED_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "memcached.fullname" . }}
+              key: memcached-password
+        ports:
+        - name: memcache
+          containerPort: 11211
+        livenessProbe:
+          tcpSocket:
+            port: memcache
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          tcpSocket:
+            port: memcache
+          initialDelaySeconds: 5
+          timeoutSeconds: 3
+          periodSeconds: 5
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+{{- if .Values.metrics.enabled }}
+      - name: metrics
+        image: {{ template "memcached.metrics.image" . }}
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+        ports:
         - name: metrics
-          image: {{ template "memcached.metrics.image" . }}
-          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          ports:
-            - name: metrics
-              containerPort: 9150
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: metrics
-            initialDelaySeconds: 15
-            timeoutSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /metrics
-              port: metrics
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-          {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
-          {{- end }}
-        {{- end }}
+          containerPort: 9150
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+  {{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}

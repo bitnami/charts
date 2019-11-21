@@ -4,13 +4,13 @@ version: 3.0.17
 appVersion: 1.5.20
 description: Chart for Memcached
 keywords:
-  - memcached
-  - cache
+- memcached
+- cache
 home: http://memcached.org/
 sources:
-  - https://github.com/bitnami/bitnami-docker-memcached
+- https://github.com/bitnami/bitnami-docker-memcached
 maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
+- name: Bitnami
+  email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/memcached/img/memcached-stack-110x117.png
