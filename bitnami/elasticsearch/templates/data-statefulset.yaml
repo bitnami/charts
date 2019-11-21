@@ -42,19 +42,19 @@ spec:
       {{- end }}
       {{- if or .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
-      {{- if .Values.sysctlImage.enabled }}
+        {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
-            - /bin/bash
-            - -ec
-            - |
-              install_packages procps
-              sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+            - /scripts/sysctl.sh
           securityContext:
             privileged: true
+          volumeMounts:
+            - name: initcontainer-script
+              mountPath: /scripts/sysctl.sh
+              subPath: sysctl.sh
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.data.persistence.enabled }}
         - name: volume-permissions
@@ -140,6 +140,12 @@ spec:
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
       volumes:
+        {{- if .Values.sysctlImage.enabled }}
+        - name: initcontainer-script
+          configMap:
+            name: {{ include "elasticsearch.fullname" . }}-initcontainer
+            defaultMode: 0755
+        {{- end }}
         {{- if .Values.config }}
         - name: "config"
           configMap:
