@@ -53,7 +53,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
 | `global.minio.existingSecret`        | Name of existing secret to use for MinIO credentials (overrides `existingSecret`)                                                                         | `nil`                                                   |
 | `global.minio.accessKey`             | MinIO Access Key (overrides `accessKey.password`)                                                                                                         | `nil`                                                   |
 | `global.minio.secretKey`             | MinIO Secret Key (overrides `secretKey.password`)                                                                                                         | `nil`                                                   |
@@ -65,6 +65,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `image.debug`                        | Specify if debug logs should be enabled                                                                                                                   | `false`                                                 |
 | `nameOverride`                       | String to partially override minio.fullname template with a string (will prepend the release name)                                                        | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override minio.fullname template with a string                                                                                            | `nil`                                                   |
+| `clusterDomain`                      | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                         |
 | `clientImage.registry`               | MinIO Client image registry                                                                                                                               | `docker.io`                                             |
 | `clientImage.repository`             | MinIO Client image name                                                                                                                                   | `bitnami/minio-client`                                  |
 | `clientImage.tag`                    | MinIO Client image tag                                                                                                                                    | `{TAG_NAME}`                                            |
@@ -88,14 +89,14 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `defaultBuckets`                     | Comma, semi-colon or space separated list of buckets to create (only in standalone mode)                                                                  | `nil`                                                   |
 | `disableWebUI`                       | Disable MinIO Web UI                                                                                                                                      | `false`                                                 |
 | `extraEnv`                           | Any extra environment variables you would like to pass to the pods                                                                                        | `{}`                                                    |
-| `podAnnotations`                     | Annotations to be added to pods                                                                                                                           | `{}`                                                    |
-| `antiAffinity`                       | Pod anti-affinity policy                                                                                                                                  | `soft`                                                  |
-| `nodeAffinity`                       | Node affinity policy                                                                                                                                      | `nil`                                                   |
-| `resources`                          | Pod resources                                                                                                                                             | `{}`                                                    |
+| `resources`                          | Minio containers' resources                                                                                                                               | `{}`                                                    |
+| `podAnnotations`                     | Pod annotations                                                                                                                                           | `{}`                                                    |
+| `affinity`                           | Map of node/pod affinities                                                                                                                                | `{}` (The value is evaluated as a template)             |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                                                            | `{}` (The value is evaluated as a template)             |
+| `tolerations`                        | Tolerations for pod assignment                                                                                                                            | `[]` (The value is evaluated as a template)             |
 | `securityContext.enabled`            | Enable security context                                                                                                                                   | `true`                                                  |
 | `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                  |
 | `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                  |
-| `clusterDomain`                      | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                         |
 | `livenessProbe.enabled`              | Enable/disable the Liveness probe                                                                                                                         | `true`                                                  |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                  | `60`                                                    |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                            | `10`                                                    |
@@ -124,9 +125,9 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `ingress.annotations`                | Ingress annotations                                                                                                                                       | `[]`                                                    |
 | `ingress.hosts[0].name`              | Hostname to your MinIO installation                                                                                                                       | `minio.local`                                           |
 | `ingress.hosts[0].path`              | Path within the url structure                                                                                                                             | `/`                                                     |
-| `ingress.hosts[0].tls`                    | Utilize TLS backend in ingress                                                                       | `false`                                                      |
-| `ingress.hosts[0].tlsHosts`               | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                 | `nil`                                                        |
-| `ingress.hosts[0].tlsSecret`              | TLS Secret (certificates)                                                                            | `minio.local-tls`                                          |
+| `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                                                                                            | `false`                                                 |
+| `ingress.hosts[0].tlsHosts`          | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                                                                      | `nil`                                                   |
+| `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                                                                                                 | `minio.local-tls`                                       |
 | `ingress.secrets[0].name`            | TLS Secret Name                                                                                                                                           | `nil`                                                   |
 | `ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
 | `ingress.secrets[0].key`             | TLS Secret Key                                                                                                                                            | `nil`                                                   |
@@ -204,16 +205,6 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - networkPolicy.allowExternal: true
 + networkPolicy.allowExternal: false
-```
-
-- Set deployment updateStrategy to RollingUpdate:
-```diff
-- deployment:
--   updateStrategy:
--     type: Recreate
-+ deployment:
-+   updateStrategy:
-+     type: RollingUpdate
 ```
 
 ### Distributed mode

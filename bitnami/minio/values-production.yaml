@@ -45,6 +45,10 @@ image:
 ##
 # fullnameOverride:
 
+## Cluster domain
+##
+clusterDomain: cluster.local
+
 ## Bitnami MinIO Client image version
 ## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
 ##
@@ -69,25 +73,45 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
 ## MinIO server mode. Allowed values: standalone or distributed.
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 mode: distributed
 
+## MinIO deployment parameters
+## Only when mode is 'standalone'
+##
 deployment:
-## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-## Example:
-## updateStrategy:
-##  type: RollingUpdate
-##  rollingUpdate:
-##    maxSurge: 25%
-##    maxUnavailable: 25%
+  ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## Example:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
   updateStrategy:
-    type: RollingUpdate
+    type: Recreate
 
+## MinIO statefulset parameters
+## Only when mode is 'distributed'
+##
 statefulset:
   ## Update strategy, can be set to RollingUpdate or OnDelete by default.
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -110,6 +134,8 @@ statefulset:
 ## Mount MinIO secret as a file instead of passing environment variable
 ##
 useCredentialsFile: false
+## MinIO credentials
+##
 accessKey:
   ## MinIO Access Key
   ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
@@ -142,32 +168,6 @@ disableWebUI: true
 ##
 extraEnv: {}
 
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations:
-  prometheus.io/scrape: "true"
-  prometheus.io/path: "/minio/prometheus/metrics"
-  prometheus.io/port: "9000"
-
-## Pods anti-affinity
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-antiAffinity: soft
-
-## Node affinity
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-# nodeAffinity: {}
-
-## Configure master resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  requests:
-    memory: 256Mi
-    cpu: 250m
-
 ## Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -176,11 +176,46 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
-# Cluster domain
-clusterDomain: cluster.local
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/minio/prometheus/metric"
+  prometheus.io/port: "9000"
 
-## Configure liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## MinIO containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 250m
+  #   memory: 256Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+## MinIO containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
   enabled: true
@@ -216,7 +251,7 @@ persistence:
   ## Persistent Volume Access Mode
   ##
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
 
   ## Persistent Volume size
   ##
@@ -236,6 +271,7 @@ persistence:
   annotations: {}
 
 ## MinIO Service properties
+##
 service:
   ## MinIO Service type
   ##
@@ -284,21 +320,21 @@ ingress:
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
-  - name: minio.local
-    path: /
+    - name: minio.local
+      path: /
 
-    ## Set this to true in order to enable TLS on the ingress record
-    tls: false
+      ## Set this to true in order to enable TLS on the ingress record
+      tls: false
 
-    ## Optionally specify the TLS hosts for the ingress record
-    ## Useful when the Ingress controller supports www-redirection
-    ## If not specified, the above host name will be used
-    # tlsHosts:
-    # - www.minio.local
-    # - minio.local
+      ## Optionally specify the TLS hosts for the ingress record
+      ## Useful when the Ingress controller supports www-redirection
+      ## If not specified, the above host name will be used
+      # tlsHosts:
+      # - www.minio.local
+      # - minio.local
 
-    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-    tlsSecret: minio.local-tls
+      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+      tlsSecret: minio.local-tls
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -314,6 +350,8 @@ ingress:
   #   key:
   #   certificate:
 
+## NetworkPolicy parameters
+##
 networkPolicy:
   ## Specifies whether a NetworkPolicy should be created
   ##
