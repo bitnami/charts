@@ -28,7 +28,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
-                matchLabels: {{- include "influxdb.matchLabels" . | nindent 20 }}
+                matchLabels: {{- include "influxdb.matchLabels" . | nindent 18 }}
                   app.kubernetes.io/component: influxdb
         {{- else if eq .Values.influxdb.antiAffinity "soft" }}
         podAntiAffinity:
