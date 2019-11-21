@@ -1,4 +1,4 @@
 dependencies:
-- name: mongodb
-  version: ">= 0"
-  repository: https://kubernetes-charts.storage.googleapis.com
+  - name: mongodb
+    version: ">= 0"
+    repository: https://kubernetes-charts.storage.googleapis.com

@@ -10,10 +10,10 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: {{ .Values.dashboard.service.port }}
-    targetPort: http
-    protocol: TCP
-    name: http
+    - port: {{ .Values.dashboard.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
     app: {{ template "kubeapps.dashboard.fullname" . }}
     release: {{ .Release.Name }}

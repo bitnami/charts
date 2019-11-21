@@ -19,32 +19,29 @@ spec:
         release: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
-      containers:
-      - name: kubectl
-        image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}
-        command:
-        - /bin/sh
-        args:
-        - -ec
-        - |
-          kubectl delete apprepositories.kubeapps.com -n {{ .Release.Namespace }} --all
-          kubectl delete secrets -n {{ .Release.Namespace }} -l app={{ template "kubeapps.name" $ }},release={{ $.Release.Name }}
-      restartPolicy: OnFailure
-      serviceAccountName: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
-    {{- with .Values.hooks.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- if .Values.hooks.affinity }}
+      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.hooks.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hooks.nodeSelector }}
+      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.hooks.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hooks.tolerations }}
+      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.hooks.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-    {{- with .Values.hooks.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.hooks.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      restartPolicy: OnFailure
+      serviceAccountName: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
+      containers:
+        - name: kubectl
+          image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}
+          command:
+            - /bin/sh
+          args:
+            - -ec
+            - |
+              kubectl delete apprepositories.kubeapps.com -n {{ .Release.Namespace }} --all
+              kubectl delete secrets -n {{ .Release.Namespace }} -l app={{ template "kubeapps.name" $ }},release={{ $.Release.Name }}

@@ -56,6 +56,12 @@ data:
       location ~* /api/chartsvc {
         rewrite /api/chartsvc/(.*) /chartsvc/$1 break;
         rewrite /api/chartsvc /chartsvc break;
+
+        {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
+        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+        {{- end }}
+
         proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
       }
 

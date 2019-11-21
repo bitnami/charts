@@ -40,5 +40,6 @@ data:
   config.json: |-
     {
       "namespace": "{{ .Release.Namespace }}",
-      "appVersion": "{{ .Chart.AppVersion }}"
+      "appVersion": "{{ .Chart.AppVersion }}",
+      "logoutURI": "/oauth2/sign_out"
     }

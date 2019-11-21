@@ -7,24 +7,23 @@ metadata:
     chart: {{ template "kubeapps.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-{{- with .Values.frontend.service.annotations }}
-  annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+  {{- if .Values.frontend.service.annotations }}
+  annotations: {{- include "kubeapps.tplValue" (dict "value" .Values.frontend.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.frontend.service.type }}
-  {{- if and (.Values.frontend.service.loadBalancerIP) (eq .Values.frontend.service.type "LoadBalancer") }}
+  {{- if and (eq .Values.frontend.service.type "LoadBalancer") (not (empty .Values.frontend.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.frontend.service.loadBalancerIP }}
   {{- end }}
   ports:
-  - port: {{ .Values.frontend.service.port }}
-  {{- if .Values.authProxy.enabled }}
-    targetPort: proxy
-  {{- else }}
-    targetPort: http
-  {{- end }}
-    protocol: TCP
-    name: http
+    - port: {{ .Values.frontend.service.port }}
+      {{- if .Values.authProxy.enabled }}
+      targetPort: proxy
+      {{- else }}
+      targetPort: http
+      {{- end }}
+      protocol: TCP
+      name: http
   selector:
     app: {{ template "kubeapps.fullname" . }}
     release: {{ .Release.Name }}
