@@ -42,7 +42,7 @@ spec:
       {{- end }}
       {{- if or .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
-      {{- if .Values.sysctlImage.enabled }}
+        {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
@@ -51,7 +51,18 @@ spec:
             - /bin/bash
             - -ec
             - |
-              install_packages procps
+              if ! [ -x "$(command -v sysctl)" ]; then
+                echo 'sysctl not installed. Installing it...'
+                distro=$(awk -F= '/^ID=/{print $2}' /etc/os-release | tr -d '"')
+                case $distro in
+                  ol | centos)
+                    yum install -y procps
+                    rm -rf /var/cache/yum;;
+                  ubuntu | debian)
+                    apt-get update -qq && apt-get install -y --no-install-recommends procps
+                    rm -rf /var/lib/apt/lists /var/cache/apt/archives;;
+                esac
+              fi
               sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
           securityContext:
             privileged: true
