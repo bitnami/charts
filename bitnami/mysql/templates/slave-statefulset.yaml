@@ -172,8 +172,11 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels: {{- include "mysql.matchLabels" . | nindent 10 }}
+        labels:
+          app: {{ template "mysql.name" . }}
           component: slave
+          release: {{ .Release.Name }}
+          heritage: {{ .Release.Service }}
       spec:
         accessModes:
         {{- range .Values.slave.persistence.accessModes }}
