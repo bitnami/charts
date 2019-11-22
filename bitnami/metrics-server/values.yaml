@@ -40,7 +40,7 @@ image:
 rbac:
   ## Specifies whether RBAC rules should be created
   ##
-  create: false
+  create: true
 
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -48,7 +48,7 @@ rbac:
 serviceAccount:
   ## Specifies whether a ServiceAccount should be created
   ##
-  create: false
+  create: true
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the metrics-server.fullname template
   # name:
