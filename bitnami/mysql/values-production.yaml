@@ -35,6 +35,10 @@ image:
 ##
 # fullnameOverride:
 
+## Cluster domain
+##
+clusterDomain: cluster.local
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -51,24 +55,23 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
-service:
-  ## Kubernetes service type
-  type: ClusterIP
-  port: 3306
-
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## Admin (root) credentials
 ##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
-
-# Cluster domain
-clusterDomain: cluster.local
-
 root:
   ## MySQL admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-the-root-password-on-first-run
@@ -81,6 +84,8 @@ root:
   ## If it is not force, a random password will be generated.
   forcePassword: true
 
+## Database settings
+##
 db:
   ## MySQL username and password
   ## ref: https://github.com/bitnami/bitnami-docker-mysql#creating-a-database-user-on-first-run
@@ -117,43 +122,9 @@ replication:
   ## If it is not force, a random password will be generated.
   forcePassword: true
 
+## Master nodes parameters
+##
 master:
-  antiAffinity: soft
-  ## updateStrategy for MySQL Master StatefulSet
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  updateStrategy:
-    type: RollingUpdate
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  persistence:
-    ## If true, use a Persistent Volume Claim, If false, use emptyDir
-    ##
-    enabled: true
-    mountPath: /bitnami/mysql
-    ## Enable persistence using an existing PVC
-    ##
-    # existingClaim:
-    ## Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    ## Persistent Volume Claim annotations
-    ##
-    annotations:
-    ## Persistent Volume Access Mode
-    ##
-    accessModes:
-    - ReadWriteOnce
-    ## Persistent Volume size
-    ##
-    size: 8Gi
-    ##
-
   ## Configure MySQL with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -185,58 +156,113 @@ master:
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
 
-  ## Configure master resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## updateStrategy for master nodes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  resources: {}
-  livenessProbe:
-    enabled: true
-    ##
-    ## Initializing the database could take some time
-    initialDelaySeconds: 120
-    ##
-    ## Default Kubernetes values
-    periodSeconds: 10
-    timeoutSeconds: 1
-    successThreshold: 1
-    failureThreshold: 3
-  readinessProbe:
-    enabled: true
-    ##
-    ## Initializing the database could take some time
-    initialDelaySeconds: 30
-    ##
-    ## Default Kubernetes values
-    periodSeconds: 10
-    timeoutSeconds: 1
-    successThreshold: 1
-    failureThreshold: 3
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
 
-slave:
-  replicas: 2
-  antiAffinity: soft
-  ## updateStrategy for MySQL Slave StatefulSet
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  updateStrategy:
-    type: RollingUpdate
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Pod Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+
+  ## MySQL master containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+
+  ## MySQL master containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    ## Initializing the database could take some time
+    ##
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    enabled: true
+    ## Initializing the database could take some time
+    ##
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+  ## Enable persistence using PVCs on master nodes
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
   persistence:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
     enabled: true
     mountPath: /bitnami/mysql
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
     # storageClass: "-"
-    annotations:
+    ## PVC annotations
+    ##
+    annotations: {}
+    ## Persistent Volume Access Mode
+    ##
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     ## Persistent Volume size
     ##
     size: 8Gi
+    ## Use an existing PVC
     ##
+    # existingClaim:
+
+## Slave nodes parameters
+##
+slave:
+  ## Number of slave replicas
+  ##
+  replicas: 2
 
   ## Configure MySQL slave with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
@@ -267,41 +293,142 @@ slave:
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
 
+  ## updateStrategy for slave nodes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  ## Configure slave resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  resources: {}
-  livenessProbe:
-    enabled: true
-    ##
-    ## Initializing the database could take some time
-    initialDelaySeconds: 120
-    ##
-    ## Default Kubernetes values
-    periodSeconds: 10
-    timeoutSeconds: 1
-    successThreshold: 1
-    failureThreshold: 3
-  readinessProbe:
-    enabled: true
-    ##
-    ## Initializing the database could take some time
-    initialDelaySeconds: 30
-    ##
-    ## Default Kubernetes values
-    periodSeconds: 10
-    timeoutSeconds: 1
-    successThreshold: 1
-    failureThreshold: 3
+  podAnnotations: {}
 
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
 
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Pod Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+
+  ## MySQL slave containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+
+  ## MySQL slave containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    ## Initializing the database could take some time
+    ##
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    enabled: true
+    ## Initializing the database could take some time
+    ##
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+  ## Enable persistence using PVCs on slave nodes
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ##
+    enabled: true
+    mountPath: /bitnami/mysql
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    ## PVC annotations
+    ##
+    annotations: {}
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## Persistent Volume size
+    ##
+    size: 8Gi
+    ## Use an existing PVC
+    ##
+    # existingClaim:
+
+## MySQL Service properties
+##
+service:
+  ## MySQL Service type
+  ##
+  type: ClusterIP
+
+  ## MySQL Service port
+  ##
+  port: 3306
+
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+
+  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerIP:
+
+## MySQL prometheus metrics parameters
+## ref: https://docs.influxdata.com/influxdb/v1.7/administration/server_monitoring/#influxdb-metrics-http-endpoint
+##
 metrics:
   enabled: true
+  ## Bitnami MySQL Prometheus exporter image
+  ## ref: https://hub.docker.com/r/bitnami/mysqld-exporter/tags/
+  ##
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
@@ -313,7 +440,50 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9104"
+  ## MySQL Prometheus exporter containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 0.5
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 0.5
+    #   memory: 256Mi
+
+  ## MySQL Prometheus exporter service parameters
+  ##
+  service:
+    type: ClusterIP
+    port: 9104
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    enabled: false
+    ## Namespace in which Prometheus is running
+    ##
+    # namespace: monitoring
+
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # interval: 10s
+
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # scrapeTimeout: 10s
+
+    ## ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # selector:
+    #   prometheus: my-prometheus

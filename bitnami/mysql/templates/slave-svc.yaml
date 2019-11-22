@@ -3,25 +3,36 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "mysql.slave.fullname" . }}
-  labels:
-    app: "{{ template "mysql.name" . }}"
-    chart: {{ template "mysql.chart" . }}
-    component: "slave"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  labels: {{- include "mysql.labels" . | nindent 4 }}
+    component: slave
+  {{- if or .Values.service.annotations .Values.metrics.service.annotations }}
+  annotations:
+  {{- if .Values.service.annotations }}
+  {{- include "mysql.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.metrics.service.annotations }}
+  {{- include "mysql.tplValue" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
   ports:
-  - name: mysql
-    port: {{ .Values.service.port }}
-    targetPort: mysql
-{{- if .Values.metrics.enabled }}
-  - name: metrics
-    port: 9104
-    targetPort: metrics
-{{- end }}
-  selector:
-    app: "{{ template "mysql.name" . }}"
-    component: "slave"
-    release: "{{ .Release.Name }}"
+    - name: mysql
+      port: {{ .Values.service.port }}
+      targetPort: mysql
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePortl)) }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.metrics.enabled }}
+    - name: metrics
+      port: {{ .Values.metrics.service.port }}
+      targetPort: metrics
+    {{- end }}
+  selector: {{- include "mysql.matchLabels" . | nindent 4 }}
+    component: slave
 {{- end }}

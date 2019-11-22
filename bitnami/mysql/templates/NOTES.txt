@@ -32,6 +32,15 @@ To connect to your database:
   3. To connect to slave service (read-only):
 
       mysql -h {{ template "mysql.slave.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.db.name }}
+
+{{- end }}
+{{- if .Values.metrics.enabled }}
+
+To access the MySQL Prometheus metrics from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "mysql.fullname" . }} {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
+    curl 127.0.0.1:{{ .Values.metrics.service.port }}/metrics
+
 {{- end }}
 
 To upgrade this helm chart:
