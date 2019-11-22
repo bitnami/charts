@@ -103,13 +103,13 @@ data:
     ## Check wether the member was succesfully removed from the cluster
     should_add_new_member() {
         return_value=0
-        if (grep -E "^Member[[:space:]]+[a-z0-9]+ removed from cluster [a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log") || \
+        if (grep -E "^Member[[:space:]]+[a-z0-9]+\s+removed\s+from\s+cluster\s+[a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log") || \
            ! ([[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]); then
             rm -rf $ETCD_DATA_DIR/* 1>&3 2>&4
         else
             return_value=1
         fi
-        rm "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 1>&3 2>&4
+        rm -f "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 1>&3 2>&4
         return $return_value
     }
 
@@ -199,7 +199,6 @@ data:
     fi
 
     # Constants
-    HOSTNAME="$(hostname -s)"
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
     ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
