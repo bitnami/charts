@@ -1,23 +1,23 @@
 apiVersion: v1
 name: postgresql-ha
-version: 1.0.2
+version: 1.1.0
 appVersion: 11.6.0
 description: Chart for PostgreSQL with HA architecture (using Replication Manager (repmgr) and Pgpool).
 keywords:
-- postgresql
-- repmgr
-- pgpool
-- postgres
-- database
-- sql
-- replication
-- cluster
-- high availability
+  - postgresql
+  - repmgr
+  - pgpool
+  - postgres
+  - database
+  - sql
+  - replication
+  - cluster
+  - high availability
 home: https://www.postgresql.org/
 icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
 sources:
-- https://github.com/bitnami/bitnami-docker-postgresql
+  - https://github.com/bitnami/bitnami-docker-postgresql
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl

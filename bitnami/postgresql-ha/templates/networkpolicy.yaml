@@ -3,25 +3,25 @@ kind: NetworkPolicy
 apiVersion: {{ template "postgresql-ha.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ include "postgresql-ha.fullname" . }}
-  labels: {{ include "postgresql-ha.labels" . | nindent 4 }}
+  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels: {{ include "postgresql-ha.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: postgresql
   ingress:
-  # Allow inbound connections
-  - ports:
-    - port: 5432
-      {{- if not .Values.networkPolicy.allowExternal }}
-      from:
-      - podSelector:
-          matchLabels:
-            {{ template "postgresql-ha.fullname" . }}-client: "true"
-      - podSelector:
-          matchLabels: {{ include "postgresql-ha.matchLabels" . | nindent 12 }}
-            app.kubernetes.io/component: pgpool
-      {{- end }}
-  # Allow prometheus scrapes
-  - ports:
-    - port: 9187
+    # Allow inbound connections
+    - ports:
+        - port: 5432
+          {{- if not .Values.networkPolicy.allowExternal }}
+          from:
+            - podSelector:
+                matchLabels:
+                  {{ template "postgresql-ha.fullname" . }}-client: "true"
+            - podSelector:
+                matchLabels: {{- include "postgresql-ha.matchLabels" . | nindent 18 }}
+                  app.kubernetes.io/component: pgpool
+          {{- end }}
+    # Allow prometheus scrapes
+    - ports:
+        - port: 9187
 {{- end }}

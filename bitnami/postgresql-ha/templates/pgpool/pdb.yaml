@@ -3,16 +3,16 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
-  labels: {{ include "postgresql-ha.labels" . | nindent 4 }}
+  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
     app.kubernetes.io/component: pgpool
 spec:
-{{- if .Values.pgpool.pdb.minAvailable }}
+  {{- if .Values.pgpool.pdb.minAvailable }}
   minAvailable: {{ .Values.pgpool.pdb.minAvailable }}
-{{- end }}
-{{- if .Values.pgpool.pdb.maxUnavailable }}
+  {{- end }}
+  {{- if .Values.pgpool.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.pgpool.pdb.maxUnavailable }}
-{{- end }}
+  {{- end }}
   selector:
-    matchLabels: {{ include "postgresql-ha.matchLabels" . | nindent 4 }}
+    matchLabels: {{- include "postgresql-ha.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: pgpool
 {{- end }}
