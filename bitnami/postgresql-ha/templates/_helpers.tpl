@@ -654,6 +654,19 @@ Return the appropriate apiVersion for networkPolicy
 {{- end -}}
 
 {{/*
+Renders a value that contains template.
+Usage:
+{{ include "postgresql-ha.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "postgresql-ha.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "postgresql-ha.validateValues" -}}

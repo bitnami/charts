@@ -13,34 +13,19 @@ spec:
     metadata:
       labels: {{ include "postgresql-ha.labels" . | nindent 8 }}
         app.kubernetes.io/component: pgpool
+      {{- if .Values.pgpool.podAnnotations }}
+      annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
 {{- include "postgresql-ha.imagePullSecrets" . | indent 6 }}
-      affinity:
-        {{- if eq .Values.pgpool.antiAffinity "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: "kubernetes.io/hostname"
-            labelSelector:
-              matchLabels: {{ include "postgresql-ha.matchLabels" . | nindent 18 }}
-                app.kubernetes.io/component: pgpool
-        {{- else if eq .Values.pgpool.antiAffinity "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels: {{ include "postgresql-ha.matchLabels" . | nindent 18 }}
-                  app.kubernetes.io/component: pgpool
-        {{- end }}
-        {{- if .Values.pgpool.nodeAffinity }}
-        nodeAffinity: {{ toYaml .Values.pgpool.nodeAffinity | nindent 10 }}
-        {{- end }}
-      {{- with .Values.pgpool.nodeSelector }}
-      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- if .Values.pgpool.affinity }}
+      affinity: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.affinity "context" $) | nindent 8 }}
       {{- end }}
-      {{- with .Values.pgpool.tolerations }}
-      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
+      {{- if .Values.pgpool.nodeSelector }}
+      nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.pgpool.tolerations }}
+      tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.pgpool.securityContext.enabled }}
       securityContext:
@@ -53,202 +38,204 @@ spec:
       {{- $releaseNamespace := .Release.Namespace }}
       {{- $clusterDomain:= .Values.clusterDomain }}
       initContainers:
-      - name: wait-for-backend-nodes
-        image: {{ include "postgresql-ha.volumePermissionsImage" . }}
-        imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
-        env:
-        - name: PGPOOL_BACKEND_NODES
-          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
-        command:
-          - /bin/bash
-          - -c
-          - |
-            dns_lookup() {
-                local host="${1:?host is missing}"
-                getent ahosts "$host" | awk '/STREAM/ {print $1 }'
-            }
-            is_hostname_resolved() {
-                local -r host="${1:?missing value}"
-                if [[ -n "$(dns_lookup "$host")" ]]; then
-                    true
-                else
-                    false
-                fi
-            }
-            read -r -a nodes <<< "$(tr ',;' ' ' <<< "${PGPOOL_BACKEND_NODES}")"
-            declare -i node_counter=0
-            for node in "${nodes[@]}"; do
-                read -r -a fields <<< "$(tr ':' ' ' <<< "${node}")"
-                host="${fields[1]:?field host is needed}"
-                for ((i = 1 ; i <= 10 ; i+=1 )); do
-                    is_hostname_resolved "$host" && node_counter+=1 && break
-                    sleep 5
-                done
-            done
-            if [[ $node_counter -ne ${#nodes[@]} ]]; then
-                echo "Not enough active backend nodes!"
-                exit 1
-            fi
-            echo "Every backend node is active!"
-            exit 0
-        {{- if .Values.pgpool.securityContext.enabled }}
-        securityContext:
-          runAsUser: {{ .Values.pgpool.securityContext.runAsUser }}
-        {{- end }}
+        - name: wait-for-backend-nodes
+          image: {{ include "postgresql-ha.volumePermissionsImage" . }}
+          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
+          env:
+            - name: PGPOOL_BACKEND_NODES
+              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
+          command:
+            - /bin/bash
+            - -c
+            - |
+              dns_lookup() {
+                  local host="${1:?host is missing}"
+                  getent ahosts "$host" | awk '/STREAM/ {print $1 }'
+              }
+              is_hostname_resolved() {
+                  local -r host="${1:?missing value}"
+                  if [[ -n "$(dns_lookup "$host")" ]]; then
+                      true
+                  else
+                      false
+                  fi
+              }
+              read -r -a nodes <<< "$(tr ',;' ' ' <<< "${PGPOOL_BACKEND_NODES}")"
+              declare -i node_counter=0
+              for node in "${nodes[@]}"; do
+                  read -r -a fields <<< "$(tr ':' ' ' <<< "${node}")"
+                  host="${fields[1]:?field host is needed}"
+                  for ((i = 1 ; i <= 10 ; i+=1 )); do
+                      is_hostname_resolved "$host" && node_counter+=1 && break
+                      sleep 5
+                  done
+              done
+              if [[ $node_counter -ne ${#nodes[@]} ]]; then
+                  echo "Not enough active backend nodes!"
+                  exit 1
+              fi
+              echo "Every backend node is active!"
+              exit 0
+          {{- if .Values.pgpool.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.pgpool.securityContext.runAsUser }}
+          {{- end }}
       containers:
-      - name: pgpool
-        image: {{ include "postgresql-ha.pgpoolImage" . }}
-        imagePullPolicy: {{ .Values.pgpoolImage.pullPolicy | quote }}
-        {{- if .Values.pgpool.securityContext.enabled }}
-        securityContext:
-          runAsUser: {{ .Values.pgpool.securityContext.runAsUser }}
-        {{- end }}
-        env:
-        - name: BITNAMI_DEBUG
-          value: {{ ternary "true" "false" .Values.pgpoolImage.debug | quote }}
-        - name: PGPOOL_BACKEND_NODES
-          value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
-        - name: PGPOOL_SR_CHECK_USER
-          value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
-        {{- if .Values.postgresql.usePasswordFile }}
-        - name: PGPOOL_SR_CHECK_PASSWORD_FILE
-          value: "/opt/bitnami/pgpool/secrets/pgpool-sr-check-password"
-        {{- else }}
-        - name: PGPOOL_SR_CHECK_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-              key: repmgr-password
-        {{- end }}
-        - name: PGPOOL_ENABLE_LDAP
-          value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
-        {{- if .Values.ldap.enabled }}
-        - name: PGPOOL_LDAP_URI
-          value: {{ .Values.ldap.uri | quote }}
-        - name: PGPOOL_LDAP_BASE
-          value: {{ .Values.ldap.base | quote }}
-        - name: PGPOOL_LDAP_BIND_DN
-          value: {{ .Values.ldap.binddn | quote }}
-        - name: PGPOOL_LDAP_BIND_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "postgresql-ha.ldapSecretName" . }}
-              key: bind-password
-        {{- if .Values.ldap.bslookup }}
-        - name: PGPOOL_LDAP_BASE_LOOKUP
-          value: {{ .Values.ldap.bslookup | quote }}
-        {{- end }}
-        {{- if .Values.ldap.scope }}
-        - name: PGPOOL_LDAP_SCOPE
-          value: {{ .Values.ldap.scope | quote }}
-        {{- end }}
-        {{- if .Values.ldap.tlsReqcert }}
-        - name: PGPOOL_LDAP_TLS_REQCERT
-          value: {{ .Values.ldap.tlsReqcert | quote }}
-        {{- end }}
-        - name: PGPOOL_LDAP_NSS_INITGROUPS_IGNOREUSERS
-          value: {{ .Values.ldap.nssInitgroupsIgnoreusers | quote }}
-        {{- end }}
-        - name: PGPOOL_POSTGRES_USERNAME
-          value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
-        {{- if .Values.postgresql.usePasswordFile }}
-        - name: PGPOOL_POSTGRES_PASSWORD_FILE
-          value: "/opt/bitnami/pgpool/secrets/pgpool-password"
-        {{- else }}
-        - name: PGPOOL_POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-              key: postgresql-password
-        {{- end }}
-        - name: PGPOOL_ADMIN_USERNAME
-          value: {{ (include "postgresql-ha.pgpoolAdminUsername" .) | quote }}
-        {{- if .Values.pgpool.usePasswordFile }}
-        - name: PGPOOL_ADMIN_PASSWORD_FILE
-          value: "/opt/bitnami/pgpool/secrets/admin-password"
-        {{- else }}
-        - name: PGPOOL_ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "postgresql-ha.pgpoolSecretName" . }}
-              key: admin-password
-        {{- end }}
-        ports:
-        - name: postgresql
-          containerPort: 5432
-          protocol: TCP
-        {{- if and .Values.pgpool.livenessProbe.enabled (not .Values.ldap.enabled) }}
-        livenessProbe:
-          exec:
-            command:
-            - bash
-            - -ec
-            - |
-               if nodes=$(PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;" | grep "up" | wc -l); then
-                   if [[ $nodes -eq {{ $postgresqlReplicaCount }} ]]; then
-                       true
+        - name: pgpool
+          image: {{ include "postgresql-ha.pgpoolImage" . }}
+          imagePullPolicy: {{ .Values.pgpoolImage.pullPolicy | quote }}
+          {{- if .Values.pgpool.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.pgpool.securityContext.runAsUser }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.pgpoolImage.debug | quote }}
+            - name: PGPOOL_BACKEND_NODES
+              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
+            - name: PGPOOL_SR_CHECK_USER
+              value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: PGPOOL_SR_CHECK_PASSWORD_FILE
+              value: "/opt/bitnami/pgpool/secrets/pgpool-sr-check-password"
+            {{- else }}
+            - name: PGPOOL_SR_CHECK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  key: repmgr-password
+            {{- end }}
+            - name: PGPOOL_ENABLE_LDAP
+              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
+            {{- if .Values.ldap.enabled }}
+            - name: PGPOOL_LDAP_URI
+              value: {{ .Values.ldap.uri | quote }}
+            - name: PGPOOL_LDAP_BASE
+              value: {{ .Values.ldap.base | quote }}
+            - name: PGPOOL_LDAP_BIND_DN
+              value: {{ .Values.ldap.binddn | quote }}
+            - name: PGPOOL_LDAP_BIND_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.ldapSecretName" . }}
+                  key: bind-password
+            {{- if .Values.ldap.bslookup }}
+            - name: PGPOOL_LDAP_BASE_LOOKUP
+              value: {{ .Values.ldap.bslookup | quote }}
+            {{- end }}
+            {{- if .Values.ldap.scope }}
+            - name: PGPOOL_LDAP_SCOPE
+              value: {{ .Values.ldap.scope | quote }}
+            {{- end }}
+            {{- if .Values.ldap.tlsReqcert }}
+            - name: PGPOOL_LDAP_TLS_REQCERT
+              value: {{ .Values.ldap.tlsReqcert | quote }}
+            {{- end }}
+            - name: PGPOOL_LDAP_NSS_INITGROUPS_IGNOREUSERS
+              value: {{ .Values.ldap.nssInitgroupsIgnoreusers | quote }}
+            {{- end }}
+            - name: PGPOOL_POSTGRES_USERNAME
+              value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: PGPOOL_POSTGRES_PASSWORD_FILE
+              value: "/opt/bitnami/pgpool/secrets/pgpool-password"
+            {{- else }}
+            - name: PGPOOL_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  key: postgresql-password
+            {{- end }}
+            - name: PGPOOL_ADMIN_USERNAME
+              value: {{ (include "postgresql-ha.pgpoolAdminUsername" .) | quote }}
+            {{- if .Values.pgpool.usePasswordFile }}
+            - name: PGPOOL_ADMIN_PASSWORD_FILE
+              value: "/opt/bitnami/pgpool/secrets/admin-password"
+            {{- else }}
+            - name: PGPOOL_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.pgpoolSecretName" . }}
+                  key: admin-password
+            {{- end }}
+          ports:
+            - name: postgresql
+              containerPort: 5432
+              protocol: TCP
+          {{- if and .Values.pgpool.livenessProbe.enabled (not .Values.ldap.enabled) }}
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - -ec
+                - |
+                   if nodes=$(PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;" | grep "up" | wc -l); then
+                       if [[ $nodes -eq {{ $postgresqlReplicaCount }} ]]; then
+                           true
+                       else
+                           false
+                       fi
                    else
                        false
                    fi
-               else
-                   false
-               fi
-          initialDelaySeconds: {{ .Values.pgpool.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.pgpool.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.pgpool.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.pgpool.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.pgpool.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if and .Values.pgpool.readinessProbe.enabled (not .Values.ldap.enabled) }}
-        readinessProbe:
-          exec:
-            command:
-            - bash
-            - -ec
-            - |
-               if nodes=$(PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;" | wc -l); then
-                   if [[ $nodes -eq {{ $postgresqlReplicaCount }} ]]; then
-                       true
+            initialDelaySeconds: {{ .Values.pgpool.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.pgpool.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.pgpool.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.pgpool.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.pgpool.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if and .Values.pgpool.readinessProbe.enabled (not .Values.ldap.enabled) }}
+          readinessProbe:
+            exec:
+              command:
+                - bash
+                - -ec
+                - |
+                   if nodes=$(PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;" | wc -l); then
+                       if [[ $nodes -eq {{ $postgresqlReplicaCount }} ]]; then
+                           true
+                       else
+                           false
+                       fi
                    else
                        false
                    fi
-               else
-                   false
-               fi
-          initialDelaySeconds: {{ .Values.pgpool.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.pgpool.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.pgpool.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.pgpool.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.pgpool.readinessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.pgpool.resources }}
-        resources: {{- toYaml .Values.pgpool.resources | nindent 10 }}
-        {{- end }}
-        volumeMounts:
+            initialDelaySeconds: {{ .Values.pgpool.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.pgpool.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.pgpool.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.pgpool.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.pgpool.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.pgpool.resources }}
+          resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: postgresql-password
+              mountPath: /opt/bitnami/pgpool/secrets/
+            {{- end }}
+            {{- if .Values.pgpool.usePasswordFile }}
+            - name: pgpool-password
+              mountPath: /opt/bitnami/pgpool/secrets/
+            {{- end }}
+      {{- if or .Values.postgresql.usePasswordFile .Values.pgpool.usePasswordFile }}
+      volumes:
         {{- if .Values.postgresql.usePasswordFile }}
         - name: postgresql-password
-          mountPath: /opt/bitnami/pgpool/secrets/
+          secret:
+            secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
+            items:
+              - key: postgresql-password
+                path: pgpool-password
+              - key: repmgr-password
+                path: pgpool-sr-check-password
         {{- end }}
         {{- if .Values.pgpool.usePasswordFile }}
         - name: pgpool-password
-          mountPath: /opt/bitnami/pgpool/secrets/
+          secret:
+            secretName: {{ include "postgresql-ha.pgpoolSecretName" . }}
+            items:
+              - key: admin-password
+                path: admin-password
         {{- end }}
-      volumes:
-      {{- if .Values.postgresql.usePasswordFile }}
-      - name: postgresql-password
-        secret:
-          secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
-          items:
-          - key: postgresql-password
-            path: pgpool-password
-          - key: repmgr-password
-            path: pgpool-sr-check-password
-      {{- end }}
-      {{- if .Values.pgpool.usePasswordFile }}
-      - name: pgpool-password
-        secret:
-          secretName: {{ include "postgresql-ha.pgpoolSecretName" . }}
-          items:
-          - key: admin-password
-            path: admin-password
       {{- end }}
