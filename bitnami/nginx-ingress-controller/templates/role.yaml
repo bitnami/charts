@@ -2,12 +2,8 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  labels:
-    app: {{ template "nginx-ingress.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
   name: {{ template "nginx-ingress.fullname" . }}
+  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
 rules:
   - apiGroups:
       - ""
@@ -37,7 +33,7 @@ rules:
       - watch
   - apiGroups:
       - extensions
-      - "networking.k8s.io" # k8s 1.14+
+      - "networking.k8s.io"
     resources:
       - ingresses
     verbs:
@@ -46,7 +42,7 @@ rules:
       - watch
   - apiGroups:
       - extensions
-      - "networking.k8s.io" # k8s 1.14+
+      - "networking.k8s.io"
     resources:
       - ingresses/status
     verbs:
@@ -81,11 +77,14 @@ rules:
     verbs:
       - create
       - patch
-{{- if .Values.podSecurityPolicy.enabled }}
-  - apiGroups:      ['extensions']
-    resources:      ['podsecuritypolicies']
-    verbs:          ['use']
-    resourceNames:  [{{ template "nginx-ingress.fullname" . }}]
-{{- end }}
-
+  {{- if .Values.podSecurityPolicy.enabled }}
+  - apiGroups:
+      - 'extensions'
+    resources:
+      - 'podsecuritypolicies'
+    verbs:
+      - 'use'
+    resourceNames:
+      - {{ template "nginx-ingress.fullname" . }}
+  {{- end }}
 {{- end -}}

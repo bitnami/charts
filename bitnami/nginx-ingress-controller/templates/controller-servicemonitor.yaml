@@ -6,14 +6,10 @@ metadata:
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
-  labels:
-    app: {{ template "nginx-ingress.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: "{{ .Values.name }}"
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
+    component: {{ .Values.name }}
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
-{{ toYaml .Values.metrics.serviceMonitor.additionalLabels | indent 4 }}
+    {{- toYaml .Values.metrics.serviceMonitor.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   endpoints:
@@ -26,8 +22,6 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   selector:
-    matchLabels:
-      app: {{ template "nginx-ingress.name" . }}
-      component: "{{ .Values.name }}"
-      release: {{ .Release.Name }}
+    matchLabels: {{- include "nginx-ingress.matchLabels" . | nindent 6 }}
+      component: {{ .Values.name }}
 {{- end }}

@@ -105,10 +105,6 @@ Parameter | Description | Default
 `service.healthCheckNodePort` | If `service.type` is `NodePort` or `LoadBalancer` and `service.externalTrafficPolicy` is set to `Local`, set this to [the managed health-check port the kube-proxy will expose](https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typenodeport). If blank, a random port in the `NodePort` range will be assigned | `""`
 `service.loadBalancerIP` | IP address to assign to load balancer (if supported) | `""`
 `service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported) | `[]`
-`service.enableHttp` | If port 80 should be opened for service | `true`
-`service.enableHttps` | If port 443 should be opened for service | `true`
-`service.targetPorts.http` | Sets the targetPort that maps to the Ingress' port 80 | `80`
-`service.targetPorts.https` | Sets the targetPort that maps to the Ingress' port 443 | `443`
 `service.ports.http` | Sets service http port | `80`
 `service.ports.https` | Sets service https port | `443`
 `service.type` | Type of controller service to create | `LoadBalancer`
@@ -130,11 +126,6 @@ Parameter | Description | Default
 `readinessProbe.port` | The port number that the readiness probe will listen on. | 10254
 `metrics.enabled` | If `true`, enable Prometheus metrics (`stats.enabled` must be `true` as well) | `false`
 `metrics.service.annotations` | Annotations for Prometheus metrics service | `{}`
-`metrics.service.clusterIP` | Cluster IP address to assign to service | `""`
-`metrics.service.omitClusterIP` | To omit the `ClusterIP` from the metrics service | `false`
-`metrics.service.externalIPs` | Prometheus metrics service external IP addresses | `[]`
-`metrics.service.loadBalancerIP` | IP address to assign to load balancer (if supported) | `""`
-`metrics.service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported) | `[]`
 `metrics.service.port` | Prometheus metrics service port | `9913`
 `metrics.service.type` | Type of Prometheus metrics service to create | `ClusterIP`
 `metrics.serviceMonitor.enabled` | Set this to `true` to create ServiceMonitor for Prometheus operator | `false`
@@ -168,13 +159,8 @@ Parameter | Description | Default
 `defaultBackend.replicaCount` | Desired number of default backend pods | `1`
 `defaultBackend.minAvailable` | Minimum number of available default backend pods for PodDisruptionBudget | `1`
 `defaultBackend.resources` | Default backend pod resource requests & limits | `{}`
-`defaultBackend.priorityClassName` | Default backend  priorityClassName | `nil`
-`defaultBackend.service.annotations` | Annotations for default backend service | `{}`
-`defaultBackend.service.clusterIP` | Internal default backend cluster service IP | `""`
-`defaultBackend.service.externalIPs` | Default backend service external IP addresses | `[]`
-`defaultBackend.service.loadBalancerIP` | IP address to assign to load balancer (if supported) | `""`
-`defaultBackend.service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported) | `[]`
 `defaultBackend.service.type` | Type of default backend service to create | `ClusterIP`
+`defaultBackend.service.port` | Sets backend service port | `80`
 `imagePullSecrets` | Name of Secret resource containing private registry credentials | `nil`
 `rbac.create` | If `true`, create & use RBAC resources | `true`
 `securityContext.fsGroup` |	Group ID for the container	| `1001`
@@ -216,13 +202,15 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
-- Enable "vts-status" page:
+- Install the NGINX Ingress Controller as a daemonset:
+
 ```diff
-- stats.enabled: false
-+ stats.enabled: true
+- kind: Deployment
++ kind: DaemonSet
 ```
 
-- Enable Prometheus metrics
+- Enable Prometheus metrics:
+
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true

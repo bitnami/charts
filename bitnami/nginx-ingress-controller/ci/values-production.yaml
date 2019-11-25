@@ -1,0 +1,13 @@
+# Test values file for generating all of the yaml and check that
+# the rendering is correct
+
+kind: DaemonSet
+
+podSecurityPolicy:
+  enabled: true
+
+metrics:
+  enabled: true
+  ## Kubeval doesn't recognise ServiceMonitor as a valid K8s object
+  # serviceMonitor:
+  #   enabled: true
