@@ -2,15 +2,8 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "nginx.fullname" . }}
-  labels:
-    app: {{ template "nginx.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-  {{- range $key, $value := .Values.ingress.selectors }}
-    {{ $key }}: {{ $value | quote }}
-  {{- end }}
+  name: {{ include "nginx.fullname" . }}
+  labels: {{- include "nginx.labels" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -20,17 +13,25 @@ metadata:
     {{- end }}
 spec:
   rules:
-  {{- range .Values.ingress.hosts }}
-  - host: {{ .name }}
-    http:
-      paths:
-      - path: {{ default "/" .path }}
-        backend:
-          serviceName: "{{ template "nginx.fullname" $ }}"
-          servicePort: http
-  {{- end }}
+    {{- if .Values.ingress.hostname }}
+    - host: {{ .Values.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: "{{ template "nginx.fullname" $ }}"
+              servicePort: http
+    {{- end }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: "{{ template "nginx.fullname" $ }}"
+              servicePort: http
+    {{- end }}
   {{- if .Values.ingress.tls }}
-  tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
+  tls: {{- toYaml .Values.ingress.tls | nindent 4 }}
   {{- end }}
 {{- end }}

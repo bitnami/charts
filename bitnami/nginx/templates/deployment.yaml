@@ -2,109 +2,82 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "nginx.fullname" . }}
-  labels:
-    app: {{ template "nginx.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  labels: {{- include "nginx.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "nginx.fullname" . }}
-      release: "{{ .Release.Name }}"
+    matchLabels: {{- include "nginx.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
-      labels:
-        app: {{ template "nginx.fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
-{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      labels: {{- include "nginx.labels" . | nindent 8 }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
-  {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
-  {{- end }}
-  {{- if .Values.metrics.podAnnotations }}
-{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
-  {{- end }}
-{{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- include "nginx.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
+        {{- include "nginx.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
-      affinity:
-        {{- with .Values.nodeAffinity }}
-        nodeAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
-        {{- end }}
-        {{- with .Values.podAffinity }}
-        podAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
-        {{- end }}
-        {{- if eq .Values.podAntiAffinity "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: "kubernetes.io/hostname"
-            labelSelector:
-              matchLabels:
-                app: {{ template "nginx.fullname" . }}
-                release: "{{ .Release.Name }}"
-        {{- else if eq .Values.podAntiAffinity "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchLabels:
-                  app: {{ template "nginx.fullname" . }}
-                  release: "{{ .Release.Name }}"
-        {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
 {{- include "nginx.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "nginx.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "nginx.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "nginx.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       containers:
-      - name: nginx
-        image: "{{ template "nginx.image" . }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        ports:
-        - name: http
-          containerPort: 8080
-        livenessProbe: {{ toYaml .Values.livenessProbe | nindent 10 }}
-        readinessProbe: {{ toYaml .Values.readinessProbe | nindent 10 }}
-        volumeMounts:
-        {{- if .Values.serverBlock }}
-        - name: nginx-server-block
-          mountPath: /opt/bitnami/nginx/conf/server_blocks
-        {{- end }}
-        resources:
-{{ toYaml .Values.resources | indent 12 }}
-{{- if .Values.metrics.enabled }}
-      - name: metrics
-        image: {{ template "nginx.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        command: [ '/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:8080/status']
-        ports:
+        - name: nginx
+          image: {{ template "nginx.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+          {{- if .Values.livenessProbe }}
+          livenessProbe: {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe: {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.serverBlock }}
+          volumeMounts:
+            - name: nginx-server-block
+              mountPath: /opt/bitnami/nginx/conf/server_blocks
+          {{- end }}
+        {{- if .Values.metrics.enabled }}
         - name: metrics
-          containerPort: 9113
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        resources:
-{{ toYaml .Values.metrics.resources | indent 12 }}
-{{- end }}
-      volumes:
+          image: {{ template "nginx.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:8080/status']
+          ports:
+            - name: metrics
+              containerPort: 9113
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
       {{- if .Values.serverBlock }}
-      - name: nginx-server-block
-        configMap:
-          name: {{ template "nginx.fullname" . }}
+      volumes:
+        - name: nginx-server-block
+          configMap:
+            name: {{ template "nginx.fullname" . }}
       {{- end }}
