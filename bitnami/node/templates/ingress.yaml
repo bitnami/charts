@@ -4,11 +4,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "node.fullname" $ }}
-  labels:
-    app: {{ template "node.name" $ }}
-    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
-    release: "{{ $.Release.Name }}"
-    heritage: "{{ $.Release.Service }}"
+  labels: {{- include "node.labels" $ | nindent 4 }}
   annotations:
     {{- if .certManager }}
     kubernetes.io/tls-acme: "true"
@@ -18,20 +14,18 @@ metadata:
     {{- end }}
 spec:
   rules:
-  - host: {{ .name }}
-    http:
-      paths:
-        - path: {{ default "/" .path }}
-          backend:
-            serviceName: {{ template "node.fullname" $ }}
-            servicePort: 80
-{{- if .tls }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ template "node.fullname" $ }}
+              servicePort: 80
+  {{- if .tls }}
   tls:
-  - hosts:
-    - {{ .name }}
-    secretName: {{ .tlsSecret }}
+    - hosts:
+        - {{ .name }}
+      secretName: {{ .tlsSecret }}
+  {{- end }}
 {{- end }}
----
 {{- end }}
-{{- end }}
-

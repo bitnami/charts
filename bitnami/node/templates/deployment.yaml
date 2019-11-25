@@ -2,165 +2,179 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "node.fullname" . }}
-  labels:
-    app: {{ template "node.name" . }}
-    chart: {{ template "node.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  labels: {{- include "node.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "node.name" . }}
-      release: "{{ .Release.Name }}"
+    matchLabels: {{- include "node.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicas }}
   template:
     metadata:
-      labels:
-        app: {{ template "node.name" . }}
-        chart: {{ template "node.chart" . }}
-        release: {{ .Release.Name | quote }}
-        heritage: "{{ .Release.Service }}"
+      labels: {{- include "node.labels" . | nindent 8 }}
     spec:
+{{- include "node.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "node.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "node.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "node.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-{{- include "node.imagePullSecrets" . | indent 6 }}
       initContainers:
-      - name: git-clone-repository
-        image: "{{ template "git.image" . }}"
-        imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-        command: [ '/bin/sh', '-c' , 'git clone {{ .Values.repository }} /app && cd /app && git checkout {{ .Values.revision }}']
-        volumeMounts:
-        - name: app
-          mountPath: /app
-      - name: npm-install
-        image: "{{ template "node.image" . }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        workingDir: /app
-        command: ['/bin/bash', '-c', 'npm install']
-        env:
-        - name: HOME
-          value: /tmp
-        volumeMounts:
-        - name: app
-          mountPath: /app
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
-      - name: volume-permissions
-        image: "{{ template "node.volumePermissions.image" . }}"
-        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
-        securityContext:
-          runAsUser: 0
-        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
-        volumeMounts:
-        - name: data
-          mountPath: {{ .Values.persistence.path }}
-      {{- end }}
+        - name: git-clone-repository
+          image: {{ include "git.image" . }}
+          imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              git clone {{ .Values.repository }} --branch {{ .Values.revision }} /app
+          volumeMounts:
+            - name: app
+              mountPath: /app
+        - name: npm-install
+          image: {{ template "node.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          workingDir: /app
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              npm install
+          env:
+            - name: HOME
+              value: /tmp
+          volumeMounts:
+            - name: app
+              mountPath: /app
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "node.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.persistence.path }}
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.path }}
+        {{- end }}
       containers:
-      - name: {{ template "node.fullname" . }}
-        image: "{{ template "node.image" . }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        env:
-        {{- if .Values.mongodb.install }}
-        - name: DATABASE_HOST
-          value: {{ template "node.mongodb.fullname" . }}
-        - name: DATABASE_PORT
-          value: "27017"
-        - name: DATABASE_USER
-          value: {{ .Values.mongodb.mongodbUsername | quote }}
-        - name: DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "node.mongodb.fullname" . }}
-              key: mongodb-password
-        - name: DATABASE_NAME
-          value: {{ .Values.mongodb.mongodbDatabase | quote }}
-        - name: DATABASE_CONNECTION_OPTIONS
-          value: ""
-        {{ else }}
-        {{- $type := dict "type" .Values.externaldb.type }}
-        - name: DATABASE_HOST
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.host" $type }}
-        {{- if not .Values.externaldb.broker.serviceInstanceName }}
-        - name: DATABASE_NAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: database
-        {{ else }}
-        - name: DATABASE_NAME
-          value: ""
-        {{- end }}
-        - name: DATABASE_PORT
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.port" $type }}
-        - name: DATABASE_USER
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.username" $type }}
-        - name: DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "node.secretName" . }}
-              key: {{ template "externaldb.password" $type }}
-        {{- if .Values.externaldb.ssl }}
-        - name: DATABASE_CONNECTION_OPTIONS
-          value: "ssl=true"
-        {{ else }}
-        - name: DATABASE_CONNECTION_OPTIONS
-          value: ""
-        {{- end }}
-        {{- end }}
-        - name: DATA_FOLDER
-          value: "/app"
-{{- if .Values.extraEnv }}
-{{ toYaml .Values.extraEnv | indent 8 }}
-{{- end }}
-        workingDir: /app
-        command: ['/bin/bash', '-c', 'npm start']
-        ports:
-        - name: http
-          containerPort: {{ .Values.applicationPort }}
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
-          failureThreshold: 6
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 10
-          timeoutSeconds: 3
-          periodSeconds: 5
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-        volumeMounts:
-        - name: app
-          mountPath: /app
-        - name: data
-          mountPath: {{ .Values.persistence.path }}
+        - name: node
+          image: {{ template "node.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            {{- if .Values.mongodb.install }}
+            - name: DATABASE_HOST
+              value: {{ template "node.mongodb.fullname" . }}
+            - name: DATABASE_PORT
+              value: "27017"
+            - name: DATABASE_USER
+              value: {{ .Values.mongodb.mongodbUsername | quote }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "node.mongodb.fullname" . }}
+                  key: mongodb-password
+            - name: DATABASE_NAME
+              value: {{ .Values.mongodb.mongodbDatabase | quote }}
+            - name: DATABASE_CONNECTION_OPTIONS
+              value: ""
+            {{- else }}
+            {{- $type := dict "type" .Values.externaldb.type }}
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "node.secretName" . }}
+                  key: {{ template "externaldb.host" $type }}
+            {{- if not .Values.externaldb.broker.serviceInstanceName }}
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "node.secretName" . }}
+                  key: database
+            {{- else }}
+            - name: DATABASE_NAME
+              value: ""
+            {{- end }}
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "node.secretName" . }}
+                  key: {{ template "externaldb.port" $type }}
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "node.secretName" . }}
+                  key: {{ template "externaldb.username" $type }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "node.secretName" . }}
+                  key: {{ template "externaldb.password" $type }}
+            {{- if .Values.externaldb.ssl }}
+            - name: DATABASE_CONNECTION_OPTIONS
+              value: "ssl=true"
+            {{- else }}
+            - name: DATABASE_CONNECTION_OPTIONS
+              value: ""
+            {{- end }}
+            {{- end }}
+            - name: DATA_FOLDER
+              value: "/app"
+            {{- if .Values.extraEnv }}
+            {{- toYaml .Values.extraEnv | nindent 12 }}
+            {{- end }}
+          workingDir: /app
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              npm start
+          ports:
+            - name: http
+              containerPort: {{ .Values.applicationPort }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+            periodSeconds: 5
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: app
+              mountPath: /app
+            - name: data
+              mountPath: {{ .Values.persistence.path }}
       volumes:
-      - name: app
-        emptyDir: {}
-      - name: data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "node.fullname" . }}
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-      {{- end }}
+        - name: app
+          emptyDir: {}
+        - name: data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ template "node.fullname" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
