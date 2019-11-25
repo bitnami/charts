@@ -3,54 +3,56 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  labels:
-    app: {{ template "nginx-ingress.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: "{{ .Values.name }}"
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
   name: {{ template "nginx-ingress.fullname" . }}
+  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
+    component: {{ .Values.name }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "nginx-ingress.name" . }}
-      release: "{{ .Release.Name }}"
-      component: "{{ .Values.name }}"
+    matchLabels: {{- include "nginx-ingress.matchLabels" . | nindent 6 }}
+      component: {{ .Values.name }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
-  updateStrategy:
-{{ toYaml .Values.updateStrategy | indent 4 }}
+  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   minReadySeconds: {{ .Values.minReadySeconds }}
   template:
     metadata:
       {{- if .Values.podAnnotations }}
-      annotations:
-{{ toYaml .Values.podAnnotations | indent 8}}
+      annotations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels:
-        app: {{ template "nginx-ingress.name" . }}
-        chart: {{ template "nginx-ingress-controller.chart" . }}
-        component: "{{ .Values.name }}"
-        release: {{ .Release.Name }}
+      labels: {{- include "nginx-ingress.labels" . | nindent 8 }}
+        component: {{ .Values.name }}
         {{- if .Values.podLabels }}
-{{ toYaml .Values.podLabels | indent 8}}
+        {{- include "nginx-ingress.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      dnsPolicy: {{ .Values.dnsPolicy }}
 {{- include "nginx-ingress-controller.imagePullSecrets" . | indent 6 }}
-{{- if .Values.priorityClassName }}
-      priorityClassName: "{{ .Values.priorityClassName }}"
-{{- end }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "nginx-ingress.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "nginx-ingress.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.podSecurityContext }}
-      securityContext:
-{{ toYaml .Values.podSecurityContext | indent 8 }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      serviceAccountName: {{ template "nginx-ingress.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- if .Values.extraInitContainers }}
+      initContainers: {{- toYaml .Values.extraInitContainers | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ template "nginx-ingress.name" . }}-{{ .Values.name }}
-          image: "{{ template "nginx-ingress-controller.image" . }}"
-          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          image: {{ template "nginx-ingress-controller.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.lifecycle }}
-          lifecycle:
-{{ toYaml .Values.lifecycle | indent 12 }}
+          lifecycle: {{- toYaml .Values.lifecycle | nindent 12 }}
           {{- end }}
           args:
             - /nginx-ingress-controller
@@ -95,9 +97,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          {{- if .Values.extraEnvs }}
-{{ toYaml .Values.extraEnvs | indent 12 }}
-          {{- end }}
+            {{- if .Values.extraEnvs }}
+            {{- toYaml .Values.extraEnvs | nindent 12 }}
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /healthz
@@ -108,6 +110,16 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.readinessProbe.port }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           ports:
             - name: http
               containerPort: {{ .Values.containerPort.http }}
@@ -121,84 +133,56 @@ spec:
               {{- if .Values.daemonset.useHostPort }}
               hostPort: {{ .Values.daemonset.hostPorts.https }}
               {{- end }}
-          {{- if .Values.metrics.enabled }}
+            {{- if .Values.metrics.enabled }}
             - name: metrics
               containerPort: 10254
               protocol: TCP
-          {{- end }}
-          {{- range $key, $value := .Values.tcp }}
+            {{- end }}
+            {{- range $key, $value := .Values.tcp }}
             - name: "{{ $key }}-tcp"
               containerPort: {{ $key }}
               protocol: TCP
               {{- if $useHostPort }}
               hostPort: {{ $key }}
               {{- end }}
-          {{- end }}
-          {{- range $key, $value := .Values.udp }}
+            {{- end }}
+            {{- range $key, $value := .Values.udp }}
             - name: "{{ $key }}-udp"
               containerPort: {{ $key }}
               protocol: UDP
               {{- if $useHostPort }}
               hostPort: {{ $key }}
               {{- end }}
+            {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: {{ .Values.readinessProbe.port }}
-              scheme: HTTP
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-{{- if (or .Values.customTemplate.configMapName .Values.extraVolumeMounts) }}
+          {{- if (or .Values.customTemplate.configMapName .Values.extraVolumeMounts) }}
           volumeMounts:
-{{- end }}
-{{- if .Values.customTemplate.configMapName }}
+            {{- if .Values.customTemplate.configMapName }}
             - mountPath: /etc/nginx/template
               name: nginx-template-volume
               readOnly: true
-{{- end }}
-{{- if .Values.extraVolumeMounts }}
-{{ toYaml .Values.extraVolumeMounts | indent 12}}
-{{- end }}
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
-{{- if .Values.extraContainers }}
-{{ toYaml .Values.extraContainers | indent 8}}
-{{- end }}
-{{- if .Values.extraInitContainers }}
-      initContainers:
-{{ toYaml .Values.extraInitContainers | indent 8}}
-{{- end }}
-      hostNetwork: {{ .Values.hostNetwork }}
-    {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
-    {{- end }}
-    {{- if .Values.tolerations }}
-      tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
-    {{- end }}
-    {{- if .Values.affinity }}
-      affinity:
-{{ toYaml .Values.affinity | indent 8 }}
-    {{- end }}
-      serviceAccountName: {{ template "nginx-ingress.serviceAccountName" . }}
-      terminationGracePeriodSeconds: 60
-{{- if (or .Values.customTemplate.configMapName .Values.extraVolumes) }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+          {{- end }}
+        {{- if .Values.extraContainers }}
+        {{- toYaml .Values.extraContainers | nindent 8 }}
+        {{- end }}
+      {{- if (or .Values.customTemplate.configMapName .Values.extraVolumes) }}
       volumes:
-{{- end }}
-{{- if .Values.customTemplate.configMapName }}
+        {{- if .Values.customTemplate.configMapName }}
         - name: nginx-template-volume
           configMap:
             name: {{ .Values.customTemplate.configMapName }}
             items:
-            - key: {{ .Values.customTemplate.configMapKey }}
-              path: nginx.tmpl
-{{- end }}
-{{- if .Values.extraVolumes }}
-{{ toYaml .Values.extraVolumes | indent 8}}
-{{- end }}
+              - key: {{ .Values.customTemplate.configMapKey }}
+                path: nginx.tmpl
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+      {{- end }}
 {{- end }}
