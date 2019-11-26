@@ -265,6 +265,13 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `alertmanager.priorityClassName`                | Priority class assigned to the Pods                                                                                | ``                                                                                                                                                                                                                                                  |
 | `alertmanager.additionalPeers`                  | AdditionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster | `[]`                                                                                                                                                                                                                                                |
 
+### Exporters
+
+|             Parameter             |      Description       | Default |
+|-----------------------------------|------------------------|---------|
+| `exporters.enabled`               | Deploy exporters       | `true`  |
+| `exporters.node-exporter.enabled` | Deploy `node-exporter` | `true`  |
+
 The above parameters map to the env variables defined in [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator). For more information please refer to the [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
