@@ -89,7 +89,7 @@ spec:
             - name: MONGODB_CFG_REPLICA_SET_NAME
               value: {{ printf "%s-configsvr" ( include "mongodb-sharded.fullname" . ) }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
-              value: {{ .Values.mongodbSystemLogVerbosity | quote }}
+              value: {{ .Values.common.mongodbSystemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
               {{- if .Values.mongodbDisableSystemLog }}
               value: "yes"

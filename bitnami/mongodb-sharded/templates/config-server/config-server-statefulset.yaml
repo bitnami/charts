@@ -73,7 +73,7 @@ spec:
               value: "true"
             {{- end }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
-              value: {{ .Values.mongodbSystemLogVerbosity | quote }}
+              value: {{ .Values.common.mongodbSystemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
               {{- if .Values.mongodbDisableSystemLog }}
               value: "yes"
