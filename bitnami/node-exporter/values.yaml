@@ -1,0 +1,222 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+  labels: {}
+    # foo: bar
+
+## String to partially override node-exporter.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override node-exporter.fullname template
+##
+# fullnameOverride:
+
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  create: true
+
+  ## RBAC API version
+  ##
+  apiVersion: v1beta1
+
+  ## Podsecuritypolicy
+  ##
+  pspEnabled: true
+
+## Bitnami Node Exporter image version
+## ref: https://hub.docker.com/r/bitnami/node-exporter/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/node-exporter
+  tag: 0.18.1-debian-9-r172
+
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## Additional command line arguments to pass to node-exporter
+extraArgs: {}
+  # collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
+  # collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
+
+## Additional volumes to the node-exporter pods
+extraVolumes: []
+#  - name: copy-portal-skins
+#    emptyDir: {}
+
+## Additional volumeMounts to the node-exporter container
+extraVolumeMounts: []
+#  - name: copy-portal-skins
+#   mountPath: /var/lib/lemonldap-ng/portal/skins
+
+## Service account for Node Exporter to use.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the node-exporter.fullname template
+  # name:
+
+## SecurityContext configuration
+##
+securityContext:
+  enabled: true
+  runAsUser: 1001
+  fsGroup: 1001
+
+## Node Exporter Service
+##
+service:
+  ## Kubernetes service type and port number
+  ##
+  type: ClusterIP
+  port: 9100
+  # clusterIP: None
+
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort: 30080
+
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  # loadBalancerIP:
+
+  ## Load Balancer sources
+  ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ##
+  # loadBalancerSourceRanges:
+  # - 10.10.10.0/24
+
+  ## Provide any additional service annotations
+  ##
+  annotations: {}
+
+  ## Provide any additional service labels
+  ##
+  labels: {}
+
+# The update strategy to apply to the DaemonSet
+##
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+# Expose the service to the host network
+hostNetwork: true
+
+# minReadySeconds to avoid killing pods before we are ready
+##
+minReadySeconds: 0
+
+## Priority class assigned to the Pods
+##
+priorityClassName: ""
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}
+
+## Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Node Affinity. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+##
+nodeAffinity: {}
+
+## Pod AntiAffinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+podAntiAffinity: soft
+
+## Pod Affinity. The value is evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+podAffinity: {}
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+## ServiceMonitor configuration
+##
+serviceMonitor:
+  enabled: false
+  ## Namespace in which Prometheus is running
+  ##
+  # namespace: monitoring
+
+  ## The name of the label on the target service to use as the job name in prometheus
+  # jobLabel:
+
+  ## Interval at which metrics should be scraped.
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  # interval: 10s
+
+  ## Timeout after which the scrape is ended
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  # scrapeTimeout: 10s
+
+  ## ServiceMonitor selector labels
+  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+  ##
+  # selector:
+  #   prometheus: my-prometheus
