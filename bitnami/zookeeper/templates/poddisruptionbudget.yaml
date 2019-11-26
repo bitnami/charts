@@ -4,17 +4,11 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "zookeeper.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
-    helm.sh/chart: {{ template "zookeeper.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
 spec:
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ template "zookeeper.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "zookeeper.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: zookeeper
-{{ toYaml .Values.podDisruptionBudget | indent 2 }}
+  {{- toYaml .Values.podDisruptionBudget | nindent 2 }}
 {{- end }}
