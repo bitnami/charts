@@ -25,10 +25,10 @@ spec:
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
         {{- if .Values.podAnnotations }}
-        {{- toYaml .Values.podAnnotations | indent 8 }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
         {{- if .Values.metrics.podAnnotations }}
-        {{- toYaml .Values.metrics.podAnnotations | indent 8 }}
+        {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
