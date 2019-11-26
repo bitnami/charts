@@ -92,5 +92,5 @@ To access Alertmanager from outside the cluster execute the following commands:
 {{- end }}
 {{- end }}
 
-{{ include "prometheus-operator.validateValues" . }}
-{{ include "prometheus-operator.checkRollingTags" . }}
+{{- include "prometheus-operator.validateValues" . }}
+{{- include "prometheus-operator.checkRollingTags" . }}
