@@ -118,16 +118,16 @@ auth:
   enabled: false
   ## User that will use Zookeeper clients to auth
   ##
-  # clientUser:
+  clientUser:
   ## Password that will use Zookeeper clients to auth
   ##
-  # clientPassword:
+  clientPassword:
   ## Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"
   ##
-  # serverUsers: ""
+  serverUsers:
   ## Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
   ##
-  # serverPasswords: ""
+  serverPasswords:
 
 ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
 ##
@@ -248,9 +248,20 @@ metrics:
   ##
   resources: {}
 
-  ## Metrics exporter labels and tolerations for pod assignment
-  # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
-  # tolerations: []
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
 
   ## Prometheus Operator ServiceMonitor configuration
   ##
@@ -258,7 +269,7 @@ metrics:
     enabled: false
     ## Namespace in which Prometheus is running
     ##
-    # namespace: monitoring
+    namespace:
 
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint

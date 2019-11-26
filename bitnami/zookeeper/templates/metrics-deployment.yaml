@@ -3,66 +3,62 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "zookeeper.fullname" . }}-exporter
-  labels:
-    app.kubernetes.io/name: {{ template "zookeeper.name" . }}
-    helm.sh/chart: {{ template "zookeeper.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: metrics
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ template "zookeeper.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "zookeeper.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: metrics
   template:
     metadata:
       {{- if .Values.metrics.podAnnotations }}
-      annotations: {{ toYaml .Values.metrics.podAnnotations | nindent 8 }}
+      annotations: {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
       {{- end }}
-      labels:
-        app.kubernetes.io/name: {{ template "zookeeper.name" . }}
-        helm.sh/chart: {{ template "zookeeper.chart" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/component: metrics
+      labels: {{- include "zookeeper.labels" . | nindent 8 }}
       {{- if .Values.metrics.podLabels }}
-{{ toYaml .Values.metrics.podLabels | indent 8 }}
+      {{- toYaml .Values.metrics.podLabels | nindent 8 }}
       {{- end }}
     spec:
-{{- include "zookeeper.imagePullSecrets" . | indent 6 }}
+      {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.metrics.affinity }}
+      affinity: {{- include "zookeeper.tplValue" (dict "value" .Values.metrics.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.nodeSelector }}
+      nodeSelector: {{- include "zookeeper.tplValue" (dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.metrics.tolerations }}
-      tolerations: {{ toYaml .Values.metrics.tolerations | nindent 8 }}
+      tolerations: {{- include "zookeeper.tplValue" (dict "value" .Values.metrics.tolerations "context" $) | nindent 8 }}
       {{- end }}
       containers:
-      - image: {{ template "zookeeper.metrics.image" . }}
-        name: zookeeper-exporter
-        command:
-          - /usr/local/bin/zookeeper-exporter
-          - -timeout
-          - {{ .Values.metrics.timeoutSeconds | quote }}
-          - -zk-list
-          {{- $replicaCount := int .Values.replicaCount }}
-          {{- $followerPort := int .Values.service.followerPort }}
-          {{- $electionPort := int .Values.service.electionPort }}
-          {{- $servicePort := int .Values.service.port }}
-          {{- $releaseNamespace := .Release.Namespace }}
-          {{- $zookeeperFullname := include "zookeeper.fullname" . }}
-          {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
-          {{- $clusterDomain := .Values.clusterDomain }}
-          - {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }}{{- if (lt $e ( sub $replicaCount 1)) -}},{{- end -}}{{ end }}
-        ports:
-          - name: metrics
-            containerPort: 8080
-        resources: {{ toYaml .Values.metrics.resources | nindent 10 }}
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 180
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 15
+        - image: {{ template "zookeeper.metrics.image" . }}
+          name: zookeeper-exporter
+          command:
+            - /usr/local/bin/zookeeper-exporter
+            - -timeout
+            - {{ .Values.metrics.timeoutSeconds | quote }}
+            - -zk-list
+            {{- $replicaCount := int .Values.replicaCount }}
+            {{- $followerPort := int .Values.service.followerPort }}
+            {{- $electionPort := int .Values.service.electionPort }}
+            {{- $servicePort := int .Values.service.port }}
+            {{- $releaseNamespace := .Release.Namespace }}
+            {{- $zookeeperFullname := include "zookeeper.fullname" . }}
+            {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
+            {{- $clusterDomain := .Values.clusterDomain }}
+            - {{range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }}{{- if (lt $e ( sub $replicaCount 1)) -}},{{- end -}}{{ end }}
+          ports:
+            - name: metrics
+              containerPort: 8080
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 180
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
 {{- end }}
