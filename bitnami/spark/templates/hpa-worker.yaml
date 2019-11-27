@@ -2,11 +2,7 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  labels:
-    app.kubernetes.io/name: {{ include "spark.name" . }}
-    helm.sh/chart: {{ include "spark.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  labels: {{- include "spark.labels" . | nindent 4 }}
     app.kubernetes.io/component: worker-autoscaler
   name: {{ include "spark.fullname" . }}-autoscaler
 spec:
@@ -17,8 +13,8 @@ spec:
   minReplicas: {{ .Values.worker.replicaCount }}
   maxReplicas: {{ .Values.worker.autoscaling.replicasMax }}
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      targetAverageUtilization: {{ .Values.worker.autoscaling.CpuTargetPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.worker.autoscaling.CpuTargetPercentage }}
 {{- end }}
