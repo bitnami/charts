@@ -4,12 +4,12 @@
 
 1. Get the TensorFlow Serving URL by running:
 
-  {{- if contains "NodePort" .Values.serviceType }}
+  {{- if contains "NodePort" .Values.service.type }}
 
   export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "tensorflow-resnet.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
 
-  {{- else if contains "LoadBalancer" .Values.serviceType }}
+  {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "tensorflow-resnet.fullname" . }}'
@@ -17,7 +17,7 @@
   export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "tensorflow-resnet.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
   export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "tensorflow-resnet.fullname" . }} -o jsonpath="{.spec.ports[0].port}")
 
-  {{- else if contains "ClusterIP" .Values.serviceType }}
+  {{- else if contains "ClusterIP" .Values.service.type }}
 
     export APP_HOST=127.0.0.1
     export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "tensorflow-resnet.fullname" . }} -o jsonpath="{.spec.ports[0].port}")
