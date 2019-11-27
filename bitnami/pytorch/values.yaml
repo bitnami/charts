@@ -32,6 +32,15 @@ image:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## String to partially override pytorch.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override pytorch.fullname template
+##
+# fullnameOverride:
+
+
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
@@ -63,53 +72,72 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
-## String to partially override pytorch.fullname template (will maintain the release name)
+## Service for the scheduler node
 ##
-# nameOverride:
-
-## String to fully override pytorch.fullname template
-##
-# fullnameOverride:
-
 service:
-  ## Kubernetes service type, ClusterIP and NodePort are supported at present
+  ## Kubernetes service type
+  ##
   type: ClusterIP
+  ## Scheduler Service port
+  ##
+  port: 49875
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  # nodePort:
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
 
 ## PyTorch configuration
-##
 ## The main entrypoint of your app, this will be executed as:
 ##   python [file] [args]
+##
 entrypoint:
   file:
-  #args:
+  # args:
 
-## Set to `distributed` in order to enable distributed mode
-##   mode: distributed
+## PyTorch deployment mode. Can be `standalone` or `distributed`
 ##
 mode: standalone
 
 ## Number of nodes that will run the code
 ##   WORLD_SIZE will be set to this value
 ##
-#worldSize:
+# worldSize:
 
 ## The port used to comunicate with the master
-##   MASTER_PORT will be set to this value
+## MASTER_PORT will be set to this value
 ##
 port: 49875
 
 ## Name of an existing config map containing all the files you want to load in PyTorch
 ##
-#configMap:
+# configMap:
 
 ## Enable in order to download files from git repository.
 ##
 cloneFilesFromGit:
   enabled: false
-#  repository:
-#  revision: master
+  # repository:
+  # revision: master
 
 ## Additional environment variables
 ##
@@ -119,25 +147,20 @@ cloneFilesFromGit:
 #   - name: NCCL_DEBUG_SUBSYS
 #     value: "ALL"
 
-## Node labels for pod assignment
+## Node labels for pod assignment (this value is evaluated as a template)
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 
-## Tolerations for pod assignment
+## Tolerations for pod assignment (this value is evaluated as a template)
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
 
-## Affinity for pod assignment
+## Affinity for pod assignment (this value is evaluated as a template)
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
-
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources: {}
 
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -146,6 +169,21 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 250m
+  #   memory: 256Mi
+  requests: {}
+  #   cpu: 250m
+  #   memory: 256Mi
 
 ## Configure liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -180,7 +218,7 @@ persistence:
   ## Persistent Volume Access Mode
   ##
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
 
   ## Persistent Volume size
   ##
