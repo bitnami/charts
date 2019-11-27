@@ -3,11 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "pytorch.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
-  labels:
-    app.kubernetes.io/name: {{ include "pytorch.name" . }}
-    helm.sh/chart: {{ include "pytorch.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "pytorch.labels" . | nindent 4 }}
 spec:
   accessModes:
   {{- range .Values.persistence.accessModes }}
