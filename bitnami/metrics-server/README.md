@@ -72,6 +72,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `service.annotations`     | Annotations for the Service                                                                                                     | {}                                                      |
 | `service.loadBalancerIP`  | LoadBalancer IP if Service type is `LoadBalancer`                                                                               | `nil`                                                   |
 | `service.nodePort`        | NodePort if Service type is `LoadBalancer` or `NodePort`                                                                        | `nil`                                                   |
+| `resources`               | The [resources] to allocate for the container                                                                                   | `{}`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
