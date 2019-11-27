@@ -7,8 +7,6 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
-replicaCount: 1
-
 ## TensorFlow Serving server image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-serving/tags/
 ##
@@ -16,7 +14,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-serving
-    tag: 2.0.0-debian-9-r0
+    tag: 2.0.0-debian-9-r11
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -28,8 +26,6 @@ server:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  port: 8500
-  restApiPort: 8501
 
 ## TensorFlow ResNet image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-resnet/tags/
@@ -38,7 +34,7 @@ client:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-resnet
-    tag: 2.0.0-debian-9-r0
+    tag: 2.0.0-debian-9-r10
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -59,18 +55,54 @@ client:
 ##
 # fullnameOverride:
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
+## Container ports
 ##
-serviceType: LoadBalancer
+containerPorts:
+  server: 8500
+  restApi: 8501
+
+## Number of replicas
+##
+replicaCount: 1
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 500m
+  #   memory: 1Gi
+  requests: {}
+  #   cpu: 250m
+  #   memory: 256Mi
+
+## Containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
 livenessProbe:
   enabled: true
   initialDelaySeconds: 30
@@ -78,7 +110,6 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 readinessProbe:
   enabled: true
   initialDelaySeconds: 15
@@ -87,16 +118,42 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Service for the scheduler node
 ##
-affinity: {}
+service:
+  ## Kubernetes service type
+  ##
+  type: LoadBalancer
+  ## TensorFlow server port
+  ##
+  port: 8500
+  ## REST API port
+  ##
+  restApiPort: 8501
+  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePorts:
+    server: ""
+    restApi: ""
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  # loadBalancerIP:
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
 
-## Add the corresponding annotations so Prometheus can collect Tensorflow Serving metrics
+## TensorFlow Serving Prometheus exporter configuration
 ##
 metrics:
   enabled: false
+  ## Prometheus exporter pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/path: "/monitoring/prometheus/metrics"
-    prometheus.io/port: "8501"
+    prometheus.io/port: "{{ .Values.containerPorts.restApi }}"
