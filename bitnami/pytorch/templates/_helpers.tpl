@@ -32,6 +32,24 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "pytorch.labels" -}}
+app.kubernetes.io/name: {{ include "pytorch.name" . }}
+helm.sh/chart: {{ include "pytorch.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "pytorch.matchLabels" -}}
+app.kubernetes.io/name: {{ include "pytorch.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Return the proper PyTorch image name
 */}}
 {{- define "pytorch.image" -}}
@@ -145,9 +163,9 @@ pytorch: mode
 {{/* Validate values of PyTorch - number of replicas must be even, greater than 4 and lower than 32 */}}
 {{- define "pytorch.validateValues.worldSize" -}}
 {{- $replicaCount := int .Values.worldSize }}
-{{- if and (eq .Values.mode "distributed") (lt $replicaCount 24) -}}
+{{- if and (eq .Values.mode "distributed") (or (lt $replicaCount 1) (gt $replicaCount 32)) -}}
 pytorch: worldSize
-    World size must be greater than 1 in distributed mode!!
+    World size must be greater than 1 and lower than 32 in distributed mode!!
     Please set a valid world size (--set worldSize=X)
 {{- end -}}
 {{- end -}}
@@ -220,4 +238,17 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
         {{- end -}}
     {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "pytorch.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "pytorch.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}

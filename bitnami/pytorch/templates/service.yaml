@@ -2,19 +2,21 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "pytorch.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "pytorch.name" . }}
-    helm.sh/chart: {{ include "pytorch.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/component: "master"
+  labels: {{- include "pytorch.labels" . | nindent 4 }}
+    app.kubernetes.io/component: master
+  {{- if .Values.service.annotations }}
+  annotations: {{- include "pytorch.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.port }}
+    - port: {{ .Values.service.port }}
       targetPort: pytorch
       name: pytorch
-  selector:
-    app.kubernetes.io/name: {{ include "pytorch.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: "master"
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "pytorch.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: master
