@@ -1,5 +1,16 @@
-** Please be patient while the chart is being deployed **
+{{- if or (not .Values.elasticsearch.hosts) (not .Values.elasticsearch.port) -}}
+######################################################################################################
+### ERROR: You did not provide the Elasticsearch external host or port in your 'helm install' call ###
+######################################################################################################
 
+Complete your Kibana deployment by running:
+
+  helm upgrade {{ .Release.Name }} bitnami/kibana \
+    --set elasticsearch.hosts[0]=YOUR_ES_HOST,elasticsearch.port=YOUR_ES_PORT
+
+Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of your Elasticsearch deployment.
+
+{{- else -}}
 1. Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
 {{- range $host := .Values.ingress.hosts }}
@@ -41,3 +52,4 @@ WARNING: For Prometheus metrics to work, make sure that the kibana-prometheus-ex
 {{- end }}
 
 {{ include "kibana.validateValues" . }}
+{{- end }}
