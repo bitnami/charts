@@ -24,6 +24,31 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "wildfly.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "wildfly.labels" -}}
+app: {{ include "wildfly.name" . }}
+chart: {{ include "wildfly.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "wildfly.matchLabels" -}}
+app: {{ include "wildfly.name" . }}
+release: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Return the proper Wildfly image name
 */}}
 {{- define "wildfly.image" -}}
@@ -137,4 +162,17 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
         {{- end -}}
     {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "wildfly.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "wildfly.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}
