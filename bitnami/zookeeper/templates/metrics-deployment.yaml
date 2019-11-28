@@ -50,7 +50,9 @@ spec:
           ports:
             - name: metrics
               containerPort: 8080
+          {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /metrics
