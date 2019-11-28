@@ -12,8 +12,7 @@ spec:
   template:
     metadata:
       {{- if .Values.podAnnotations }}
-      annotations:
-{{ toYaml .Values.podAnnotations | indent 8 }}
+      annotations: {{- include "node-exporter.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "node-exporter.labels" . | nindent 8 }}
         {{- if .Values.podLabels }}
