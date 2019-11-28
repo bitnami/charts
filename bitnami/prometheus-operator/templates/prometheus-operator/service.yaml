@@ -27,8 +27,5 @@ spec:
     {{- if and .Values.operator.service.nodePort (or (eq .Values.operator.service.type "NodePort") (eq .Values.operator.service.type "LoadBalancer")) }}
     nodePort: {{ .Values.operator.service.nodePort }}
     {{- end }}
-  selector:
-    app.kubernetes.io/name: {{ template "prometheus-operator.name" . }}
-    app.kubernetes.io/component: operator
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  selector: {{- include "prometheus-operator.operator.matchLabels" . | nindent 4 }}
 {{- end }}

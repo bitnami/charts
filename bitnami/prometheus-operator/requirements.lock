@@ -1,0 +1,6 @@
+dependencies:
+- name: node-exporter
+  repository: https://charts.bitnami.com/bitnami
+  version: 0.1.0
+digest: sha256:ed8eb97c5bf626e91d36ca8a98f59cacc240b25821e6c2fcfcce5daea768962d
+generated: "2019-11-28T20:00:58.626042613+05:30"
