@@ -33,6 +33,17 @@ rbac:
   ##
   pspEnabled: true
 
+## Service account for Node Exporter to use.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the node-exporter.fullname template
+  # name:
+
 ## Bitnami Node Exporter image version
 ## ref: https://hub.docker.com/r/bitnami/node-exporter/tags/
 ##
@@ -67,17 +78,6 @@ extraVolumes: []
 extraVolumeMounts: []
 #  - name: copy-portal-skins
 #   mountPath: /var/lib/lemonldap-ng/portal/skins
-
-## Service account for Node Exporter to use.
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-##
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
-  create: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the node-exporter.fullname template
-  # name:
 
 ## SecurityContext configuration
 ##
