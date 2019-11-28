@@ -5,6 +5,9 @@ metadata:
   name: alertmanagers.monitoring.coreos.com
   annotations:
     "helm.sh/hook": crd-install
+    {{- if .Values.operator.customResourceDeletePolicy }}
+    "helm.sh/hook-delete-policy": {{ .Values.operator.customResourceDeletePolicy }}
+    {{- end }}
 spec:
   group: monitoring.coreos.com
   names:
