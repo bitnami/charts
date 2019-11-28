@@ -10,9 +10,9 @@ keywords:
 home: https://prometheus.io/
 icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
 sources:
-- https://github.com/bitnami/bitnami-docker-node-exporter
-- https://github.com/prometheus/node_exporter
+  - https://github.com/bitnami/bitnami-docker-node-exporter
+  - https://github.com/prometheus/node_exporter
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl

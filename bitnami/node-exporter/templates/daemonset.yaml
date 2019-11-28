@@ -65,7 +65,7 @@ spec:
           volumeMounts:
             - name: proc
               mountPath: /host/proc
-              readOnly:  true
+              readOnly: true
             - name: sys
               mountPath: /host/sys
               readOnly: true
