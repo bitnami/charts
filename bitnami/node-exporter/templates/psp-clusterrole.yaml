@@ -5,9 +5,9 @@ metadata:
   name: {{ template "node-exporter.fullname" . }}-psp
   labels: {{- include "node-exporter.labels" . | nindent 4 }}
 rules:
-- apiGroups: ['extensions']
-  resources: ['podsecuritypolicies']
-  verbs: ['use']
-  resourceNames:
-  - {{ template "node-exporter.fullname" . }}
+  - apiGroups: ['extensions']
+    resources: ['podsecuritypolicies']
+    verbs: ['use']
+    resourceNames:
+      - {{ template "node-exporter.fullname" . }}
 {{- end }}

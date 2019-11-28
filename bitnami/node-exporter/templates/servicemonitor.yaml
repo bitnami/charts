@@ -17,13 +17,13 @@ spec:
   selector:
     matchLabels: {{- include "node-exporter.matchLabels" . | nindent 6 }}
   endpoints:
-  - port: metrics
-    {{- if .Values.serviceMonitor.interval }}
-    interval: {{ .Values.serviceMonitor.interval }}
-    {{- end }}
-    {{- if .Values.serviceMonitor.scrapeTimeout }}
-    scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
-    {{- end }}
+    - port: metrics
+      {{- if .Values.serviceMonitor.interval }}
+      interval: {{ .Values.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      {{- end }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

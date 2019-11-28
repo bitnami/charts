@@ -8,7 +8,7 @@ spec:
   privileged: false
   allowPrivilegeEscalation: false
   requiredDropCapabilities:
-  - ALL
+    - ALL
   volumes:
     - 'configMap'
     - 'emptyDir'
@@ -26,19 +26,19 @@ spec:
   runAsUser:
     rule: 'MustRunAs'
     ranges:
-    - min: 1001
-      max: 1001
+      - min: 1001
+        max: 1001
   seLinux:
     rule: 'RunAsAny'
   supplementalGroups:
     rule: 'MustRunAs'
     ranges:
-    - min: 1001
-      max: 1001
+      - min: 1001
+        max: 1001
   fsGroup:
     rule: 'MustRunAs'
     ranges:
-    - min: 1001
-      max: 1001
+      - min: 1001
+        max: 1001
   readOnlyRootFilesystem: false
 {{- end }}
