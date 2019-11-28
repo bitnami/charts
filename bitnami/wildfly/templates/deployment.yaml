@@ -90,5 +90,5 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "wildfly.fullname" . }}
           {{- else }}
-            emptyDir: {}
+          emptyDir: {}
         {{- end -}}
