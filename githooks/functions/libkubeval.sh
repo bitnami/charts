@@ -18,20 +18,26 @@ run_kubeval_chart() {
     if [[ -d "$chart_path"/ci ]]; then
         find "$chart_path"/ci -type f -regex ".*\.yaml" > "$ci_values_file_list"
     fi
+    printf '\033[0;34m- Running kubeval in %s \033[0m\n' "$chart_name"
 
     for values_file in "$chart_path"/values.yaml $(< "$ci_values_file_list"); do
         if [[ ! -f "$values_file" ]];then
             continue
         fi
-        values_file_display=${values_file#$chart_path/}
+        values_file_display=${chart_name}/${values_file#$chart_path/}
 
-        printf '\033[0;34m- Running helm template --values %s %s | kubeval\n\033[0m' "$values_file_display" "$chart_name"
-        if helm template --values "$values_file" "$chart_path" | kubeval; then
-            printf '\033[0;32m\U00002705 helm template --values %s %s | kubeval\n\n\033[0m' "$values_file_display" "$chart_name"
-        else
-            printf '\033[0;31m\U0001F6AB helm template --values %s %s | kubeval failed.\n\n\033[0m' "$values_file_display" "$chart_name"
-            test_failed=1
-        fi
+        for options_str in "--strict" "--strict --openshift"; do
+            # Redirect to an output file so we create less verbosity
+            cmd_output_file=$(mktemp)
+            read -r -a opt_array <<< "$options_str"
+            # printf '\033[0;34m- Running helm template --values %s %s | kubeval %s \033[0m\n' "$values_file_display" "$chart_name" "${options_str}"
+            if ! helm template --values "$values_file" "$chart_path" | kubeval "${opt_array[@]}" > "$cmd_output_file" 2>&1; then
+                cat "$cmd_output_file"
+                printf '\033[0;31m\U0001F6AB helm template --values %s %s | kubeval %s failed.\033[0m\n' "$values_file_display" "$chart_name" "${options_str}"
+                test_failed=1
+            fi
+            rm "$cmd_output_file"
+        done
     done
 
     rm "$ci_values_file_list"
@@ -39,6 +45,7 @@ run_kubeval_chart() {
     if [[ "$test_failed" = "1" ]]; then
         false
     else
+        printf '\033[0;32m\U00002705 Kubeval %s\n\033[0m' "$chart_name"
         true
     fi
 }

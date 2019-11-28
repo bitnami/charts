@@ -6,9 +6,7 @@ run_helm_lint_chart() {
     local test_failed=0
 
     printf '\033[0;34m- Running helm lint %s\n\033[0m' "$chart_name"
-    if helm lint "$chart_path"; then
-        printf '\033[0;32m\U00002705 helm lint %s\n\n\033[0m' "$chart_name"
-    else
+    if ! helm lint "$chart_path"; then
         printf '\033[0;31m\U0001F6AB helm lint %s failed.\n\n\033[0m' "$chart_name"
         test_failed=1
     fi
@@ -18,6 +16,7 @@ run_helm_lint_chart() {
     if [[ -d "$chart_path"/ci ]]; then
         find "$chart_path"/ci -type f -regex ".*\.yaml" > "$ci_values_file_list"
     fi
+    printf '\033\033[0;34m- Running helm template in %s \n\033[0m' "$chart_name"
 
     for values_file in "$chart_path"/values.yaml $(< "$ci_values_file_list"); do
         if [[ ! -f "$values_file" ]];then
@@ -25,12 +24,7 @@ run_helm_lint_chart() {
         fi
         values_file_display=${values_file#$chart_path/}
 
-        printf '\033\033[0;34m- Running helm template --values %s %s\n\033[0m' "$values_file_display" "$chart_name"
-        helm repo add bitnami https://charts.bitnami.com/bitnami >> /dev/null
-        helm dependency update "$chart_path" >> /dev/null
-        if helm template --values "$values_file" "$chart_path" >> /dev/null; then
-            printf '\033[0;32m\U00002705 helm template --values %s %s\n\n\033[0m' "$values_file_display" "$chart_name"
-        else
+        if ! helm template --values "$values_file" "$chart_path" >> /dev/null; then
             printf '\033[0;31m\U0001F6AB helm template --values %s %s failed.\n\n\033[0m' "$values_file_display" "$chart_path"
             test_failed=1
         fi
@@ -41,6 +35,7 @@ run_helm_lint_chart() {
     if [[ "$test_failed" = "1" ]]; then
         false
     else
+        printf '\033[0;32m\U00002705 helm lint and helm template %s\n\n\033[0m' "$chart_name"
         true
     fi
 }

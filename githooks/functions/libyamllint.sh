@@ -6,31 +6,29 @@ render_and_yaml_lint() {
     local -r values="${3:?missing_values}"
     local -r repo_path="$(git rev-parse --show-toplevel)"
     local -r display_chart_path=${chart_path#"$repo_path/"}
-    local -r display_values=${values#"$chart_path/"}
+    local -r display_values=${values#"$repo_path/"}
     local -r basename_template_path=${path#"$chart_path/"}
     local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2} }}"
-    printf '\033[0;34m- Running yamllint on %s/%s (values: %s)\n\033[0m' "$display_chart_path" "$basename_template_path" "$display_values"
+    # printf '\033[0;34m- Running yamllint on %s/%s (values: %s)\n\033[0m' "$display_chart_path" "$basename_template_path" "$display_values"
 
     if ! helm template --values "$values" "$chart_path" -x "$basename_template_path" | yamllint -s -d "$lint_rules" -; then
-        printf '\033[0;31m\U0001F6AB (helm template --values %s %s -x %s | yamllint -s -d "%s" -) failed\n\n\033[0m' "$display_values" "$display_chart_path" "$basename_template_path" "$lint_rules"
+        printf '\033[0;31m\U0001F6AB (helm template --values %s %s -x %s | yamllint -s -d "%s" -) failed\n\033[0m' "$display_values" "$display_chart_path" "$basename_template_path" "$lint_rules"
         false
     else
-        printf '\033[0;32m\U00002705 %s/%s (values: %s)\n\n\033[0m' "$display_chart_path" "$basename_template_path" "$display_values"
         true
     fi
 }
 
 yaml_lint_file() {
     local -r path="${1:?missing_file}"
-    local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2}}}"
+    local -r lint_rules="{extends: default, rules: { line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2}}}"
     local -r repo_path="$(git rev-parse --show-toplevel)"
     local -r display_path=${path#"$repo_path/"}
-    printf '\033[0;34m- Running yamllint on %s\n' "$display_path"
+    # printf '\033[0;34m- Running yamllint on %s\n' "$display_path"
     if ! yamllint -s -d "$lint_rules" "$path"; then
-        printf '\033[0;31m\U0001F6AB yamllint -s -d "%s" %s failed\n\n\033[0m' "$lint_rules" "$display_path"
+        printf '\033[0;31m\U0001F6AB yamllint -s -d "%s" %s failed\n\033[0m' "$lint_rules" "$display_path"
         false
     else
-        printf '\033[0;32m\U00002705 %s\n\n\033[0m' "$display_path"
         true
     fi
 }
@@ -50,6 +48,7 @@ run_yaml_lint_chart() {
     local -r chart_name="${1:?missing_chart_name}"
     local -r chart_path="$(git rev-parse --show-toplevel)"/"$chart_name"
     local test_failed=0
+    printf '\033[0;34m- Running yamllint on %s\n' "$chart_name"
 
     local -r ci_values_file_list=$(mktemp)
     local -r template_yaml_file_list=$(mktemp)
@@ -82,6 +81,7 @@ run_yaml_lint_chart() {
     if [[ "$test_failed" = "1" ]]; then
         false
     else
+        printf '\033[0;32m\U00002705 Yaml lint %s\n\033[0m' "$chart_name"
         true
     fi
 }
