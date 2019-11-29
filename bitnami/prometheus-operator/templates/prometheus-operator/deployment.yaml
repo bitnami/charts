@@ -89,5 +89,5 @@ spec:
         resources: {{- toYaml .Values.operator.resources | nindent 10 }}
         securityContext:
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
 {{- end }}

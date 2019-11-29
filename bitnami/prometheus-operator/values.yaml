@@ -110,6 +110,11 @@ operator:
   ## Create Prometheus Operator CRDs
   createCustomResource: true
 
+  ## Prometheus Operator CRD deletion policy
+  ## ref: https://v3.helm.sh/docs/topics/charts_hooks/
+  ##
+  # customResourceDeletePolicy: before-hook-creation
+
   ## Create a servicemonitor for the operator
   ##
   serviceMonitor:
