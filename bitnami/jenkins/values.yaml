@@ -87,9 +87,9 @@ resources:
   limits: {}
   #   cpu: 500m
   #   memory: 1Gi
-  requests: {}
-  #   cpu: 300m
-  #   memory: 512Mi
+  requests:
+    cpu: 300m
+    memory: 512Mi
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
