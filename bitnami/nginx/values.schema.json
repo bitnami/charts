@@ -13,16 +13,6 @@
           "title": "Use a custom hostname",
           "description": "Enable the ingress resource that allows you to access the NGINX installation."
         },
-        "certManager": {
-          "type": "boolean",
-          "form": true,
-          "title": "Enable TLS annotations via cert-manager",
-          "description": "Set this to true in order to add the corresponding annotations for cert-manager",
-          "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
-          }
-        },
         "hostname": {
           "type": "string",
           "form": true,
