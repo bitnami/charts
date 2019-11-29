@@ -70,7 +70,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `persistence.storageClass`           | PVC Storage Class for Jenkins volume                                                                 | `nil` (uses alpha storage class annotation)                  |
 | `persistence.accessMode`             | PVC Access Mode for Jenkins volume                                                                   | `ReadWriteOnce`                                              |
 | `persistence.size`                   | PVC Storage Request for Jenkins volume                                                               | `8Gi`                                                        |
-| `resources`                          | CPU/Memory resource requests/limits                                                                  | `{}`                                                         |
+| `resources`                          | CPU/Memory resource requests/limits                                                                  | `requests: { cpu: "300m", memory: "512Mi" }`                 |
 | `livenessProbe.enabled`              | Turn on and off liveness probe                                                                       | `true`                                                       |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                             | `180`                                                        |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                                       | `10`                                                         |
@@ -112,7 +112,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `metrics.image.pullPolicy`           | Image pull policy                                                                                    | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod                                                      | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}` |
-| `metrics.resources`                  | Exporter resource requests/limit                                                                     | Memory: `256Mi`, CPU: `100m`                                 |
+| `metrics.resources`                  | Exporter resource requests/limit                                                                     | `requests: { cpu: "256m", memory: "100Mi" }`                 |
 
 The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.
 
