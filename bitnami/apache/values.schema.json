@@ -11,7 +11,7 @@
           "type": "boolean",
           "form": true,
           "title": "Use a custom hostname",
-          "description": "Enable the ingress resource that allows you to access the WordPress installation."
+          "description": "Enable the ingress resource that allows you to access the Apache installation."
         },
         "certManager": {
           "type": "boolean",
