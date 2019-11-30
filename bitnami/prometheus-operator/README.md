@@ -268,10 +268,10 @@ The following table lists the configurable parameters of the Prometheus Operator
 
 ### Exporters
 
-|             Parameter             |      Description       | Default |
-|-----------------------------------|------------------------|---------|
-| `exporters.enabled`               | Deploy exporters       | `true`  |
-| `exporters.node-exporter.enabled` | Deploy `node-exporter` | `true`  |
+|             Parameter             |      Description                                                                              | Default |
+|-----------------------------------|-----------------------------------------------------------------------------------------------|---------|
+| `exporters.enabled`               | Deploy exporters                                                                              | `false` |
+| `exporters.node-exporter.enabled` | Deploy [`node-exporter`](https://github.com/bitnami/charts/tree/master/bitnami/node-exporter) | `true`  |
 
 The above parameters map to the env variables defined in [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator). For more information please refer to the [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator) image documentation.
 
@@ -346,6 +346,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 -   logLevel: info
 +   logLevel: error
+```
+
+- Enable exporters (node-exporter by default):
+
+```diff
+-   exporters.enabled: false
++   exporters.enabled: true
 ```
 
 ## Upgrading

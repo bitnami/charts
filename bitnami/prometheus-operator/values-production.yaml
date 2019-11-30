@@ -754,6 +754,7 @@ alertmanager:
 
 ## Exporters
 exporters:
+  enabled: true
   node-exporter:
     ## Enable node-exporter
     enabled: true
