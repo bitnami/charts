@@ -8,18 +8,20 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+
+
 ## Bitnami Airflow image version
 ## ref: https://hub.docker.com/r/bitnami/airflow/tags/
 ##
 image:
-  registry: docker.io
-  repository: bitnami/airflow
-  tag: 1.10.6-debian-9-r0
+  registry: pilotyard.azurecr.io
+  repository: cccs/airflow
+  tag: latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -30,20 +32,20 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
+  debug: true
 
 ## Bitnami Airflow Scheduler image version
 ## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
 ##
 schedulerImage:
-  registry: docker.io
-  repository: bitnami/airflow-scheduler
-  tag: 1.10.6-debian-9-r1
+  registry: pilotyard.azurecr.io
+  repository: cccs/airflow-scheduler
+  tag: latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -60,41 +62,40 @@ schedulerImage:
 ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
 ##
 workerImage:
-  registry: docker.io
-  repository: bitnami/airflow-worker
-  tag: 1.10.6-debian-9-r1
+  registry: pilotyard.azurecr.io
+  repository: cccs/airflow-worker
+  tag: latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistryKeySecretName
+   
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
+  debug: true
 
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
 git:
-  registry: docker.io
-  repository: bitnami/git
-  tag: 2.24.0-debian-9-r10
-  pullPolicy: IfNotPresent
+  registry: pilotyard.azurecr.io
+  repository: cccs/git
+  tag: latest
+  pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # pullSecrets:
-  #   - myRegistryKeySecretName
-
+  #   - dag-clone-key
 ## String to partially override airflow.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -128,28 +129,19 @@ airflow:
   ## Enable in order to download DAG files from git repository.
   ##
   cloneDagFilesFromGit:
-    enabled: false
-    # repository:
-    # branch:
-    # interval:
-  ## URL used to access to airflow web ui
+    enabled: true
+    repository: git@github.com:CybercentreCanada/airflow-dags.git
+    branch: master
+    interval: 10
+    ## Name of secret in kubernetes containing the ssh keys for access to a git repo
+    sshKeySecret: dag-clone-key
+ ## URL used to access to airflow web ui
   ##
-  # baseUrl:
+  baseUrl: http://my_host${AIRFLOW_INGRESS_URI}
   ## Airflow worker component configuration
   worker:
     port: 8793
     replicas: 1
-
-  ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
-  ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
-  ##
-  # extraEnvVars:
-  #   - name: AIRFLOW__SMTP__SMTP_HOST
-  #     value: "localhost"
-  #   - name: AIRFLOW__SMTP__SMTP_PORT
-  #     value: "25"
-  #   - name: AIRFLOW__SMTP__USER
-  #     value: ""
 
   auth:
     ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
@@ -161,7 +153,7 @@ airflow:
     username: user
     ## Specify password to acccess web UI
     ##
-    # password:
+    password: test
     ## Specify a fernet key to secure airflow connections
     ## Fernet key must be 32 url-safe base64-encoded bytes.
     ## More info at:
@@ -171,15 +163,36 @@ airflow:
     # fernetKey:
     ## Use existing secret (ignores previous password and fernetKey)
     ##
-    # existingSecret:
+    # NOTE: this password is hard coded in the charts so don't try to change the name.
+    existingSecret: ${AIRFLOW_RELEASE_NAME}-secrets
+
+  ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
+  ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
+  ##
+  extraEnvVars:
+      - name: ARIFLOW__WEBSERVER__ENABLE_PROXY_FIX
+        value: "True"
+        # These are not working right now. I reported the issue to bitnami
+        # instead we have hard coded these airflow.cfg changes
+        # into the app-entrypoint.sh script
+        # - name: AIRFLOW__WEBSERVER__AUTHENTICATE
+        #   value: "True"
+        # - name: AIRFLOW__WEBSERVER__AUTH_BACKEND
+        #   value: "xuser-header-auth"
+  pool:
+    enabled: "true"
+    name: "kubernetes"
+    size: !!str "32"
+    description: ""
+
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
+  enabled: false
+  fsGroup: 1000
+  runAsUser: root 
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -205,10 +218,10 @@ service:
 ##
 ingress:
   ## Set to true to enable ingress record generation
-  enabled: false
+  enabled: true
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
-  certManager: false
+  certManager: true
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -217,26 +230,30 @@ ingress:
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   annotations:
-  #  kubernetes.io/ingress.class: nginx
-
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/auth-response-headers: "X-Auth-Request-User, X-Auth-Request-Email"
+    nginx.ingress.kubernetes.io/auth-signin: "https://auth.pilot.aadtest.ca/oauth2/start?rd=%2F$server_name$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "https://auth.pilot.aadtest.ca/oauth2/auth"
+  
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   ##
   hosts:
-    - name: airflow.local
-      path: /
-      ## Set this to true in order to enable TLS on the ingress record
-      tls: false
+  - name: airflow.pilot.aadtest.ca
+    path: ${AIRFLOW_INGRESS_URI}
 
-      ## Optionally specify the TLS hosts for the ingress record
-      ## Useful when the Ingress controller supports www-redirection
-      ## If not specified, the above host name will be used
-      # tlsHosts:
-      # - www.airflow.local
-      # - airflow.local
+    ## Set this to true in order to enable TLS on the ingress record
+    tls: true
 
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      tlsSecret: airflow.local-tls
+    ## Optionally specify the TLS hosts for the ingress record
+    ## Useful when the Ingress controller supports www-redirection
+    ## If not specified, the above host name will be used
+    # tlsHosts:
+    # - www.airflow.local
+    # - airflow.local
+
+    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+    tlsSecret: airflow.local-tls
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -304,8 +321,10 @@ readinessProbe:
 postgresql:
   enabled: true
   postgresqlUsername: bn_airflow
-  # postgresqlPassword:
+  #postgresqlPassword:
   postgresqlDatabase: bitnami_airflow
+#  nameOverride = 
+  existingSecret: ${AIRFLOW_RELEASE_NAME}-postgresql
 
 externalDatabase:
   ## All of these values are only used when postgresql.enabled is set to false
@@ -328,6 +347,7 @@ externalDatabase:
 redis:
   enabled: true
   # password: ""
+  existingSecret: ${AIRFLOW_RELEASE_NAME}-redis
 
 externalRedis:
   ## All of these values are only used when redis.enabled is set to false
@@ -341,12 +361,12 @@ externalRedis:
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
 
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20180711.0-debian-9-r94
+    tag: 0.20180711.0-debian-9-r67
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -354,6 +374,10 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9112"
 
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -365,9 +389,34 @@ metrics:
   # tolerations: []
 
   ## Metrics exporter pod Annotation and Labels
+  # podAnnotations: {}
   # podLabels: {}
 
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9112"
-
+additionalRepos:
+  enabled: true
+  repos:
+  - name: notebooks
+    repository: git@github.com:CybercentreCanada/jupyter-notebooks.git
+    branch: "master"
+    interval: 10
+    sshKeySecret: airflow-clone-keys
+workers:
+  - name: "kubernetes"
+    #volumes:
+    #- name: "VOLUME-TEST1"
+    #  emptyDir: {}
+    #image:
+    #  registry: "TEST REGISTRY"
+    #  repository: "TEST REPOSITORY"
+    #  tag: "TEST TAG"
+    #  pullPolicy: "TEST POLICY"
+    additionalRepos:
+      enabled: true
+      repos:
+      - name: notebooks
+        repository: git@github.com:CybercentreCanada/jupyter-notebooks.git
+        branch: "master"
+        interval: 10
+        sshKeySecret: airflow-clone-keys
+    replicas: 2
+    queue: "kubernetes"
