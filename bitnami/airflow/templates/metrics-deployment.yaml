@@ -67,5 +67,5 @@ spec:
           ports:
             - name: metrics
               containerPort: 9112
-          resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
 {{- end }}
