@@ -47,7 +47,7 @@ spec:
       {{- end }}
       {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
       initContainers:
-      - name: git-clone-dag-repository
+      - name: git-clone-repository
         image: "{{ template "git.image" . }}"
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
         command:
@@ -61,7 +61,7 @@ spec:
         - name: dag-git-keys
           mountPath: /root/.ssh
       containers:
-      - name: dag-repo-syncer
+      - name: git-repo-syncer
         image: "{{ template "git.image" . }}"
         imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
         command:
@@ -194,25 +194,25 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
       volumes:
       {{- if .Files.Glob "files/dags/*.py" }}
-      - name: local-dag-files
-        configMap:
-          name: {{ template "airflow.fullname" . }}-dag-files
+        - name: local-dag-files
+          configMap:
+            name: {{ template "airflow.fullname" . }}-dag-files
       {{- end }}
       {{- if .Values.airflow.dagsConfigMap }}
-      - name: external-dag-files
-        configMap:
-          name: {{ .Values.airflow.dagsConfigMap }}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.airflow.dagsConfigMap }}
       {{- end }}
       {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-      - name: git-cloned-dag-files
-        emptyDir: {}
-      - name: dag-git-keys
-        secret:
-          secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
-          defaultMode: 0600
+        - name: git-cloned-dag-files
+          emptyDir: {}
+        - name: dag-git-keys
+          secret:
+            secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            defaultMode: 0600
       {{- end }}
       {{- if .Values.airflow.configurationConfigMap }}
-      - name: custom-configuration-file
-        configMap:
-          name: {{ .Values.airflow.configurationConfigMap }}
+        - name: custom-configuration-file
+          configMap:
+            name: {{ .Values.airflow.configurationConfigMap }}
       {{- end }}

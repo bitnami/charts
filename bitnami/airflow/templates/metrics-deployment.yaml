@@ -17,14 +17,13 @@ spec:
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
-      annotations:
-{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+      annotations: {{ toYaml .Values.metrics.podAnnotations | nindent 8 }}
       labels:
         app.kubernetes.io/name: {{ include "airflow.name" . }}
         app.kubernetes.io/component: metrics
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-{{- include "airflow.imagePullSecrets" . | indent 6 }}
+    {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       containers:
       - image: {{ template "airflow.metrics.image" . }}
         name: airflow-exporter
