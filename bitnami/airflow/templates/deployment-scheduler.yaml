@@ -190,27 +190,27 @@ spec:
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
           {{- end }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
-        volumes:
-        {{- if .Files.Glob "files/dags/*.py" }}
-          - name: local-dag-files
-            configMap:
-              name: {{ template "airflow.fullname" . }}-dag-files
-        {{- end }}
-        {{- if .Values.airflow.dagsConfigMap }}
-          - name: external-dag-files
-            configMap:
-              name: {{ .Values.airflow.dagsConfigMap }}
-        {{- end }}
-        {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-          - name: git-cloned-dag-files
-            emptyDir: {}
-          - name: dag-git-keys
-            secret:
-              secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
-              defaultMode: 0600
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      {{- if .Files.Glob "files/dags/*.py" }}
+        - name: local-dag-files
+          configMap:
+            name: {{ template "airflow.fullname" . }}-dag-files
       {{- end }}
-        {{- if .Values.airflow.configurationConfigMap }}
+      {{- if .Values.airflow.dagsConfigMap }}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.airflow.dagsConfigMap }}
+      {{- end }}
+      {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+        - name: git-cloned-dag-files
+          emptyDir: {}
+        - name: dag-git-keys
+          secret:
+            secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            defaultMode: 0600
+      {{- end }}
+      {{- if .Values.airflow.configurationConfigMap }}
         - name: custom-configuration-file
           configMap:
             name: {{ .Values.airflow.configurationConfigMap }}
