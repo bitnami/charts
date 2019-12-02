@@ -188,8 +188,8 @@ spec:
               {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
             {{- end }}
           ports:
-          - name: http
-            containerPort: 8080
+            - name: http
+              containerPort: 8080
         {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
