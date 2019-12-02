@@ -184,12 +184,12 @@ spec:
             - name: AIRFLOW_POOL_DESCRIPTION
               value: {{ .Values.airflow.pool.description }}
               {{- end }}
-        {{- if .Values.airflow.extraEnvVars }}
-          {{ toYaml .Values.airflow.extraEnvVars | nindent 8 }}
-        {{- end }}
-        ports:
-        - name: http
-          containerPort: 8080
+            {{- if .Values.airflow.extraEnvVars }}
+              {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
+            {{- end }}
+          ports:
+          - name: http
+            containerPort: 8080
         {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -212,47 +212,46 @@ spec:
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
         {{- end }}
-        volumeMounts:
+          volumeMounts:
+            {{- if .Files.Glob "files/dags/*.py" }}
+            - name: local-dag-files
+              mountPath: /opt/bitnami/airflow/dags/local
+            {{- end }}
+            {{- if .Values.airflow.dagsConfigMap }}
+            - name: external-dag-files
+              mountPath: /opt/bitnami/airflow/dags/external
+            {{- end }}
+            {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+            - name: git-cloned-dag-files
+              mountPath: /opt/bitnami/airflow/dags/git
+            {{- end }}
+            {{- if .Values.airflow.configurationConfigMap }}
+            - name: custom-configuration-file
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: airflow.cfg
+            {{- end }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
         {{- if .Files.Glob "files/dags/*.py" }}
         - name: local-dag-files
-          mountPath: /opt/bitnami/airflow/dags/local
+          configMap:
+            name: {{ template "airflow.fullname" . }}-dag-files
         {{- end }}
         {{- if .Values.airflow.dagsConfigMap }}
         - name: external-dag-files
-          mountPath: /opt/bitnami/airflow/dags/external
+          configMap:
+            name: {{ .Values.airflow.dagsConfigMap }}
         {{- end }}
         {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
         - name: git-cloned-dag-files
-          mountPath: /opt/bitnami/airflow/dags/git
+          emptyDir: {}
+        - name: dag-git-keys
+          secret:
+            secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            defaultMode: 0600
         {{- end }}
         {{- if .Values.airflow.configurationConfigMap }}
         - name: custom-configuration-file
-          mountPath: /opt/bitnami/airflow/airflow.cfg
-          subPath: airflow.cfg
+          configMap:
+            name: {{ .Values.airflow.configurationConfigMap }}
         {{- end }}
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-      volumes:
-      {{- if .Files.Glob "files/dags/*.py" }}
-      - name: local-dag-files
-        configMap:
-          name: {{ template "airflow.fullname" . }}-dag-files
-      {{- end }}
-      {{- if .Values.airflow.dagsConfigMap }}
-      - name: external-dag-files
-        configMap:
-          name: {{ .Values.airflow.dagsConfigMap }}
-      {{- end }}
-      {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-      - name: git-cloned-dag-files
-        emptyDir: {}
-      - name: dag-git-keys
-        secret:
-          secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
-          defaultMode: 0600
-      {{- end }}
-      {{- if .Values.airflow.configurationConfigMap }}
-      - name: custom-configuration-file
-        configMap:
-          name: {{ .Values.airflow.configurationConfigMap }}
-      {{- end }}
