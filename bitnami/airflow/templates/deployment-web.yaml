@@ -47,7 +47,7 @@ spec:
       {{- end }}
       {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
       initContainers:
-        - name: git-clone-dag-repository
+        - name: git-clone-repository
           image: "{{ template "git.image" . }}"
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           command:
@@ -61,7 +61,7 @@ spec:
             - name: dag-git-keys
               mountPath: /root/.ssh
       containers:
-        - name: dag-repo-syncer
+        - name: git-repo-syncer
           image: "{{ template "git.image" . }}"
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           command:
@@ -92,98 +92,98 @@ spec:
             - name: NAMI_LOG_LEVEL
               value: "trace8"
             {{- end }}
-          - name: AIRFLOW_DATABASE_NAME
-            {{- if .Values.postgresql.enabled }}
-            value: {{ .Values.postgresql.postgresqlDatabase }}
-            {{- else }}
-            value: {{ .Values.externalDatabase.database | quote }}
-            {{- end }}
-          - name: AIRFLOW_DATABASE_USERNAME
-            {{- if .Values.postgresql.enabled }}
-            value: {{ .Values.postgresql.postgresqlUsername }}
-            {{- else }}
-            value: {{ .Values.externalDatabase.user | quote }}
-            {{- end }}
-          - name: AIRFLOW_DATABASE_PASSWORD
-            valueFrom:
-              secretKeyRef:
+            - name: AIRFLOW_DATABASE_NAME
               {{- if .Values.postgresql.enabled }}
-                name: {{ template "airflow.postgresql.fullname" . }}
-                key: postgresql-password
+              value: {{ .Values.postgresql.postgresqlDatabase }}
               {{- else }}
-                name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-                key: db-password
+              value: {{ .Values.externalDatabase.database | quote }}
               {{- end }}
-          - name: AIRFLOW_DATABASE_HOST
-            {{- if .Values.postgresql.enabled }}
-            value: {{ template "airflow.postgresql.fullname" . }}
-            {{- else }}
-            value: {{ .Values.externalDatabase.host | quote }}
-            {{- end }}
-          - name: AIRFLOW_DATABASE_PORT_NUMBER
-            {{- if .Values.postgresql.enabled }}
-            value: "5432"
-            {{- else }}
-            value: {{ .Values.externalDatabase.port | quote }}
-            {{- end }}
-          - name: REDIS_HOST
-            {{- if .Values.redis.enabled }}
-            value: {{ template "airflow.redis.fullname" . }}
-            {{- else }}
-            value: {{ .Values.externalRedis.host | quote }}
-            {{- end }}
-          - name: REDIS_PORT_NUMBER
-            {{- if .Values.redis.enabled }}
-            value: "6379"
-            {{- else }}
-            value: {{ .Values.externalRedis.port | quote }}
-            {{- end }}
-          - name: REDIS_PASSWORD
-            valueFrom:
-              secretKeyRef:
+            - name: AIRFLOW_DATABASE_USERNAME
+              {{- if .Values.postgresql.enabled }}
+              value: {{ .Values.postgresql.postgresqlUsername }}
+              {{- else }}
+              value: {{ .Values.externalDatabase.user | quote }}
+              {{- end }}
+            - name: AIRFLOW_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                {{- if .Values.postgresql.enabled }}
+                  name: {{ template "airflow.postgresql.fullname" . }}
+                  key: postgresql-password
+                {{- else }}
+                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+                  key: db-password
+                {{- end }}
+            - name: AIRFLOW_DATABASE_HOST
+              {{- if .Values.postgresql.enabled }}
+              value: {{ template "airflow.postgresql.fullname" . }}
+              {{- else }}
+              value: {{ .Values.externalDatabase.host | quote }}
+              {{- end }}
+            - name: AIRFLOW_DATABASE_PORT_NUMBER
+              {{- if .Values.postgresql.enabled }}
+              value: "5432"
+              {{- else }}
+              value: {{ .Values.externalDatabase.port | quote }}
+              {{- end }}
+            - name: REDIS_HOST
               {{- if .Values.redis.enabled }}
-                name: {{ template "airflow.redis.secretName" . }}
-                key: redis-password
+              value: {{ template "airflow.redis.fullname" . }}
               {{- else }}
-                name: {{ printf "%s-%s" .Release.Name "externalredis" }}
-                key: redis-password
+              value: {{ .Values.externalRedis.host | quote }}
               {{- end }}
-          - name: AIRFLOW_EXECUTOR
-            value: "CeleryExecutor"
-          - name: AIRFLOW_USERNAME
-            value: {{ .Values.airflow.auth.username }}
-          - name: AIRFLOW_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
-                key: airflow-password
-          - name: AIRFLOW_FERNET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
-                key: airflow-fernetKey
-          - name: AIRFLOW_WEBSERVER_HOST
-            value: {{ template "airflow.fullname" . }}
-            {{- if .Values.airflow.baseUrl }}
-          - name: AIRFLOW_BASE_URL
-            value: {{ .Values.airflow.baseUrl }}
-            {{- end }}
-          - name: AIRFLOW_LOAD_EXAMPLES
-            {{- if .Values.airflow.loadExamples }}
-            value: "yes"
-            {{- else }}
-            value: "no"
-            {{- end }}
-            {{- if .Values.airflow.pool.enabled }}
-          - name: AIRFLOW_POOL
-            value: "true"
-          - name: AIRFLOW_POOL_NAME
-            value: {{ .Values.airflow.pool.name }}
-          - name: AIRFLOW_POOL_SIZE
-            value: "32" 
-          - name: AIRFLOW_POOL_DESCRIPTION
-            value: {{ .Values.airflow.pool.description }}
-            {{- end }}
+            - name: REDIS_PORT_NUMBER
+              {{- if .Values.redis.enabled }}
+              value: "6379"
+              {{- else }}
+              value: {{ .Values.externalRedis.port | quote }}
+              {{- end }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                {{- if .Values.redis.enabled }}
+                  name: {{ template "airflow.redis.secretName" . }}
+                  key: redis-password
+                {{- else }}
+                  name: {{ printf "%s-%s" .Release.Name "externalredis" }}
+                  key: redis-password
+                {{- end }}
+            - name: AIRFLOW_EXECUTOR
+              value: "CeleryExecutor"
+            - name: AIRFLOW_USERNAME
+              value: {{ .Values.airflow.auth.username }}
+            - name: AIRFLOW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
+                  key: airflow-password
+            - name: AIRFLOW_FERNET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
+                  key: airflow-fernetKey
+            - name: AIRFLOW_WEBSERVER_HOST
+              value: {{ template "airflow.fullname" . }}
+              {{- if .Values.airflow.baseUrl }}
+            - name: AIRFLOW_BASE_URL
+              value: {{ .Values.airflow.baseUrl }}
+              {{- end }}
+            - name: AIRFLOW_LOAD_EXAMPLES
+              {{- if .Values.airflow.loadExamples }}
+              value: "yes"
+              {{- else }}
+              value: "no"
+              {{- end }}
+              {{- if .Values.airflow.pool.enabled }}
+            - name: AIRFLOW_POOL
+              value: "true"
+            - name: AIRFLOW_POOL_NAME
+              value: {{ .Values.airflow.pool.name }}
+            - name: AIRFLOW_POOL_SIZE
+              value: "32" 
+            - name: AIRFLOW_POOL_DESCRIPTION
+              value: {{ .Values.airflow.pool.description }}
+              {{- end }}
         {{- if .Values.airflow.extraEnvVars }}
           {{ toYaml .Values.airflow.extraEnvVars | nindent 8 }}
         {{- end }}
