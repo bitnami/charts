@@ -45,17 +45,17 @@ spec:
       {{- end }}
       {{- include "mongodb-sharded.imagePullSecrets" $ | nindent 6 }}
       initContainers:
-        {{- if and $.Values.volumePermissions.enabled $.Values.persistence.enabled }}
+        {{- if and $.Values.volumePermissions.enabled $.Values.shardsvr.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "mongodb-sharded.volumePermissions.image" $ }}
           imagePullPolicy: {{ $.Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["chown", "-R", "{{ $.Values.securityContext.runAsUser }}:{{ $.Values.securityContext.fsGroup }}", "{{ $.Values.persistence.mountPath }}"]
+          command: ["chown", "-R", "{{ $.Values.securityContext.runAsUser }}:{{ $.Values.securityContext.fsGroup }}", "{{ $.Values.shardsvr.persistence.mountPath }}"]
           securityContext:
             runAsUser: 0
           resources: {{ toYaml $.Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
             - name: datadir
-              mountPath: {{ $.Values.persistence.mountPath }}
+              mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
         {{- end }}
       containers:
         - name: mongodb
@@ -165,7 +165,7 @@ spec:
             - name: replicaset-entrypoint-configmap
               mountPath: /entrypoint
             - name: datadir
-              mountPath: {{ $.Values.persistence.mountPath }}
+              mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
             {{- if or $.Values.shardsvr.dataNode.config $.Values.shardsvr.dataNode.configCM }}
             - name: config
               mountPath: /bitnami/mongodb/conf/
@@ -282,23 +282,23 @@ spec:
         {{- if $.Values.shardsvr.dataNode.extraVolumes }}
           {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if $.Values.persistence.enabled }}
+  {{- if $.Values.shardsvr.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: datadir
         annotations:
-        {{- range $key, $value := $.Values.persistence.annotations }}
+        {{- range $key, $value := $.Values.shardsvr.persistence.annotations }}
           {{ $key }}: "{{ $value }}"
         {{- end }}
       spec:
         accessModes:
-        {{- range $.Values.persistence.accessModes }}
+        {{- range $.Values.shardsvr.persistence.accessModes }}
           - {{ . | quote }}
         {{- end }}
         resources:
           requests:
-            storage: {{ $.Values.persistence.size | quote }}
-        {{- include "mongodb-sharded.storageClass" $ | nindent 8}}
+            storage: {{ $.Values.shardsvr.persistence.size | quote }}
+        {{- include "mongodb-sharded.shardsvr.storageClass" $ | nindent 8}}
   {{- else }}
         - name: datadir
           emptyDir: {}
