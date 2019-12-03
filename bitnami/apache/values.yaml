@@ -121,6 +121,8 @@ resources:
 ##
 livenessProbe:
   enabled: true
+  path: "/"
+  port: http
   initialDelaySeconds: 180
   periodSeconds: 20
   timeoutSeconds: 5
@@ -128,6 +130,8 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
+  path: "/"
+  port: http
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
