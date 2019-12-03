@@ -280,7 +280,7 @@ spec:
         {{ if .Values.auth.enabled }}
         - name: kafka-certificates
           secret:
-            secretName: {{ required "A secret containinig the Kafka JKS certificates is required when authentication in enabled" .Values.auth.certificatesSecret }}
+            secretName: {{ required "A secret containing the Kafka JKS certificates is required when authentication in enabled" .Values.auth.certificatesSecret }}
             defaultMode: 256
         {{ end }}
 {{- if not .Values.persistence.enabled }}
