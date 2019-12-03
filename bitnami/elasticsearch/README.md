@@ -244,6 +244,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                               | `stretch`                                                    |
 | `volumePermissions.image.pullPolicy`              | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
 | `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| `kibana.enabled`                                  | Use bundled Kibana                                                                                                                                        | `false`                                                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -431,6 +432,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true
+```
+
+- Enable bundled Kibana:
+```diff
+- kibana.enabled: false
++ kibana.enabled: true
 ```
 
 ### Default kernel settings

@@ -730,3 +730,8 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+## Enable bundled Kibana
+##
+kibana:
+  enabled: false

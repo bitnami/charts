@@ -1,0 +1,5 @@
+dependencies:
+- name: kibana
+  version: 4.x.x
+  repository: https://charts.bitnami.com/bitnami
+  condition: kibana.enabled
