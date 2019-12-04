@@ -70,6 +70,7 @@ spec:
             - -skip-auth-regex=^\/config\.json$
             - -skip-auth-regex=^\/favicon.*\.png$
             - -skip-auth-regex=^\/static\/
+            - -skip-auth-regex=^\/$
             {{- range .Values.authProxy.additionalFlags }}
             - {{ . }}
             {{- end }}
