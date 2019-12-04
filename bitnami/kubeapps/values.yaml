@@ -22,6 +22,16 @@ ingress:
   ##
   certManager: false
 
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: kubeapps.local
+
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations,
   ## please see https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -35,18 +45,18 @@ ingress:
     ##
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  ##
-  hosts:
-    - name: kubeapps.local
-      path: /
-      ## Set this to true in order to enable TLS on the ingress record
-      ##
-      tls: false
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      ##
-      tlsSecret: kubeapps.local-tls
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: kubeapps.local
+  ##   path: /
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - kubeapps.local
+  ##   secretName: kubeapps.local-tls
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -59,9 +69,23 @@ ingress:
   ## Please see README.md for more information
   ##
   secrets: []
-  # - name: kubeapps.local-tls
-  #   key:
-  #   certificate:
+  ## - name: kubeapps.local-tls
+  ##   key:
+  ##   certificate:
+
+  ## DEPRECATED: to be removed on 3.0.0
+  ## The list of hostnames to be covered with this ingress record.
+  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  ##
+  hosts:
+    - name: kubeapps.local
+      path: /
+      ## Set this to true in order to enable TLS on the ingress record
+      ##
+      tls: false
+      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+      ##
+      tlsSecret: kubeapps.local-tls
 
 ## Frontend paramters
 ##
@@ -374,7 +398,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.7.1-debian-9-r0
+    tag: 1.7.1-debian-9-r10
   ## Dashboard service parameters
   ##
   service:
@@ -430,6 +454,7 @@ mongodb:
   ##
   persistence:
     enabled: false
+    size: 8Gi
   ## MongoDB credentials are handled by kubeapps to facilitate upgrades
   ##
   existingSecret: kubeapps-mongodb
@@ -488,10 +513,16 @@ authProxy:
     tag: 4.0.0-r32
   ## Mandatory parameters
   ##
-  provider:
-  clientID:
-  clientSecret:
-  cookieSecret:
+  provider: ""
+  clientID: ""
+  clientSecret: ""
+  ## cookieSecret is used by oauth2-proxy to encrypt any credentials so that it requires
+  ## no storage. Note that it must be a particular number of bytes. Recommend using the
+  ## following to generate a cookieSecret as per the oauth2 configuration documentation
+  ## at https://pusher.github.io/oauth2_proxy/configuration :
+  ## python -c 'import os,base64; print base64.urlsafe_b64encode(os.urandom(16))'
+  cookieSecret: ""
+  ## Use "example.com" to restrict logins to emails from example.com
   emailDomain: "*"
   ## Additional flags for oauth2-proxy
   ##

@@ -41,5 +41,7 @@ data:
     {
       "namespace": "{{ .Release.Namespace }}",
       "appVersion": "{{ .Chart.AppVersion }}",
-      "logoutURI": "/oauth2/sign_out"
+      "authProxyEnabled": {{ .Values.authProxy.enabled }},
+      "oauthLoginURI": "/oauth2/start",
+      "oauthLogoutURI": "/oauth2/sign_out"
     }
