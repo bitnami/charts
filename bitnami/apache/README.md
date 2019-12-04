@@ -75,6 +75,10 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `cloneHtdocsFromGit.branch`      | Branch inside the git repository                        | `nil`                                                        |
 | `cloneHtdocsFromGit.interval`    | Interval for sidecar container pull from the repository | `60`                                                         |
 | `podAnnotations`                 | Pod annotations                                         | `{}`                                                         |
+| `livenessProbe.enabled`          | Enable liveness probe                                   | `true`                                                       |
+| `livenessProbe.path`             | Path to access on the HTTP server                       | `/`                                                          |
+| `readinessProbe.enabled`         | Enable readiness probe                                  | `true`                                                       |
+| `readinessProbe.path`            | Path to access on the HTTP server                       | `/`                                                          |    
 | `ingress.enabled`                | Enable ingress controller resource                      | `false`                                                      |
 | `ingress.hostname`               | Default host for the ingress resource                   | `example.local`                                              |
 | `ingress.certManager`            | Add annotations for cert-manager                        | `false`                                                      |
