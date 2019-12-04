@@ -129,9 +129,11 @@ airflow:
   ##
   cloneDagFilesFromGit:
     enabled: false
-    # repository:
-    # branch:
-    # interval:
+    # repository: 
+    # branch: 
+    # interval: 
+    ## Name of secret in kubernetes containing the ssh keys for access to a git repo
+    # sshKeySecret:
   ## URL used to access to airflow web ui
   ##
   baseUrl: http://airflow.local
@@ -172,6 +174,13 @@ airflow:
     ## Use existing secret (ignores previous password and fernetKey)
     ##
     # existingSecret:
+
+  pool:
+    enabled: false
+    # name:
+    # size:
+    # description:
+
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
