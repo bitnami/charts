@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "frontend": {
+      "type": "object",
+      "title": "Frontend configuration",
+      "form": true,
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "title": "Number of replicas",
+          "form": true
+        }
+      }
+    },
+    "dashboard": {
+      "type": "object",
+      "title": "Dashboard configuration",
+      "form": true,
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "title": "Number of replicas",
+          "form": true
+        }
+      }
+    },
+    "chartsvc": {
+      "type": "object",
+      "title": "Chartsvc configuration",
+      "form": true,
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "title": "Number of replicas",
+          "form": true
+        }
+      }
+    },
+    "tillerProxy": {
+      "type": "object",
+      "title": "Tiller Proxy configuration",
+      "form": true,
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "title": "Number of replicas",
+          "form": true
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "form": true,
+      "title": "Ingress configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Use a custom hostname",
+          "description": "Enable the ingress resource that allows you to access the Kubeapps dashboard."
+        },
+        "hostname": {
+          "type": "string",
+          "form": true,
+          "title": "Hostname",
+          "hidden": {
+            "condition": false,
+            "value": "ingress.enabled"
+          }
+        },
+        "tls": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable TLS configuration",
+          "hidden": {
+            "condition": false,
+            "value": "ingress.enabled"
+          }
+        },
+        "certManager": {
+          "type": "boolean",
+          "form": true,
+          "title": "Use cert-manager to auto-generate the TLS certificate",
+          "description": "Add the corresponding annotations for cert-manager to auto-generate the TLS certificate",
+          "hidden": {
+            "condition": false,
+            "value": "ingress.enabled"
+          }
+        }
+      }
+    },
+    "authProxy": {
+      "type": "object",
+      "title": "OIDC Proxy configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable OIDC proxy",
+          "description": "Use an OIDC provider in order to manage accounts, groups and roles with a single application"
+        },
+        "provider": {
+          "type": "string",
+          "form": true,
+          "title": "Identity Provider name",
+          "description": "See https://pusher.github.io/oauth2_proxy/auth-configuration to find available providers",
+          "hidden": {
+            "condition": false,
+            "value": "authProxy.enabled"
+          }
+        },
+        "clientID": {
+          "type": "string",
+          "form": true,
+          "title": "Client ID:",
+          "description": "Client ID of the Identity Provider",
+          "hidden": {
+            "condition": false,
+            "value": "authProxy.enabled"
+          }
+        },
+        "clientSecret": {
+          "type": "string",
+          "form": true,
+          "title": "Client Secret",
+          "description": "Secret used to validate the Client ID",
+          "hidden": {
+            "condition": false,
+            "value": "authProxy.enabled"
+          }
+        },
+        "cookieSecret": {
+          "type": "string",
+          "form": true,
+          "title": "Cookie Secret",
+          "description": "Used by OAuth2 Proxy to encrypt any credentials",
+          "hidden": {
+            "condition": false,
+            "value": "authProxy.enabled"
+          }
+        }
+      }
+    },
+    "mongodb": {
+      "type": "object",
+      "title": "MongoDB configuration",
+      "form": true,
+      "properties": {
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "form": true,
+              "title": "Enable persistence",
+              "description": "Enable persistence using Persistent Volume Claims"
+            },
+            "size": {
+              "type": "string",
+              "title": "Volume Size",
+              "form": true,
+              "render": "slider",
+              "sliderMin": 1,
+              "sliderMax": 100,
+              "sliderUnit": "Gi",
+              "hidden": {
+                "condition": false,
+                "value": "mongodb.persistence.enabled"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
