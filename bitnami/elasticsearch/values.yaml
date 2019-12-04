@@ -735,3 +735,7 @@ metrics:
 ##
 kibana:
   enabled: false
+  elasticsearch:
+    hosts:
+    - {{ include "influxdb.fullname" . }}
+    port: 9200
