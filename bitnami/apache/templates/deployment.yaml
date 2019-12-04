@@ -80,7 +80,7 @@ spec:
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.livenessProbe.port }}
+              port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -91,7 +91,7 @@ spec:
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.readinessProbe.port }}
+              port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
