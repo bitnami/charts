@@ -109,13 +109,6 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                   |
 | `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                   |
 | `securityContext.runAsNonRoot`       | Run containers as non-root users                                                                                                                          | `true`                                                   |
-| `persistence.enabled`                | Use a PVC to persist data                                                                                                                                 | `true`                                                   |
-| `persistence.mountPath`              | Path to mount the volume at                                                                                                                               | `/bitnami/mongodb`                                       |
-| `persistence.subPath`                | Subdirectory of the volume to mount at                                                                                                                    | `""`                                                     |
-| `persistence.storageClass`           | Storage class of backing PVC                                                                                                                              | `nil` (uses alpha storage class annotation)              |
-| `persistence.accessModes`            | Use volume as ReadOnly or ReadWrite                                                                                                                       | `[ReadWriteOnce]`                                        |
-| `persistence.size`                   | Size of data volume                                                                                                                                       | `8Gi`                                                    |
-| `persistence.annotations`            | Persistent Volume annotations                                                                                                                             | `{}`                                                     |
 | `livenessProbe.enabled`              | Enable/disable the Liveness probe                                                                                                                         | `true`                                                   |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                  | `30`                                                     |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                            | `10`                                                     |
@@ -133,28 +126,35 @@ The following table lists the configurable parameters of the MongoDB chart and t
 
 ### Config Server configuration
 
-| Parameter                      | Description                                                                                     | Default         |
-|--------------------------------|-------------------------------------------------------------------------------------------------|-----------------|
-| `configsvr.replicas`           | Number of nodes in the replica set (the first node will be primary)                             | `1`             |
-| `configsvr.podAnnotations`     | Annotations to be added to the deployment or statefulsets                                       | `{}`            |
-| `configsvr.podLabels`          | Annotations to be added to the deployment or statefulsets                                       | `{}`            |
-| `configsvr.resources`          | Pod resources                                                                                   | `{}`            |
-| `configsvr.priorityClassName`  | Pod priority class name                                                                         | ``              |
-| `configsvr.nodeSelector`       | Node labels for pod assignment (evaluated as a template)                                        | `{}`            |
-| `configsvr.affinity`           | Affinity for pod assignment (evaluated as a template)                                           | `{}`            |
-| `configsvr.tolerations`        | Toleration labels for pod assignment (evaluated as a template)                                  | `{}`            |
-| `configsvr.updateStrategy`     | Statefulsets update strategy policy (evaluated as a template)                                   | `RollingUpdate` |
-| `configsvr.schedulerName`      | Name of the k8s scheduler (other than default)                                                  | `nil`           |
-| `configsvr.sidecars`           | Attach additional containers (evaluated as a template)                                          | `nil`           |
-| `configsvr.initContainers`     | Add additional init containers (evaluated as a template)                                        | `nil`           |
-| `configsvr.config`             | MongoDB configuration                                                                           | `nil`           |
-| `configsvr.configCM`           | ConfigMap name with MongoDB configuration (cannot be used with configsvr.config)                | `nil`           |
-| `configsvr.mongodbExtraFlags`  | MongoDB additional command line flags                                                           | `[]`            |
-| `configsvr.extraEnvVars`       | Array containing extra env vars (evaluated as a template)                                       | `nil`           |
-| `configsvr.extraEnvVarsCM`     | ConfigMap containing extra env vars (evaluated as a template)                                   | `nil`           |
-| `configsvr.extraEnvVarsSecret` | Secret containing extra env vars (evaluated as a template)                                      | `nil`           |
-| `configsvr.extraVolumes`       | Array of extra volumes (evaluated as template). Requires setting `common.extraVolumeMounts`     | `nil`           |
-| `configsvr.extraVolumeMounts`  | Array of extra volume mounts (evaluated as template). Normally used with `common.extraVolumes`. | `nil`           |
+| Parameter                            | Description                                                                                     | Default                                     |
+|--------------------------------------|-------------------------------------------------------------------------------------------------|---------------------------------------------|
+| `configsvr.replicas`                 | Number of nodes in the replica set (the first node will be primary)                             | `1`                                         |
+| `configsvr.podAnnotations`           | Annotations to be added to the deployment or statefulsets                                       | `{}`                                        |
+| `configsvr.podLabels`                | Annotations to be added to the deployment or statefulsets                                       | `{}`                                        |
+| `configsvr.resources`                | Pod resources                                                                                   | `{}`                                        |
+| `configsvr.priorityClassName`        | Pod priority class name                                                                         | ``                                          |
+| `configsvr.nodeSelector`             | Node labels for pod assignment (evaluated as a template)                                        | `{}`                                        |
+| `configsvr.affinity`                 | Affinity for pod assignment (evaluated as a template)                                           | `{}`                                        |
+| `configsvr.tolerations`              | Toleration labels for pod assignment (evaluated as a template)                                  | `{}`                                        |
+| `configsvr.updateStrategy`           | Statefulsets update strategy policy (evaluated as a template)                                   | `RollingUpdate`                             |
+| `configsvr.schedulerName`            | Name of the k8s scheduler (other than default)                                                  | `nil`                                       |
+| `configsvr.sidecars`                 | Attach additional containers (evaluated as a template)                                          | `nil`                                       |
+| `configsvr.initContainers`           | Add additional init containers (evaluated as a template)                                        | `nil`                                       |
+| `configsvr.config`                   | MongoDB configuration                                                                           | `nil`                                       |
+| `configsvr.configCM`                 | ConfigMap name with MongoDB configuration (cannot be used with configsvr.config)                | `nil`                                       |
+| `configsvr.mongodbExtraFlags`        | MongoDB additional command line flags                                                           | `[]`                                        |
+| `configsvr.extraEnvVars`             | Array containing extra env vars (evaluated as a template)                                       | `nil`                                       |
+| `configsvr.extraEnvVarsCM`           | ConfigMap containing extra env vars (evaluated as a template)                                   | `nil`                                       |
+| `configsvr.extraEnvVarsSecret`       | Secret containing extra env vars (evaluated as a template)                                      | `nil`                                       |
+| `configsvr.extraVolumes`             | Array of extra volumes (evaluated as template). Requires setting `common.extraVolumeMounts`     | `nil`                                       |
+| `configsvr.extraVolumeMounts`        | Array of extra volume mounts (evaluated as template). Normally used with `common.extraVolumes`. | `nil`                                       |
+| `configsvr.persistence.enabled`      | Use a PVC to persist data                                                                       | `true`                                      |
+| `configsvr.persistence.mountPath`    | Path to mount the volume at                                                                     | `/bitnami/mongodb`                          |
+| `configsvr.persistence.subPath`      | Subdirectory of the volume to mount at                                                          | `""`                                        |
+| `configsvr.persistence.storageClass` | Storage class of backing PVC                                                                    | `nil` (uses alpha storage class annotation) |
+| `configsvr.persistence.accessModes`  | Use volume as ReadOnly or ReadWrite                                                             | `[ReadWriteOnce]`                           |
+| `configsvr.persistence.size`         | Size of data volume                                                                             | `8Gi`                                       |
+| `configsvr.persistence.annotations`  | Persistent Volume annotations                                                                   | `{}`                                        |
 
 ### Mongos configuration
 
@@ -183,28 +183,35 @@ The following table lists the configurable parameters of the MongoDB chart and t
 
 ### Shard configuration: Data nodes
 
-| Parameter                              | Description                                                                                     | Default         |
-|----------------------------------------|-------------------------------------------------------------------------------------------------|-----------------|
-| `shardsvr.dataNode.replicas`           | Number of nodes in each shard replica set (the first node will be primary)                      | `1`             |
-| `shardsvr.dataNode.podAnnotations`     | Annotations to be added to the deployment or statefulsets                                       | `{}`            |
-| `shardsvr.dataNode.podLabels`          | Annotations to be added to the deployment or statefulsets                                       | `{}`            |
-| `shardsvr.dataNode.resources`          | Pod resources                                                                                   | `{}`            |
-| `shardsvr.dataNode.priorityClassName`  | Pod priority class name                                                                         | ``              |
-| `shardsvr.dataNode.nodeSelector`       | Node labels for pod assignment (evaluated as a template)                                        | `{}`            |
-| `shardsvr.dataNode.affinity`           | Affinity for pod assignment (evaluated as a template)                                           | `{}`            |
-| `shardsvr.dataNode.tolerations`        | Toleration labels for pod assignment (evaluated as a template)                                  | `{}`            |
-| `shardsvr.dataNode.updateStrategy`     | Statefulsets update strategy policy (evaluated as a template)                                   | `RollingUpdate` |
-| `shardsvr.dataNode.schedulerName`      | Name of the k8s scheduler (other than default)                                                  | `nil`           |
-| `shardsvr.dataNode.sidecars`           | Attach additional containers (evaluated as a template)                                          | `nil`           |
-| `shardsvr.dataNode.initContainers`     | Add additional init containers (evaluated as a template)                                        | `nil`           |
-| `shardsvr.dataNode.config`             | MongoDB configuration                                                                           | `nil`           |
-| `shardsvr.dataNode.configCM`           | ConfigMap name with MongoDB configuration (cannot be used with shardsvr.dataNode.config)        | `nil`           |
-| `shardsvr.dataNode.mongodbExtraFlags`  | MongoDB additional command line flags                                                           | `[]`            |
-| `shardsvr.dataNode.extraEnvVars`       | Array containing extra env vars (evaluated as a template)                                       | `nil`           |
-| `shardsvr.dataNode.extraEnvVarsCM`     | ConfigMap containing extra env vars (evaluated as a template)                                   | `nil`           |
-| `shardsvr.dataNode.extraEnvVarsSecret` | Secret containing extra env vars (evaluated as a template)                                      | `nil`           |
-| `shardsvr.dataNode.extraVolumes`       | Array of extra volumes (evaluated as template). Requires setting `common.extraVolumeMounts`     | `nil`           |
-| `shardsvr.dataNode.extraVolumeMounts`  | Array of extra volume mounts (evaluated as template). Normally used with `common.extraVolumes`. | `nil`           |
+| Parameter                              | Description                                                                                     | Default                                     |
+|----------------------------------------|-------------------------------------------------------------------------------------------------|---------------------------------------------|
+| `shardsvr.dataNode.replicas`           | Number of nodes in each shard replica set (the first node will be primary)                      | `1`                                         |
+| `shardsvr.dataNode.podAnnotations`     | Annotations to be added to the deployment or statefulsets                                       | `{}`                                        |
+| `shardsvr.dataNode.podLabels`          | Annotations to be added to the deployment or statefulsets                                       | `{}`                                        |
+| `shardsvr.dataNode.resources`          | Pod resources                                                                                   | `{}`                                        |
+| `shardsvr.dataNode.priorityClassName`  | Pod priority class name                                                                         | ``                                          |
+| `shardsvr.dataNode.nodeSelector`       | Node labels for pod assignment (evaluated as a template)                                        | `{}`                                        |
+| `shardsvr.dataNode.affinity`           | Affinity for pod assignment (evaluated as a template)                                           | `{}`                                        |
+| `shardsvr.dataNode.tolerations`        | Toleration labels for pod assignment (evaluated as a template)                                  | `{}`                                        |
+| `shardsvr.dataNode.updateStrategy`     | Statefulsets update strategy policy (evaluated as a template)                                   | `RollingUpdate`                             |
+| `shardsvr.dataNode.schedulerName`      | Name of the k8s scheduler (other than default)                                                  | `nil`                                       |
+| `shardsvr.dataNode.sidecars`           | Attach additional containers (evaluated as a template)                                          | `nil`                                       |
+| `shardsvr.dataNode.initContainers`     | Add additional init containers (evaluated as a template)                                        | `nil`                                       |
+| `shardsvr.dataNode.config`             | MongoDB configuration                                                                           | `nil`                                       |
+| `shardsvr.dataNode.configCM`           | ConfigMap name with MongoDB configuration (cannot be used with shardsvr.dataNode.config)        | `nil`                                       |
+| `shardsvr.dataNode.mongodbExtraFlags`  | MongoDB additional command line flags                                                           | `[]`                                        |
+| `shardsvr.dataNode.extraEnvVars`       | Array containing extra env vars (evaluated as a template)                                       | `nil`                                       |
+| `shardsvr.dataNode.extraEnvVarsCM`     | ConfigMap containing extra env vars (evaluated as a template)                                   | `nil`                                       |
+| `shardsvr.dataNode.extraEnvVarsSecret` | Secret containing extra env vars (evaluated as a template)                                      | `nil`                                       |
+| `shardsvr.dataNode.extraVolumes`       | Array of extra volumes (evaluated as template). Requires setting `common.extraVolumeMounts`     | `nil`                                       |
+| `shardsvr.dataNode.extraVolumeMounts`  | Array of extra volume mounts (evaluated as template). Normally used with `common.extraVolumes`. | `nil`                                       |
+| `shardsvr.persistence.enabled`         | Use a PVC to persist data                                                                       | `true`                                      |
+| `shardsvr.persistence.mountPath`       | Path to mount the volume at                                                                     | `/bitnami/mongodb`                          |
+| `shardsvr.persistence.subPath`         | Subdirectory of the volume to mount at                                                          | `""`                                        |
+| `shardsvr.persistence.storageClass`    | Storage class of backing PVC                                                                    | `nil` (uses alpha storage class annotation) |
+| `shardsvr.persistence.accessModes`     | Use volume as ReadOnly or ReadWrite                                                             | `[ReadWriteOnce]`                           |
+| `shardsvr.persistence.size`            | Size of data volume                                                                             | `8Gi`                                       |
+| `shardsvr.persistence.annotations`     | Persistent Volume annotations                                                                   | `{}`                                        |
 
 ### Shard configuration: Arbiters
 
