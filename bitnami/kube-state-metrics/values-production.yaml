@@ -8,6 +8,7 @@ global:
   #   - myRegistryKeySecretName
   # storageClass: myStorageClass
 
+  ## Additional labels to apply to all resources
   labels: {}
   #   foo: bar
 
@@ -202,6 +203,7 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
 livenessProbe:
+  enabled: true
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -209,6 +211,7 @@ livenessProbe:
   successThreshold: 1
 
 readinessProbe:
+  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
