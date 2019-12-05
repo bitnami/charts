@@ -16,7 +16,7 @@ spec:
       {{- end }}
       labels: {{- include "kube-state-metrics.labels" . | nindent 8 }}
         {{- if .Values.podLabels }}
-{{ toYaml .Values.podLabels | indent 8 }}
+        {{- toYaml .Values.podLabels | indent 8 }}
         {{- end }}
     spec:
 {{- include "kube-state-metrics.imagePullSecrets" . | indent 6 }}
@@ -31,7 +31,7 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       serviceAccountName: {{ template "kube-state-metrics.serviceAccountName" . }}
       containers:
-        - name: {{ template "kube-state-metrics.name" . }}
+        - name: kube-state-metrics
           image: {{ template "kube-state-metrics.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
@@ -121,16 +121,20 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
               port: http
 {{ toYaml .Values.livenessProbe | indent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /
               port: http
 {{ toYaml .Values.readinessProbe | indent 12 }}
+          {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
