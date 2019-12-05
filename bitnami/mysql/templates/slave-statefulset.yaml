@@ -26,13 +26,13 @@ spec:
     spec:
 {{- include "mysql.imagePullSecrets" . | indent 6 }}
       {{- if .Values.slave.affinity }}
-      affinity: {{- include "mariadb-galera.tplValue" (dict "value" .Values.slave.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "mysql.tplValue" (dict "value" .Values.slave.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.slave.nodeSelector }}
-      nodeSelector: {{- include "mariadb-galera.tplValue" (dict "value" .Values.slave.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "mysql.tplValue" (dict "value" .Values.slave.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.slave.tolerations }}
-      tolerations: {{- include "mariadb-galera.tplValue" (dict "value" .Values.slave.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "mysql.tplValue" (dict "value" .Values.slave.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.slave.securityContext.enabled }}
       securityContext:
@@ -71,25 +71,43 @@ spec:
               value: "3306"
             - name: MYSQL_MASTER_ROOT_USER
               value: "root"
+            {{- if .Values.root.injectSecretsAsVolume }}
+            - name: MYSQL_MASTER_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/mysql/secrets/mysql-root-password"
+            {{- else }}
             - name: MYSQL_MASTER_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mysql.fullname" . }}
                   key: mysql-root-password
+            {{- end }}
             - name: MYSQL_REPLICATION_USER
               value: "{{ .Values.replication.user }}"
+            {{- if .Values.replication.injectSecretsAsVolume }}
+            - name: MYSQL_REPLICATION_PASSWORD_FILE
+              value: "/opt/bitnami/mysql/secrets/mysql-replication-password"
+            {{- else }}
             - name: MYSQL_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mysql.fullname" . }}
                   key: mysql-replication-password
+            {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
           {{- if .Values.slave.livenessProbe.enabled }}
           livenessProbe:
             exec:
-              command: ["sh", "-c", "exec mysqladmin status -uroot -p$MYSQL_MASTER_ROOT_PASSWORD"]
+              command:
+                - sh
+                - -c
+                - |
+                  password_aux="${MYSQL_MASTER_ROOT_PASSWORD:-}"
+                  if [ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]; then
+                      password_aux=$(cat $MYSQL_MASTER_ROOT_PASSWORD_FILE)
+                  fi
+                  mysqladmin status -uroot -p$password_aux
             initialDelaySeconds: {{ .Values.slave.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.slave.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.slave.livenessProbe.timeoutSeconds }}
@@ -99,7 +117,15 @@ spec:
           {{- if .Values.slave.readinessProbe.enabled }}
           readinessProbe:
             exec:
-              command: ["sh", "-c", "exec mysqladmin status -uroot -p$MYSQL_MASTER_ROOT_PASSWORD"]
+              command:
+                - sh
+                - -c
+                - |
+                  password_aux="${MYSQL_MASTER_ROOT_PASSWORD:-}"
+                  if [ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]; then
+                      password_aux=$(cat $MYSQL_MASTER_ROOT_PASSWORD_FILE)
+                  fi
+                  mysqladmin status -uroot -p$password_aux
             initialDelaySeconds: {{ .Values.slave.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.slave.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.slave.readinessProbe.timeoutSeconds }}
@@ -121,21 +147,34 @@ spec:
               mountPath: /opt/bitnami/mysql/conf/my.cnf
               subPath: my.cnf
             {{- end }}
+            {{- if or .Values.root.injectSecretsAsVolume .Values.replication.injectSecretsAsVolume }}
+            - name: mysql-credentials
+              mountPath: /opt/bitnami/mysql/secrets/
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "mysql.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           env:
+            {{- if .Values.root.injectSecretsAsVolume }}
+            - name: MYSQL_MASTER_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/mysqld-exporter/secrets/mysql-root-password"
+            {{- else }}
             - name: MYSQL_MASTER_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mysql.fullname" . }}
                   key: mysql-root-password
+            {{- end }}
           command:
             - /bin/sh
             - -c
             - |
-              DATA_SOURCE_NAME="root:$MYSQL_MASTER_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter
+              password_aux="${MYSQL_MASTER_ROOT_PASSWORD:-}"
+              if [ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]; then
+                  password_aux=$(cat $MYSQL_MASTER_ROOT_PASSWORD_FILE)
+              fi
+              DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter
           ports:
             - name: metrics
               containerPort: 9104
@@ -154,12 +193,31 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+          {{- if or .Values.root.injectSecretsAsVolume }}
+          volumeMounts:
+            - name: mysql-credentials
+              mountPath: /opt/bitnami/mysql/secrets/
+          {{- end }}
         {{- end }}
       volumes:
         {{- if .Values.slave.config }}
         - name: config
           configMap:
             name: {{ template "mysql.slave.fullname" . }}
+        {{- end }}
+        {{- if or .Values.root.injectSecretsAsVolume .Values.replication.injectSecretsAsVolume }}
+        - name: mysql-credentials
+          secret:
+            secretName: {{ template "mysql.fullname" . }}
+            items:
+              {{- if .Values.root.injectSecretsAsVolume }}
+              - key: mysql-root-password
+                path: mysql-root-password
+              {{- end }}
+              {{- if .Values.replication.injectSecretsAsVolume }}
+              - key: mysql-replication-password
+                path: mysql-replication-password
+              {{- end }}
         {{- end }}
 {{- if not .Values.slave.persistence.enabled }}
         - name: "data"
