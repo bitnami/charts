@@ -6,7 +6,7 @@ metadata:
   labels: {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: relay
 spec:
-  replicas: 1
+  replicas: {{ .Values.relay.replicaCount }}
   selector:
     matchLabels: {{- include "influxdb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: relay
