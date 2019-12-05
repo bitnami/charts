@@ -13,8 +13,8 @@ spec:
     - ports:
         - port: {{ .Values.service.port }}
         - port: {{ .Values.service.thriftPort }}
-      {{- if not .Values.networkPolicy.allowExternal }}
       from:
+      {{- if not .Values.networkPolicy.allowExternal }}
         - podSelector:
             matchLabels:
               {{ include "cassandra.fullname" . }}-client: "true"
