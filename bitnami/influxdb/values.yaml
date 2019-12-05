@@ -194,15 +194,15 @@ influxdb:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 15
+    periodSeconds: 45
+    timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
   readinessProbe:
     enabled: true
     initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 15
+    periodSeconds: 45
+    timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
 
