@@ -123,7 +123,7 @@ tolerations: {}
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
 persistence:
   enabled: false
-  # storageClassName: ""
+  storageClassName: ""
   # requests:
   #   storage: 5Gi
 
