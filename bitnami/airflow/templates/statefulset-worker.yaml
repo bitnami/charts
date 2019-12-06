@@ -216,7 +216,7 @@ spec:
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ template "airflow.fullname" . }}
             - name: AIRFLOW_QUEUE
-              value: {{ default "default " .Values.airflow.worker.queue }}
+              value: {{ default "default" .Values.airflow.worker.queue }}
             {{- if .Values.airflow.extraEnvVars }}
               {{ toYaml .Values.airflow.extraEnvVars | nindent 8 }}
             {{- end }}
