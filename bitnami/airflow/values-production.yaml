@@ -379,3 +379,32 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9112"
+
+additionalRepos:
+  enabled: false
+  # repos:
+  # - name:
+    # repository:
+    # branch:
+    # interval:
+    # sshKeySecret:
+workers:
+  # - name:
+    #volumes:
+    #- name:
+    #  emptyDir: {}
+    #image:
+    #  registry:
+    #  repository:
+    #  tag:
+    #  pullPolicy:
+    # additionalRepos:
+      # enabled: false
+      # repos:
+      # - name:
+      #   repository:
+      #   branch:
+      #   interval:
+      #   sshKeySecret:
+    # replicas:
+    # queue:
