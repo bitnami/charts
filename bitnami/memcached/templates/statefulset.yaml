@@ -1,6 +1,6 @@
-{{- if eq .Values.architecture "standalone" }}
+{{- if eq .Values.architecture "high-availability" }}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ template "memcached.fullname" . }}
   labels: {{- include "memcached.labels" . | nindent 4 }}
@@ -42,6 +42,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
 {{ toYaml .Values.command | indent 12 }}
+{{- if .Values.persistence.enabled }}
+            - -e /cache-state/memory_file
+{{- end }}
           env:
             - name: MEMCACHED_USERNAME
               value: {{ default "" .Values.memcachedUsername | quote }}
@@ -90,5 +93,20 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: pv-data
+              mountPath: /cache-state
         {{- end }}
+{{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: pv-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: {{ .Values.persistence.storageClassName }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.requests.storage }}
+{{- end }}
 {{- end }}
