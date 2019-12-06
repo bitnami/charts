@@ -8,6 +8,7 @@ spec:
   selector:
     matchLabels: {{- include "memcached.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
+  serviceName: {{ template "memcached.fullname" . }}-headless
   template:
     metadata:
       labels: {{- include "memcached.labels" . | nindent 8 }}
