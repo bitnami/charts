@@ -66,21 +66,24 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.additionalRepos.enabled }}
-        {{- range .Values.additionalRepos.repos }}
         - name: git-clone-{{ .name }}
           image: "{{ template "git.image" $ }}"
           imagePullPolicy: {{ $.Values.git.pullPolicy | quote }}
           command:
             - /bin/bash
             - -ec
+            {{- range .Values.additionalRepos.repos }}
             - |
               git clone {{ .repository }} --branch {{ .branch }} /{{ .name }}
+            {{- end }}
           volumeMounts:
+            {{- range .Values.additionalRepos.repos }}
             - name: git-cloned-{{ .name }}
               mountPath: /{{ .name }}
             {{- if .sshKeySecret }}
             - name: {{ .name }}-git-keys
               mountPath: /root/.ssh
+            {{- end }}
             {{- end }}
         {{- end }}
         {{- end }}
@@ -106,7 +109,6 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.additionalRepos.enabled }}
-        {{- range .Values.additionalRepos.repos }}
         - name: {{ .name }}-repo-syncer
           image: "{{ template "git.image" $ }}"
           imagePullPolicy: {{ $.Values.git.pullPolicy | quote }}
@@ -115,15 +117,19 @@ spec:
             - -ec
             - |
               while true; do
+                {{- range .Values.additionalRepos.repos }}
                   cd /{{ .name }} && git pull origin {{ .branch }}
+                {{- end }}
                   sleep {{ default "60" .interval }}
               done
           volumeMounts:
+            {{- range .Values.additionalRepos.repos }}
             - name: git-cloned-{{ .name }}
               mountPath: /{{ .name }}
             {{- if .sshKeySecrets }}
             - name: {{ .name }}-git-keys
               mountPath: /root/.ssh
+            {{- end }}
             {{- end }}
         {{- end }}
         {{- end }}
