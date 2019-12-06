@@ -132,7 +132,7 @@ persistence:
 command:
   - memcached
   # - -m <maxMemoryLimit>
-  # - -i <maxItemSize>
+  # - -I <maxItemSize>
   # - -vv
 
 ## Prometheus Exporter / Metrics
