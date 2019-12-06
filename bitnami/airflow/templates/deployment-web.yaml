@@ -58,8 +58,10 @@ spec:
           volumeMounts:
             - name: git-cloned-dag-files
               mountPath: /dags
+            {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
             - name: dag-git-keys
               mountPath: /root/.ssh
+            {{- end }}
       containers:
         - name: git-repo-syncer
           image: "{{ template "git.image" . }}"
@@ -75,8 +77,10 @@ spec:
           volumeMounts:
             - name: git-cloned-dag-files
               mountPath: /dags
+            {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
             - name: dag-git-keys
               mountPath: /root/.ssh
+            {{- end }}
       {{- else }}
       containers:
       {{- end }}
@@ -180,7 +184,7 @@ spec:
             - name: AIRFLOW_POOL_NAME
               value: {{ .Values.airflow.pool.name }}
             - name: AIRFLOW_POOL_SIZE
-              value: "32" 
+              value: {{ .Values.airflow.pool.size }}
             - name: AIRFLOW_POOL_DESCRIPTION
               value: {{ .Values.airflow.pool.description }}
               {{- end }}
@@ -245,10 +249,12 @@ spec:
         {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
         - name: git-cloned-dag-files
           emptyDir: {}
+        {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
         - name: dag-git-keys
           secret:
             secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
             defaultMode: 0600
+        {{- end }}
         {{- end }}
         {{- if .Values.airflow.configurationConfigMap }}
         - name: custom-configuration-file
