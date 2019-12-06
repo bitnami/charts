@@ -89,6 +89,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                                 | `nil`                                                        |
 | `airflow.worker.port`                     | Airflow Worker port                                                                                  | `8793`                                                       |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                                    | `2`                                                          |
+| `airflow.worker.queue`      		    | Dedicated queue for the default worker 								   | `default`						   	  |
 | `airflow.auth.forcePassword`              | Force users to specify a password                                                                    | `false`                                                      |
 | `airflow.auth.username`                   | Username to access web UI                                                                            | `user`                                                       |
 | `airflow.auth.password`                   | Password to access web UI                                                                            | `nil`                                                        |
