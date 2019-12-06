@@ -203,15 +203,13 @@ spec:
               value: {{ .Values.airflow.pool.description }}
               {{- end }}
             - name: AIRFLOW_QUEUE
-              value: {{ default "default " .Values.airflow.worker.queue }}
-              {{- if .Values.airflow.extraEnvVars }}
-                {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
-              {{- end }}
-            - name: AIRFLOW_EXECUTOR
-              value: "CeleryExecutor"
-        ports:
-        - name: http
-          containerPort: 8080
+              value: {{ default "default" .Values.airflow.worker.queue }}
+            {{- if .Values.airflow.extraEnvVars }}
+              {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
