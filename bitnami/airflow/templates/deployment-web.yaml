@@ -84,6 +84,7 @@ spec:
       {{- else }}
       containers:
       {{- end }}
+<<<<<<< HEAD
       - name: airflow-web
         image: {{ template "airflow.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -101,6 +102,19 @@ spec:
             value: {{ .Values.postgresql.postgresqlDatabase }}
             {{- else }}
             value: {{ .Values.externalDatabase.database | quote }}
+=======
+        - name: airflow-web
+          image: {{ template "airflow.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            {{- if .Values.image.debug }}
+            - name: BASH_DEBUG
+              value: "1"
+            - name: NAMI_DEBUG
+              value: "1"
+            - name: NAMI_LOG_LEVEL
+              value: "trace8"
+>>>>>>> Changed worker to create one container for all additional repos
             {{- end }}
           - name: AIRFLOW_DATABASE_USERNAME
             {{- if .Values.postgresql.enabled }}
@@ -258,28 +272,30 @@ spec:
             mountPath: /opt/bitnami/airflow/airflow.cfg
             subPath: airflow.cfg
             {{- end }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
-        volumes:
-          {{- if .Files.Glob "files/dags/*.py" }}
-          - name: local-dag-files
-            mountPath: /opt/bitnami/airflow/dags/local
-          {{- end }}
-          {{- if .Values.airflow.dagsConfigMap }}
-          - name: external-dag-files
-            mountPath: /opt/bitnami/airflow/dags/external
-          {{- end }}
-          {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-          - name: git-cloned-dag-files
-            emptyDir: {}
-          {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
-          - name: dag-git-keys
-            secret:
-              secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
-              defaultMode: 0600
-          {{- end }}
-          {{- end }}
-          {{- if .Values.airflow.configurationConfigMap }}
-          - name: custom-configuration-file
-            mountPath: /opt/bitnami/airflow/airflow.cfg
-            subPath: airflow.cfg
-          {{- end }}
+         resources: {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        {{- if .Files.Glob "files/dags/*.py" }}
+        - name: local-dag-files
+          configMap:
+            name: {{ template "airflow.fullname" . }}-dag-files
+        {{- end }}
+        {{- if .Values.airflow.dagsConfigMap }}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.airflow.dagsConfigMap }}
+        {{- end }}
+        {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+        - name: git-cloned-dag-files
+          emptyDir: {}
+        {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+        - name: dag-git-keys
+          secret:
+            secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            defaultMode: 0600
+        {{- end }}
+        {{- end }}
+        {{- if .Values.airflow.configurationConfigMap }}
+        - name: custom-configuration-file
+          configMap:
+            name: {{ .Values.airflow.configurationConfigMap }}
+        {{- end }}
