@@ -89,50 +89,45 @@ spec:
             # If you use a custom properties file, it must be loaded using a ConfigMap
             - name: SPARK_WORKER_OPTS
               value: {{ .Values.worker.configOptions }}
-            {{- if eq ( .Values.security.rpc.authenticationEnabled | quote ) "yes" }}
+            {{- if .Values.security.rpc.authenticationEnabled }}
             - name: SPARK_RPC_AUTHENTICATION_ENABLED
               value: {{ .Values.security.rpc.authenticationEnabled | quote }}
             - name: SPARK_RPC_AUTHENTICATION_SECRET
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.security.passwordsSecretName }}
                   name: {{ .Values.security.passwordsSecretName }}
                   key: rpc-authentication-secret
-                {{- else }}
-                  name: {{ include "spark.fullname" . }}-secret
-                  key: rpc-authentication-secret
-                {{- end }}
             {{- end }}
-            {{- if eq ( .Values.security.encryptionEnabled | quote ) "yes" }}
+            {{- if .Values.security.rpc.encryptionEnabled }}
             - name: SPARK_RPC_ENCRYPTION_ENABLED
               value: {{ .Values.security.rpc.encryptionEnabled | quote }}
             {{- end }}
-            {{- if eq ( .Values.security.storageEncriptionEnabled | quote ) "yes" }}
+            {{- if .Values.security.storageEncryptionEnabled }}
             - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
               value: {{ .Values.security.storageEncryptionEnabled | quote }}
             {{- end }}
-            {{- if eq ( .Values.security.ssl.enabled | quote ) "yes" }}
+            {{- if .Values.security.ssl.enabled }}
             - name: SPARK_SSL_ENABLED
               value: {{ .Values.security.ssl.enabled | quote }}
             - name: SPARK_SSL_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" }}
+                  name: {{ .Values.security.passwordsSecretName }}
                   key: ssl-key-password
             - name: SPARK_SSL_KEYSTORE_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ template "spark.get.passwordSecretName" }}
-                    key: ssl-keystore-password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.security.passwordsSecretName }}
+                  key: ssl-keystore-password
             - name: SPARK_SSL_TRUSTSTORE_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ template "spark.get.passwordSecretName" }}
-                    key: ssl-truststore-password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.security.passwordsSecretName }}
+                  key: ssl-truststore-password
             - name: SPARK_SSL_NEED_CLIENT_AUTH
-              value: {{ .Values.security.ssl.needClientAuth }}
+              value: {{ .Values.security.ssl.needClientAuth | quote }}
             - name: SPARK_SSL_PROTOCOL
-              value: {{ .Values.security.ssl.protocol }}
+              value: {{ .Values.security.ssl.protocol | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
             {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
