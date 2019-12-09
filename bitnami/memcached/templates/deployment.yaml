@@ -68,6 +68,10 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "memcached.metrics.image" . }}
