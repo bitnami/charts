@@ -44,7 +44,7 @@ spec:
           command:
 {{ toYaml .Values.command | indent 12 }}
 {{- if .Values.persistence.enabled }}
-            - -e /cache-state/memory_file
+            - -e/cache-state/memory_file
 {{- end }}
           env:
             - name: MEMCACHED_USERNAME
