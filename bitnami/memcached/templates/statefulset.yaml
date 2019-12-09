@@ -72,6 +72,10 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          {{- end }}
           {{- if .Values.persistence.enabled }}
           volumeMounts:
             - name: pv-data
