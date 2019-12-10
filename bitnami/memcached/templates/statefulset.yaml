@@ -86,6 +86,8 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /cache-state
+            - name: tmp
+              mountPath: /tmp
           {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -110,6 +112,9 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
 {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
