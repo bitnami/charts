@@ -47,8 +47,7 @@ spec:
           {{- end }}
           image: {{ template "memcached.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          command:
-{{ toYaml .Values.command | indent 12 }}
+          command: {{- toYaml .Values.command | nindent 12 }}
           args:
 {{ toYaml .Values.arguments | indent 12 }}
 {{- if .Values.persistence.enabled }}
