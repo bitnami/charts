@@ -189,7 +189,7 @@ memcached: architecture
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of InfluxDB - number of replicas */}}
+{{/* Validate values of Memcached - number of replicas */}}
 {{- define "memcached.validateValues.replicaCount" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- if and (eq .Values.architecture "standalone") (gt $replicaCount 1) -}}
