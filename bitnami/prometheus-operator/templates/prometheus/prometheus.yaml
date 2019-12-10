@@ -85,11 +85,11 @@ spec:
   {{- if .Values.prometheus.remoteWrite }}
   remoteWrite: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.remoteWrite "context" $) | nindent 4 }}
   {{- end }}
-{{- if .Values.prometheus.securityContext.enabled }}
-securityContext:
-  runAsUser: {{ .Values.prometheus.securityContext.runAsUser }}
-  fsGroup: {{ .Values.prometheus.securityContext.fsGroup }}
-{{- end }}
+  {{- if .Values.prometheus.securityContext.enabled }}
+  securityContext:
+    runAsUser: {{ .Values.prometheus.securityContext.runAsUser }}
+    fsGroup: {{ .Values.prometheus.securityContext.fsGroup }}
+  {{- end }}
   {{- if .Values.prometheus.ruleNamespaceSelector }}
   ruleNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.ruleNamespaceSelector "context" $) | nindent 4 }}
   {{- end }}
