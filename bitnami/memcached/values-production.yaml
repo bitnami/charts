@@ -130,8 +130,7 @@ persistence:
 
 ## Args for running memcached
 ## Ref: https://github.com/memcached/memcached/wiki/ConfiguringServer
-command:
-  - memcached
+arguments:
   # - -m <maxMemoryLimit>
   # - -I <maxItemSize>
   # - -vv
