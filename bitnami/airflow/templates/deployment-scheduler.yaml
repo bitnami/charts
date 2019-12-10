@@ -84,9 +84,10 @@ spec:
       {{- else }}
       containers:
       {{- end }}
-        - name: airflow-scheduler
-          image: {{ template "airflow.schedulerImage" . }}
-          imagePullPolicy: {{ .Values.schedulerImage.pullPolicy | quote }}
+        - name: airflow-worker
+          image: "{{ template "airflow.workerImage" . }}"
+          imagePullPolicy: "{{ .Values.workerImage.pullPolicy }}"
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           env:
           {{- if .Values.schedulerImage.debug }}
             - name: BASH_DEBUG
