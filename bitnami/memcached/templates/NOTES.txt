@@ -17,3 +17,5 @@ To access the Memcached Prometheus metrics from outside the cluster execute the 
     curl http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics
 
 {{- end }}
+
+{{- include "memcached.validateValues" . }}
