@@ -123,10 +123,26 @@ tolerations: {}
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
 persistence:
-  enabled: false
-  storageClassName: ""
-  # requests:
-  #   storage: 5Gi
+  enabled: true
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##  set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##  GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ## Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## Persistent Volume size
+  ##
+  size: 8Gi
+
 
 ## Args for running memcached
 ## Ref: https://github.com/memcached/memcached/wiki/ConfiguringServer
