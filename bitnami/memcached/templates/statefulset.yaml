@@ -39,10 +39,18 @@ spec:
       {{- end }}
       containers:
         - name: memcached
+          {{- if .Values.persistence.enabled }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "/usr/bin/pkill -10 memcached ; sleep 60s"]
+          {{- end }}
           image: {{ template "memcached.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
 {{ toYaml .Values.command | indent 12 }}
+          args:
+{{ toYaml .Values.arguments | indent 12 }}
 {{- if .Values.persistence.enabled }}
             - -e/cache-state/memory_file
 {{- end }}

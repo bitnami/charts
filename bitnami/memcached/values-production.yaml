@@ -98,7 +98,7 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
