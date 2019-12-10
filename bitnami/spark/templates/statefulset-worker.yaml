@@ -112,17 +112,17 @@ spec:
             - name: SPARK_SSL_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.security.passwordsSecretName }}
+                  name: {{ template "spark.get.passwordSecretName" }}
                   key: ssl-key-password
             - name: SPARK_SSL_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.security.passwordsSecretName }}
+                  name: {{ template "spark.get.passwordSecretName" }}
                   key: ssl-keystore-password
             - name: SPARK_SSL_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.security.passwordsSecretName }}
+                  name: {{ template "spark.get.passwordSecretName" }}
                   key: ssl-truststore-password
             - name: SPARK_SSL_NEED_CLIENT_AUTH
               value: {{ .Values.security.ssl.needClientAuth | quote }}
