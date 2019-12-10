@@ -40,8 +40,7 @@ spec:
         - name: memcached
           image: {{ template "memcached.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          command:
-{{ toYaml .Values.command | indent 12 }}
+          command: {{- toYaml .Values.command | nindent 12 }}
           env:
             - name: MEMCACHED_USERNAME
               value: {{ default "" .Values.memcachedUsername | quote }}
