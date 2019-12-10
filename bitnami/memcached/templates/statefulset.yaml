@@ -59,6 +59,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "memcached.fullname" . }}
                   key: memcached-password
+            {{- toYaml .Values.extraEnv | nindent 12 }}
           ports:
             - name: memcache
               containerPort: 11211

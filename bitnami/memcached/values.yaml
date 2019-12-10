@@ -26,6 +26,10 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Extra environment vars to pass.
+## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
+extraEnv: []
+
 ## String to partially override memcached.fullname template (will maintain the release name)
 ##
 # nameOverride:
