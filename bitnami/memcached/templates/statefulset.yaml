@@ -84,7 +84,7 @@ spec:
           {{- end }}
           {{- if .Values.persistence.enabled }}
           volumeMounts:
-            - name: pv-data
+            - name: data
               mountPath: /cache-state
           {{- end }}
         {{- if .Values.metrics.enabled }}
@@ -113,13 +113,21 @@ spec:
 {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
-        name: pv-data
+        name: data
+      {{- with .Values.persistence.annotations }}
+        annotations:
+        {{- range $key, $value := . }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      {{- end }}
       spec:
         accessModes:
-          - ReadWriteOnce
-        storageClassName: {{ .Values.persistence.storageClassName }}
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
         resources:
           requests:
-            storage: {{ .Values.persistence.requests.storage }}
+            storage: {{ .Values.persistence.size | quote }}
+        {{ include "memcached.storageClass" . | nindent 8 }}
 {{- end }}
 {{- end }}
