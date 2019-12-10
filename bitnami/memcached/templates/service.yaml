@@ -8,6 +8,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if eq .Values.architecture "high-availability" }}
+  clusterIP: None
+  {{- end }}
   {{- if and (not (empty .Values.service.loadBalancerIP)) (eq .Values.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
