@@ -458,7 +458,7 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 
 ### Enable bundled Kibana
 
-This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `kibana.enabled=true` parameter.
+This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `kibana.enabled=true` parameter. It is enabled by default using the `values-production.yaml` file.
 If you want to modify the `nameOverride` parameter in the Elasticsearch chart, you also need to set the same value for the `kibana.nameOverride` in order to use the same value in both charts.
 
 ## Persistence
