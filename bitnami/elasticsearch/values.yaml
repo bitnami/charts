@@ -2,11 +2,15 @@
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
-# global:
+global:
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
+  ## Coordinating name to be used in the Kibana subchart (service name)
+  ##
+  coordinating:
+    name: coordinating-only
 
 ## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
@@ -238,7 +242,6 @@ master:
 ## Elasticsearch coordinating-only node parameters
 ##
 coordinating:
-  name: coordinating-only
   ## Number of coordinating-only node(s) replicas to deploy
   ##
   replicas: 2
@@ -737,5 +740,8 @@ kibana:
   enabled: false
   elasticsearch:
     hosts:
-    - {{ include "influxdb.fullname" . }}
+    - '{{ include "elasticsearch.coordinating.fullname" . }}'
     port: 9200
+  ## String to partially override elasticsearch.fullname template in the kibana subchart
+  ##
+  nameOverride: elasticsearch

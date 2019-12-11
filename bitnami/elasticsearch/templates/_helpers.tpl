@@ -127,7 +127,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "elasticsearch.coordinating.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.coordinating.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.global.coordinating.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
