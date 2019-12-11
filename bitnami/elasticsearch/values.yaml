@@ -3,10 +3,10 @@
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+  # imageRegistry: myRegistryName
+  # imagePullSecrets:
+  #   - myRegistryKeySecretName
+  # storageClass: myStorageClass
   ## Coordinating name to be used in the Kibana subchart (service name)
   ##
   coordinating:
@@ -740,7 +740,7 @@ kibana:
   enabled: false
   elasticsearch:
     hosts:
-    - '{{ include "elasticsearch.coordinating.fullname" . }}'
+      - '{{ include "elasticsearch.coordinating.fullname" . }}'
     port: 9200
   ## String to partially override elasticsearch.fullname template in the kibana subchart
   ##
