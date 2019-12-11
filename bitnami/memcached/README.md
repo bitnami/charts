@@ -59,6 +59,9 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `nameOverride`                | String to partially override memcached.fullname template with a string (will prepend the release name) | `nil`                                                        |
 | `fullnameOverride`            | String to fully override memcached.fullname template with a string                                     | `nil`                                                        |
 | `clusterDomain`               | Kubernetes cluster domain                                                                              | `cluster.local`                                              |
+|`replicas`                     | Number of containers       | `1`                     |
+|`extraEnv`                     | Additional env vars to pass| `{}`                     |
+|`arguments`                    | Arguments to pass          | `["/run.sh"]`                     |
 | `memcachedUsername`           | Memcached admin user                                                                                   | `nil`                                                        |
 | `memcachedPassword`           | Memcached admin password                                                                               | `nil`                                                        |
 | `service.type`                | Kubernetes service type for Memcached                                                                  | `ClusterIP`                                                  |
@@ -69,6 +72,10 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `service.annotations`         | Additional annotations for Memcached service                                                           | `{}`                                                         |
 | `resources.requests`          | CPU/Memory resource requests                                                                           | `{memory: "256Mi", cpu: "250m"}`                             |
 | `resources.limits`            | CPU/Memory resource limits                                                                             | `{}`                                                         |
+| `persistence.enabled`                | Enable persistence using PVC                                                                    | `true`                                                       |
+| `persistence.storageClass`           | PVC Storage Class for Jenkins volume                                                            | `nil` (uses alpha storage class annotation)                  |
+| `persistence.accessMode`             | PVC Access Mode for Jenkins volume                                                              | `ReadWriteOnce`                                              |
+| `persistence.size`                   | PVC Storage Request for Jenkins volume                                                          | `8Gi`                                                        |
 | `securityContext.enabled`     | Enable security context                                                                                | `true`                                                       |
 | `securityContext.fsGroup`     | Group ID for the container                                                                             | `1001`                                                       |
 | `securityContext.runAsUser`   | User ID for the container                                                                              | `1001`                                                       |
@@ -123,6 +130,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+## Persistence
+
+The [Bitnami Memcached](https://github.com/bitnami/bitnami-docker-memcached) image stores the cache-state at the `/cache-state` path of the container if enabled.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Notable changes
 
