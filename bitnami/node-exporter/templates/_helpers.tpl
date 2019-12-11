@@ -84,6 +84,14 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
+matchLabels
+*/}}
+{{- define "node-exporter.matchLabels" -}}
+app.kubernetes.io/name: {{ include "node-exporter.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "node-exporter.serviceAccountName" -}}
@@ -92,14 +100,6 @@ Create the name of the service account to use
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
-{{- end -}}
-
-{{/*
-matchLabels
-*/}}
-{{- define "node-exporter.matchLabels" -}}
-app.kubernetes.io/name: {{ include "node-exporter.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
