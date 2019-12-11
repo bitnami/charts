@@ -82,7 +82,8 @@ Set Elasticsearch URL.
 {{- define "kibana.elasticsearch.url" -}}
 {{- if .Values.elasticsearch.hosts -}}
 {{- $totalHosts := len .Values.elasticsearch.hosts -}}
-{{- range $i, $host := .Values.elasticsearch.hosts -}}
+{{- range $i, $hostTemplate := .Values.elasticsearch.hosts -}}
+{{- $host := tpl $hostTemplate $ }}
 {{- printf "http://%s:%s" $host (include "kibana.elasticsearch.port" $) -}}
 {{- if (lt ( add1 $i ) $totalHosts ) }}{{- printf "," -}}{{- end }}
 {{- end -}}
