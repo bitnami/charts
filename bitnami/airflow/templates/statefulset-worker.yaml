@@ -156,7 +156,7 @@ spec:
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ template "airflow.fullname" . }}
             {{- if .Values.airflow.extraEnvVars }}
-              {{ toYaml .Values.airflow.extraEnvVars | nindent 8 }}
+              {{ toYaml .Values.airflow.extraEnvVars | nindent 12 }}
             {{- end }}
           ports:
             - name: worker
