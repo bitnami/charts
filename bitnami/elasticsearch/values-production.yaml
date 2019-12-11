@@ -737,7 +737,7 @@ metrics:
 ## Enable bundled Kibana
 ##
 kibana:
-  enabled: false
+  enabled: true
   elasticsearch:
     hosts:
     - '{{ include "elasticsearch.coordinating.fullname" . }}'
