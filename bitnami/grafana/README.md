@@ -175,7 +175,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Using custom configuration
 
-Grafana support multiples configuration files. Using kubernetes you can mount a file using a ConfigMap. For example, to mount a custom `grafana.ini` file or `custom.ini` file you can create a ConfigMap like the following:
+Grafana supports multiples configuration files. Using kubernetes you can mount a file using a ConfigMap. For example, to mount a custom `grafana.ini` file or `custom.ini` file you can create a ConfigMap like the following:
 
 ```yaml
 apiVersion: v1
@@ -194,14 +194,30 @@ A default provider is created if enabled, or you can mount your own provider usi
   1. To create a dashboard, it is needed to have a datasource for it. The datasources must be created mounting a secret with all the datasource files in it. In this case, it is not a ConfigMap because the datasource could contain sensitive information.
   2. To load the dashboards themselves you need to create a ConfigMap for each one containing the `json` file that defines the dashboard and set the array with the ConfigMap names into the `dashboardsConfigMaps` parameter.
 Note the difference between the datasources and the dashboards creation. For the datasources we can use just one secret with all of the files, while for the dashboards we need one ConfigMap per file.
-For example, after the creation of the dashboard and datasource ConfigMap in the same way that the explained for the `grafana.ini` file, use the following parameters to deploy Grafana with custom dashboards:
+
+For example, create the dashboard ConfigMap(s) and datasource Secret as described below:
+
+```console
+$ kubectl create secret generic datasource-secret --from-file=datasource-secret.yaml
+$ kubectl create configmap my-dashboard-1 --from-file=my-dashboard-1.json
+$ kubectl create configmap my-dashboard-2 --from-file=my-dashboard-2.json
+```
+
+> Note: the commands above assume you had previously exported your dashboards in the JSON files: *my-dashboard-1.json* and *my-dashboard-2.json*
+> Note: the commands above assume you had previously created a datasource config file *datasource-secret.yaml*. Find an example at https://grafana.com/docs/grafana/latest/administration/provisioning/#example-datasource-config-file
+
+Once you have them, use the following parameters to deploy Grafana with 2 custom dashboards:
 
 ```console
 dashboardsProvider.enabled=true
 datasources.secretName=datasource-secret
-dashboardsConfigMaps[0].configMapName=mydashboard
-dashboardsConfigMaps[0].fileName=mydashboard.json
+dashboardsConfigMaps[0].configMapName=my-dashboard-1
+dashboardsConfigMaps[0].fileName=my-dashboard-1.json
+dashboardsConfigMaps[1].configMapName=my-dashboard-2
+dashboardsConfigMaps[1].fileName=my-dashboard-2.json
 ```
+
+More info at [Grafana documentation](https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards).
 
 ### LDAP configuration
 
