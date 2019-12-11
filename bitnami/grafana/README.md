@@ -204,6 +204,7 @@ $ kubectl create configmap my-dashboard-2 --from-file=my-dashboard-2.json
 ```
 
 > Note: the commands above assume you had previously exported your dashboards in the JSON files: *my-dashboard-1.json* and *my-dashboard-2.json*
+
 > Note: the commands above assume you had previously created a datasource config file *datasource-secret.yaml*. Find an example at https://grafana.com/docs/grafana/latest/administration/provisioning/#example-datasource-config-file
 
 Once you have them, use the following parameters to deploy Grafana with 2 custom dashboards:
