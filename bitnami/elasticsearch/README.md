@@ -249,7 +249,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 
 | `kibana.enabled`               | Use bundled Kibana                                                                  | `false`                                                                                 |
 | `kibana.elasticsearch.hosts`   | Array containing hostnames for the ES instances. Used to generate the URL           | `{{ include "elasticsearch.coordinating.fullname" . }}` Coordinating service (fullname) |
-| `kibana.elasticsearch.port`    | Port to connect Kibana and ES instance. Used to generate the UR                     | `9200`                                                                                  |
+| `kibana.elasticsearch.port`    | Port to connect Kibana and ES instance. Used to generate the URL                    | `9200`                                                                                  |
 | `kibana.nameOverride`          | String to partially override elasticsearch.fullname template in the kibana subchart | `elasticsearch`                                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
