@@ -1,4 +1,4 @@
-{{- range $.Values.workers }}
+{{- range .Values.workers }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
