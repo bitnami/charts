@@ -285,7 +285,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Notable changes
 
-### 4.0.0
+### 5.0.0
 
 This version does not include Elasticsearch as a bundled dependency. From now on, you should specify an external Elasticsearch instance using the `elasticsearch.hosts[]` and `elasticsearch.port` [parameters](#parameters).
 
