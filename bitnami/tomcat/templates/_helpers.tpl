@@ -167,9 +167,9 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{/*
 Renders a value that contains template.
 Usage:
-{{ include "cassandra.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
+{{ include "tomcat.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
 */}}
-{{- define "cassandra.tplValue" -}}
+{{- define "tomcat.tplValue" -}}
     {{- if typeIs "string" .value }}
         {{- tpl .value .context }}
     {{- else }}
