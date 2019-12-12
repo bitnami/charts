@@ -30,6 +30,17 @@ spec:
         fsGroup: {{ .Values.master.securityContext.fsGroup }}
         runAsUser: {{ .Values.master.securityContext.runAsUser }}
       {{- end }}
+      {{- if .Values.master.configurationConfigMap }}
+      initContainers:
+        - name: configmap-data
+          image: busybox
+          command: ["sh","-c","cp -Lr /configmap-data/* /config"]
+          volumeMounts:
+          - name: config
+            mountPath: /config
+          - name: configmap-data
+            mountPath: /configmap-data
+      {{- end }}
       containers:
         - name: spark-master
           image: {{ template "spark.image" . }}
@@ -145,9 +156,11 @@ spec:
           {{- end }}
       volumes:
         {{- if .Values.master.configurationConfigMap }}
-        - name: config
+        - name: configmap-data
           configMap:
             name: {{ .Values.master.configurationConfigMap }}
+        - name: config
+          emptyDir: {}
         {{- end }}
         {{- if .Values.security.certificatesSecretName }}
         - name: certs
