@@ -56,30 +56,6 @@ schedulerImage:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
-## Bitnami Airflow Worker image version
-## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
-##
-workerImage:
-  registry: docker.io
-  repository: bitnami/airflow-worker
-  tag: 1.10.6-debian-9-r1
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
-
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
@@ -133,14 +109,10 @@ airflow:
     # branch: 
     # interval: 
     ## Name of secret in kubernetes containing the ssh keys for access to a git repo
-    # sshKeySecret:
+    # sshKeySecretName:
   ## URL used to access to airflow web ui
   ##
   # baseUrl:
-  ## Airflow worker component configuration
-  worker:
-    port: 8793
-    replicas: 1
 
   ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
   ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
@@ -227,7 +199,7 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   annotations:
   #  kubernetes.io/ingress.class: nginx
- 
+
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   ##
@@ -381,31 +353,44 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9112"
 
-additionalRepos:
-  enabled: false
-  # repos:
-  # - name:
-    # repository:
-    # branch:
-    # interval:
-    # sshKeySecret:
+## List the workers you need here, the default worker is required. 
 workers:
-  # - name:
+  ## Bitnami Airflow Worker image version
+  ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
+  ##
+  - name: "default"
+    image:
+      registry: docker.io
+      repository: bitnami/airflow-worker
+      tag: 1.10.6-debian-9-r1
+      ## Specify a imagePullPolicy
+      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ##
+      pullPolicy: IfNotPresent
+        ## Optionally specify an array of imagePullSecrets.
+        ## Secrets must be manually created in the namespace.
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ##
+        # pullSecrets:
+        #   - myRegistryKeySecretName
+
+        ## Set to true if you would like to see extra information on logs
+        ## It turns BASH and NAMI debugging in minideb
+        ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    debug: false
+    ## Specify any extra volumes you want attached to the pod. 
     #volumes:
     #- name:
     #  emptyDir: {}
-    #image:
-    #  registry:
-    #  repository:
-    #  tag:
-    #  pullPolicy:
-    # additionalRepos:
+    #additionalRepos:
       # enabled: false
       # repos:
       # - name:
       #   repository:
       #   branch:
       #   interval:
-      #   sshKeySecret:
-    # replicas:
-    # queue:
+      #   sshKeySecretName:
+    replicas: 1
+    queue: "default"
+    port: 8793

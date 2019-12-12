@@ -61,7 +61,7 @@ spec:
           volumeMounts:
             - name: git-cloned-dag-files
               mountPath: /dags
-            {{- if $.Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            {{- if $.Values.airflow.cloneDagFilesFromGit.sshKeySecretName }}
             - name: dag-git-keys
               mountPath: /root/.ssh
             {{- end }}
@@ -79,7 +79,7 @@ spec:
           volumeMounts:
             - name: git-cloned-{{ .name }}
               mountPath: /{{ .name }}
-            {{- if .sshKeySecret }}
+            {{- if .sshKeySecretName }}
             - name: {{ .name }}-git-keys
               mountPath: /root/.ssh
             {{- end }}
@@ -101,7 +101,7 @@ spec:
           volumeMounts:
             - name: git-cloned-dag-files
               mountPath: /dags
-            {{- if $.Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            {{- if $.Values.airflow.cloneDagFilesFromGit.sshKeySecretName }}
             - name: dag-git-keys
               mountPath: /root/.ssh
             {{- end }}
@@ -222,7 +222,7 @@ spec:
           {{- end }}
         ports:
           - name: worker
-            containerPort: {{ $.Values.airflow.worker.port }}
+            containerPort: {{ .port }}
         {{- if $.Values.livenessProbe.enabled }}
         livenessProbe:
           tcpSocket:
@@ -281,10 +281,10 @@ spec:
         {{- if $.Values.airflow.cloneDagFilesFromGit.enabled }}
         - name: git-cloned-dag-files
           emptyDir: {}
-        {{- if $.Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+        {{- if $.Values.airflow.cloneDagFilesFromGit.sshKeySecretName }}
         - name: dag-git-keys
           secret:
-            secretName: {{ $.Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            secretName: {{ $.Values.airflow.cloneDagFilesFromGit.sshKeySecretName }}
             defaultMode: 0600   
         {{- end }}
         {{- end }}
@@ -296,10 +296,10 @@ spec:
         {{- range .additionalRepos.repos }}
         - name: git-cloned-{{ .name }}
           emptyDir: {}
-        {{- if .sshKeySecret }}
+        {{- if .sshKeySecretName }}
         - name: {{ .name }}-git-keys  
           secret:
-            secretName: {{ .sshKeySecret }}
+            secretName: {{ .sshKeySecretName }}
             defaultMode: 0600
         {{- end }}
         {{- end }}

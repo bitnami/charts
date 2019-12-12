@@ -85,7 +85,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.cloneDagFilesFromGit.repository` | Repository where download DAG files from                                                             | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.branch`     | Branch from repository to checkout                                                                   | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.interval`   | Interval to pull the repository on sidecar container                                                 | `nil`                                                        |
-| `airflow.cloneDagFilesFromGit.sshKeySecret` | Kubernetes secret containing SSH keys for the dags repo 					   | `nil`							  |
+| `airflow.cloneDagFilesFromGit.sshKeySecretName` | Kubernetes secret containing SSH keys for the dags repo 					   | `nil`							  |
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                                 | `nil`                                                        |
 | `airflow.worker.port`                     | Airflow Worker port                                                                                  | `8793`                                                       |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                                    | `2`                                                          |
@@ -156,11 +156,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                  | Additional annotations for Metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |
 | `additionalRepos.enabled`                 | Enables the use of additional repos in the default Airflow Workers                                   | `false` 							  |
-| `additionalRepos.repos[o].name`	    | Descriptive name of a repo to sync			 					   | `nil`							  |
-| `additionalRepos.repos[0].repository`	    | Link to the additional repository to sync 							   | `nil` 							  |
-| `additionalRepos.repos[0].branch` 	    | Branch from repository to sync									   | `nil`							  | 
-| `additionalRepos.repos[0].interval`	    | Interval to pull the repository									   | 60 							  |
-| `additionalRepos.repos[0].sshKeySecret`   | Kubernetes secret containing SSH keys for this repo						   | `nil`							  |
 | `workers[0].name`	      		    | Descriptive name of a worker to add								   | `nil`							  |
 | `workers[0].volumes[0].name`		    | Name of volume to add to this worker 								   | `nil`							  | 
 | `workers[0].image.registry`    	    | Registry for this workers image									   | `nil`							  |
@@ -172,7 +167,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `workers[0].additionalRepos.repos[0].repository` | Link to the additional repository to sync with this worker					   | `nil` 							  |
 | `workers[0].additionalRepos.repos[0].branch` | Branch from repository to sync with this worker							   | `nil`							  | 
 | `workers[0].additionalRepos.repos[0].interval` | Interval to pull the repository for this worker							   | 60 							  |
-| `workers[0].additionalRepos.repos[0].sshKeySecret` | Kubernetes secret containing SSH keys for this repo						   | `nil`							  |
+| `workers[0].additionalRepos.repos[0].sshKeySecretName` | Kubernetes secret containing SSH keys for this repo						   | `nil`							  |
 | `workers[0].replicas`			    | Specify how many replicas are needed for this worker						   | 1								  |
 | `workers[0].queue`			    | Specify which queue you want this worker to pull tasks from 					   | `default`							  |
 
@@ -259,7 +254,7 @@ airflow.cloneDagFilesFromGit.enabled=true
 airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
 airflow.cloneDagFilesFromGit.branch=master
 airflow.cloneDagFilesFromGit.interval=60
-airflow.cloneDagFilesFromGit.sshKeySecret=KUBERNETES_SECRET
+airflow.cloneDagFilesFromGit.sshKeySecretName=KUBERNETES_SECRET
 ```
 Note: If it's a private git repo, you need to supply it with ssh keys via a kubernetes secret. To do so you must generate ssh keys, and then create a secret in kubernetes with the generated keys.
 ## Additional Repos
@@ -272,7 +267,7 @@ additionalRepos.repos[0].name=additional-repo
 additionalRepos.repos[0].repository=https://github.com/USERNAME/REPOSITORY
 additionalRepos.repos[0].branch=master
 additioanlRepos.repos[0].interval=60
-additioanlRepos.repos[0].sshKeySecret=KUBERNETES_SECRET
+additioanlRepos.repos[0].sshKeySecretName=KUBERNETES_SECRET
 ```
 
 ## Custom Workers
