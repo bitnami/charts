@@ -1,4 +1,4 @@
-{{- if not .Values.configurationCM }}
+{{- if and (not .Values.configurationCM) (and .Values.elasticsearch.hosts .Values.elasticsearch.port) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
