@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ template "mariadb-galera.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "mariadb-galera.fullname" . }}

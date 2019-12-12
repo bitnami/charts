@@ -69,6 +69,17 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for statefulsets.
+*/}}
+{{- define "mariadb-galera.statefulset.apiVersion" -}}
+{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "apps/v1beta1" -}}
+{{- else -}}
+{{- print "apps/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper metrics image name
 */}}
 {{- define "mariadb-galera.metrics.image" -}}
