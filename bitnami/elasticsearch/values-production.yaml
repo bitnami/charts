@@ -742,6 +742,3 @@ kibana:
     hosts:
       - '{{ include "elasticsearch.coordinating.fullname" . }}'
     port: 9200
-  ## String to partially override elasticsearch.fullname template in the kibana subchart
-  ##
-  nameOverride: elasticsearch
