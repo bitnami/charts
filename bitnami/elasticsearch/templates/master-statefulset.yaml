@@ -63,7 +63,7 @@ spec:
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: data
+            - name: "data"
               mountPath: "/bitnami/elasticsearch/data"
         {{- end }}
       {{- end }}
