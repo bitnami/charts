@@ -11,6 +11,7 @@ global:
   ##
   coordinating:
     name: coordinating-only
+  kibanaEnabled: false
 
 ## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
@@ -734,10 +735,9 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
 
-## Enable bundled Kibana
+## Bundled Kibana parameters
 ##
 kibana:
-  enabled: false
   elasticsearch:
     hosts:
       - '{{ include "elasticsearch.coordinating.fullname" . }}'
