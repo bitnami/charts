@@ -250,7 +250,6 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `kibana.enabled`               | Use bundled Kibana                                                                  | `false`                                                                                 |
 | `kibana.elasticsearch.hosts`   | Array containing hostnames for the ES instances. Used to generate the URL           | `{{ include "elasticsearch.coordinating.fullname" . }}` Coordinating service (fullname) |
 | `kibana.elasticsearch.port`    | Port to connect Kibana and ES instance. Used to generate the URL                    | `9200`                                                                                  |
-| `kibana.nameOverride`          | String to partially override elasticsearch.fullname template in the kibana subchart | `elasticsearch`                                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -459,7 +458,7 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 ### Enable bundled Kibana
 
 This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `kibana.enabled=true` parameter. It is enabled by default using the `values-production.yaml` file.
-If you want to modify the `nameOverride` parameter in the Elasticsearch chart, you also need to set the same value for the `kibana.nameOverride` in order to use the same value in both charts.
+To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
 
 ## Persistence
 
