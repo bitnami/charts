@@ -1,3 +1,4 @@
+{{- if and .Values.elasticsearch.hosts .Values.elasticsearch.port -}}
 apiVersion: {{ template "kibana.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -184,3 +185,4 @@ spec:
       tolerations:
       {{- tpl (toYaml .Values.tolerations) $ | nindent 6 }}
       {{- end }}
+{{- end }}
