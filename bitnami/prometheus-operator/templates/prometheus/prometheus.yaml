@@ -59,7 +59,7 @@ spec:
   {{- if .Values.prometheus.evaluationInterval }}
   evaluationInterval: {{ .Values.prometheus.evaluationInterval }}
   {{- end }}
-  resources: {{- toYaml .Values.alertmanager.resources | nindent 4 }}
+  resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
   retention: {{ .Values.prometheus.retention }}
   {{- if .Values.prometheus.retentionSize }}
   retentionSize: {{ .Values.prometheus.retentionSize }}
