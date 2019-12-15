@@ -82,6 +82,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.readinessProbe.timeoutSeconds`      | When the probe times out                                                                           | 5                                                       |
 | `master.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.         | 6                                                       |
 | `master.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed        | 1                                                       |
+| `master.podAnnotations` | Additional annotations for Metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |
 | `worker.debug`                              | Specify if debug values should be set on workers                                                   | `false`                                                 |
 | `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                 | `8080`                                                  |
 | `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                           | `7077`                                                  |
@@ -114,6 +115,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.readinessProbe.timeoutSeconds`      | When the probe times out                                                                           | 5                                                       |
 | `worker.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.         | 6                                                       |
 | `worker.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed        | 1                                                       |
+| `worker.podAnnotations` | Additional annotations for Metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |
 | `security.passwordsSecretName`              | Secret to use when using security configuration to set custom passwords                            | No default                                              |
 | `security.rpc.authenticationEnabled`        | Enable the RPC authentication                                                                      | `no`                                                    |
 | `security.rpc.encryptionEnabled`            | Enable the encryption for RPC                                                                      | `no`                                                    |
@@ -134,6 +136,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `ingress.certManager`                       | Add annotations for cert-manager                                                                   | `false`                                                 |
 | `ingress.annotations`                       | Ingress annotations                                                                                | `{}`                                                    |
 | `ingress.hosts`                             | Add hosts to the ingress controller with name and path                                             | `name: spark.local`, `path: /`                          |
+| `metrics.podAnnotations`        | Additional annotations for Metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
