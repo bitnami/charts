@@ -99,12 +99,11 @@ imagePullSecrets:
 {{- end -}}
 {{- end -}}
 
-
 {{/* Validate values of Spark - Incorrect extra volume settings */}}
 {{- define "spark.validateValues.extraVolumes" -}}
 {{- if and (.Values.worker.extraVolumes) (not .Values.worker.extraVolumeMounts) -}}
 spark: missing-worker-extra-volume-mounts
-    You specified worker extra volumes but not mount points for them. Please set
+    You specified worker extra volumes but no mount points for them. Please set
     the extraVolumeMounts value
 {{- end -}}
 {{- end -}}
