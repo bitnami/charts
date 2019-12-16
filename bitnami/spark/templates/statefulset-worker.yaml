@@ -52,6 +52,9 @@ spec:
               mountPath: '/opt/bitnami/spark/conf/certs'
               readOnly: true
             {{- end }}
+            {{- if .Values.worker.extraVolumeMounts }}
+            {{- tpl (toYaml .Values.worker.extraVolumeMounts) $ | nindent 12 }}
+            {{- end }}
           env:
             - name: SPARK_MODE
               value: "worker"
@@ -172,4 +175,7 @@ spec:
         - name: certs
           secret:
             secretName: {{ .Values.security.certificatesSecretName }}
+        {{- end }}
+        {{- if .Values.worker.extraVolumes }}
+        {{- tpl (toYaml .Values.worker.extraVolumes) $ | nindent 8 }}
         {{- end }}
