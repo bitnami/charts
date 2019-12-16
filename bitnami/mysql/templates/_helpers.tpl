@@ -54,6 +54,24 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end }}
 
 {{/*
+Common labels
+*/}}
+{{- define "mysql.labels" -}}
+app: {{ include "mysql.name" . }}
+chart: {{ include "mysql.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "mysql.matchLabels" -}}
+app: {{ include "mysql.name" . }}
+release: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Return the proper MySQL image name
 */}}
 {{- define "mysql.image" -}}
@@ -231,4 +249,17 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
         {{- end -}}
     {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "mysql.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "mysql.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}

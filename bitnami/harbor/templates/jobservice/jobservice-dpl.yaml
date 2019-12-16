@@ -1,29 +1,36 @@
-apiVersion: apps/v1
+apiVersion: {{ template "deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: "{{ template "harbor.jobservice" . }}"
-  labels:
-    {{- include "harbor.labels" . | nindent 4 }}
+  name: {{ include "harbor.jobservice" . }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
     app.kubernetes.io/component: jobservice
 spec:
   replicas: {{ .Values.jobservice.replicas }}
   selector:
-    matchLabels: {{ include "harbor.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: jobservice
   template:
     metadata:
-      labels:
-        {{ include "harbor.labels" . | nindent 8 }}
+      labels: {{- include "harbor.labels" . | nindent 8 }}
         app.kubernetes.io/component: jobservice
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
-      {{- if .Values.jobservice.podAnnotations }}
-        {{ toYaml .Values.jobservice.podAnnotations | nindent 8 }}
-      {{- end }}
+        {{- if .Values.jobservice.podAnnotations }}
+        {{- include "harbor.tplValue" (dict "value" .Values.jobservice.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
 {{- include "harbor.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.jobservice.affinity }}
+      affinity: {{- include "harbor.tplValue" (dict "value" .Values.jobservice.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.jobservice.nodeSelector }}
+      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.jobservice.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.jobservice.tolerations }}
+      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.jobservice.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -31,93 +38,91 @@ spec:
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
-      - name: volume-permissions
-        image: "{{ template "harbor.volumePermissions.image" . }}"
-        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/var/log/jobs"]
-        securityContext:
-          runAsUser: 0
-        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
-        volumeMounts:
-        - name: job-logs
-          mountPath: /var/log/jobs
-          subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+        - name: volume-permissions
+          image: {{ include "harbor.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/var/log/jobs"
+              chown -R "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}" "/var/log/jobs"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: job-logs
+              mountPath: /var/log/jobs
+              subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
       {{- end }}
       containers:
-      - name: jobservice
-        image: "{{ template "harbor.jobserviceImage" . }}"
-        imagePullPolicy: {{ .Values.jobserviceImage.pullPolicy | quote }}
-        {{- if .Values.jobservice.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path: /api/v1/stats
-            port: http
-          initialDelaySeconds: {{ .Values.jobservice.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.jobservice.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.jobservice.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.jobservice.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.jobservice.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.jobservice.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /api/v1/stats
-            port: http
-          initialDelaySeconds: {{ .Values.jobservice.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.jobservice.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.jobservice.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.jobservice.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.jobservice.readinessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.jobservice.resources }}
-        resources: {{ toYaml .Values.jobservice.resources | nindent 10 }}
-        {{- end }}
-        env:
-        - name: BITNAMI_DEBUG
-          value: {{ ternary "true" "false" .Values.jobserviceImage.debug | quote }}
-        - name: CORE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: "{{ template "harbor.core" . }}"
-              key: secret
-        - name: JOBSERVICE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: "{{ template "harbor.jobservice" . }}"
-              key: secret
-        - name: CORE_URL
-          value: "http://{{ template "harbor.core" . }}"
-        - name: REGISTRY_CONTROLLER_URL
-          value: "http://{{ template "harbor.registry" . }}:8080"
-        - name: LOG_LEVEL
-          value: debug
-        ports:
-        - containerPort: 8080
-          name: http
-        volumeMounts:
-        - name: jobservice-config
-          mountPath: /etc/jobservice/config.yml
-          subPath: config.yml
-        - name: job-logs
-          mountPath: /var/log/jobs
-          subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+        - name: jobservice
+          image: {{ include "harbor.jobserviceImage" . }}
+          imagePullPolicy: {{ .Values.jobserviceImage.pullPolicy | quote }}
+          {{- if .Values.jobservice.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /api/v1/stats
+              port: http
+            initialDelaySeconds: {{ .Values.jobservice.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.jobservice.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.jobservice.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.jobservice.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.jobservice.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.jobservice.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /api/v1/stats
+              port: http
+            initialDelaySeconds: {{ .Values.jobservice.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.jobservice.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.jobservice.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.jobservice.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.jobservice.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.jobservice.resources }}
+          resources: {{- toYaml .Values.jobservice.resources | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.jobserviceImage.debug | quote }}
+            - name: CORE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.core" . }}
+                  key: secret
+            - name: JOBSERVICE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.jobservice" . }}
+                  key: secret
+            - name: CORE_URL
+              value: "http://{{ template "harbor.core" . }}"
+            - name: REGISTRY_CONTROLLER_URL
+              value: "http://{{ template "harbor.registry" . }}:8080"
+            - name: LOG_LEVEL
+              value: debug
+          ports:
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - name: jobservice-config
+              mountPath: /etc/jobservice/config.yml
+              subPath: config.yml
+            - name: job-logs
+              mountPath: /var/log/jobs
+              subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
       volumes:
-      - name: jobservice-config
-        configMap:
-          name: "{{ template "harbor.jobservice" . }}"
-      - name: job-logs
-        {{- if and .Values.persistence.enabled (eq .Values.jobservice.jobLogger "file") }}
-        persistentVolumeClaim:
-          claimName: {{ .Values.persistence.persistentVolumeClaim.jobservice.existingClaim | default (include "harbor.jobservice" .) }}
-        {{- else }}
-        emptyDir: {}
-        {{- end }}
-      {{- with .Values.jobservice.nodeSelector }}
-      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
-      {{- with .Values.jobservice.affinity }}
-      affinity: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
-      {{- with .Values.jobservice.tolerations }}
-      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
+        - name: jobservice-config
+          configMap:
+            name: {{ include "harbor.jobservice" . }}
+        - name: job-logs
+          {{- if and .Values.persistence.enabled (eq .Values.jobservice.jobLogger "file") }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.persistentVolumeClaim.jobservice.existingClaim | default (include "harbor.jobservice" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

@@ -3,14 +3,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: system:{{ template "metrics-server.fullname" . }}
-  labels:
-    app: {{ template "metrics-server.name" . }}
-    chart: {{ template "metrics-server.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  labels: {{- include "metrics-server.labels" . | nindent 4 }}
 rules:
   - apiGroups:
-    - ""
+      - ""
     resources:
       - pods
       - nodes
@@ -20,10 +16,10 @@ rules:
       - list
       - watch
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - nodes/stats
+      - nodes/stats
     verbs:
-    - get
-    - create
+      - get
+      - create
 {{- end -}}

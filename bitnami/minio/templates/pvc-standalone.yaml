@@ -3,11 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "minio.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "minio.name" . }}
-    helm.sh/chart: {{ include "minio.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "minio.labels" . | nindent 4 }}
 spec:
   accessModes:
   {{- range .Values.persistence.accessModes }}

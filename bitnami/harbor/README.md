@@ -12,7 +12,7 @@ For example, the following changes have been introduced:
   - published for debian-9 and ol-7
 - This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
-## TL;DR:
+## TL;DR;
 
 ```
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -387,6 +387,14 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrade
+
+## 3.0.0
+
+Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
+
+In c085d396a0515be7217d65e92f4fbd474840908b the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
+
+This major version signifies this change.
 
 ## 2.0.0
 

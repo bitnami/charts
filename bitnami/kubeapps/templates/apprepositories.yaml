@@ -13,23 +13,26 @@ metadata:
 spec:
   type: helm
   url: {{ .url }}
-{{- if or $.Values.securityContext.enabled $.Values.apprepository.initialReposProxy.enabled}}
+{{- if or $.Values.securityContext.enabled $.Values.apprepository.initialReposProxy.enabled .nodeSelector }}
   syncJobPodTemplate:
     spec:
-  {{- if $.Values.apprepository.initialReposProxy.enabled }}
+      {{- if $.Values.apprepository.initialReposProxy.enabled }}
       containers:
-      - env:
-          - name: https_proxy
-            value: {{ $.Values.apprepository.initialReposProxy.https_proxy }}
-          - name: http_proxy
-            value: {{ $.Values.apprepository.initialReposProxy.http_proxy }}
-          - name: no_proxy
-            value: {{ $.Values.apprepository.initialReposProxy.no_proxy }}
-  {{- end }}
-  {{- if $.Values.securityContext.enabled }}
-        securityContext:
+        - env:
+            - name: https_proxy
+              value: {{ $.Values.apprepository.initialReposProxy.https_proxy }}
+            - name: http_proxy
+              value: {{ $.Values.apprepository.initialReposProxy.http_proxy }}
+            - name: no_proxy
+              value: {{ $.Values.apprepository.initialReposProxy.no_proxy }}
+      {{- end }}
+      {{- if $.Values.securityContext.enabled }}
+      securityContext:
         runAsUser: {{ $.Values.securityContext.runAsUser }}
-  {{- end }}
+      {{- end }}
+      {{- if .nodeSelector }}
+      nodeSelector: {{- toYaml .nodeSelector | nindent 8 }}
+      {{- end }}
 {{- end }}
   {{- if or .caCert .authorizationHeader }}
   auth:

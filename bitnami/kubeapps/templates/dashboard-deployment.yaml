@@ -22,51 +22,51 @@ spec:
         release: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
-      containers:
-      - name: dashboard
-        image: {{ template "kubeapps.image" (list .Values.dashboard.image .Values.global) }}
-        livenessProbe:
-{{ toYaml .Values.dashboard.livenessProbe | indent 10 }}
-        readinessProbe:
-{{ toYaml .Values.dashboard.readinessProbe | indent 10 }}
-        volumeMounts:
-        - name: vhost
-          mountPath: /opt/bitnami/nginx/conf/server_blocks
-        - name: config
-          mountPath: /app/config.json
-          subPath: config.json
-        ports:
-        - name: http
-          containerPort: 8080
-        resources:
-{{ toYaml .Values.dashboard.resources | indent 12 }}
-      volumes:
-      - name: vhost
-        configMap:
-          name: {{ template "kubeapps.dashboard-config.fullname" . }}
-          items:
-          - key: vhost.conf
-            path: vhost.conf
-      - name: config
-        configMap:
-          name: {{ template "kubeapps.dashboard-config.fullname" . }}
-          items:
-          - key: config.json
-            path: config.json
-    {{- with .Values.dashboard.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- if .Values.dashboard.affinity }}
+      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.nodeSelector }}
+      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.tolerations }}
+      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-    {{- with .Values.dashboard.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.dashboard.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      containers:
+        - name: dashboard
+          image: {{ template "kubeapps.image" (list .Values.dashboard.image .Values.global) }}
+          {{- if .Values.dashboard.livenessProbe }}
+          livenessProbe: {{- toYaml .Values.dashboard.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dashboard.readinessProbe }}
+          readinessProbe: {{- toYaml .Values.dashboard.readinessProbe | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: vhost
+              mountPath: /opt/bitnami/nginx/conf/server_blocks
+            - name: config
+              mountPath: /app/config.json
+              subPath: config.json
+          ports:
+            - name: http
+              containerPort: 8080
+          {{- if .Values.dashboard.resources }}
+          resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: vhost
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: vhost.conf
+                path: vhost.conf
+        - name: config
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: config.json
+                path: config.json

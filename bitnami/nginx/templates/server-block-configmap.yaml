@@ -1,0 +1,10 @@
+{{- if .Values.serverBlock -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nginx.fullname" . }}
+  labels: {{- include "nginx.labels" . | nindent 4 }}
+data:
+  server-block.conf: |-
+{{ .Values.serverBlock | indent 4 }}
+{{- end -}}

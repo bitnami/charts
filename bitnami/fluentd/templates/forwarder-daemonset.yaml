@@ -1,3 +1,4 @@
+{{- if .Values.forwarder.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -16,101 +17,104 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/forwarder-configmap.yaml") . | sha256sum }}
         {{- if .Values.forwarder.podAnnotations }}
-        {{- toYaml .Values.forwarder.podAnnotations | nindent 8 }}
+        {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+{{- include "fluentd.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "fluentd.serviceAccountName" . }}
-      {{- if .Values.securityContext.enabled }}
+      {{- if .Values.forwarder.affinity }}
+      affinity: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.forwarder.nodeSelector }}
+      nodeSelector: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.forwarder.tolerations }}
+      tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.forwarder.securityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.forwarder.securityContext.runAsUser }}
+        fsGroup: {{ .Values.forwarder.securityContext.fsGroup }}
       {{- end }}
       containers:
-      - name: fluentd
-        image: {{ include "fluentd.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        env:
-        - name: FLUENTD_CONF
-          value: {{ .Values.forwarder.configFile }}
-        - name: FLUENTD_OPT
-          value: {{ .Values.forwarder.extraArgs | quote }}
-        {{- if .Values.forwarder.extraEnv }}
-        {{- toYaml .Values.forwarder.extraEnv | nindent 8 }}
-        {{- end }}
-        ports:
-        - name: http
-          containerPort: 9880
-          protocol: TCP
-        {{- if .Values.metrics.enabled }}
-        - name: metrics
-          containerPort: {{ .Values.metrics.service.port }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.forwarder.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
-            port: http
-          initialDelaySeconds: {{ .Values.forwarder.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.forwarder.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.forwarder.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.forwarder.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.forwarder.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.forwarder.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
-            port: http
-          initialDelaySeconds: {{ .Values.forwarder.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.forwarder.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.forwarder.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.forwarder.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.forwarder.readinessProbe.failureThreshold }}
-        {{- end }}
-        resources: {{- toYaml .Values.forwarder.resources | nindent 10 }}
-        volumeMounts:
-        - name: fluentd-config
-          mountPath: /opt/bitnami/fluentd/conf
-        - name: buffer
-          mountPath: /opt/bitnami/fluentd/logs/buffers
+        - name: fluentd
+          image: {{ include "fluentd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: FLUENTD_CONF
+              value: {{ .Values.forwarder.configFile }}
+            - name: FLUENTD_OPT
+              value: {{ .Values.forwarder.extraArgs | quote }}
+            {{- if .Values.forwarder.extraEnv }}
+            {{- toYaml .Values.forwarder.extraEnv | nindent 12 }}
+            {{- end }}
+          ports:
+            {{- if .Values.forwarder.containerPorts }}
+            {{- toYaml .Values.forwarder.containerPorts | nindent 12 }}
+            {{- end }}
+            {{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.metrics.service.port }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.forwarder.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+              port: http
+            initialDelaySeconds: {{ .Values.forwarder.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.forwarder.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.forwarder.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.forwarder.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.forwarder.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.forwarder.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+              port: http
+            initialDelaySeconds: {{ .Values.forwarder.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.forwarder.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.forwarder.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.forwarder.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.forwarder.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.forwarder.resources }}
+          resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: fluentd-config
+              mountPath: /opt/bitnami/fluentd/conf
+            - name: buffer
+              mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- if .Values.tls.enabled }}
+            - name: certs
+              mountPath: /opt/bitnami/fluentd/certs
+            {{- end }}
+            - name: varlog
+              mountPath: /var/log
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+      volumes:
         {{- if .Values.tls.enabled }}
         - name: certs
-          mountPath: /opt/bitnami/fluentd/certs
+          secret:
+            secretName: {{ template "fluentd.tls.secretName" . }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
         {{- end }}
+        - name: fluentd-config
+          configMap:
+            name: {{ template "fluentd.forwarder.configMap" . }}
+        - name: buffer
+          emptyDir: {}
         - name: varlog
-          mountPath: /var/log
+          hostPath:
+            path: /var/log
         - name: varlibdockercontainers
-          mountPath: /var/lib/docker/containers
-      volumes:
-      {{- if .Values.tls.enabled }}
-      - name: certs
-        secret:
-          secretName: {{ template "fluentd.tls.secretName" . }}
-          items:
-          - key: tls.crt
-            path: tls.crt
-          - key: tls.key
-            path: tls.key
-      {{- end }}
-      - name: fluentd-config
-        configMap:
-          name: {{ template "fluentd.forwarder.configMap" . }}
-      - name: buffer
-        emptyDir: {}
-      - name: varlog
-        hostPath:
-          path: /var/log
-      - name: varlibdockercontainers
-        hostPath:
-          path: /var/lib/docker/containers
-      {{- with .Values.forwarder.nodeSelector }}
-      nodeSelector: {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.forwarder.affinity }}
-      affinity: {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.forwarder.tolerations }}
-      tolerations: {{- toYaml . | nindent 8 }}
-      {{- end }}
+          hostPath:
+            path: /var/lib/docker/containers
+{{- end }}

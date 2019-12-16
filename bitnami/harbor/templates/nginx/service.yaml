@@ -5,7 +5,7 @@ metadata:
 {{- if eq .Values.service.type "ClusterIP" }}
 {{- $clusterIP := .Values.service.clusterIP }}
   name: {{ $clusterIP.name }}
-  labels: {{ include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
@@ -25,7 +25,7 @@ spec:
 {{- else if eq .Values.service.type "NodePort" }}
 {{- $nodePort := .Values.service.nodePort }}
   name: {{ $nodePort.name }}
-  labels: {{ include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
 spec:
   type: NodePort
   ports:
@@ -54,7 +54,7 @@ spec:
 {{- else if eq .Values.service.type "LoadBalancer" }}
 {{- $loadBalancer := .Values.service.loadBalancer }}
   name: {{ $loadBalancer.name }}
-  labels: {{ include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
   {{- with $loadBalancer.annotations }}
     annotations:
     {{- toYaml . | nindent 4 }}
@@ -80,7 +80,6 @@ spec:
       targetPort: 4443
     {{- end }}
 {{- end }}
-  selector:
-    {{- include "harbor.matchLabels" . | nindent 4 }}
+  selector: {{- include "harbor.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: nginx
 {{- end }}

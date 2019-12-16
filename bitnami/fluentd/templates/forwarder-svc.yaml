@@ -1,0 +1,32 @@
+{{- if and .Values.forwarder.enabled .Values.forwarder.service.ports }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fluentd.fullname" . }}-forwarder
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: forwarder
+  {{- if .Values.forwarder.service.annotations }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.forwarder.service.type }}
+  {{- if and .Values.forwarder.service.loadBalancerIP (eq .Values.forwarder.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.forwarder.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and .Values.forwarder.service.loadBalancerSourceRanges (eq .Values.forwarder.service.type "LoadBalancer") }}
+  loadBalancerSourceRanges:
+  {{- with .Values.forwarder.service.loadBalancerSourceRanges }}
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.forwarder.service.type "ClusterIP") .Values.forwarder.service.clusterIP }}
+  clusterIP: {{ .Values.forwarder.service.clusterIP }}
+  {{- end }}
+  ports:
+  {{- range $key, $value := .Values.forwarder.service.ports }}
+    - name: {{ $key }}
+      {{ toYaml $value | nindent 6 }}
+  {{- end }}
+  selector: {{ include "fluentd.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: forwarder
+{{- end }}

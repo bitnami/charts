@@ -56,7 +56,17 @@ data:
       location ~* /api/chartsvc {
         rewrite /api/chartsvc/(.*) /chartsvc/$1 break;
         rewrite /api/chartsvc /chartsvc break;
+
+        {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
+        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+        {{- end }}
+
+        {{- if .Values.useHelm3 }}
+        proxy_pass http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }};
+        {{- else }}
         proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
+        {{- end }}
       }
 
       location ~* /api/tiller-deploy {
@@ -65,11 +75,32 @@ data:
         proxy_read_timeout 10m;
         rewrite /api/tiller-deploy/(.*) /$1 break;
         rewrite /api/tiller-deploy / break;
+        {{- if .Values.useHelm3 }}
+        proxy_pass http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }};
+        {{- else }}
         proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
+        {{- end }}
 
         {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+        {{- end }}
+      }
+
+      # The route for the Kubeapps backend API is not prefixed.
+      location ~* /api/ {
+        rewrite /api/(.*) /backend/$1 break;
+        rewrite /api/ /backend break;
+
+        {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
+        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+        {{- end }}
+
+        {{- if .Values.useHelm3 }}
+        proxy_pass http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }};
+        {{- else }}
+        proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
         {{- end }}
       }
 

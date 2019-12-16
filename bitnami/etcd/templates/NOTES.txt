@@ -19,7 +19,7 @@
 
 etcd can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
-    {{ template "etcd.fullname" . }}.{{ .Release.Namespace }}.{{ .Values.service.dnsBase }}
+    {{ template "etcd.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To set a key run the following command:
 

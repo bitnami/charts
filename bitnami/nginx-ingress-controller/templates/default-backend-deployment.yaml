@@ -2,46 +2,47 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: {{ template "nginx-ingress.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: "{{ .Values.defaultBackend.name }}"
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
   name: {{ template "nginx-ingress.defaultBackend.fullname" . }}
+  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
+    component: {{ .Values.defaultBackend.name }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "nginx-ingress.name" . }}
-      release: "{{ .Release.Name }}"
+    matchLabels: {{- include "nginx-ingress.matchLabels" . | nindent 6 }}
+      component: {{ .Values.defaultBackend.name }}
   replicas: {{ .Values.defaultBackend.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   template:
     metadata:
-    {{- if .Values.defaultBackend.podAnnotations }}
-      annotations:
-{{ toYaml .Values.defaultBackend.podAnnotations | indent 8 }}
-    {{- end }}
-      labels:
-        app: {{ template "nginx-ingress.name" . }}
-        component: "{{ .Values.defaultBackend.name }}"
-        release: {{ .Release.Name }}
+      {{- if .Values.defaultBackend.podAnnotations }}
+      annotations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "nginx-ingress.labels" . | nindent 8 }}
+        component: {{ .Values.defaultBackend.name }}
         {{- if .Values.defaultBackend.podLabels }}
-{{ toYaml .Values.defaultBackend.podLabels | indent 8 }}
+        {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
 {{- include "nginx-ingress-controller.imagePullSecrets" . | indent 6 }}
-{{- if .Values.defaultBackend.priorityClassName }}
-      priorityClassName: "{{ .Values.defaultBackend.priorityClassName }}"
-{{- end }}
-      {{- if .Values.defaultBackend.podSecurityContext }}
-      securityContext:
-{{ toYaml .Values.defaultBackend.podSecurityContext | indent 8 }}
+      {{- if .Values.defaultBackend.priorityClassName }}
+      priorityClassName: {{ .Values.defaultBackend.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.defaultBackend.affinity }}
+      affinity: {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.nodeSelector }}
+      nodeSelector: {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.tolerations }}
+      tolerations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.podSecurityContext }}
+      securityContext: {{- toYaml .Values.defaultBackend.podSecurityContext | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 60
       containers:
         - name: {{ template "nginx-ingress.name" . }}-{{ .Values.defaultBackend.name }}
-          image: "{{ template "nginx-ingress-controller.defaultBackend.image" . }}"
-          imagePullPolicy: "{{ .Values.defaultBackend.image.pullPolicy }}"
+          image: {{ template "nginx-ingress-controller.defaultBackend.image" . }}
+          imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy | quote }}
           args:
           {{- range $key, $value := .Values.defaultBackend.extraArgs }}
             {{- if $value }}
@@ -76,19 +77,5 @@ spec:
             - name: http
               containerPort: {{ .Values.defaultBackend.port }}
               protocol: TCP
-          resources:
-{{ toYaml .Values.defaultBackend.resources | indent 12 }}
-    {{- if .Values.defaultBackend.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.defaultBackend.nodeSelector | indent 8 }}
-    {{- end }}
-    {{- if .Values.defaultBackend.tolerations }}
-      tolerations:
-{{ toYaml .Values.defaultBackend.tolerations | indent 8 }}
-    {{- end }}
-    {{- if .Values.defaultBackend.affinity }}
-      affinity:
-{{ toYaml .Values.defaultBackend.affinity | indent 8 }}
-    {{- end }}
-      terminationGracePeriodSeconds: 60
+          resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
 {{- end }}

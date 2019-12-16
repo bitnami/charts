@@ -6,17 +6,17 @@ metadata:
     "helm.sh/hook": test-success
 spec:
   containers:
-  - name: {{ .Release.Name }}-tiller-proxy-test
-    image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
-    env:
-    - name: TILLER_PROXY_HOST
-      value: {{ template "kubeapps.tiller-proxy.fullname" . }}.{{ .Release.Namespace }}
-    - name: TILLER_PROXY_PORT
-      value: "{{ .Values.tillerProxy.service.port }}"
-    - name: KUBEAPPS_RELEASE
-      value: {{ .Release.Name }}
-    command: 
-    - sh
-    - -c
-    - "curl -o /tmp/output -ik -H \"Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)\" $TILLER_PROXY_HOST:$TILLER_PROXY_PORT/v1/releases && cat /tmp/output && cat /tmp/output | grep $KUBEAPPS_RELEASE"
+    - name: {{ .Release.Name }}-tiller-proxy-test
+      image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
+      env:
+        - name: TILLER_PROXY_HOST
+          value: {{ template "kubeapps.tiller-proxy.fullname" . }}.{{ .Release.Namespace }}
+        - name: TILLER_PROXY_PORT
+          value: "{{ .Values.tillerProxy.service.port }}"
+        - name: KUBEAPPS_RELEASE
+          value: {{ .Release.Name }}
+      command:
+        - sh
+        - -c
+        - "curl -o /tmp/output -ik -H \"Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)\" $TILLER_PROXY_HOST:$TILLER_PROXY_PORT/v1/releases && cat /tmp/output && cat /tmp/output | grep $KUBEAPPS_RELEASE"
   restartPolicy: Never

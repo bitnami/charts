@@ -6,13 +6,13 @@ metadata:
     "helm.sh/hook": test-success
 spec:
   containers:
-  - name: {{ .Release.Name }}-dashboard-test
-    image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
-    env:
-    - name: DASHBOARD_HOST
-      value: {{ template "kubeapps.fullname" . }}.{{ .Release.Namespace }}
-    command:
-    - sh
-    - -c
-    - curl -o /tmp/output $DASHBOARD_HOST && cat /tmp/output && cat /tmp/output | grep 'You need to enable JavaScript to run this app'
+    - name: {{ .Release.Name }}-dashboard-test
+      image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
+      env:
+        - name: DASHBOARD_HOST
+          value: {{ template "kubeapps.fullname" . }}.{{ .Release.Namespace }}
+      command:
+        - sh
+        - -c
+        - curl -o /tmp/output $DASHBOARD_HOST && cat /tmp/output && cat /tmp/output | grep 'You need to enable JavaScript to run this app'
   restartPolicy: Never

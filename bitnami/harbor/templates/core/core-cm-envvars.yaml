@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "harbor.core" . }}-envvars
-  labels: {{ include "harbor.labels" . | nindent 4 }}
+  name: {{ include "harbor.core" . }}-envvars
+  labels: {{- include "harbor.labels" . | nindent 4 }}
 data:
   DATABASE_TYPE: "postgresql"
-  POSTGRESQL_HOST: "{{ template "harbor.postgresql.fullname" . }}"
-  POSTGRESQL_PORT: "{{ .Values.postgresql.service.port }}"
-  POSTGRESQL_USERNAME: "{{ .Values.postgresql.postgresqlUsername }}"
+  POSTGRESQL_HOST: "{{ template "harbor.database.host" . }}"
+  POSTGRESQL_PORT: "{{ template "harbor.database.port" . }}"
+  POSTGRESQL_USERNAME: "{{ template "harbor.database.username" . }}"
   POSTGRESQL_DATABASE: "registry"
   POSTGRESQL_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
-  EXT_ENDPOINT: "{{ .Values.externalURL }}"
+  EXT_ENDPOINT: "{{ template "harbor.externalUrl" . }}"
   CORE_URL: "http://{{ template "harbor.core" . }}"
   JOBSERVICE_URL: "http://{{ template "harbor.fullname" . }}-jobservice"
   REGISTRY_URL: "http://{{ template "harbor.registry" . }}:5000"
@@ -20,9 +20,9 @@ data:
   CFG_EXPIRATION: "5"
   ADMIRAL_URL: "NA"
   WITH_CLAIR: "{{ .Values.clair.enabled }}"
-  CLAIR_DB_HOST: "{{ template "harbor.postgresql.fullname" . }}"
-  CLAIR_DB_PORT: "{{ .Values.postgresql.service.port }}"
-  CLAIR_DB_USERNAME: "{{ .Values.postgresql.postgresqlUsername }}"
+  CLAIR_DB_HOST: "{{ template "harbor.database.host" . }}"
+  CLAIR_DB_PORT: "{{ template "harbor.database.port" . }}"
+  CLAIR_DB_USERNAME: "{{ template "harbor.database.username" . }}"
   CLAIR_DB: "{{ template "harbor.database.clairDatabase" . }}"
   CLAIR_DB_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
   CLAIR_URL: "http://{{ template "harbor.fullname" . }}-clair:6060"

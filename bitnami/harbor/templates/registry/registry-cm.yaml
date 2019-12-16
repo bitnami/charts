@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "{{ template "harbor.registry" . }}"
-  labels: {{ include "harbor.labels" . | nindent 4 }}
+  name: {{ include "harbor.registry" . }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
 data:
   config.yml: |+
     version: 0.1
@@ -150,7 +150,7 @@ data:
     auth:
       token:
         issuer: harbor-token-issuer
-        realm: "{{ .Values.externalURL }}/service/token"
+        realm: "{{ template "harbor.externalUrl" . }}/service/token"
         rootcertbundle: /etc/registry/root.crt
         service: harbor-registry
     validation:

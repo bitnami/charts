@@ -2,41 +2,29 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "spark.fullname" . }}-worker
-  labels:
-    app.kubernetes.io/name: {{ include "spark.name" . }}
-    helm.sh/chart: {{ include "spark.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "spark.labels" . | nindent 4 }}
     app.kubernetes.io/component: worker
 spec:
   serviceName: {{ template "spark.fullname" . }}-headless
   replicas: {{ .Values.worker.replicaCount }}
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "spark.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "spark.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: worker
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: {{ include "spark.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        helm.sh/chart: {{ include "spark.chart" . }}
+      labels: {{- include "spark.labels" . | nindent 8 }}
         app.kubernetes.io/component: worker
     spec:
-    {{- if .Values.worker.nodeSelector }}
-      nodeSelector:
-      {{- toYaml .Values.worker.nodeSelector | nindent 8 }}
-    {{- end }}
-    {{- with .Values.worker.affinity }}
-      affinity:
-      {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.worker.tolerations }}
-      tolerations:
-      {{- toYaml . | nindent 8 }}
-    {{- end }}
-      {{- include "spark.imagePullSecrets" . | nindent 6 }}
+{{- include "spark.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.worker.affinity }}
+      affinity: {{- include "spark.tplValue" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.worker.nodeSelector }}
+      nodeSelector: {{- include "spark.tplValue" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.worker.tolerations }}
+      tolerations: {{- include "spark.tplValue" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.worker.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.worker.securityContext.fsGroup }}
@@ -44,113 +32,111 @@ spec:
       {{- end }}
       containers:
         - name: spark-worker
-          image: "{{ template "spark.image" . }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ template "spark.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           ports:
             - name: http
               containerPort: {{ .Values.worker.webPort }}
               protocol: TCP
-          {{- if .Values.worker.clusterPort }}
+            {{- if .Values.worker.clusterPort }}
             - name: cluster
               containerPort: {{ .Values.worker.clusterPort }}
-          {{- end }}
+            {{- end }}
           volumeMounts:
-          {{- if .Values.worker.configurationConfigMap }}
-          - name: config
-            mountPath: '/opt/bitnami/spark/conf/'
-          {{- end }}
-          {{- if .Values.security.certificatesSecret }}
+            {{- if .Values.worker.configurationConfigMap }}
+            - name: config
+              mountPath: '/opt/bitnami/spark/conf/'
+            {{- end }}
+            {{- if .Values.security.certificatesSecret }}
             - name: certs
               mountPath: '/opt/bitnami/spark/conf/certs'
               readOnly: true
-          {{- end }}
+            {{- end }}
           env:
-          - name: SPARK_MODE
-            value: "worker"
-          {{- if .Values.worker.debug }}
-          - name: BASH_DEBUG
-            value: "1"
-          {{- end }}
-          - name: SPARK_DAEMON_MEMORY
-            value: {{ .Values.worker.daemonMemoryLimit | quote }}
-          ## There are some environment variables whose existence needs
-          ## to be checked because Spark checks if they are null instead of an
-          ## empty string
-          {{- if .Values.worker.memoryLimit }}
-          - name: SPARK_WORKER_MEMORY
-            value: {{ .Values.worker.memoryLimit | quote }}
-          {{- end }}
-          {{- if .Values.worker.coreLimit }}
-          - name: SPARK_WORKER_CORES
-            value: {{ .Values.worker.coreLimit | quote }}
-          {{- end }}
-          {{- if .Values.worker.clusterPort }}
-          - name: SPARK_WORKER_PORT
-            value: {{ .Values.worker.clusterPort | quote }}
-          {{- end }}
-          {{- if .Values.worker.webPort  }}
-          - name: SPARK_WORKER_WEBUI_PORT
-            value: {{ .Values.worker.webPort | quote }}
-          {{- end }}
-          {{- if .Values.worker.dir }}
-          - name: SPARK_WORKER_DIR
-            value: {{ .Values.worker.dir | quote }}
-          {{- end }}
-          - name: SPARK_DAEMON_JAVA_OPTS
-            value: {{ .Values.worker.javaOptions | quote }}
-          - name: SPARK_MASTER_URL
-            value: spark://{{ include "spark.fullname" . }}-master-svc:{{ .Values.service.clusterPort }}
-          # If you use a custom properties file, it must be loaded using a ConfigMap
-          - name: SPARK_WORKER_OPTS
-            value: {{ .Values.worker.configOptions }}
-          {{- if eq ( .Values.security.rpc.authenticationEnabled | quote ) "yes" }}
-          - name: SPARK_RPC_AUTHENTICATION_ENABLED
-            value: {{ .Values.security.rpc.authenticationEnabled | quote }}
-          - name: SPARK_RPC_AUTHENTICATION_SECRET
-            valueFrom:
-              secretKeyRef:
-              {{- if .Values.security.passwordsSecretName }}
-                name: {{ .Values.security.passwordsSecretName }}
-                key: rpc-authentication-secret
-              {{- else }}
-                name: {{ include "spark.fullname" . }}-secret
-                key: rpc-authentication-secret
-              {{- end }}
-          {{- end }}
-          {{- if eq ( .Values.security.encryptionEnabled | quote ) "yes" }}
-          - name: SPARK_RPC_ENCRYPTION_ENABLED
-            value: {{ .Values.security.rpc.encryptionEnabled | quote }}
-          {{- end }}
-          {{- if eq ( .Values.security.storageEncriptionEnabled | quote ) "yes" }}
-          - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
-            value: {{ .Values.security.storageEncryptionEnabled | quote }}
-          {{- end }}
-          {{- if eq ( .Values.security.ssl.enabled | quote ) "yes" }}
-          - name: SPARK_SSL_ENABLED
-            value: {{ .Values.security.ssl.enabled | quote }}
-          - name: SPARK_SSL_KEY_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "spark.get.passwordSecretName" }}
-                key: ssl-key-password
-          - name: SPARK_SSL_KEYSTORE_PASSWORD
+            - name: SPARK_MODE
+              value: "worker"
+            - name: BASH_DEBUG
+              value: {{ ternary "1" "0" .Values.image.debug | quote }}
+            - name: SPARK_DAEMON_MEMORY
+              value: {{ .Values.worker.daemonMemoryLimit | quote }}
+            ## There are some environment variables whose existence needs
+            ## to be checked because Spark checks if they are null instead of an
+            ## empty string
+            {{- if .Values.worker.memoryLimit }}
+            - name: SPARK_WORKER_MEMORY
+              value: {{ .Values.worker.memoryLimit | quote }}
+            {{- end }}
+            {{- if .Values.worker.coreLimit }}
+            - name: SPARK_WORKER_CORES
+              value: {{ .Values.worker.coreLimit | quote }}
+            {{- end }}
+            {{- if .Values.worker.clusterPort }}
+            - name: SPARK_WORKER_PORT
+              value: {{ .Values.worker.clusterPort | quote }}
+            {{- end }}
+            {{- if .Values.worker.webPort  }}
+            - name: SPARK_WORKER_WEBUI_PORT
+              value: {{ .Values.worker.webPort | quote }}
+            {{- end }}
+            {{- if .Values.worker.dir }}
+            - name: SPARK_WORKER_DIR
+              value: {{ .Values.worker.dir | quote }}
+            {{- end }}
+            - name: SPARK_DAEMON_JAVA_OPTS
+              value: {{ .Values.worker.javaOptions | quote }}
+            - name: SPARK_MASTER_URL
+              value: spark://{{ include "spark.fullname" . }}-master-svc:{{ .Values.service.clusterPort }}
+            # If you use a custom properties file, it must be loaded using a ConfigMap
+            - name: SPARK_WORKER_OPTS
+              value: {{ .Values.worker.configOptions }}
+            {{- if eq ( .Values.security.rpc.authenticationEnabled | quote ) "yes" }}
+            - name: SPARK_RPC_AUTHENTICATION_ENABLED
+              value: {{ .Values.security.rpc.authenticationEnabled | quote }}
+            - name: SPARK_RPC_AUTHENTICATION_SECRET
+              valueFrom:
+                secretKeyRef:
+                {{- if .Values.security.passwordsSecretName }}
+                  name: {{ .Values.security.passwordsSecretName }}
+                  key: rpc-authentication-secret
+                {{- else }}
+                  name: {{ include "spark.fullname" . }}-secret
+                  key: rpc-authentication-secret
+                {{- end }}
+            {{- end }}
+            {{- if eq ( .Values.security.encryptionEnabled | quote ) "yes" }}
+            - name: SPARK_RPC_ENCRYPTION_ENABLED
+              value: {{ .Values.security.rpc.encryptionEnabled | quote }}
+            {{- end }}
+            {{- if eq ( .Values.security.storageEncriptionEnabled | quote ) "yes" }}
+            - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
+              value: {{ .Values.security.storageEncryptionEnabled | quote }}
+            {{- end }}
+            {{- if eq ( .Values.security.ssl.enabled | quote ) "yes" }}
+            - name: SPARK_SSL_ENABLED
+              value: {{ .Values.security.ssl.enabled | quote }}
+            - name: SPARK_SSL_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "spark.get.passwordSecretName" }}
-                  key: ssl-keystore-password
-          - name: SPARK_SSL_TRUSTSTORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" }}
-                  key: ssl-truststore-password
-          - name: SPARK_SSL_NEED_CLIENT_AUTH
-            value: {{ .Values.security.ssl.needClientAuth }}
-          - name: SPARK_SSL_PROTOCOL
-            value: {{ .Values.security.ssl.protocol }}
-          {{- end }}
-          {{- if .Values.master.extraEnvVars }}
-          {{- toYaml .Values.master.extraEnvVars | nindent 10 }}
-          {{- end }}
+                  key: ssl-key-password
+            - name: SPARK_SSL_KEYSTORE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "spark.get.passwordSecretName" }}
+                    key: ssl-keystore-password
+            - name: SPARK_SSL_TRUSTSTORE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "spark.get.passwordSecretName" }}
+                    key: ssl-truststore-password
+            - name: SPARK_SSL_NEED_CLIENT_AUTH
+              value: {{ .Values.security.ssl.needClientAuth }}
+            - name: SPARK_SSL_PROTOCOL
+              value: {{ .Values.security.ssl.protocol }}
+            {{- end }}
+            {{- if .Values.master.extraEnvVars }}
+            {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
+            {{- end }}
           {{- if .Values.worker.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -173,16 +159,17 @@ spec:
             successThreshold: {{ .Values.worker.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.worker.readinessProbe.failureThreshold }}
           {{- end }}
-          resources:
-            {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- end }}
       volumes:
-      {{- if .Values.worker.configurationConfigMap }}
-      - name: config
-        configMap:
-          name: {{ .Values.worker.configurationConfigMap }}
-      {{- end }}
-      {{- if .Values.security.certificatesSecretName }}
-      - name: certs
-        secret:
-          secretName: {{ .Values.security.certificatesSecretName }}
-      {{- end }}
+        {{- if .Values.worker.configurationConfigMap }}
+        - name: config
+          configMap:
+            name: {{ .Values.worker.configurationConfigMap }}
+        {{- end }}
+        {{- if .Values.security.certificatesSecretName }}
+        - name: certs
+          secret:
+            secretName: {{ .Values.security.certificatesSecretName }}
+        {{- end }}

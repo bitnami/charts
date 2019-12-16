@@ -1,0 +1,29 @@
+{{- if and (or (.Files.Glob "files/repmgr.conf") (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration) (not .Values.postgresql.configurationCM) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-configuration" (include "postgresql-ha.postgresql" .) }}
+  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+data:
+  {{- if (.Files.Glob "files/repmgr.conf") }}
+  {{- (.Files.Glob "files/repmgr.conf").AsConfig | nindent 2 }}
+  {{- else if .Values.postgresql.repmgrConfiguration }}
+  repmgr.conf: |
+  {{- .Values.postgresql.repmgrConfiguration | nindent 4 }}
+  {{- end }}
+  {{- if (.Files.Glob "files/postgresql.conf") }}
+  {{- (.Files.Glob "files/postgresql.conf").AsConfig | nindent 2 }}
+  {{- else if .Values.postgresql.configuration }}
+  postgresql.conf: |
+  {{- range $key, $value := default dict .Values.postgresql.configuration }}
+    {{ $key | snakecase }}={{ $value }}
+  {{- end }}
+  {{- end }}
+  {{- if (.Files.Glob "files/pg_hba.conf") }}
+  {{- (.Files.Glob "files/pg_hba.conf").AsConfig | nindent 2 }}
+  {{- else if .Values.postgresql.pgHbaConfiguration }}
+  pg_hba.conf: |
+  {{- .Values.postgresql.pgHbaConfiguration | nindent 4 }}
+  {{- end }}
+{{- end }}

@@ -3,11 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "spark.fullname" . }}-ingress
-  labels:
-    app.kubernetes.io/name: {{ include "spark.name" . }}
-    helm.sh/chart: {{ include "spark.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  labels: {{- include "spark.labels" . | nindent 4 }}
     app.kubernetes.io/component: ingress
   annotations:
     {{- if .Values.ingress.certManager }}
@@ -18,13 +14,13 @@ metadata:
 {{- end }}
 spec:
   rules:
-  {{- range .Values.ingress.hosts }}
-  - host: {{ .name }}
-    http:
-      paths:
-      - path: {{ default "/" .path }}
-        backend:
-          serviceName: {{ include "spark.fullname" $ }}-master-svc
-          servicePort: http
-  {{- end }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ include "spark.fullname" $ }}-master-svc
+              servicePort: http
+    {{- end }}
 {{- end }}

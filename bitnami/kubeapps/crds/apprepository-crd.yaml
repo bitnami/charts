@@ -9,5 +9,5 @@ spec:
     kind: AppRepository
     plural: apprepositories
     shortNames:
-    - apprepos
+      - apprepos
   version: v1alpha1

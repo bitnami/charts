@@ -1,0 +1,13 @@
+{{- if eq .Values.mode "distributed" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pytorch.fullname" . }}-headless
+  labels: {{- include "pytorch.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector: {{- include "pytorch.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+{{- end }}

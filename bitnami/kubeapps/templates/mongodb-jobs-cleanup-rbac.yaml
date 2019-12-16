@@ -13,12 +13,12 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - delete
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -38,7 +38,7 @@ roleRef:
   kind: Role
   name: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ template "kubeapps.mongodb-jobs-cleanup.fullname" . }}
+    namespace: {{ .Release.Namespace }}
 {{- end -}}

@@ -1,30 +1,37 @@
-apiVersion: apps/v1
+apiVersion: {{ template "deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: "{{ template "harbor.registry" . }}"
-  labels:
-    {{- include "harbor.labels" . | nindent 4 }}
+  name: {{ include "harbor.registry" . }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
     app.kubernetes.io/component: registry
 spec:
   replicas: {{ .Values.registry.replicas }}
   selector:
-    matchLabels: {{ include "harbor.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: registry
   template:
     metadata:
-      labels:
-        {{ include "harbor.labels" . | nindent 8 }}
+      labels: {{- include "harbor.labels" . | nindent 8 }}
         app.kubernetes.io/component: registry
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/registry/registry-cm.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/registry/registry-secret.yaml") . | sha256sum }}
         checksum/secret-jobservice: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
-      {{- if .Values.registry.podAnnotations }}
-        {{ toYaml .Values.registry.podAnnotations | nindent 8 }}
-      {{- end }}
+        {{- if .Values.registry.podAnnotations }}
+        {{- include "harbor.tplValue" (dict "value" .Values.registry.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
 {{- include "harbor.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.registry.affinity }}
+      affinity: {{- include "harbor.tplValue" (dict "value" .Values.registry.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.registry.nodeSelector }}
+      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.registry.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.registry.tolerations }}
+      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.registry.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -32,162 +39,160 @@ spec:
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
-      - name: volume-permissions
-        image: "{{ template "harbor.volumePermissions.image" . }}"
-        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}"]
-        securityContext:
-          runAsUser: 0
-        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
-        volumeMounts:
-        - name: registry-data
-          mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
-          subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
+        - name: volume-permissions
+          image: {{ include "harbor.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "{{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}"
+              chown -R "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}" "{{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: registry-data
+              mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
+              subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
       {{- end }}
       containers:
-      - name: registry
-        image: "{{ template "harbor.registryImage" . }}"
-        imagePullPolicy: {{ .Values.registryImage.pullPolicy | quote }}
-        {{- if .Values.registry.registry.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path: /
-            port: registry
-          initialDelaySeconds: {{ .Values.registry.registry.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.registry.registry.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.registry.registry.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.registry.registry.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.registry.registry.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.registry.registry.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /
-            port: registry
-          initialDelaySeconds: {{ .Values.registry.registry.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.registry.registry.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.registry.registry.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.registry.registry.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.registry.registry.readinessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.registry.registry.resources }}
-        resources: {{ toYaml .Values.registry.registry.resources | nindent 10 }}
-        {{- end }}
-        env:
-        - name: BITNAMI_DEBUG
-          value: {{ ternary "true" "false" .Values.registryImage.debug | quote }}
-        envFrom:
-        - secretRef:
-            name: "{{ template "harbor.registry" . }}"
-        ports:
-        - containerPort: 5000
-          name: registry
-        - containerPort: 5001
-          name: debug
-        volumeMounts:
-        - name: registry-data
-          mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
-          subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
+        - name: registry
+          image: {{ include "harbor.registryImage" . }}
+          imagePullPolicy: {{ .Values.registryImage.pullPolicy | quote }}
+          {{- if .Values.registry.registry.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: registry
+            initialDelaySeconds: {{ .Values.registry.registry.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.registry.registry.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.registry.registry.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.registry.registry.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.registry.registry.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.registry.registry.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: registry
+            initialDelaySeconds: {{ .Values.registry.registry.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.registry.registry.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.registry.registry.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.registry.registry.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.registry.registry.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.registry.registry.resources }}
+          resources: {{- toYaml .Values.registry.registry.resources | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.registryImage.debug | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ include "harbor.registry" . }}
+          ports:
+            - containerPort: 5000
+              name: registry
+            - containerPort: 5001
+              name: debug
+          volumeMounts:
+            - name: registry-data
+              mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
+              subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
+            - name: registry-root-certificate
+              mountPath: /etc/registry/root.crt
+              subPath: tls.crt
+            - name: registry-config
+              mountPath: /etc/registry/config.yml
+              subPath: config.yml
+            {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+            - name: gcs-key
+              mountPath: /etc/registry/gcs-key.json
+              subPath: gcs-key.json
+            {{- end }}
+        - name: registryctl
+          image: {{ include "harbor.registryctlImage" . }}
+          imagePullPolicy: {{ .Values.registryctlImage.pullPolicy | quote }}
+          {{- if .Values.registry.controller.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: registryctl
+            initialDelaySeconds: {{ .Values.registry.controller.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.registry.controller.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.registry.controller.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.registry.controller.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.registry.controller.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.registry.controller.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: registryctl
+            initialDelaySeconds: {{ .Values.registry.controller.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.registry.controller.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.registry.controller.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.registry.controller.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.registry.controller.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.registry.controller.resources }}
+          resources: {{- toYaml .Values.registry.controller.resources | nindent 12 }}
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "harbor.registry" . }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.registryctlImage.debug | quote }}
+            - name: CORE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.core" . }}
+                  key: secret
+            - name: JOBSERVICE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.jobservice" . }}
+                  key: secret
+          ports:
+            - containerPort: 8080
+              name: registryctl
+          volumeMounts:
+            - name: registry-data
+              mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
+              subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
+            - name: registry-config
+              mountPath: /etc/registry/config.yml
+              subPath: config.yml
+            - name: registry-config
+              mountPath: /etc/registryctl/config.yml
+              subPath: ctl-config.yml
+      volumes:
         - name: registry-root-certificate
-          mountPath: /etc/registry/root.crt
-          subPath: tls.crt
+          secret:
+            {{- if .Values.core.secretName }}
+            secretName: {{ .Values.core.secretName }}
+            {{- else }}
+            secretName: {{ include "harbor.core" . }}
+            {{- end }}
         - name: registry-config
-          mountPath: /etc/registry/config.yml
-          subPath: config.yml
+          configMap:
+            name: {{ include "harbor.registry" . }}
+        - name: registry-data
+        {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "filesystem") }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.persistentVolumeClaim.registry.existingClaim | default (include "harbor.registry" .) }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
         - name: gcs-key
-          mountPath: /etc/registry/gcs-key.json
-          subPath: gcs-key.json
+          secret:
+            secretName: {{ include "harbor.registry" . }}
+            items:
+              - key: GCS_KEY_DATA
+                path: gcs-key.json
         {{- end }}
-      - name: registryctl
-        image: "{{ template "harbor.registryctlImage" . }}"
-        imagePullPolicy: {{ .Values.registryctlImage.pullPolicy | quote }}
-        {{- if .Values.registry.controller.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: registryctl
-          initialDelaySeconds: {{ .Values.registry.controller.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.registry.controller.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.registry.controller.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.registry.controller.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.registry.controller.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.registry.controller.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: registryctl
-          initialDelaySeconds: {{ .Values.registry.controller.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.registry.controller.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.registry.controller.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.registry.controller.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.registry.controller.readinessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.registry.controller.resources }}
-        resources: {{ toYaml .Values.registry.controller.resources | nindent 10 }}
-        {{- end }}
-        envFrom:
-        - secretRef:
-            name: "{{ template "harbor.registry" . }}"
-        env:
-        - name: BITNAMI_DEBUG
-          value: {{ ternary "true" "false" .Values.registryctlImage.debug | quote }}
-        - name: CORE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: "{{ template "harbor.core" . }}"
-              key: secret
-        - name: JOBSERVICE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: "{{ template "harbor.jobservice" . }}"
-              key: secret
-        ports:
-        - containerPort: 8080
-          name: registryctl
-        volumeMounts:
-        - name: registry-data
-          mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
-          subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
-        - name: registry-config
-          mountPath: /etc/registry/config.yml
-          subPath: config.yml
-        - name: registry-config
-          mountPath: /etc/registryctl/config.yml
-          subPath: ctl-config.yml
-      volumes:
-      - name: registry-root-certificate
-        secret:
-          {{- if .Values.core.secretName }}
-          secretName: {{ .Values.core.secretName }}
-          {{- else }}
-          secretName: "{{ template "harbor.core" . }}"
-          {{- end }}
-      - name: registry-config
-        configMap:
-          name: "{{ template "harbor.registry" . }}"
-      - name: registry-data
-      {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "filesystem") }}
-        persistentVolumeClaim:
-          claimName: {{ .Values.persistence.persistentVolumeClaim.registry.existingClaim | default (include "harbor.registry" .) }}
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
-      {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
-      - name: gcs-key
-        secret:
-          secretName: "{{ template "harbor.registry" . }}"
-          items:
-            - key: GCS_KEY_DATA
-              path: gcs-key.json
-      {{- end }}
-      {{- with .Values.registry.nodeSelector }}
-      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
-      {{- with .Values.registry.affinity }}
-      affinity: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
-      {{- with .Values.registry.tolerations }}
-      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}

@@ -1,0 +1,15 @@
+# Test values file for generating all of the yaml and check that
+# the rendering is correct
+
+metrics:
+  enabled: true
+
+podDisruptionBudget:
+  create: true
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name: mariadb-galera-service-account

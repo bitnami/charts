@@ -3,12 +3,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "mysql.master.fullname" . }}
-  labels:
-    app: {{ template "mysql.name" . }}
-    component: "master"
-    chart: {{ template "mysql.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  labels: {{- include "mysql.labels" . | nindent 4 }}
+    component: master
 data:
   my.cnf: |-
 {{ .Values.master.config | indent 4 }}

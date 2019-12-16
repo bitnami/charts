@@ -95,7 +95,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.database.username" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-    {{- printf "%s" "postgres" -}}
+    {{- .Values.postgresql.postgresqlUsername -}}
   {{- else -}}
     {{- .Values.externalDatabase.user -}}
   {{- end -}}
@@ -145,7 +145,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
     {{- printf "%s" "notarysigner" -}}
   {{- else -}}
-    {{- .Values.database.external.notarySignerDatabase -}}
+    {{- .Values.externalDatabase.notarySignerDatabase -}}
   {{- end -}}
 {{- end -}}
 
@@ -153,7 +153,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
     {{- printf "%s" "disable" -}}
   {{- else -}}
-    {{- .Values.database.external.sslmode -}}
+    {{- .Values.externalDatabase.sslmode -}}
   {{- end -}}
 {{- end -}}
 
@@ -817,5 +817,40 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
             {{- printf "storageClassName: %s" $registry.storageClass -}}
         {{- end -}}
     {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for deployment.
+*/}}
+{{- define "deployment.apiVersion" -}}
+{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "apps/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "harbor.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "harbor.tplValue" -}}
+    {{- if typeIs "string" .value -}}
+        {{- tpl .value .context -}}
+    {{- else -}}
+        {{- tpl (.value | toYaml) .context -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Set the http prefix if the externalURl dont have it
+*/}}
+{{- define "harbor.externalUrl" -}}
+{{- if hasPrefix "http" .Values.externalURL -}}
+    {{- print .Values.externalURL -}}
+{{- else -}}
+    {{- printf "http://%s" .Values.externalURL -}}
 {{- end -}}
 {{- end -}}

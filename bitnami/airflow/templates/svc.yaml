@@ -19,12 +19,12 @@ spec:
   {{- end }}
   {{- end }}
   ports:
-  - name: http
-    port: 8080
-    {{- if and .Values.service.nodePort (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
-    nodePort: {{ .Values.service.nodePort }}
-    {{- end }}
-    targetPort: http
+    - name: http
+      port: 8080
+      {{- if and .Values.service.nodePort (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+      targetPort: http
   selector:
     app.kubernetes.io/name: {{ include "airflow.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

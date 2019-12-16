@@ -1,0 +1,21 @@
+{{- if and (or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.postgresql.initdbScripts) (not .Values.postgresql.initdbScriptsCM) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-initdb-scripts" (include "postgresql-ha.postgresql" .) }}
+  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+{{- with .Files.Glob "files/docker-entrypoint-initdb.d/*.sql.gz" }}
+binaryData:
+{{- range $path, $bytes := . }}
+  {{ base $path }}: {{ $.Files.Get $path | b64enc | quote }}
+{{- end }}
+{{- end }}
+data:
+  {{- with .Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql}" }}
+  {{- .AsConfig | nindent 2 }}
+  {{- end }}
+  {{- with .Values.postgresql.initdbScripts }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}

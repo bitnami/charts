@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "grafana.fullname" . }}
-  labels: {{ include "grafana.labels" . | nindent 4 }}
+  labels: {{- include "grafana.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}

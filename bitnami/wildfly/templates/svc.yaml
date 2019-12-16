@@ -2,31 +2,33 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "wildfly.fullname" . }}
-  labels:
-    app: {{ template "wildfly.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  labels: {{- include "wildfly.labels" . | nindent 4 }}
+  {{- if .Values.service.annotations }}
+  annotations: {{- include "wildfly.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-  - name: http
-    port: {{ .Values.service.port}}
-    targetPort: http
-    {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.http)))}}
-    nodePort: {{ .Values.service.nodePorts.http }}
-    {{- end }}
-  - name: mgmt
-    port: {{ .Values.service.mgmtPort}}
-    targetPort: mgmt
-    {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.mgmt)))}}
-    nodePort: {{ .Values.service.nodePorts.mgmt }}
-    {{- end }}
-  selector:
-    app: {{ template "wildfly.fullname" . }}
+    - name: http
+      port: {{ .Values.service.port}}
+      targetPort: http
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
+      nodePort: {{ .Values.service.nodePorts.http }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: mgmt
+      port: {{ .Values.service.mgmtPort}}
+      targetPort: mgmt
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.mgmt)) }}
+      nodePort: {{ .Values.service.nodePorts.mgmt }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "wildfly.matchLabels" . | nindent 4 }}

@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.4.0-debian-9-r0
+  tag: 7.5.0-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -339,23 +339,7 @@ metrics:
 ## Properties for Elasticsearch
 ##
 elasticsearch:
-  ## Enable bundled Elasticsearch
-  enabled: false
-  ## Enable sysctl image for the bundled Elasticsearch
-  sysctlImage:
-    enabled: true
-  ## Elasticsearch master-eligible node parameters
-  master:
-    replicas: 2
-  ## Elasticsearch coordinating-only node parameters
-  coordinating:
-    replicas: 2
-  ## Elasticsearch data node parameters
-  data:
-    replicas: 2
-  ## Properties when enabled is false
-  external:
-    hosts:
-    # - elasticsearch-1
-    # - elasticsearch-2
-    port:
+  hosts:
+  # - elasticsearch-1
+  # - elasticsearch-2
+  port:

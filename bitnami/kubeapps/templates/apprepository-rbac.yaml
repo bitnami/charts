@@ -9,39 +9,39 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-- apiGroups:
-  - batch
-  resources:
-  - cronjobs
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-  - delete
-- apiGroups:
-  - batch
-  resources:
-  - jobs
-  verbs:
-  - create
-- apiGroups:
-  - kubeapps.com
-  resources:
-  - apprepositories
-  - apprepositories/finalizers
-  verbs:
-  - get
-  - list
-  - update
-  - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+  - apiGroups:
+      - batch
+    resources:
+      - cronjobs
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+      - delete
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+    verbs:
+      - create
+  - apiGroups:
+      - kubeapps.com
+    resources:
+      - apprepositories
+      - apprepositories/finalizers
+    verbs:
+      - get
+      - list
+      - update
+      - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -57,9 +57,9 @@ roleRef:
   kind: Role
   name: {{ template "kubeapps.apprepository.fullname" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ template "kubeapps.apprepository.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ template "kubeapps.apprepository.fullname" . }}
+    namespace: {{ .Release.Namespace }}
 ---
 # Define role, but no binding, so users can be bound to this role
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -67,13 +67,13 @@ kind: Role
 metadata:
   name: {{ .Release.Name }}-repositories-read
 rules:
-- apiGroups:
-  - kubeapps.com
-  resources:
-  - apprepositories
-  verbs:
-  - list
-  - get
+  - apiGroups:
+      - kubeapps.com
+    resources:
+      - apprepositories
+    verbs:
+      - list
+      - get
 ---
 # Define role, but no binding, so users can be bound to this role
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -81,19 +81,16 @@ kind: Role
 metadata:
   name: {{ .Release.Name }}-repositories-write
 rules:
-- apiGroups:
-  - kubeapps.com
-  resources:
-  - apprepositories
-  verbs:
-  - get
-  - create
-  - update
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - create
+  - apiGroups:
+      - kubeapps.com
+    resources:
+      - apprepositories
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
 {{- end -}}

@@ -2,17 +2,11 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "mariadb-galera.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
-    helm.sh/chart: {{ include "mariadb-galera.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "mariadb-galera.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
-    matchLabels:
-      app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
+    matchLabels: {{- include "mariadb-galera.matchLabels" . | nindent 6 }}
   serviceName: {{ template "mariadb-galera.fullname" . }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
@@ -21,228 +15,210 @@ spec:
     {{- end }}
   template:
     metadata:
-      {{- if .Values.annotations }}
-      annotations:
-        {{- range $key, $value := .Values.annotations }}
-        {{ $key }}: '{{ $value }}'
-        {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "mariadb-galera.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels:
-        app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        helm.sh/chart: {{ include "mariadb-galera.chart" . }}
+      labels: {{- include "mariadb-galera.labels" . | nindent 8 }}
     spec:
+{{- include "mariadb-galera.imagePullSecrets" . | indent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ template "mariadb-galera.serviceAccountName" . }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "mariadb-galera.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "mariadb-galera.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "mariadb-galera.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      affinity:
-        {{- with .Values.nodeAffinity }}
-        nodeAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
-        {{- end }}
-        {{- if eq .Values.podAntiAffinity "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: "kubernetes.io/hostname"
-            labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
-                app.kubernetes.io/instance: {{ .Release.Name }}
-        {{- else if eq .Values.podAntiAffinity "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
-                  app.kubernetes.io/instance: {{ .Release.Name }}
-        {{- end }}
-        {{- with .Values.podAffinity }}
-        podAffinity: {{ tpl (toYaml .) $ | nindent 10 }}
-        {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
-      {{- end }}
-{{- include "mariadb-galera.imagePullSecrets" . | indent 6 }}
       {{- if .Values.extraInitContainers }}
-      initContainers:
-{{ tpl (toYaml .Values.extraInitContainers) . | indent 6 }}
+      initContainers: {{- include "mariadb-galera.tplValue" (dict "value" .Values.extraInitContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
-      - name: "mariadb-galera"
-        image: {{ template "mariadb-galera.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        env:
-        {{- if .Values.image.debug}}
-        - name: BITNAMI_DEBUG
-          value: "true"
-        {{- end }}
-        - name: MARIADB_GALERA_CLUSTER_NAME
-          value: {{ .Values.galera.name | quote }}
-        - name: MARIADB_GALERA_CLUSTER_ADDRESS
-          value: "gcomm://{{ template "mariadb-galera.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-        - name: MARIADB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-            {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-            {{- else }}
-              name: {{ template "mariadb-galera.fullname" . }}
+        - name: "mariadb-galera"
+          image: {{ template "mariadb-galera.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: MARIADB_GALERA_CLUSTER_NAME
+              value: {{ .Values.galera.name | quote }}
+            - name: MARIADB_GALERA_CLUSTER_ADDRESS
+              value: "gcomm://{{ template "mariadb-galera.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.existingSecret }}
+                  name: {{ .Values.existingSecret }}
+                  {{- else }}
+                  name: {{ template "mariadb-galera.fullname" . }}
+                  {{- end }}
+                  key: mariadb-root-password
+            {{- if .Values.db.user }}
+            - name: MARIADB_USER
+              value: {{ .Values.db.user | quote }}
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.existingSecret }}
+                  name: {{ .Values.existingSecret }}
+                  {{- else }}
+                  name: {{ template "mariadb-galera.fullname" . }}
+                  {{- end }}
+                  key: mariadb-password
             {{- end }}
-              key: mariadb-root-password
-        {{- if .Values.db.user }}
-        - name: MARIADB_USER
-          value: {{ .Values.db.user | quote }}
-        - name: MARIADB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-            {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-            {{- else }}
-              name: {{ template "mariadb-galera.fullname" . }}
+            - name: MARIADB_DATABASE
+              value: {{ .Values.db.name | quote }}
+            - name: MARIADB_GALERA_MARIABACKUP_USER
+              value: {{ .Values.galera.mariabackup.user }}
+            - name: MARIADB_GALERA_MARIABACKUP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.existingSecret }}
+                  name: {{ .Values.existingSecret }}
+                  {{- else }}
+                  name: {{ template "mariadb-galera.fullname" . }}
+                  {{- end }}
+                  key: mariadb-galera-mariabackup-password
+            {{- if .Values.ldap.enabled }}
+            - name: MARIADB_LDAP_URI
+              value: {{ .Values.ldap.uri }}
+            - name: MARIADB_LDAP_BASE
+              value: {{ .Values.ldap.base }}
+            - name: MARIADB_LDAP_BIND_DN
+              value: {{ .Values.ldap.binddn }}
+            - name: MARIADB_LDAP_BIND_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.existingSecret }}
+                  name: {{ .Values.existingSecret }}
+                  {{- else }}
+                  name: {{ template "mariadb-galera.fullname" . }}
+                  {{- end }}
+                  key: ldap-bindpw
+            - name: MARIADB_LDAP_NSS_INITGROUPS_IGNOREUSERS
+              value: {{ .Values.ldap.nss_initgroups_ignoreusers | quote }}
+            {{- if .Values.ldap.bslookup }}
+            - name: MARIADB_LDAP_BASE_LOOKUP
+              value: {{ .Values.ldap.bslookup }}
             {{- end }}
-              key: mariadb-password
-        {{- end }}
-        - name: MARIADB_DATABASE
-          value: {{ .Values.db.name | quote }}
-        - name: MARIADB_GALERA_MARIABACKUP_USER
-          value: {{ .Values.galera.mariabackup.user }}
-        - name: MARIADB_GALERA_MARIABACKUP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-            {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-            {{- else }}
-              name: {{ template "mariadb-galera.fullname" . }}
+            {{- if .Values.ldap.scope }}
+            - name: MARIADB_LDAP_SCOPE
+              value: {{ .Values.ldap.scope }}
             {{- end }}
-              key: mariadb-galera-mariabackup-password
-        {{- if .Values.ldap.enabled }}
-        - name: MARIADB_LDAP_URI
-          value: {{ .Values.ldap.uri }}
-        - name: MARIADB_LDAP_BASE
-          value: {{ .Values.ldap.base }}
-        - name: MARIADB_LDAP_BIND_DN
-          value: {{ .Values.ldap.binddn }}
-        - name: MARIADB_LDAP_BIND_PASSWORD
-          valueFrom:
-            secretKeyRef:
-            {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-            {{- else }}
-              name: {{ template "mariadb-galera.fullname" . }}
+            {{- if .Values.ldap.tls_reqcert }}
+            - name: MARIADB_LDAP_TLS_REQCERT
+              value: {{ .Values.ldap.tls_reqcert }}
             {{- end }}
-              key: ldap-bindpw
-        - name: MARIADB_LDAP_NSS_INITGROUPS_IGNOREUSERS
-          value: {{ .Values.ldap.nss_initgroups_ignoreusers | quote }}
-        {{- if .Values.ldap.bslookup }}
-        - name: MARIADB_LDAP_BASE_LOOKUP
-          value: {{ .Values.ldap.bslookup }}
-        {{- end }}
-        {{- if .Values.ldap.scope }}
-        - name: MARIADB_LDAP_SCOPE
-          value: {{ .Values.ldap.scope }}
-        {{- end }}
-        {{- if .Values.ldap.tls_reqcert }}
-        - name: MARIADB_LDAP_TLS_REQCERT
-          value: {{ .Values.ldap.tls_reqcert }}
-        {{- end }}
-        {{- end }}
-        {{- if .Values.extraFlags }}
-        - name: MARIADB_EXTRA_FLAGS
-          value: {{ .Values.extraFlags | quote }}
-        {{- end }}
-        ports:
-        - name: mysql
-          containerPort: 3306
-        - name: galera
-          containerPort: 4567
-        - name: ist
-          containerPort: 4568
-        - name: sst
-          containerPort: 4444
-        {{- if .Values.livenessProbe.enabled }}
-        livenessProbe:
-          exec:
-            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
-        readinessProbe:
-          exec:
-            command: ["sh", "-c", "exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
-          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-        {{- end }}
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-        volumeMounts:
-        - name: data
-          mountPath: {{ .Values.persistence.mountPath }}
-          {{- if .Values.persistence.subPath }}
-          subPath: {{ .Values.persistence.subPath }}
+            {{- end }}
+            {{- if .Values.extraFlags }}
+            - name: MARIADB_EXTRA_FLAGS
+              value: {{ .Values.extraFlags | quote }}
+            {{- end }}
+          ports:
+            - name: mysql
+              containerPort: 3306
+            - name: galera
+              containerPort: 4567
+            - name: ist
+              containerPort: 4568
+            - name: sst
+              containerPort: 4444
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - -ec
+                - |
+                  exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           {{- end }}
-        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
-        - name: custom-init-scripts
-          mountPath: /docker-entrypoint-initdb.d
-        {{- end }}
-        {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
-        - name: mariadb-galera-config
-          mountPath: /opt/bitnami/mariadb/conf/my.cnf
-          subPath: my.cnf
-       {{- end }}
-{{- if .Values.metrics.enabled }}
-      - name: metrics
-        image: {{ template "mariadb-galera.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        env:
-        - name: MARIADB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-            {{- if .Values.existingSecret }}
-              name: {{ .Values.existingSecret }}
-            {{- else }}
-              name: {{ template "mariadb-galera.fullname" . }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - bash
+                - -ec
+                - |
+                  exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
+            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d
             {{- end }}
-              key: mariadb-root-password
-        command: [ 'sh', '-c', 'DATA_SOURCE_NAME="root:$MARIADB_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter' ]
-        ports:
+            {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
+            - name: mariadb-galera-config
+              mountPath: /opt/bitnami/mariadb/conf/my.cnf
+              subPath: my.cnf
+            {{- end }}
+        {{- if .Values.metrics.enabled }}
         - name: metrics
-          containerPort: 9104
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        resources:
-{{ toYaml .Values.metrics.resources | indent 10 }}
-{{- end }}
-{{- if .Values.extraContainers }}
-{{ tpl (toYaml .Values.extraContainers) . | indent 6 }}
-{{- end }}
+          image: {{ template "mariadb-galera.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.existingSecret }}
+                  name: {{ .Values.existingSecret }}
+                  {{- else }}
+                  name: {{ template "mariadb-galera.fullname" . }}
+                  {{- end }}
+                  key: mariadb-root-password
+          command:
+            - sh
+            - -c
+            - |
+              DATA_SOURCE_NAME="root:$MARIADB_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter
+          ports:
+            - name: metrics
+              containerPort: 9104
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.extraContainers }}
+        {{- include "mariadb-galera.tplValue" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
         - name: mariadb-galera-config

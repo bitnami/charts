@@ -1,72 +1,69 @@
-apiVersion: apps/v1
+apiVersion: {{ template "deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: "{{ template "harbor.portal" . }}"
-  labels:
-    {{- include "harbor.labels" . | nindent 4 }}
+  name: {{ include "harbor.portal" . }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
     app.kubernetes.io/component: portal
 spec:
   replicas: {{ .Values.portal.replicas }}
   selector:
-    matchLabels: {{ include "harbor.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: portal
   template:
     metadata:
-      labels:
-        {{ include "harbor.labels" . | nindent 8 }}
+      labels: {{- include "harbor.labels" . | nindent 8 }}
         app.kubernetes.io/component: portal
-      annotations:
       {{- if .Values.portal.podAnnotations }}
-        {{ toYaml .Values.portal.podAnnotations | nindent 8 }}
+      annotations: {{- include "harbor.tplValue" (dict "value" .Values.portal.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
 {{- include "harbor.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.portal.affinity }}
+      affinity: {{- include "harbor.tplValue" (dict "value" .Values.portal.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.portal.nodeSelector }}
+      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.portal.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.portal.tolerations }}
+      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.portal.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
       containers:
-      - name: portal
-        image: "{{ template "harbor.portalImage" . }}"
-        imagePullPolicy: {{ .Values.portalImage.pullPolicy | quote }}
-        {{- if .Values.portal.resources }}
-        resources: {{ toYaml .Values.portal.resources | nindent 10 }}
-        {{- end }}
-        {{- if .Values.portal.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: {{ .Values.portal.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.portal.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.portal.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.portal.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.portal.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.portal.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: {{ .Values.portal.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.portal.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.portal.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.portal.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.portal.readinessProbe.failureThreshold }}
-        {{- end }}
-        env:
-        - name: BITNAMI_DEBUG
-          value: {{ ternary "true" "false" .Values.portalImage.debug | quote }}
-        ports:
-        - containerPort: 8080
-          name: http
-      {{- with .Values.portal.nodeSelector }}
-      nodeSelector: {{ tpl (toYaml .) $ | indent 8 }}
-      {{- end }}
-      {{- with .Values.portal.affinity }}
-      affinity: {{ tpl (toYaml .) $ | indent 8 }}
-      {{- end }}
-      {{- with .Values.portal.tolerations }}
-      tolerations: {{ tpl (toYaml .) $ | indent 8 }}
-      {{- end }}
+        - name: portal
+          image: {{ include "harbor.portalImage" . }}
+          imagePullPolicy: {{ .Values.portalImage.pullPolicy | quote }}
+          {{- if .Values.portal.resources }}
+          resources: {{- toYaml .Values.portal.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.portal.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.portal.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.portal.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.portal.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.portal.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.portal.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.portal.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.portal.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.portal.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.portal.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.portal.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.portal.readinessProbe.failureThreshold }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.portalImage.debug | quote }}
+          ports:
+            - containerPort: 8080
+              name: http

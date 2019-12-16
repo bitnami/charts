@@ -43,6 +43,25 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "cassandra.labels" -}}
+app: {{ include "cassandra.name" . }}
+chart: {{ include "cassandra.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "cassandra.matchLabels" -}}
+app: {{ include "cassandra.name" . }}
+release: {{ .Release.Name }}
+{{- end -}}
+
+
+{{/*
 Return the proper Cassandra image name
 */}}
 {{- define "cassandra.image" -}}
@@ -207,4 +226,17 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
         {{- end -}}
     {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "cassandra.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "cassandra.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.3.18-debian-9-r32
+  tag: 10.3.21-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -44,6 +44,10 @@ image:
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 # schedulerName:
+
+## Specifies the Kubernetes Cluster's Domain Name.
+##
+clusterDomain: cluster.local
 
 ## MariaDB Gallera K8s svc properties
 ##
@@ -76,10 +80,6 @@ service:
   ##
   annotations: {}
 
-## Specifies the Kubernetes Cluster's Domain Name.
-##
-clusterDomain: cluster.local
-
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -95,6 +95,8 @@ serviceAccount:
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
+  ## Specifies whether RBAC rules should be created
+  ##
   create: false
 
 ## Pod Security Context
@@ -105,10 +107,8 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
-## Use existing secret (ignores rootUser.password, db.password, and galera.mariabackup.password)
+## Database credentials for root (admin) user
 ##
-# existingSecret:
-
 rootUser:
   ## MariaDB admin password
   ## Password is ignored if existingSecret is specified.
@@ -119,6 +119,10 @@ rootUser:
   ## If it is not force, a random password will be generated.
   ##
   forcePassword: true
+
+## Use existing secret (ignores rootUser.password, db.password, and galera.mariabackup.password)
+##
+# existingSecret:
 
 ## Custom db configuration
 ##
@@ -145,6 +149,8 @@ galera:
   ##
   name: galera
 
+  ## Credentials to perform backups
+  ##
   mariabackup:
     ## MariaBackup username and password
     ## Password is ignored if existingSecret is specified.
@@ -180,11 +186,13 @@ mariadbConfiguration: |-
   [client]
   port=3306
   socket=/opt/bitnami/mariadb/tmp/mysql.sock
+  plugin_dir=/opt/bitnami/mariadb/plugin
 
   [mysqld]
   default-storage-engine=InnoDB
   basedir=/opt/bitnami/mariadb
   datadir=/bitnami/mariadb/data
+  plugin_dir=/opt/bitnami/mariadb/plugin
   tmpdir=/opt/bitnami/mariadb/tmp
   socket=/opt/bitnami/mariadb/tmp/mysql.sock
   pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
@@ -270,6 +278,7 @@ mariadbConfiguration: |-
 
 ## ConfigMap with MariaDB configuration
 ## NOTE: This will override mariadbConfiguration
+##
 # configurationConfigMap:
 
 ## initdb scripts
@@ -283,18 +292,13 @@ mariadbConfiguration: |-
 
 ## ConfigMap with scripts to be run at first boot
 ## Note: This will override initdbScripts
+##
 # initdbScriptsConfigMap:
 
 ## MariaDB additional command line flags
 ## Can be used to specify command line flags, for example:
 ##
 ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
-
-## Mariadb Master additional pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-# annotations:
-#   key: key
-#   another-key: another-value
 
 ## Desired number of cluster nodes
 ##
@@ -306,30 +310,25 @@ replicaCount: 3
 updateStrategy:
   type: RollingUpdate
 
-## Node Affinity. The value is evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+## Additional pod annotations for MariaDB Galera pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
-nodeAffinity: {}
+podAnnotations: {}
 
-## Pod AntiAffinity
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Affinity for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
-podAntiAffinity: soft
+affinity: {}
 
-## Pod Affinity. The value is evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-podAffinity: {}
-
-## Node labels for pod assignment
+## Node labels for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 
-## Tolerations for pod assignment
+## Tolerations for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: []
+tolerations: {}
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -353,15 +352,14 @@ persistence:
   # storageClass: "-"
   ## Persistent Volume Claim annotations
   ##
-  annotations: {}
+  annotations:
   ## Persistent Volume Access Mode
   ##
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   ## Persistent Volume size
   ##
   size: 8Gi
-  ##
 
 ## Additional init containers
 ##
@@ -374,12 +372,23 @@ extraInitContainers: []
 ##
 extraContainers: []
 
-## Configure resource requests and limits
+## MariaDB Galera containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
-resources: {}
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 0.5
+  #   memory: 256Mi
+  requests: {}
+  #   cpu: 0.5
+  #   memory: 256Mi
 
-## Liveness and readiness probes configuration
+## MariaDB Galera containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
   enabled: true
@@ -411,10 +420,13 @@ podDisruptionBudget:
 ##
 metrics:
   enabled: true
+  ## Bitnami MySQL Prometheus exporter image
+  ## ref: https://hub.docker.com/r/bitnami/mysqld-exporter/tags/
+  ##
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-9-r74
+    tag: 0.12.1-debian-9-r130
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -422,7 +434,22 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  ## MySQL Prometheus exporter containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 0.5
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 0.5
+    #   memory: 256Mi
+  ## MySQL Prometheus exporter service parameters
+  ##
   service:
     type: ClusterIP
     port: 9104
@@ -430,16 +457,26 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9104"
 
-  # Enable this if you're using https://github.com/coreos/prometheus-operator
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
   serviceMonitor:
     enabled: false
-    ## Specify a namespace if needed
+    ## Namespace in which Prometheus is running
+    ##
     # namespace: monitoring
-    # fallback to the prometheus default unless specified
+
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
     # interval: 10s
+
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
     # scrapeTimeout: 10s
-    ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/helm/charts/tree/master/stable/prometheus-operator#tldr)
-    ## [Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#prometheus-operator-1)
-    ## [Kube Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#exporters)
+
+    ## ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
     selector:
       prometheus: kube-prometheus

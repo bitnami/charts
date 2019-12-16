@@ -11,7 +11,7 @@ To get your credentials run:
 
 To connect to your MinIO server using a client:
 
-- Run a MinIO Client pod and append the desired command (e.g. 'admin info'):
+- Run a MinIO Client pod and append the desired command (e.g. 'admin info server'):
 
    kubectl run --namespace {{ .Release.Namespace }} {{ include "minio.fullname" . }}-client \
      --rm --tty -i --restart='Never' \
@@ -21,7 +21,7 @@ To connect to your MinIO server using a client:
      {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
      --labels="{{ template "minio.name" . }}-client=true" \
      {{- end }}
-     --image {{ template "minio.clientImage" . }} -- admin info minio
+     --image {{ template "minio.clientImage" . }} -- admin info server minio
 
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 

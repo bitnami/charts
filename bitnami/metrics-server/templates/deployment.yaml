@@ -2,44 +2,41 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "metrics-server.fullname" . }}
-  labels:
-    app: {{ template "metrics-server.name" . }}
-    chart: {{ template "metrics-server.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  labels: {{- include "metrics-server.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "metrics-server.name" . }}
-      release: "{{ .Release.Name }}"
-  selector:
-    matchLabels:
-      app: {{ template "metrics-server.name" . }}
-      release: {{ .Release.Name | quote }}
-      chart: {{ template "metrics-server.chart" . }}
+    matchLabels: {{- include "metrics-server.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        app: {{ template "metrics-server.name" . }}
-        release: {{ .Release.Name | quote }}
-        chart: {{ template "metrics-server.chart" . }}
+      labels: {{- include "metrics-server.labels" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "metrics-server.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
-      serviceAccountName: {{ template "metrics-server.serviceAccountName" . }}
 {{- include "metrics-server.imagePullSecrets" . | indent 6 }}
+      serviceAccountName: {{ template "metrics-server.serviceAccountName" . }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "metrics-server.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "metrics-server.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "metrics-server.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       containers:
-      - name: metrics-server
-        image: {{ template "metrics-server.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        ports:
-        - name: https
-          containerPort: {{ .Values.securePort }}
-        command:
-        - metrics-server
-        - --secure-port={{ .Values.securePort }}
-      {{- range $key, $value := .Values.extraArgs }}
-        - --{{ $key }}={{ $value }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-      {{- end }}
+        - name: metrics-server
+          image: {{ template "metrics-server.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.securePort }}
+          command:
+            - metrics-server
+            - --secure-port={{ .Values.securePort }}
+            {{- range $key, $value := .Values.extraArgs }}
+            - --{{ $key }}={{ $value }}
+            {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}

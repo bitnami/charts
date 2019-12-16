@@ -3,11 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "consul.fullname" . }}
-  labels:
-    app: "{{ template "consul.name" . }}"
-    chart: "{{ template "consul.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  labels: {{- include "consul.labels" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -17,21 +13,21 @@ metadata:
     {{- end }}
 spec:
   rules:
-  {{- range .Values.ingress.hosts }}
-  - host: {{ .name }}
-    http:
-      paths:
-      - path: {{ default "/" .path }}
-        backend:
-          serviceName: {{ template "consul.fullname" $ }}-ui
-          servicePort: http
-  {{- end }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ template "consul.fullname" $ }}-ui
+              servicePort: http
+    {{- end }}
   tls:
-  {{- range .Values.ingress.hosts }}
-  {{- if .tls }}
-  - hosts:
-    - {{ .name }}
-    secretName: {{ .tlsSecret }}
-  {{- end }}
-  {{- end }}
+    {{- range .Values.ingress.hosts }}
+    {{- if .tls }}
+    - hosts:
+        - {{ .name }}
+      secretName: {{ .tlsSecret }}
+    {{- end }}
+    {{- end }}
 {{- end }}

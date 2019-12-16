@@ -1,3 +1,4 @@
+{{- if not .Values.useHelm3 -}}
 {{- if .Values.rbac.create -}}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
@@ -9,18 +10,18 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - get
-- apiGroups:
-  - "kubeapps.com"
-  resources:
-  - apprepositories
-  verbs:
-  - get
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+  - apiGroups:
+      - "kubeapps.com"
+    resources:
+      - apprepositories
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -36,7 +37,8 @@ roleRef:
   kind: Role
   name: {{ template "kubeapps.tiller-proxy.fullname" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ template "kubeapps.tiller-proxy.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ template "kubeapps.tiller-proxy.fullname" . }}
+    namespace: {{ .Release.Namespace }}
 {{- end -}}
+{{- end }}{{/* matches useHelm3 */}}

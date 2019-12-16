@@ -6,19 +6,15 @@
 {{- $etcdFullname := include "etcd.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
-{{- $dnsBase := .Values.service.dnsBase }}
+{{- $clusterDomain := .Values.clusterDomain }}
 {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
 {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
 {{- $initSnapshotFilename := .Values.startFromSnapshot.snapshotFilename }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  labels:
-    app.kubernetes.io/name: {{ template "etcd.name" . }}
-    helm.sh/chart: {{ template "etcd.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-  name: {{ template "etcd.fullname" . }}-scripts
+  name: {{ include "etcd.fullname" . }}-scripts
+  labels: {{- include "etcd.labels" . | nindent 4 }}
 data:
   setup.sh: |-
     #!/bin/bash
@@ -26,12 +22,12 @@ data:
     set -o errexit
     set -o pipefail
     set -o nounset
-    
+
     # Debug section
     exec 3>&1
     exec 4>&2
 
-    if [ ${BASH_DEBUG:-0} -eq 1 ]; then
+    if [ "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
     else
       echo "==> Bash debug is off"
@@ -42,7 +38,7 @@ data:
     # Constants
     HOSTNAME="$(hostname -s)"
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
@@ -107,13 +103,13 @@ data:
     ## Check wether the member was succesfully removed from the cluster
     should_add_new_member() {
         return_value=0
-        if (grep -E "^Member[[:space:]]+[a-z0-9]+ removed from cluster [a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log") || \
+        if (grep -E "^Member[[:space:]]+[a-z0-9]+\s+removed\s+from\s+cluster\s+[a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log") || \
            ! ([[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]); then
             rm -rf $ETCD_DATA_DIR/* 1>&3 2>&4
         else
             return_value=1
         fi
-        rm "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 1>&3 2>&4
+        rm -f "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 1>&3 2>&4
         return $return_value
     }
 
@@ -142,7 +138,9 @@ data:
 {{- end }}
     else
         echo "==> Detected data from previous deployments..." 1>&3 2>&4
-        if is_disastrous_failure; then
+        if [[ {{ $replicaCount }} -eq 1 ]]; then
+            echo "==> Single node cluster detected!!" 1>&3 2>&4
+        elif is_disastrous_failure; then
             echo "==> Cluster not responding!!" 1>&3 2>&4
 {{- if .Values.disasterRecovery.enabled }}
             if [[ -f "/snapshots/db" ]]; then
@@ -161,19 +159,18 @@ data:
                 exit 1
             fi
 {{- else }}
-            echo "==> Disaster recovery is disabled, the cluster cannot be recovered!" 1>&3 2>&4
-            exit 1
+            echo "==> Disaster recovery is disabled, the cluster will try to recover on it's own..." 1>&3 2>&4
 {{- end }}
         elif should_add_new_member; then
             echo "==> Adding new member to existing cluster..." 1>&3 2>&4
-            etcdctl $AUTH_OPTIONS member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}" | grep "^ETCD_" > "$ETCD_DATA_DIR/new_member_envs" 1>&3 2>&4
+            etcdctl $AUTH_OPTIONS member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}" | grep "^ETCD_" > "$ETCD_DATA_DIR/new_member_envs" 1>&3 2>&4
             sed -ie 's/^/export /' "$ETCD_DATA_DIR/new_member_envs"
             echo "==> Loading env vars of existing cluster..." 1>&3 2>&4
             source "$ETCD_DATA_DIR/new_member_envs" 1>&3 2>&4
             store_member_id & 1>&3 2>&4
         else
             echo "==> Updating member in existing cluster..." 1>&3 2>&4
-            etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.{{ $dnsBase }}:{{ $peerPort }}" 1>&3 2>&4
+            etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}" 1>&3 2>&4
         fi
     fi
 
@@ -188,12 +185,12 @@ data:
     set -o errexit
     set -o pipefail
     set -o nounset
-    
+
     # Debug section
     exec 3>&1
     exec 4>&2
 
-    if [ ${BASH_DEBUG:-0} -eq 1 ]; then
+    if [ "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
     else
       echo "==> Bash debug is off"
@@ -202,9 +199,8 @@ data:
     fi
 
     # Constants
-    HOSTNAME="$(hostname -s)"
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 
@@ -215,12 +211,12 @@ data:
     set -o errexit
     set -o pipefail
     set -o nounset
-    
+
     # Debug section
     exec 3>&1
     exec 4>&2
 
-    if [ ${BASH_DEBUG:-0} -eq 1 ]; then
+    if [ "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
     else
       echo "==> Bash debug is off"
@@ -230,7 +226,7 @@ data:
 
     # Constants
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    
+
     echo "==> [DEBUG] Probing etcd cluster"
     echo "==> [DEBUG] Probe command: \"etcdctl $AUTH_OPTIONS endpoint health\""
     etcdctl $AUTH_OPTIONS endpoint health
@@ -241,12 +237,12 @@ data:
     set -o errexit
     set -o pipefail
     set -o nounset
-    
+
     # Debug section
     exec 3>&1
     exec 4>&2
 
-    if [ ${BASH_DEBUG:-0} -eq 1 ]; then
+    if [ "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
     else
       echo "==> Bash debug is off"
@@ -256,7 +252,7 @@ data:
 
     # Constants
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.{{ $dnsBase }}:{{ $clientPort }},{{ end }}"
+    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
 

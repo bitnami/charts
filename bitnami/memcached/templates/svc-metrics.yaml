@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "memcached.fullname" . }}-metrics
+  labels: {{- include "memcached.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+  {{- if .Values.metrics.service.annotations }}
+  annotations: {{- include "memcached.tplValue" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.metrics.service.type }}
+  ports:
+    - name: metrics
+      port: {{ .Values.metrics.service.port }}
+      targetPort: metrics
+  selector: {{- include "memcached.matchLabels" . | nindent 4 }}

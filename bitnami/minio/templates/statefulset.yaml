@@ -5,16 +5,10 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "minio.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "minio.name" . }}
-    helm.sh/chart: {{ include "minio.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "minio.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "minio.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "minio.matchLabels" . | nindent 6 }}
   serviceName: {{ include "minio.fullname" . }}-headless
   replicas: {{ .Values.statefulset.replicaCount }}
   podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
@@ -25,37 +19,20 @@ spec:
     {{- end }}
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: {{ include "minio.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        helm.sh/chart: {{ include "minio.chart" . }}
+      labels: {{- include "minio.labels" . | nindent 8 }}
       {{- if or .Values.podAnnotations }}
-      annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
+      annotations: {{- include "minio.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "minio.imagePullSecrets" . | nindent 6 }}
-      affinity:
-      {{- if eq .Values.antiAffinity "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ include "minio.name" . }}
-                  app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- else if eq .Values.antiAffinity "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ include "minio.name" . }}
-                  app.kubernetes.io/instance: {{ .Release.Name }}
+{{- include "minio.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "minio.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.nodeAffinity }}
-        nodeAffinity: {{ toYaml .Values.nodeAffinity | nindent 10 }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "minio.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "minio.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -63,123 +40,125 @@ spec:
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
-      - name: volume-permissions
-        image: "{{ template "minio.volumePermissions.image" . }}"
-        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.mountPath }}"]
-        securityContext:
-          runAsUser: 0
-        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
-        volumeMounts:
-        - name: data
-          mountPath: {{ .Values.persistence.mountPath }}
+        - name: volume-permissions
+          image: {{ template "minio.volumePermissions.image" . }}
+          imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
       {{- end }}
       containers:
-      - name: "minio"
-        image: {{ include "minio.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- if .Values.securityContext.enabled }}
-        securityContext:
-          runAsUser: {{ .Values.securityContext.runAsUser }}
-        {{- end }}
-        env:
-        {{- if .Values.image.debug }}
-        - name: BITNAMI_DEBUG
-          value: "true"
-        {{- end }}
-        - name: MINIO_DISTRIBUTED_MODE_ENABLED
-          value: "yes"
-        - name: MINIO_SKIP_CLIENT
-          value: "yes"
-        - name: MINIO_DISTRIBUTED_NODES
-          {{- $minioFullname := include "minio.fullname" . }}
-          {{- $minioHeadlessServiceName := printf "%s-%s" $minioFullname "headless" | trunc 63  }}
-          {{- $releaseNamespace := .Release.Namespace }}
-          value: {{range $i, $e := until $replicaCount }}{{ $minioFullname }}-{{ $e }}.{{ $minioHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $.Values.clusterDomain }},{{ end }}
-        {{- if .Values.useCredentialsFile }}
-        - name: MINIO_ACCESS_KEY_FILE
-          value: "/opt/bitnami/minio/secrets/access-key"
-        {{- else }}
-        - name: MINIO_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "minio.secretName" . }}
-              key: access-key
-        {{- end }}
-        {{- if .Values.useCredentialsFile }}
-        - name: MINIO_SECRET_KEY_FILE
-          value: "/opt/bitnami/minio/secrets/secret-key"
-        {{- else }}
-        - name: MINIO_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "minio.secretName" . }}
-              key: secret-key
-        {{- end }}
-        - name: MINIO_BROWSER
-          value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
-{{- if .Values.extraEnv }}
-{{ toYaml .Values.extraEnv | indent 8 }}
-{{- end }}
-        ports:
         - name: minio
-          containerPort: 9000
-        {{- if .Values.livenessProbe.enabled }}
-        livenessProbe:
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          httpGet:
-            path: /minio/health/live
-            port: minio
-        {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
-        readinessProbe:
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          tcpSocket:
-            port: minio
-        {{- end }}
-        {{- if .Values.resources }}
-        resources: {{ toYaml .Values.resources | nindent 10 }}
-        {{- end }}
-        volumeMounts:
+          image: {{ include "minio.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: MINIO_DISTRIBUTED_MODE_ENABLED
+              value: "yes"
+            - name: MINIO_SKIP_CLIENT
+              value: "yes"
+            - name: MINIO_DISTRIBUTED_NODES
+              {{- $minioFullname := include "minio.fullname" . }}
+              {{- $minioHeadlessServiceName := printf "%s-%s" $minioFullname "headless" | trunc 63  }}
+              {{- $releaseNamespace := .Release.Namespace }}
+              value: {{range $i, $e := until $replicaCount }}{{ $minioFullname }}-{{ $e }}.{{ $minioHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $.Values.clusterDomain }},{{ end }}
+            {{- if .Values.useCredentialsFile }}
+            - name: MINIO_ACCESS_KEY_FILE
+              value: "/opt/bitnami/minio/secrets/access-key"
+            {{- else }}
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "minio.secretName" . }}
+                  key: access-key
+            {{- end }}
+            {{- if .Values.useCredentialsFile }}
+            - name: MINIO_SECRET_KEY_FILE
+              value: "/opt/bitnami/minio/secrets/secret-key"
+            {{- else }}
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "minio.secretName" . }}
+                  key: secret-key
+            {{- end }}
+            - name: MINIO_BROWSER
+              value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
+            {{- if .Values.extraEnv }}
+            {{- toYaml .Values.extraEnv | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: minio
+              containerPort: 9000
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            httpGet:
+              path: /minio/health/live
+              port: minio
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            tcpSocket:
+              port: minio
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.useCredentialsFile }}
+            - name: minio-credentials
+              mountPath: /opt/bitnami/minio/secrets/
+            {{- end }}
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+      volumes:
         {{- if .Values.useCredentialsFile }}
         - name: minio-credentials
-          mountPath: /opt/bitnami/minio/secrets/
+          secret:
+            secretName: {{ include "minio.secretName" . }}
         {{- end }}
-        - name: "data"
-          mountPath: {{ .Values.persistence.mountPath }}
-      volumes:
-      {{- if .Values.useCredentialsFile }}
-      - name: minio-credentials
-        secret:
-          secretName: {{ include "minio.secretName" . }}
-      {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
 {{- else }}
   volumeClaimTemplates:
-  - metadata:
-      name: "data"
-      labels:
-        app.kubernetes.io/name: {{ include "minio.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- if .Values.persistence.annotations }}
-      annotations: {{ toYaml .Values.persistence.annotations | nindent 8 }}
-      {{- end }}
-    spec:
-      accessModes: {{ toYaml .Values.persistence.accessModes | nindent 8 }}
-      {{ include "minio.storageClass" . }}
-      resources:
-        requests:
-          storage: {{ .Values.persistence.size | quote }}
+    - metadata:
+        name: data
+        labels: {{- include "minio.matchLabels" . | nindent 10 }}
+        {{- if .Values.persistence.annotations }}
+        annotations: {{- include "minio.tplValue" ( dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes: {{ toYaml .Values.persistence.accessModes | nindent 10 }}
+        {{ include "minio.storageClass" . }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
 {{- end }}
 {{- end }}
 {{- end }}

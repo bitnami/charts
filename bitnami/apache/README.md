@@ -75,6 +75,10 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `cloneHtdocsFromGit.branch`      | Branch inside the git repository                        | `nil`                                                        |
 | `cloneHtdocsFromGit.interval`    | Interval for sidecar container pull from the repository | `60`                                                         |
 | `podAnnotations`                 | Pod annotations                                         | `{}`                                                         |
+| `livenessProbe.enabled`          | Enable liveness probe                                   | `true`                                                       |
+| `livenessProbe.path`             | Path to access on the HTTP server                       | `/`                                                          |
+| `readinessProbe.enabled`         | Enable readiness probe                                  | `true`                                                       |
+| `readinessProbe.path`            | Path to access on the HTTP server                       | `/`                                                          |    
 | `ingress.enabled`                | Enable ingress controller resource                      | `false`                                                      |
 | `ingress.hostname`               | Default host for the ingress resource                   | `example.local`                                              |
 | `ingress.certManager`            | Add annotations for cert-manager                        | `false`                                                      |
@@ -86,7 +90,9 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `ingress.secrets[0].name`        | TLS Secret Name                                         | `nil`                                                        |
 | `ingress.secrets[0].certificate` | TLS Secret Certificate                                  | `nil`                                                        |
 | `ingress.secrets[0].key`         | TLS Secret Key                                          | `nil`                                                        |
-| `affinity`                       | Map of node/pod affinities                              | `{}`                                                         |
+| `affinity`                       | Map of node/pod affinities                              | `{}` (The value is evaluated as a template)                  |
+| `nodeSelector`                   | Node labels for pod assignment                          | `{}` (The value is evaluated as a template)                  |
+| `tolerations`                    | Tolerations for pod assignment                          | `[]` (The value is evaluated as a template)                  |
 | `metrics.enabled`                | Start a side-car prometheus exporter                    | `false`                                                      |
 | `metrics.image.registry`         | Apache exporter image registry                          | `docker.io`                                                  |
 | `metrics.image.repository`       | Apache exporter image name                              | `lusotycoon/apache-exporter`                                 |

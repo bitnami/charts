@@ -13,20 +13,20 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 rules:
-- apiGroups:
-  - kubeapps.com
-  resources:
-  - apprepositories
-  verbs:
-  - list
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - list
-  - delete
+  - apiGroups:
+      - kubeapps.com
+    resources:
+      - apprepositories
+    verbs:
+      - list
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - list
+      - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -46,7 +46,7 @@ roleRef:
   kind: Role
   name: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
+    namespace: {{ .Release.Namespace }}
 {{- end -}}

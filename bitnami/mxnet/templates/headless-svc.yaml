@@ -3,15 +3,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "mxnet.fullname" . }}-headless
-  labels:
-    app.kubernetes.io/name: {{ include "mxnet.name" . }}
-    helm.sh/chart: {{ include "mxnet.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "mxnet.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   clusterIP: None
-  selector:
-    app.kubernetes.io/name: {{ include "mxnet.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  selector: {{- include "mxnet.matchLabels" . | nindent 4 }}
 {{- end }}

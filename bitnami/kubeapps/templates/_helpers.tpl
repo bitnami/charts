@@ -25,6 +25,31 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "kubeapps.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "kubeapps.labels" -}}
+app: {{ include "kubeapps.name" . }}
+chart: {{ include "kubeapps.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "kubeapps.matchLabels" -}}
+app: {{ include "kubeapps.name" . }}
+release: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Render image reference
 */}}
 {{- define "kubeapps.image" -}}
@@ -53,13 +78,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "kubeapps.mongodb.fullname" -}}
 {{- $name := default "mongodb" .Values.mongodb.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "kubeapps.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -133,6 +151,13 @@ Create name for the tiller-proxy based on the fullname
 {{- end -}}
 
 {{/*
+Create name for kubeops based on the fullname
+*/}}
+{{- define "kubeapps.kubeops.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-kubeops
+{{- end -}}
+
+{{/*
 Create name for the secrets related to an app repository
 */}}
 {{- define "kubeapps.apprepository-secret.name" -}}
@@ -176,4 +201,17 @@ imagePullSecrets:
 {{- end }}
 {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "kubeapps.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "kubeapps.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}

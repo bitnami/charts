@@ -4,13 +4,12 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: "{{ template "harbor.registry" . }}"
+  name: {{ include "harbor.registry" . }}
   {{- if eq .Values.persistence.resourcePolicy "keep" }}
   annotations:
     helm.sh/resource-policy: keep
   {{- end }}
-  labels:
-    {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
     app.kubernetes.io/component: registry
 spec:
   accessModes:

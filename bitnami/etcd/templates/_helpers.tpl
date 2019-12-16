@@ -31,6 +31,25 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "etcd.labels" -}}
+app.kubernetes.io/name: {{ include "etcd.name" . }}
+helm.sh/chart: {{ include "etcd.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "etcd.matchLabels" -}}
+app.kubernetes.io/name: {{ include "etcd.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+
+{{/*
 Return the proper etcd image name
 */}}
 {{- define "etcd.image" -}}
@@ -174,7 +193,6 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "etcd.validateValues.startFromSnapshot.existingClaim" .) -}}
 {{- $messages := append $messages (include "etcd.validateValues.startFromSnapshot.snapshotFilename" .) -}}
 {{- $messages := append $messages (include "etcd.validateValues.disasterRecovery" .) -}}
-{{- $messages := append $messages (include "etcd.validateValues.podAntiAffinity" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -207,15 +225,6 @@ etcd: startFromSnapshot.snapshotFilename
 etcd: disasterRecovery
     Persistence must be enabled when disasterRecovery is enabled!!
     Please enable persistence (--set persistence.enabled=true)
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of etcd - must provide a valid podAntiAffinity ("soft" or "hard") */}}
-{{- define "etcd.validateValues.podAntiAffinity" -}}
-{{- if and (ne .Values.podAntiAffinity "soft") (ne .Values.podAntiAffinity "hard") -}}
-etcd: mode
-    Invalid podAntiAffinity selected. Valid values are "soft" and
-    "hard". Please set a valid mode (--set podAntiAffinity="xxxx")
 {{- end -}}
 {{- end -}}
 
@@ -275,4 +284,17 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
         {{- end -}}
     {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "etcd.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "etcd.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}

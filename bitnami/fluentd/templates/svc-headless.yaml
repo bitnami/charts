@@ -1,4 +1,4 @@
-{{- if .Values.aggregator.enabled -}}
+{{- if and .Values.aggregator.enabled .Values.aggregator.service.ports -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,9 +9,10 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-  - name: tcp
-    port: {{ .Values.aggregator.port }}
-    targetPort: tcp
+  {{- range $key, $value := .Values.aggregator.service.ports }}
+    - name: {{ $key }}
+      {{ toYaml $value | nindent 6 }}
+  {{- end }}
   selector: {{- include "fluentd.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
 {{- end -}}

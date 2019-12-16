@@ -1,0 +1,18 @@
+{{- if .Values.postgresql.pdb.create }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "postgresql-ha.postgresql" . }}
+  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+spec:
+  {{- if .Values.postgresql.pdb.minAvailable }}
+  minAvailable: {{ .Values.postgresql.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.postgresql.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.postgresql.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "postgresql-ha.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: postgresql
+{{- end }}

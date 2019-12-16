@@ -3,9 +3,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "influxdb.fullname" . }}-metrics
-  labels: {{ include "influxdb.labels" . | nindent 4 }}
+  labels: {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
-  annotations: {{- tpl (toYaml .Values.metrics.service.annotations) $ | nindent 4 }}
+  {{- if .Values.metrics.service.annotations }}
+  annotations: {{- include "influxdb.tplValue" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
   {{- if and .Values.metrics.service.loadBalancerIP (eq .Values.metrics.service.type "LoadBalancer") }}
@@ -30,6 +32,6 @@ spec:
       {{- else if eq .Values.metrics.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{ include "influxdb.matchLabels" . | nindent 4 }}
+  selector: {{- include "influxdb.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 {{- end }}
