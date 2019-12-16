@@ -387,10 +387,19 @@ workers:
       # enabled: false
       # repos:
       # - name:
-      #   repository:
-      #   branch:
-      #   interval:
-      #   sshKeySecretName:
+       #  repository:
+       #  branch:
+       #  interval:
+       ## Enable to allow cloning from a private repo
+       ##
+       #  sshEnabled: false
+       ## SSH keys to clone the repo
+       ##
+       #  sshKeys:
+       ## Name of existing secret containing the SSH keys to clone the repo
+       ## When provided, `workers[0].additionalRepos.repos[0].sshKeys` will be ignored
+       ##
+       #  sshKeySecretName:
     replicas: 1
     queue: "default"
     port: 8793
