@@ -97,7 +97,11 @@ data:
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
         {{- end }}
 
+        {{- if .Values.useHelm3 }}
+        proxy_pass http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }};
+        {{- else }}
         proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
+        {{- end }}
       }
 
       location / {
