@@ -7,6 +7,11 @@ metadata:
     app.kubernetes.io/component: influxdb
 spec:
   replicas: 1
+  strategy:
+    type: {{ .Values.influxdb.updateStrategy }}
+    {{- if (eq "Recreate" .Values.influxdb.updateStrategy) }}
+    rollingUpdate: null
+    {{- end }}
   selector:
     matchLabels: {{- include "influxdb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: influxdb
