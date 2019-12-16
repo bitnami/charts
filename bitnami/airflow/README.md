@@ -63,12 +63,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `schedulerImage.pullPolicy`               | Airflow Scheduler image pull policy                                                                  | `IfNotPresent`                                               |
 | `schedulerImage.pullSecrets`              | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `schedulerImage.debug`                    | Specify if debug values should be set                                                                | `false`                                                      |
-| `workerImage.registry`                    | Airflow Worker image registry                                                                        | `docker.io`                                                  |
-| `workerImage.repository`                  | Airflow Worker image name                                                                            | `bitnami/airflow-worker`                                     |
-| `workerImage.tag`                         | Airflow Worker image tag                                                                             | `{TAG_NAME}`                                                 |
-| `workerImage.pullPolicy`                  | Airflow Worker image pull policy                                                                     | `IfNotPresent`                                               |
-| `workerImage.pullSecrets`                 | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `workerImage.debug`                       | Specify if debug values should be set                                                                | `false`                                                      |
 | `git.registry`                            | Git image registry                                                                                   | `docker.io`                                                  |
 | `git.repository`                          | Git image name                                                                                       | `bitnami/git`                                                |
 | `git.tag`                                 | Git image tag                                                                                        | `{TAG_NAME}`                                                 |
@@ -87,9 +81,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.cloneDagFilesFromGit.interval`   | Interval to pull the repository on sidecar container                                                 | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.sshKeySecretName` | Kubernetes secret containing SSH keys for the dags repo 					   | `nil`							  |
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                                 | `nil`                                                        |
-| `airflow.worker.port`                     | Airflow Worker port                                                                                  | `8793`                                                       |
-| `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                                    | `2`                                                          |
-| `airflow.worker.queue`      		    | Dedicated queue for the default worker 								   | `default`						   	  |
 | `airflow.auth.forcePassword`              | Force users to specify a password                                                                    | `false`                                                      |
 | `airflow.auth.username`                   | Username to access web UI                                                                            | `user`                                                       |
 | `airflow.auth.password`                   | Password to access web UI                                                                            | `nil`                                                        |
@@ -155,7 +146,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.image.pullPolicy`                | Image pull policy                                                                                    | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                  | Additional annotations for Metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |
-| `additionalRepos.enabled`                 | Enables the use of additional repos in the default Airflow Workers                                   | `false` 							  |
 | `workers[0].name`	      		    | Descriptive name of a worker to add								   | `nil`							  |
 | `workers[0].volumes[0].name`		    | Name of volume to add to this worker 								   | `nil`							  | 
 | `workers[0].image.registry`    	    | Registry for this workers image									   | `nil`							  |
@@ -257,18 +247,6 @@ airflow.cloneDagFilesFromGit.interval=60
 airflow.cloneDagFilesFromGit.sshKeySecretName=KUBERNETES_SECRET
 ```
 Note: If it's a private git repo, you need to supply it with ssh keys via a kubernetes secret. To do so you must generate ssh keys, and then create a secret in kubernetes with the generated keys.
-## Additional Repos
-
-You can specify additional repositories to sync with your worker for additional files for your DAGs to use, or whatever pleases you. You can specify multiple. To do so: 
-
-```console
-additionalRepos.enabled=true
-additionalRepos.repos[0].name=additional-repo
-additionalRepos.repos[0].repository=https://github.com/USERNAME/REPOSITORY
-additionalRepos.repos[0].branch=master
-additioanlRepos.repos[0].interval=60
-additioanlRepos.repos[0].sshKeySecretName=KUBERNETES_SECRET
-```
 
 ## Custom Workers
 
