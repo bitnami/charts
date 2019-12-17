@@ -79,7 +79,9 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.cloneDagFilesFromGit.repository` | Repository where download DAG files from                                                             | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.branch`     | Branch from repository to checkout                                                                   | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.interval`   | Interval to pull the repository on sidecar container                                                 | `nil`                                                        |
-| `airflow.cloneDagFilesFromGit.sshKeySecretName` | Kubernetes secret containing SSH keys for the dags repo 					   | `nil`							  |
+| `airflow.cloneDagFilesFromGit.sshEnabled` | Enable the use of SSH keys to clone from a private git repo					   | `false`							  | 
+| `airflow.cloneDagFilesFromGit.sshKey`	    | Provide a plain text private SSH key to clone from a private git repo				   | `nil`							  |
+| `airflow.cloneDagFilesFromGit.sshKeySecretName` | Kubernetes secret containing SSH keys for the dags repo. Providing this overrides prividing an ssh key | `nil`						  |
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                                 | `nil`                                                        |
 | `airflow.auth.forcePassword`              | Force users to specify a password                                                                    | `false`                                                      |
 | `airflow.auth.username`                   | Username to access web UI                                                                            | `user`                                                       |
@@ -244,9 +246,10 @@ airflow.cloneDagFilesFromGit.enabled=true
 airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
 airflow.cloneDagFilesFromGit.branch=master
 airflow.cloneDagFilesFromGit.interval=60
+airflow.cloneDagFilesFromGit.sshEnabled=true
 airflow.cloneDagFilesFromGit.sshKeySecretName=KUBERNETES_SECRET
 ```
-Note: If it's a private git repo, you need to supply it with ssh keys via a kubernetes secret. To do so you must generate ssh keys, and then create a secret in kubernetes with the generated keys.
+Note: If it's a private git repo, you need to supply it with ssh keys. It can either be a plain text ssh key, by specifying `airflow.cloneDagFilesFromGit.sshKey` or via a kubernetes secret by specifying `airflow.cloneDagFilesFromGit.sshKeySecretName`. If both are specified the already created secret will be used.
 
 ## Custom Workers
 
@@ -264,7 +267,8 @@ workers[0].additionalRepos.repos[0].name=descriptive_Name
 workers[0].additionalRepos.repos[0].repository=https://github.com/USERNAME/REPOSITORY
 workers[0].additionalRepos.repos[0].branch=master
 workers[0].additionalRepos.repos[0].interval=60
-workers[0].additionalRepos.repos[0].sskKeySecret=KUBERNETES_SECRET
+workers[0].additionalRepos.repos[0].sshEnabled=true
+workers[0].additionalRepos.repos[0].sskKey=PRIVATE_SSH_KEY
 workers[0].replicas=2
 workers[0].queue=default
 ```
