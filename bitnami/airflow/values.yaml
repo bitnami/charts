@@ -108,8 +108,16 @@ airflow:
     # repository: 
     # branch: 
     # interval: 
-    ## Name of secret in kubernetes containing the ssh keys for access to a git repo
-    # sshKeySecretName:
+    ## Enable to allow cloning from a private repo
+    ##
+    #  sshEnabled: false
+    ## SSH keys to clone the repo
+    ##
+    #  sshKeys:
+    ## Name of existing secret containing the SSH keys to clone the repo
+    ## When provided, `workers[0].additionalRepos.repos[0].sshKeys` will be ignored
+    ##
+    #  sshKeySecretName:
   ## URL used to access to airflow web ui
   ##
   # baseUrl:
