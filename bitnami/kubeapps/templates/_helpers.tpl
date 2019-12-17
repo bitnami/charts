@@ -151,6 +151,13 @@ Create name for the tiller-proxy based on the fullname
 {{- end -}}
 
 {{/*
+Create name for kubeops based on the fullname
+*/}}
+{{- define "kubeapps.kubeops.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-kubeops
+{{- end -}}
+
+{{/*
 Create name for the secrets related to an app repository
 */}}
 {{- define "kubeapps.apprepository-secret.name" -}}

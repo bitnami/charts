@@ -1,0 +1,140 @@
+{{- if eq .Values.architecture "high-availability" }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "memcached.fullname" . }}
+  labels: {{- include "memcached.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {{- include "memcached.matchLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ template "memcached.fullname" . }}
+  template:
+    metadata:
+      labels: {{- include "memcached.labels" . | nindent 8 }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
+      annotations:
+        {{- if .Values.podAnnotations }}
+        {{- include "memcached.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
+        {{- include "memcached.tplValue" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+{{- include "memcached.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "memcached.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "memcached.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "memcached.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      containers:
+        - name: memcached
+          {{- if .Values.persistence.enabled }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "/usr/bin/pkill -10 memcached ; sleep 60s"]
+          {{- end }}
+          image: {{ template "memcached.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          args: {{- toYaml .Values.arguments | nindent 12 }}
+          {{- if .Values.persistence.enabled }}
+            - -e/cache-state/memory_file
+          {{- end }}
+          env:
+            - name: MEMCACHED_USERNAME
+              value: {{ default "" .Values.memcachedUsername | quote }}
+            - name: MEMCACHED_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "memcached.fullname" . }}
+                  key: memcached-password
+            {{- if .Values.extraEnv }}
+            {{- toYaml .Values.extraEnv | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: memcache
+              containerPort: 11211
+          livenessProbe:
+            tcpSocket:
+              port: memcache
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            tcpSocket:
+              port: memcache
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          {{- end }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: /cache-state
+            - name: tmp
+              mountPath: /tmp
+          {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ template "memcached.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          ports:
+            - name: metrics
+              containerPort: 9150
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+{{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      {{- with .Values.persistence.annotations }}
+        annotations:
+        {{- range $key, $value := . }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+        {{ include "memcached.storageClass" . | nindent 8 }}
+{{- end }}
+{{- end }}

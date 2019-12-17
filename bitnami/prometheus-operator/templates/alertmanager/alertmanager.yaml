@@ -29,11 +29,11 @@ spec:
   {{- end }}
   resources: {{- toYaml .Values.alertmanager.resources | nindent 4 }}
   routePrefix: "/"
-{{- if .Values.alertmanager.securityContext.enabled }}
-securityContext:
-  runAsUser: {{ .Values.alertmanager.securityContext.runAsUser }}
-  fsGroup: {{ .Values.alertmanager.securityContext.fsGroup }}
-{{- end }}
+  {{- if .Values.alertmanager.securityContext.enabled }}
+  securityContext:
+    runAsUser: {{ .Values.alertmanager.securityContext.runAsUser }}
+    fsGroup: {{ .Values.alertmanager.securityContext.fsGroup }}
+  {{- end }}
   {{- if .Values.alertmanager.storageSpec }}
   storage: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.storageSpec "context" $) | nindent 4 }}
   {{- end }}

@@ -27,7 +27,7 @@ data:
     exec 3>&1
     exec 4>&2
 
-    if [ ${BASH_DEBUG:-0} -eq 1 ]; then
+    if [ "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
     else
       echo "==> Bash debug is off"
@@ -190,7 +190,7 @@ data:
     exec 3>&1
     exec 4>&2
 
-    if [ ${BASH_DEBUG:-0} -eq 1 ]; then
+    if [ "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
     else
       echo "==> Bash debug is off"
@@ -216,7 +216,7 @@ data:
     exec 3>&1
     exec 4>&2
 
-    if [ ${BASH_DEBUG:-0} -eq 1 ]; then
+    if [ "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
     else
       echo "==> Bash debug is off"
@@ -242,7 +242,7 @@ data:
     exec 3>&1
     exec 4>&2
 
-    if [ ${BASH_DEBUG:-0} -eq 1 ]; then
+    if [ "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
     else
       echo "==> Bash debug is off"

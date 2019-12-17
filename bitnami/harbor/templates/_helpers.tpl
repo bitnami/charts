@@ -95,7 +95,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.database.username" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-    {{- printf "%s" "postgres" -}}
+    {{- .Values.postgresql.postgresqlUsername -}}
   {{- else -}}
     {{- .Values.externalDatabase.user -}}
   {{- end -}}
@@ -145,7 +145,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
     {{- printf "%s" "notarysigner" -}}
   {{- else -}}
-    {{- .Values.database.external.notarySignerDatabase -}}
+    {{- .Values.externalDatabase.notarySignerDatabase -}}
   {{- end -}}
 {{- end -}}
 
@@ -153,7 +153,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
     {{- printf "%s" "disable" -}}
   {{- else -}}
-    {{- .Values.database.external.sslmode -}}
+    {{- .Values.externalDatabase.sslmode -}}
   {{- end -}}
 {{- end -}}
 

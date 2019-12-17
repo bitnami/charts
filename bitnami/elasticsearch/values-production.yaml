@@ -2,11 +2,16 @@
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  # imageRegistry: myRegistryName
+  # imagePullSecrets:
+  #   - myRegistryKeySecretName
+  # storageClass: myStorageClass
+  ## Coordinating name to be used in the Kibana subchart (service name)
+  ##
+  coordinating:
+    name: coordinating-only
+  kibanaEnabled: true
 
 ## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
@@ -238,7 +243,6 @@ master:
 ## Elasticsearch coordinating-only node parameters
 ##
 coordinating:
-  name: coordinating-only
   ## Number of coordinating-only node(s) replicas to deploy
   ##
   replicas: 2
@@ -730,3 +734,11 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+## Bundled Kibana parameters
+##
+kibana:
+  elasticsearch:
+    hosts:
+      - '{{ include "elasticsearch.coordinating.fullname" . }}'
+    port: 9200

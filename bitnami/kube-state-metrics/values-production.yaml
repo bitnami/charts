@@ -65,7 +65,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-
 ## Additional command line arguments to pass to kube-state-metrics
 extraArgs: {}
 

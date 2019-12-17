@@ -57,6 +57,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `global.imageRegistry`                            | Global Docker image registry                                                                                                                              | `nil`                                                        |
 | `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)      |
 | `global.storageClass`                             | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                        |
+| `global.coordinating.name`                        | Coordinating-only node pod name at global level to be used also in the Kibana subchart                                                                    | `coordinating-only`                                          |
 | `image.registry`                                  | Elasticsearch image registry                                                                                                                              | `docker.io`                                                  |
 | `image.repository`                                | Elasticsearch image repository                                                                                                                            | `bitnami/elasticsearch`                                      |
 | `image.tag`                                       | Elasticsearch image tag                                                                                                                                   | `{TAG_NAME}`                                                 |
@@ -103,7 +104,6 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                 | `5`                                                          |
 | `clusterDomain`                                   | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                              |
 | `discovery.name`                                  | Discover node pod name                                                                                                                                    | `discovery`                                                  |
-| `coordinating.name`                               | Coordinating-only node pod name                                                                                                                           | `coordinating-only`                                          |
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                                                   | `2`                                                          |
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                                                          | `128m`                                                       |
 | `coordinating.antiAffinity`                       | Coordinating-only node pod anti-affinity policy                                                                                                           | `soft`                                                       |
@@ -244,6 +244,12 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                               | `stretch`                                                    |
 | `volumePermissions.image.pullPolicy`              | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
 | `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+
+### Kibana Parameters
+
+| `global.kibanaEnabled`         | Use bundled Kibana                                                                  | `false`                                                                                 |
+| `kibana.elasticsearch.hosts`   | Array containing hostnames for the ES instances. Used to generate the URL           | `{{ include "elasticsearch.coordinating.fullname" . }}` Coordinating service (fullname) |
+| `kibana.elasticsearch.port`    | Port to connect Kibana and ES instance. Used to generate the URL                    | `9200`                                                                                  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -433,6 +439,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+- Enable bundled Kibana:
+```diff
+- global.kibanaEnabled: false
++ global.kibanaEnabled: true
+```
+
 ### Default kernel settings
 
 Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
@@ -442,6 +454,11 @@ Currently, Elasticsearch requires some changes in the kernel of the host machine
 
 This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
 You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
+
+### Enable bundled Kibana
+
+This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter. It is enabled by default using the `values-production.yaml` file.
+To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
 
 ## Persistence
 
@@ -459,6 +476,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Notable changes
+
+### 10.0.0
+
+In this version, Kibana was added as dependant chart. More info about how to enable and work with this bundled Kibana in the ["Enable bundled Kibana"](#enable-bundled-kibana) section.
 
 ### 9.0.0
 
