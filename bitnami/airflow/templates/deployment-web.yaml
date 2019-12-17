@@ -58,7 +58,7 @@ spec:
           volumeMounts:
             - name: git-cloned-dag-files
               mountPath: /dags
-            {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecretName }}
             - name: dag-git-keys
               mountPath: /root/.ssh
             {{- end }}
@@ -77,7 +77,7 @@ spec:
           volumeMounts:
             - name: git-cloned-dag-files
               mountPath: /dags
-            {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecretName }}
             - name: dag-git-keys
               mountPath: /root/.ssh
             {{- end }}
@@ -265,10 +265,10 @@ spec:
         {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
         - name: git-cloned-dag-files
           emptyDir: {}
-        {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+        {{- if .Values.airflow.cloneDagFilesFromGit.sshKeySecretName }}
         - name: dag-git-keys
           secret:
-            secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecret }}
+            secretName: {{ .Values.airflow.cloneDagFilesFromGit.sshKeySecretName }}
             defaultMode: 0600
         {{- end }}
         {{- end }}
