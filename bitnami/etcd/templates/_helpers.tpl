@@ -124,15 +124,18 @@ Return the proper etcdctl authentication options
 {{- define "etcd.authOptions" -}}
 {{- $rbacOption := "--user root:$ETCD_ROOT_PASSWORD" -}}
 {{- $certsOption := " --cert=\"$ETCD_CERT_FILE\" --key=\"$ETCD_KEY_FILE\"" -}}
+{{- $autoCertsOption := " --cert=\"/bitnami/etcd/data/fixtures/client/cert.pem\" --key=\"/bitnami/etcd/data/fixtures/client/key.pem\"" -}}
 {{- $caOption := " --cacert=\"$ETCD_TRUSTED_CA_FILE\"" -}}
 {{- if .Values.auth.rbac.enabled -}}
 {{- printf "%s" $rbacOption -}}
 {{- end -}}
-{{- if .Values.auth.client.secureTransport -}}
+{{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS -}}
+{{- printf "%s" $autoCertsOption -}}
+{{- else if and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS) -}}
 {{- printf "%s" $certsOption -}}
-{{- end -}}
 {{- if .Values.auth.client.enableAuthentication -}}
 {{- printf "%s" $caOption -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
