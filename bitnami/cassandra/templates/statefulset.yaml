@@ -214,6 +214,9 @@ spec:
               protocol: TCP
             - name: jmx
               containerPort: 5555
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
           livenessProbe:
             tcpSocket:
               port: metrics
