@@ -63,12 +63,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `schedulerImage.pullPolicy`               | Airflow Scheduler image pull policy                                                                  | `IfNotPresent`                                               |
 | `schedulerImage.pullSecrets`              | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `schedulerImage.debug`                    | Specify if debug values should be set                                                                | `false`                                                      |
-| `workerImage.registry`                    | Airflow Worker image registry                                                                        | `docker.io`                                                  |
-| `workerImage.repository`                  | Airflow Worker image name                                                                            | `bitnami/airflow-worker`                                     |
-| `workerImage.tag`                         | Airflow Worker image tag                                                                             | `{TAG_NAME}`                                                 |
-| `workerImage.pullPolicy`                  | Airflow Worker image pull policy                                                                     | `IfNotPresent`                                               |
-| `workerImage.pullSecrets`                 | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `workerImage.debug`                       | Specify if debug values should be set                                                                | `false`                                                      |
 | `git.registry`                            | Git image registry                                                                                   | `docker.io`                                                  |
 | `git.repository`                          | Git image name                                                                                       | `bitnami/git`                                                |
 | `git.tag`                                 | Git image tag                                                                                        | `{TAG_NAME}`                                                 |
@@ -85,15 +79,20 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.cloneDagFilesFromGit.repository` | Repository where download DAG files from                                                             | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.branch`     | Branch from repository to checkout                                                                   | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.interval`   | Interval to pull the repository on sidecar container                                                 | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.sshEnabled` | Enable the use of SSH keys to clone from a private git repo					   | `false`							  | 
+| `airflow.cloneDagFilesFromGit.sshKey`	    | Provide a plain text private SSH key to clone from a private git repo				   | `nil`							  |
+| `airflow.cloneDagFilesFromGit.sshKeySecretName` | Kubernetes secret containing SSH keys for the dags repo. Providing this overrides prividing an ssh key | `nil`						  |
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                                 | `nil`                                                        |
-| `airflow.worker.port`                     | Airflow Worker port                                                                                  | `8793`                                                       |
-| `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                                    | `2`                                                          |
 | `airflow.auth.forcePassword`              | Force users to specify a password                                                                    | `false`                                                      |
 | `airflow.auth.username`                   | Username to access web UI                                                                            | `user`                                                       |
 | `airflow.auth.password`                   | Password to access web UI                                                                            | `nil`                                                        |
 | `airflow.auth.fernetKey`                  | Fernet key to secure connections                                                                     | `nil`                                                        |
 | `airflow.auth.existingSecret`             | Name of an existing secret containing airflow password and fernet key                                | `nil`                                                        |
 | `airflow.extraEnvVars`                    | Extra environment variables to add to airflow web, worker and scheduler pods                         | `nil`                                                        |
+| `airflow.pool.enabled`		    | Enable adding an additional pool to airflow 							   | `false`							  |
+| `airflow.pool.name`			    | Name of the additional pool									   | `nil`							  |
+| `airflow.pool.size`			    | Size of the additional pool									   | 0								  | 
+| `airflow.pool.description`		    | Description for the addition pool									   | `nil`							  |
 | `securityContext.enabled`                 | Enable security context                                                                              | `true`                                                       |
 | `securityContext.fsGroup`                 | Group ID for the container                                                                           | `1001`                                                       |
 | `securityContext.runAsUser`               | User ID for the container                                                                            | `1001`                                                       |
@@ -149,6 +148,20 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.image.pullPolicy`                | Image pull policy                                                                                    | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                  | Additional annotations for Metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |
+| `workers[0].name`	      		    | Descriptive name of a worker to add								   | `nil`							  |
+| `workers[0].volumes[0].name`		    | Name of volume to add to this worker 								   | `nil`							  | 
+| `workers[0].image.registry`    	    | Registry for this workers image									   | `nil`							  |
+| `workers[0].image.repository`		    | Name of this worker image										   | `nil`							  | 
+| `workers[0].image.tag`		    | Tag for this worker image										   | `nil`							  | 
+| `workers[0].image.pullPolicy` 	    | Pull policy for this worker image									   | `nil`							  | 
+| `workers[0].additionalRepos.enabled`	    | Enables the use of additional repos for this worker						   | `false`							  |
+| `workers[0].additionalRepos.repos[0].name` | Descriptive name of a repo to sync with this worker 	 					   | `nil`							  |
+| `workers[0].additionalRepos.repos[0].repository` | Link to the additional repository to sync with this worker					   | `nil` 							  |
+| `workers[0].additionalRepos.repos[0].branch` | Branch from repository to sync with this worker							   | `nil`							  | 
+| `workers[0].additionalRepos.repos[0].interval` | Interval to pull the repository for this worker							   | 60 							  |
+| `workers[0].additionalRepos.repos[0].sshKeySecretName` | Kubernetes secret containing SSH keys for this repo						   | `nil`							  |
+| `workers[0].replicas`			    | Specify how many replicas are needed for this worker						   | 1								  |
+| `workers[0].queue`			    | Specify which queue you want this worker to pull tasks from 					   | `default`							  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -233,8 +246,32 @@ airflow.cloneDagFilesFromGit.enabled=true
 airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
 airflow.cloneDagFilesFromGit.branch=master
 airflow.cloneDagFilesFromGit.interval=60
+airflow.cloneDagFilesFromGit.sshEnabled=true
+airflow.cloneDagFilesFromGit.sshKeySecretName=KUBERNETES_SECRET
 ```
+Note: If it's a private git repo, you need to supply it with ssh keys. It can either be a plain text ssh key, by specifying `airflow.cloneDagFilesFromGit.sshKey` or via a kubernetes secret by specifying `airflow.cloneDagFilesFromGit.sshKeySecretName`. If both are specified the already created secret will be used.
 
+## Custom Workers
+
+You can specify a list of custom workers as well, with custom images and volumes and repositories.
+
+```console
+workers[0].name=name
+workers[0].volumes=[list of volumes]
+workers[0].image.repository=image_name
+workers[0].image.registry=docker.io
+workers[0].image.tag=latest
+workers[0].image.pullPolicy=Always
+workers[0].additionalRepos.enabled=true
+workers[0].additionalRepos.repos[0].name=descriptive_Name
+workers[0].additionalRepos.repos[0].repository=https://github.com/USERNAME/REPOSITORY
+workers[0].additionalRepos.repos[0].branch=master
+workers[0].additionalRepos.repos[0].interval=60
+workers[0].additionalRepos.repos[0].sshEnabled=true
+workers[0].additionalRepos.repos[0].sskKey=PRIVATE_SSH_KEY
+workers[0].replicas=2
+workers[0].queue=default
+```
 ## Persistence
 
 The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.

@@ -56,30 +56,6 @@ schedulerImage:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
-## Bitnami Airflow Worker image version
-## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
-##
-workerImage:
-  registry: docker.io
-  repository: bitnami/airflow-worker
-  tag: 1.10.6-debian-9-r1
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
-
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
@@ -129,16 +105,22 @@ airflow:
   ##
   cloneDagFilesFromGit:
     enabled: false
-    # repository:
-    # branch:
-    # interval:
+    # repository: 
+    # branch: 
+    # interval: 
+    ## Enable to allow cloning from a private repo
+    ##
+    #  sshEnabled: false
+    ## SSH keys to clone the repo
+    ##
+    #  sshKeys:
+    ## Name of existing secret containing the SSH keys to clone the repo
+    ## When provided, `workers[0].additionalRepos.repos[0].sshKeys` will be ignored
+    ##
+    #  sshKeySecretName:
   ## URL used to access to airflow web ui
   ##
-  baseUrl: http://airflow.local
-  ## Airflow worker component configuration
-  worker:
-    port: 8793
-    replicas: 3
+  # baseUrl:
 
   ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
   ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
@@ -172,6 +154,13 @@ airflow:
     ## Use existing secret (ignores previous password and fernetKey)
     ##
     # existingSecret:
+
+  pool:
+    enabled: false
+    # name:
+    # size:
+    # description:
+
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -365,8 +354,60 @@ metrics:
   # tolerations: []
 
   ## Metrics exporter pod Annotation and Labels
+  # podAnnotations: {}
   # podLabels: {}
 
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9112"
+
+## List the workers you need here, the default worker is required. 
+workers:
+  ## Bitnami Airflow Worker image version
+  ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
+  ##
+  - name: "default"
+    image:
+      registry: docker.io
+      repository: bitnami/airflow-worker
+      tag: 1.10.6-debian-9-r1
+      ## Specify a imagePullPolicy
+      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ##
+      pullPolicy: IfNotPresent
+        ## Optionally specify an array of imagePullSecrets.
+        ## Secrets must be manually created in the namespace.
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ##
+        # pullSecrets:
+        #   - myRegistryKeySecretName
+
+        ## Set to true if you would like to see extra information on logs
+        ## It turns BASH and NAMI debugging in minideb
+        ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    debug: false
+    ## Specify any extra volumes you want attached to the pod. 
+    #volumes:
+    #- name:
+    #  emptyDir: {}
+    #additionalRepos:
+      # enabled: false
+      # repos:
+      # - name:
+       #  repository:
+       #  branch:
+       #  interval:
+       ## Enable to allow cloning from a private repo
+       ##
+       #  sshEnabled: false
+       ## SSH keys to clone the repo
+       ##
+       #  sshKeys:
+       ## Name of existing secret containing the SSH keys to clone the repo
+       ## When provided, `workers[0].additionalRepos.repos[0].sshKeys` will be ignored
+       ##
+       #  sshKeySecretName:
+    replicas: 1
+    queue: "default"
+    port: 8793
