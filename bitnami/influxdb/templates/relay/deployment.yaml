@@ -7,6 +7,11 @@ metadata:
     app.kubernetes.io/component: relay
 spec:
   replicas: {{ .Values.relay.replicaCount }}
+  strategy:
+    type: {{ .Values.relay.updateStrategy }}
+    {{- if (eq "Recreate" .Values.relay.updateStrategy) }}
+    rollingUpdate: null
+    {{- end }}
   selector:
     matchLabels: {{- include "influxdb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: relay

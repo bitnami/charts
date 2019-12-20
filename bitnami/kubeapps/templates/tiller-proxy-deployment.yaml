@@ -1,3 +1,4 @@
+{{- if not .Values.useHelm3 -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -68,6 +69,12 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.tillerProxy.service.port }}
+          {{- if .Values.tillerProxy.livenessProbe }}
+          livenessProbe: {{- toYaml .Values.tillerProxy.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.tillerProxy.readinessProbe }}
+          readinessProbe: {{- toYaml .Values.tillerProxy.readinessProbe | nindent 12 }}
+          {{- end }}
           {{- if .Values.tillerProxy.resources }}
           resources: {{- toYaml .Values.tillerProxy.resources | nindent 12 }}
           {{- end }}
@@ -80,3 +87,4 @@ spec:
           secret:
             secretName: {{ template "kubeapps.tiller-proxy.fullname" . }}
       {{- end }}
+{{- end }}{{/* matches useHelm3 */}}

@@ -26,9 +26,16 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Extra environment vars to pass.
+## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
+extraEnv: []
+
 ## String to partially override memcached.fullname template (will maintain the release name)
 ##
 # nameOverride:
+
+## Number of containers to run
+replicaCount: 2
 
 ## String to fully override memcached.fullname template
 ##
@@ -36,6 +43,10 @@ image:
 
 # Cluster domain
 clusterDomain: cluster.local
+
+## Memcahed architecture. Allowed values: standalone or high-availability
+##
+architecture: standalone
 
 ## Memcached admin user
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
@@ -91,6 +102,7 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+  readOnlyRootFilesystem: true
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -111,6 +123,38 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: {}
+
+## Persistence - used for dumping and restoring states between recreations
+## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
+persistence:
+  enabled: true
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##  set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##  GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ## Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## Persistent Volume size
+  ##
+  size: 8Gi
+
+
+## Args for running memcached
+## Ref: https://github.com/memcached/memcached/wiki/ConfiguringServer
+arguments:
+  - /run.sh
+  # - -m <maxMemoryLimit>
+  # - -I <maxItemSize>
+  # - -vv
 
 ## Prometheus Exporter / Metrics
 ##

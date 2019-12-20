@@ -2,11 +2,16 @@
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  # imageRegistry: myRegistryName
+  # imagePullSecrets:
+  #   - myRegistryKeySecretName
+  # storageClass: myStorageClass
+  ## Coordinating name to be used in the Kibana subchart (service name)
+  ##
+  coordinating:
+    name: coordinating-only
+  kibanaEnabled: true
 
 ## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
@@ -14,7 +19,7 @@
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.5.0-debian-9-r0
+  tag: 7.5.1-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -238,7 +243,6 @@ master:
 ## Elasticsearch coordinating-only node parameters
 ##
 coordinating:
-  name: coordinating-only
   ## Number of coordinating-only node(s) replicas to deploy
   ##
   replicas: 2
@@ -502,7 +506,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.1-debian-9-r37
+    tag: 5.8.1-debian-9-r50
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -667,7 +671,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-9-r100
+    tag: 1.1.0-debian-9-r112
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -730,3 +734,11 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+## Bundled Kibana parameters
+##
+kibana:
+  elasticsearch:
+    hosts:
+      - '{{ include "elasticsearch.coordinating.fullname" . }}'
+    port: 9200

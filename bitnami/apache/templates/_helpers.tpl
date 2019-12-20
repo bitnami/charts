@@ -126,7 +126,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return true if mouting a static web page
 */}}
 {{- define "apache.useHtdocs" -}}
-{{ or .Values.cloneHtdocsFromGit.enabled .Values.htdocsConfigMap .Values.htdocsPVC }}
+{{ default "" (or .Values.cloneHtdocsFromGit.enabled .Values.htdocsConfigMap .Values.htdocsPVC) }}
 {{- end -}}
 
 {{/*
