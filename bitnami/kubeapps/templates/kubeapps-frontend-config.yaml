@@ -62,11 +62,7 @@ data:
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
         {{- end }}
 
-        {{- if .Values.useHelm3 }}
-        proxy_pass http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }};
-        {{- else }}
-        proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
-        {{- end }}
+        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
       }
 
       location ~* /api/tiller-deploy {
@@ -75,11 +71,7 @@ data:
         proxy_read_timeout 10m;
         rewrite /api/tiller-deploy/(.*) /$1 break;
         rewrite /api/tiller-deploy / break;
-        {{- if .Values.useHelm3 }}
-        proxy_pass http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }};
-        {{- else }}
-        proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
-        {{- end }}
+        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
 
         {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
@@ -97,11 +89,7 @@ data:
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
         {{- end }}
 
-        {{- if .Values.useHelm3 }}
-        proxy_pass http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }};
-        {{- else }}
-        proxy_pass http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }};
-        {{- end }}
+        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
       }
 
       location / {

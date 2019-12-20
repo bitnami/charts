@@ -144,6 +144,17 @@ Create name for the frontend config based on the fullname
 {{- end -}}
 
 {{/*
+Create proxy_pass for the frontend config based on the useHelm3 flag
+*/}}
+{{- define "kubeapps.frontend-config.proxy_pass" -}}
+{{- if .Values.useHelm3 -}}
+http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }}
+{{- else -}}
+http://{{ template "kubeapps.tiller-proxy.fullname" . }}:{{ .Values.tillerProxy.service.port }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create name for the tiller-proxy based on the fullname
 */}}
 {{- define "kubeapps.tiller-proxy.fullname" -}}

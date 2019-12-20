@@ -1,3 +1,4 @@
+{{- if not .Values.useHelm3 -}}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -20,3 +21,4 @@ spec:
         - -c
         - "curl -o /tmp/output -ik -H \"Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)\" $TILLER_PROXY_HOST:$TILLER_PROXY_PORT/v1/releases && cat /tmp/output && cat /tmp/output | grep $KUBEAPPS_RELEASE"
   restartPolicy: Never
+{{- end }}{{/* matches useHelm3 */}}

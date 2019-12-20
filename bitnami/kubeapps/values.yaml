@@ -434,7 +434,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.7.2-debian-9-r2
+    tag: 1.7.2-debian-9-r4
   ## Dashboard service parameters
   ##
   service:
