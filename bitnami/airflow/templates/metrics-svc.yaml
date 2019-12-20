@@ -12,9 +12,9 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - name: metrics
-    port: 9112
-    targetPort: metrics
+    - name: metrics
+      port: 9112
+      targetPort: metrics
   selector:
     app.kubernetes.io/name: {{ include "airflow.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
