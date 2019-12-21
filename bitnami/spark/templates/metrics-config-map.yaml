@@ -1,0 +1,19 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metrics-config
+  labels:
+    app.kubernetes.io/name: {{ include "spark.name" . }}
+    helm.sh/chart: {{ include "spark.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+data:
+  metrics.properties: |-
+    *.source.jvm.class=org.apache.spark.metrics.source.JvmSource
+    *.sink.prometheusServlet.class=org.apache.spark.metrics.sink.PrometheusServlet
+    *.sink.prometheusServlet.path=/metrics/prometheus
+    master.sink.prometheusServlet.path=/metrics/master/prometheus
+    applications.sink.prometheusServlet.path=/metrics/applications/prometheus
+
+{{- end -}}
