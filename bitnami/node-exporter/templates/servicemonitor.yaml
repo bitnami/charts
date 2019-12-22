@@ -24,6 +24,9 @@ spec:
       {{- if .Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
       {{- end }}
+      {{- if .Values.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "node-exporter.tplValue" ( dict "value" .Values.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
