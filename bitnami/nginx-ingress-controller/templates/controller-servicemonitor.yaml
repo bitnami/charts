@@ -18,6 +18,9 @@ spec:
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: true
       {{- end }}
+      {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "nginx-ingress.tplValue" ( dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
