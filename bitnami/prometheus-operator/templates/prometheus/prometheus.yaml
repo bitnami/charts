@@ -92,6 +92,8 @@ spec:
   {{- end }}
   {{- if .Values.prometheus.ruleNamespaceSelector }}
   ruleNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.ruleNamespaceSelector "context" $) | nindent 4 }}
+  {{- else }}
+  ruleNamespaceSelector: {}
   {{- end }}
   {{- if .Values.prometheus.ruleSelector }}
   ruleSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.ruleSelector "context" $) | nindent 4 }}
