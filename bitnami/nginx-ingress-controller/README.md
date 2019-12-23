@@ -132,6 +132,7 @@ Parameter | Description | Default
 `metrics.serviceMonitor.additionalLabels` | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`
 `metrics.serviceMonitor.namespace` | namespace where servicemonitor resource should be created | `the same namespace as nginx ingress`
 `metrics.serviceMonitor.honorLabels` | honorLabels chooses the metric's labels on collisions with target labels. | `false`
+`metrics.serviceMonitor.metricRelabelings` | metricRelabelings which should be applied to the ServiceMonitor. | `[]`
 `metrics.prometheusRule.enabled` | Set this to `true` to create prometheusRules for Prometheus operator | `false`
 `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus | `{}`
 `metrics.prometheusRule.namespace` | Namespace where prometheusRules resource should be created | `the same namespace as nginx ingress`
