@@ -239,6 +239,14 @@ master:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     # loadBalancerIP:
+  ## Provide functionality to use RBAC
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for the master node
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    name:
 
 ## Elasticsearch coordinating-only node parameters
 ##
@@ -321,6 +329,16 @@ coordinating:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     # loadBalancerIP:
+  ## Provide functionality to use RBAC
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for the coordinating node
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name:
 
 ## Elasticsearch data node parameters
 ##
@@ -413,6 +431,16 @@ data:
     ## Persistent Volume size
     ##
     size: 8Gi
+  ## Provide functionality to use RBAC
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for the data node
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name:
 
 ## Elasticsearch ingest node parameters
 ##
