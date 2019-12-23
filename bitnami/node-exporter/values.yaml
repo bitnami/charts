@@ -220,3 +220,8 @@ serviceMonitor:
   ##
   # selector:
   #   prometheus: my-prometheus
+
+  ## Metric relabeling
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+  ##
+  # metricRelabelings: []
