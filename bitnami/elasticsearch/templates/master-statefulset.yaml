@@ -28,6 +28,9 @@ spec:
       {{- if .Values.master.tolerations }}
       tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.master.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.master.serviceAccount.create }}
+      serviceAccountName: {{ .Values.master.serviceAccount.name | default (include "elasticsearch.master.fullname" .) }}
+      {{- end }}
       {{- if .Values.master.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.master.securityContext.fsGroup }}
