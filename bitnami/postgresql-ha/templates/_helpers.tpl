@@ -314,18 +314,19 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
+{{- $postgresqlDatabase := default "postgres" .Values.postgresql.database -}}
 {{- if .Values.global }}
     {{- if .Values.global.postgresql }}
         {{- if .Values.global.postgresql.database }}
-            {{- .Values.global.postgresql.database -}}
+            {{- default "postgres" .Values.global.postgresql.database -}}
         {{- else -}}
-            {{- .Values.postgresql.database -}}
+            {{- $postgresqlDatabase -}}
         {{- end -}}
     {{- else -}}
-        {{- .Values.postgresql.database -}}
+        {{- $postgresqlDatabase -}}
     {{- end -}}
 {{- else -}}
-    {{- .Values.postgresql.database -}}
+    {{- $postgresqlDatabase -}}
 {{- end -}}
 {{- end -}}
 
@@ -732,5 +733,14 @@ postgresql-ha: Upgrade repmgr extension
     $ helm upgrade {{ .Release.Name }} bitnami/postgresql-ha \
       --set postgresql.replicaCount=1 \
       --set postgresql.upgradeRepmgrExtension=true
+{{- end -}}
+{{- end -}}
+
+{{/* Set PGPASSWORD as environment variable depends on configuration */}}
+{{- define "postgresql-ha.pgpassword" -}}
+{{- if .Values.postgresql.usePasswordFile -}}
+PGPASSWORD=$(< $POSTGRES_PASSWORD_FILE)
+{{- else -}}
+PGPASSWORD=$POSTGRES_PASSWORD
 {{- end -}}
 {{- end -}}
