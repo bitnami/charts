@@ -81,7 +81,7 @@ spec:
               value: {{ .Values.persistence.mountPath | quote }}
             - name: PGDATA
               value: {{ printf "%s/%s" .Values.persistence.mountPath "data" | quote }}
-            - name: POSTGRES_USERNAME
+            - name: POSTGRES_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: POSTGRES_PASSWORD_FILE
