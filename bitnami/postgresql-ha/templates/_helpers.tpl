@@ -318,7 +318,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- if .Values.global }}
     {{- if .Values.global.postgresql }}
         {{- if .Values.global.postgresql.database }}
-            {{- default "" .Values.global.postgresql.database -}}
+            {{- default "postgres" .Values.global.postgresql.database -}}
         {{- else -}}
             {{- $postgresqlDatabase -}}
         {{- end -}}
@@ -739,7 +739,7 @@ postgresql-ha: Upgrade repmgr extension
 {{/* Set PGPASSWORD as environment variable depends on configuration */}}
 {{- define "postgresql-ha.pgpassword" -}}
 {{- if .Values.postgresql.usePasswordFile -}}
-PGPASSWORD=$(cat $POSTGRES_PASSWORD_FILE)
+PGPASSWORD=$(< $POSTGRES_PASSWORD_FILE)
 {{- else -}}
 PGPASSWORD=$POSTGRES_PASSWORD
 {{- end -}}
