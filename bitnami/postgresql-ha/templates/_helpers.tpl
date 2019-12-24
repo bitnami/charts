@@ -314,7 +314,7 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- $postgresqlDatabase := default "" .Values.postgresql.database -}}
+{{- $postgresqlDatabase := default "postgres" .Values.postgresql.database -}}
 {{- if .Values.global }}
     {{- if .Values.global.postgresql }}
         {{- if .Values.global.postgresql.database }}

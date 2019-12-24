@@ -150,10 +150,7 @@ spec:
               command:
                 - sh
                 - -c
-                - '{{include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }}
-                {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) -}}
-                -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} 
-                {{- end }} -h 127.0.0.1 -c "SELECT 1"'
+                - '{{include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.postgresql.livenessProbe.timeoutSeconds }}
@@ -166,10 +163,7 @@ spec:
               command:
                 - sh
                 - -c
-                - '{{include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }}
-                {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) -}}
-                -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} 
-                {{- end }} -h 127.0.0.1 -c "SELECT 1"'
+                - '{{include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.postgresql.readinessProbe.timeoutSeconds }}
