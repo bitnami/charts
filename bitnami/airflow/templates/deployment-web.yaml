@@ -216,6 +216,11 @@ spec:
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
             {{- end }}
+            {{- if .Values.airflow.webserverConfigMap}}
+            - name: custom-webserver-configuration-file
+              mountPath: /opt/bitnami/airflow/webserver_config.py
+              subPath: webserver_config.py
+            {{- end }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         {{- if .Files.Glob "files/dags/*.py" }}
@@ -236,4 +241,9 @@ spec:
         - name: custom-configuration-file
           configMap:
             name: {{ .Values.airflow.configurationConfigMap }}
+        {{- end }}
+        {{- if .Values.airflow.webserverConfigMap }}
+        - name: custom-webserver-configuration-file
+          configMap:
+            name: {{ .Values.airflow.webserverConfigMap }}
         {{- end }}
