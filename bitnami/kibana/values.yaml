@@ -283,12 +283,12 @@ podAnnotations: {}
 ##
 sidecars:
 ## e.g.
-# - name: your-image-name
-  # image: your-image
-  # imagePullPolicy: Always
-  # ports:
-  # - name: portname
-  #   containerPort: 1234
+- name: elasticsearch
+  image: bitnami/elasticsearch:7.5.1-debian-9-r0
+  imagePullPolicy: IfNotPresent
+  ports:
+  - name: http
+    containerPort: 9200
 
 ## Add init containers to the pod
 ##
