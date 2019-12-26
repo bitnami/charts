@@ -86,7 +86,7 @@ Also, we can't use a single if because lazy evaluation is not an option
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
 {{- else -}}
-    {{- if .Values.image.registry -}}
+    {{- if $registryName -}}
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- else -}}
         {{- printf "%s:%s" $repositoryName $tag -}}
@@ -113,7 +113,7 @@ Also, we can't use a single if because lazy evaluation is not an option
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
 {{- else -}}
-    {{- if .Values.git.registry -}}
+    {{- if $registryName -}}
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- else -}}
         {{- printf "%s:%s" $repositoryName $tag -}}
@@ -193,7 +193,7 @@ Also, we can't use a single if because lazy evaluation is not an option
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
 {{- else -}}
-    {{- if .Values.volumePermissions.image.registry -}}
+    {{- if $registryName -}}
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- else -}}
         {{- printf "%s:%s" $repositoryName $tag -}}
