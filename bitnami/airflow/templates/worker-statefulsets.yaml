@@ -68,7 +68,7 @@ spec:
         {{- end }}
         {{- if .additionalRepos.enabled }}
         {{- range .additionalRepos.repos }}
-        - name: git-clone-{{ .name }}
+        - name: git-clone-{{ .name | camelcase | kebabcase}}
           image: "{{ template "git.image" $ }}"
           imagePullPolicy: {{ $.Values.git.pullPolicy | quote }}
           command:
@@ -108,6 +108,7 @@ spec:
         {{- end }}
         {{- if .additionalRepos.enabled }}
         {{- range .additionalRepos.repos }}
+        {{- if .syncFilesFromGit }}
         - name: {{ .name }}-repo-syncer
           image: "{{ template "git.image" $ }}"
           imagePullPolicy: {{ $.Values.git.pullPolicy | quote }}
@@ -126,15 +127,17 @@ spec:
               mountPath: /root/.ssh
         {{- end }}
         {{- end }}
+        {{- end }}
         {{- else }}
       containers:
       {{- end }}
-      - name: airflow-worker
+      - name: {{ .name | camelcase | kebabcase }}
         {{- if .image }}
-{{ toYaml .image | indent 10 }}
+        image: "{{ .image.registry }}/{{ .image.repository }}:{{ .image.tag }}"
+        imagePullPolicy: {{ .image.pullPolicy default "IfNotPresent" }} 
         {{- else }}
-        image: "{{ template "airflow.workerImage" $ }}"
-        imagePullPolicy: "{{ $.Values.workerImage.pullPolicy }}"
+        image: "docker.io/bitnami/airflow-worker:1.10.6-debian-9-r1"
+        imagePullPolicy: "IfNotPresent"
         {{- end }}
         resources:
 {{ toYaml $.Values.resources | indent 10 }}

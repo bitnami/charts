@@ -78,13 +78,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Airflow Worker image name
-*/}}
-{{- define "airflow.workerImage" -}}
-{{- $registryName := .Values.workerImage.registry -}}
-{{- $repositoryName := .Values.workerImage.repository -}}
-{{- $tag := .Values.workerImage.tag | toString -}}
-{{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option

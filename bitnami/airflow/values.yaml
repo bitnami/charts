@@ -397,7 +397,6 @@ workers:
       # - name:
        #  repository:
        #  branch:
-       #  interval:
        ## Enable to allow cloning from a private repo
        ##
        #  sshEnabled: false
@@ -408,6 +407,9 @@ workers:
        ## When provided, `workers[0].additionalRepos.repos[0].sshKeys` will be ignored
        ##
        #  sshKeySecretName:
+       ## set to true if you want this git repo to be synced with the pod.
+       #  syncFilesFromGit: false
+       #  interval:
     replicas: 1
     queue: "default"
     port: 8793
