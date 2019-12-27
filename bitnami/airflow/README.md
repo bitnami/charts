@@ -94,6 +94,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.auth.fernetKey`                  | Fernet key to secure connections                                                                     | `nil`                                                        |
 | `airflow.auth.existingSecret`             | Name of an existing secret containing airflow password and fernet key                                | `nil`                                                        |
 | `airflow.extraEnvVars`                    | Extra environment variables to add to airflow web, worker and scheduler pods                         | `nil`                                                        |
+| `airflow.webserverConfigMap`              | Config map name for ~/airflow/webserver_config.py                                                   | `nil`                                                        |
 | `securityContext.enabled`                 | Enable security context                                                                              | `true`                                                       |
 | `securityContext.fsGroup`                 | Group ID for the container                                                                           | `1001`                                                       |
 | `securityContext.runAsUser`               | User ID for the container                                                                            | `1001`                                                       |
