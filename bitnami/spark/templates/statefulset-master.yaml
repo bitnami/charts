@@ -166,7 +166,11 @@ spec:
         {{- if .Values.metrics.enabled }}
         - name: metricsconfig
           configMap:
+            {{- if .Values.metrics.metricsConfigMap }}
+            name: {{ .Values.metrics.metricsConfigMap }}
+            {{- else }}
             name: "metrics-config"
+            {{- end }}
         {{- end }}
        {{- if .Values.security.certificatesSecretName }}
         - name: certs

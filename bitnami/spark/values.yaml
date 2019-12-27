@@ -342,3 +342,6 @@ metrics:
   enabled: false
   #podAnnotations:
   #  prometheus.io/scrape: "true"
+  ## Set a custom metrics.properties configuration by using an existing configMap.
+  ##
+  # metricsConfigMap:

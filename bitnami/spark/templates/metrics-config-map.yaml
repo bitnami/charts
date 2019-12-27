@@ -1,4 +1,4 @@
-{{- if .Values.metrics.enabled }}
+{{- if and .Values.metrics.enabled (not .Values.metrics.metricsConfigMap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

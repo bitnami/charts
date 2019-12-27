@@ -82,7 +82,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.readinessProbe.timeoutSeconds`      | When the probe times out                                                                           | 5                                                       |
 | `master.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.         | 6                                                       |
 | `master.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed        | 1                                                       |
-| `master.podAnnotations` | Additional annotations for master metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "8080", prometheus.io/path: "/metrics/applications/prometheus}` |
+| `master.podAnnotations` | Additional annotations for master                                                          | `{}` |
 | `worker.debug`                              | Specify if debug values should be set on workers                                                   | `false`                                                 |
 | `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                 | `8080`                                                  |
 | `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                           | `7077`                                                  |
@@ -115,8 +115,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.readinessProbe.timeoutSeconds`      | When the probe times out                                                                           | 5                                                       |
 | `worker.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.         | 6                                                       |
 | `worker.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed        | 1                                                       |
-| `worker.podAnnotations` | Additional annotations for worker metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "8081" prometheus.io/path: "/metrics/prometheus}` |
-| `security.passwordsSecretName`              | Secret to use when using security configuration to set custom passwords                            | No default                                              |
+| `worker.podAnnotations` | Additional annotations for worker                                                          | `{}` |
 | `worker.extraVolumes`                       | Array of extra volumes to be added to the Spark worker deployment (evaluated as template). Requires setting `worker.extraVolumeMounts`                                 | `nil`                                                                                                   |             |
 | `worker.extraVolumeMounts`                  | Array of extra volume mounts to be added to the Spark worker deployment (evaluated as template). Normally used with `worker.extraVolumes`.                             | `nil`       | `security.passwordsSecretName`              | Secret to use when using security configuration to set custom passwords                            | No default                                              |
 | `security.rpc.authenticationEnabled`        | Enable the RPC authentication                                                                      | `no`                                                    |
@@ -138,7 +137,8 @@ The following tables lists the configurable parameters of the spark chart and th
 | `ingress.certManager`                       | Add annotations for cert-manager                                                                   | `false`                                                 |
 | `ingress.annotations`                       | Ingress annotations                                                                                | `{}`                                                    |
 | `ingress.hosts`                             | Add hosts to the ingress controller with name and path                                             | `name: spark.local`, `path: /`                          |
-| `metrics.podAnnotations`        | Additional annotations for Metrics exporter                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9112"}` |
+| `metrics.podAnnotations`        | Additional annotations for Metrics exporter                                                          | `{}` |
+| `metrics.metricsConfigMap`        | Specify the name of a custom metrics.properties configMap                                                          | `nil` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -224,6 +224,10 @@ To set the configuration on the worker use: `worker.configurationConfigMap=confi
 It can be set both at the same time with the same ConfigMap or using two ConfigMaps.
 Also, you can provide in the ConfigMap a `spark-defaults.conf` file.
 You can use both files without the other.
+
+### Using custom metrics configuration
+
+To use a custom metrics.properties a ConfigMap should be created with the `metrics.properties` file inside the ConfigMap. The ConfigMap name must be provided at deployment time, to set the configuration on the master and workers use: `metrics.metricsConfigMap=configMapName`
 
 ### Submit an application
 
