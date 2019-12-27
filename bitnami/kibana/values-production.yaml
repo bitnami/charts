@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.5.0-debian-9-r0
+  tag: 7.5.1-debian-9-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -58,7 +58,7 @@ updateStrategy:
 ## List of plugins to install
 ##
 plugins:
-  # - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
+# - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 
 ## Saved objects to import (NDJSON format)
 ##
@@ -284,23 +284,22 @@ podAnnotations: {}
 sidecars:
 ## e.g.
 # - name: your-image-name
-  # image: your-image
-  # imagePullPolicy: Always
-  # ports:
-  # - name: portname
-  #   containerPort: 1234
+# image: your-image
+# imagePullPolicy: Always
+# ports:
+# - name: portname
+#   containerPort: 1234
 
 ## Add init containers to the pod
 ##
 initContainers:
 ## e.g.
 # - name: your-image-name
-  # image: your-image
-  # imagePullPolicy: Always
-  # ports:
-  # - name: portname
-  #   containerPort: 1234
-
+# image: your-image
+# imagePullPolicy: Always
+# ports:
+# - name: portname
+#   containerPort: 1234
 
 ## Prometheus metrics (requires the kibana-prometheus-exporter plugin)
 ##
