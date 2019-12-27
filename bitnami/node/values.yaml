@@ -81,6 +81,11 @@ git:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Enable to download app from external git repository.
+## Disable it if your docker image already includes your application at /app
+##
+getAppFromExternalRepository: true
+
 ## Git repository http/https
 ##
 repository: https://github.com/bitnami/sample-mean.git
