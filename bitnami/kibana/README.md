@@ -268,7 +268,8 @@ initContainers:
 
 This chart requires an Elasticsearch instance to work. For production, you can use an already existing Elasticsearch instance or deploy the [Elasticsearch chart](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch) with the [`global.kibanaEnabled=true` parameter](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#enable-bundled-kibana).
 
-For testing purpose, you can use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
+For the purpose of testing, you can use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
+
 ```
 elasticsearch.hosts[0]=localhost
 elasticsearch.port=9200
