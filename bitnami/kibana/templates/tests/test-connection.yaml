@@ -10,5 +10,5 @@ spec:
     - name: wget
       image: bitnami/minideb
       command: ['wget']
-      args:  ['{{ include "kibana.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "kibana.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never
