@@ -155,6 +155,14 @@ service:
   electionPort: 3888
   publishNotReadyAddresses: true
 
+## Zookeeper Service Account
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: false
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using zookeeper.fullname   
+  name:
+
 ## Zookeeper Pod Security Context
 securityContext:
   enabled: true
