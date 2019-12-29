@@ -265,13 +265,16 @@ service:
   ## Service annotations done as key:value pairs
   annotations: {}
 
-## Kafka Service Account
+## Service account for Kafka to use.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
 serviceAccount:
-  # Specifies whether a ServiceAccount should be created
+  ## Specifies whether a ServiceAccount should be created
+  ##
   create: false
-  # The name of the ServiceAccount to use.
-  # If not set and create is true, a name is generated using kafka.fullname   
-  name:
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the kafka.fullname template
+  # name:
 
 ## Kafka data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
