@@ -32,6 +32,17 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+ {{- define "kafka.serviceAccountName" -}}
+ {{- if .Values.serviceAccount.create -}}
+     {{ default (include "kafka.fullname" .) .Values.serviceAccount.name }}
+ {{- else -}}
+     {{ default "default" .Values.serviceAccount.name }}
+ {{- end -}}
+ {{- end -}}
+{{/*
+
 Common labels
 */}}
 {{- define "kafka.labels" -}}
