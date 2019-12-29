@@ -265,6 +265,14 @@ service:
   ## Service annotations done as key:value pairs
   annotations: {}
 
+## Kafka Service Account
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: false
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using kafka.fullname   
+  name:
+
 ## Kafka data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
 ## If set to "-", storageClassName: "", which disables dynamic provisioning

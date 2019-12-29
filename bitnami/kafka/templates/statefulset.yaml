@@ -4,6 +4,7 @@ metadata:
   name: {{ include "kafka.fullname" . }}
   labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: kafka
+    role: kafka
 spec:
   selector:
     matchLabels: {{- include "kafka.matchLabels" . | nindent 6 }}
@@ -25,6 +26,9 @@ spec:
         app.kubernetes.io/component: kafka
     spec:
 {{- include "kafka.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ default (include "kafka.fullname" .) .Values.serviceAccount.name }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
