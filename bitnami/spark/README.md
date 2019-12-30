@@ -116,11 +116,11 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed        | 1                                                       |
 | `worker.extraVolumes`                       | Array of extra volumes to be added to the Spark worker deployment (evaluated as template). Requires setting `worker.extraVolumeMounts`                                 | `nil`                                                                                                   |             |
 | `worker.extraVolumeMounts`                  | Array of extra volume mounts to be added to the Spark worker deployment (evaluated as template). Normally used with `worker.extraVolumes`.                             | `nil`       | `security.passwordsSecretName`              | Secret to use when using security configuration to set custom passwords                            | No default                                              |
-| `security.rpc.authenticationEnabled`        | Enable the RPC authentication                                                                      | `no`                                                    |
-| `security.rpc.encryptionEnabled`            | Enable the encryption for RPC                                                                      | `no`                                                    |
-| `security.storageEncryptionEnabled`         | Enable the encryption of the storage                                                               | `no`                                                    |
-| `security.ssl.enabled`                      | Enable the SSL configuration                                                                       | `no`                                                    |
-| `security.ssl.needClientAuth`               | Enable the client authentication                                                                   | `no`                                                    |
+| `security.rpc.authenticationEnabled`        | Enable the RPC authentication                                                                      | `false`                                                    |
+| `security.rpc.encryptionEnabled`            | Enable the encryption for RPC                                                                      | `false`                                                    |
+| `security.storageEncryptionEnabled`         | Enable the encryption of the storage                                                               | `false`                                                    |
+| `security.ssl.enabled`                      | Enable the SSL configuration                                                                       | `false`                                                    |
+| `security.ssl.needClientAuth`               | Enable the client authentication                                                                   | `false`                                                    |
 | `security.ssl.protocol`                     | Set the SSL protocol                                                                               | `TLSv1.2`                                               |
 | `security.certificatesSecretName`           | Set the name of the secret that contains the certificates                                          | No default                                              |
 | `service.type`                              | Kubernetes Service type                                                                            | `ClusterIP`                                             |
@@ -134,7 +134,11 @@ The following tables lists the configurable parameters of the spark chart and th
 | `ingress.enabled`                           | Enable the use of the ingress controller to access the web UI                                      | `false`                                                 |
 | `ingress.certManager`                       | Add annotations for cert-manager                                                                   | `false`                                                 |
 | `ingress.annotations`                       | Ingress annotations                                                                                | `{}`                                                    |
-| `ingress.hosts`                             | Add hosts to the ingress controller with name and path                                             | `name: spark.local`, `path: /`                          |
+| `ingress.hosts[0].name`                     | Hostname to your Spark installation                                                                | `spark.local`                                              |
+| `ingress.hosts[0].path`                   | Path within the url structure                                                                        | `/`                                                          |
+| `ingress.hosts[0].tls`                      | Utilize TLS backend in ingress                                                                       | `false`                                                      |
+| `ingress.hosts[0].tlsHosts`                 | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                 | `nil`                                                        |
+| `ingress.hosts[0].tlsSecret`                | TLS Secret (certificates)                                                                            | `spark.local-tls`                                          |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -173,24 +177,24 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 - Enable RPC authentication and encryption:
 ```diff
-- security.rpc.authenticationEnabled: no
-- security.rpc.encryptionEnabled: no
-+ security.rpc.authenticationEnabled: yes
-+ security.rpc.encryptionEnabled: yes
+- security.rpc.authenticationEnabled: false
+- security.rpc.encryptionEnabled: false
++ security.rpc.authenticationEnabled: true
++ security.rpc.encryptionEnabled: true
 ```
 
 - Enable storage encryption:
 ```diff
-- security.storageEncryptionEnabled: no
-+ security.storageEncryptionEnabled: yes
+- security.storageEncryptionEnabled: false
++ security.storageEncryptionEnabled: true
 ```
 
 - Configure SSL parameters:
 ```diff
-- security.ssl.enabled: no
-- security.ssl.needClientAuth: no
-+ security.ssl.enabled: yes
-+ security.ssl.needClientAuth: yes
+- security.ssl.enabled: false
+- security.ssl.needClientAuth: false
++ security.ssl.enabled: true
++ security.ssl.needClientAuth: true
 ```
 
 - Set a secret name for passwords:
@@ -252,11 +256,11 @@ To deploy chart, use the following parameters:
 ```bash
 security.certificatesSecretName=my-secret
 security.passwordsSecretName=my-passwords-secret
-security.rpc.authenticationEnabled=yes
-security.rpc.encryptionEnabled=yes
-security.storageEncrytionEnabled=yes
-security.ssl.enabled=yes
-security.ssl.needClientAuth=yes
+security.rpc.authenticationEnabled=true
+security.rpc.encryptionEnabled=true
+security.storageEncrytionEnabled=true
+security.ssl.enabled=true
+security.ssl.needClientAuth=true
 ```
 
 > Be aware that currently is not possible to submit an application to a standalone cluster if RPC authentication is configured. More info about the issue [here](https://issues.apache.org/jira/browse/SPARK-25078).
