@@ -28,7 +28,7 @@ spec:
     spec:
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.serviceAccount.create }}
-      serviceAccountName: {{ default (include "zookeeper.fullname" .) .Values.serviceAccount.name }}
+      serviceAccountName: {{ template "zookeeper.serviceAccountName" . }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
