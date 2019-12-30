@@ -172,7 +172,7 @@ spec:
             name: "metrics-config"
             {{- end }}
         {{- end }}
-       {{- if .Values.security.certificatesSecretName }}
+        {{- if .Values.security.certificatesSecretName }}
         - name: certs
           secret:
             secretName: {{ .Values.security.certificatesSecretName }}
