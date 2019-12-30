@@ -174,7 +174,7 @@ CONFLICT: You specified both config.grafanaIniSecret and config.grafanaIniConfig
 CONFLICT: You specified both config.customIniSecret and config.customIniConfigMap. Please set only one of them.
 {{- end -}}
 {{- if and .Values.config.useGrafanaIniFile (not .Values.config.grafanaIniSecret) (not .Values.config.grafanaIniConfigMap) -}}
-CONFLICT: You enabled config.useGrafanaIniFile but did not specify config.grafanaIniSecret nor config.grafanaIniConfigMap
+WARNING: You enabled config.useGrafanaIniFile but did not specify config.grafanaIniSecret nor config.grafanaIniConfigMap
 {{- end -}}
 {{- if and .Values.config.useCustomIniFile (not .Values.config.customIniSecret) (not .Values.config.customIniConfigMap) -}}
 CONFLICT: You enabled config.useCustomIniFile but did not specify config.customIniSecret nor config.customIniConfigMap
