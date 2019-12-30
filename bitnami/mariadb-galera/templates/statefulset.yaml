@@ -178,6 +178,9 @@ spec:
               mountPath: /opt/bitnami/mariadb/conf/my.cnf
               subPath: my.cnf
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "mariadb-galera.metrics.image" . }}
@@ -229,6 +232,9 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ template "mariadb-galera.initdbScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
