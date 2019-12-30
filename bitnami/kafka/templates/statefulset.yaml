@@ -27,7 +27,7 @@ spec:
     spec:
 {{- include "kafka.imagePullSecrets" . | indent 6 }}
       {{- if .Values.serviceAccount.create }}
-      serviceAccountName: {{ default (include "kafka.fullname" .) .Values.serviceAccount.name }}
+      serviceAccountName: {{ template "kafka.serviceAccountName" . }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
