@@ -121,13 +121,13 @@ master:
     failureThreshold: 6
     successThreshold: 1
 
-  ## Pod Annotation and Labels
+  ## Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  #podAnnotations:
-  #  prometheus.io/path: "/metrics/applications/prometheus"
-  #  prometheus.io/scrape: "true"
-  #  prometheus.io/port: "8080"
+  # podAnnotations:
+  #   prometheus.io/path: "/metrics/applications/prometheus"
+  #   prometheus.io/scrape: "true"
+  #   prometheus.io/port: "8080"
 
 ## Spark worker specific configuration
 ##
@@ -232,6 +232,14 @@ worker:
     failureThreshold: 6
     successThreshold: 1
 
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  # podAnnotations:
+  #   prometheus.io/scrape: "true"
+  #   prometheus.io/path: "/metrics/prometheus"
+  #   prometheus.io/port: "8081"
+
   ## Autoscaling parameters
   ##
   autoscaling:
@@ -248,12 +256,6 @@ worker:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   ## extraVolumeMounts: {}
-
-  #podAnnotations:
-  #  prometheus.io/path: "/metrics/prometheus"
-  #  prometheus.io/scrape: "true"
-  #  prometheus.io/port: "8081"
-
 
 ## Security configuration
 ##
@@ -338,16 +340,13 @@ ingress:
   hosts:
     - name: spark.local
       path: /
+
 metrics:
   enabled: false
-  ## Pod Annotation and Labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ## Metrics exporter pod Annotation and Labels
   ##
-  #podAnnotations:
-  #  prometheus.io/path: "/metrics/applications/prometheus"
-  #  prometheus.io/scrape: "true"
-  #  prometheus.io/port: "8080"
-  podAnnotations: {}
-  ## Set a custom metrics.properties by using an existing configMap with the configuration file.
+  # podAnnotations:
+  #   prometheus.io/scrape: "true"
+  ## Set a custom metrics.properties configuration by using an existing configMap.
   ##
   # metricsConfigMap:
