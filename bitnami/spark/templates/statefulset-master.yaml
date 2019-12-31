@@ -42,13 +42,16 @@ spec:
               containerPort: {{ .Values.master.clusterPort }}
           volumeMounts:
             {{- if .Values.master.configurationConfigMap }}
-              - name: config
-                mountPath: '/opt/bitnami/spark/conf/'
+            - name: config
+              mountPath: '/opt/bitnami/spark/conf/'
             {{- end }}
             {{- if .Values.security.certificatesSecretName }}
-              - name: certs
-                mountPath: '/opt/bitnami/spark/conf/certs'
-                readOnly: true
+            - name: certs
+              mountPath: '/opt/bitnami/spark/conf/certs'
+              readOnly: true
+            {{- end }}
+            {{- if .Values.master.extraVolumeMounts }}
+            {{- tpl (toYaml .Values.master.extraVolumeMounts) $ | nindent 12 }}
             {{- end }}
           env:
             - name: SPARK_MODE
@@ -81,8 +84,8 @@ spec:
                   name: {{ .Values.security.passwordsSecretName }}
                   {{- else }}
                   name: {{ include "spark.fullname" . }}-secret
-                  key: rpc-authentication-secret
                   {{- end }}
+                  key: rpc-authentication-secret
             {{- end }}
             {{- if .Values.security.rpc.encryptionEnabled }}
             - name: SPARK_RPC_ENCRYPTION_ENABLED
@@ -116,13 +119,13 @@ spec:
               value: {{ .Values.security.ssl.protocol | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
-            {{- toYaml .Values.master.extraEnvVars | nindent 10 }}
+            {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
             {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ .Values.master.webPort }}
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
@@ -133,7 +136,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ .Values.master.webPort }}
             initialDelaySeconds: {{ .Values.master.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.master.readinessProbe.timeoutSeconds }}
@@ -153,4 +156,7 @@ spec:
         - name: certs
           secret:
             secretName: {{ .Values.security.certificatesSecretName }}
+        {{- end }}
+        {{- if .Values.master.extraVolumes }}
+        {{- tpl (toYaml .Values.master.extraVolumes) $ | nindent 8 }}
         {{- end }}
