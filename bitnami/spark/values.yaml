@@ -43,10 +43,10 @@ master:
   ## Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  #podAnnotations:
-  #  prometheus.io/path: "/metrics/applications/prometheus"
-  #  prometheus.io/scrape: "true"
-  #  prometheus.io/port: "8080"
+  # podAnnotations:
+  #   prometheus.io/path: "/metrics/applications/prometheus"
+  #   prometheus.io/scrape: "true"
+  #   prometheus.io/port: "8080"
 
   ## Set a custom configuration by using an existing configMap with the configuration file.
   ##
@@ -132,10 +132,13 @@ master:
 ## Spark worker specific configuration
 ##
 worker:
-  #podAnnotations:
-  #  prometheus.io/path: "/metrics/prometheus"
-  #  prometheus.io/scrape: "true"
-  #  prometheus.io/port: "8081"
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  # podAnnotations:
+  #   prometheus.io/scrape: "true"
+  #   prometheus.io/path: "/metrics/prometheus"
+  #   prometheus.io/port: "8081"
 
   ## Set a custom configuration by using an existing configMap with the configuration file.
   ##
@@ -340,8 +343,10 @@ ingress:
 
 metrics:
   enabled: false
-  #podAnnotations:
-  #  prometheus.io/scrape: "true"
+  ## Metrics exporter pod Annotation and Labels
+  ##
+  # podAnnotations:
+  #   prometheus.io/scrape: "true"
   ## Set a custom metrics.properties configuration by using an existing configMap.
   ##
   # metricsConfigMap:
