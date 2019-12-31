@@ -47,7 +47,7 @@ spec:
             - name: config
               mountPath: '/opt/bitnami/spark/conf/'
             {{- end }}
-            {{- if .Values.security.certificatesSecret }}
+            {{- if .Values.security.certificatesSecretName }}
             - name: certs
               mountPath: '/opt/bitnami/spark/conf/certs'
               readOnly: true
@@ -98,7 +98,11 @@ spec:
             - name: SPARK_RPC_AUTHENTICATION_SECRET
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.security.passwordsSecretName }}
                   name: {{ .Values.security.passwordsSecretName }}
+                  {{- else }}
+                  name: {{ include "spark.fullname" . }}-secret
+                  {{- end }}
                   key: rpc-authentication-secret
             {{- end }}
             {{- if .Values.security.rpc.encryptionEnabled }}
@@ -115,25 +119,25 @@ spec:
             - name: SPARK_SSL_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" }}
+                  name: {{ template "spark.get.passwordSecretName" . }}
                   key: ssl-key-password
             - name: SPARK_SSL_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" }}
+                  name: {{ template "spark.get.passwordSecretName" . }}
                   key: ssl-keystore-password
             - name: SPARK_SSL_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" }}
+                  name: {{ template "spark.get.passwordSecretName" . }}
                   key: ssl-truststore-password
             - name: SPARK_SSL_NEED_CLIENT_AUTH
               value: {{ .Values.security.ssl.needClientAuth | quote }}
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
             {{- end }}
-            {{- if .Values.master.extraEnvVars }}
-            {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
+            {{- if .Values.worker.extraEnvVars }}
+            {{- toYaml .Values.worker.extraEnvVars | nindent 12 }}
             {{- end }}
           {{- if .Values.worker.livenessProbe.enabled }}
           livenessProbe:
