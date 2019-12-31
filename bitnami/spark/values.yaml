@@ -40,14 +40,6 @@ image:
 ## Spark master specific configuration
 ##
 master:
-  ## Metrics exporter pod Annotation and Labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  # podAnnotations:
-  #   prometheus.io/path: "/metrics/applications/prometheus"
-  #   prometheus.io/scrape: "true"
-  #   prometheus.io/port: "8080"
-
   ## Set a custom configuration by using an existing configMap with the configuration file.
   ##
   # configurationConfigMap:
@@ -129,17 +121,17 @@ master:
     failureThreshold: 6
     successThreshold: 1
 
-## Spark worker specific configuration
-##
-worker:
-  ## Pod annotations
+  ## Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   # podAnnotations:
+  #   prometheus.io/path: "/metrics/applications/prometheus"
   #   prometheus.io/scrape: "true"
-  #   prometheus.io/path: "/metrics/prometheus"
-  #   prometheus.io/port: "8081"
+  #   prometheus.io/port: "8080"
 
+## Spark worker specific configuration
+##
+worker:
   ## Set a custom configuration by using an existing configMap with the configuration file.
   ##
   # configurationConfigMap:
@@ -239,6 +231,14 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+    
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  # podAnnotations:
+  #   prometheus.io/scrape: "true"
+  #   prometheus.io/path: "/metrics/prometheus"
+  #   prometheus.io/port: "8081"
 
   ## Autoscaling parameters
   ##
