@@ -137,6 +137,11 @@ spec:
     {{- if .Values.prometheus.podAffinity }}
     podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podAffinity "context" $) | nindent 6 }}
     {{- end }}
+    {{- if .Values.prometheus.additionalScrapeConfigsExternal }}
+    additionalScrapeConfigs:
+      name: {{ template "prometheus-operator.prometheus.fullname" . }}-scrape-config
+      key: additional-scrape-configs.yaml
+    {{- end }}
 {{- include "prometheus-operator.prometheus.imagePullSecrets" . | indent 2 }}
   {{- if .Values.prometheus.containers }}
   containers: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}
