@@ -210,7 +210,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `prometheus.storageSpec`                      | Prometheus StorageSpec for persistent data                                           | `{}`                                                                   |
 | `prometheus.priorityClassName`                | Priority class assigned to the Pods                                                  | ``                                                                     |
 | `prometheus.containers`                       | Containers allows injecting additional containers                                    | `[]`                                                                   |
-| `prometheus.additionalScrapeConfigsExternal`  | Enable additional scrape configs that are managed externally to this chart           | `false` See [docs](##additional-scrape-configurations) for details.    |
+| `prometheus.additionalScrapeConfigsExternal`  | Enable additional scrape configs that are managed externally to this chart           | `false` See [docs](#additional-scrape-configurations) for details.    |
 
 ### Alertmanager Parameters
 
