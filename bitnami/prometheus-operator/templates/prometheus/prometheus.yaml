@@ -137,7 +137,7 @@ spec:
     {{- if .Values.prometheus.podAffinity }}
     podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podAffinity "context" $) | nindent 6 }}
     {{- end }}
-    {{- if or .Values.prometheus.additionalScrapeConfigsExternal }}
+    {{- if .Values.prometheus.additionalScrapeConfigsExternal }}
     additionalScrapeConfigs:
       name: {{ template "prometheus-operator.prometheus.fullname" . }}-scrape-config
       key: additional-scrape-configs.yaml

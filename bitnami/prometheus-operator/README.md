@@ -210,7 +210,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `prometheus.storageSpec`                      | Prometheus StorageSpec for persistent data                                           | `{}`                                                                   |
 | `prometheus.priorityClassName`                | Priority class assigned to the Pods                                                  | ``                                                                     |
 | `prometheus.containers`                       | Containers allows injecting additional containers                                    | `[]`                                                                   |
-| `prometheus.additionalScrapeConfigsExternal`  | Enable additional scrape configs that are managed externally to this chart           | `false` See [docs](#additionalScrape) for details.                     |
+| `prometheus.additionalScrapeConfigsExternal`  | Enable additional scrape configs that are managed externally to this chart           | `false` See [docs](##additional-scrape-configurations) for details.    |
 
 ### Alertmanager Parameters
 
@@ -351,7 +351,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 +   logLevel: error
 ```
 
-### <a name="additionalScrape"></a>Additonal scrape configurations
+### Additional scrape configurations
 
 It is possible to inject externally managed scrape configurations in a ConfigMap by enabling `prometheus.additionalScrapeConfigsExternal`. The ConfigMap must exist in the same namespace when Prometheus is starting. Its name is generated using the `prometheus-operator.prometheus.fullname` template with a `-scrape-config` suffix. The file it contains has to be named `additional-scrape-configs.yaml`.
 
