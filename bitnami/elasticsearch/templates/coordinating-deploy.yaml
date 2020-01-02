@@ -33,7 +33,7 @@ spec:
       tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.coordinating.serviceAccount.create }}
-      serviceAccountName: {{ .Values.coordinating.serviceAccount.name | default (include "elasticsearch.coordinating.fullname" .) }}
+      serviceAccountName: {{ template "elasticsearch.coordinating.serviceAccountName" . }}
       {{- end }}
       {{- if .Values.coordinating.securityContext.enabled }}
       securityContext:
