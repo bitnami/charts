@@ -16,6 +16,7 @@ spec:
       annotations: {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
       {{- end }}
       labels: {{- include "zookeeper.labels" . | nindent 8 }}
+        app.kubernetes.io/component: metrics
       {{- if .Values.metrics.podLabels }}
       {{- toYaml .Values.metrics.podLabels | nindent 8 }}
       {{- end }}
