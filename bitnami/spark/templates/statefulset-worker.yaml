@@ -88,7 +88,7 @@ spec:
             - name: SPARK_DAEMON_JAVA_OPTS
               value: {{ .Values.worker.javaOptions | quote }}
             - name: SPARK_MASTER_URL
-              value: spark://{{ include "spark.fullname" . }}-master-svc:{{ .Values.service.clusterPort }}
+              value: spark://{{ include "spark.master.service.name" . }}:{{ .Values.service.clusterPort }}
             # If you use a custom properties file, it must be loaded using a ConfigMap
             - name: SPARK_WORKER_OPTS
               value: {{ .Values.worker.configOptions }}
