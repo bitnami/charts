@@ -7,7 +7,7 @@ metadata:
 spec:
   updateStrategy:
     type: {{ .Values.data.updateStrategy.type }}
-    {{- if (eq "Recreate" .Values.data.updateStrategy.type) }}
+    {{- if (eq "OnDelete" .Values.data.updateStrategy.type) }}
     rollingUpdate: null
     {{- else if .Values.data.updateStrategy.rollingUpdatePartition }}
     rollingUpdate:
@@ -35,6 +35,9 @@ spec:
       {{- end }}
       {{- if .Values.data.tolerations }}
       tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.data.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.data.serviceAccount.create }}
+      serviceAccountName: {{ .Values.data.serviceAccount.name | default (include "elasticsearch.data.fullname" .) }}
       {{- end }}
       {{- if .Values.data.securityContext.enabled }}
       securityContext:

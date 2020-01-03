@@ -75,6 +75,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `git.repository`                        | Git image name                                                              | `bitnami/git`                                           |
 | `git.tag`                               | Git image tag                                                               | `{TAG_NAME}`                                            |
 | `git.pullPolicy`                        | Git image pull policy                                                       | `IfNotPresent`                                          |
+| `getAppFromExternalRepository`          | Whether to get app from external git repo or not                            | `true`                                                  |
 | `repository`                            | Repo of the application                                                     | `https://github.com/bitnami/sample-mean.git`            |
 | `revision`                              | Revision to checkout                                                        | `master`                                                |
 | `replicas`                              | Number of replicas for the application                                      | `1`                                                     |

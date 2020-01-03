@@ -27,6 +27,7 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
       initContainers:
+        {{- if .Values.getAppFromExternalRepository }}
         - name: git-clone-repository
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
@@ -70,6 +71,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.path }}
+        {{- end }}
         {{- end }}
       containers:
         - name: node
@@ -164,13 +166,17 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if .Values.getAppFromExternalRepository }}
             - name: app
               mountPath: /app
+            {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.path }}
       volumes:
+        {{- if .Values.getAppFromExternalRepository }}
         - name: app
           emptyDir: {}
+        {{- end }}
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

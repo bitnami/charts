@@ -303,6 +303,9 @@ prometheus:
     annotations: {}
 
   serviceMonitor:
+    ## Creates a ServiceMonitor to monitor Prometheus itself
+    enabled: true
+
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -601,6 +604,9 @@ alertmanager:
   ## If true, create a serviceMonitor for alertmanager
   ##
   serviceMonitor:
+    ## Creates a ServiceMonitor to monitor Alertmanager
+    enabled: true
+
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##

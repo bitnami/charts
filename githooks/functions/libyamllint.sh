@@ -11,7 +11,17 @@ render_and_yaml_lint() {
     local -r lint_rules="{extends: default, rules: {line-length: disable, trailing-spaces: disable, truthy: enable, document-start: disable, empty-lines: {max-end: 2} }}"
     # printf '\033[0;34m- Running yamllint on %s/%s (values: %s)\n\033[0m' "$display_chart_path" "$basename_template_path" "$display_values"
 
-    if ! helm template --values "$values" "$chart_path" -x "$basename_template_path" | yamllint -s -d "$lint_rules" -; then
+    local -r helm_version="$(helm version --template={{.Version}})"
+    local -r helm_three="^v3.*"
+    local rendered_template
+
+    if [[ "$helm_version" =~ $helm_three ]]; then
+        rendered_template=$(helm template --values "$values" "$chart_path" -s "$basename_template_path" 2> /dev/null)
+    else
+        rendered_template=$(helm template --values "$values" "$chart_path" -x "$basename_template_path" 2> /dev/null)
+    fi
+
+    if ! echo "$rendered_template" | yamllint -s -d "$lint_rules" -; then
         printf '\033[0;31m\U0001F6AB (helm template --values %s %s -x %s | yamllint -s -d "%s" -) failed\n\033[0m' "$display_values" "$display_chart_path" "$basename_template_path" "$lint_rules"
         false
     else

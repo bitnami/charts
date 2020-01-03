@@ -81,6 +81,10 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: INFLUXDB_HTTP_AUTH_ENABLED
               value: {{ .Values.authEnabled | quote }}
             {{- if .Values.adminUser.name }}
@@ -164,7 +168,7 @@ spec:
                   if [[ -f "${INFLUXDB_ADMIN_USER_PASSWORD_FILE:-}" ]]; then
                       export INFLUXDB_ADMIN_USER_PASSWORD="$(< "${INFLUXDB_ADMIN_USER_PASSWORD_FILE}")"
                   fi
-                  {{ if .Values.authEnabled }}INFLUX_USERNAME="$INFLUXDB_ADMIN_USER" INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"{{ end }} timeout {{ $livenessTimeout }}s influx -host 127.0.0.1 -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
+                  {{ if .Values.authEnabled }}INFLUX_USERNAME="$INFLUXDB_ADMIN_USER" INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"{{ end }} timeout {{ $livenessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
             initialDelaySeconds: {{ .Values.influxdb.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.influxdb.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.influxdb.livenessProbe.timeoutSeconds }}
@@ -182,7 +186,7 @@ spec:
                   if [[ -f "${INFLUXDB_ADMIN_USER_PASSWORD_FILE:-}" ]]; then
                       export INFLUXDB_ADMIN_USER_PASSWORD="$(< "${INFLUXDB_ADMIN_USER_PASSWORD_FILE}")"
                   fi
-                  {{ if .Values.authEnabled }}INFLUX_USERNAME="$INFLUXDB_ADMIN_USER" INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"{{ end }} timeout {{ $readinessTimeout }}s influx -host 127.0.0.1 -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
+                  {{ if .Values.authEnabled }}INFLUX_USERNAME="$INFLUXDB_ADMIN_USER" INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"{{ end }} timeout {{ $readinessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
             initialDelaySeconds: {{ .Values.influxdb.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.influxdb.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.influxdb.readinessProbe.timeoutSeconds }}

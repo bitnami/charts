@@ -58,9 +58,9 @@ data:
             echo "==> Configuring RBAC authentication!" 1>&3 2>&4
             etcd &
             ETCD_PID=$!
-            while ! etcdctl member list; do sleep 1; done
-            echo "$ETCD_ROOT_PASSWORD" | etcdctl user add root --interactive=false
-            etcdctl auth enable
+            while ! etcdctl $AUTH_OPTIONS member list; do sleep 1; done
+            echo "$ETCD_ROOT_PASSWORD" | etcdctl $AUTH_OPTIONS user add root --interactive=false
+            etcdctl $AUTH_OPTIONS auth enable
             kill "$ETCD_PID"
             sleep 5
         fi

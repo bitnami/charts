@@ -50,7 +50,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the grafana chart and their default values.
 
 | Parameter                              | Description                                                                                            | Default                                                 |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+|----------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                 | Global Docker image registry                                                                           | `nil`                                                   |
 | `global.imagePullSecrets`              | Global Docker registry secret names as an array                                                        | `[]` (does not add image pull secrets to deployed pods) |
 | `image.registry`                       | Grafana image registry                                                                                 | `docker.io`                                             |
@@ -77,8 +77,10 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `extraConfigmaps`                      | Array to mount extra ConfigMaps to configure Grafana                                                   | `{}`                                                    |
 | `config.useGrafanaIniFile`             | Allows to load a `grafana.ini` file                                                                    | `false`                                                 |
 | `config.grafanaIniConfigMap`           | Name of the ConfigMap containing the `grafana.ini` file                                                | `nil`                                                   |
+| `config.grafanaIniSecret`              | Name of the Secret containing the `grafana.ini` file                                                   | `nil`                                                   |
 | `config.useCustomIniFile`              | Allows to load a `custom.ini` file                                                                     | `false`                                                 |
 | `config.customIniConfigMap`            | Name of the ConfigMap containing the `custom.ini` file                                                 | `nil`                                                   |
+| `config.customIniSecret`               | Name of the Secret containing the `custom.ini` file                                                    | `nil`                                                   |
 | `dashboardsProvider.enabled`           | Enable the use of a Grafana dashboard provider                                                         | `false`                                                 |
 | `dashboardsProvider.configMapName`     | Name of a ConfigMap containing a custom dashboard provider                                             | `nil`                                                   |
 | `dashboardsConfigMaps`                 | Array with the names of a series of ConfigMaps containing dashboards files                             | `nil`                                                   |
@@ -175,7 +177,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Using custom configuration
 
-Grafana supports multiples configuration files. Using kubernetes you can mount a file using a ConfigMap. For example, to mount a custom `grafana.ini` file or `custom.ini` file you can create a ConfigMap like the following:
+Grafana supports multiples configuration files. Using kubernetes you can mount a file using a ConfigMap or a Secret. For example, to mount a custom `grafana.ini` file or `custom.ini` file you can create a ConfigMap like the following:
 
 ```yaml
 apiVersion: v1

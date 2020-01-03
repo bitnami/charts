@@ -267,18 +267,18 @@ security:
   ## RPC configuration
   ##
   rpc:
-    authenticationEnabled: "yes"
-    encryptionEnabled: "yes"
+    authenticationEnabled: true
+    encryptionEnabled: true
 
   ## Enables local storage encryption
   ##
-  storageEncryptionEnabled: "yes"
+  storageEncryptionEnabled: true
 
   ## SSL configuration
   ##
   ssl:
-    enabled: "yes"
-    needClientAuth: "yes"
+    enabled: true
+    needClientAuth: true
     protocol: TLSv1.2
 
   ## Name of the secret that contains the certificates
@@ -340,6 +340,10 @@ ingress:
   hosts:
     - name: spark.local
       path: /
+  tls:
+  - hosts:
+    - spark.domain.com
+    secretName: spark.local-tls
 
 metrics:
   enabled: false

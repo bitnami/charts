@@ -162,13 +162,23 @@ spec:
         {{- end }}
         {{- if .Values.config.useGrafanaIniFile }}
         - name: grafana-ini
+          {{- if .Values.config.grafanaIniConfigMap }}
           configMap:
-            name: {{ required "A configmap containing the grafana.ini file is needed!!" .Values.config.grafanaIniConfigMap }}
+            name: {{ .Values.config.grafanaIniConfigMap }}
+          {{- else if .Values.config.grafanaIniSecret }}
+          secret:
+            secretName: {{ .Values.config.grafanaIniSecret }}
+          {{- end }}
         {{- end }}
         {{- if .Values.config.useCustomIniFile }}
         - name: custom-ini
+          {{- if .Values.config.customIniConfigMap }}
           configMap:
-            name: {{ required "A configmap containing the custom.ini file is needed!!" .Values.config.customIniConfigMap }}
+            name: {{ .Values.config.customIniConfigMap }}
+          {{- else if .Values.config.customIniSecret }}
+          secret:
+            secretName: {{ .Values.config.customIniSecret }}
+          {{- end }}
         {{- end }}
         {{- range .Values.extraConfigmaps }}
         - name: {{ .name }}

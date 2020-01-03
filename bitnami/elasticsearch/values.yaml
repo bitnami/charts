@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.5.0-debian-9-r0
+  tag: 7.5.1-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -137,6 +137,13 @@ master:
   ## Number of master-eligible node(s) replicas to deploy
   ##
   replicas: 2
+
+  ## updateStrategy for ElasticSearch master statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
   heapSize: 128m
   ## Provide annotations for master-eligible pods.
   ##
@@ -239,6 +246,14 @@ master:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     # loadBalancerIP:
+  ## Provide functionality to use RBAC
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for the master node
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    name:
 
 ## Elasticsearch coordinating-only node parameters
 ##
@@ -246,6 +261,13 @@ coordinating:
   ## Number of coordinating-only node(s) replicas to deploy
   ##
   replicas: 2
+
+  ## updateStrategy for ElasticSearch coordinating deployment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
   heapSize: 128m
   ## Provide annotations for the coordinating-only pods.
   ##
@@ -321,6 +343,16 @@ coordinating:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     # loadBalancerIP:
+  ## Provide functionality to use RBAC
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for the coordinating node
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name:
 
 ## Elasticsearch data node parameters
 ##
@@ -413,6 +445,16 @@ data:
     ## Persistent Volume size
     ##
     size: 8Gi
+  ## Provide functionality to use RBAC
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for the data node
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name:
 
 ## Elasticsearch ingest node parameters
 ##
@@ -506,7 +548,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.1-debian-9-r37
+    tag: 5.8.1-debian-9-r50
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -671,7 +713,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-9-r100
+    tag: 1.1.0-debian-9-r112
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

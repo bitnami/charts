@@ -264,6 +264,22 @@ initContainers:
    containerPort: 1234
 ```
 
+#### Add a sample Elasticsearch container as sidecar
+
+This chart requires an Elasticsearch instance to work. For production, you can use an already existing Elasticsearch instance or deploy the [Elasticsearch chart](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch) with the [`global.kibanaEnabled=true` parameter](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#enable-bundled-kibana).
+
+For the purpose of testing, you can use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
+
+```
+elasticsearch.hosts[0]=localhost
+elasticsearch.port=9200
+sidecars[0].name=elasticsearch
+sidecars[0].image=bitnami/elasticsearch:latest
+sidecars[0].imagePullPolicy=IfNotPresent
+sidecars[0].ports[0].name=http
+sidecars[0].ports[0].containerPort=9200
+```
+
 ## Persistence
 
 The [Bitnami Kibana](https://github.com/bitnami/bitnami-docker-kibana) image can persist data. If enabled, the persisted path is `/bitnami/kibana` by default.
