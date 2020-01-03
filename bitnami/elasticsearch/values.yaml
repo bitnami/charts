@@ -253,7 +253,7 @@ master:
     create: false
     ## The name of the ServiceAccount to use.
     ## If not set and create is true, a name is generated using the fullname template
-    name:
+    # name:
 
 ## Elasticsearch coordinating-only node parameters
 ##
@@ -352,7 +352,7 @@ coordinating:
     ## The name of the ServiceAccount to use.
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    # name:
 
 ## Elasticsearch data node parameters
 ##
@@ -454,7 +454,7 @@ data:
     ## The name of the ServiceAccount to use.
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    # name:
 
 ## Elasticsearch ingest node parameters
 ##

@@ -144,6 +144,39 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+ Create the name of the master service account to use
+ */}}
+{{- define "elasticsearch.master.serviceAccountName" -}}
+{{- if .Values.master.serviceAccount.create -}}
+    {{ default (include "elasticsearch.master.fullname" .) .Values.master.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.master.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the coordinating-only service account to use
+ */}}
+{{- define "elasticsearch.coordinating.serviceAccountName" -}}
+{{- if .Values.coordinating.serviceAccount.create -}}
+    {{ default (include "elasticsearch.coordinating.fullname" .) .Values.coordinating.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.coordinating.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the data service account to use
+ */}}
+{{- define "elasticsearch.data.serviceAccountName" -}}
+{{- if .Values.data.serviceAccount.create -}}
+    {{ default (include "elasticsearch.data.fullname" .) .Values.data.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.data.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified metrics name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
