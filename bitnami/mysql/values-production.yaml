@@ -149,6 +149,7 @@ master:
     plugin_dir=/opt/bitnami/mysql/plugin
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
+    datadir=/bitnami/mysql/data
     tmpdir=/opt/bitnami/mysql/tmp
     max_allowed_packet=16M
     bind-address=0.0.0.0
@@ -287,6 +288,7 @@ slave:
     basedir=/opt/bitnami/mysql
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
+    datadir=/bitnami/mysql/data
     tmpdir=/opt/bitnami/mysql/tmp
     max_allowed_packet=16M
     bind-address=0.0.0.0
