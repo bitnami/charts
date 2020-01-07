@@ -25,6 +25,12 @@ spec:
     {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
-  {{- end }}
+  {{- range $i, $tls := .Values.ingress.tls }}
+    - hosts:
+      {{- range $e, $host := $tls.hosts }}
+        - {{ $host }}
+      {{ end -}}
+      secretName: {{ $tls.secretName }}
+  {{ end -}}
+  {{- end -}}
 {{- end }}
