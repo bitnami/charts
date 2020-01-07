@@ -224,6 +224,12 @@ worker:
     failureThreshold: 6
     successThreshold: 1
 
+  ## Array to add extra volumes
+  ##
+  ## extraVolumes:
+  ## Array to add extra mounts (normally used with extraVolumes)
+  ##
+  ## extraVolumeMounts: {}
   ## Autoscaling parameters
   ##
   autoscaling:
@@ -232,14 +238,6 @@ worker:
     CpuTargetPercentage: 50
     ## Max number of workers when using autoscaling
     replicasMax: 10
-
-  ## Array to add extra volumes
-  ##
-  ## extraVolumes:
-
-  ## Array to add extra mounts (normally used with extraVolumes)
-  ##
-  ## extraVolumeMounts: {}
 
 ## Security configuration
 ##
@@ -325,6 +323,6 @@ ingress:
     - name: spark.local
       path: /
   tls:
-  - hosts:
-    - spark.domain.com
-    secretName: spark.local-tls
+    - hosts:
+        - spark.domain.com
+      secretName: spark.local-tls

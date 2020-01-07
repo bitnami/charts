@@ -48,6 +48,14 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 
+{{- /* 
+As we use a headless service we need to append -master-svc to 
+the service name. 
+*/ -}}
+{{- define "spark.master.service.name" -}}
+{{ include "spark.fullname" . }}-master-svc
+{{- end -}}
+
 {{- /*
 Create chart name and version as used by the chart label.
 */}}
