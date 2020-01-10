@@ -4,6 +4,6 @@ dependencies:
   version: 7.3.1
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
-  version: 10.1.0
+  version: 10.3.3
 digest: sha256:bad621518ab9d12662436062824ce1a8c4656b6bc8ae4dc7ccb1decc5c91fd09
-generated: "2019-12-17T13:12:07.830004+01:00"
+generated: 2020-01-10T08:44:18.419476411Z
