@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2019.10.12-debian-9-r15
+  tag: 2019.10.12-debian-9-r34
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,7 +55,7 @@ clusterDomain: cluster.local
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2019.10.9-debian-9-r33
+  tag: 2019.10.9-debian-9-r54
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
