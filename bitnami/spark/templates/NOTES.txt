@@ -30,7 +30,7 @@
 2. Submit an application to the cluster:
 
   To submit an application to the cluster the spark-submit script must be used. That script can be
-  obtained at https://github.com/apache/spark/tree/master/bin. Also you can use bitnami/spark docker image. 
+  obtained at https://github.com/apache/spark/tree/master/bin. Also you can use kubectl run. 
 
   First, obtain the master IP, to do that the service type must be NodePort or LoadBalancer. Run the following command to obtain the master IP and submit your application:
 
@@ -39,16 +39,20 @@
   export SUBMIT_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='cluster')].nodePort}" services {{ include "spark.master.service.name" . }})
   export SUBMIT_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
 
-  docker run -ti bitnami/spark spark-submit --master spark://$SUBMIT_IP:$SUBMIT_PORT \
-      --class org.apache.spark.examples.SparkPi \
-      --deploy-mode cluster \
-      examples/jars/spark-examples_2.11-2.4.4.jar 1000
+  kubectl run --namespace {{ .Release.Namespace }} {{ template "spark.fullname" . }}-client --rm --tty -i --restart='Never' \
+    --image {{ template "spark.image" . }} \
+    -- spark-submit --master spark://$SUBMIT_IP:$SUBMIT_PORT \
+    --class org.apache.spark.examples.SparkPi \
+    --deploy-mode cluster \
+    examples/jars/spark-examples_2.11-2.4.4.jar 1000
 
 {{- else if eq "LoadBalancer" .Values.service.type }}
 
   export SUBMIT_IP=$(kubectl get services | awk '/{{ include "spark.master.service.name" . }}/ { print $4 }')
 
-  docker run -ti bitnami/spark spark-submit --master spark://$SUBMIT_IP:{{ .Values.service.clusterPort }} \
+  kubectl run --namespace {{ .Release.Namespace }} {{ template "spark.fullname" . }}-client --rm --tty -i --restart='Never' \
+    --image {{ template "spark.image" . }} \
+    -- spark-submit --master spark://$SUBMIT_IP:{{ .Values.service.clusterPort }} \
     --deploy-mode cluster \
     --class org.apache.spark.examples.SparkPi \
     examples/jars/spark-examples_2.11-2.4.4.jar 1000
