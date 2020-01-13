@@ -132,6 +132,7 @@ airflow:
     # repository:
     # branch:
     # interval:
+    # path:
   ## URL used to access to airflow web ui
   ##
   baseUrl: http://airflow.local
