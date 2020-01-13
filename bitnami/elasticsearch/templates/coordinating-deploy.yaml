@@ -5,6 +5,11 @@ metadata:
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
     role: coordinating-only
 spec:
+  strategy:
+    type: {{ .Values.coordinating.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.coordinating.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- end }}
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
       role: coordinating-only
@@ -27,6 +32,7 @@ spec:
       {{- if .Values.coordinating.tolerations }}
       tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      serviceAccountName: {{ template "elasticsearch.coordinating.serviceAccountName" . }}
       {{- if .Values.coordinating.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.coordinating.securityContext.fsGroup }}

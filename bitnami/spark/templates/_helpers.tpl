@@ -48,6 +48,14 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 
+{{- /* 
+As we use a headless service we need to append -master-svc to 
+the service name. 
+*/ -}}
+{{- define "spark.master.service.name" -}}
+{{ include "spark.fullname" . }}-master-svc
+{{- end -}}
+
 {{- /*
 Create chart name and version as used by the chart label.
 */}}
@@ -99,11 +107,22 @@ imagePullSecrets:
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Spark - Incorrect extra volume settings */}}
+{{- define "spark.validateValues.extraVolumes" -}}
+{{- if and (.Values.worker.extraVolumes) (not .Values.worker.extraVolumeMounts) -}}
+spark: missing-worker-extra-volume-mounts
+    You specified worker extra volumes but no mount points for them. Please set
+    the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
+
 {{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "spark.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "spark.validateValues.extraVolumes" .) -}}
 {{- $messages := append $messages (include "spark.validateValues.workerCount" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}

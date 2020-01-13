@@ -5,6 +5,11 @@ metadata:
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
     role: master
 spec:
+  updateStrategy:
+    type: {{ .Values.master.updateStrategy.type }}
+    {{- if (eq "OnDelete" .Values.master.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- end }}
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
       role: master
@@ -28,6 +33,7 @@ spec:
       {{- if .Values.master.tolerations }}
       tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.master.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      serviceAccountName: {{ template "elasticsearch.master.serviceAccountName" . }}
       {{- if .Values.master.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.master.securityContext.fsGroup }}

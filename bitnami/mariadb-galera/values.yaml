@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.3.21-debian-9-r0
+  tag: 10.4.11-debian-9-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -261,6 +261,12 @@ mariadbConfiguration: |-
   log-queries-not-using-indexes=1
   slow-query-log=1
 
+  ## SSL
+  ## Use extraVolumes and extraVolumeMounts to mount /certs filesystem
+  # ssl_ca=/certs/ca.pem
+  # ssl_cert=/certs/server-cert.pem
+  # ssl_key=/certs/server-key.pem
+
   [galera]
   wsrep_on=ON
   wsrep_provider=/opt/bitnami/mariadb/lib/libgalera_smm.so
@@ -275,6 +281,26 @@ mariadbConfiguration: |-
 
   [mariadb]
   plugin_load_add=auth_pam
+
+  ## Data-at-Rest Encryption
+  ## Use extraVolumes and extraVolumeMounts to mount /encryption filesystem
+  # plugin_load_add=file_key_management
+  # file_key_management_filename=/encryption/keyfile.enc
+  # file_key_management_filekey=FILE:/encryption/keyfile.key
+  # file_key_management_encryption_algorithm=AES_CTR
+  # encrypt_binlog=ON
+  # encrypt_tmp_files=ON
+
+  ## InnoDB/XtraDB Encryption
+  # innodb_encrypt_tables=ON
+  # innodb_encrypt_temporary_tables=ON
+  # innodb_encrypt_log=ON
+  # innodb_encryption_threads=4
+  # innodb_encryption_rotate_key_age=1
+
+  ## Aria Encryption
+  # aria_encrypt_tables=ON
+  # encrypt_tmp_disk_tables=ON
 
 ## ConfigMap with MariaDB configuration
 ## NOTE: This will override mariadbConfiguration
@@ -372,6 +398,27 @@ extraInitContainers: []
 ##
 extraContainers: []
 
+## extraVolumes and extraVolumeMounts allows you to mount other volumes
+## Example Use Cases: 
+##  mount certificates to enable data-in-transit encryption
+##  mount keys for data-at-rest encryption using file plugin
+# extraVolumes:
+# - name: mariadb-certs
+#   secret:
+#     defaultMode: 288
+#     secretName: mariadb-certs
+# - name: mariadb-encryption
+#   secret:
+#     defaultMode: 288
+#     secretName: mariadb-encryption
+# extraVolumeMounts:
+# - name: mariadb-certs
+#   mountPath: /certs
+#   readOnly: true
+# - name: mariadb-encryption
+#   mountPath: /encryption
+#   readOnly: true
+
 ## MariaDB Galera containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
@@ -426,7 +473,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-9-r130
+    tag: 0.12.1-debian-9-r136
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

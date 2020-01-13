@@ -8,7 +8,7 @@ data:
   POSTGRESQL_HOST: "{{ template "harbor.database.host" . }}"
   POSTGRESQL_PORT: "{{ template "harbor.database.port" . }}"
   POSTGRESQL_USERNAME: "{{ template "harbor.database.username" . }}"
-  POSTGRESQL_DATABASE: "registry"
+  POSTGRESQL_DATABASE: "{{ template "harbor.database.coreDatabase" . }}"
   POSTGRESQL_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
   EXT_ENDPOINT: "{{ template "harbor.externalUrl" . }}"
   CORE_URL: "http://{{ template "harbor.core" . }}"

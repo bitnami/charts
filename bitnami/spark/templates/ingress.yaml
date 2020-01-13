@@ -20,7 +20,17 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ include "spark.fullname" $ }}-master-svc
+              serviceName: {{ include "spark.master.service.name" $ }}
               servicePort: http
     {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+  {{- range $i, $tls := .Values.ingress.tls }}
+    - hosts:
+      {{- range $e, $host := $tls.hosts }}
+        - {{ $host }}
+      {{ end -}}
+      secretName: {{ $tls.secretName }}
+  {{ end -}}
+  {{- end -}}
 {{- end }}

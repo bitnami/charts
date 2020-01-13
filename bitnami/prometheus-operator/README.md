@@ -163,6 +163,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `prometheus.service.loadBalancerIP`           | `loadBalancerIP` if service type is `LoadBalancer`                                   | `nil`                                                                  |
 | `prometheus.service.loadBalancerSourceRanges` | Address that are allowed when svc is `LoadBalancer`                                  | `[]`                                                                   |
 | `prometheus.service.annotations`              | Additional annotations for Prometheus service                                        | `{}`                                                                   |
+| `prometheus.serviceMonitor.enabled`           | Creates a ServiceMonitor to monitor Prometheus itself                                | `true`                                                                 |
 | `prometheus.serviceMonitor.interval`          | Scrape interval (use by default, falling back to Prometheus' default)                | `nil`                                                                  |
 | `prometheus.serviceMonitor.metricRelabelings` | Metric relabeling                                                                    | `[]`                                                                   |
 | `prometheus.serviceMonitor.relabelings`       | Relabel configs                                                                      | `[]`                                                                   |
@@ -209,7 +210,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `prometheus.storageSpec`                      | Prometheus StorageSpec for persistent data                                           | `{}`                                                                   |
 | `prometheus.priorityClassName`                | Priority class assigned to the Pods                                                  | ``                                                                     |
 | `prometheus.containers`                       | Containers allows injecting additional containers                                    | `[]`                                                                   |
-| `prometheus.additionalScrapeConfigsExternal`  | Enable additional scrape configs that are managed externally to this chart           | `false`                                                                |
+| `prometheus.additionalScrapeConfigsExternal`  | Enable additional scrape configs that are managed externally to this chart           | `false` See [docs](#additional-scrape-configurations) for details.    |
 
 ### Alertmanager Parameters
 
@@ -235,6 +236,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `alertmanager.service.loadBalancerIP`           | `loadBalancerIP` if service type is `LoadBalancer`                                                                 | `nil`                                                                                                                                                                                                                                               |
 | `alertmanager.service.loadBalancerSourceRanges` | Address that are allowed when svc is `LoadBalancer`                                                                | `[]`                                                                                                                                                                                                                                                |
 | `alertmanager.service.annotations`              | Additional annotations for Alertmanager service                                                                    | `{}`                                                                                                                                                                                                                                                |
+| `alertmanager.serviceMonitor.enabled`           | Creates a ServiceMonitor to monitor Alertmanager                                                                   | `true`                                                                                                                                                                                                                                              |
 | `alertmanager.serviceMonitor.interval`          | Scrape interval (use by default, falling back to Prometheus' default)                                              | `nil`                                                                                                                                                                                                                                               |
 | `alertmanager.serviceMonitor.metricRelabelings` | Metric relabeling                                                                                                  | `[]`                                                                                                                                                                                                                                                |
 | `alertmanager.serviceMonitor.relabelings`       | Relabel configs                                                                                                    | `[]`                                                                                                                                                                                                                                                |
@@ -348,6 +350,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 -   logLevel: info
 +   logLevel: error
 ```
+
+### Additional scrape configurations
+
+It is possible to inject externally managed scrape configurations in a ConfigMap by enabling `prometheus.additionalScrapeConfigsExternal`. The ConfigMap must exist in the same namespace when Prometheus is starting. Its name is generated using the `prometheus-operator.prometheus.fullname` template with a `-scrape-config` suffix. The file it contains has to be named `additional-scrape-configs.yaml`.
 
 ## Upgrading
 

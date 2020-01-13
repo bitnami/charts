@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 2.4.4-debian-9-r65
+  tag: 2.4.4-debian-9-r98
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -223,7 +223,13 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-
+    
+  ## Array to add extra volumes
+  ##
+  ## extraVolumes:
+  ## Array to add extra mounts (normally used with extraVolumes)
+  ##
+  ## extraVolumeMounts: {}
   ## Autoscaling parameters
   ##
   autoscaling:
@@ -243,12 +249,12 @@ security:
   ## RPC configuration
   ##
   rpc:
-    authenticationEnabled: "no"
-    encryptionEnabled: "no"
+    authenticationEnabled: false
+    encryptionEnabled: false
 
   ## Enables local storage encryption
   ##
-  storageEncryptionEnabled: "no"
+  storageEncryptionEnabled: false
 
   ## Name of the secret that contains the certificates
   ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
@@ -258,8 +264,8 @@ security:
   ## SSL configuration
   ##
   ssl:
-    enabled: "no"
-    needClientAuth: "no"
+    enabled: false
+    needClientAuth: false
     protocol: TLSv1.2
 
 ## Service parameters
@@ -316,3 +322,7 @@ ingress:
   hosts:
     - name: spark.local
       path: /
+  tls:
+    - hosts:
+        - spark.domain.com
+      secretName: spark.local-tls

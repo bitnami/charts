@@ -42,13 +42,16 @@ spec:
               containerPort: {{ .Values.master.clusterPort }}
           volumeMounts:
             {{- if .Values.master.configurationConfigMap }}
-              - name: config
-                mountPath: '/opt/bitnami/spark/conf/'
+            - name: config
+              mountPath: '/opt/bitnami/spark/conf/'
             {{- end }}
             {{- if .Values.security.certificatesSecretName }}
-              - name: certs
-                mountPath: '/opt/bitnami/spark/conf/certs'
-                readOnly: true
+            - name: certs
+              mountPath: '/opt/bitnami/spark/conf/certs'
+              readOnly: true
+            {{- end }}
+            {{- if .Values.master.extraVolumeMounts }}
+            {{- tpl (toYaml .Values.master.extraVolumeMounts) $ | nindent 12 }}
             {{- end }}
           env:
             - name: SPARK_MODE
@@ -71,58 +74,58 @@ spec:
             - name: SPARK_MASTER_OPTS
               value: {{ .Values.master.configOptions | quote }}
             {{- end }}
-            {{- if eq ( .Values.security.rpc.authenticationEnabled | quote ) "yes" }}
+            {{- if .Values.security.rpc.authenticationEnabled }}
             - name: SPARK_RPC_AUTHENTICATION_ENABLED
               value: {{ .Values.security.rpc.authenticationEnabled | quote }}
             - name: SPARK_RPC_AUTHENTICATION_SECRET
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.security.passwordsSecretName }}
+                  {{- if .Values.security.passwordsSecretName }}
                   name: {{ .Values.security.passwordsSecretName }}
-                {{- else }}
+                  {{- else }}
                   name: {{ include "spark.fullname" . }}-secret
-                {{- end }}
+                  {{- end }}
                   key: rpc-authentication-secret
             {{- end }}
-            {{- if eq ( .Values.security.encryptionEnabled | quote ) "yes" }}
+            {{- if .Values.security.rpc.encryptionEnabled }}
             - name: SPARK_RPC_ENCRYPTION_ENABLED
               value: {{ .Values.security.rpc.encryptionEnabled | quote }}
             {{- end }}
-            {{- if eq ( .Values.security.storageEncriptionEnabled | quote ) "yes" }}
+            {{- if .Values.security.storageEncryptionEnabled }}
             - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
               value: {{ .Values.security.storageEncryptionEnabled | quote }}
             {{- end }}
-            {{- if eq ( .Values.security.ssl.enabled | quote ) "yes" }}
+            {{- if .Values.security.ssl.enabled }}
             - name: SPARK_SSL_ENABLED
               value: {{ .Values.security.ssl.enabled | quote }}
             - name: SPARK_SSL_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" }}
+                  name: {{ template "spark.get.passwordSecretName" . }}
                   key: ssl-key-password
             - name: SPARK_SSL_KEYSTORE_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ template "spark.get.passwordSecretName" }}
-                    key: ssl-keystore-password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "spark.get.passwordSecretName" . }}
+                  key: ssl-keystore-password
             - name: SPARK_SSL_TRUSTSTORE_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ template "spark.get.passwordSecretName" }}
-                    key: ssl-truststore-password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "spark.get.passwordSecretName" . }}
+                  key: ssl-truststore-password
             - name: SPARK_SSL_NEED_CLIENT_AUTH
-              value: {{ .Values.security.ssl.needClientAuth }}
+              value: {{ .Values.security.ssl.needClientAuth | quote }}
             - name: SPARK_SSL_PROTOCOL
-              value: {{ .Values.security.ssl.protocol }}
+              value: {{ .Values.security.ssl.protocol | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
-            {{- toYaml .Values.master.extraEnvVars | nindent 10 }}
+            {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
             {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ .Values.master.webPort }}
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
@@ -133,7 +136,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ .Values.master.webPort }}
             initialDelaySeconds: {{ .Values.master.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.master.readinessProbe.timeoutSeconds }}
@@ -153,4 +156,7 @@ spec:
         - name: certs
           secret:
             secretName: {{ .Values.security.certificatesSecretName }}
+        {{- end }}
+        {{- if .Values.master.extraVolumes }}
+        {{- tpl (toYaml .Values.master.extraVolumes) $ | nindent 8 }}
         {{- end }}
