@@ -247,5 +247,4 @@ spec:
               - key: admin-password
                 path: admin-password
         {{- end }}
-
       {{- end }}

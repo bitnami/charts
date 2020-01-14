@@ -10,6 +10,6 @@ data:
   {{- (.Files.Glob "files/pgpool.conf").AsConfig | nindent 2 }}
   {{- else if .Values.pgpool.configuration }}
   pgpool.conf: |
-  {{- .Values.pgpool.configuration | nindent 4 }}
+  {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.configuration "context" $) | nindent 4 }}
   {{- end }}
 {{- end }}
