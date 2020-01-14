@@ -364,6 +364,18 @@ pgpool:
   adminUsername: admin
   # adminPassword:
 
+  ## Pgpool configuration
+  ## Specify content for pgpool.conf
+  ## Alternatively, you can put your pgpool.conf under the files/ directory
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration-file
+  ##
+  # configuration:
+
+  ## ConfigMap with Pgpool configuration
+  ## NOTE: This will override pgpool.configuration parameter
+  ##
+  # configurationCM:
+
 ## LDAP parameters
 ##
 ldap:
