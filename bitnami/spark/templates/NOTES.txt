@@ -16,7 +16,7 @@
     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
     You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "spark.master.service.name" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} | awk '/{{ include "spark.master.service.name" . }}/ { print $4 }')
+  export SERVICE_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ include "spark.master.service.name" . }} -o jsonpath="{.status.loadBalancer.ingress[0]['ip', 'hostname'] }")
   echo http://$SERVICE_IP:{{ .Values.service.webPort }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
@@ -48,7 +48,7 @@
 
 {{- else if eq "LoadBalancer" .Values.service.type }}
 
-  export SUBMIT_IP=$(kubectl get services | awk '/{{ include "spark.master.service.name" . }}/ { print $4 }')
+  export SUBMIT_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ include "spark.master.service.name" . }} -o jsonpath="{.status.loadBalancer.ingress[0]['ip', 'hostname'] }")
 
   kubectl run --namespace {{ .Release.Namespace }} {{ template "spark.fullname" . }}-client --rm --tty -i --restart='Never' \
     --image {{ template "spark.image" . }} \
@@ -59,9 +59,7 @@
 
 {{- else }}
 
-  export SUBMIT_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} | awk '/{{ include "spark.master.service.name" . }}/ { print $3 }')
-
-  kubectl exec -ti {{ include "spark.fullname" . }}-worker-0 -- spark-submit --master spark://$SUBMIT_IP:{{ .Values.service.clusterPort }} \
+  kubectl exec -ti {{ include "spark.fullname" . }}-worker-0 -- spark-submit --master spark://{{ include "spark.master.service.name" . }}:{{ .Values.service.clusterPort }} \
     --class org.apache.spark.examples.SparkPi \
     examples/jars/spark-examples_2.11-2.4.4.jar 5
 
