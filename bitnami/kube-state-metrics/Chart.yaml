@@ -2,7 +2,7 @@ apiVersion: v1
 appVersion: 1.9.2
 description: kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
 name: kube-state-metrics
-version: 0.1.7
+version: 0.1.8
 keywords:
   - prometheus
   - kube-state-metrics
