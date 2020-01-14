@@ -105,6 +105,8 @@ spec:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
                   key: repmgr-password
             {{- end }}
+            - name: PGPOOL_ENABLE_LOAD_BALANCING
+              value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
             - name: PGPOOL_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
