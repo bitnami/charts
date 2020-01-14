@@ -525,6 +525,17 @@ Return the PostgreSQL extended configuration configmap.
 {{- end -}}
 
 {{/*
+Return the Pgpool configuration configmap.
+*/}}
+{{- define "postgresql-ha.pgpoolConfigurationCM" -}}
+{{- if .Values.pgpool.configurationCM -}}
+{{- printf "%s" (tpl .Values.pgpool.configurationCM $) -}}
+{{- else -}}
+{{- printf "%s-configuration" (include "postgresql-ha.pgpool" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the PostgreSQL initdb scripts configmap.
 */}}
 {{- define "postgresql-ha.postgresqlInitdbScriptsCM" -}}
