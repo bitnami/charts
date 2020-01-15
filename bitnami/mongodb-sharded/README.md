@@ -7,6 +7,7 @@ This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/)
 ## TL;DR;
 
 ```bash
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install bitnami/mongodb-sharded
 ```
 
