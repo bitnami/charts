@@ -36,7 +36,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#
 The stable charts are contributed to the upstream [helm/charts](https://github.com/helm/charts) repository. The following command allows you to download and install all the charts from this repository, both the bitnami and the upstreamed ones.
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
 ### Using Helm
@@ -47,12 +47,12 @@ Please refer to the [Quick Start guide](https://github.com/helm/helm/blob/master
 
 Useful Helm Client Commands:
 * View available charts: `helm search`
-* Install a chart: `helm install stable/<package-name>`
+* Install a chart: `helm install bitnami/<package-name>`
 * Upgrade your application: `helm upgrade`
 
 # License
 
-Copyright (c) 2018-2019 Bitnami
+Copyright (c) 2020 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
