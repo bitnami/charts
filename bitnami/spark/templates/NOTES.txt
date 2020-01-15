@@ -32,7 +32,10 @@
   To submit an application to the cluster the spark-submit script must be used. That script can be
   obtained at https://github.com/apache/spark/tree/master/bin. Also you can use kubectl run. 
 
-  First, obtain the master IP, to do that the service type must be NodePort or LoadBalancer. Run the following command to obtain the master IP and submit your application:
+{{- if or (eq "NodePort" .Values.service.type) (eq "LoadBalancer" .Values.service.type) }}
+
+  Run the commands below to obtain the master IP and submit your application.
+{{- end -}}
 
 {{- if eq "NodePort" .Values.service.type }}
 
@@ -63,9 +66,9 @@
     --class org.apache.spark.examples.SparkPi \
     examples/jars/spark-examples_2.11-2.4.4.jar 5
 
-{{- end }}
-
 ** IMPORTANT: When submit an application from outside the cluster service type should be set to the NodePort or LoadBalancer. **
+
+{{- end }}
 
 ** IMPORTANT: When submit an application the --master parameter should be set to the service IP, if not, the application will not resolve the master. **
 
