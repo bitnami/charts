@@ -130,6 +130,8 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `pgpool.pdb.maxUnavailable`                    | Maximum number / percentage of pods that may be made unavailable                                                                                                     | `nil`                                                        |
 | `pgpool.adminUsername`                         | Pgpool Admin username                                                                                                                                                | `admin`                                                      |
 | `pgpool.adminPassword`                         | Pgpool Admin password                                                                                                                                                | `nil`                                                        |
+| `pgpool.configuration`                         | Content of pgpool.conf                                                                                                                                               | `nil`                                                        |
+| `pgpool.configurationCM`                       | ConfigMap with the Pgpool configuration file (Note: Overrides `pgpol.configuration`)                                                                                 | `nil` (The value is evaluated as a template)                 |
 | **LDAP**                                       |                                                                                                                                                                      |                                                              |
 | `ldap.enabled`                                 | Enable LDAP support                                                                                                                                                  | `false`                                                      |
 | `ldap.existingSecret`                          | Name of existing secret to use for LDAP passwords                                                                                                                    | `nil`                                                        |
@@ -294,15 +296,15 @@ Next, login to the PostgreSQL server using the `psql` client and add the PAM aut
 
 > Note: Parameters including commas must be escaped as shown in the above example. More information at: https://github.com/helm/helm/blob/master/docs/using_helm.md#the-format-and-limitations-of---set
 
-### repmgr.conf / postgresql.conf / pg_hba.conf files as configMap
+### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf files as configMap
 
 This helm chart also supports to customize the whole configuration file.
 
-Add your custom files to "files" in your working directory. Those files will be mounted as configMap to the containers and it will be used for configuring Repmgr and the PostgreSQL server.
+Add your custom files to "files" in your working directory. Those files will be mounted as configMap to the containers and it will be used for configuring Pgpool, Repmgr and the PostgreSQL server.
 
-Alternatively, you can specify the PostgreSQL and Repmgr configuration using the `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters.
+Alternatively, you can specify the Pgpool, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters.
 
-In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `postgresql.configurationCM` parameter. Note that this will override the two previous options.
+In addition to these options, you can also set an external ConfigMap(s) with all the configuration files. This is done by setting the `postgresql.configurationCM` and `pgpool.configurationCM` parameters. Note that this will override the two previous options.
 
 ### Allow settings to be loaded from files other than the default `postgresql.conf`
 
