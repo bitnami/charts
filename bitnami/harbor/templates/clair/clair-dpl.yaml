@@ -81,6 +81,7 @@ spec:
         - name: adapter
           image: {{ include "harbor.clairAdapterImage" . }}
           imagePullPolicy: {{ .Values.clairAdapterImage.pullPolicy }}
+          {{- if .Values.clair.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /probe/healthy
@@ -90,6 +91,8 @@ spec:
             timeoutSeconds: {{ .Values.clair.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.clair.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.clair.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.clair.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /probe/ready
@@ -99,6 +102,7 @@ spec:
             timeoutSeconds: {{ .Values.clair.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.clair.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.clair.readinessProbe.failureThreshold }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.clairAdapterImage.debug | quote }}
@@ -106,7 +110,7 @@ spec:
               # To avoid a pod cannot reach itself via service IP when the clusters disable hairpin
               value: "http://127.0.0.1:6060"
             - name: SCANNER_STORE_REDIS_URL
-              value: {{ include "harbor.redisForClearAdapter" . }}
+              value: {{ include "harbor.redisForClairAdapter" . }}
             - name: SCANNER_CLAIR_DATABASE_URL
               value: {{ include "harbor.database.clair" . }}
           {{- if .Values.clair.adapter.resources }}

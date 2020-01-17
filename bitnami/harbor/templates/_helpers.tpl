@@ -260,7 +260,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*the username redis is used for a placeholder as no username needed in redis*/}}
-{{- define "harbor.redisForClearAdapter" -}}
+{{- define "harbor.redisForClairAdapter" -}}
   {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
     {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) }}
   {{- else }}
