@@ -56,7 +56,7 @@ spec:
   name: {{ $loadBalancer.name }}
   labels: {{- include "harbor.labels" . | nindent 4 }}
   {{- with $loadBalancer.annotations }}
-    annotations:
+  annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:

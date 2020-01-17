@@ -11,6 +11,8 @@ spec:
       port: 6060
     - name: health
       port: 6061
+    - name: adapter
+      port: 8080
   selector: {{- include "harbor.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: clair
 {{- end }}

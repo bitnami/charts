@@ -58,7 +58,7 @@ spec:
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.registryImage.debug | quote }}
+              value: {{ ternary "true" "false" .Values.clairImage.debug | quote }}
             {{- if .Values.clair.httpProxy }}
             - name: HTTP_PROXY
               value: {{ .Values.clair.httpProxy }}
@@ -78,6 +78,42 @@ spec:
             - name: clair-config
               mountPath: /etc/clair/config.yaml
               subPath: config.yaml
+        - name: adapter
+          image: {{ include "harbor.clairAdapterImage" . }}
+          imagePullPolicy: {{ .Values.clairAdapterImage.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: /probe/healthy
+              port: 8080
+            initialDelaySeconds: {{ .Values.clair.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.clair.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.clair.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.clair.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.clair.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /probe/ready
+              port: 8080
+            initialDelaySeconds: {{ .Values.clair.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.clair.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.clair.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.clair.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.clair.readinessProbe.failureThreshold }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.clairAdapterImage.debug | quote }}
+            - name: SCANNER_CLAIR_URL
+              # To avoid a pod cannot reach itself via service IP when the clusters disable hairpin
+              value: "http://127.0.0.1:6060"
+            - name: SCANNER_STORE_REDIS_URL
+              value: {{ include "harbor.redisForClearAdapter" . }}
+            - name: SCANNER_CLAIR_DATABASE_URL
+              value: {{ include "harbor.database.clair" . }}
+          {{- if .Values.clair.adapter.resources }}
+          resources: {{ toYaml .Values.clair.adapter.resources | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: 8080
       volumes:
         - name: clair-config
           configMap:
