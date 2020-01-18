@@ -259,6 +259,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{/*the username redis is used for a placeholder as no username needed in redis*/}}
+{{- define "harbor.redisForClairAdapter" -}}
+  {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
+    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) }}
+  {{- else }}
+    {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+  {{- end -}}
+{{- end -}}
+
 {{/*
 host:port,pool_size,password
 100 is the default value of pool size
@@ -514,6 +523,29 @@ Return the proper Harbor Clair image name
 {{- $registryName := .Values.clairImage.registry -}}
 {{- $repositoryName := .Values.clairImage.repository -}}
 {{- $tag := .Values.clairImage.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Harbor Clair image name
+*/}}
+{{- define "harbor.clairAdapterImage" -}}
+{{- $registryName := .Values.clairAdapterImage.registry -}}
+{{- $repositoryName := .Values.clairAdapterImage.repository -}}
+{{- $tag := .Values.clairAdapterImage.tag | toString -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.

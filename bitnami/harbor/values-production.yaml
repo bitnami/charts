@@ -176,6 +176,30 @@ clairImage:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
+## Bitnami Harbor Adapter Clair image
+## ref: https://hub.docker.com/r/bitnami/harbor-adapter-clair/tags/
+##
+clairAdapterImage:
+  registry: docker.io
+  repository: bitnami/harbor-adapter-clair
+  tag: 1.0.1-debian-9-r0
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and NAMI debugging in minideb
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  debug: false
+
 ## Bitnami Harbor Notary Server image
 ## ref: https://hub.docker.com/r/bitnami/harbor-notary-server/tags/
 ##
@@ -1039,6 +1063,20 @@ chartmuseum:
 ##
 clair:
   enabled: true
+  # Harbor needs Clair adapter to comunicate with Clair API.
+  adapter:
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #   cpu: 500m
+      #   memory: 1Gi
+      requests: {}
+      #   cpu: 250m
+      #   memory: 256Mi  
+      
   replicas: 1
   # The http(s) proxy used to update vulnerabilities database from internet
   httpProxy:
