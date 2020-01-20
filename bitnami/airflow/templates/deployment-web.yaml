@@ -210,6 +210,9 @@ spec:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - name: git-cloned-dag-files
               mountPath: /opt/bitnami/airflow/dags/git
+              {{- if .Values.airflow.cloneDagFilesFromGit.path }}
+              subPath: {{ .Values.airflow.cloneDagFilesFromGit.path }}
+              {{- end }}
             {{- end }}
             {{- if .Values.airflow.configurationConfigMap }}
             - name: custom-configuration-file

@@ -85,6 +85,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.cloneDagFilesFromGit.repository` | Repository where download DAG files from                                                             | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.branch`     | Branch from repository to checkout                                                                   | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.interval`   | Interval to pull the repository on sidecar container                                                 | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.path`       | Path to a folder in the repository containing DAGs. If not set, all DAGS from the repo are loaded.   | `nil`                                                        |
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                                 | `nil`                                                        |
 | `airflow.worker.port`                     | Airflow Worker port                                                                                  | `8793`                                                       |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                                    | `2`                                                          |
@@ -94,7 +95,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.auth.fernetKey`                  | Fernet key to secure connections                                                                     | `nil`                                                        |
 | `airflow.auth.existingSecret`             | Name of an existing secret containing airflow password and fernet key                                | `nil`                                                        |
 | `airflow.extraEnvVars`                    | Extra environment variables to add to airflow web, worker and scheduler pods                         | `nil`                                                        |
-| `airflow.webserverConfigMap`              | Config map name for ~/airflow/webserver_config.py                                                   | `nil`                                                        |
+| `airflow.webserverConfigMap`              | Config map name for ~/airflow/webserver_config.py                                                    | `nil`                                                        |
 | `securityContext.enabled`                 | Enable security context                                                                              | `true`                                                       |
 | `securityContext.fsGroup`                 | Group ID for the container                                                                           | `1001`                                                       |
 | `securityContext.runAsUser`               | User ID for the container                                                                            | `1001`                                                       |
