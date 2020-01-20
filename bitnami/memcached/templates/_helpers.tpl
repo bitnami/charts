@@ -172,6 +172,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "memcached.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "memcached.validateValues.replicaCount" .) -}}
+{{- $messages := append $messages (include "memcached.validateValues.readOnlyRootFilesystem" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -200,6 +201,14 @@ memcached: replicaCount
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Memcached - securityContext.readOnlyRootFilesystem */}}
+{{- define "memcached.validateValues.readOnlyRootFilesystem" -}}
+{{- if and .Values.securityContext.enabled .Values.securityContext.readOnlyRootFilesystem (not (empty .Values.memcachedPassword)) -}}
+memcached: securityContext.readOnlyRootFilesystem
+    Enabling authentication is not compatible with using a read-only filesystem.
+    Please disable it (--set securityContext.readOnlyRootFilesystem=false)
+{{- end -}}
+{{- end -}}
 
 {{/*
 Renders a value that contains template.

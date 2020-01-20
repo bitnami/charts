@@ -59,9 +59,9 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `nameOverride`                | String to partially override memcached.fullname template with a string (will prepend the release name) | `nil`                                                        |
 | `fullnameOverride`            | String to fully override memcached.fullname template with a string                                     | `nil`                                                        |
 | `clusterDomain`               | Kubernetes cluster domain                                                                              | `cluster.local`                                              |
-|`replicas`                     | Number of containers       | `1`                     |
-|`extraEnv`                     | Additional env vars to pass| `{}`                     |
-|`arguments`                    | Arguments to pass          | `["/run.sh"]`                     |
+|`replicas`                     | Number of containers                                                                                   | `1`                                                          |
+|`extraEnv`                     | Additional env vars to pass                                                                            | `{}`                                                         |
+|`arguments`                    | Arguments to pass                                                                                      | `["/run.sh"]`                                                |
 | `memcachedUsername`           | Memcached admin user                                                                                   | `nil`                                                        |
 | `memcachedPassword`           | Memcached admin password                                                                               | `nil`                                                        |
 | `service.type`                | Kubernetes service type for Memcached                                                                  | `ClusterIP`                                                  |
@@ -72,13 +72,14 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `service.annotations`         | Additional annotations for Memcached service                                                           | `{}`                                                         |
 | `resources.requests`          | CPU/Memory resource requests                                                                           | `{memory: "256Mi", cpu: "250m"}`                             |
 | `resources.limits`            | CPU/Memory resource limits                                                                             | `{}`                                                         |
-| `persistence.enabled`                | Enable persistence using PVC                                                                    | `true`                                                       |
-| `persistence.storageClass`           | PVC Storage Class for Jenkins volume                                                            | `nil` (uses alpha storage class annotation)                  |
-| `persistence.accessMode`             | PVC Access Mode for Jenkins volume                                                              | `ReadWriteOnce`                                              |
-| `persistence.size`                   | PVC Storage Request for Jenkins volume                                                          | `8Gi`                                                        |
+| `persistence.enabled`         | Enable persistence using PVC                                                                           | `true`                                                       |
+| `persistence.storageClass`    | PVC Storage Class for Jenkins volume                                                                   | `nil` (uses alpha storage class annotation)                  |
+| `persistence.accessMode`      | PVC Access Mode for Jenkins volume                                                                     | `ReadWriteOnce`                                              |
+| `persistence.size`            | PVC Storage Request for Jenkins volume                                                                 | `8Gi`                                                        |
 | `securityContext.enabled`     | Enable security context                                                                                | `true`                                                       |
 | `securityContext.fsGroup`     | Group ID for the container                                                                             | `1001`                                                       |
 | `securityContext.runAsUser`   | User ID for the container                                                                              | `1001`                                                       |
+| `securityContext.readOnlyRootFilesystem` | Enable read-only filesystem                                                                 | `false`                                                      |
 | `podAnnotations`              | Pod annotations                                                                                        | `{}`                                                         |
 | `affinity`                    | Map of node/pod affinities                                                                             | `{}` (The value is evaluated as a template)                  |
 | `nodeSelector`                | Node labels for pod assignment                                                                         | `{}` (The value is evaluated as a template)                  |
@@ -100,7 +101,7 @@ The above parameters map to the env variables defined in [bitnami/memcached](htt
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release --set memcachedUser=user,memcachedPassword=password bitnami/memcached
+$ helm install --name my-release --set memcachedUsername=user,memcachedPassword=password bitnami/memcached
 ```
 
 The above command sets the Memcached admin account username and password to `user` and `password` respectively.
@@ -126,9 +127,17 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Start a side-car prometheus exporter:
+
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true
+```
+
+- Enable read-only filesystem:
+
+```diff
+- securityContext.readOnlyRootFilesystem=false
++ securityContext.readOnlyRootFilesystem=true
 ```
 
 ## Persistence
