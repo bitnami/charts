@@ -376,6 +376,10 @@ pgpool:
   ##
   # configurationCM:
 
+  ## Use Pgpool Load-Balancing
+  ##
+  useLoadBalancing: true
+
 ## LDAP parameters
 ##
 ldap:
