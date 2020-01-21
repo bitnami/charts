@@ -70,7 +70,7 @@ spec:
             - --udp-services-configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}-udp
           {{- end }}
           {{- if .Values.maxmindLicenseKey }}
-            - --maxmind-license-key=$MAXMIND_LICENSE_KEY
+            - --maxmind-license-key={{ .Values.maxmindLicenseKey }}
           {{- end }}
           {{- if .Values.scope.enabled }}
             - --watch-namespace={{ default .Release.Namespace .Values.scope.namespace }}

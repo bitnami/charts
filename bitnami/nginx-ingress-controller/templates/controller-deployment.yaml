@@ -70,7 +70,7 @@ spec:
             - --udp-services-configmap={{ default .Release.Namespace .Values.udpConfigMapNamespace }}/{{ template "nginx-ingress.fullname" . }}-udp
           {{- end }}
           {{- if .Values.maxmindLicenseKey }}
-            - --maxmind-license-key=$MAXMIND_LICENSE_KEY
+            - --maxmind-license-key={{ .Values.maxmindLicenseKey }}
           {{- end }}
           {{- if .Values.scope.enabled }}
             - --watch-namespace={{ default .Release.Namespace .Values.scope.namespace }}
@@ -103,11 +103,6 @@ spec:
             {{- if .Values.extraEnvs }}
             {{- toYaml .Values.extraEnvs | nindent 12 }}
             {{- end }}
-            - name: MAXMIND_LICENSE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "nginx-ingress.fullname" . }}
-                  key: maxmind-license-key
           livenessProbe:
             httpGet:
               path: /healthz
