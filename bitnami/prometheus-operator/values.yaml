@@ -785,3 +785,58 @@ node-exporter:
 kube-state-metrics:
   serviceMonitor:
     enabled: true
+
+## Component scraping the kube-apiserver
+kubeApiServer:
+  ## Create a ServiceMonitor to scrape kube-apiserver service
+  enabled: true
+
+  serviceMonitor:
+    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+
+    ## Metric relabeling
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    metricRelabelings: []
+
+    ## Relabel configs
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    ##
+    relabelings: []
+
+# Component scraping for kubelet and kubelet hosted cAdvisor
+kubelet:
+  ## Create a ServiceMonitor to scrape kubelet service
+  enabled: true
+
+  ## Namespace where kubelet service is deployed
+  namespace: kube-system
+
+  serviceMonitor:
+    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+
+    ## Metric relabeling
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    metricRelabelings: []
+
+    ## Relabel configs
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    ##
+    relabelings: []
+
+    ## Metric relabeling for scraping cAdvisor
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    cAdvisorMetricRelabelings: []
+
+    ## Relabel configs for scraping cAdvisor
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    cAdvisorRelabelings: []

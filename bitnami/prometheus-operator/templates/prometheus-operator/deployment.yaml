@@ -45,49 +45,49 @@ spec:
         {{- else if eq .Values.operator.podAntiAffinity "soft" }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchLabels: {{- include "prometheus-operator.operator.matchLabels" . | nindent 18 }}
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchLabels: {{- include "prometheus-operator.operator.matchLabels" . | nindent 20 }}
         {{- end }}
         {{- if .Values.operator.podAffinity }}
         podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.operator.podAffinity "context" $) | nindent 10 }}
         {{- end }}
       containers:
-      - name: {{ template "prometheus-operator.name" . }}
-        image: {{ template "prometheus-operator.image" . }}
-        imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
-        args:
-          {{- if .Values.operator.kubeletService.enabled }}
-          - --kubelet-service={{ .Values.operator.kubeletService.namespace }}/{{ template "prometheus-operator.fullname" . }}-kubelet
-          {{- end }}
-          {{- if .Values.operator.logFormat }}
-          - --log-format={{ .Values.operator.logFormat }}
-          {{- end }}
-          {{- if .Values.operator.logLevel }}
-          - --log-level={{ .Values.operator.logLevel }}
-          {{- end }}
-          - --logtostderr=true
-          - --localhost=127.0.0.1
-          - --config-reloader-image={{ template "prometheus-operator.configmapReload.image" . }}
-          - --prometheus-config-reloader={{ template "prometheus-operator.prometheusConfigReloader.image" . }}
-        ports:
-          - name: http
-            containerPort: 8080
-            protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: http
-{{ toYaml .Values.operator.livenessProbe | indent 10 }}
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: http
-{{ toYaml .Values.operator.readinessProbe | indent 10 }}
-        resources: {{- toYaml .Values.operator.resources | nindent 10 }}
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
+        - name: {{ template "prometheus-operator.name" . }}
+          image: {{ template "prometheus-operator.image" . }}
+          imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
+          args:
+            {{- if .Values.operator.kubeletService.enabled }}
+            - --kubelet-service={{ .Values.operator.kubeletService.namespace }}/{{ template "prometheus-operator.fullname" . }}-kubelet
+            {{- end }}
+            {{- if .Values.operator.logFormat }}
+            - --log-format={{ .Values.operator.logFormat }}
+            {{- end }}
+            {{- if .Values.operator.logLevel }}
+            - --log-level={{ .Values.operator.logLevel }}
+            {{- end }}
+            - --logtostderr=true
+            - --localhost=127.0.0.1
+            - --config-reloader-image={{ template "prometheus-operator.configmapReload.image" . }}
+            - --prometheus-config-reloader={{ template "prometheus-operator.prometheusConfigReloader.image" . }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+{{ toYaml .Values.operator.livenessProbe | indent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+{{ toYaml .Values.operator.readinessProbe | indent 12 }}
+          resources: {{- toYaml .Values.operator.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
 {{- end }}

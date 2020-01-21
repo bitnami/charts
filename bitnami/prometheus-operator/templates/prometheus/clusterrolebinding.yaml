@@ -9,7 +9,7 @@ roleRef:
   kind: ClusterRole
   name: {{ template "prometheus-operator.prometheus.fullname" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ template "prometheus-operator.prometheus.serviceAccountName" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ template "prometheus-operator.prometheus.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
 {{- end }}

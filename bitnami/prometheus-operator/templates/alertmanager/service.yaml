@@ -21,12 +21,12 @@ spec:
   clusterIP: {{ .Values.alertmanager.service.clusterIP }}
   {{- end }}
   ports:
-  - name: http
-    port: {{ .Values.alertmanager.service.port }}
-    targetPort: 9093
-    {{- if and .Values.alertmanager.service.nodePort (or (eq .Values.alertmanager.service.type "NodePort") (eq .Values.alertmanager.service.type "LoadBalancer")) }}
-    nodePort: {{ .Values.alertmanager.service.nodePort }}
-    {{- end }}
+    - name: http
+      port: {{ .Values.alertmanager.service.port }}
+      targetPort: 9093
+      {{- if and .Values.alertmanager.service.nodePort (or (eq .Values.alertmanager.service.type "NodePort") (eq .Values.alertmanager.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.alertmanager.service.nodePort }}
+      {{- end }}
   selector:
     app: alertmanager
     alertmanager: {{ template "prometheus-operator.alertmanager.fullname" . }}

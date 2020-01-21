@@ -270,11 +270,22 @@ The following table lists the configurable parameters of the Prometheus Operator
 
 ### Exporters
 
-|               Parameter                |         Description         | Default |
-|----------------------------------------|-----------------------------|---------|
-| `exporters.enabled`                    | Deploy exporters            | `true`  |
-| `exporters.node-exporter.enabled`      | Deploy `node-exporter`      | `true`  |
-| `exporters.kube-state-metrics.enabled` | Deploy `kube-state-metrics` | `true`  |
+|                     Parameter                      |                                              Description                                               |    Default    |
+|----------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------|
+| `exporters.enabled`                                | Deploy exporters                                                                                       | `true`        |
+| `exporters.node-exporter.enabled`                  | Deploy `node-exporter`                                                                                 | `true`        |
+| `exporters.kube-state-metrics.enabled`             | Deploy `kube-state-metrics`                                                                            | `true`        |
+| `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system` |
+| `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service                                                      | `true`        |
+| `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                  | `nil`         |
+| `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                      | `[]`          |
+| `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`          |
+| `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                                                                | `[]`          |
+| `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`          |
+| `kubeApiServer.enabled`                            | Create a ServiceMonitor to scrape kube-apiserver service                                               | `true`        |
+| `kubeApiServer.serviceMonitor.interval`            | Scrape interval (use by default, falling back to Prometheus' default)                                  | `nil`         |
+| `kubeApiServer.serviceMonitor.metricRelabelings`   | Metric relabeling                                                                                      | `[]`          |
+| `kubeApiServer.serviceMonitor.relabelings`         | Relabel configs                                                                                        | `[]`          |
 
 The above parameters map to the env variables defined in [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator). For more information please refer to the [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator) image documentation.
 

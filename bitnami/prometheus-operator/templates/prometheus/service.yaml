@@ -21,12 +21,12 @@ spec:
   clusterIP: {{ .Values.prometheus.service.clusterIP }}
   {{- end }}
   ports:
-  - name: http
-    port: {{ .Values.prometheus.service.port }}
-    targetPort: 9090
-    {{- if and .Values.prometheus.service.nodePort (or (eq .Values.prometheus.service.type "NodePort") (eq .Values.prometheus.service.type "LoadBalancer")) }}
-    nodePort: {{ .Values.prometheus.service.nodePort }}
-    {{- end }}
+    - name: http
+      port: {{ .Values.prometheus.service.port }}
+      targetPort: 9090
+      {{- if and .Values.prometheus.service.nodePort (or (eq .Values.prometheus.service.type "NodePort") (eq .Values.prometheus.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.prometheus.service.nodePort }}
+      {{- end }}
   selector:
     app: prometheus
     prometheus: {{ template "prometheus-operator.prometheus.fullname" . }}
