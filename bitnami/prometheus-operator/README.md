@@ -282,6 +282,10 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`          |
 | `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                                                                | `[]`          |
 | `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`          |
+| `kubeApiServer.enabled`                            | Create a ServiceMonitor to scrape kube-apiserver service                                               | `true`        |
+| `kubeApiServer.serviceMonitor.interval`            | Scrape interval (use by default, falling back to Prometheus' default)                                  | `nil`         |
+| `kubeApiServer.serviceMonitor.metricRelabelings`   | Metric relabeling                                                                                      | `[]`          |
+| `kubeApiServer.serviceMonitor.relabelings`         | Relabel configs                                                                                        | `[]`          |
 
 The above parameters map to the env variables defined in [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator). For more information please refer to the [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator) image documentation.
 
