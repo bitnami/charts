@@ -145,6 +145,7 @@ Parameter | Description | Default
 `configMapNamespace` | The nginx-configmap namespace name | `""`
 `tcpConfigMapNamespace` | The tcp-services-configmap namespace name | `""`
 `udpConfigMapNamespace` | The udp-services-configmap namespace name | `""`
+`maxmindLicenseKey` | License key used to download GeoLite2 databases | `""`
 `defaultBackend.enabled` | If false, defaultBackendService must be provided | `true`
 `defaultBackend.name` | Name of the default backend component | `default-backend`
 `defaultBackend.image.repository` | Default backend container image repository | `k8s.gcr.io/defaultbackend`
