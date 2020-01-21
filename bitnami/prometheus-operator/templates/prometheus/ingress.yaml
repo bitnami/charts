@@ -13,15 +13,15 @@ metadata:
     {{- end }}
 spec:
   rules:
-  {{- range .Values.prometheus.ingress.hosts }}
-  - host: {{ .name }}
-    http:
-      paths:
-      - path: {{ default "/" .path }}
-        backend:
-          serviceName: {{ template "prometheus-operator.prometheus.fullname" $ }}
-          servicePort: http
-  {{- end }}
+    {{- range .Values.prometheus.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+        - path: {{ default "/" .path }}
+          backend:
+            serviceName: {{ template "prometheus-operator.prometheus.fullname" $ }}
+            servicePort: http
+    {{- end }}
   {{- if .Values.prometheus.ingress.tls }}
   tls:
 {{ toYaml .Values.prometheus.ingress.tls | indent 4 }}

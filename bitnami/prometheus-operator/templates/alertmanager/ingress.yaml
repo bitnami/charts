@@ -13,17 +13,17 @@ metadata:
     {{- end }}
 spec:
   rules:
-  {{- range .Values.alertmanager.ingress.hosts }}
-  - host: {{ .name }}
-    http:
-      paths:
-      - path: {{ default "/" .path }}
-        backend:
-          serviceName: {{ template "prometheus-operator.alertmanager.fullname" $ }}
-          servicePort: http
-  {{- end }}
+    {{- range .Values.alertmanager.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ template "prometheus-operator.alertmanager.fullname" $ }}
+              servicePort: http
+    {{- end }}
   {{- if .Values.alertmanager.ingress.tls }}
   tls:
 {{ toYaml .Values.alertmanager.ingress.tls | indent 4 }}
-  {{- end }}
+{{- end }}
 {{- end -}}

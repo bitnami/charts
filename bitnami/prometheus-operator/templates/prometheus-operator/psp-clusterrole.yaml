@@ -5,9 +5,9 @@ metadata:
   name: {{ template "prometheus-operator.operator.fullname" . }}-psp
   labels: {{- include "prometheus-operator.operator.labels" . | nindent 4 }}
 rules:
-- apiGroups: ['extensions']
-  resources: ['podsecuritypolicies']
-  verbs: ['use']
-  resourceNames:
-  - {{ template "prometheus-operator.operator.fullname" . }}
+  - apiGroups: ['extensions']
+    resources: ['podsecuritypolicies']
+    verbs: ['use']
+    resourceNames:
+      - {{ template "prometheus-operator.operator.fullname" . }}
 {{- end }}

@@ -21,11 +21,11 @@ spec:
   clusterIP: {{ .Values.operator.service.clusterIP }}
   {{- end }}
   ports:
-  - name: http
-    port: {{ .Values.operator.service.port }}
-    targetPort: http
-    {{- if and .Values.operator.service.nodePort (or (eq .Values.operator.service.type "NodePort") (eq .Values.operator.service.type "LoadBalancer")) }}
-    nodePort: {{ .Values.operator.service.nodePort }}
-    {{- end }}
+    - name: http
+      port: {{ .Values.operator.service.port }}
+      targetPort: http
+      {{- if and .Values.operator.service.nodePort (or (eq .Values.operator.service.type "NodePort") (eq .Values.operator.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.operator.service.nodePort }}
+      {{- end }}
   selector: {{- include "prometheus-operator.operator.matchLabels" . | nindent 4 }}
 {{- end }}
