@@ -218,6 +218,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+## Notable changes
+
+### 5.3.0
+
+In this version you can indicate the key to download the GeoLite2 databases using the [parameter](#parameters) `maxmindLicenseKey`.
+
 ## Upgrading
 
 ### To 1.0.0
