@@ -817,6 +817,9 @@ kubelet:
   namespace: kube-system
 
   serviceMonitor:
+    ## Scrape kubelet over https
+    https: true
+
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##

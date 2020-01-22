@@ -277,6 +277,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `exporters.kube-state-metrics.enabled`             | Deploy `kube-state-metrics`                                                                            | `true`        |
 | `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system` |
 | `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service                                                      | `true`        |
+| `kubelet.serviceMonitor.https`                     | Enable scraping of the kubelet over HTTPS                                                              | `true`        |
 | `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                  | `nil`         |
 | `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                      | `[]`          |
 | `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`          |
