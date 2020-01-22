@@ -92,6 +92,7 @@ service:
   ## Kubernetes service type and port number
   ##
   type: ClusterIP
+  targetPort: 9100
   port: 9100
   # clusterIP: None
 

@@ -37,7 +37,7 @@ spec:
           args:
             - --path.procfs=/host/proc
             - --path.sysfs=/host/sys
-            - --web.listen-address=0.0.0.0:9100
+            - --web.listen-address=0.0.0.0:{{ .Values.service.targetPort }}
             {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}
             - --{{ $key }}={{ $value }}
@@ -47,7 +47,7 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: 9100
+              containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
