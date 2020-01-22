@@ -145,6 +145,7 @@ Parameter | Description | Default
 `configMapNamespace` | The nginx-configmap namespace name | `""`
 `tcpConfigMapNamespace` | The tcp-services-configmap namespace name | `""`
 `udpConfigMapNamespace` | The udp-services-configmap namespace name | `""`
+`maxmindLicenseKey` | Maxmind license key to download GeoLite2 Databases. See [Accessing and using GeoLite2 database](https://blog.maxmind.com/2019/12/18/significant-changes-to-accessing-and-using-geolite2-databases/) | `""`
 `defaultBackend.enabled` | If false, defaultBackendService must be provided | `true`
 `defaultBackend.name` | Name of the default backend component | `default-backend`
 `defaultBackend.image.repository` | Default backend container image repository | `k8s.gcr.io/defaultbackend`
@@ -216,6 +217,11 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+## Notable changes
+
+### 5.3.0
+
+In this version you can indicate the key to download the GeoLite2 databases using the [parameter](#parameters) `maxmindLicenseKey`.
 
 ## Upgrading
 

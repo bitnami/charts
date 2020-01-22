@@ -72,6 +72,9 @@ spec:
           {{- if .Values.scope.enabled }}
             - --watch-namespace={{ default .Release.Namespace .Values.scope.namespace }}
           {{- end }}
+          {{- if .Values.maxmindLicenseKey }}
+            - --maxmind-license-key={{ .Values.maxmindLicenseKey }}
+          {{- end }}
           {{- if and (.Values.reportNodeInternalIp) (.Values.hostNetwork)}}
             - --report-node-internal-ip-address={{ .Values.reportNodeInternalIp }}
           {{- end }}
