@@ -2,7 +2,7 @@ apiVersion: v1
 appVersion: 0.18.1
 description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
 name: node-exporter
-version: 0.1.4
+version: 0.2.0
 keywords:
   - prometheus
   - node-exporter
