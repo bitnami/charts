@@ -80,6 +80,16 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+
+{{/*
+Create a default fully qualified app name for PostgreSQL dependency.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "kubeapps.postgresql.fullname" -}}
+{{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{/*
 Create name for the apprepository-controller based on the fullname
 */}}
@@ -102,10 +112,10 @@ Create name for the apprepository cleanup job
 {{- end -}}
 
 {{/*
-Create name for the mongodb secret bootstrap job
+Create name for the db-secret secret bootstrap job
 */}}
-{{- define "kubeapps.mongodb-jobs-cleanup.fullname" -}}
-{{ template "kubeapps.fullname" . }}-internal-mongodb-jobs-cleanup
+{{- define "kubeapps.db-secret-jobs-cleanup.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-db-secret-jobs-cleanup
 {{- end -}}
 
 {{/*
@@ -116,10 +126,10 @@ Create name for the kubeapps upgrade job
 {{- end -}}
 
 {{/*
-Create name for the chartsvc based on the fullname
+Create name for the assetsvc based on the fullname
 */}}
-{{- define "kubeapps.chartsvc.fullname" -}}
-{{ template "kubeapps.fullname" . }}-internal-chartsvc
+{{- define "kubeapps.assetsvc.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-assetsvc
 {{- end -}}
 
 {{/*

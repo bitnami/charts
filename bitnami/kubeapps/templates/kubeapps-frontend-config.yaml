@@ -53,9 +53,9 @@ data:
         {{- end }}
       }
 
-      location ~* /api/chartsvc {
-        rewrite /api/chartsvc/(.*) /chartsvc/$1 break;
-        rewrite /api/chartsvc /chartsvc break;
+      location ~* /api/assetsvc {
+        rewrite /api/assetsvc/(.*) /assetsvc/$1 break;
+        rewrite /api/assetsvc /assetsvc break;
 
         {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.

@@ -32,10 +32,16 @@ spec:
         - /kubeops
         args:
         - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
-        - --chartsvc-url=http://{{ template "kubeapps.chartsvc.fullname" . }}:{{ .Values.chartsvc.service.port }}
+        - --assetsvc-url=http://{{ template "kubeapps.assetsvc.fullname" . }}:{{ .Values.assetsvc.service.port }}
         ports:
         - name: http
           containerPort: {{ .Values.kubeops.service.port }}
+        {{- if .Values.kubeops.livenessProbe }}
+        livenessProbe: {{- toYaml .Values.kubeops.livenessProbe | nindent 12 }}
+        {{- end }}
+        {{- if .Values.kubeops.readinessProbe }}
+        readinessProbe: {{- toYaml .Values.kubeops.readinessProbe | nindent 12 }}
+        {{- end }}
         env:
         - name: POD_NAMESPACE
           valueFrom:

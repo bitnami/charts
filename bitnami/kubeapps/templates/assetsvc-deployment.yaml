@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "kubeapps.assetsvc.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.assetsvc.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.assetsvc.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "kubeapps.assetsvc.fullname" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "kubeapps.assetsvc.fullname" . }}
+        release: {{ .Release.Name }}
+    spec:
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.assetsvc.affinity }}
+      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.assetsvc.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.assetsvc.nodeSelector }}
+      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.assetsvc.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.assetsvc.tolerations }}
+      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.assetsvc.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      containers:
+        - name: assetsvc
+          image: {{ template "kubeapps.image" (list .Values.assetsvc.image .Values.global) }}
+          command:
+            - /assetsvc
+          {{- if .Values.mongodb.enabled }}
+          args:
+            - --database-type=mongodb
+            - --database-user=root
+            - --database-name=charts
+            - --database-url={{ template "kubeapps.mongodb.fullname" . }}
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mongodb.existingSecret }}
+                  key: mongodb-root-password
+          {{- end }}
+          {{- if .Values.postgresql.enabled }}
+          args:
+            - --database-type=postgresql
+            - --database-user=postgres
+            - --database-name=assets
+            - --database-url={{ template "kubeapps.postgresql.fullname" . }}-headless:5432
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgresql.existingSecret }}
+                  key: postgresql-password
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.assetsvc.service.port }}
+          {{- if .Values.assetsvc.livenessProbe }}
+          livenessProbe: {{- toYaml .Values.assetsvc.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.assetsvc.readinessProbe }}
+          readinessProbe: {{- toYaml .Values.assetsvc.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.assetsvc.resource }}
+          resources: {{- toYaml .Values.assetsvc.resources | nindent 12 }}
+          {{- end }}

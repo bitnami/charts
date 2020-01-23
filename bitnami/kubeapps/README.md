@@ -57,11 +57,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install --name kubeapps --namespace kubeapps \
-  --set chartsvc.service.port=9090 \
+  --set assetsvc.service.port=9090 \
     bitnami/kubeapps
 ```
 
-The above command sets the port for the chartsvc Service to 9090.
+The above command sets the port for the assetsvc Service to 9090.
 
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 
@@ -74,6 +74,12 @@ $ helm install --name kubeapps --namespace kubeapps -f custom-values.yaml bitnam
 ### Configuring Initial Repositories
 
 By default, Kubeapps will track the [community Helm charts](https://github.com/helm/charts) and the [Kubernetes Service Catalog charts](https://github.com/kubernetes-incubator/service-catalog). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](values.yaml) file.
+
+### Configuring the database to use
+
+Kubeapps supports two database types: MongoDB or PostgreSQL. By default MongoDB is installed. If you want to enable PostgreSQL instead set the following values when installing the application: `mongodb.enabled=false` and `postresql.enabled=true`.
+
+> **Note**: Changing the database type when upgrading is not supported.
 
 ### Configuring connection to a custom namespace Tiller instance
 
