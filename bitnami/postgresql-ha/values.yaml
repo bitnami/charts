@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.0-debian-10-r0
+  tag: CHANGEME
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -375,6 +375,20 @@ pgpool:
   ## NOTE: This will override pgpool.configuration parameter
   ##
   # configurationCM:
+
+  ## initdb scripts
+  ## Specify dictionary of scripts to be run everytime Pgpool container is initialized
+  ## Alternatively, you can put your scripts under the files/pgpool-entrypoint-initdb.d directory
+  ##
+  # initdbScripts:
+  #   my_init_script.sh: |
+  #      #!/bin/sh
+  #      echo "Do something."
+
+  ## ConfigMap with scripts to be run everytime Pgpool container is initialized
+  ## NOTE: This will override pgpool.initdbScripts
+  ##
+  # initdbScriptsCM:
 
   ## Use Pgpool Load-Balancing
   ##

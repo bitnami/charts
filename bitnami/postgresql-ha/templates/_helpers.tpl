@@ -547,6 +547,17 @@ Return the PostgreSQL initdb scripts configmap.
 {{- end -}}
 
 {{/*
+Return the Pgpool initdb scripts configmap.
+*/}}
+{{- define "postgresql-ha.pgpoolInitdbScriptsCM" -}}
+{{- if .Values.pgpool.initdbScriptsCM -}}
+{{- printf "%s" (tpl .Values.pgpool.initdbScriptsCM $) -}}
+{{- else -}}
+{{- printf "%s-initdb-scripts" (include "postgresql-ha.pgpool" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the LDAP bind password
 */}}
 {{- define "postgresql-ha.ldapPassword" -}}
