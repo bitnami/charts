@@ -14,17 +14,15 @@ spec:
   {{- end }}
   alerting:
     alertmanagers:
-    {{- if .Values.prometheus.externalLabels }}
-    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.externalLabels "context" $) | indent 6 }}
-    {{- else }}
-    {{- if .Values.alertmanager.enabled }}
+    {{- if .Values.prometheus.alertingEndpoints }}
+    {{ include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | indent 6 }}
+    {{- else if .Values.alertmanager.enabled }}
       - namespace: {{ .Release.Namespace }}
         name: {{ template "prometheus-operator.alertmanager.fullname" . }}
         port: http
         pathPrefix: "/"
     {{- else }}
       []
-    {{- end }}
     {{- end }}
   {{- if .Values.prometheus.image }}
   baseImage: {{ template "prometheus-operator.prometheus.baseImage" . }}
