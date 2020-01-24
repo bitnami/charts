@@ -19,8 +19,8 @@ spec:
     metadata:
       labels: {{- include "mysql.labels" . | nindent 8 }}
         component: master
-      {{- if .Values.master.annotations }}
-      annotations: {{ include "mysql.tplValue" ( dict "value" .Values.master.annotations "context" $) | nindent 8 }}
+      {{- if .Values.master.podAnnotations }}
+      annotations: {{ include "mysql.tplValue" ( dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
 {{- include "mysql.imagePullSecrets" . | indent 6 }}

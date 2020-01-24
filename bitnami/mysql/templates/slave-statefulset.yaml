@@ -20,8 +20,8 @@ spec:
     metadata:
       labels: {{- include "mysql.labels" . | nindent 8 }}
         component: slave
-      {{- if .Values.slave.annotations }}
-      annotations: {{ include "mysql.tplValue" ( dict "value" .Values.slave.annotations "context" $) | nindent 8 }}
+      {{- if .Values.slave.podAnnotations }}
+      annotations: {{ include "mysql.tplValue" ( dict "value" .Values.slave.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
 {{- include "mysql.imagePullSecrets" . | indent 6 }}
