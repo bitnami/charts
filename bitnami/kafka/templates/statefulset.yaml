@@ -82,7 +82,7 @@ spec:
                 # Configure Kafka internal and external listeners
                 {{- if .Values.externalAccess.enabled }}
                 export KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-                export KAFKA_CFG_LISTENERS=INTERNAL://:{{ .Values.service.port }},EXTERNAL://:{{ .Values.externalAccess.service.port }}
+                export KAFKA_CFG_LISTENERS=INTERNAL://:{{ .Values.service.port }},EXTERNAL://:${EXTERNAL_ACCESS_PORT}
                 export KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
                 {{- if .Values.advertisedListeners }}
                 export KAFKA_CFG_ADVERTISED_LISTENERS={{ .Values.advertisedListeners }}
