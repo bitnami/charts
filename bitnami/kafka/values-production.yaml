@@ -265,6 +265,25 @@ service:
   ## Service annotations done as key:value pairs
   annotations: {}
 
+externalAccess:
+  enabled: false
+  service:
+    ## Type of service for external access. It can be LoadBalancer or NodePort.
+    ##
+    type: LoadBalancer
+    ## Port used when service type is LoadBalancer
+    ##
+    port: 19092
+    ## Array of load balancer IPs for each Kafka broker. Length must be the same as replicas
+    ##
+    loadBalancerIP: []
+    ## When service type is NodePort, you can specify the domain used for Kafka advertised listeners.
+    ## If not specified, the container will try to get the kubernetes node external IP using: 'curl -s https://ipinfo.io/ip'
+    # domain: mydomain.com
+    ## Array of node ports used for each Kafka broker. Length must be the same as replicas
+    ##
+    nodePort: []
+
 ## Service account for Kafka to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
