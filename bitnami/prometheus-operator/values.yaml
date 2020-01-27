@@ -217,10 +217,10 @@ operator:
       #   - myRegistryKeySecretName
 
   prometheusConfigReloader:
-    image:
-      registry: docker.io
-      repository: bitnami/prometheus-operator
-      tag: 0.34.0-debian-9-r38
+    image: {}
+      # registry:
+      # repository:
+      # tag:
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

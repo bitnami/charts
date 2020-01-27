@@ -100,7 +100,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `operator.service.loadBalancerSourceRanges`           | Address that are allowed when svc is `LoadBalancer`                                   | `[]`                                                                 |
 | `operator.service.annotations`                        | Additional annotations for Prometheus Operator service                                | `{}`                                                                 |
 | `operator.createCustomResource`                       | Create Prometheus Operator CRD's. With helm v3 use the `--skip-crds` argument instead | `true`                                                               |
-| `operator.customResourceDeletePolicy`                 | Prometheus Operator CRD deletion policy                                               | `nil`                                                                     |
+| `operator.customResourceDeletePolicy`                 | Prometheus Operator CRD deletion policy                                               | `nil`                                                                |
 | `operator.serviceMonitor.enabled`                     | Creates a ServiceMonitor to monitor Prometheus Operator                               | `true`                                                               |
 | `operator.serviceMonitor.interval`                    | Scrape interval (use by default, falling back to Prometheus' default)                 | `nil`                                                                |
 | `operator.serviceMonitor.metricRelabelings`           | Metric relabeling                                                                     | `[]`                                                                 |
@@ -133,9 +133,9 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `operator.configmapReload.image.tag`                  | ConfigMap Reload Image tag                                                            | `{TAG_NAME}`                                                         |
 | `operator.configmapReload.image.pullPolicy`           | ConfigMap Reload image pull policy                                                    | `IfNotPresent`                                                       |
 | `operator.configmapReload.image.pullSecrets`          | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)              |
-| `operator.prometheusConfigReloader.image.registry`    | Prometheus Config Reloader image registry                                             | `docker.io`                                                          |
-| `operator.prometheusConfigReloader.image.repository`  | Prometheus Config Reloader Image name                                                 | `bitnami/configmap-reload`                                           |
-| `operator.prometheusConfigReloader.image.tag`         | Prometheus Config Reloader Image tag                                                  | `{TAG_NAME}`                                                         |
+| `operator.prometheusConfigReloader.image.registry`    | Prometheus Config Reloader image registry                                             | same as `operator.image.registry`                                    |
+| `operator.prometheusConfigReloader.image.repository`  | Prometheus Config Reloader Image name                                                 | same as `operator.image.repository`                                  |
+| `operator.prometheusConfigReloader.image.tag`         | Prometheus Config Reloader Image tag                                                  | same as `operator.image.tag`                                         |
 | `operator.prometheusConfigReloader.image.pullPolicy`  | Prometheus Config Reloader image pull policy                                          | `IfNotPresent`                                                       |
 | `operator.prometheusConfigReloader.image.pullSecrets` | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)              |
 

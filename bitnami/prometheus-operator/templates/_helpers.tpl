@@ -153,6 +153,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return the proper Prometheus Operator Reloader image name
 */}}
 {{- define "prometheus-operator.prometheusConfigReloader.image" -}}
+{{- if and .Values.operator.prometheusConfigReloader.image.registry (and .Values.operator.prometheusConfigReloader.image.repository .Values.operator.prometheusConfigReloader.image.tag) }}
 {{- $registryName := .Values.operator.prometheusConfigReloader.image.registry -}}
 {{- $repositoryName := .Values.operator.prometheusConfigReloader.image.repository -}}
 {{- $tag := .Values.operator.prometheusConfigReloader.image.tag | toString -}}
@@ -169,6 +170,9 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- end -}}
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- else -}}
+{{- include "prometheus-operator.image" . -}}
 {{- end -}}
 {{- end -}}
 
@@ -395,9 +399,11 @@ WARNING: Rolling tag detected ({{ .Values.operator.image.repository }}:{{ .Value
 WARNING: Rolling tag detected ({{ .Values.operator.configmapReload.image.repository }}:{{ .Values.operator.configmapReload.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 {{- end }}
+{{- if and .Values.operator.prometheusConfigReloader.image.registry (and .Values.operator.prometheusConfigReloader.image.repository .Values.operator.prometheusConfigReloader.image.tag) }}
 {{- if and (contains "bitnami/" .Values.operator.prometheusConfigReloader.image.repository) (not (.Values.operator.prometheusConfigReloader.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.operator.prometheusConfigReloader.image.repository }}:{{ .Values.operator.prometheusConfigReloader.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
 {{- end }}
 {{- if and (contains "bitnami/" .Values.prometheus.image.repository) (not (.Values.prometheus.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.prometheus.image.repository }}:{{ .Values.prometheus.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
