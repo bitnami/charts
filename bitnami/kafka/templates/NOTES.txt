@@ -65,7 +65,7 @@ To connect to your Kafka server from outside the cluster check the following inf
         1. Obtain the pod name:
         kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
 
-        2. Obtain pod configuration
+        2. Obtain pod configuration:
         kubectl exec -it KAFKA_POD -- cat /opt/bitnami/kafka/conf/server.properties | grep advertised.listeners
 
 {{- end }}
