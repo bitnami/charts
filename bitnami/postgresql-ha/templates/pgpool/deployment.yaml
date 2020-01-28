@@ -37,49 +37,6 @@ spec:
       {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
       {{- $releaseNamespace := .Release.Namespace }}
       {{- $clusterDomain:= .Values.clusterDomain }}
-      initContainers:
-        - name: wait-for-backend-nodes
-          image: {{ include "postgresql-ha.volumePermissionsImage" . }}
-          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
-          env:
-            - name: PGPOOL_BACKEND_NODES
-              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
-          command:
-            - /bin/bash
-            - -c
-            - |
-              dns_lookup() {
-                  local host="${1:?host is missing}"
-                  getent ahosts "$host" | awk '/STREAM/ {print $1 }'
-              }
-              is_hostname_resolved() {
-                  local -r host="${1:?missing value}"
-                  if [[ -n "$(dns_lookup "$host")" ]]; then
-                      true
-                  else
-                      false
-                  fi
-              }
-              read -r -a nodes <<< "$(tr ',;' ' ' <<< "${PGPOOL_BACKEND_NODES}")"
-              declare -i node_counter=0
-              for node in "${nodes[@]}"; do
-                  read -r -a fields <<< "$(tr ':' ' ' <<< "${node}")"
-                  host="${fields[1]:?field host is needed}"
-                  for ((i = 1 ; i <= 10 ; i+=1 )); do
-                      is_hostname_resolved "$host" && node_counter+=1 && break
-                      sleep 5
-                  done
-              done
-              if [[ $node_counter -ne ${#nodes[@]} ]]; then
-                  echo "Not enough active backend nodes!"
-                  exit 1
-              fi
-              echo "Every backend node is active!"
-              exit 0
-          {{- if .Values.pgpool.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.pgpool.securityContext.runAsUser }}
-          {{- end }}
       containers:
         - name: pgpool
           image: {{ include "postgresql-ha.pgpoolImage" . }}
@@ -171,15 +128,16 @@ spec:
                 - bash
                 - -ec
                 - |
-                   if nodes=$(PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;" | grep "up" | wc -l); then
-                       if [[ $nodes -eq {{ $postgresqlReplicaCount }} ]]; then
-                           true
-                       else
-                           false
-                       fi
-                   else
-                       false
-                   fi
+                  if PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;"; then
+                    for node in $(PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;" | grep "down" | cut -d'|' -f2); do
+                      if PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h ${node} -tA -c "SELECT 1" >/dev/null; then
+                        false
+                      fi
+                    done
+                  else
+                    false
+                  fi
+
             initialDelaySeconds: {{ .Values.pgpool.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.pgpool.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.pgpool.livenessProbe.timeoutSeconds }}
@@ -192,16 +150,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - |
-                   if nodes=$(PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;" | wc -l); then
-                       if [[ $nodes -eq {{ $postgresqlReplicaCount }} ]]; then
-                           true
-                       else
-                           false
-                       fi
-                   else
-                       false
-                   fi
+                - PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "SELECT 1" >/dev/null
             initialDelaySeconds: {{ .Values.pgpool.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.pgpool.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.pgpool.readinessProbe.timeoutSeconds }}
