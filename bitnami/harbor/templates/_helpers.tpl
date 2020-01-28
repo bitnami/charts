@@ -882,6 +882,8 @@ Set the http prefix if the externalURl dont have it
 {{- define "harbor.externalUrl" -}}
 {{- if hasPrefix "http" .Values.externalURL -}}
     {{- print .Values.externalURL -}}
+{{- else if .Values.service.tls.enabled -}}
+    {{- printf "https://%s" .Values.externalURL -}}
 {{- else -}}
     {{- printf "http://%s" .Values.externalURL -}}
 {{- end -}}
