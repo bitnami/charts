@@ -265,8 +265,8 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "kafka.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "kafka.validateValues.loadBalancerIPListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.loadBalancerIPListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -281,7 +281,7 @@ Compile all warnings into a single message, and call fail.
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIP }}
 {{- if and ( .Values.externalAccess.enabled ) ( not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") -}}
-kafka: .Values.externalAccess.service.loadBalancerIP
+kafka: externalAccess.service.loadBalancerIP
     Number of replicas and loadBalancerIP array length must be the same.
 {{- end -}}
 {{- end -}}
@@ -299,7 +299,7 @@ kafka: .Values.externalAccess.service.nodePort
 {{/* Validate values of Kafka - service type for external access */}}
 {{- define "kafka.validateValues.externalAccessServiceType" -}}
 {{- if and (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
-kafka: .Values.externalAccess.service.type
+kafka: externalAccess.service.type
     Available servive type for external access are NodePort or LoadBalancer.
 {{- end -}}
 {{- end -}}

@@ -60,8 +60,12 @@ To connect to your Kafka server from outside the cluster check the following inf
 
 {{- else }}
 
-    Kafka brokers domain: You can get the external node ip from the Kafka configuration file with the following command (Check the EXTERNAL listener)
+    Kafka brokers domain: You can get the external node IP from the Kafka configuration file with the following commands (Check the EXTERNAL listener)
 
+        1. Obtain the pod name:
+        kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
+
+        2. Obtain pod configuration
         kubectl exec -it KAFKA_POD -- cat /opt/bitnami/kafka/conf/server.properties | grep advertised.listeners
 
 {{- end }}
@@ -75,10 +79,6 @@ To connect to your Kafka server from outside the cluster check the following inf
 
     Kafka Brokers domain: You will have a different external IP for each Kafka broker. Get the external ip from `-external` suffixed services: `kubectl get svc`.
     Kafka Brokers port: {{ .Values.externalAccess.service.port }}
-
-{{- else }}
-
-    Unsupported service type for external access.
 
 {{- end }}
 

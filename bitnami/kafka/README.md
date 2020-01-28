@@ -321,6 +321,35 @@ auth.certificatesSecret=kafka-certificates
 
 > **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.certificatesPassword` option to provide your password.
 
+### Accessing Kafka brokers from outside the cluster
+
+In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
+
+There are two ways of configuring external access. Using LoadBalancer services or using NodePort services.
+
+#### Using LoadBalancer services
+
+```console
+externalAccess.enabled=true
+externalAccess.service.type=LoadBalancer
+externalAccess.service.port=19092
+externalAccess.service.loadBalancerIP={'external-ip-1', 'external-ip-2'}
+```
+
+You need to know in advance the load balancer IPs so each Kafka broker advertised listener is configured with it.
+
+#### Using NodePort services
+
+```console
+externalAccess.enabled=true
+externalAccess.service.type=NodePort
+externalAccess.service.nodePort={'node-port-1', 'node-port-2'}
+```
+
+You need to know in advance the NodePort that will be exposed for each Kafka broker. It will be used to configure the advertised listener of each broker.
+
+The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` is provided.
+
 ## Persistence
 
 The [Bitnami Kafka](https://github.com/bitnami/bitnami-docker-kafka) image stores the Kafka data at the `/bitnami/kafka` path of the container.
