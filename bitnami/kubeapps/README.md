@@ -13,16 +13,26 @@
 
 ## TL;DR;
 
+For Helm 2:
+
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
+```
+
+For Helm 3:
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+kubectl create namespace kubeapps
+helm install kubeapps --namespace kubeapps bitnami/kubeapps --set useHelm3=true
 ```
 
 ## Introduction
 
 This chart bootstraps a [Kubeapps](https://kubeapps.com) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MongoDB chart](https://github.com/helm/charts/tree/master/stable/mongodb) which is required for bootstrapping a MongoDB deployment for the database requirements of the Kubeapps application.
+It also packages the [Bitnami MongoDB chart](https://github.com/helm/charts/tree/master/stable/mongodb) or the [Bitnami PostgreSQL chart](https://github.com/helm/charts/tree/master/stable/postgresql) which is required for bootstrapping a deployment for the database requirements of the Kubeapps application.
 
 ## Prerequisites
 
@@ -34,18 +44,25 @@ It also packages the [Bitnami MongoDB chart](https://github.com/helm/charts/tree
 
 To install the chart with the release name `kubeapps`:
 
+For Helm 2:
+
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
 ```
 
-> **IMPORTANT** This assumes an insecure Helm installation, which is not recommended in production. See [the documentation to learn how to secure Helm and Kubeapps in production](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
+> **IMPORTANT** This assumes an insecure Helm 2 installation, which is not recommended in production. See [the documentation to learn how to secure Helm 2 and Kubeapps in production](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
+
+For Helm 3:
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install kubeapps --namespace kubeapps bitnami/kubeapps --set useHelm3=true
+```
 
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Caveat**: Only one Kubeapps installation is supported per namespace
-
-> **Tip**: List all releases using `helm list`
 
 Once you have installed Kubeapps follow the [Getting Started Guide](https://github.com/kubeapps/kubeapps/blob/master/docs/user/getting-started.md) for additional information on how to access and use Kubeapps.
 
@@ -56,7 +73,7 @@ For a full list of configuration parameters of the Kubeapps chart, see the [valu
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name kubeapps --namespace kubeapps \
+$ helm install kubeapps --namespace kubeapps \
   --set assetsvc.service.port=9090 \
     bitnami/kubeapps
 ```
@@ -66,7 +83,7 @@ The above command sets the port for the assetsvc Service to 9090.
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name kubeapps --namespace kubeapps -f custom-values.yaml bitnami/kubeapps
+$ helm install kubeapps --namespace kubeapps -f custom-values.yaml bitnami/kubeapps
 ```
 
 ## Configuration and installation details
@@ -81,13 +98,13 @@ Kubeapps supports two database types: MongoDB or PostgreSQL. By default MongoDB 
 
 > **Note**: Changing the database type when upgrading is not supported.
 
-### Configuring connection to a custom namespace Tiller instance
+### [Only for Helm 2] Configuring connection to a custom namespace Tiller instance
 
 By default, Kubeapps connects to the Tiller Service in the `kube-system` namespace, the default install location for Helm.
 
 If your instance of Tiller is running in a different namespace or you want to have different instances of Kubeapps connected to different Tiller instances, you can achieve it by setting the `tillerProxy.host` parameter. For example, you can set `tillerProxy.host=tiller-deploy.my-custom-namespace:44134`
 
-### Configuring connection to a secure Tiller instance
+### [Only for Helm 2] Configuring connection to a secure Tiller instance
 
 In production, we strongly recommend setting up a [secure installation of Tiller](https://docs.helm.sh/using_helm/#using-ssl-between-helm-and-tiller), the Helm server side component.
 
@@ -133,8 +150,6 @@ You can provide your own certificates using the `ingress.secrets` object. If you
 
 You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace in which Kubeapps is installed (`kubeapps` if you followed the instructions in this guide) and click on the "Upgrade" button. Select the new version and confirm.
 
-> NOTE: If the chart values were modified when deploying Kubeapps the first time, those values need to be set again when upgrading.
-
 You can also use the Helm CLI to upgrade Kubeapps, first ensure you have updated your local chart repository cache:
 
 ```console
@@ -155,8 +170,11 @@ If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-
 To uninstall/delete the `kubeapps` deployment:
 
 ```console
+# For Helm 2
 $ helm delete --purge kubeapps
-$ # Optional: Only if there are no more instances of Kubeapps
+# For Helm 3
+$ helm uninstall kubeapps
+# Optional: Only if there are no more instances of Kubeapps
 $ kubectl delete crd apprepositories.kubeapps.com
 ```
 

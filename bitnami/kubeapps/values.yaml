@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Enable this feature flag to use Kubeapps with Helm 3 support.
+## If you set it to true, Kubeapps will not work with releases installed with Helm 2.
+useHelm3: false
+
 ## The frontend service is the main reverse proxy used to access the Kubeapps UI
 ## To expose Kubeapps externally either configure the ingress object below or
 ## set frontend.service.type=LoadBalancer in the frontend configuration.
@@ -177,7 +181,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.8.0-scratch-r0
+    tag: 1.8.1-scratch-r0
   ## Kubeapps assets synchronization tool
   ## Image used to perform chart repository syncs
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-asset-syncer/tags/
@@ -185,7 +189,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 1.8.0-scratch-r0
+    tag: 1.8.1-scratch-r0
   ## Initial charts repo proxies to configure
   ##
   initialReposProxy:
@@ -315,7 +319,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.8.0-scratch-r0
+    tag: 1.8.1-scratch-r0
 
   ## Tiller Proxy service parameters
   ##
@@ -389,7 +393,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 1.8.0-scratch-r0
+    tag: 1.8.1-scratch-r0
   ## Assetsvc service parameters
   ##
   service:
@@ -449,7 +453,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.8.0-debian-9-r0
+    tag: 1.8.1-debian-10-r0
   ## Dashboard service parameters
   ##
   service:
@@ -629,8 +633,3 @@ authProxy:
     requests:
       cpu: 25m
       memory: 32Mi
-
-## The useHelm3 feature flag is currently only for developing the in-progress (and incomplete) Helm3 support.
-## If you set it to true, Kubeapps will not work at present.
-useHelm3: false
-
