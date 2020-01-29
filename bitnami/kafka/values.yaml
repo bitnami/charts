@@ -35,7 +35,7 @@ image:
 ## String to partially override kafka.fullname template (will maintain the release name)
 # nameOverride:
 
- ## String to fully override kafka.fullname template
+## String to fully override kafka.fullname template
 # fullnameOverride:
 
 ## Init containers parameters:
@@ -207,16 +207,16 @@ auth:
   enabled: false
 
   ## Enable SSL to be used with brokers and consumers
-  #ssl: false
+  # ssl: false
 
   ## Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser.
-  #existingSecret:
+  # existingSecret:
 
   ## Name of the existing secret containing the certificate files that will be used by Kafka.
-  #certificatesSecret:
+  # certificatesSecret:
 
   ## Password for the above certificates if they are password protected.
-  #certificatesPassword:
+  # certificatesPassword:
 
   ## Kafka client user.
   brokerUser: user
@@ -231,10 +231,10 @@ auth:
   # interBrokerPassword:
 
   ## Kafka Zookeeper user.
-  #zookeeperUser:
+  # zookeeperUser:
 
   ## Kafka Zookeeper password.
-  #zookeeperPassword:
+  # zookeeperPassword:
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -264,6 +264,25 @@ service:
 
   ## Service annotations done as key:value pairs
   annotations: {}
+
+externalAccess:
+  enabled: false
+  service:
+    ## Type of service for external access. It can be LoadBalancer or NodePort.
+    ##
+    type: LoadBalancer
+    ## Port used when service type is LoadBalancer
+    ##
+    port: 19092
+    ## Array of load balancer IPs for each Kafka broker. Length must be the same as replicas
+    ##
+    loadBalancerIP: []
+    ## When service type is NodePort, you can specify the domain used for Kafka advertised listeners.
+    ## If not specified, the container will try to get the kubernetes node external IP using: 'curl -s https://ipinfo.io/ip'
+    # domain: mydomain.com
+    ## Array of node ports used for each Kafka broker. Length must be the same as replicas
+    ##
+    nodePort: []
 
 ## Service account for Kafka to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -496,12 +515,12 @@ metrics:
       ## `whitelistObjectNames: []`
       ##
       overrideConfig: {}
-        # jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
-        # lowercaseOutputName: true
-        # lowercaseOutputLabelNames: true
-        # ssl: false
-        # rules:
-        # - pattern: ".*"
+      #   jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
+      #   lowercaseOutputName: true
+      #   lowercaseOutputLabelNames: true
+      #   ssl: false
+      #   rules:
+      #   - pattern: ".*"
       ## If you would like to supply your own ConfigMap for JMX metrics, supply the name of that
       ## ConfigMap as an `overrideName` here.
       ##

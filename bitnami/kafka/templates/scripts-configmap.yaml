@@ -1,0 +1,39 @@
+{{- if .Values.externalAccess.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kafka.fullname" . }}-scripts
+  labels: {{- include "kafka.labels" . | nindent 4 }}
+data:
+  setup.sh: |-
+    #!/bin/bash
+
+    HOSTNAME=$(hostname -s)
+    ID=${HOSTNAME:(-1)}
+
+    # Configure external ip and port
+    {{- if eq .Values.externalAccess.service.type "LoadBalancer" }}
+    export EXTERNAL_ACCESS_IP=$(echo '{{ .Values.externalAccess.service.loadBalancerIP }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.port }}
+    {{- else if eq .Values.externalAccess.service.type "NodePort" }}
+    {{- if .Values.externalAccess.service.domain }}
+    export EXTERNAL_ACCESS_IP={{ .Values.externalAccess.service.domain }}
+    {{- else }}
+    export EXTERNAL_ACCESS_IP=$(curl -s https://ipinfo.io/ip)
+    {{- end }}
+    export EXTERNAL_ACCESS_PORT=$(echo '{{ .Values.externalAccess.service.nodePort }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    {{- end }}
+
+    # Configure Kafka internal and external listeners
+    export KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+    export KAFKA_CFG_LISTENERS=INTERNAL://:{{ .Values.service.port }},EXTERNAL://:${EXTERNAL_ACCESS_PORT}
+    export KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+    {{- if .Values.advertisedListeners }}
+    export KAFKA_CFG_ADVERTISED_LISTENERS={{ .Values.advertisedListeners }}
+    {{- else }}
+    export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
+    {{- end }}
+
+    exec /entrypoint.sh /run.sh
+
+{{- end }}

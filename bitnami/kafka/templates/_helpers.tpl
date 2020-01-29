@@ -259,3 +259,47 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "kafka.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.loadBalancerIPListLength" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - number of replicas must be the same than loadBalancerIP list */}}
+{{- define "kafka.validateValues.loadBalancerIPListLength" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIP }}
+{{- if and ( .Values.externalAccess.enabled ) ( not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") -}}
+kafka: externalAccess.service.loadBalancerIP
+    Number of replicas and loadBalancerIP array length must be the same.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - number of replicas must be the same than NodePort list */}}
+{{- define "kafka.validateValues.nodePortListLength" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- $nodePortListLength := len .Values.externalAccess.service.nodePort }}
+{{- if and ( .Values.externalAccess.enabled ) ( not (eq $replicaCount $nodePortListLength )) (eq .Values.externalAccess.service.type "NodePort") -}}
+kafka: .Values.externalAccess.service.nodePort
+    Number of replicas and nodePort array length must be the same.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - service type for external access */}}
+{{- define "kafka.validateValues.externalAccessServiceType" -}}
+{{- if and (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
+kafka: externalAccess.service.type
+    Available servive type for external access are NodePort or LoadBalancer.
+{{- end -}}
+{{- end -}}

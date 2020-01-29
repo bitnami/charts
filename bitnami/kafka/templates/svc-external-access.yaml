@@ -1,0 +1,44 @@
+{{- if .Values.externalAccess.enabled }}
+{{- $fullName := include "kafka.fullname" . }}
+{{- $replicaCount := .Values.replicaCount | int }}
+{{- $root := . }}
+
+{{- range $i, $e := until $replicaCount }}
+{{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kafka.fullname" $ }}-{{ $i }}-external
+  labels: {{- include "kafka.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: kafka
+    pod: {{ $targetPod }}
+spec:
+  type: {{ $root.Values.externalAccess.service.type }}
+  {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
+  {{- if $root.Values.externalAccess.service.loadBalancerIP }}
+  loadBalancerIP: {{ index $root.Values.externalAccess.service.loadBalancerIP $i }}
+  {{- end }}
+  {{- end }}
+  ports:
+    - name: kafka
+      {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
+      port: {{ $root.Values.externalAccess.service.port }}
+      {{- else }}
+      port: {{ index $root.Values.externalAccess.service.nodePort $i }}
+      {{- end }}
+      {{- if $root.Values.externalAccess.service.nodePort }}
+      nodePort: {{ index $root.Values.externalAccess.service.nodePort $i }}
+      {{- end }}
+      {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
+      targetPort: kafka-external
+      {{- else }}
+      targetPort: {{ index $root.Values.externalAccess.service.nodePort $i }}
+      {{- end }}
+  selector: {{- include "kafka.matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: kafka
+    statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+---
+{{- end }}
+{{- end }}

@@ -48,26 +48,39 @@ To start a kafka consumer run the following command:
     kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
     {{- end }}
 
-To connect to your Kafka server from outside the cluster execute the following commands:
+{{- if .Values.externalAccess.enabled }}
 
-{{- if contains "NodePort" .Values.service.type }}
+To connect to your Kafka server from outside the cluster check the following information:
 
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "kafka.fullname" . }})
-    echo "Kafka Broker Endpoint: $NODE_IP:$NODE_PORT"
+{{- if contains "NodePort" .Values.externalAccess.service.type }}
 
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- if .Values.externalAccess.service.domain }}
+
+    Kafka brokers domain: Use your provided hostname to reach Kafka brokers, {{ .Values.externalAccess.service.domain }}
+
+{{- else }}
+
+    Kafka brokers domain: You can get the external node IP from the Kafka configuration file with the following commands (Check the EXTERNAL listener)
+
+        1. Obtain the pod name:
+        kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
+
+        2. Obtain pod configuration:
+        kubectl exec -it KAFKA_POD -- cat /opt/bitnami/kafka/conf/server.properties | grep advertised.listeners
+
+{{- end }}
+
+    Kafka brokers port: You should have a different node port for each Kafka broker. The list of configured node ports is {{ .Values.externalAccess.service.nodePort }}
+
+{{- else if contains "LoadBalancer" .Values.externalAccess.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "kafka.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "kafka.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    echo "Kafka Broker Endpoint: $SERVICE_IP:9092"
+    Kafka Brokers domain: You will have a different external IP for each Kafka broker. Get the external ip from `-external` suffixed services: `kubectl get svc`.
+    Kafka Brokers port: {{ .Values.externalAccess.service.port }}
 
-{{- else if contains "ClusterIP" .Values.service.type }}
-
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "kafka.fullname" . }} 9092:9092 &
-    echo "Kafka Broker Endpoint: 127.0.0.1:9092"
+{{- end }}
 
 {{- end }}
 {{ if .Values.auth.enabled }}
@@ -98,3 +111,5 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 
 {{- end }}
+
+{{ include "kafka.validateValues" . }}

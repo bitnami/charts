@@ -59,6 +59,10 @@ spec:
           {{- if .Values.resources }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.externalAccess.enabled }}
+          command:
+            - /scripts/setup.sh
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
@@ -78,6 +82,7 @@ spec:
               {{- end }}
             - name: KAFKA_PORT_NUMBER
               value: {{ .Values.service.port | quote }}
+            {{- if not .Values.externalAccess.enabled }}
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
               value: {{ .Values.listeners }}
@@ -98,6 +103,7 @@ spec:
               {{- else }}
               value: 'PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)'
               {{- end }}
+            {{- end }}
             {{- if .Values.listenerSecurityProtocolMap }}
             - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
               value: {{ .Values.listenerSecurityProtocolMap }}
@@ -207,6 +213,10 @@ spec:
             - name: kafka-ssl
               containerPort: 9093
             {{- end }}
+            {{- if and .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
+            - name: kafka-external
+              containerPort: 19092
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
@@ -228,6 +238,11 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- end }}
           volumeMounts:
+            {{- if .Values.externalAccess.enabled }}
+            - name: scripts
+              mountPath: /scripts/setup.sh
+              subPath: setup.sh
+            {{- end }}
             {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /bitnami/kafka
@@ -267,6 +282,12 @@ spec:
               mountPath: /etc/jmx-kafka
         {{ end }}
       volumes:
+        {{- if .Values.externalAccess.enabled }}
+        - name: scripts
+          configMap:
+            name: {{ include "kafka.fullname" . }}-scripts
+            defaultMode: 0755
+        {{- end }}
         {{ if .Values.metrics.jmx.enabled }}
         - name: jmx-config
           configMap:

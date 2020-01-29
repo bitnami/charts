@@ -122,6 +122,12 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `service.nodePort`                      | Kubernetes Service nodePort                                                                                                                               | `nil`                                                   |
 | `service.loadBalancerIP`                | loadBalancerIP for Kafka Service                                                                                                                          | `nil`                                                   |
 | `service.annotations`                   | Service annotations                                                                                                                                       | ``                                                      |
+| `externalAccess.enabled`               | Enable Kubernetes external cluster access to Kafka brokers                                                                                                 | `false`                                                 |
+| `externalAccess.service.type`          | Kubernetes Servive type for external access. It can be NodePort or LoadBalancer                                                                            | `LoadBalancer`                                          |
+| `externalAccess.service.port`          | Kafka port used for external access when service type is LoadBalancer                                                                                      | `19092`                                                 |
+| `externalAccess.service.loadBalancerIP`| Array of load balancer IPs for Kafka brokers.                                                                                                              | `[]`                                                    |
+| `externalAccess.service.domain`        | Domain or external ip used to configure Kafka external listener when service type is NodePort                                                              | `nil`                                                   |
+| `externalAccess.service.nodePort`      | Array of node ports used to configure Kafka external listener when service type is NodePort                                                                | `[]`                                                    |
 | `serviceAccount.create`                 | Enable creation of ServiceAccount for kafka pod                                                                                                           | `false`                                                 |
 | `serviceAccount.name`                   | Name of the created serviceAccount                                                                                                                        | Generated using the `kafka.fullname` template           |
 | `persistence.enabled`                   | Enable Kafka persistence using PVC, note that Zookeeper perisstency is unaffected                                                                         | `true`                                                  |
@@ -314,6 +320,35 @@ auth.certificatesSecret=kafka-certificates
 ```
 
 > **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.certificatesPassword` option to provide your password.
+
+### Accessing Kafka brokers from outside the cluster
+
+In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
+
+There are two ways of configuring external access. Using LoadBalancer services or using NodePort services.
+
+#### Using LoadBalancer services
+
+```console
+externalAccess.enabled=true
+externalAccess.service.type=LoadBalancer
+externalAccess.service.port=19092
+externalAccess.service.loadBalancerIP={'external-ip-1', 'external-ip-2'}
+```
+
+You need to know in advance the load balancer IPs so each Kafka broker advertised listener is configured with it.
+
+#### Using NodePort services
+
+```console
+externalAccess.enabled=true
+externalAccess.service.type=NodePort
+externalAccess.service.nodePort={'node-port-1', 'node-port-2'}
+```
+
+You need to know in advance the NodePort that will be exposed for each Kafka broker. It will be used to configure the advertised listener of each broker.
+
+The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` is provided.
 
 ## Persistence
 
