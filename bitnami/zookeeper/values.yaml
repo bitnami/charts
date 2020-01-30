@@ -105,6 +105,9 @@ maxClientCnxns: 60
 ##
 fourlwCommandsWhitelist: srvr, mntr
 
+## Allow zookeeper to listen for peers on all IPs
+##
+listenOnAllIPs: true
 ## Allow to accept connections from unauthenticated users
 ##
 allowAnonymousLogin: true
