@@ -125,19 +125,7 @@ spec:
           livenessProbe:
             exec:
               command:
-                - bash
-                - -ec
-                - |
-                  if PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;"; then
-                    for node in $(PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "show pool_nodes;" | grep "down" | cut -d'|' -f2); do
-                      if PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h ${node} -tA -c "SELECT 1" >/dev/null; then
-                        false
-                      fi
-                    done
-                  else
-                    false
-                  fi
-
+                - /healthcheck.sh
             initialDelaySeconds: {{ .Values.pgpool.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.pgpool.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.pgpool.livenessProbe.timeoutSeconds }}
