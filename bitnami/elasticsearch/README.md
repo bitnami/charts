@@ -485,7 +485,7 @@ The field `podManagementPolicy` can't be updated in a StatefulSet, so you need t
 
 ```console
 $ kubectl delete statefulset elasticsearch-master
-$ helm upgrade bitnami/elasticsearch
+$ helm upgrade <DEPLOYMENT_NAME> bitnami/elasticsearch
 ```
 
 ### 10.0.0
