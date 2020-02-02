@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.5.6-debian-10-r6
+  tag: 3.5.6-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -107,7 +107,8 @@ fourlwCommandsWhitelist: srvr, mntr
 
 ## Allow zookeeper to listen for peers on all IPs
 ##
-listenOnAllIPs: true
+listenOnAllIPs: false
+
 ## Allow to accept connections from unauthenticated users
 ##
 allowAnonymousLogin: true
