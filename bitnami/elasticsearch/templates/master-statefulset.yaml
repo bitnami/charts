@@ -14,6 +14,7 @@ spec:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
       role: master
   serviceName: {{ template "elasticsearch.master.fullname" . }}
+  podManagementPolicy: Parallel
   replicas: {{ .Values.master.replicas }}
   template:
     metadata:

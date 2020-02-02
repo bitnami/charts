@@ -477,6 +477,17 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Notable changes
 
+### 11.0.0
+
+Elasticsearch master pods are now deployed in parallel in order to bootstrap de cluster and be discovered.
+
+The field `podManagementPolicy` can't be updated in a StatefulSet, so you need to destroy it before you upgrade the chart to this version.
+
+```console
+$ kubectl delete statefulset elasticsearch-master
+$ helm upgrade <DEPLOYMENT_NAME> bitnami/elasticsearch
+```
+
 ### 10.0.0
 
 In this version, Kibana was added as dependant chart. More info about how to enable and work with this bundled Kibana in the ["Enable bundled Kibana"](#enable-bundled-kibana) section.
