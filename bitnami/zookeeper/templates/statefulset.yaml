@@ -96,6 +96,8 @@ spec:
               value: {{ .Values.maxClientCnxns | quote }}
             - name: ZOO_4LW_COMMANDS_WHITELIST
               value: {{ .Values.fourlwCommandsWhitelist | quote }}
+            - name: ZOO_LISTEN_ALLIPS_ENABLED
+              value: {{ ternary "yes" "no" .Values.listenOnAllIPs | quote }}
             - name: ZOO_SERVERS
               {{- $replicaCount := int .Values.replicaCount }}
               {{- $followerPort := int .Values.service.followerPort }}
