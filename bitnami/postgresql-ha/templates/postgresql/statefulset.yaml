@@ -180,7 +180,7 @@ spec:
             {{- end }}
             {{- if or (.Files.Glob "files/conf.d/*.conf") .Values.postgresql.extendedConf .Values.postgresql.extendedConfCM }}
             - name: postgresql-extended-config
-              mountPath: /bitnami/repmgr/conf/conf.d/
+              mountPath: /bitnami/postgresql/conf/conf.d/
             {{- end }}
             {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
             - name: custom-init-scripts
