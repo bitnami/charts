@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 10.18.1-debian-10-r0
+  tag: 10.19.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -72,7 +72,7 @@ volumePermissions:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.25.0-debian-10-r0
+  tag: 2.25.0-debian-10-r11
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

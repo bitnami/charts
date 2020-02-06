@@ -1,9 +1,9 @@
 dependencies:
 - name: mongodb
   repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 7.8.0
+  version: 7.8.2
 - name: bitnami-common
   repository: https://charts.bitnami.com/bitnami
   version: 0.0.8
 digest: sha256:ef3a38fc3e846e18d2f0f1f326772092287a5ac289a4db640216a2717b081efd
-generated: 2020-01-24T02:23:33.402717974Z
+generated: 2020-02-06T10:14:14.475653084Z
