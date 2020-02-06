@@ -134,6 +134,10 @@ spec:
               {{- else }}
               value: {{ .Values.externalRedis.port | quote }}
               {{- end }}
+            {{- if and (not .Values.redis.enabled) .Values.externalRedis.username }}
+            - name: REDIS_USER
+              value: {{ .Values.externalRedis.username | quote }}
+            {{- end }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:

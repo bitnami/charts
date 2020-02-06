@@ -333,11 +333,19 @@ redis:
 externalRedis:
   ## All of these values are only used when redis.enabled is set to false
   ## Redis host
+  ##
   host: localhost
   ## Redis port number
+  ##
   port: 6379
   ## Redis password
+  ##
   password: ""
+  ## Redis username
+  ## Most Redis implementnations do not require a username to authenticate
+  ## and it should be enough with the password
+  ##
+  # username: ""
 
 ## Prometheus Exporter / Metrics
 ##
