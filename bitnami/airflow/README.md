@@ -144,6 +144,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `externalRedis.host`                      | External Redis host                                                                                  | `nil`                                                        |
 | `externalRedis.port`                      | External Redis port                                                                                  | `nil`                                                        |
 | `externalRedis.password`                  | External Redis password                                                                              | `nil`                                                        |
+| `externalRedis.username`                  | External Redis username (not required on most Redis implementations)                                 | `nil`                                                        |
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                                                 | `false`                                                      |
 | `metrics.image.registry`                  | Airflow exporter image registry                                                                      | `docker.io`                                                  |
 | `metrics.image.repository`                | Airflow exporter image name                                                                          | `bitnami/airflow-exporter`                                   |
