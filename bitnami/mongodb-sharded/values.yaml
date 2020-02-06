@@ -50,24 +50,6 @@ fullnameOverride:
 ## mongodbRootPassword: password
 mongodbRootPassword:
 
-## Create a non-root MongoDB user
-## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
-##
-## mongodbUsername: user
-mongodbUsername:
-
-## non-root MongoDB user password
-## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
-##
-## mongodbPassword: password
-mongodbPassword:
-
-## Create database on first run
-## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
-##
-# mongodbDatabase: database
-mongodbDatabase:
-
 ## Replica Set key (shared for shards and config servers)
 ## ref:
 ##
