@@ -241,6 +241,15 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrade
 
+### 5.0.0
+
+An issue in StatefulSet manifest of the 4.x chart series rendered chart upgrades to be broken. The 5.0.0 series fixes this issue. To upgrade to the 5.x series you need to manually delete the Cassandra StatefulSet before executing the `helm upgrade` command.
+
+```bash
+$ kubectl delete sts -l release=<RELEASE_NAME>
+$ helm upgrade <RELEASE_NAME> ...
+```
+
 ### 4.0.0
 
 This release changes uses Bitnami Cassandra container `3.11.4-debian-9-r188`, based on Bash.
