@@ -24,9 +24,19 @@ spec:
     - name: http
       port: {{ .Values.prometheus.service.port }}
       targetPort: 9090
+      protocol: TCP
       {{- if and .Values.prometheus.service.nodePort (or (eq .Values.prometheus.service.type "NodePort") (eq .Values.prometheus.service.type "LoadBalancer")) }}
       nodePort: {{ .Values.prometheus.service.nodePort }}
       {{- end }}
+    {{- if .Values.prometheus.createThanosSidecar }}
+    - name: grpc-thanos
+      port: {{ .Values.prometheus.service.thanosPort }}
+      targetPort: grpc-thanos
+      protocol: TCP
+      {{- if and .Values.prometheus.service.thanosNodePort (or (eq .Values.prometheus.service.type "NodePort") (eq .Values.prometheus.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.prometheus.service.thanosNodePort }}
+      {{- end }}
+    {{- end }}
   selector:
     app: prometheus
     prometheus: {{ template "prometheus-operator.prometheus.fullname" . }}

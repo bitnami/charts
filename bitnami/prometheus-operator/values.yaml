@@ -247,6 +247,23 @@ prometheus:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Bitnami Thanos image
+  ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
+  ##
+  thanosImage:
+    registry: docker.io
+    repository: bitnami/thanos
+    tag: 0.10.1-scratch-r0
+    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+
   ## Service account for Prometheus to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
@@ -286,6 +303,14 @@ prometheus:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     # nodePort: 30090
+
+    ## Service port for Thanos
+    ##
+    thanosPort: 10901
+
+    ## Service node port for Thanos
+    ##
+    # thanosNodePort: 30901
 
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -521,6 +546,10 @@ prometheus:
   ## Containers allows injecting additional containers
   ##
   containers: []
+
+  ## Enable a Thanos sidecar container
+  ##
+  createThanosSidecar: false
 
   ## Enable additional scrape configs that are managed externally to this chart
   ##

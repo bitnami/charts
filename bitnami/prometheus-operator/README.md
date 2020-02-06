@@ -148,6 +148,11 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `prometheus.image.repository`                 | Prometheus Image name                                                                | `bitnami/prometheus`                                                   |
 | `prometheus.image.tag`                        | Prometheus Image tag                                                                 | `{TAG_NAME}`                                                           |
 | `prometheus.image.pullSecrets`                | Specify docker-registry secret names as an array                                     | `[]` (does not add image pull secrets to deployed pods)                |
+| `prometheus.thanosImage.registry`             | Thanos image registry                                                                | `docker.io`                                                            |
+| `prometheus.thanosImage.repository`           | Thanos image name                                                                    | `bitnami/prometheus`                                                   |
+| `prometheus.thanosImage.tag`                  | Thanos image tag                                                                     | `{TAG_NAME}`                                                           |
+| `prometheus.thanosImage.pullPolicy`           | Thanos image pull policy                                                             | `IfNotPresent`                                                         |
+| `prometheus.thanosImage.pullSecrets`          | Specify docker-registry secret names as an array                                     | `[]` (does not add image pull secrets to deployed pods)                |
 | `prometheus.serviceAccount.create`            | Specify whether to create a ServiceAccount for Prometheus                            | `true`                                                                 |
 | `prometheus.serviceAccount.name`              | The name of the ServiceAccount to create                                             | Generated using the `prometheus-operator.prometheus.fullname` template |
 | `prometheus.securityContext.enabled`          | Enable security context                                                              | `true`                                                                 |
@@ -160,6 +165,8 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `prometheus.service.port`                     | Prometheus service port                                                              | `9090`                                                                 |
 | `prometheus.service.clusterIP`                | Specific cluster IP when service type is cluster IP. Use `None` for headless service | `nil`                                                                  |
 | `prometheus.service.nodePort`                 | Kubernetes Service nodePort                                                          | `nil`                                                                  |
+| `prometheus.service.thanosPort`               | Thanos service port                                                                  | `10901`                                                                |
+| `prometheus.service.thanosNodePort`           | Kubernetes Service nodePort for Thanos                                               | `nil`                                                                  |
 | `prometheus.service.loadBalancerIP`           | `loadBalancerIP` if service type is `LoadBalancer`                                   | `nil`                                                                  |
 | `prometheus.service.loadBalancerSourceRanges` | Address that are allowed when svc is `LoadBalancer`                                  | `[]`                                                                   |
 | `prometheus.service.annotations`              | Additional annotations for Prometheus service                                        | `{}`                                                                   |
@@ -210,6 +217,7 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `prometheus.storageSpec`                      | Prometheus StorageSpec for persistent data                                           | `{}`                                                                   |
 | `prometheus.priorityClassName`                | Priority class assigned to the Pods                                                  | ``                                                                     |
 | `prometheus.containers`                       | Containers allows injecting additional containers                                    | `[]`                                                                   |
+| `prometheus.createThanosSidecar`              | Create a Thanos sidecar container                                                    | `false`                                                                |
 | `prometheus.additionalScrapeConfigsExternal`  | Enable additional scrape configs that are managed externally to this chart           | `false` See [docs](#additional-scrape-configurations) for details.    |
 
 ### Alertmanager Parameters
