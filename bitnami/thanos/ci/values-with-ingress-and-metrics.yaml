@@ -1,0 +1,12 @@
+# Test values file for generating all of the yaml and check that
+# the rendering is correct
+
+ingress:
+  enabled: true
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    ## Enable only if you previously installed the Prometheus Operator 
+    ## in your cluster
+    enabled: false
