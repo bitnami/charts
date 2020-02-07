@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: {{ template "prometheus-operator.prometheus.fullname" . }}-thanos
   labels: {{- include "prometheus-operator.prometheus.labels" . | nindent 4 }}
+    app.kubernetes.io/subcomponent: thanos
   {{- if .Values.prometheus.thanos.service.annotations }}
   annotations: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.thanos.service.annotations "context" $) | nindent 4 }}
   {{- end }}
