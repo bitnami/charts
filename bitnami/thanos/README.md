@@ -100,7 +100,7 @@ This charts allows you install several Thanos components, so you deploy an archi
                                                          └──────────────┘
 ```
 
-> Note: Components marked with (*) are provided by subchart(s) (such as th [Bitnami Minio chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami Prometheus Operator chart](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator))
+> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami Minio chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami Prometheus Operator chart](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator))
 
 Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate-thanos-with-prometheus-and-alertmanager) for detailed instructions to deploy this architecture.
 
@@ -513,3 +513,12 @@ That's all! Now you have Thanos fully integrated with Prometheus and Alertmanage
 The data is persisted by default using PVC(s) on Thanos components. You can disable the persistence setting the `XXX.persistence.enabled` parameter(s) to `false`. A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `XXX.persistence.storageClass` parameter(s) or set `XXX. persistence.existingClaim` if you have already existing persistent volumes to use.
 
 > Note: you need to substitue the XXX placeholders above with the actual component(s) you want to configure.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volumes. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volumes before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
