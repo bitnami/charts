@@ -54,6 +54,12 @@ spec:
             - --http-address=0.0.0.0:8080
             - --log.level={{ .Values.bucketweb.logLevel }}
             - --objstore.config-file=/conf/objstore.yml
+            {{- if .Values.bucketweb.refresh }}
+            - --refresh={{ .Values.bucketweb.refresh }}
+            {{- end }}
+            {{- if .Values.bucketweb.timeout }}
+            - --timeout={{ .Values.bucketweb.timeout }}
+            {{- end }}
             {{- range $key, $value := .Values.bucketweb.extraFlags }}
             - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
             {{- end }}
@@ -61,12 +67,6 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-          {{- if .Values.bucketweb.livenessProbe }}
-          livenessProbe: {{- toYaml .Values.bucketweb.livenessProbe | nindent 12 }}
-          {{- end }}
-          {{- if .Values.bucketweb.readinessProbe }}
-          readinessProbe: {{- toYaml .Values.bucketweb.readinessProbe | nindent 12 }}
-          {{- end }}
           {{- if .Values.bucketweb.resources }}
           resources: {{- toYaml .Values.bucketweb.resources | nindent 12 }}
           {{- end }}

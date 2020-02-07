@@ -189,6 +189,14 @@ bucketweb:
   ##
   logLevel: info
 
+  ## Refresh interval to download metadata from remote storage
+  ##
+  refresh: 30m
+
+  ## Timeout to download metadata from remote storage
+  ##
+  timeout: 5m
+
   ## Extra Flags to passed to Bucket Web
   ##
   extraFlags: {}
@@ -243,30 +251,6 @@ bucketweb:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
-  ## Thanos Bucket Web pods' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    httpGet:
-      path: /-/healthy
-      port: http
-      scheme: HTTP
-    initialDelaySeconds: 30
-    timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
-  readinessProbe:
-    httpGet:
-      path: /-/ready
-      port: http
-      scheme: HTTP
-    initialDelaySeconds: 30
-    timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
 
   ## Service paramaters
   ##

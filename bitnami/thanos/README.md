@@ -21,7 +21,7 @@ helm install thanos --namespace thanos bitnami/thanos
 
 ## Introduction
 
-This chart bootstraps a [thanos](https://github.com/bitnami/bitnami-docker-thanos) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Thanos](https://github.com/bitnami/bitnami-docker-thanos) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -82,7 +82,7 @@ This charts allows you install several Thanos components, so you deploy an archi
                        └──────────────┘           │      └──────────────┘      └──────────────┘
                    push                           │             │                     │
 ┌──────────────┐   alerts   ┌──────────────┐      │             │ storages            │ Downsample &
-│ Alertmanager │ ◀──────────│ Thanos       │ ◀────┘             │ query metrics       │ compact blocks
+│ Alertmanager │ ◀──────────│ Thanos       │ ◀────┤             │ query metrics       │ compact blocks
 │ (*)          │            │ Ruler        │      │             │                     │
 └──────────────┘            └──────────────┘      │             ▼                     │
       ▲                            │              │      ┌──────────────┐             │
@@ -100,7 +100,7 @@ This charts allows you install several Thanos components, so you deploy an archi
                                                          └──────────────┘
 ```
 
-> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami Minio chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami Prometheus Operator chart](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator))
+> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami Minio chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami Prometheus Operator chart](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator)).
 
 Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate-thanos-with-prometheus-and-alertmanager) for detailed instructions to deploy this architecture.
 
@@ -164,10 +164,12 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Thanos Bucket Web parameters
 
-| Parameter                                  | Description                                                      | Default                        |
-|--------------------------------------------|------------------------------------------------------------------|--------------------------------|
+| Parameter                                    | Description                                                    | Default                        |
+|----------------------------------------------|----------------------------------------------------------------|--------------------------------|
 | `bucketweb.enabled`                          | Enable/disable Thanos Bucket Web component                     | `false`                        |
 | `bucketweb.logLevel`                         | Thanos Bucket Web log level                                    | `info`                         |
+| `bucketweb.refresh`                          | Refresh interval to download metadata from remote storage      | `30m`                          |
+| `bucketweb.timeout`                          | Timeout to download metadata from remote storage               | `5m`                           |
 | `bucketweb.extraFlags`                       | Extra Flags to passed to Thanos Compactor                      | `{}`                           |
 | `bucketweb.replicaCount`                     | Number of Thanos Bucket Web replicas to deploy                 | `1`                            |
 | `bucketweb.StrategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                |
@@ -180,8 +182,6 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.securityContext.runAsUser`        | User ID for the Thanos Bucket Web container                    | `1001`                         |
 | `bucketweb.resources.limits`                 | The resources limits for the Thanos Bucket Web container       | `{}`                           |
 | `bucketweb.resources.requests`               | The requested resources for the Thanos Bucket Web container    | `{}`                           |
-| `bucketweb.livenessProbe`                    | Liveness probe configuration for Thanos Bucket Web             | `Check values.yaml file`       |
-| `bucketweb.readinessProbe`                   | Readiness probe configuration for Thanos Bucket Web            | `Check values.yaml file`       |
 | `bucketweb.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
 | `bucketweb.service.http.port`                | Service HTTP port                                              | `8080`                         |
 | `bucketweb.service.http.nodePort`            | Service HTTP node port                                         | `nil`                          |
@@ -437,7 +437,7 @@ In addition to these options, you can also set an external ConfigMap with the co
 
 You can intregrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami Prometheus Operator chart](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator) following the steps below:
 
-> Note: in this example we will use MinIO (subchar) as the Objstore. Every component will be deployed in the "monitoring" namespace.
+> Note: in this example we will use MinIO (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
 - Create a **values.yaml** like the one below:
 
@@ -510,7 +510,7 @@ That's all! Now you have Thanos fully integrated with Prometheus and Alertmanage
 
 ## Persistence
 
-The data is persisted by default using PVC(s) on Thanos components. You can disable the persistence setting the `XXX.persistence.enabled` parameter(s) to `false`. A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `XXX.persistence.storageClass` parameter(s) or set `XXX. persistence.existingClaim` if you have already existing persistent volumes to use.
+The data is persisted by default using PVC(s) on Thanos components. You can disable the persistence setting the `XXX.persistence.enabled` parameter(s) to `false`. A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `XXX.persistence.storageClass` parameter(s) or set `XXX.persistence.existingClaim` if you have already existing persistent volumes to use.
 
 > Note: you need to substitue the XXX placeholders above with the actual component(s) you want to configure.
 
