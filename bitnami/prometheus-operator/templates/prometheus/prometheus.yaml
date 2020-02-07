@@ -141,12 +141,12 @@ spec:
     key: additional-scrape-configs.yaml
   {{- end }}
 {{- include "prometheus-operator.prometheus.imagePullSecrets" . | indent 2 }}
-  {{- if or .Values.prometheus.containers .Values.prometheus.createThanosSidecar }}
+  {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create }}
   containers:
-    {{- if .Values.prometheus.createThanosSidecar }}
+    {{- if .Values.prometheus.thanos.create }}
     - name: thanos-sidecar
       image: {{ template "prometheus-operator.prometheus.thanosImage" . }}
-      imagePullPolicy: {{ .Values.prometheus.thanosImage.pullPolicy }}
+      imagePullPolicy: {{ .Values.prometheus.thanos.image.pullPolicy }}
       args:
         - sidecar
         - --prometheus.url=http://localhost:9090
@@ -161,7 +161,7 @@ spec:
           protocol: TCP
     {{- end }}
     {{- if .Values.prometheus.containers }}
-    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | indent 4 }}
     {{- end }}
   {{- end }}
 

@@ -225,9 +225,9 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return the proper Thanos Image name
 */}}
 {{- define "prometheus-operator.prometheus.thanosImage" -}}
-{{- $registryName := .Values.prometheus.thanosImage.registry -}}
-{{- $repositoryName := .Values.prometheus.thanosImage.repository -}}
-{{- $tag := .Values.prometheus.thanosImage.tag | toString -}}
+{{- $registryName := .Values.prometheus.thanos.image.registry -}}
+{{- $repositoryName := .Values.prometheus.thanos.image.repository -}}
+{{- $tag := .Values.prometheus.thanos.image.tag | toString -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
