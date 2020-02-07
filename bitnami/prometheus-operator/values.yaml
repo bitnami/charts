@@ -287,14 +287,6 @@ prometheus:
     ##
     # nodePort: 30090
 
-    ## Service port for Thanos
-    ##
-    thanosPort: 10901
-
-    ## Service node port for Thanos
-    ##
-    # thanosNodePort: 30901
-
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
