@@ -4,8 +4,8 @@ kind: Service
 metadata:
   name: {{ template "prometheus-operator.prometheus.fullname" . }}
   labels: {{- include "prometheus-operator.prometheus.labels" . | nindent 4 }}
-  {{- with .Values.prometheus.service.annotations }}
-  annotations: {{- toYaml . | nindent 4 }}
+  {{- if .Values.prometheus.service.annotations }}
+  annotations: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.prometheus.service.type }}
@@ -24,6 +24,7 @@ spec:
     - name: http
       port: {{ .Values.prometheus.service.port }}
       targetPort: 9090
+      protocol: TCP
       {{- if and .Values.prometheus.service.nodePort (or (eq .Values.prometheus.service.type "NodePort") (eq .Values.prometheus.service.type "LoadBalancer")) }}
       nodePort: {{ .Values.prometheus.service.nodePort }}
       {{- end }}
