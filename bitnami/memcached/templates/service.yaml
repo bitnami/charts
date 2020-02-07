@@ -4,7 +4,7 @@ metadata:
   name: {{ template "memcached.fullname" . }}
   labels: {{- include "memcached.labels" . | nindent 4 }}
   {{- if .Values.service.annotations }}
-  annotations: {{- include "memcached.tplValue" (dict "value" .Values.service.annotation "context" $) | nindent 4 }}
+  annotations: {{- include "memcached.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
