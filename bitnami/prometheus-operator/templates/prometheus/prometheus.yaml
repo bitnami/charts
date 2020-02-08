@@ -153,10 +153,10 @@ spec:
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:10902
       ports:
-        - name: grpc-thanos
+        - name: grpc
           containerPort: 10901
           protocol: TCP
-        - name: http-thanos
+        - name: http
           containerPort: 10902
           protocol: TCP
     {{- end }}
