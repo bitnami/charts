@@ -22,9 +22,9 @@ spec:
   clusterIP: {{ .Values.prometheus.thanos.service.clusterIP }}
   {{- end }}
   ports:
-    - name: grpc-thanos
+    - name: grpc
       port: {{ .Values.prometheus.thanos.service.port }}
-      targetPort: grpc-thanos
+      targetPort: grpc
       protocol: TCP
       {{- if and .Values.prometheus.thanos.service.nodePort (or (eq .Values.prometheus.thanos.service.type "NodePort") (eq .Values.prometheus.thanos.service.type "LoadBalancer")) }}
       nodePort: {{ .Values.prometheus.thanos.service.nodePort }}
