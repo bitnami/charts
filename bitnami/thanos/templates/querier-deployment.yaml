@@ -52,14 +52,20 @@ spec:
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --query.replica-label={{ .Values.querier.replicaLabel }}
+            {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
+            - --store.sd-files=/conf/servicediscovery.yml
+            {{- end }}
+            {{- if and .Values.querier.dnsDiscovery.enabled .Values.querier.dnsDiscovery.sidecarsService .Values.querier.dnsDiscovery.sidecarsNamespace }}
+            - --store=dnssrv+_grpc._tcp.{{ .Values.querier.dnsDiscovery.sidecarsService }}.{{ .Values.querier.dnsDiscovery.sidecarsNamespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
+            {{- if and .Values.storegateway.enabled .Values.querier.dnsDiscovery.enabled }}
+            - --store=dnssrv+_grpc._tcp.{{ include "thanos.fullname" . }}-storegateway.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
+            {{- if and .Values.ruler.enabled .Values.querier.dnsDiscovery.enabled }}
+            - --store=dnssrv+_grpc._tcp.{{ include "thanos.fullname" . }}-ruler.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
             {{- range .Values.querier.stores }}
             - --store={{ . }}
-            {{- end }}
-            {{- if .Values.ruler.enabled }}
-            - --store={{ include "thanos.fullname" . }}-ruler.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.grpc.port }}
-            {{- end }}
-            {{- if .Values.storegateway.enabled }}
-            - --store={{ include "thanos.fullname" . }}-storegateway.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.storegateway.service.grpc.port }}
             {{- end }}
             {{- range $key, $value := .Values.querier.extraFlags }}
             - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
@@ -80,4 +86,14 @@ spec:
           {{- if .Values.querier.resources }}
           resources: {{- toYaml .Values.querier.resources | nindent 12 }}
           {{- end }}
+      {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
+          volumeMounts:
+            - name: sd-config
+              mountPath: /conf/servicediscovery.yml
+              subPath: servicediscovery.yml
+      volumes:
+        - name: sd-config
+          configMap:
+            name: {{ include "thanos.querier.SDConfigmapName" . }}
+      {{- end }}
 {{- end }}

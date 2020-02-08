@@ -4,6 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "thanos.fullname" . }}-ruler-configmap
   labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ruler
 data:
 {{- if (.Files.Glob "files/conf/ruler.yml") }}
 {{ (.Files.Glob "files/conf/ruler.yml").AsConfig | indent 2 }}

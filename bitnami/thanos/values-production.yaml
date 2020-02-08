@@ -61,10 +61,32 @@ querier:
   ## Labels to treat as a replica indicator along which data is deduplicated
   ##
   replicaLabel: replica
+
+  ## Dinamically configure store APIs using DNS discovery
+  ##
+  dnsDiscovery:
+    enabled: true
+    ## Sidecars service name to discover them using DNS discovery
+    ##
+    # sidecarsService:
+    ## Sidecars namespace to discover them using DNS discovery
+    ##
+    # sidecarsNamespace
   
-  ## Store APIs to connect with Thanos Querier
+  ## Statically configure store APIs to connect with Thanos Querier
   ##
   stores: []
+
+  ## Querier Service Discovery Configuration
+  ## Specify content for servicediscovery.yml
+  ## Alternatively, you can put your servicediscovery.yml under the files/conf/ directory
+  ##
+  # sdConfig:
+
+  ## ConfigMap with Querier Service Discovery Configuration
+  ## NOTE: This will override querier.sdConfig
+  ##
+  # existingSDConfigmap:
 
   ## Extra Flags to passed to Thanos Querier
   ##
@@ -177,6 +199,15 @@ querier:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+
+  ## Autoscaling parameters
+  ##
+  autoscaling:
+    enabled: false
+    #  minReplicas: 1
+    #  maxReplicas: 11
+    #  targetCPU: 50
+    #  targetMemory: 50
 
 ## Thanos Bucket Web parameters
 ##
@@ -583,13 +614,14 @@ ruler:
   ##
   logLevel: info
 
-  ## Addresses of statically configured query API servers
+  ## Dinamically configure Querier APIs using DNS discovery
   ##
-  queries: []
-  
-  ## Alertmanager URL
-  ## 
-  # alertmanagerUrl: http://localhost
+  dnsDiscovery:
+    enabled: true
+
+  ## Alermanager URLs array
+  ##
+  alertmanagers: []
   
   ## The default evaluation interval to use
   ##

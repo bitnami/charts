@@ -155,7 +155,7 @@ Return the Thanos Objstore configuration configmap.
 {{- end -}}
 
 {{/*
-Return true if a secret object should be created
+Return true if a configmap object should be created
 */}}
 {{- define "thanos.createObjstoreConfigmap" -}}
 {{- if and (or .Values.objstoreConfig (.Files.Glob "files/conf/objstore.yml")) (not .Values.existingObjstoreConfigmap) }}
@@ -163,6 +163,28 @@ Return true if a secret object should be created
 {{- else -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the Thanos Querier Service Discovery configuration configmap.
+*/}}
+{{- define "thanos.querier.SDConfigmapName" -}}
+{{- if .Values.querier.existingSDConfigmap -}}
+    {{- printf "%s" (tpl .Values.querier.existingSDConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-querier-sd-configmap" (include "thanos.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created
+*/}}
+{{- define "thanos.querier.createSDConfigmap" -}}
+{{- if and (or .Values.querier.sdConfig (.Files.Glob "files/conf/servicediscovery.yml")) (not .Values.querier.existingSDConfigmap) }}
+    {- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
 
 {{/*
 Return the Thanos Ruler configuration configmap.
@@ -176,7 +198,7 @@ Return the Thanos Ruler configuration configmap.
 {{- end -}}
 
 {{/*
-Return true if a secret object should be created
+Return true if a configmap object should be created
 */}}
 {{- define "thanos.ruler.createConfigmap" -}}
 {{- if and (or .Values.ruler.config (.Files.Glob "files/conf/ruler.yml")) (not .Values.ruler.existingConfigmap) }}
@@ -319,7 +341,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "thanos.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "thanos.validateValues.objstore" .) -}}
-{{- $messages := append $messages (include "thanos.validateValues.ruler.alertmanagerUrl" .) -}}
+{{- $messages := append $messages (include "thanos.validateValues.ruler.alertmanagers" .) -}}
 {{- $messages := append $messages (include "thanos.validateValues.ruler.config" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -342,13 +364,11 @@ thanos: objstore configuration
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Thanos - Ruler Alertmanager */}}
-{{- define "thanos.validateValues.ruler.alertmanagerUrl" -}}
-{{- if and .Values.ruler.enabled (not .Values.ruler.alertmanagerUrl) -}}
-thanos: ruler alertmanagerUrl
-    When enabling Ruler component, you must provide the URL where
-    alertmanagerUrl is running.
-    Please set a valid URL (--set ruler.alertmanagerUrl=http://ALERTMANAGER_URL)
+{{/* Validate values of Thanos - Ruler Alertmanager(s) */}}
+{{- define "thanos.validateValues.ruler.alertmanagers" -}}
+{{- if and .Values.ruler.enabled (empty .Values.ruler.alertmanagers) -}}
+thanos: ruler alertmanagers
+    When enabling Ruler component, you must provide alermanagers URL(s).
 {{- end -}}
 {{- end -}}
 

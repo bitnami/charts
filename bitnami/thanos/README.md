@@ -133,34 +133,44 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Thanos Querier parameters
 
-| Parameter                                  | Description                                              | Default                        |
-|--------------------------------------------|----------------------------------------------------------|--------------------------------|
-| `querier.enabled`                          | Enable/disable Thanos Querier component                  | `true`                         |
-| `querier.logLevel`                         | Thanos Querier log level                                 | `info`                         |
-| `querier.replicaLabel`                     | Replica indicator(s) along which data is deduplicated    | `replica`                      |
-| `querier.stores`                           | Store APIs to connect with Thanos Querier                | `[]`                           |
-| `querier.extraFlags`                       | Extra Flags to passed to Thanos Compactor                | `{}`                           |
-| `querier.replicaCount`                     | Number of Thanos Querier replicas to deploy              | `1`                            |
-| `querier.StrategyType`                     | Deployment Strategy Type                                 | `RollingUpdate`                |
-| `querier.affinity`                         | Affinity for pod assignment                              | `{}` (evaluated as a template) |
-| `querier.nodeSelector`                     | Node labels for pod assignment                           | `{}` (evaluated as a template) |
-| `querier.tolerations`                      | Tolerations for pod assignment                           | `[]` (evaluated as a template) |
-| `querier.priorityClassName`                | Controller priorityClassName                             | `nil`                          |
-| `querier.securityContext.enabled`          | Enable security context for Thanos Querier pods          | `true`                         |
-| `querier.securityContext.fsGroup`          | Group ID for the Thanos Querier filesystem               | `1001`                         |
-| `querier.securityContext.runAsUser`        | User ID for the Thanos Querier container                 | `1001`                         |
-| `querier.resources.limits`                 | The resources limits for the Thanos Querier container    | `{}`                           |
-| `querier.resources.requests`               | The requested resources for the Thanos Querier container | `{}`                           |
-| `querier.livenessProbe`                    | Liveness probe configuration for Thanos Querier          | `Check values.yaml file`       |
-| `querier.readinessProbe`                   | Readiness probe configuration for Thanos Querier         | `Check values.yaml file`       |
-| `querier.service.type`                     | Kubernetes service type                                  | `ClusterIP`                    |
-| `querier.service.http.port`                | Service HTTP port                                        | `9090`                         |
-| `querier.service.http.nodePort`            | Service HTTP node port                                   | `nil`                          |
-| `querier.service.grpc.port`                | Service GRPC port                                        | `10901`                        |
-| `querier.service.grpc.nodePort`            | Service GRPC node port                                   | `nil`                          |
-| `querier.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`         | `nil`                          |
-| `querier.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer    | `[]`                           |
-| `querier.service.annotations`              | Annotations for Thanos Querier service                   | `{}`                           |
+| Parameter                                  | Description                                                | Default                        |
+|--------------------------------------------|------------------------------------------------------------|--------------------------------|
+| `querier.enabled`                          | Enable/disable Thanos Querier component                    | `true`                         |
+| `querier.logLevel`                         | Thanos Querier log level                                   | `info`                         |
+| `querier.replicaLabel`                     | Replica indicator(s) along which data is deduplicated      | `replica`                      |
+| `querier.dnsDiscovery.enabled`             | Enable store APIs discovery via DNS                        | `true`                         |
+| `querier.dnsDiscovery.sidecarsService`     | Sidecars service name to discover them using DNS discovery | `nil`                          |
+| `querier.dnsDiscovery.sidecarsNamespace`   | Sidecars namespace to discover them using DNS discovery    | `nil`                          |
+| `querier.stores`                           | Store APIs to connect with Thanos Querier                  | `[]`                           |
+| `querier.sdConfig`                         | Service Discovery configuration                            | `nil`                          |
+| `querier.existingSDConfigmap`              | Name of existing ConfigMap with Ruler configuration        | `nil`                          |
+| `querier.extraFlags`                       | Extra Flags to passed to Thanos Compactor                  | `{}`                           |
+| `querier.replicaCount`                     | Number of Thanos Querier replicas to deploy                | `1`                            |
+| `querier.StrategyType`                     | Deployment Strategy Type                                   | `RollingUpdate`                |
+| `querier.affinity`                         | Affinity for pod assignment                                | `{}` (evaluated as a template) |
+| `querier.nodeSelector`                     | Node labels for pod assignment                             | `{}` (evaluated as a template) |
+| `querier.tolerations`                      | Tolerations for pod assignment                             | `[]` (evaluated as a template) |
+| `querier.priorityClassName`                | Controller priorityClassName                               | `nil`                          |
+| `querier.securityContext.enabled`          | Enable security context for Thanos Querier pods            | `true`                         |
+| `querier.securityContext.fsGroup`          | Group ID for the Thanos Querier filesystem                 | `1001`                         |
+| `querier.securityContext.runAsUser`        | User ID for the Thanos Querier container                   | `1001`                         |
+| `querier.resources.limits`                 | The resources limits for the Thanos Querier container      | `{}`                           |
+| `querier.resources.requests`               | The requested resources for the Thanos Querier container   | `{}`                           |
+| `querier.livenessProbe`                    | Liveness probe configuration for Thanos Querier            | `Check values.yaml file`       |
+| `querier.readinessProbe`                   | Readiness probe configuration for Thanos Querier           | `Check values.yaml file`       |
+| `querier.service.type`                     | Kubernetes service type                                    | `ClusterIP`                    |
+| `querier.service.http.port`                | Service HTTP port                                          | `9090`                         |
+| `querier.service.http.nodePort`            | Service HTTP node port                                     | `nil`                          |
+| `querier.service.grpc.port`                | Service GRPC port                                          | `10901`                        |
+| `querier.service.grpc.nodePort`            | Service GRPC node port                                     | `nil`                          |
+| `querier.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`           | `nil`                          |
+| `querier.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer      | `[]`                           |
+| `querier.service.annotations`              | Annotations for Thanos Querier service                     | `{}`                           |
+| `querier.autoscaling.enabled`              | Enable autoscaling for Thanos Querier                      | `false`                        |
+| `querier.autoscaling.minReplicas`          | Minimum number of Thanos Querier replicas                  | `nil`                          |
+| `querier.autoscaling.maxReplicas`          | Maximum number of Thanos Querier replicas                  | `nil`                          |
+| `querier.autoscaling.targetCPU`            | Target CPU utilization percentage                          | `nil`                          |
+| `querier.autoscaling.targetMemory`         | Target Memory utilization percentage                       | `nil`                          |
 
 ### Thanos Bucket Web parameters
 
@@ -264,8 +274,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 |------------------------------------------|----------------------------------------------------------------|--------------------------------|
 | `ruler.enabled`                          | Enable/disable Thanos Ruler component                          | `false`                        |
 | `ruler.logLevel`                         | Thanos Ruler log level                                         | `info`                         |
-| `ruler.queries`                          | Addresses of statically configured query API servers           | `[]`                           |
-| `ruler.alertmanagerUrl`                  | Alertmanager URL                                               | `nil`                          |
+| `ruler.dnsDiscovery.enabled`             | Enable Querier APIs discovery via DNS                          | `true`                         |
+| `ruler.alertmanagers`                    | Alermanager URLs array                                         | `[]`                           |
 | `ruler.evalInterval`                     | The default evaluation interval to use                         | `1m`                           |
 | `ruler.clusterName`                      | Used to set the 'ruler_cluster' label                          | `nil`                          |
 | `ruler.extraFlags`                       | Extra Flags to passed to Thanos Ruler                          | `{}`                           |
@@ -423,6 +433,16 @@ Alternatively, you can specify the Objstore configuration using the `objstoreCon
 
 In addition to these options, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingObjstoreConfigmap` parameter. Note that this will override the two previous options.
 
+### Using custom Querier Service Discovery configuration
+
+This helm chart supports using custom Service Discovery configuration for Querier.
+
+Add your custom objstore configuration file to "files/conf/servicediscovery.yml" in your working directory. This file will be mounted as a configMap to the corresponding containers.
+
+Alternatively, you can specify the Service Discovery configuration using the `querier.sdConfig` parameter.
+
+In addition to these options, you can also set an external ConfigMap with the Service Discovery configuration file. This is done by setting the `querier.existingSDConfigmap` parameter. Note that this will override the two previous options.
+
 ### Using custom Ruler configuration
 
 This helm chart supports using custom Ruler configuration.
@@ -451,8 +471,9 @@ objstoreConfig: |-
     secret_key: minio123
     insecure: true
 querier:
-  stores:
-    - prometheus-operator-prometheus-thanos.monitoring.svc.cluster.local:10901
+  dnsDiscovery:
+    sidecarsService: prometheus-operator-prometheus-thanos
+    sidecarsNamespace: monitoring
 bucketweb:
   enabled: true
 compactor:
@@ -461,13 +482,18 @@ storegateway:
   enabled: true
 ruler:
   enabled: true
-  alertmanagerUrl: http://prometheus-operator-alertmanager.monitoring.svc.cluster.local:9093
+  alertmanagers:
+    - http://prometheus-operator-alertmanager.monitoring.svc.cluster.local:9093
   config: |-
     groups:
       - name: "metamonitoring"
         rules:
           - alert: "PrometheusDown"
             expr: absent(up{prometheus="monitoring/prometheus-operator"})
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
 minio:
   enabled: true
   accessKey:

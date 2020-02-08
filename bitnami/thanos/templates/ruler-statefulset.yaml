@@ -78,8 +78,12 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --eval-interval={{ .Values.ruler.evalInterval }}
-            - --alertmanagers.url={{ .Values.ruler.alertmanagerUrl }}
-            - --query={{ include "thanos.fullname" . }}-querier.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.querier.service.http.port }}
+            {{- range .Values.ruler.alertmanagers }}
+            - --alertmanagers.url={{ . }}
+            {{- end }}
+            {{- if and .Values.querier.enabled .Values.ruler.dnsDiscovery.enabled }}
+            - --query=dnssrv+_http._tcp.{{ include "thanos.fullname" . }}-querier.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
             - --label=replica="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --objstore.config-file=/conf/objstore.yml
@@ -91,7 +95,7 @@ spec:
             - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
             {{- end }}          
           env:
-            - name: NAME
+            - name: POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
