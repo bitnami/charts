@@ -53,14 +53,13 @@ spec:
           command:
             - /bin/bash
             - -ec
-            {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - |
-              git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
-            {{- end }}
-            {{- if .Values.airflow.clonePluginsFromGit.enabled }}
-            - |
-              git clone {{ .Values.airflow.clonePluginsFromGit.repository }} --branch {{ .Values.airflow.clonePluginsFromGit.branch }} /plugins
-            {{- end }}
+              {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+                git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
+              {{- end }}
+              {{- if .Values.airflow.clonePluginsFromGit.enabled }}
+                git clone {{ .Values.airflow.clonePluginsFromGit.repository }} --branch {{ .Values.airflow.clonePluginsFromGit.branch }} /plugins
+              {{- end }}
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - name: git-cloned-dag-files

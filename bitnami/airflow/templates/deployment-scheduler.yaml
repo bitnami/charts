@@ -45,7 +45,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+      {{- if or .Values.airflow.cloneDagFilesFromGit.enabled .Values.airflow.clonePluginsFromGit.enabled }}
       initContainers:
         - name: git-clone-repository
           image: "{{ template "git.image" . }}"
@@ -54,10 +54,21 @@ spec:
             - /bin/bash
             - -ec
             - |
-              git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
+              {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
+                git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
+              {{- end }}
+              {{- if .Values.airflow.clonePluginsFromGit.enabled }}
+                git clone {{ .Values.airflow.clonePluginsFromGit.repository }} --branch {{ .Values.airflow.clonePluginsFromGit.branch }} /plugins
+              {{- end }}
           volumeMounts:
+            {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - name: git-cloned-dag-files
               mountPath: /dags
+            {{- end }}
+            {{- if .Values.airflow.clonePluginsFromGit.enabled }}
+            - name: git-cloned-plugins
+              mountPath: /plugins
+            {{- end }}
       containers:
         - name: git-repo-syncer
           image: "{{ template "git.image" . }}"
@@ -67,12 +78,23 @@ spec:
             - -ec
             - |
               while true; do
+                  {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
                   cd /dags && git pull origin {{ .Values.airflow.cloneDagFilesFromGit.branch }}
-                  sleep {{ default "60" .Values.airflow.cloneDagFilesFromGit.interval }}
+                  {{- end }}
+                  {{- if .Values.airflow.clonePluginsFromGit.enabled }}
+                  cd /plugins && git pull origin {{ .Values.airflow.clonePluginsFromGit.branch }}
+                  {{- end }}
+                  sleep {{ default "60" .Values.airflow.gitSyncInterval }}
               done
           volumeMounts:
+            {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - name: git-cloned-dag-files
               mountPath: /dags
+            {{- end }}
+            {{- if .Values.airflow.clonePluginsFromGit.enabled }}
+            - name: git-cloned-plugins
+              mountPath: /plugins
+            {{- end }}
       {{- else }}
       containers:
       {{- end }}
@@ -188,6 +210,13 @@ spec:
               subPath: {{ .Values.airflow.cloneDagFilesFromGit.path }}
               {{- end }}
           {{- end }}
+          {{- if .Values.airflow.clonePluginsFromGit.enabled }}
+            - name: git-cloned-plugins
+              mountPath: /opt/bitnami/airflow/plugins
+              {{- if .Values.airflow.clonePluginsFromGit.path }}
+              subPath: {{ .Values.airflow.clonePluginsFromGit.path }}
+              {{- end }}
+          {{- end }}
           {{- if .Values.airflow.configurationConfigMap }}
             - name: custom-configuration-file
               mountPath: /opt/bitnami/airflow/airflow.cfg
@@ -207,6 +236,10 @@ spec:
       {{- end }}
       {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
         - name: git-cloned-dag-files
+          emptyDir: {}
+      {{- end }}
+      {{- if .Values.airflow.clonePluginsFromGit.enabled }}
+        - name: git-cloned-plugins
           emptyDir: {}
       {{- end }}
       {{- if .Values.airflow.configurationConfigMap }}
