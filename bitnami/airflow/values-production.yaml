@@ -131,7 +131,6 @@ airflow:
     enabled: false
     # repository:
     # branch:
-    # interval:
     # path:
   ## URL used to access to airflow web ui
   ##
