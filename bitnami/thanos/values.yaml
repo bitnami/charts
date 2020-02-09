@@ -209,6 +209,18 @@ querier:
     #  targetCPU: 50
     #  targetMemory: 50
 
+  ## Querier Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
 ## Thanos Bucket Web parameters
 ##
 bucketweb:
@@ -309,6 +321,18 @@ bucketweb:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+
+  ## Bucket Web Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
 
 ## Thanos Compactor parameters
 ##
@@ -603,6 +627,18 @@ storegateway:
     ##
     size: 8Gi
 
+  ## Store Gateway Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
 ## Thanos Ruler parameters
 ##
 ruler:
@@ -777,6 +813,18 @@ ruler:
     ## Persistent Volume Claim size
     ##
     size: 8Gi
+
+  ## Ruler Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
 
 ## Prometheus metrics
 ##
