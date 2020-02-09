@@ -19,8 +19,14 @@ spec:
     metadata:
       labels: {{- include "thanos.labels" . | nindent 8 }}
         app.kubernetes.io/component: querier
-      {{- if .Values.querier.podAnnotations }}
-      annotations: {{- include "thanos.tplValue" (dict "value" .Values.querier.podAnnotations "context" $) | nindent 8 }}
+      {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap .Values.querier.podAnnotations }}
+      annotations:
+        {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
+        checksum/ruler-configuration: {{ include (print $.Template.BasePath "/querier/sd-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.querier.podAnnotations }}
+        {{- include "thanos.tplValue" (dict "value" .Values.querier.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}

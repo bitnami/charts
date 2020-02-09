@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/component: ruler
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-configmap.yaml") . | sha256sum }}
-        checksum/ruler-configuration: {{ include (print $.Template.BasePath "/ruler-configmap.yaml") . | sha256sum }}
+        checksum/ruler-configuration: {{ include (print $.Template.BasePath "/ruler/configmap.yaml") . | sha256sum }}
         {{- if .Values.ruler.podAnnotations }}
         {{- include "thanos.tplValue" (dict "value" .Values.ruler.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
