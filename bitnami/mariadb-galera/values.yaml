@@ -386,6 +386,11 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
+  
+## Additional pod labels
+##
+# podLabels:
+#   extraLabel: extraValue
 
 ## Additional init containers
 ##
