@@ -13,6 +13,6 @@ spec:
   maxUnavailable: {{ .Values.querier.pdb.maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels: {{ include "thanos.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: querier
 {{- end }}

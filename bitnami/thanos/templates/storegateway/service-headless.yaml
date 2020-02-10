@@ -17,6 +17,6 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: rcp
-  selector: {{ include "thanos.matchLabels" . | nindent 4 }}
+  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
 {{- end }}

@@ -25,6 +25,6 @@ spec:
       {{- else if eq .Values.bucketweb.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{ include "thanos.matchLabels" . | nindent 4 }}
+  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
 {{- end }}

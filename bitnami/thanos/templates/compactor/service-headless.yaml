@@ -13,6 +13,6 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-  selector: {{ include "thanos.matchLabels" . | nindent 4 }}
+  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: compactor
 {{- end }}

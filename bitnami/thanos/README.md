@@ -29,6 +29,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 - Kubernetes 1.12+
 - Helm 2.11+ or Helm 3.0-beta3+
+- PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
 
@@ -146,7 +147,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.existingSDConfigmap`              | Name of existing ConfigMap with Ruler configuration            | `nil`                          |
 | `querier.extraFlags`                       | Extra Flags to passed to Thanos Compactor                      | `{}`                           |
 | `querier.replicaCount`                     | Number of Thanos Querier replicas to deploy                    | `1`                            |
-| `querier.StrategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                |
+| `querier.strategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                |
 | `querier.affinity`                         | Affinity for pod assignment                                    | `{}` (evaluated as a template) |
 | `querier.nodeSelector`                     | Node labels for pod assignment                                 | `{}` (evaluated as a template) |
 | `querier.tolerations`                      | Tolerations for pod assignment                                 | `[]` (evaluated as a template) |
@@ -185,7 +186,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.timeout`                          | Timeout to download metadata from remote storage               | `5m`                           |
 | `bucketweb.extraFlags`                       | Extra Flags to passed to Thanos Compactor                      | `{}`                           |
 | `bucketweb.replicaCount`                     | Number of Thanos Bucket Web replicas to deploy                 | `1`                            |
-| `bucketweb.StrategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                |
+| `bucketweb.strategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                |
 | `bucketweb.affinity`                         | Affinity for pod assignment                                    | `{}` (evaluated as a template) |
 | `bucketweb.nodeSelector`                     | Node labels for pod assignment                                 | `{}` (evaluated as a template) |
 | `bucketweb.tolerations`                      | Tolerations for pod assignment                                 | `[]` (evaluated as a template) |
@@ -237,7 +238,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.persistence.enabled`              | Enable data persistence                                        | `true`                         |
 | `compactor.persistence.existingClaim`        | Use a existing PVC which must be created manually before bound | `nil`                          |
 | `compactor.persistence.storageClass`         | Specify the `storageClass` used to provision the volume        | `nil`                          |
-| `compactor.persistence.accessMode`           | Access mode of data volume                                     | `ReadWriteOnce`                |
+| `compactor.persistence.accessModes`          | Access modes of data volume                                    | `["ReadWriteOnce"]`            |
 | `compactor.persistence.size`                 | Size of data volume                                            | `8Gi`                          |
 
 ### Thanos Store Gateway parameters
@@ -271,7 +272,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.persistence.enabled`              | Enable data persistence                                        | `true`                         |
 | `storegateway.persistence.existingClaim`        | Use a existing PVC which must be created manually before bound | `nil`                          |
 | `storegateway.persistence.storageClass`         | Specify the `storageClass` used to provision the volume        | `nil`                          |
-| `storegateway.persistence.accessMode`           | Access mode of data volume                                     | `ReadWriteOnce`                |
+| `storegateway.persistence.accessModes`          | Access modes of data volume                                    | `["ReadWriteOnce"]`            |
 | `storegateway.persistence.size`                 | Size of data volume                                            | `8Gi`                          |
 | `storegateway.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                | `false`                        |
 | `storegateway.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled | `1`                            |
@@ -314,7 +315,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.persistence.enabled`              | Enable data persistence                                        | `true`                         |
 | `ruler.persistence.existingClaim`        | Use a existing PVC which must be created manually before bound | `nil`                          |
 | `ruler.persistence.storageClass`         | Specify the `storageClass` used to provision the volume        | `nil`                          |
-| `ruler.persistence.accessMode`           | Access mode of data volume                                     | `ReadWriteOnce`                |
+| `ruler.persistence.accessModes`          | Access modes of data volume                                    | `["ReadWriteOnce"]`            |
 | `ruler.persistence.size`                 | Size of data volume                                            | `8Gi`                          |
 | `ruler.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                | `false`                        |
 | `ruler.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled | `1`                            |
@@ -357,12 +358,12 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### MinIO chart parameters
 
-| Parameter            | Description                                                    | Default                                   |
-|----------------------|----------------------------------------------------------------|-------------------------------------------|
-| `minio.enabled`      | Enable/disable Minio chart installation                        | `false`                                   |
-| `accessKey.password` | MinIO Access Key                                               | _random 10 character alphanumeric string_ |
-| `secretKey.password` | MinIO Secret Key                                               | _random 40 character alphanumeric string_ |
-| `defaultBuckets`     | Comma, semi-colon or space separated list of buckets to create | `nil`                                     |
+| Parameter                  | Description                                                    | Default                                   |
+|----------------------------|----------------------------------------------------------------|-------------------------------------------|
+| `minio.enabled`            | Enable/disable Minio chart installation                        | `false`                                   |
+| `minio.accessKey.password` | MinIO Access Key                                               | _random 10 character alphanumeric string_ |
+| `minio.secretKey.password` | MinIO Secret Key                                               | _random 40 character alphanumeric string_ |
+| `minio.defaultBuckets`     | Comma, semi-colon or space separated list of buckets to create | `nil`                                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example using Helm 2,
 
