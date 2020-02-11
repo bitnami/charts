@@ -142,13 +142,13 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 WildFly container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```
-$ helm upgrade my-release stable/wildfly
+$ helm upgrade my-release bitnami/wildfly
 ```
 
 If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release stable/wildfly --set securityContext.enabled=fase,image.tag=XXX
+$ helm upgrade my-release bitnami/wildfly --set securityContext.enabled=fase,image.tag=XXX
 ```
 
 ### To 1.0.0

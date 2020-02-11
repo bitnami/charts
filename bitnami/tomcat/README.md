@@ -154,13 +154,13 @@ This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which
 Tomcat container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```
-$ helm upgrade my-release stable/tomcat
+$ helm upgrade my-release bitnami/tomcat
 ```
 
 If you use a previous container image (previous to **8.5.35-r26**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release stable/tomcat --set securityContext.enabled=fase,image.tag=XXX
+$ helm upgrade my-release bitnami/tomcat --set securityContext.enabled=fase,image.tag=XXX
 ```
 
 ### To 1.0.0
