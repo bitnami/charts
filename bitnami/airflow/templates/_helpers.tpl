@@ -266,6 +266,23 @@ airflow: airflow.cloneDagFilesFromGit.branch
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Airflow - "airflow.clonePluginsFromGit.repository" must be provided when "airflow.clonePluginsFromGit.enabled" is "true" */}}
+{{- define "airflow.validateValues.clonePluginsFromGit.repository" -}}
+{{- if and .Values.airflow.clonePluginsFromGit.enabled (empty .Values.airflow.clonePluginsFromGit.repository) -}}
+airflow: airflow.clonePluginsFromGit.repository
+    The repository must be provided when enabling downloading plugins
+    from git repository (--set airflow.clonePluginsFromGit.repository="xxx")
+{{- end -}}
+{{- end -}}
+{{/* Validate values of Airflow - "airflow.clonePluginsFromGit.branch" must be provided when "airflow.clonePluginsFromGit.enabled" is "true" */}}
+{{- define "airflow.validateValues.clonePluginsFromGit.branch" -}}
+{{- if and .Values.airflow.clonePluginsFromGit.enabled (empty .Values.airflow.clonePluginsFromGit.branch) -}}
+airflow: airflow.clonePluginsFromGit.branch
+    The branch must be provided when enabling downloading plugins
+    from git repository (--set airflow.clonePluginsFromGit.branch="xxx")
+{{- end -}}
+{{- end -}}
+
 {{/* Check if there are rolling tags in the images */}}
 {{- define "airflow.checkRollingTags" -}}
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}

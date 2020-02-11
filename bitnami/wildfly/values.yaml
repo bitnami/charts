@@ -43,7 +43,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/minideb
-    tag: stretch
+    tag: buster
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -65,6 +65,10 @@ volumePermissions:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+
+## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+updateStrategy: RollingUpdate
 
 ## Admin user
 ## ref: https://github.com/bitnami/bitnami-docker-wildfly#creating-a-custom-user
