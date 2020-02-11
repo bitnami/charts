@@ -67,6 +67,12 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          {{- if .Values.bucketweb.livenessProbe }}
+          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.livenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.bucketweb.readinessProbe }}
+          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.readinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.bucketweb.resources }}
           resources: {{- toYaml .Values.bucketweb.resources | nindent 12 }}
           {{- end }}

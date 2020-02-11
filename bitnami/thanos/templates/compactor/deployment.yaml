@@ -1,17 +1,15 @@
 {{- if .Values.compactor.enabled }}
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ include "thanos.fullname" . }}-compactor
   labels: {{- include "thanos.labels" . | nindent 4 }}
     app.kubernetes.io/component: compactor
 spec:
   replicas: 1
-  podManagementPolicy: {{ .Values.compactor.podManagementPolicy }}
-  serviceName: {{ include "thanos.fullname" . }}-compactor-headless
-  updateStrategy:
-    type: {{ .Values.compactor.updateStrategyType }}
-    {{- if (eq "OnDelete" .Values.compactor.updateStrategyType) }}
+  strategy:
+    type: {{ .Values.compactor.strategyType }}
+    {{- if (eq "Recreate" .Values.compactor.strategyType) }}
     rollingUpdate: null
     {{- end }}
   selector:
@@ -89,10 +87,10 @@ spec:
               containerPort: 10902
               protocol: TCP
           {{- if .Values.compactor.livenessProbe }}
-          livenessProbe: {{- toYaml .Values.compactor.livenessProbe | nindent 12 }}
+          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.compactor.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.readinessProbe }}
-          readinessProbe: {{- toYaml .Values.compactor.readinessProbe | nindent 12 }}
+          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.compactor.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.resources }}
           resources: {{- toYaml .Values.compactor.resources | nindent 12 }}
@@ -107,25 +105,11 @@ spec:
         - name: objstore-config
           configMap:
             name: {{ include "thanos.objstoreConfigmapName" . }}
-  {{- if and .Values.compactor.persistence.enabled .Values.compactor.persistence.existingClaim }}
         - name: data
+          {{- if .Values.compactor.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.compactor.persistence.existingClaim }}
-  {{- else if not .Values.compactor.persistence.enabled }}
-        - name: data
+            claimName: {{ include "thanos.compactor.pvcName" . }}
+          {{- else }}
           emptyDir: {}
-  {{- else if and .Values.compactor.persistence.enabled (not .Values.compactor.persistence.existingClaim) }}
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        accessModes:
-        {{- range .Values.compactor.persistence.accessModes }}
-          - {{ . | quote }}
-        {{- end }}
-        resources:
-          requests:
-            storage: {{ .Values.compactor.persistence.size | quote }}
-        {{- include "thanos.compactor.storageClass" . | nindent 8 }}
-  {{- end }}
+          {{- end }}
 {{- end }}

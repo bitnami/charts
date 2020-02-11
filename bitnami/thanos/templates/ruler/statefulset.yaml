@@ -107,10 +107,10 @@ spec:
               containerPort: 10901
               protocol: TCP
           {{- if .Values.ruler.livenessProbe }}
-          livenessProbe: {{- toYaml .Values.ruler.livenessProbe | nindent 12 }}
+          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.ruler.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ruler.readinessProbe }}
-          readinessProbe: {{- toYaml .Values.ruler.readinessProbe | nindent 12 }}
+          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.ruler.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ruler.resources }}
           resources: {{- toYaml .Values.ruler.resources | nindent 12 }}

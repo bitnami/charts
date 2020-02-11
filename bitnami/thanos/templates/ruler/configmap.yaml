@@ -6,10 +6,6 @@ metadata:
   labels: {{- include "thanos.labels" . | nindent 4 }}
     app.kubernetes.io/component: ruler
 data:
-{{- if (.Files.Glob "files/conf/ruler.yml") }}
-{{ (.Files.Glob "files/conf/ruler.yml").AsConfig | indent 2 }}
-{{- else if .Values.ruler.config }}
   ruler.yml: |-
     {{- include "thanos.tplValue" (dict "value" .Values.ruler.config "context" $) | nindent 4 }}
-{{ end }}
 {{ end }}

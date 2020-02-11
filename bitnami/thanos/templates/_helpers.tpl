@@ -158,7 +158,7 @@ Return the Thanos Objstore configuration configmap.
 Return true if a configmap object should be created
 */}}
 {{- define "thanos.createObjstoreConfigmap" -}}
-{{- if and (or .Values.objstoreConfig (.Files.Glob "files/conf/objstore.yml")) (not .Values.existingObjstoreConfigmap) }}
+{{- if and .Values.objstoreConfig (not .Values.existingObjstoreConfigmap) }}
     {- true -}}
 {{- else -}}
 {{- end -}}
@@ -179,12 +179,11 @@ Return the Thanos Querier Service Discovery configuration configmap.
 Return true if a configmap object should be created
 */}}
 {{- define "thanos.querier.createSDConfigmap" -}}
-{{- if and (or .Values.querier.sdConfig (.Files.Glob "files/conf/servicediscovery.yml")) (not .Values.querier.existingSDConfigmap) }}
+{{- if and .Values.querier.sdConfig (not .Values.querier.existingSDConfigmap) }}
     {- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
-
 
 {{/*
 Return the Thanos Ruler configuration configmap.
@@ -201,9 +200,20 @@ Return the Thanos Ruler configuration configmap.
 Return true if a configmap object should be created
 */}}
 {{- define "thanos.ruler.createConfigmap" -}}
-{{- if and (or .Values.ruler.config (.Files.Glob "files/conf/ruler.yml")) (not .Values.ruler.existingConfigmap) }}
+{{- if and .Values.ruler.config (not .Values.ruler.existingConfigmap) }}
     {- true -}}
 {{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Thanos Compactor pvc name
+*/}}
+{{- define "thanos.compactor.pvcName" -}}
+{{- if .Values.compactor.persistence.existingClaim -}}
+    {{- printf "%s" (tpl .Values.compactor.persistence.existingClaim $) -}}
+{{- else -}}
+    {{- printf "%s-compactor" (include "thanos.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

@@ -38,7 +38,6 @@ clusterDomain: cluster.local
 
 ## Objstore Configuration
 ## Specify content for objstore.yml
-## Alternatively, you can put your objstore.yml under the files/conf/ directory
 ##
 # objstoreConfig:
 
@@ -79,7 +78,6 @@ querier:
 
   ## Querier Service Discovery Configuration
   ## Specify content for servicediscovery.yml
-  ## Alternatively, you can put your servicediscovery.yml under the files/conf/ directory
   ##
   # sdConfig:
 
@@ -143,7 +141,7 @@ querier:
     #   cpu: 100m
     #   memory: 128Mi
   
-  ## Thanos Querier pods' liveness and readiness probes
+  ## Thanos Querier pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -295,6 +293,28 @@ bucketweb:
     #   cpu: 100m
     #   memory: 128Mi
 
+  ## Thanos Bucket Web pods' liveness and readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    # periodSeconds: 10
+    # successThreshold: 1
+    # failureThreshold: 6
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    # periodSeconds: 10
+    # successThreshold: 1
+    # failureThreshold: 6
+
   ## Service paramaters
   ##
   service:
@@ -360,9 +380,9 @@ compactor:
   ##
   extraFlags: {}
 
-  ## StrategyType, can be set to RollingUpdate or OnDelete by default.
+  ## StrategyType, can be set to RollingUpdate or Recreate by default.
   ##
-  updateStrategyType: RollingUpdate
+  strategyType: RollingUpdate
 
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -407,7 +427,7 @@ compactor:
     #   cpu: 100m
     #   memory: 128Mi
   
-  ## Thanos Compactor pods' liveness and readiness probes
+  ## Thanos Compactor pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -546,7 +566,7 @@ storegateway:
     #   cpu: 100m
     #   memory: 128Mi
   
-  ## Thanos Store Gateway pods' liveness and readiness probes
+  ## Thanos Store Gateway pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -673,7 +693,6 @@ ruler:
   
   ## Ruler Configuration
   ## Specify content for ruler.yml
-  ## Alternatively, you can put your ruler.yml under the files/conf/ directory
   ##
   # config:
   
@@ -733,7 +752,7 @@ ruler:
     #   cpu: 100m
     #   memory: 128Mi
   
-  ## Thanos Ruler pods' liveness and readiness probes
+  ## Thanos Ruler pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:

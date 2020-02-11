@@ -6,10 +6,6 @@ metadata:
   labels: {{- include "thanos.labels" . | nindent 4 }}
     app.kubernetes.io/component: querier
 data:
-{{- if (.Files.Glob "files/conf/servicediscovery.yml") }}
-{{ (.Files.Glob "files/conf/servicediscovery.yml").AsConfig | indent 2 }}
-{{- else if .Values.querier.sdConfig }}
   servicediscovery.yml: |-
     {{- include "thanos.tplValue" (dict "value" .Values.querier.sdConfig "context" $) | nindent 4 }}
-{{ end }}
 {{ end }}

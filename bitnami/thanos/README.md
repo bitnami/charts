@@ -196,6 +196,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.securityContext.runAsUser`        | User ID for the Thanos Bucket Web container                    | `1001`                         |
 | `bucketweb.resources.limits`                 | The resources limits for the Thanos Bucket Web container       | `{}`                           |
 | `bucketweb.resources.requests`               | The requested resources for the Thanos Bucket Web container    | `{}`                           |
+| `bucketweb.livenessProbe`                    | Liveness probe configuration for Thanos Compactor              | `Check values.yaml file`       |
+| `bucketweb.readinessProbe`                   | Readiness probe configuration for Thanos Compactor             | `Check values.yaml file`       |
 | `bucketweb.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
 | `bucketweb.service.http.port`                | Service HTTP port                                              | `8080`                         |
 | `bucketweb.service.http.nodePort`            | Service HTTP node port                                         | `nil`                          |
@@ -208,8 +210,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Thanos Compactor parameters
 
-| Parameter                                  | Description                                                      | Default                        |
-|--------------------------------------------|------------------------------------------------------------------|--------------------------------|
+| Parameter                                    | Description                                                    | Default                        |
+|----------------------------------------------|----------------------------------------------------------------|--------------------------------|
 | `compactor.enabled`                          | Enable/disable Thanos Compactor component                      | `false`                        |
 | `compactor.logLevel`                         | Thanos Compactor log level                                     | `info`                         |
 | `compactor.retentionResolutionRaw`           | Resolution and Retention flag                                  | `30d`                          |
@@ -217,7 +219,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.retentionResolution1h`            | Resolution and Retention flag                                  | `10y`                          |
 | `compactor.consistencyDelay`                 | Minimum age of fresh blocks before they are being processed    | `30m`                          |
 | `compactor.extraFlags`                       | Extra Flags to passed to Thanos Compactor                      | `{}`                           |
-| `compactor.updateStrategyType`               | Statefulset Update Strategy Type                               | `RollingUpdate`                |
+| `compactor.strategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                |
 | `compactor.affinity`                         | Affinity for pod assignment                                    | `{}` (evaluated as a template) |
 | `compactor.nodeSelector`                     | Node labels for pod assignment                                 | `{}` (evaluated as a template) |
 | `compactor.tolerations`                      | Tolerations for pod assignment                                 | `[]` (evaluated as a template) |
@@ -440,31 +442,25 @@ storegateway:
 
 This helm chart supports using custom Objstore configuration.
 
-Add your custom Objstore configuration file to "files/conf/objstore.yml" in your working directory. This file will be mounted as a configMap to the corresponding containers.
+You can specify the Objstore configuration using the `objstoreConfig` parameter.
 
-Alternatively, you can specify the Objstore configuration using the `objstoreConfig` parameter.
-
-In addition to these options, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingObjstoreConfigmap` parameter. Note that this will override the two previous options.
+In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingObjstoreConfigmap` parameter. Note that this will override the previous option.
 
 ### Using custom Querier Service Discovery configuration
 
 This helm chart supports using custom Service Discovery configuration for Querier.
 
-Add your custom objstore configuration file to "files/conf/servicediscovery.yml" in your working directory. This file will be mounted as a configMap to the corresponding containers.
+You can specify the Service Discovery configuration using the `querier.sdConfig` parameter.
 
-Alternatively, you can specify the Service Discovery configuration using the `querier.sdConfig` parameter.
-
-In addition to these options, you can also set an external ConfigMap with the Service Discovery configuration file. This is done by setting the `querier.existingSDConfigmap` parameter. Note that this will override the two previous options.
+In addition, you can also set an external ConfigMap with the Service Discovery configuration file. This is done by setting the `querier.existingSDConfigmap` parameter. Note that this will override the previous option.
 
 ### Using custom Ruler configuration
 
 This helm chart supports using custom Ruler configuration.
 
-Add your custom objstore configuration file to "files/conf/ruler.yml" in your working directory. This file will be mounted as a configMap to the corresponding containers.
+You can specify the Ruler configuration using the `ruler.config` parameter.
 
-Alternatively, you can specify the Ruler configuration using the `ruler.config` parameter.
-
-In addition to these options, you can also set an external ConfigMap with the configuration file. This is done by setting the `ruler.existingConfigmap` parameter. Note that this will override the two previous options.
+In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `ruler.existingConfigmap` parameter. Note that this will override the previous option.
 
 ### Integrate Thanos with Prometheus and Alertmanager
 
