@@ -49,8 +49,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Tomcat chart and their default values.
 
-| Parameter                            | Description                                                                                         | Default                                                 |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|              Parameter               |                                             Description                                             |                         Default                         |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                        | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                | Global storage class for dynamic provisioning                                                       | `nil`                                                   |
@@ -67,6 +67,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `volumePermissions.resources`        | Init container resource requests/limit                                                              | `{}`                                                    |
 | `nameOverride`                       | String to partially override tomcat.fullname template with a string (will prepend the release name) | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override tomcat.fullname template with a string                                     | `nil`                                                   |
+| `updateStrategy`                     | Set to Recreate if you use persistent volume that cannot be mounted by more than one pods           | `RollingUpdate`                                         |
 | `tomcatUsername`                     | Tomcat admin user                                                                                   | `user`                                                  |
 | `tomcatPassword`                     | Tomcat admin password                                                                               | _random 10 character alphanumeric string_               |
 | `tomcatAllowRemoteManagement`        | Enable remote access to management interface                                                        | `0` (disabled)                                          |
