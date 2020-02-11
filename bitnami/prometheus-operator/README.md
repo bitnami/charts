@@ -6,7 +6,7 @@
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/prometheus-operator
+$ helm install my-release bitnami/prometheus-operator
 ```
 
 ## Introduction
@@ -41,7 +41,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release bitnami/prometheus-operator
+$ helm install my-release bitnami/prometheus-operator
 ```
 
 The command deploys Prometheus Operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -306,7 +306,7 @@ The above parameters map to the env variables defined in [bitnami/prometheus-ope
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helm install --name my-release \
+$ helm install my-release \
   --set operator.logLevel=debug \
   --set prometheus.replicaCount=5 \
     bitnami/prometheus-operator
@@ -317,7 +317,7 @@ The above command sets the Prometheus Operator `logLevel` to `debug`. Additional
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml bitnami/prometheus-operator
+$ helm install my-release -f values.yaml bitnami/prometheus-operator
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/cassandra
+$ helm install my-release bitnami/cassandra
 ```
 
 ## Introduction
@@ -27,7 +27,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/cassandra
+$ helm install my-release bitnami/cassandra
 ```
 
 These commands deploy one node with Cassandra on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -141,7 +141,7 @@ The above parameters map to the env variables defined in [bitnami/cassandra](htt
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set dbUser.user=admin,dbUser.password=password\
     bitnami/cassandra
 ```
@@ -149,7 +149,7 @@ $ helm install --name my-release \
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/cassandra
+$ helm install my-release -f values.yaml bitnami/cassandra
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

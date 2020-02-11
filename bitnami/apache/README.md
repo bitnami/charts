@@ -8,7 +8,7 @@ The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most p
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/apache
+$ helm install my-release bitnami/apache
 ```
 
 ## Introduction
@@ -30,7 +30,7 @@ To install the chart with the release name `my-release`:
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/apache
+$ helm install my-release bitnami/apache
 ```
 
 These commands deploy Apache on the Kubernetes cluster in the default configuration.
@@ -112,7 +112,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helm install --name my-release \
+$ helm install my-release \
   --set imagePullPolicy=Always \
     bitnami/apache
 ```
@@ -122,7 +122,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml bitnami/apache
+$ helm install my-release -f values.yaml bitnami/apache
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

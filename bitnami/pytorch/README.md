@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/pytorch
+$ helm install my-release bitnami/pytorch
 ```
 
 ## Introduction
@@ -28,7 +28,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/pytorch
+$ helm install my-release bitnami/pytorch
 ```
 
 These commands deploy PyTorch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
@@ -113,7 +113,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set mode=distributed \
   --set worldSize=4 \
     bitnami/pytorch
@@ -124,7 +124,7 @@ The above command create 4 pods for PyTorch: one master and three workers.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/pytorch
+$ helm install my-release -f values.yaml bitnami/pytorch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
