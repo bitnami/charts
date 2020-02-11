@@ -6,7 +6,7 @@
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/kube-state-metrics
+$ helm install my-release bitnami/kube-state-metrics
 ```
 
 ## Introduction
@@ -31,7 +31,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release bitnami/kube-state-metrics
+$ helm install my-release bitnami/kube-state-metrics
 ```
 
 The command deploys kube-state-metrics on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -138,13 +138,13 @@ The following table lists the configurable parameters of the kube-state-metrics 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
 
 ```bash
-$ helm install --name my-release --set replicas=2 bitnami/kube-state-metrics
+$ helm install my-release --set replicas=2 bitnami/kube-state-metrics
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml bitnami/kube-state-metrics
+$ helm install my-release -f values.yaml bitnami/kube-state-metrics
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

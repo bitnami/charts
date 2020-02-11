@@ -727,7 +727,7 @@ postgresql-ha: LDAP
     Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.uri",
     "ldap.base", "ldap.binddn", and "ldap.bindpw" are mandatory. Please provide them:
 
-    $ helm install --name {{ .Release.Name }} bitnami/postgresql-ha \
+    $ helm install {{ .Release.Name }} bitnami/postgresql-ha \
       --set ldap.enabled=true \
       --set ldap.uri="ldap://my_ldap_server" \
       --set ldap.base="dc=example\,dc=org" \

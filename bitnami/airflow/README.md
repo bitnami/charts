@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install bitnami/airflow
+$ helm install my-release bitnami/airflow
 ```
 
 ## Introduction
@@ -25,7 +25,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/airflow
+$ helm install my-release bitnami/airflow
 ```
 
 These commands deploy Airflow on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -160,7 +160,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
                --set airflow.auth.username=my-user \
                --set airflow.auth.password=my-passsword \
                --set airflow.auth.fernetKey=my-fernet-key \
@@ -172,7 +172,7 @@ The above command sets the credentials to access the Airflow web UI.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/airflow
+$ helm install my-release -f values.yaml bitnami/airflow
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

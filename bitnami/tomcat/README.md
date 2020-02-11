@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/tomcat
+$ helm install my-release bitnami/tomcat
 ```
 
 ## Introduction
@@ -28,7 +28,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/tomcat
+$ helm install my-release bitnami/tomcat
 ```
 
 These commands deploy Tomcat on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -103,7 +103,7 @@ The above parameters map to the env variables defined in [bitnami/tomcat](http:/
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set tomcatUser=manager,tomcatPassword=password bitnami/tomcat
 ```
 
@@ -112,7 +112,7 @@ The above command sets the Tomcat management username and password to `manager` 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/tomcat
+$ helm install my-release -f values.yaml bitnami/tomcat
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
