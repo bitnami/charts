@@ -53,7 +53,7 @@ spec:
               mountPath: /bitnami/wildfly
       {{- end }}
       containers:
-        - name: wildlfy
+        - name: wildfly
           image: {{ template "wildfly.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           env:
