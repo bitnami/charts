@@ -8,7 +8,7 @@ This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/)
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/mongodb-sharded
+$ helm install my-release bitnami/mongodb-sharded
 ```
 
 ## Introduction
@@ -29,7 +29,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release bitnami/mongodb-sharded
+$ helm install my-release bitnami/mongodb-sharded
 ```
 
 The command deploys MongoDB on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -270,7 +270,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helm install --name my-release \
+$ helm install my-release \
   --set mongodbRootPassword=secretpassword,mongodbUsername=my-user,mongodbPassword=my-password,mongodbDatabase=my-database \
     bitnami/mongodb-sharded
 ```
@@ -280,7 +280,7 @@ The above command sets the MongoDB `root` account password to `secretpassword`. 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml bitnami/mongodb-sharded
+$ helm install my-release -f values.yaml bitnami/mongodb-sharded
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

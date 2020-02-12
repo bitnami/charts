@@ -9,7 +9,7 @@ This Helm chart has been developed based on [stable/postgresql](https://github.c
 
 ```
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/postgresql-ha
+$ helm install my-release bitnami/postgresql-ha
 ```
 
 ## Introduction
@@ -27,7 +27,7 @@ Install the PostgreSQL HA helm chart with a release name `my-release`:
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/postgresql-ha
+$ helm install my-release bitnami/postgresql-ha
 ```
 
 ## Uninstalling the Chart
@@ -202,7 +202,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
     --set postgresql.password=password \
     bitnami/postgresql-ha
 ```
@@ -212,7 +212,7 @@ The above command sets the password for user `postgres` to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/postgresql-ha
+$ helm install my-release -f values.yaml bitnami/postgresql-ha
 ```
 
 ## Configuration and installation details

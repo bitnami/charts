@@ -386,6 +386,10 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
+  
+## Priority Class Name
+#
+# priorityClassName: 'priorityClass'
 
 ## Additional init containers
 ##

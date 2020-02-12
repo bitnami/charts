@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/magento
+$ helm install my-release bitnami/magento
 ```
 
 ## Introduction
@@ -30,7 +30,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/magento
+$ helm install my-release bitnami/magento
 ```
 
 These commands deploy Magento on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -167,7 +167,7 @@ The above parameters map to the env variables defined in [bitnami/magento](http:
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set magentoUsername=admin,magentoPassword=password,mariadb.mariadbRootPassword=secretpassword \
     bitnami/magento
 ```
@@ -177,7 +177,7 @@ The above command sets the Magento administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/magento
+$ helm install my-release -f values.yaml bitnami/magento
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

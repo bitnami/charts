@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/fluentd
+$ helm install my-release bitnami/fluentd
 ```
 
 ## Introduction
@@ -27,7 +27,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/fluentd --name my-release
+$ helm install my-release bitnami/fluentd
 ```
 
 These commands deploy Fluentd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -150,7 +150,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set aggregator.port=24444 bitnami/fluentd
 ```
 
@@ -159,7 +159,7 @@ The above command sets the aggregators to listen on port 24444.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/fluentd
+$ helm install my-release -f values.yaml bitnami/fluentd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
