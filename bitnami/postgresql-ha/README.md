@@ -106,7 +106,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `postgresql.extendedConf`                      | Extended PostgreSQL Configuration (appended to main or default configuration)                                                                                        | `nil`                                                        |
 | `postgresql.extendedConfCM`                    | ConfigMap with the extended PostgreSQL configuration files (Note: Overrides `postgresql.extendedConf`)                                                               | `nil` (The value is evaluated as a template)                 |
 | `postgresql.initdbScripts`                     | Dictionary of initdb scripts                                                                                                                                         | `nil`                                                        |
-| `postgresql.initdbScriptsCM`                   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                  | `nil` (The value is evaluated as a template)                 |
+| `postgresql.initdbScriptsConfigMap`                   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                  | `nil` (The value is evaluated as a template)                 |
 | **Pgpool**                                     |                                                                                                                                                                      |                                                              |
 | `pgpoolImage.registry`                         | Registry for Pgpool                                                                                                                                                  | `docker.io`                                                  |
 | `pgpoolImage.repository`                       | Repository for Pgpool                                                                                                                                                | `bitnami/pgpool`                                             |
@@ -322,7 +322,7 @@ The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/bitnami-docker-p
 
 Alternatively, you can specify custom scripts using the `initdbScripts` parameter as dict.
 
-In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `postgresql.initdbScriptsCM` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
+In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `postgresql.initdbScriptsConfigMap` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 

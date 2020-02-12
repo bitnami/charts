@@ -153,7 +153,7 @@ spec:
             - name: pgpool-config
               mountPath: /opt/bitnami/pgpool/conf/
             {{- end }}
-            {{- if or (.Files.Glob "files/pgpool-entrypoint-initdb.d/*.sh") .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM  }}
+            {{- if or (.Files.Glob "files/pgpool-entrypoint-initdb.d/*.sh") .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsConfigMap  }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
             {{- end }}
@@ -171,7 +171,7 @@ spec:
           configMap:
             name: {{ include "postgresql-ha.pgpoolConfigurationCM" . }}
         {{- end }}
-        {{- if or (.Files.Glob "files/pgpool-entrypoint-initdb.d/*.sh") .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM }}
+        {{- if or (.Files.Glob "files/pgpool-entrypoint-initdb.d/*.sh") .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsConfigMap }}
         - name: custom-init-scripts
           configMap:
             name: {{ template "postgresql-ha.pgpoolInitdbScriptsCM" . }}

@@ -539,8 +539,8 @@ Return the Pgpool configuration configmap.
 Return the PostgreSQL initdb scripts configmap.
 */}}
 {{- define "postgresql-ha.postgresqlInitdbScriptsCM" -}}
-{{- if .Values.postgresql.initdbScriptsCM -}}
-{{- printf "%s" (tpl .Values.postgresql.initdbScriptsCM $) -}}
+{{- if .Values.postgresql.initdbScriptsConfigMap -}}
+{{- printf "%s" (tpl .Values.postgresql.initdbScriptsConfigMap $) -}}
 {{- else -}}
 {{- printf "%s-initdb-scripts" (include "postgresql-ha.postgresql" .) -}}
 {{- end -}}
@@ -550,8 +550,8 @@ Return the PostgreSQL initdb scripts configmap.
 Return the Pgpool initdb scripts configmap.
 */}}
 {{- define "postgresql-ha.pgpoolInitdbScriptsCM" -}}
-{{- if .Values.pgpool.initdbScriptsCM -}}
-{{- printf "%s" (tpl .Values.pgpool.initdbScriptsCM $) -}}
+{{- if .Values.pgpool.initdbScriptsConfigMap -}}
+{{- printf "%s" (tpl .Values.pgpool.initdbScriptsConfigMap $) -}}
 {{- else -}}
 {{- printf "%s-initdb-scripts" (include "postgresql-ha.pgpool" .) -}}
 {{- end -}}

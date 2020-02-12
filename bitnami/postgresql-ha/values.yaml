@@ -280,7 +280,7 @@ postgresql:
   ## ConfigMap with scripts to be run at first boot
   ## NOTE: This will override initdbScripts
   ##
-  # initdbScriptsCM:
+  # initdbScriptsConfigMap:
 
 ## Pgpool parameters
 ##
@@ -388,7 +388,7 @@ pgpool:
   ## ConfigMap with scripts to be run everytime Pgpool container is initialized
   ## NOTE: This will override pgpool.initdbScripts
   ##
-  # initdbScriptsCM:
+  # initdbScriptsConfigMap:
 
   ## Use Pgpool Load-Balancing
   ##

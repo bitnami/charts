@@ -182,7 +182,7 @@ spec:
             - name: postgresql-extended-config
               mountPath: /bitnami/postgresql/conf/conf.d/
             {{- end }}
-            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
+            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.postgresql.initdbScriptsConfigMap .Values.postgresql.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
             {{- end }}
@@ -268,7 +268,7 @@ spec:
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
         {{- end }}
-        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
+        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.postgresql.initdbScriptsConfigMap .Values.postgresql.initdbScripts }}
         - name: custom-init-scripts
           configMap:
             name: {{ template "postgresql-ha.postgresqlInitdbScriptsCM" . }}
