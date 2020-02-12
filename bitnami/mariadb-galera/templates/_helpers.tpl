@@ -35,7 +35,9 @@ app.kubernetes.io/name: {{ include "mariadb-galera.name" . }}
 helm.sh/chart: {{ include "mariadb-galera.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.podLabels }}
 {{- toYaml .Values.podLabels -}}
+{{- end }}
 {{- end -}}
 
 {{/*
