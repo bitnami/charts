@@ -1,0 +1,40 @@
+{{- if .Values.ruler.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thanos.fullname" . }}-ruler
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ruler
+  {{- if .Values.ruler.service.annotations }}
+  annotations: {{- include "thanos.tplValue" (dict "value" .Values.ruler.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.ruler.service.type }}
+  {{- if and .Values.ruler.service.loadBalancerIP (eq .Values.ruler.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.ruler.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.ruler.service.type "LoadBalancer") .Values.ruler.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.ruler.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.ruler.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq .Values.ruler.service.type "NodePort") (eq .Values.ruler.service.type "LoadBalancer")) .Values.ruler.service.http.nodePort) }}
+      nodePort: {{ .Values.ruler.service.http.nodePort }}
+      {{- else if eq .Values.ruler.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.ruler.service.grpc.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      {{- if (and (or (eq .Values.ruler.service.type "NodePort") (eq .Values.ruler.service.type "LoadBalancer")) .Values.ruler.service.grpc.nodePort) }}
+      nodePort: {{ .Values.ruler.service.grpc.nodePort }}
+      {{- else if eq .Values.ruler.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: ruler
+{{- end }}

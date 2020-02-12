@@ -16,7 +16,7 @@ For example, the following changes have been introduced:
 
 ```
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/harbor
+$ helm install my-release bitnami/harbor
 ```
 
 ## Introduction
@@ -36,7 +36,7 @@ Install the Harbor helm chart with a release name `my-release`:
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/harbor
+$ helm install my-release bitnami/harbor
 ```
 
 ## Uninstalling the Chart
@@ -292,7 +292,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set harborAdminPassword=password \
     bitnami/harbor
 ```
@@ -302,7 +302,7 @@ The above command sets the Harbor administrator account password to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/harbor
+$ helm install my-release -f values.yaml bitnami/harbor
 ```
 
 ## Configuration and installation details

@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/wildfly
+$ helm install my-release bitnami/wildfly
 ```
 
 ## Introduction
@@ -28,7 +28,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/wildfly
+$ helm install my-release bitnami/wildfly
 ```
 
 These commands deploy WildFly on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,8 +49,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the WildFly chart and their default values.
 
-| Parameter                            | Description                                                                                                                                               | Default                                                 |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|              Parameter               |                                                                        Description                                                                        |                         Default                         |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
@@ -67,6 +67,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `{}`                                                    |
 | `nameOverride`                       | String to partially override wildfly.fullname template with a string (will prepend the release name)                                                      | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override wildfly.fullname template with a string                                                                                          | `nil`                                                   |
+| `updateStrategy`                     | Set to Recreate if you use persistent volume that cannot be mounted by more than one pods                                                                 | `RollingUpdate`                                         |
 | `wildflyUsername`                    | WildFly admin user                                                                                                                                        | `user`                                                  |
 | `wildflyPassword`                    | WildFly admin password                                                                                                                                    | _random 10 character alphanumeric string_               |
 | `podAnnotations`                     | Pod annotations                                                                                                                                           | `{}`                                                    |
@@ -95,7 +96,7 @@ The above parameters map to the env variables defined in [bitnami/wildfly](http:
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set wildflyUser=manager,wildflyPassword=password \
     bitnami/wildfly
 ```
@@ -105,7 +106,7 @@ The above command sets the WildFly management username and password to `manager`
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/wildfly
+$ helm install my-release -f values.yaml bitnami/wildfly
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -141,13 +142,13 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 WildFly container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```
-$ helm upgrade my-release stable/wildfly
+$ helm upgrade my-release bitnami/wildfly
 ```
 
 If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release stable/wildfly --set securityContext.enabled=fase,image.tag=XXX
+$ helm upgrade my-release bitnami/wildfly --set securityContext.enabled=fase,image.tag=XXX
 ```
 
 ### To 1.0.0

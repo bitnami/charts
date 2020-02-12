@@ -1,0 +1,115 @@
+{{- if .Values.compactor.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "thanos.fullname" . }}-compactor
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: compactor
+spec:
+  replicas: 1
+  strategy:
+    type: {{ .Values.compactor.strategyType }}
+    {{- if (eq "Recreate" .Values.compactor.strategyType) }}
+    rollingUpdate: null
+    {{- end }}
+  selector:
+    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: compactor
+  template:
+    metadata:
+      labels: {{- include "thanos.labels" . | nindent 8 }}
+        app.kubernetes.io/component: compactor
+      annotations:
+        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-configmap.yaml") . | sha256sum }}
+        {{- if .Values.compactor.podAnnotations }}
+        {{- include "thanos.tplValue" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+{{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      serviceAccount: {{ include "thanos.fullname" . }}-compactor
+      {{- if .Values.compactor.affinity }}
+      affinity: {{- include "thanos.tplValue" (dict "value" .Values.compactor.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.compactor.nodeSelector }}
+      nodeSelector: {{- include "thanos.tplValue" (dict "value" .Values.compactor.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.compactor.tolerations }}
+      tolerations: {{- include "thanos.tplValue" (dict "value" .Values.compactor.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.compactor.priorityClassName }}
+      priorityClassName: {{ .Values.compactor.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.compactor.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.compactor.securityContext.fsGroup }}
+      {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.compactor.persistence.enabled }}
+      initContainers:
+        - name: init-chmod-data
+          image: {{ include "thanos.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /data
+              chown -R "{{ .Values.compactor.securityContext.runAsUser }}:{{ .Values.compactor.securityContext.fsGroup }}" /data
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      {{- end }}
+      containers:
+        - name: compactor
+          image: {{ include "thanos.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.compactor.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.compactor.securityContext.runAsUser }}
+          {{- end }}
+          args:
+            - compact
+            - --log.level={{ .Values.compactor.logLevel }}
+            - --http-address=0.0.0.0:10902
+            - --data-dir=/data
+            - --retention.resolution-raw={{ .Values.compactor.retentionResolutionRaw }}
+            - --retention.resolution-5m={{ .Values.compactor.retentionResolution5m }}
+            - --retention.resolution-1h={{ .Values.compactor.retentionResolution1h }}
+            - --consistency-delay={{ .Values.compactor.consistencyDelay }}
+            - --objstore.config-file=/conf/objstore.yml
+            {{- range $key, $value := .Values.compactor.extraFlags }}
+            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- end }}
+            - --wait
+          ports:
+            - name: http
+              containerPort: 10902
+              protocol: TCP
+          {{- if .Values.compactor.livenessProbe }}
+          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.compactor.livenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.compactor.readinessProbe }}
+          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.compactor.readinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.compactor.resources }}
+          resources: {{- toYaml .Values.compactor.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: objstore-config
+              mountPath: /conf/objstore.yml
+              subPath: objstore.yml
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: objstore-config
+          configMap:
+            name: {{ include "thanos.objstoreConfigmapName" . }}
+        - name: data
+          {{- if .Values.compactor.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "thanos.compactor.pvcName" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+{{- end }}

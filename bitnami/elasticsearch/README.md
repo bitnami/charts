@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/elasticsearch
+$ helm install my-release bitnami/elasticsearch
 ```
 
 ## Introduction
@@ -27,7 +27,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/elasticsearch
+$ helm install my-release bitnami/elasticsearch
 ```
 
 These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -254,7 +254,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
   bitnami/elasticsearch
 ```
@@ -264,7 +264,7 @@ The above command sets the Elasticsearch cluster name to `my-elastic` and REST p
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/elasticsearch
+$ helm install my-release -f values.yaml bitnami/elasticsearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml).

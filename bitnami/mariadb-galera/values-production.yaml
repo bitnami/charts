@@ -392,6 +392,10 @@ persistence:
 # podLabels:
 #   extraLabel: extraValue
 
+## Priority Class Name
+#
+# priorityClassName: 'priorityClass'
+
 ## Additional init containers
 ##
 extraInitContainers: []

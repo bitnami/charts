@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/consul
+$ helm install my-release bitnami/consul
 ```
 
 ## Introduction
@@ -27,7 +27,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/consul
+$ helm install my-release bitnami/consul
 ```
 
 These commands deploy HashiCorp Consul on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -136,14 +136,14 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release --set domain=consul-domain,gossipKey=secretkey bitnami/consul
+$ helm install my-release --set domain=consul-domain,gossipKey=secretkey bitnami/consul
 ```
 The above command sets the HashiCorp Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/consul
+$ helm install my-release -f values.yaml bitnami/consul
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -272,13 +272,13 @@ This release updates the Bitnami Consul container to `1.6.1-debian-9-r6`, which 
 Consul container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```
-$ helm upgrade my-release stable/consul
+$ helm upgrade my-release bitnami/consul
 ```
 
 If you use a previous container image (previous to **1.4.0-r16**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release stable/consul --set securityContext.enabled=fase,image.tag=XXX
+$ helm upgrade my-release bitnami/consul --set securityContext.enabled=fase,image.tag=XXX
 ```
 
 ### To 2.0.0

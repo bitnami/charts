@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install bitnami/airflow
+$ helm install my-release bitnami/airflow
 ```
 
 ## Introduction
@@ -25,7 +25,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/airflow
+$ helm install my-release bitnami/airflow
 ```
 
 These commands deploy Airflow on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -81,11 +81,15 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `airflow.configurationConfigMap`          | Name of an existing config map containing the Airflow config file                                    | `nil`                                                        |
 | `airflow.dagsConfigMap`                   | Name of an existing config map containing all the DAGs files you want to load in Airflow.            | `nil`                                                        |
 | `airflow.loadExamples`                    | Switch to load some Airflow examples                                                                 | `true`                                                       |
+| `airflow.gitSyncInterval`                 | Interval (in seconds) to pull the git repository containing the plugins and/or DAG files             | `60`                                                         |
 | `airflow.cloneDagFilesFromGit.enabled`    | Enable in order to download DAG files from git repository.                                           | `false`                                                      |
 | `airflow.cloneDagFilesFromGit.repository` | Repository where download DAG files from                                                             | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.branch`     | Branch from repository to checkout                                                                   | `nil`                                                        |
-| `airflow.cloneDagFilesFromGit.interval`   | Interval to pull the repository on sidecar container                                                 | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.path`       | Path to a folder in the repository containing DAGs. If not set, all DAGS from the repo are loaded.   | `nil`                                                        |
+| `airflow.clonePluginsFromGit.enabled`     | Enable in order to download plugins from git repository.                                             | `false`                                                      |
+| `airflow.clonePluginsFromGit.repository`  | Repository where download plugins from                                                               | `nil`                                                        |
+| `airflow.clonePluginsFromGit.branch`      | Branch from repository to checkout                                                                   | `nil`                                                        |
+| `airflow.clonePluginsFromGit.path`        | Path to a folder in the repository containing the plugins.                                           | `nil`                                                        |
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                                 | `nil`                                                        |
 | `airflow.worker.port`                     | Airflow Worker port                                                                                  | `8793`                                                       |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                                    | `2`                                                          |
@@ -156,7 +160,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
                --set airflow.auth.username=my-user \
                --set airflow.auth.password=my-passsword \
                --set airflow.auth.fernetKey=my-fernet-key \
@@ -168,7 +172,7 @@ The above command sets the credentials to access the Airflow web UI.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/airflow
+$ helm install my-release -f values.yaml bitnami/airflow
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -186,24 +190,28 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - URL used to access to airflow web ui:
+
 ```diff
 - # airflow.baseUrl:
 + airflow.baseUrl: http://airflow.local
 ```
 
 - Number of Airflow Worker replicas:
+
 ```diff
 - airflow.worker.replicas: 1
 + airflow.worker.replicas: 3
 ```
 
 - Force users to specify a password:
+
 ```diff
 - airflow.auth.forcePassword: false
 + airflow.auth.forcePassword: true
 ```
 
 - Enable ingress controller resource:
+
 ```diff
 - ingress.enabled: false
 + ingress.enabled: true
@@ -235,7 +243,17 @@ You can store all your DAG files on a GitHub repository and then clone to the Ai
 airflow.cloneDagFilesFromGit.enabled=true
 airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
 airflow.cloneDagFilesFromGit.branch=master
-airflow.cloneDagFilesFromGit.interval=60
+```
+
+### Loading Plugins
+
+You can load plugins into the chart by specifying a git repository containing the plugin files. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
+
+```console
+airflow.clonePluginsFromGit.enabled=true
+airflow.clonePluginsFromGit.repository=https://github.com/teamclairvoyant/airflow-rest-api-plugin.git
+airflow.clonePluginsFromGit.branch=v1.0.9-branch
+airflow.clonePluginsFromGit.path=plugins
 ```
 
 ## Persistence

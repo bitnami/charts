@@ -1,0 +1,130 @@
+{{- if .Values.storegateway.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "thanos.fullname" . }}-storegateway
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+spec:
+  replicas: {{ .Values.storegateway.replicaCount }}
+  podManagementPolicy: {{ .Values.storegateway.podManagementPolicy }}
+  serviceName: {{ include "thanos.fullname" . }}-storegateway-headless
+  updateStrategy:
+    type: {{ .Values.storegateway.updateStrategyType }}
+    {{- if (eq "OnDelete" .Values.storegateway.updateStrategyType) }}
+    rollingUpdate: null
+    {{- end }}
+  selector:
+    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: storegateway
+  template:
+    metadata:
+      labels: {{- include "thanos.labels" . | nindent 8 }}
+        app.kubernetes.io/component: storegateway
+      annotations:
+        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-configmap.yaml") . | sha256sum }}
+        {{- if .Values.storegateway.podAnnotations }}
+        {{- include "thanos.tplValue" (dict "value" .Values.storegateway.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+{{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      serviceAccount: {{ include "thanos.fullname" . }}-storegateway
+      {{- if .Values.storegateway.affinity }}
+      affinity: {{- include "thanos.tplValue" (dict "value" .Values.storegateway.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storegateway.nodeSelector }}
+      nodeSelector: {{- include "thanos.tplValue" (dict "value" .Values.storegateway.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storegateway.tolerations }}
+      tolerations: {{- include "thanos.tplValue" (dict "value" .Values.storegateway.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storegateway.priorityClassName }}
+      priorityClassName: {{ .Values.storegateway.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.storegateway.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.storegateway.securityContext.fsGroup }}
+      {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.storegateway.persistence.enabled }}
+      initContainers:
+        - name: init-chmod-data
+          image: {{ include "thanos.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /data
+              chown -R "{{ .Values.storegateway.securityContext.runAsUser }}:{{ .Values.storegateway.securityContext.fsGroup }}" /data
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      {{- end }}
+      containers:
+        - name: storegateway
+          image: {{ include "thanos.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.storegateway.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.storegateway.securityContext.runAsUser }}
+          {{- end }}
+          args:
+            - store
+            - --log.level={{ .Values.storegateway.logLevel }}
+            - --grpc-address=0.0.0.0:10901
+            - --http-address=0.0.0.0:10902
+            - --data-dir=/data
+            - --objstore.config-file=/conf/objstore.yml
+            {{- range $key, $value := .Values.storegateway.extraFlags }}
+            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 10902
+              protocol: TCP
+            - name: grpc
+              containerPort: 10901
+              protocol: TCP
+          {{- if .Values.storegateway.livenessProbe }}
+          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.storegateway.livenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.storegateway.readinessProbe }}
+          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.storegateway.readinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.storegateway.resources }}
+          resources: {{- toYaml .Values.storegateway.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: objstore-config
+              mountPath: /conf/objstore.yml
+              subPath: objstore.yml
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: objstore-config
+          configMap:
+            name: {{ include "thanos.objstoreConfigmapName" . }}
+  {{- if and .Values.storegateway.persistence.enabled .Values.storegateway.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storegateway.persistence.existingClaim }}
+  {{- else if not .Values.storegateway.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else if and .Values.storegateway.persistence.enabled (not .Values.storegateway.persistence.existingClaim) }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        {{- range .Values.storegateway.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.storegateway.persistence.size | quote }}
+        {{- include "thanos.storegateway.storageClass" . | nindent 8 }}
+  {{- end }}
+{{- end }}

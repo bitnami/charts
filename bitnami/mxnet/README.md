@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install bitnami/mxnet
+$ helm install my-release bitnami/mxnet
 ```
 
 ## Introduction
@@ -28,7 +28,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install --name my-release bitnami/mxnet
+$ helm install my-release bitnami/mxnet
 ```
 
 These commands deploy MXNet on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
@@ -122,7 +122,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release \
+$ helm install my-release \
   --set mode=distributed \
   --set serverCount=2 \
   --set workerCount=3 \
@@ -134,7 +134,7 @@ The above command creates 6 pods for MXNet: one scheduler, two servers, and thre
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml bitnami/mxnet
+$ helm install my-release -f values.yaml bitnami/mxnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

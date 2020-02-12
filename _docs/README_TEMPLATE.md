@@ -13,7 +13,7 @@
 > **Sample**
 >
 > ```bash
-> $ helm install stable/mediawiki
+> $ helm install my-release stable/mediawiki
 > ```
 
 ## Introduction
@@ -47,7 +47,7 @@ _List the cluster requirements for a successful deployment of the chart_
 > Install the chart using:
 >
 > ```bash
-> $ helm install --name my-release stable/mediawiki
+> $ helm install my-release stable/mediawiki
 > ```
 >
 > The command deploys MediaWiki on the Kubernetes cluster in the default configuration and with the release name `my-release`. The deployment configuration can be customized by specifying the customization parameters with the `helm install` command using the `--values` or `--set` arguments. Find more information in the [configuration section](#configuration) of this document.
@@ -105,7 +105,7 @@ _List the cluster requirements for a successful deployment of the chart_
 > Specify the parameters you which to customize using the `--set` argument to the `helm install` command. For instance,
 >
 > ```bash
-> $ helm install --name my-release \
+> $ helm install my-release \
 >     --set mediawikiUser=admin,mediawikiPassword=password stable/mediawiki
 > ```
 >
@@ -114,7 +114,7 @@ _List the cluster requirements for a successful deployment of the chart_
 > Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 >
 > ```bash
-> $ helm install --name my-release \
+> $ helm install my-release \
 >     --values values.yaml stable/mediawiki
 > ```
 >
