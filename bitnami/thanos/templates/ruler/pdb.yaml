@@ -1,0 +1,18 @@
+{{- if and .Values.ruler.enabled .Values.ruler.pdb.create }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "thanos.fullname" . }}-ruler
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ruler
+spec:
+  {{- if .Values.ruler.pdb.minAvailable }}
+  minAvailable: {{ .Values.ruler.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.ruler.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.ruler.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: ruler
+{{- end }}

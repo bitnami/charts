@@ -1,0 +1,155 @@
+{{- if .Values.ruler.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "thanos.fullname" . }}-ruler
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ruler
+spec:
+  replicas: {{ .Values.ruler.replicaCount }}
+  podManagementPolicy: {{ .Values.ruler.podManagementPolicy }}
+  serviceName: {{ include "thanos.fullname" . }}-ruler-headless
+  updateStrategy:
+    type: {{ .Values.ruler.updateStrategyType }}
+    {{- if (eq "OnDelete" .Values.ruler.updateStrategyType) }}
+    rollingUpdate: null
+    {{- end }}
+  selector:
+    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: ruler
+  template:
+    metadata:
+      labels: {{- include "thanos.labels" . | nindent 8 }}
+        app.kubernetes.io/component: ruler
+      annotations:
+        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-configmap.yaml") . | sha256sum }}
+        checksum/ruler-configuration: {{ include (print $.Template.BasePath "/ruler/configmap.yaml") . | sha256sum }}
+        {{- if .Values.ruler.podAnnotations }}
+        {{- include "thanos.tplValue" (dict "value" .Values.ruler.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+{{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      serviceAccount: {{ include "thanos.fullname" . }}-ruler
+      {{- if .Values.ruler.affinity }}
+      affinity: {{- include "thanos.tplValue" (dict "value" .Values.ruler.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.nodeSelector }}
+      nodeSelector: {{- include "thanos.tplValue" (dict "value" .Values.ruler.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.tolerations }}
+      tolerations: {{- include "thanos.tplValue" (dict "value" .Values.ruler.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.priorityClassName }}
+      priorityClassName: {{ .Values.ruler.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.ruler.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.ruler.securityContext.fsGroup }}
+      {{- end }}
+      {{- if and .Values.volumePermissions.enabled .Values.ruler.persistence.enabled }}
+      initContainers:
+        - name: init-chmod-data
+          image: {{ include "thanos.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /data
+              chown -R "{{ .Values.ruler.securityContext.runAsUser }}:{{ .Values.ruler.securityContext.fsGroup }}" /data
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      {{- end }}
+      containers:
+        - name: ruler
+          image: {{ include "thanos.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.ruler.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.ruler.securityContext.runAsUser }}
+          {{- end }}
+          args:
+            - rule
+            - --log.level={{ .Values.ruler.logLevel }}
+            - --grpc-address=0.0.0.0:10901
+            - --http-address=0.0.0.0:10902
+            - --data-dir=/data
+            - --eval-interval={{ .Values.ruler.evalInterval }}
+            {{- range .Values.ruler.alertmanagers }}
+            - --alertmanagers.url={{ . }}
+            {{- end }}
+            {{- if and .Values.querier.enabled .Values.ruler.dnsDiscovery.enabled }}
+            - --query=dnssrv+_http._tcp.{{ include "thanos.fullname" . }}-querier.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
+            - --label=replica="$(POD_NAME)"
+            - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
+            - --objstore.config-file=/conf/objstore.yml
+            - --rule-file=/conf/ruler.yml
+            {{- range .Values.ruler.queries }}
+            - --query={{ . }}
+            {{- end }}
+            {{- range $key, $value := .Values.ruler.extraFlags }}
+            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- end }}          
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          ports:
+            - name: http
+              containerPort: 10902
+              protocol: TCP
+            - name: grpc
+              containerPort: 10901
+              protocol: TCP
+          {{- if .Values.ruler.livenessProbe }}
+          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.ruler.livenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ruler.readinessProbe }}
+          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.ruler.readinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ruler.resources }}
+          resources: {{- toYaml .Values.ruler.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: ruler-config
+              mountPath: /conf/ruler.yml
+              subPath: ruler.yml
+            - name: objstore-config
+              mountPath: /conf/objstore.yml
+              subPath: objstore.yml
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: ruler-config
+          configMap:
+            name: {{ include "thanos.ruler.configmapName" . }}
+        - name: objstore-config
+          configMap:
+            name: {{ include "thanos.objstoreConfigmapName" . }}
+  {{- if and .Values.ruler.persistence.enabled .Values.ruler.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.ruler.persistence.existingClaim }}
+  {{- else if not .Values.ruler.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else if and .Values.ruler.persistence.enabled (not .Values.ruler.persistence.existingClaim) }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        {{- range .Values.ruler.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.ruler.persistence.size | quote }}
+        {{- include "thanos.ruler.storageClass" . | nindent 8 }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,26 @@
+{{- if and .Values.compactor.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "thanos.fullname" . }}-compactor
+  {{- if .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  {{- end }}
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: compactor
+spec:
+  selector:
+    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: compactor
+  endpoints:
+    - port: http
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

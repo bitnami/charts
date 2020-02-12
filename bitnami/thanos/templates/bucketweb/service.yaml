@@ -1,0 +1,30 @@
+{{- if .Values.bucketweb.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thanos.fullname" . }}-bucketweb
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: bucketweb
+  {{- if .Values.bucketweb.service.annotations }}
+  annotations: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.bucketweb.service.type }}
+  {{- if and .Values.bucketweb.service.loadBalancerIP (eq .Values.bucketweb.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.bucketweb.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.bucketweb.service.type "LoadBalancer") .Values.bucketweb.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.bucketweb.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.bucketweb.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq .Values.bucketweb.service.type "NodePort") (eq .Values.bucketweb.service.type "LoadBalancer")) .Values.bucketweb.service.http.nodePort) }}
+      {{- else if eq .Values.bucketweb.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: bucketweb
+{{- end }}
