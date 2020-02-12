@@ -4,19 +4,9 @@
 
 ## TL;DR;
 
-For Helm 2:
-
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install --name thanos --namespace thanos bitnami/thanos
-```
-
-For Helm 3:
-
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-kubectl create namespace thanos
-helm install thanos --namespace thanos bitnami/thanos
+helm install my-release bitnami/thanos
 ```
 
 ## Introduction
@@ -33,21 +23,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release` in the namespace `my-namespace`:
-
-For Helm 2:
+To install the chart with the release name `my-release`:
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install --name my-release bitnami/thanos --namespace my-namespace bitnami/thanos
-```
-
-For Helm 3:
-
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-kubectl create namespace my-namespace
-helm install my-release --namespace my-namespace bitnami/thanos
+helm install my-release bitnami/thanos
 ```
 
 These commands deploy Thanos on the Kubernetes cluster with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -58,18 +38,8 @@ These commands deploy Thanos on the Kubernetes cluster with the default configur
 
 To uninstall/delete the `my-release` chart:
 
-For Helm 2:
-
 ```bash
-helm delete my-release
-```
-
-> Use the option `--purge` to delete all history too.
-
-For Helm 3:
-
-```bash
-helm uninstall my-release --namespace my-namespace
+helm uninstall my-release
 ```
 
 ## Architecture
@@ -367,20 +337,18 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `minio.secretKey.password` | MinIO Secret Key                                               | _random 40 character alphanumeric string_ |
 | `minio.defaultBuckets`     | Comma, semi-colon or space separated list of buckets to create | `nil`                                     |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example using Helm 2,
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install --name my-release \
-  --set querier.replicaCount=2 \
-    bitnami/thanos
+helm install my-release --set querier.replicaCount=2 bitnami/thanos
 ```
 
 The above command install Thanos chart with 2 Thanos Querier replicas.
 
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example using Helm 2,
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-helm install --name my-release -f values.yaml bitnami/thanos
+helm install my-release -f values.yaml bitnami/thanos
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -513,19 +481,6 @@ minio:
 ```
 
 - Install Prometheus Operator and Thanos charts:
-
-For Helm 2:
-
-```bash
-helm install --name prometheus-operator \
-    --set prometheus.thanos.create=true \
-    --namespace monitoring \
-    bitnami/prometheus-operator
-helm install --name thanos \
-    --values values.yaml \
-    --namespace monitoring \
-    bitnami/thanos
-```
 
 For Helm 3:
 
