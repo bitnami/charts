@@ -1,0 +1,11 @@
+{{- if (include "thanos.ruler.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "thanos.fullname" . }}-ruler-configmap
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ruler
+data:
+  ruler.yml: |-
+    {{- include "thanos.tplValue" (dict "value" .Values.ruler.config "context" $) | nindent 4 }}
+{{ end }}
