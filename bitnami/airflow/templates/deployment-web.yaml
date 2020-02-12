@@ -128,6 +128,9 @@ spec:
                 {{- if .Values.postgresql.enabled }}
                   name: {{ template "airflow.postgresql.fullname" . }}
                   key: postgresql-password
+                {{- else if .Values.externalDatabase.existingSecret}}
+                  name: {{ .Values.externalDatabase.existingSecret }}
+                  key: db-password
                 {{- else }}
                   name: {{ printf "%s-%s" .Release.Name "externaldb" }}
                   key: db-password
@@ -165,6 +168,9 @@ spec:
                 secretKeyRef:
                 {{- if .Values.redis.enabled }}
                   name: {{ template "airflow.redis.secretName" . }}
+                  key: redis-password
+                {{- else if .Values.externalRedis.existingSecret}}
+                  name: {{ .Values.externalRedis.existingSecret }}
                   key: redis-password
                 {{- else }}
                   name: {{ printf "%s-%s" .Release.Name "externalredis" }}

@@ -54,6 +54,9 @@ spec:
                 {{- if .Values.postgresql.enabled }}
                   name: {{ template "airflow.postgresql.fullname" . }}
                   key: postgresql-password
+                {{- else if .Values.externalDatabase.existingSecret}}
+                  name: {{ .Values.externalDatabase.existingSecret }}
+                  key: db-password
                 {{- else }}
                   name: {{ printf "%s-%s" .Release.Name "externaldb" }}
                   key: db-password
