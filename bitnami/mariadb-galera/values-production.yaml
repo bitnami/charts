@@ -386,7 +386,7 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
-  
+
 ## Additional pod labels
 ##
 # podLabels:
@@ -408,7 +408,7 @@ extraInitContainers: []
 extraContainers: []
 
 ## extraVolumes and extraVolumeMounts allows you to mount other volumes
-## Example Use Cases: 
+## Example Use Cases:
 ##  mount certificates to enable data-in-transit encryption
 ##  mount keys for data-at-rest encryption using file plugin
 # extraVolumes:
