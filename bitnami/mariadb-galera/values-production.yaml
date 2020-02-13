@@ -387,6 +387,11 @@ persistence:
   ##
   size: 8Gi
   
+## Additional pod labels
+##
+# podLabels:
+#   extraLabel: extraValue
+
 ## Priority Class Name
 #
 # priorityClassName: 'priorityClass'
