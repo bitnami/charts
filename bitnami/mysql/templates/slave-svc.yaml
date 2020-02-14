@@ -17,7 +17,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- if not (empty .Values.service.loadBalancerIP.slave) }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP.slave }}
+  {{- end }}
   {{- end }}
   ports:
     - name: mysql
