@@ -7,6 +7,11 @@ metadata:
     app.kubernetes.io/component: chartmuseum
 spec:
   replicas: {{ .Values.chartmuseum.replicas }}
+  strategy:
+    type: {{ .Values.chartmuseum.updateStrategy.type }}
+    {{- if eq .Values.chartmuseum.updateStrategy.type "Recreate" }}
+    rollingUpdate: null
+    {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: chartmuseum

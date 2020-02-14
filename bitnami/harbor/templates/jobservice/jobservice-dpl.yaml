@@ -6,6 +6,11 @@ metadata:
     app.kubernetes.io/component: jobservice
 spec:
   replicas: {{ .Values.jobservice.replicas }}
+  strategy:
+    type: {{ .Values.jobservice.updateStrategy.type }}
+    {{- if eq .Values.jobservice.updateStrategy.type "Recreate" }}
+    rollingUpdate: null
+    {{- end }}  
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: jobservice
