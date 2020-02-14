@@ -6,6 +6,11 @@ metadata:
     app.kubernetes.io/component: registry
 spec:
   replicas: {{ .Values.registry.replicas }}
+  strategy:
+    type: {{ .Values.registry.updateStrategy.type }}
+    {{- if eq .Values.registry.updateStrategy.type "Recreate" }}
+    rollingUpdate: null
+    {{- end }}  
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: registry
