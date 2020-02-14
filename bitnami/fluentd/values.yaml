@@ -73,7 +73,7 @@ forwarder:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
-  extraEnv: {}
+  extraEnv: []
 
   ## Forwarder containers' ports
   ##
@@ -245,9 +245,9 @@ aggregator:
   ## Extra environment variables to pass to the container
   ## extraEnv:
   ##   - name: MY_ENV_VAR
-  ##   - value: my_value
+  ##     value: my_value
   ##
-  extraEnv: {}
+  extraEnv: []
 
   ## Aggregator containers' ports
   ##
