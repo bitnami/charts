@@ -1,7 +1,7 @@
 apiVersion: v1
 name: zookeeper
-version: 5.4.1
-appVersion: 3.5.6
+version: 5.4.2
+appVersion: 3.5.7
 description: A centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services for distributed applications.
 keywords:
   - zookeeper
