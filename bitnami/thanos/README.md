@@ -324,7 +324,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `stretch`                                               |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `buster`                                                |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 
