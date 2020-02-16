@@ -144,7 +144,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `externalDatabase.password`               | External PostgreSQL password                                                                         | `nil`                                                        |
 | `externalDatabase.database`               | External PostgreSQL database name                                                                    | `nil`                                                        |
 | `externalDatabase.port`                   | External PostgreSQL port                                                                             | `nil`                                                        |
-| `externalDatabase.existingSecret`         | Name of an existing secret containing the postgres password ('db-password' key)                      | `nil`                                                        |
+| `externalDatabase.existingSecret`         | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)            | `nil`                                                        |
 | `redis.enabled`                           | Switch to enable or disable the Redis helm chart                                                     | `true`                                                       |
 | `externalRedis.host`                      | External Redis host                                                                                  | `nil`                                                        |
 | `externalRedis.port`                      | External Redis port                                                                                  | `nil`                                                        |
@@ -287,7 +287,7 @@ type: Opaque
 data:
   airflow-password: "Smo1QTJLdGxXMg=="
   airflow-fernetKey: "YVRZeVJVWnlXbU4wY1dOalVrdE1SV3cxWWtKeFIzWkVRVTVrVjNaTFR6WT0="
-  db-password: "cG9zdGdyZXMK"
+  postgresql-password: "cG9zdGdyZXMK"
   redis-password: "cmVkaXMK"
 ```
 

@@ -324,7 +324,7 @@ externalDatabase:
   user: bn_airflow
   ## Database password
   password: ""
-  ## Name of an existing secret resource containing the DB password in a 'db-password' key
+  ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
   existingSecret: ""
   ## Database name
   database: bitnami_airflow
