@@ -215,13 +215,39 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s-master" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-Create a template for the redis secret
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+{{/*
+Get the Redis credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
-{{- $name := default "redis" .Values.redis.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.redis.enabled -}}
+    {{/* Create a template for the redis secret
+    We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+    */}}
+    {{- $name := default "redis" .Values.redis.nameOverride -}}
+    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- else }}
+    {{- if .Values.externalRedis.existingSecret -}}
+        {{- printf "%s" .Values.externalRedis.existingSecret -}}
+    {{- else -}}
+        {{ printf "%s-%s" .Release.Name "externalredis" }}
+    {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Get the Postgresql credentials secret.
+*/}}
+{{- define "airflow.postgresql.secretName" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- printf "%s" (include "airflow.postgresql.fullname" .) -}}
+{{- else }}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+    {{- else -}}
+        {{ printf "%s-%s" .Release.Name "externaldb" }}
+    {{- end -}}
+{{- end -}}
+{{- end -}}    
 
 {{/*
 Get the secret name
