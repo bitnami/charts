@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add stable https://kubernetes-charts.storage.googleapis.com
 $ helm install my-release bitnami/mysql
 ```
 
@@ -26,7 +26,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add stable https://kubernetes-charts.storage.googleapis.com
 $ helm install my-release bitnami/mysql
 ```
 
@@ -225,7 +225,7 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
 
-The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can be defined.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can be defined.
 
 ### Adjust permissions of persistent volume mountpoint
 
