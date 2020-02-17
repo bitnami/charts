@@ -1075,8 +1075,8 @@ clair:
       #   memory: 1Gi
       requests: {}
       #   cpu: 250m
-      #   memory: 256Mi  
-      
+      #   memory: 256Mi
+
   replicas: 1
   # The http(s) proxy used to update vulnerabilities database from internet
   httpProxy:

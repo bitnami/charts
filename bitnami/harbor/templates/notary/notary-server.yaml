@@ -15,7 +15,7 @@ spec:
       labels: {{- include "harbor.labels" . | nindent 8 }}
         component: notary-server
       annotations:
-        checksum/configmap: {{ include (print $.Template.BasePath "/notary/notary-cm.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/notary/notary-secret.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if .Values.notary.podAnnotations }}
         annotations: {{- include "harbor.tplValue" (dict "value" .Values.notary.podAnnotations "context" $) | nindent 8 }}
@@ -51,33 +51,34 @@ spec:
             - name: DB_URL
               value: {{ include "harbor.database.notaryServer" . }}
           volumeMounts:
-            - name: notary-config
-              mountPath: /etc/notary
+            - name: config
+              mountPath: /etc/notary/server-config.postgres.json
+              subPath: server.json
             - name: root-certificate
               mountPath: /root.crt
               subPath: tls.crt
-            {{- if .Values.notary.secretName }}
-            - name: notary-ca
-              mountPath: /etc/ssl/notary/cert/notary-signer-ca.crt
-              subPath: ca
-            {{- end }}
+            - name: signer-certificate
+              mountPath: /etc/ssl/notary/ca.crt
+              subPath: ca.crt
           ports:
             - containerPort: 4443
               name: notary-server
       volumes:
-        - name: notary-config
-          configMap:
-            name: {{ include "harbor.notary-server" . }}
-        - name: root-certificate
+        - name: config
+          secret:
+            secretName: {{ include "harbor.notary-server" . }}
+        - name: token-service-certificate
           secret:
             {{- if .Values.core.secretName }}
             secretName: {{ .Values.core.secretName }}
             {{- else }}
-            secretName: {{ include "harbor.core" . }}
+            secretName: {{ template "harbor.core" . }}
             {{- end }}
-        {{- if .Values.notary.secretName }}
-        - name: notary-ca
+        - name: signer-certificate
           secret:
+            {{- if .Values.notary.secretName }}
             secretName: {{ .Values.notary.secretName }}
-        {{- end }}
+            {{- else }}
+            secretName: {{ template "harbor.notary-server" . }}
+            {{- end }}
 {{- end }}
