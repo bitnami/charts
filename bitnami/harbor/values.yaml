@@ -1142,8 +1142,8 @@ clair:
 ##
 notary:
   enabled: true
-  replicas: 1
   server:
+    replicas: 1
     ## Notary server containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1176,6 +1176,7 @@ notary:
       failureThreshold: 6
       successThreshold: 1
   signer:
+    replicas: 1
     ## Notary signer containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
