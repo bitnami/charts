@@ -44,7 +44,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the Kafka chart and their default values.
+The following tables lists the configurable parameters of the Airflow chart and their default values.
 
 | Parameter                                 | Description                                                                                          | Default                                                      |
 | ----------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
@@ -106,7 +106,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `service.type`                            | Kubernetes Service type                                                                              | `ClusterIP`                                                  |
 | `service.port`                            | Airflow Web port                                                                                     | `8080`                                                       |
 | `service.nodePort`                        | Kubernetes Service nodePort                                                                          | `nil`                                                        |
-| `service.loadBalancerIP`                  | loadBalancerIP for Kafka Service                                                                     | `nil`                                                        |
+| `service.loadBalancerIP`                  | loadBalancerIP for Airflow Service                                                                     | `nil`                                                        |
 | `service.annotations`                     | Service annotations                                                                                  | ``                                                           |
 | `ingress.enabled`                         | Enable ingress controller resource                                                                   | `false`                                                      |
 | `ingress.certManager`                     | Add annotations for cert-manager                                                                     | `false`                                                      |
