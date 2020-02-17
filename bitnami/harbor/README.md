@@ -395,6 +395,13 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrade
 
+## 4.0.0
+
+PostgreSQL and Redis dependencies were updated to the use the latest major versions, `8.x.x` and `10.x.x`, respectively. These major versions do not include changes that should break backwards compatibilities, check the links below for more information:
+
+- [PostgreSQL Upgrade notes](https://github.com/bitnami/charts/blob/master/upstreamed/postgresql/README.md#upgrade)
+- [Redis Upgrade notes](https://github.com/bitnami/charts/blob/master/upstreamed/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
+
 ## 3.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
