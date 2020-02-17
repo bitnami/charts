@@ -433,7 +433,12 @@ service:
   ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
+  ## loadBalancerIP for the MySQL Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
   # loadBalancerIP:
+  #   master:
+  #   slave:
 
 ## MySQL prometheus metrics parameters
 ## ref: https://docs.influxdata.com/influxdb/v1.7/administration/server_monitoring/#influxdb-metrics-http-endpoint

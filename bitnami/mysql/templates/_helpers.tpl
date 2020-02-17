@@ -263,3 +263,36 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "mysql.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "mysql.validateValues.loadBalancerIPareNotEquals" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MySql - must provide different IPs */}}
+{{- define "mysql.validateValues.loadBalancerIPareNotEquals" -}}
+{{- if not (empty .Values.service.loadBalancerIP) -}}
+{{- if eq (.Values.service.loadBalancerIP.master | quote) (.Values.service.loadBalancerIP.slave | quote) }}
+mysql: service.loadBalancerIP
+    loadBalancerIP.master is equal to loadBalancerIP.slave which is not possible.
+    Please set a different ip for master and slave services.
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Check if there are rolling tags in the images */}}
+{{- define "mysql.checkRollingTags" -}}
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end -}}
+{{- end -}}
