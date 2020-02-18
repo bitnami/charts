@@ -263,6 +263,17 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrading
 
+### 7.0.0
+
+Consul pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
+
+The field `podManagementPolicy` can't be updated in a StatefulSet, so you need to destroy it before you upgrade the chart to this version.
+
+```console
+$ kubectl delete statefulset consul
+$ helm upgrade <DEPLOYMENT_NAME> bitnami/consul
+```
+
 ### To 6.0.0
 
 This release updates the Bitnami Consul container to `1.6.1-debian-9-r6`, which is based on Bash instead of Node.js.

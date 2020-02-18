@@ -8,6 +8,7 @@ spec:
     matchLabels: {{- include "consul.matchLabels" . | nindent 6 }}
   serviceName: {{ template "consul.fullname" . }}
   replicas: {{ .Values.replicas }}
+  podManagementPolicy: Parallel
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
@@ -182,7 +183,7 @@ spec:
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           command:
             - /bin/consul_exporter
-            - --consul.server={{ template "consul.fullname" . }}:{{ .Values.port }}'
+            - --consul.server={{ template "consul.fullname" . }}:{{ .Values.service.port }}
           ports:
             - name: metrics
               containerPort: 9107
