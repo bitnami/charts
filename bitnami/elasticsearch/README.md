@@ -479,7 +479,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### 11.0.0
 
-Elasticsearch master pods are now deployed in parallel in order to bootstrap de cluster and be discovered.
+Elasticsearch master pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
 The field `podManagementPolicy` can't be updated in a StatefulSet, so you need to destroy it before you upgrade the chart to this version.
 
