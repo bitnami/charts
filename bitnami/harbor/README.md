@@ -256,7 +256,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `clair.livenessProbe`                                                       | Liveness probe configuration                                             | `Check values.yaml file`                                |
 | `clair.readinessProbe`                                                      | Readiness probe configuration                                            | `Check values.yaml file`                                |
 | **Notary**                                                                  |
-| `notary.enabled`                                                            | Enable Notary?                                                           | `true`                                                  |
+| `notary.enabled`                                                            | Enable Notary                                                            | `true`                                                  |
 | `notaryServerImage.registry`                                                | Registry for notary server image                                         | `docker.io`                                             |
 | `notaryServerImage.repository`                                              | Repository for notary server image                                       | `bitnami/harbor-notary-server`                          |
 | `notaryServerImage.tag`                                                     | Tag for notary server image                                              | `1.10.1-debian-10-r0`                                   |
