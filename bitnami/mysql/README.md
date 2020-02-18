@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```bash
-$ helm repo add stable https://kubernetes-charts.storage.googleapis.com
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/mysql
 ```
 
