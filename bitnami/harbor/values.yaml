@@ -1250,7 +1250,7 @@ redis:
     enabled: false
   master:
     persistence:
-      enabled: true 
+      enabled: true
   slave:
     persistence:
       enabled: true
