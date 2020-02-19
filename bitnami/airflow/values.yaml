@@ -143,11 +143,47 @@ airflow:
     # path:
   ## URL used to access to airflow web ui
   ##
-  # baseUrl:
-  ## Airflow worker component configuration
   worker:
+    # baseUrl:
+    ## Airflow worker component configuration
     port: 8793
-    replicas: 1
+    replicas: 2
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+    #  limits:
+    #    cpu: 200m
+    #    memory: 1Gi
+    #  requests:
+    #    memory: 256Mi
+    #    cpu: 250m 
+  ## Airflow web specific configuration
+  #
+  web:
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+    #  limits:
+    #    cpu: 200m
+    #    memory: 1Gi
+    #  requests:
+    #    memory: 256Mi
+    #    cpu: 250m
+  ## Airflow scheduler specific configuration
+  #
+  scheduler:
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+    #  limits:
+    #    cpu: 200m
+    #    memory: 1Gi
+    #  requests:
+    #    memory: 256Mi
+    #    cpu: 250m
 
   ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
   ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html

@@ -221,7 +221,7 @@ spec:
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
           {{- end }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- toYaml .Values.airflow.scheduler.resources | nindent 12 }}
       volumes:
       {{- if .Files.Glob "files/dags/*.py" }}
         - name: local-dag-files
