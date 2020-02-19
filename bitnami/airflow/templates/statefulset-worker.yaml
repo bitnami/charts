@@ -102,7 +102,9 @@ spec:
         - name: airflow-worker
           image: "{{ template "airflow.workerImage" . }}"
           imagePullPolicy: "{{ .Values.workerImage.pullPolicy }}"
+          {{- if .Values.airflow.worker.resources }}
           resources: {{- toYaml .Values.airflow.worker.resources | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.workerImage.debug }}
             - name: BASH_DEBUG

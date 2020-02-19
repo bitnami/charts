@@ -256,7 +256,9 @@ spec:
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: webserver_config.py
             {{- end }}
+          {{- if .Values.airflow.web.resources }}
           resources: {{- toYaml .Values.airflow.web.resources | nindent 12 }}
+          {{- end }}
       volumes:
         {{- if .Files.Glob "files/dags/*.py" }}
         - name: local-dag-files
