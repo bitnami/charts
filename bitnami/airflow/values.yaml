@@ -147,7 +147,7 @@ airflow:
     # baseUrl:
     ## Airflow worker component configuration
     port: 8793
-    replicas: 2
+    replicas: 1
     ## Configure resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
