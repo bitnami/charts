@@ -5,5 +5,5 @@ dependencies:
 - name: bitnami-common
   repository: https://charts.bitnami.com/bitnami
   version: 0.0.8
-digest: sha256:ef3a38fc3e846e18d2f0f1f326772092287a5ac289a4db640216a2717b081efd
-generated: "2020-02-19T10:47:37.805276+01:00"
+digest: sha256:bdf2c5d2d51a7d59453d2aca66a26bb09858c0a294be4a49be7440554a7d0824
+generated: "2020-02-19T11:06:23.236157008Z"
