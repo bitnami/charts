@@ -805,6 +805,15 @@ core:
 ##
 jobservice:
   replicas: 1
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate 
+
   maxJobWorkers: 10
   # The logger for jobs: "file", "database" or "stdout"
   jobLogger: file
@@ -869,6 +878,15 @@ jobservice:
 
 registry:
   replicas: 1
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate 
+
   ## Harbor Registry parameters
   ##
   registry:
@@ -971,6 +989,15 @@ registry:
 chartmuseum:
   enabled: true
   replicas: 1
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate 
+
   port: 8080
 
   ## Set the use of the Redis cache.
@@ -1142,8 +1169,9 @@ clair:
 ##
 notary:
   enabled: true
-  replicas: 1
+
   server:
+    replicas: 1
     ## Notary server containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1176,6 +1204,7 @@ notary:
       failureThreshold: 6
       successThreshold: 1
   signer:
+    replicas: 1
     ## Notary signer containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1221,7 +1250,7 @@ redis:
     enabled: false
   master:
     persistence:
-      enabled: true
+      enabled: true 
   slave:
     persistence:
       enabled: true
