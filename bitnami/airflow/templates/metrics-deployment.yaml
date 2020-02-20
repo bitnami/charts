@@ -51,13 +51,8 @@ spec:
             - name: AIRFLOW_PROMETHEUS_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.postgresql.enabled }}
-                  name: {{ template "airflow.postgresql.fullname" . }}
+                  name: {{ template "airflow.postgresql.secretName" . }}
                   key: postgresql-password
-                {{- else }}
-                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-                  key: db-password
-                {{- end }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
               {{- if .Values.postgresql.enabled }}
               value: {{ .Values.postgresql.postgresqlDatabase }}

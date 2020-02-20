@@ -328,6 +328,8 @@ externalDatabase:
   database: bitnami_airflow
   ## Database port number
   port: 5432
+  ## Name of an existing secret resource containing the Postgres password in a 'postgresql-password' key
+  existingSecret: ""
 
 ##
 ## Redis chart configuration
@@ -354,6 +356,8 @@ externalRedis:
   ## and it should be enough with the password
   ##
   # username: ""
+  ## Name of an existing secret resource containing the Redis password in a 'redis-password' key
+  existingSecret: ""
 
 ## Prometheus Exporter / Metrics
 ##

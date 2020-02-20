@@ -144,11 +144,13 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `externalDatabase.password`               | External PostgreSQL password                                                                         | `nil`                                                        |
 | `externalDatabase.database`               | External PostgreSQL database name                                                                    | `nil`                                                        |
 | `externalDatabase.port`                   | External PostgreSQL port                                                                             | `nil`                                                        |
+| `externalDatabase.existingSecret`         | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)            | `nil`                                                        |
 | `redis.enabled`                           | Switch to enable or disable the Redis helm chart                                                     | `true`                                                       |
 | `externalRedis.host`                      | External Redis host                                                                                  | `nil`                                                        |
 | `externalRedis.port`                      | External Redis port                                                                                  | `nil`                                                        |
 | `externalRedis.password`                  | External Redis password                                                                              | `nil`                                                        |
 | `externalRedis.username`                  | External Redis username (not required on most Redis implementations)                                 | `nil`                                                        |
+| `externalRedis.existingSecret`            | Name of an existing secret containing the Redis password ('redis-password' key)                      | `nil`                                                        |
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                                                 | `false`                                                      |
 | `metrics.image.registry`                  | Airflow exporter image registry                                                                      | `docker.io`                                                  |
 | `metrics.image.repository`                | Airflow exporter image name                                                                          | `bitnami/airflow-exporter`                                   |
@@ -255,6 +257,41 @@ airflow.clonePluginsFromGit.repository=https://github.com/teamclairvoyant/airflo
 airflow.clonePluginsFromGit.branch=v1.0.9-branch
 airflow.clonePluginsFromGit.path=plugins
 ```
+
+### Existing Secrets
+
+You can use an existing secret to configure your Airflow auth, external Postgres, and extern Redis passwords:
+
+```console
+postgresql.enabled=false
+externalDatabase.host=my.external.postgres.host
+externalDatabase.user=bn_airflow
+externalDatabase.database=bitnami_airflow
+externalDatabase.existingSecret=all-my-secrets
+
+redis.enabled=false
+externalRedis.host=my.external.redis.host
+externalRedis.existingSecret=all-my-secrets
+
+airflow.auth.existingSecret=all-my-secrets
+```
+
+The expected secret resource looks as follows:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: all-my-secrets
+type: Opaque
+data:
+  airflow-password: "Smo1QTJLdGxXMg=="
+  airflow-fernetKey: "YVRZeVJVWnlXbU4wY1dOalVrdE1SV3cxWWtKeFIzWkVRVTVrVjNaTFR6WT0="
+  postgresql-password: "cG9zdGdyZXMK"
+  redis-password: "cmVkaXMK"
+```
+
+This is useful if you plan on using [Bitnami's sealed secrets](https://github.com/bitnami-labs/sealed-secrets) to manage your passwords.
 
 ## Persistence
 

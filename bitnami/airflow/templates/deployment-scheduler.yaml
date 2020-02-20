@@ -124,13 +124,8 @@ spec:
             - name: AIRFLOW_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.postgresql.enabled }}
-                  name: {{ template "airflow.postgresql.fullname" . }}
+                  name: {{ template "airflow.postgresql.secretName" . }}
                   key: postgresql-password
-                {{- else }}
-                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-                  key: db-password
-                {{- end }}
             - name: AIRFLOW_DATABASE_HOST
               {{- if .Values.postgresql.enabled }}
               value: {{ template "airflow.postgresql.fullname" . }}
@@ -162,13 +157,8 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.redis.enabled }}
                   name: {{ template "airflow.redis.secretName" . }}
                   key: redis-password
-                {{- else }}
-                  name: {{ printf "%s-%s" .Release.Name "externalredis" }}
-                  key: redis-password
-                {{- end }}
             - name: AIRFLOW_EXECUTOR
               value: "CeleryExecutor"
             - name: AIRFLOW_FERNET_KEY
