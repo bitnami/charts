@@ -247,6 +247,7 @@ data:
 
     if [ "${BITNAMI_SNAPSHOT_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
+      set -x
     else
       echo "==> Bash debug is off"
       exec 1>/dev/null
