@@ -95,6 +95,7 @@ spec:
               mountPath: /var/log
             - name: varlibdockercontainers
               mountPath: /var/lib/docker/containers
+              readOnly: true
       volumes:
         {{- if .Values.tls.enabled }}
         - name: certs

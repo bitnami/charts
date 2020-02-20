@@ -1,9 +1,9 @@
 dependencies:
 - name: mariadb
   repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 7.3.7
+  version: 7.3.10
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
   version: 10.3.6
-digest: sha256:bad621518ab9d12662436062824ce1a8c4656b6bc8ae4dc7ccb1decc5c91fd09
-generated: 2020-02-04T14:43:40.276041876Z
+digest: sha256:1199087946ef0adb27705bd8c44027d32981ea921d6ddd1a49da130c1ce5a8b5
+generated: "2020-02-19T11:09:30.849657053Z"

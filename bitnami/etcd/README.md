@@ -291,6 +291,13 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Notable changes
+
+### 4.4.14
+
+In this release we addressed a vulnerability that showed the `ETCD_ROOT_PASSWORD` environment variable in the application logs. Users are advised to update immediately. More information in [this issue](https://github.com/bitnami/charts/issues/1901).
+
+
 ## Upgrading
 
 ### To 3.0.0
