@@ -143,9 +143,9 @@ airflow:
     # path:
   ## URL used to access to airflow web ui
   ##
-  worker:
-    # baseUrl:
-    ## Airflow worker component configuration
+  # baseUrl:
+  ## Airflow worker component configuration
+  worker:  
     port: 8793
     replicas: 1
     ## Worker containers' resource requests and limits
@@ -323,17 +323,6 @@ tolerations: []
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
-
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-#  limits:
-#    cpu: 200m
-#    memory: 1Gi
-#  requests:
-#    memory: 256Mi
-#    cpu: 250m
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
