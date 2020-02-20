@@ -125,10 +125,10 @@ airflow:
   ## Airflow generic configuration
   ##
   loadExamples: false
-  
+
   ## Interval to pull the git repository containing the plugins and/or DAG files
   #
-  gitSyncInterval: 60  
+  gitSyncInterval: 60
   ## Enable in order to download DAG files from git repository.
   ##
   cloneDagFilesFromGit:
@@ -162,13 +162,13 @@ airflow:
       requests: {}
       #    memory: 256Mi
       #    cpu: 250m
-  
+
   ## Airflow web specific configuration
   #
   web:
-  ## Web container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
+    ## Web container' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
     resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little
@@ -181,12 +181,12 @@ airflow:
       #    memory: 256Mi
       #    cpu: 250m
 
-  ## Scheduler containers specific configuration
+  ## Airflow scheduler specific configuration
   #
   scheduler:
-  ## Scheduler containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
+    ## Scheduler containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
     resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little

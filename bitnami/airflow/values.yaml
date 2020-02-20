@@ -145,7 +145,7 @@ airflow:
   ##
   # baseUrl:
   ## Airflow worker component configuration
-  worker:  
+  worker:
     port: 8793
     replicas: 1
     ## Worker containers' resource requests and limits
@@ -162,6 +162,7 @@ airflow:
       requests: {}
       #    memory: 256Mi
       #    cpu: 250m
+
   ## Airflow web specific configuration
   #
   web:
@@ -179,6 +180,7 @@ airflow:
       requests: {}
       #    memory: 256Mi
       #    cpu: 250m
+
   ## Airflow scheduler specific configuration
   #
   scheduler:
