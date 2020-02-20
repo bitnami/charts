@@ -1,7 +1,7 @@
 apiVersion: v1
 name: postgresql-ha
-version: 1.4.3
-appVersion: 11.6.0
+version: 1.4.4
+appVersion: 11.7.0
 description: Chart for PostgreSQL with HA architecture (using Replication Manager (repmgr) and Pgpool).
 keywords:
   - postgresql
