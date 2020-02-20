@@ -125,10 +125,10 @@ airflow:
   ## Airflow generic configuration
   ##
   loadExamples: false
-  
+
   ## Interval to pull the git repository containing the plugins and/or DAG files
   #
-  gitSyncInterval: 60  
+  gitSyncInterval: 60
   ## Enable in order to download DAG files from git repository.
   ##
   cloneDagFilesFromGit:
