@@ -15,4 +15,4 @@ maintainers:
 name: thanos
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
-version: 0.1.3
+version: 0.1.4
