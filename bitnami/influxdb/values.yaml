@@ -210,7 +210,7 @@ influxdb:
   ##
   containerPorts:
     http: 8086
-    rcp: 8088
+    rpc: 8088
 
   ## Service paramaters
   ##
@@ -223,13 +223,13 @@ influxdb:
     port: 8086
     ## InfluxDB RPC Port
     ##
-    rcpPort: 8088
+    rpcPort: 8088
     ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
       http: ""
-      rcp: ""
+      rpc: ""
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -564,3 +564,21 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+backup:
+  enabled: false
+  schedule: "0 2 * * *"
+  directory: "/backups"
+  retentionDays: 10
+  annotations: {}  
+  upload:
+    google:
+      enabled: false
+      serviceAccountSecret: "influxdb-backup-gcs-key"
+      serviceAccountSecretKey: "key.json"
+      bucketname: "gs://bucket/influxdb"
+    azure:
+      enabled: false
+      storageAccountSecret: "influxdb-backup-azure-key"
+      destination_container: "influxdb-container"
+      destination_path: ""

@@ -1,0 +1,39 @@
+{{- if .Values.backup.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "influxdb.fullname" . }}-backup
+  labels: 
+    {{- include "influxdb.labels" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb
+data:
+  backup.sh: |-
+    #!/bin/bash
+
+    set -e
+
+    DATE="$(date +%Y%m%d_%H%M%S)"
+
+    echo "deleting old backups"
+    find {{ .Values.backup.directory }}  -mindepth 2 -maxdepth 2 -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
+
+    for DATABASE in $(influx -username {{ .Values.adminUser.name }} -password "${INFLUXDB_ADMIN_USER_PASSWORD}" -host {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc -port {{ .Values.influxdb.service.port }} -execute 'SHOW DATABASES' | sed -e '1,3d'); do
+        echo "backuping ${DATABASE} db to {{ .Values.backup.directory }}/${DATABASE}"
+        mkdir -p {{ .Values.backup.directory }}/${DATABASE}
+        influxd backup -host {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc:{{ .Values.influxdb.service.rpcPort }} -portable -db ${DATABASE} {{ .Values.backup.directory }}/"${DATABASE}/${DATE}"
+    done
+  upload-google.sh: |-
+    #!/bin/sh
+
+    set -e
+
+    gcloud auth activate-service-account --key-file /var/secrets/google/{{ .Values.backup.upload.google.serviceAccountSecretKey }}
+    gsutil -m rsync -r -d {{ .Values.backup.directory }}/ {{ .Values.backup.upload.google.bucketname }}
+  upload-azure.sh: |-
+    #!/bin/sh
+
+    set -e
+
+    az storage container create --name "{{ .Values.backup.upload.azure.destination_container }}"
+    az storage azcopy blob sync --destination {{ .Values.backup.upload.azure.destination_container }} --destination-path {{ .Values.backup.upload.azure.destination_path }} --source "{{ .Values.backup.directory }}"
+{{ end }}
