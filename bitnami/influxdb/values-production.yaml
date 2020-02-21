@@ -210,7 +210,7 @@ influxdb:
   ##
   containerPorts:
     http: 8086
-    rcp: 8088
+    rpc: 8088
 
   ## Service paramaters
   ##
@@ -221,15 +221,15 @@ influxdb:
     ## InfluxDB HTTP Port
     ##
     port: 8086
-    ## InfluxDB RPC Port
+    ## InfluxDB rpc Port
     ##
-    rcpPort: 8088
+    rpcPort: 8088
     ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
       http: ""
-      rcp: ""
+      rpc: ""
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##

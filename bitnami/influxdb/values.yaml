@@ -221,7 +221,7 @@ influxdb:
     ## InfluxDB HTTP Port
     ##
     port: 8086
-    ## InfluxDB RPC Port
+    ## InfluxDB rpc Port
     ##
     rpcPort: 8088
     ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
@@ -570,7 +570,7 @@ backup:
   schedule: "0 2 * * *"
   directory: "/backups"
   retentionDays: 10
-  annotations: {}  
+  annotations: {}
   upload:
     google:
       enabled: false
