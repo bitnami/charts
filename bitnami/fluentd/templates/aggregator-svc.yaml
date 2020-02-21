@@ -1,4 +1,4 @@
-{{- if .Values.aggregator.service.ports }}
+{{- if and .Values.aggregator.enabled .Values.aggregator.service.ports }}
 apiVersion: v1
 kind: Service
 metadata:

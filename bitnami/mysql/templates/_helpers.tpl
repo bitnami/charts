@@ -94,6 +94,18 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
+{{ template "mysql.initdbScriptsCM" . }}
+{{/*
+Get the initialization scripts ConfigMap name.
+*/}}
+{{- define "mysql.initdbScriptsCM" -}}
+{{- if .Values.initdbScriptsConfigMap -}}
+{{- printf "%s" .Values.initdbScriptsConfigMap -}}
+{{- else -}}
+{{- printf "%s-init-scripts" (include "mysql.master.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Return the proper MySQL metrics exporter image name
 */}}

@@ -43,5 +43,6 @@ data:
       "appVersion": "{{ .Chart.AppVersion }}",
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": "/oauth2/start",
-      "oauthLogoutURI": "/oauth2/sign_out"
+      "oauthLogoutURI": "/oauth2/sign_out",
+      "featureFlags": {{ .Values.featureFlags | toJson }}
     }
