@@ -54,11 +54,11 @@ spec:
             - name: config
               mountPath: /etc/notary/server-config.postgres.json
               subPath: server.json
-            - name: root-certificate
+            - name: signer-certificate
               mountPath: /root.crt
               subPath: tls.crt
             - name: signer-certificate
-              mountPath: /etc/ssl/notary/ca.crt
+              mountPath: /etc/notary/notary-signer-ca.crt
               subPath: ca.crt
           ports:
             - containerPort: 4443

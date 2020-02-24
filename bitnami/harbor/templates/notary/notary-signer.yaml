@@ -56,10 +56,13 @@ spec:
               mountPath: /etc/notary/signer-config.postgres.json
               subPath: signer.json
             - name: signer-certificate
-              mountPath: /etc/ssl/notary/tls.crt
+              mountPath: /etc/notary/notary-signer-ca.crt
+              subPath: ca.crt
+            - name: signer-certificate
+              mountPath: /etc/notary/notary-signer.crt
               subPath: tls.crt
             - name: signer-certificate
-              mountPath: /etc/ssl/notary/tls.key
+              mountPath: /etc/notary/notary-signer.key
               subPath: tls.key
       volumes:
         - name: config
