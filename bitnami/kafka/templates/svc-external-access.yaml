@@ -14,7 +14,7 @@ metadata:
   labels: {{- include "kafka.labels" $ | nindent 4 }}
     app.kubernetes.io/component: kafka
     pod: {{ $targetPod }}
-  annotations: {{ include "kafka.tplValue" ( dict "value" .Values.externalAccess.service.annotations "context" $) | nindent 4 }}
+  annotations: {{ include "kafka.tplValue" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ $root.Values.externalAccess.service.type }}
   {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
