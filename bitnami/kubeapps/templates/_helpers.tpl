@@ -98,10 +98,10 @@ Create name for the apprepository-controller based on the fullname
 {{- end -}}
 
 {{/*
-Create name for the apprepository bootstrap job
+Create name for the apprepository pre-upgrade job
 */}}
-{{- define "kubeapps.apprepository-jobs-bootstrap.fullname" -}}
-{{ template "kubeapps.fullname" . }}-internal-apprepository-jobs-bootstrap
+{{- define "kubeapps.apprepository-jobs-preupgrade.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-apprepository-jobs-preupgrade
 {{- end -}}
 
 {{/*
