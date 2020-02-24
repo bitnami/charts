@@ -1,4 +1,4 @@
- HA
+# PostgreSQL HA
 
 This Helm chart has been developed based on [stable/postgresql](https://github.com/helm/charts/tree/master/stable/postgresql) chart but including some changes to guarantee high availability such as:
 
