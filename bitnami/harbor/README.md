@@ -9,7 +9,7 @@ For example, the following changes have been introduced:
 - Uses new Helm chart labels formating.
 - Uses Bitnami container images:
   - non-root by default
-  - published for debian-9 and ol-7
+  - published for debian-10 and ol-7
 - This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
 ## TL;DR;
@@ -205,7 +205,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | **Chartmuseum**                                                             |
 | `chartMuseumImage.registry`                                                 | Registry for ChartMuseum image                                           | `docker.io`                                             |
 | `chartMuseumImage.repository`                                               | Repository for clair image                                               | `bitnami/chartmuseum`                                   |
-| `chartMuseumImage.tag`                                                      | Tag for ChartMuseum image                                                | `0.9.0-debian-9-r6`                                     |
+| `chartMuseumImage.tag`                                                      | Tag for ChartMuseum image                                                | `{TAG_NAME}`                                            |
 | `chartMuseumImage.pullPolicy`                                               | ChartMuseum image pull policy                                            | `IfNotPresent`                                          |
 | `chartMuseumImage.debug`                                                    | Specify if debug logs should be enabled                                  | `false`                                                 |
 | `chartmuseum.enabled`                                                       | Enable ChartMuseum                                                       | `true`                                                  |
