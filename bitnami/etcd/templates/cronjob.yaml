@@ -33,6 +33,8 @@ spec:
               env:
               - name: BITNAMI_SNAPSHOT_DEBUG
                 value: {{ ternary "true" "false" .Values.disasterRecovery.debug | quote }}
+              - name: BITNAMI_DEBUG
+                value: {{ ternary "true" "false" .Values.image.debug | quote }}
               - name: ETCDCTL_API
                 value: "3"
               {{- if .Values.auth.client.secureTransport }}
