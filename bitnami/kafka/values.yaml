@@ -284,6 +284,9 @@ externalAccess:
     ##
     nodePort: []
 
+    ## Service annotations done as key:value pairs
+    annotations: {}
+
 ## Service account for Kafka to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
