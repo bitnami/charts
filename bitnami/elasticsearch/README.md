@@ -247,6 +247,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 
 ### Kibana Parameters
 
+|            Parameter           |                                    Description                                      |                                         Default                                         |
+|--------------------------------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
 | `global.kibanaEnabled`         | Use bundled Kibana                                                                  | `false`                                                                                 |
 | `kibana.elasticsearch.hosts`   | Array containing hostnames for the ES instances. Used to generate the URL           | `{{ include "elasticsearch.coordinating.fullname" . }}` Coordinating service (fullname) |
 | `kibana.elasticsearch.port`    | Port to connect Kibana and ES instance. Used to generate the URL                    | `9200`                                                                                  |
