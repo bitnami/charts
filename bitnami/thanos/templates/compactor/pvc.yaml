@@ -13,5 +13,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.compactor.persistence.size | quote }}
-  {{- include "thanos.compactor.storageClass" . | nindent 8 }}
+  {{- include "thanos.compactor.storageClass" . | nindent 2 }}
 {{- end }}
