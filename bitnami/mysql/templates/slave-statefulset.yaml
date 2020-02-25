@@ -136,11 +136,7 @@ spec:
           resources: {{- toYaml .Values.slave.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.slave.persistence.existingClaim }}
-            - name: {{ .Values.slave.persistence.existingClaim }}
-            {{- else }}
             - name: data
-            {{- end }}
               mountPath: {{ .Values.slave.persistence.mountPath }}
             {{- if .Values.slave.config }}
             - name: config
@@ -223,7 +219,7 @@ spec:
         - name: "data"
           emptyDir: {}
 {{- else if and .Values.slave.persistence.enabled .Values.slave.persistence.existingClaim }}
-        - name: {{ .Values.slave.persistence.existingClaim }}
+        - name: "data"
           persistentVolumeClaim:
             claimName: {{ .Values.slave.persistence.existingClaim }}
 {{- else if and .Values.slave.persistence.enabled (not .Values.slave.persistence.existingClaim) }}
