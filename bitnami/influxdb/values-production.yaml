@@ -564,3 +564,21 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+backup:
+  enabled: false
+  schedule: "0 2 * * *"
+  directory: "/backups"
+  retentionDays: 10
+  annotations: {}
+  upload:
+    google:
+      enabled: false
+      serviceAccountSecret: "influxdb-backup-gcs-key"
+      serviceAccountSecretKey: "key.json"
+      bucketname: "gs://bucket/influxdb"
+    azure:
+      enabled: false
+      storageAccountSecret: "influxdb-backup-azure-key"
+      destination_container: "influxdb-container"
+      destination_path: ""
