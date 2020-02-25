@@ -548,6 +548,8 @@ prometheus:
       ##
       # pullSecrets:
       #   - myRegistryKeySecretName
+    
+    extraArgs: [] 
 
     ## Thanos Sidecar Service
     ##
