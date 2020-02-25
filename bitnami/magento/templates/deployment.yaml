@@ -115,6 +115,8 @@ spec:
               value: {{ .Values.magentoLastName | quote }}
             - name: MAGENTO_MODE
               value: {{ .Values.magentoMode | quote }}
+            - name: MAGENTO_USE_SECURE_ADMIN
+              value: {{ ternary "yes" "no" .Values.magentoUseSecureAdmin | quote }}
           ports:
             - name: http
               containerPort: 80

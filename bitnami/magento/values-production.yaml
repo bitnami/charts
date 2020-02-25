@@ -86,6 +86,11 @@ magentoLastName: LastName
 ##
 magentoMode: developer
 
+## Use SSL to access the Magento Admin. Valid values: `true`, `false`
+## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+##
+magentoUseSecureAdmin: false
+
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-magento#environment-variables
 allowEmptyPassword: "yes"
