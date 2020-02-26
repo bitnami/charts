@@ -72,6 +72,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | `magentoFirstName`                      | Magento Admin First Name                                                                             | `FirstName`                                                  |
 | `magentoLastName`                       | Magento Admin Last Name                                                                              | `LastName`                                                   |
 | `magentoMode`                           | Magento mode                                                                                         | `developer`                                                  |
+| `magentoUseSecureAdmin`                 | Use SSL to access the Magento Admin.                                                                 | `false`                                                      |
 | `magentoAdminUri`                       | Magento prefix to access Magento Admin                                                               | `admin`                                                      |
 | `allowEmptyPassword`                    | Allow DB blank passwords                                                                             | `yes`                                                        |
 | `ingress.enabled`                       | Enable ingress controller resource                                                                   | `false`                                                      |

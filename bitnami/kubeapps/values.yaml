@@ -105,7 +105,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.1-debian-9-r52
+    tag: 1.16.1-debian-10-r27
   ## Frontend service parameters
   ##
   service:
@@ -457,7 +457,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.8.2-debian-10-r0
+    tag: 1.8.2-debian-10-r6
   ## Dashboard service parameters
   ##
   service:
@@ -590,7 +590,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.1-debian-9-r52
+  tag: 1.16.1-debian-10-r27
 
 # Auth Proxy for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
