@@ -51,34 +51,33 @@ spec:
             - name: DB_URL
               value: {{ include "harbor.database.notaryServer" . }}
           volumeMounts:
-            - name: config
-              mountPath: /etc/notary/server-config.postgres.json
-              subPath: server.json
-            - name: signer-certificate
+            - name: notary-config
+              mountPath: /etc/notary
+            - name: root-certificate
               mountPath: /root.crt
               subPath: tls.crt
-            - name: signer-certificate
-              mountPath: /etc/notary/notary-signer-ca.crt
-              subPath: ca.crt
+            {{- if .Values.notary.secretName }}
+            - name: notary-ca
+              mountPath: /etc/ssl/notary/cert/notary-signer-ca.crt
+              subPath: ca
+            {{- end }}
           ports:
             - containerPort: 4443
               name: notary-server
       volumes:
-        - name: config
+        - name: notary-config
           secret:
             secretName: {{ include "harbor.notary-server" . }}
-        - name: token-service-certificate
+        - name: root-certificate
           secret:
             {{- if .Values.core.secretName }}
             secretName: {{ .Values.core.secretName }}
             {{- else }}
-            secretName: {{ template "harbor.core" . }}
+            secretName: {{ include "harbor.core" . }}
             {{- end }}
-        - name: signer-certificate
+        {{- if .Values.notary.secretName }}
+        - name: notary-ca
           secret:
-            {{- if .Values.notary.secretName }}
             secretName: {{ .Values.notary.secretName }}
-            {{- else }}
-            secretName: {{ template "harbor.notary-server" . }}
-            {{- end }}
+        {{- end }}
 {{- end }}

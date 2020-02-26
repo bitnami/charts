@@ -52,27 +52,26 @@ spec:
             - name: NOTARY_SIGNER_DEFAULTALIAS
               value: defaultalias
           volumeMounts:
-            - name: config
-              mountPath: /etc/notary/signer-config.postgres.json
-              subPath: signer.json
-            - name: signer-certificate
-              mountPath: /etc/notary/notary-signer-ca.crt
-              subPath: ca.crt
-            - name: signer-certificate
-              mountPath: /etc/notary/notary-signer.crt
-              subPath: tls.crt
-            - name: signer-certificate
-              mountPath: /etc/notary/notary-signer.key
-              subPath: tls.key
-      volumes:
-        - name: config
-          secret:
-            secretName: "{{ template "harbor.notary-server" . }}"
-        - name: signer-certificate
-          secret:
+            - name: notary-config
+              mountPath: /etc/notary
             {{- if .Values.notary.secretName }}
-            secretName: {{ .Values.notary.secretName }}
-            {{- else }}
-            secretName: {{ template "harbor.notary-server" . }}
+            - name: notary-cert
+              mountPath: /etc/ssl/notary/cert/notary-signer-ca.crt
+              subPath: ca
+            - name: notary-cert
+              mountPath: /etc/ssl/notary/cert/notary-signer.crt
+              subPath: crt
+            - name: notary-cert
+              mountPath: /etc/ssl/notary/cert/notary-signer.key
+              subPath: key
             {{- end }}
+      volumes:
+        - name: notary-config
+          secret:
+            secretName: {{ include "harbor.notary-server" . }}
+        {{- if .Values.notary.secretName }}
+        - name: notary-cert
+          secret:
+            secretName: {{ .Values.notary.secretName }}
+        {{- end }}
 {{- end }}
