@@ -549,7 +549,11 @@ prometheus:
       # pullSecrets:
       #   - myRegistryKeySecretName
     
+    ## Extra arguments passed to thanos sidecar 'args' section
+    ##
     extraArgs: [] 
+    # - --log.level=debug
+    # - --tsdb.path=/data/
 
     ## Thanos Sidecar Service
     ##
