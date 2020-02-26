@@ -149,13 +149,9 @@ spec:
           resources: {{- toYaml .Values.master.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.master.persistence.existingClaim }}
-            - name: {{ .Values.master.persistence.existingClaim }}
-            {{- else }}
             - name: data
-            {{- end }}
               mountPath: {{ .Values.master.persistence.mountPath }}
-            {{- if  (.Files.Glob "files/docker-entrypoint-initdb.d/*[sh|sql|sql.gz]") }}
+            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
             {{- end }}
@@ -222,10 +218,10 @@ spec:
           configMap:
             name: {{ template "mysql.master.fullname" . }}
         {{- end }}
-        {{- if  (.Files.Glob "files/docker-entrypoint-initdb.d/*[sh|sql|sql.gz]") }}
+        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts
           configMap:
-            name: {{ template "mysql.master.fullname" . }}-init-scripts
+            name: {{ template "mysql.initdbScriptsCM" . }}
         {{- end }}
         {{- if or .Values.root.injectSecretsAsVolume .Values.db.injectSecretsAsVolume .Values.replication.injectSecretsAsVolume }}
         - name: mysql-credentials
@@ -249,7 +245,7 @@ spec:
         - name: "data"
           emptyDir: {}
 {{- else if and .Values.master.persistence.enabled .Values.master.persistence.existingClaim }}
-        - name: {{ .Values.master.persistence.existingClaim }}
+        - name: "data"
           persistentVolumeClaim:
             claimName: {{ .Values.master.persistence.existingClaim }}
 {{- else if and .Values.master.persistence.enabled (not .Values.master.persistence.existingClaim) }}

@@ -41,7 +41,10 @@ data:
     ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
     export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
-
+    export ROOT_PASSWORD="${ETCD_ROOT_PASSWORD:-}"
+    if [[ -n "${ETCD_ROOT_PASSWORD:-}" ]]; then
+      unset ETCD_ROOT_PASSWORD
+    fi
     # Functions
     ## Store member id for later member replacement
     store_member_id() {
@@ -54,12 +57,12 @@ data:
     configure_rbac() {
         # When there's more than one replica, we can assume the 1st member
         # to be created is "{{ $etcdFullname }}-0" since a statefulset is used
-        if [[ -n "${ETCD_ROOT_PASSWORD:-}" ]] && [[ "$HOSTNAME" == "{{ $etcdFullname }}-0" ]]; then
+        if [[ -n "${ROOT_PASSWORD:-}" ]] && [[ "$HOSTNAME" == "{{ $etcdFullname }}-0" ]]; then
             echo "==> Configuring RBAC authentication!" 1>&3 2>&4
             etcd &
             ETCD_PID=$!
             while ! etcdctl $AUTH_OPTIONS member list; do sleep 1; done
-            echo "$ETCD_ROOT_PASSWORD" | etcdctl $AUTH_OPTIONS user add root --interactive=false
+            echo "$ROOT_PASSWORD" | etcdctl $AUTH_OPTIONS user add root --interactive=false
             etcdctl $AUTH_OPTIONS auth enable
             kill "$ETCD_PID"
             sleep 5
@@ -242,8 +245,9 @@ data:
     exec 3>&1
     exec 4>&2
 
-    if [ "${BITNAMI_DEBUG}" = true ]; then
+    if [ "${BITNAMI_SNAPSHOT_DEBUG}" = true -o "${BITNAMI_DEBUG}" = true ]; then
       echo "==> Bash debug is on"
+      set -x
     else
       echo "==> Bash debug is off"
       exec 1>/dev/null
@@ -254,14 +258,24 @@ data:
     AUTH_OPTIONS="{{ $etcdAuthOptions }}"
     ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
     # Remove the last comma "," introduced in the string
-    export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
+    export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS%%,}"
 
     mkdir -p "/snapshots" 1>&3 2>&4
-    if etcdctl $AUTH_OPTIONS endpoint health; then
-        echo "Snapshotting the keyspace..." 1>&3 2>&4
-        etcdctl $AUTH_OPTIONS snapshot save "/snapshots/db" 1>&3 2>&4
-    else
-        echo "Cluster isn't responding!!" 1>&3 2>&4
-        exit 1
-    fi
+
+    # walk over each node in the list, check if node healthy make snapshot and exit, otherwise try another node
+    while read -d, ETCDCTL_ENDPOINTS; do
+        echo "Using endpoint ${ETCDCTL_ENDPOINTS}" 1>&3 2>&4
+        if etcdctl $AUTH_OPTIONS endpoint health; then
+            echo "Snapshotting the keyspace..." 1>&3 2>&4
+            etcdctl $AUTH_OPTIONS snapshot save "/snapshots/db" 1>&3 2>&4
+            exit 0
+        else
+            echo "Warning - etcd endpoint ${ETCDCTL_ENDPOINTS} not healthy" 1>&3 2>&4
+            echo "Trying another endpoint." 1>&3 2>&4
+        fi
+    done <<< "$ETCDCTL_ENDPOINTS"
+
+    # exit with error if all endpoints are bad
+    echo "Error - all etcd endpoints are unhealthy!" 1>&3 2>&4
+    exit 1
 {{- end }}

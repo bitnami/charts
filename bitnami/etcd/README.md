@@ -130,6 +130,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `startFromSnapshot.existingClaim`         | PVC containing the existing snapshot                                                                                                                      | `nil`                                                       |
 | `startFromSnapshot.snapshotFilename`      | Snapshot filename                                                                                                                                         | `nil`                                                       |
 | `disasterRecovery.enabled`                | Enable auto disaster recovery by periodically snapshotting the keyspace                                                                                   | `false`                                                     |
+| `disasterRecovery.debug`                  | Enable debug logging for snapshots                                                                                                                        | `false`                                                     |
 | `disasterRecovery.cronjob.schedule`       | Schedule in Cron format to save snapshots                                                                                                                 | `*/30 * * * *`                                              |
 | `disasterRecovery.cronjob.historyLimit`   | Number of successful finished jobs to retain                                                                                                              | `1`                                                         |
 | `disasterRecovery.cronjob.podAnnotations` | Pod annotations for cronjob pods                                                                                                                          | `{}`                                                        |
@@ -290,6 +291,13 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Notable changes
+
+### 4.4.14
+
+In this release we addressed a vulnerability that showed the `ETCD_ROOT_PASSWORD` environment variable in the application logs. Users are advised to update immediately. More information in [this issue](https://github.com/bitnami/charts/issues/1901).
+
 
 ## Upgrading
 

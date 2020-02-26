@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 1.10.9-debian-10-r0
+  tag: 1.10.9-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -38,7 +38,7 @@ image:
 schedulerImage:
   registry: docker.io
   repository: bitnami/airflow-scheduler
-  tag: 1.10.7-debian-10-r12
+  tag: 1.10.9-debian-10-r16
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -62,7 +62,7 @@ schedulerImage:
 workerImage:
   registry: docker.io
   repository: bitnami/airflow-worker
-  tag: 1.10.7-debian-10-r13
+  tag: 1.10.9-debian-10-r16
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,7 +86,7 @@ workerImage:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.25.0-debian-10-r12
+  tag: 2.25.1-debian-10-r8
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -148,6 +148,56 @@ airflow:
   worker:
     port: 8793
     replicas: 1
+    ## Worker containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #    cpu: 200m
+      #    memory: 1Gi
+      requests: {}
+      #    memory: 256Mi
+      #    cpu: 250m
+
+  ## Airflow web specific configuration
+  #
+  web:
+    ## Web container' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #    cpu: 200m
+      #    memory: 1Gi
+      requests: {}
+      #    memory: 256Mi
+      #    cpu: 250m
+
+  ## Airflow scheduler specific configuration
+  #
+  scheduler:
+    ## Scheduler containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #    cpu: 200m
+      #    memory: 1Gi
+      requests: {}
+      #    memory: 256Mi
+      #    cpu: 250m
 
   ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
   ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
@@ -276,17 +326,6 @@ tolerations: []
 ##
 affinity: {}
 
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-#  limits:
-#    cpu: 200m
-#    memory: 1Gi
-#  requests:
-#    memory: 256Mi
-#    cpu: 250m
-
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
@@ -324,6 +363,8 @@ externalDatabase:
   user: bn_airflow
   ## Database password
   password: ""
+  ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
+  existingSecret: ""
   ## Database name
   database: bitnami_airflow
   ## Database port number
@@ -349,6 +390,9 @@ externalRedis:
   ## Redis password
   ##
   password: ""
+  ## Name of an existing secret resource containing the Redis password in a 'redis-password' key
+  ##
+  existingSecret: ""
   ## Redis username
   ## Most Redis implementnations do not require a username to authenticate
   ## and it should be enough with the password
@@ -363,7 +407,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20180711.0-debian-10-r12
+    tag: 0.20180711.0-debian-10-r28
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -387,4 +431,3 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9112"
-

@@ -26,23 +26,23 @@ spec:
       annotations:
       {{ toYaml .Values.podAnnotations | nindent 8 }}
     {{- end }}
-    {{- if .Values.nodeSelector }}
-      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-      {{ toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-      {{ toYaml . | nindent 8 }}
-    {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{ toYaml . | nindent 8 }}
       {{- end }}
       {{- if or .Values.airflow.cloneDagFilesFromGit.enabled .Values.airflow.clonePluginsFromGit.enabled }}
       initContainers:
@@ -124,13 +124,8 @@ spec:
             - name: AIRFLOW_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.postgresql.enabled }}
-                  name: {{ template "airflow.postgresql.fullname" . }}
+                  name: {{ template "airflow.postgresql.secretName" . }}
                   key: postgresql-password
-                {{- else }}
-                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-                  key: db-password
-                {{- end }}
             - name: AIRFLOW_DATABASE_HOST
               {{- if .Values.postgresql.enabled }}
               value: {{ template "airflow.postgresql.fullname" . }}
@@ -162,13 +157,8 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.redis.enabled }}
                   name: {{ template "airflow.redis.secretName" . }}
                   key: redis-password
-                {{- else }}
-                  name: {{ printf "%s-%s" .Release.Name "externalredis" }}
-                  key: redis-password
-                {{- end }}
             - name: AIRFLOW_EXECUTOR
               value: "CeleryExecutor"
             - name: AIRFLOW_USERNAME
@@ -256,7 +246,9 @@ spec:
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: webserver_config.py
             {{- end }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.airflow.web.resources }}
+          resources: {{- toYaml .Values.airflow.web.resources | nindent 12 }}
+          {{- end }}
       volumes:
         {{- if .Files.Glob "files/dags/*.py" }}
         - name: local-dag-files
