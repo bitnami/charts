@@ -1,3 +1,4 @@
+{{- if .Values.featureFlags.reposPerNamespace -}}
 # Invalidate the chart cache during upgrade.
 apiVersion: batch/v1
 kind: Job
@@ -65,3 +66,4 @@ spec:
                   key: postgresql-password
                   name: {{ .Values.postgresql.existingSecret }}
             {{- end }}
+{{- end -}}
