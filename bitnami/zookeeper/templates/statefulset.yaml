@@ -98,6 +98,10 @@ spec:
               value: {{ .Values.fourlwCommandsWhitelist | quote }}
             - name: ZOO_LISTEN_ALLIPS_ENABLED
               value: {{ ternary "yes" "no" .Values.listenOnAllIPs | quote }}
+            - name: ZOO_AUTOPURGE_INTERVAL
+              value: {{ .Values.autopurge.purgeInterval | quote }}
+            - name: ZOO_AUTOPURGE_RETAIN_COUNT
+              value: {{ .Values.autopurge.snapRetainCount | quote }}
             - name: ZOO_SERVERS
               {{- $replicaCount := int .Values.replicaCount }}
               {{- $followerPort := int .Values.service.followerPort }}
