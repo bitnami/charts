@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.5.7-debian-10-r0
+  tag: 3.5.7-debian-10-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -112,6 +112,14 @@ listenOnAllIPs: false
 ## Allow to accept connections from unauthenticated users
 ##
 allowAnonymousLogin: true
+
+autopurge:
+  ## Retains the snapRetainCount most recent snapshots and the corresponding transaction logs and deletes the rest
+  ##
+  snapRetainCount: 3
+  ## The time interval in hours for which the purge task has to be triggered. Set to a positive integer (1 and above) to enable the auto purging.
+  ##
+  purgeInterval: 0
 
 auth:
   ## Use existing secret (ignores previous password)
@@ -241,7 +249,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/zookeeper-exporter
-    tag: 0.1.3-debian-10-r17
+    tag: 0.1.3-debian-10-r29
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
