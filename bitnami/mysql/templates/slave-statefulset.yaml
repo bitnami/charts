@@ -44,6 +44,9 @@ spec:
         - name: volume-permissions
           image: {{ template "mysql.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          {{- if .Values.slave.containerSecurityContext }}
+          securityContext: {{- toYaml .Values.slave.containerSecurityContext | nindent 12 }}
+          {{- end }}
           command:
             - /bin/bash
             - -ec
