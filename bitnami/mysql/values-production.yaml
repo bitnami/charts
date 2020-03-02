@@ -208,13 +208,23 @@ master:
   ##
   tolerations: []
 
-  ## Pod Security Context
+  ## MySQL master pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## MySQL master containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## Example:
+  ##   containerSecurityContext:
+  ##     capabilities:
+  ##       drop: ["NET_RAW"]
+  ##     readOnlyRootFilesystem: true
+  ##
+  containerSecurityContext: {}
 
   ## MySQL master containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -346,13 +356,23 @@ slave:
   ##
   tolerations: []
 
-  ## Pod Security Context
+  ## MySQL slave pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## MySQL slave containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## Example:
+  ##   containerSecurityContext:
+  ##     capabilities:
+  ##       drop: ["NET_RAW"]
+  ##     readOnlyRootFilesystem: true
+  ##
+  containerSecurityContext: {}
 
   ## MySQL slave containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
