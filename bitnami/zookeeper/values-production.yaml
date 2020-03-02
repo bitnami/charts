@@ -233,6 +233,21 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
+## Network policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to the port Redis is listening
+  ## on. When true, zookeeper accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
