@@ -330,6 +330,9 @@ disasterRecovery:
     ## Number of successful finished jobs to retain
     ##
     historyLimit: 1
+    ## Number of etcd snapshots to retain, tagged with date
+    ##
+    snapshotHistoryLimit: 1
     ## Pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
