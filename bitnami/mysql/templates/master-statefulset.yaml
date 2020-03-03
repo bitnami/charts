@@ -212,7 +212,7 @@ spec:
           {{- if or .Values.root.injectSecretsAsVolume }}
           volumeMounts:
             - name: mysql-credentials
-              mountPath: /opt/bitnami/mysql/secrets/
+              mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
         {{- end }}
       volumes:
