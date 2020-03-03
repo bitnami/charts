@@ -15,7 +15,7 @@ spec:
       labels: {{- include "harbor.labels" . | nindent 8 }}
         app.kubernetes.io/component: clair
       annotations:
-        checksum/configmap: {{ include (print $.Template.BasePath "/clair/clair-cm.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/clair/clair-secret.yaml") . | sha256sum }}
         {{- if .Values.clair.podAnnotations }}
         {{- include "harbor.tplValue" (dict "value" .Values.clair.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -75,7 +75,7 @@ spec:
           ports:
             - containerPort: 6060
           volumeMounts:
-            - name: clair-config
+            - name: config
               mountPath: /etc/clair/config.yaml
               subPath: config.yaml
         - name: adapter
@@ -119,10 +119,7 @@ spec:
           ports:
             - containerPort: 8080
       volumes:
-        - name: clair-config
-          configMap:
-            name: {{ include "harbor.clair" . }}
-            items:
-              - key: config.yaml
-                path: config.yaml
+        - name: config
+          secret:
+            secretName: "{{ template "harbor.clair" . }}"
 {{- end }}

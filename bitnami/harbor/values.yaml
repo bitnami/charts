@@ -1076,7 +1076,7 @@ clair:
       #   memory: 1Gi
       requests: {}
       #   cpu: 250m
-      #   memory: 256Mi  
+      #   memory: 256Mi
 
   replicas: 1
   # The http(s) proxy used to update vulnerabilities database from internet
@@ -1143,8 +1143,8 @@ clair:
 ##
 notary:
   enabled: true
-  replicas: 1
   server:
+    replicas: 1
     ## Notary server containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1177,6 +1177,7 @@ notary:
       failureThreshold: 6
       successThreshold: 1
   signer:
+    replicas: 1
     ## Notary signer containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1208,6 +1209,18 @@ notary:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  ## Additional deployment annotations
+  podAnnotations: {}
+  # Fill the name of a kubernetes secret if you want to use your own
+  # TLS certificate authority, certificate and private key for notary
+  # communications.
+  # The secret must contain keys named ca.crt, tls.crt and tls.key that
+  # contain the CA, certificate and private key.
+  # They will be generated if not set.
+  secretName: ""
 
 ## Redis chart configuration
 ## ref: https://github.com/helm/charts/blob/master/stable/redis/values.yaml
