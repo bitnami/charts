@@ -1076,8 +1076,8 @@ clair:
       #   memory: 1Gi
       requests: {}
       #   cpu: 250m
-      #   memory: 256Mi  
-      
+      #   memory: 256Mi
+
   replicas: 1
   # The http(s) proxy used to update vulnerabilities database from internet
   httpProxy:
@@ -1143,8 +1143,8 @@ clair:
 ##
 notary:
   enabled: true
-  replicas: 1
   server:
+    replicas: 1
     ## Notary server containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1177,6 +1177,7 @@ notary:
       failureThreshold: 6
       successThreshold: 1
   signer:
+    replicas: 1
     ## Notary signer containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##

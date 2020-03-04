@@ -15,7 +15,7 @@ spec:
       labels: {{- include "harbor.labels" . | nindent 8 }}
         component: notary-server
       annotations:
-        checksum/configmap: {{ include (print $.Template.BasePath "/notary/notary-cm.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/notary/notary-secret.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if .Values.notary.podAnnotations }}
         annotations: {{- include "harbor.tplValue" (dict "value" .Values.notary.podAnnotations "context" $) | nindent 8 }}
@@ -66,8 +66,8 @@ spec:
               name: notary-server
       volumes:
         - name: notary-config
-          configMap:
-            name: {{ include "harbor.notary-server" . }}
+          secret:
+            secretName: {{ include "harbor.notary-server" . }}
         - name: root-certificate
           secret:
             {{- if .Values.core.secretName }}

@@ -144,6 +144,10 @@ spec:
             {{- end }}
             - name: CASSANDRA_ENABLE_RPC
               value: {{ .Values.cluster.enableRPC | quote }}
+            {{- if .Values.cluster.enableUDF }}
+            - name: CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS
+              value: {{ .Values.cluster.enableUDF | quote }}
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
