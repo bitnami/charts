@@ -406,6 +406,10 @@ metrics:
       #   cpu: 100m
       #   memory: 128Mi
 
+    ## Annotations for the Kafka Exporter Prometheus metrics deployment
+    ##
+    annotations: {}
+
     service:
       ## Kafka Exporter Service type
       ##
