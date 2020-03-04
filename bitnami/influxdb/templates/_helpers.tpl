@@ -119,6 +119,52 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Return the proper gcloud-sdk image name
+*/}}
+{{- define "gcloudSdk.image" -}}
+{{- $registryName := .Values.backup.uploadProviders.google.image.registry -}}
+{{- $repositoryName := .Values.backup.uploadProviders.google.image.repository -}}
+{{- $tag := .Values.backup.uploadProviders.google.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper azure-cli image name
+*/}}
+{{- define "azureCli.image" -}}
+{{- $registryName := .Values.backup.uploadProviders.azure.image.registry -}}
+{{- $repositoryName := .Values.backup.uploadProviders.azure.image.repository -}}
+{{- $tag := .Values.backup.uploadProviders.azure.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "influxdb.imagePullSecrets" -}}

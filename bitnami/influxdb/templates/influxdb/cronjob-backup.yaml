@@ -5,17 +5,19 @@ metadata:
   name: "{{ template "influxdb.fullname" . }}-backup"
   labels:
     {{- include "influxdb.labels" . | nindent 4 }}
-  annotations:
-    {{- toYaml .Values.backup.annotations | nindent 4 }}
 spec:
-  schedule: {{.Values.backup.schedule | quote }}
+  schedule: {{.Values.backup.cronjob.schedule | quote }}
   concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.backup.cronjob.historyLimit }}
+  failedJobsHistoryLimit: {{ .Values.backup.cronjob.historyLimit }}
   jobTemplate:
     spec:
       template:
         metadata:
           labels: 
             {{- include "influxdb.matchLabels" . | nindent 12 }}
+          annotations:
+            {{- toYaml .Values.backup.cronjob.Podannotations | nindent 12 }}
         spec:
           securityContext:
             runAsUser: 0
@@ -26,11 +28,15 @@ spec:
             configMap:
               name: {{ include "influxdb.fullname" . }}-backup
               defaultMode: 0755
-          {{- if .Values.backup.upload.google.enabled }}
+          {{- if .Values.backup.uploadProviders.google.enabled }}
           - name: google-cloud-key
             secret:
-              secretName: {{ .Values.backup.upload.google.serviceAccountSecret | quote }}
-          {{- end }}       
+          {{- if .Values.backup.uploadProviders.google.existingSecret }}
+              secretName: {{ .Values.backup.uploadProviders.google.existingSecret | quote }}
+          {{- else }}   
+              secretName: {{ include "influxdb.fullname" . }}-backup-gcloud
+          {{- end }}
+          {{- end }}
           - name: {{ include "influxdb.fullname" . }}-backups
           {{- if .Values.persistence.enabled }}
             persistentVolumeClaim:
@@ -60,9 +66,9 @@ spec:
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             command: 
               - "/bin/true"
-          {{- if .Values.backup.upload.google.enabled }}
+          {{- if .Values.backup.uploadProviders.google.enabled }}
           - name: gsutil-cp
-            image: google/cloud-sdk:alpine
+            image: {{ include "gcloudSdk.image" . }}
             command:
               - "/tmp/upload-google.sh"
             volumeMounts:
@@ -74,17 +80,17 @@ spec:
             - name: google-cloud-key
               mountPath: /var/secrets/google/
           {{- end }}
-          {{- if .Values.backup.upload.azure.enabled }}
+          {{- if .Values.backup.uploadProviders.azure.enabled }}
           - name: azure-cli
-            image: microsoft/azure-cli
+            image: {{ include "azureCli.image" . }}
             command:
             - "/tmp/upload-azure.sh"
             env:
               - name: AZURE_STORAGE_CONNECTION_STRING
                 valueFrom:
                   secretKeyRef:
-                    name: {{ .Values.backup.upload.azure.storageAccountSecret }}
-                    key: connection-string  
+                    name: {{ .Values.backup.uploadProviders.azure.secret }}
+                    key: {{ .Values.backup.uploadProviders.azure.secretKey }}
             volumeMounts:
             - name: {{ include "influxdb.fullname" . }}-backups
               mountPath: {{ .Values.backup.directory | quote }}

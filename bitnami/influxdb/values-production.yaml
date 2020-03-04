@@ -567,18 +567,30 @@ volumePermissions:
 
 backup:
   enabled: false
-  schedule: "0 2 * * *"
   directory: "/backups"
   retentionDays: 10
-  annotations: {}
-  upload:
+  cronjob:
+    schedule: "0 2 * * *"
+    historyLimit: 1
+    podAnnotations: {}
+  uploadProviders:
     google:
       enabled: false
-      serviceAccountSecret: "influxdb-backup-gcs-key"
-      serviceAccountSecretKey: "key.json"
-      bucketname: "gs://bucket/influxdb"
+      secret: ""
+      secretKey: "key.json"
+      existingSecret: ""
+      bucketName: "gs://bucket/influxdb"
+      image:
+        registry: docker.io
+        repository: google/cloud-sdk
+        tag: 281.0.0-alpine
     azure:
       enabled: false
-      storageAccountSecret: "influxdb-backup-azure-key"
-      destination_container: "influxdb-container"
-      destination_path: ""
+      secret: ""
+      secretKey: "connection-string"
+      existingSecret: ""
+      containerName: "https://blob.core.windows.net/influxdb-container"
+      image:
+        registry: docker.io
+        repository: microsoft/azure-cli
+        tag: 0.9.9
