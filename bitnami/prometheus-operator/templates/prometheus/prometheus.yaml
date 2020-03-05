@@ -160,11 +160,11 @@ spec:
         {{- end }}
       {{- if .Values.prometheus.thanos.objectStorageConfig }}
       env:
-      - name: OBJSTORE_CONFIG
-        valueFrom:
-          secretKeyRef:
-            name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
-            key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey |default "thanos.yaml" }}
+        - name: OBJSTORE_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
+              key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey |default "thanos.yaml" }}
       {{- end }}
       ports:
         - name: grpc
