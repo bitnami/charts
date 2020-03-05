@@ -38,6 +38,7 @@ spec:
       {{- if .Values.defaultBackend.podSecurityContext }}
       securityContext: {{- toYaml .Values.defaultBackend.podSecurityContext | nindent 8 }}
       {{- end }}
+      serviceAccountName: {{ template "nginx-ingress.serviceAccountName" . }}
       terminationGracePeriodSeconds: 60
       containers:
         - name: {{ template "nginx-ingress.name" . }}-{{ .Values.defaultBackend.name }}
