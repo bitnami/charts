@@ -164,7 +164,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
-              key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey |default "thanos.yaml" }}
+              key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
       {{- end }}
       ports:
         - name: grpc
