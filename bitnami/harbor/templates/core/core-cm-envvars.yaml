@@ -34,8 +34,6 @@ data:
   CONFIG_PATH: "/etc/core/app.conf"
   SYNC_REGISTRY: "false"
   CHART_CACHE_DRIVER: "redis"
-  _REDIS_URL: "{{ template "harbor.redisForCore" . }}"
-  _REDIS_URL_REG: "{{ template "harbor.redisForGC" . }}"
   PORTAL_URL: "http://{{ template "harbor.portal" . }}"
   REGISTRYCTL_URL: "http://{{ template "harbor.registry" . }}:8080"
   CLAIR_HEALTH_CHECK_SERVER_URL: "http://{{ template "harbor.clair" . }}:6061"
