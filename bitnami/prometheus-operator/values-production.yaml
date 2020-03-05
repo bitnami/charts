@@ -549,6 +549,12 @@ prometheus:
       # pullSecrets:
       #   - myRegistryKeySecretName
 
+    ## Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/thanos.md
+    objectStorageConfig: {}
+    #   secretName: thanos-objstore-config
+    #   secretKey: thanos.yaml
+
     ## Thanos Sidecar Service
     ##
     service:
