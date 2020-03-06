@@ -83,7 +83,9 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `persistence.storageClass`           | PVC Storage Class for Jenkins volume                            | `nil` (uses alpha storage class annotation)             |
 | `persistence.accessMode`             | PVC Access Mode for Jenkins volume                              | `ReadWriteOnce`                                         |
 | `persistence.size`                   | PVC Storage Request for Jenkins volume                          | `8Gi`                                                   |
-| `resources`                          | CPU/Memory resource requests/limits                             | `requests: { cpu: "300m", memory: "512Mi" }`            |
+| `persistence.annotations`            | Prsistence annotations                                          | `{}`                                                    |
+| `resources.limits`                   | Jenkins resource  limits                                        | `{}`                                                    |
+| `resources.requests`                 | Jenkins resource  requests                                      | `{ cpu: "300m", memory: "512Mi" }`                      |
 | `livenessProbe.enabled`              | Turn on and off liveness probe                                  | `true`                                                  |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                        | `180`                                                   |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                  | `10`                                                    |
@@ -100,8 +102,8 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `affinity`                           | Map of node/pod affinities                                      | `{}` (The value is evaluated as a template)             |
 | `nodeSelector`                       | Node labels for pod assignment                                  | `{}` (The value is evaluated as a template)             |
 | `tolerations`                        | Tolerations for pod assignment                                  | `[]` (The value is evaluated as a template)             |
-| `podSecurityContext`                 | Jenkins pods' Security Context                                  | `{}`                                                    |
-| `containerSecurityContext`           | Jenkins containers' Security Context                            | `{}`                                                    |
+| `podSecurityContext`                 | Jenkins pods' Security Context                                  | `{ fsGroup: "1001" }`                                   |
+| `containerSecurityContext`           | Jenkins containers' Security Context                            | `{ runAsUser: "1001" }`                                 |
 
 ### Exposure parameters
 
@@ -114,14 +116,15 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `service.nodePorts.https`         | Kubernetes https node port                                                           | `""`                       |
 | `service.externalTrafficPolicy`   | Enable client source IP preservation                                                 | `Cluster`                  |
 | `service.loadBalancerIP`          | LoadBalancer service IP address                                                      | `""`                       |
+| `service.annotations`             | Service annotations                                                                  | `{}`                       |
 | `ingress.enabled`                 | Enable ingress controller resource                                                   | `false`                    |
-| `ingress.annotations`             | Ingress annotations                                                                  | `[]`                       |
+| `ingress.annotations`             | Ingress annotations                                                                  | `{}`                       |
 | `ingress.certManager`             | Add annotations for cert-manager                                                     | `false`                    |
-| `ingress.hosts[0].name`           | Hostname to your jenkins installation                                                | `jenkins.local`            |
-| `ingress.hosts[0].path`           | Path within the url structure                                                        | `/`                        |
-| `ingress.hosts[0].tls`            | Utilize TLS backend in ingress                                                       | `false`                    |
-| `ingress.hosts[0].tlsHosts`       | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`) | `nil`                      |
-| `ingress.hosts[0].tlsSecret`      | TLS Secret (certificates)                                                            | `jenkins.local-tls-secret` |
+| `ingress.hostname`                | Default host for the ingress resource                                                | `jenkins.local`            |
+| `ingress.extraHosts[0].name`      | Additional hostnames to be covered                                                   | `nil`                      |
+| `ingress.extraHosts[0].path`      | Additional hostnames to be covered                                                   | `nil`                      |
+| `ingress.extraTls[0].hosts[0]`    | TLS configuration for additional hostnames to be covered                             | `nil`                      |
+| `ingress.extraTls[0].secretName`  | TLS configuration for additional hostnames to be covered                             | `nil`                      |
 | `ingress.secrets[0].name`         | TLS Secret Name                                                                      | `nil`                      |
 | `ingress.secrets[0].certificate`  | TLS Secret Certificate                                                               | `nil`                      |
 | `ingress.secrets[0].key`          | TLS Secret Key                                                                       | `nil`                      |
@@ -202,6 +205,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 ### To 5.0.0
 
 The [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Jenkins service was started as the `jenkins` user. From now on, both the container and the Jenkins service run as user `jenkins` (`uid=1001`). You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `root`.
+Ingress configuration was also adapted to follow the Helm charts best practices.
 
 Consequences:
 
