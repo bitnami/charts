@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.204.4-debian-10-r0
+  tag: 2.204.4-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -111,6 +111,18 @@ nodeSelector: {}
 ##
 tolerations: {}
 
+## Jenkins pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  fsGroup: 1001
+
+## Jenkins containers' Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  runAsUser: 1001
+
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -188,26 +200,23 @@ ingress:
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations: {}
-  #  kubernetes.io/ingress.class: nginx
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## hosts:
+  ## extraHosts:
   ## - name: jenkins.local
   ##   path: /
 
-  ## The tls configuration for the ingress
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ##
-  tls:
-    - hosts:
-        - example.local
-      secretName: example.local-tls
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - jenkins.local
+  ##   secretName: jenkins.local-tls
 
-  secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -217,9 +226,51 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: apache.local-tls
-  #   key:
-  #   certificate:
+  ##
+  secrets: []
+  ## - name: jenkins.local-tls
+  ##   key:
+  ##   certificate:
+
+## Init Container paramaters
+## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
+## values from the podSecurityContext section of the component
+##
+volumePermissions:
+  enabled: false
+  ## Bitnami Minideb image
+  ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init Container resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
 ## Prometheus Exporter / Metrics
 ##
@@ -231,7 +282,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/jenkins-exporter
-    tag: 0.20171225.0-debian-10-r34
+    tag: 0.20171225.0-debian-10-r37
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -242,12 +293,7 @@ metrics:
   ## Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9118"
-    ## Metrics exporter resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
+  podAnnotations: {}
   ## Jenkins Prometheus exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -262,3 +308,48 @@ metrics:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+  ## Metrics exporter service configuration
+  ##
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## Metrics exporter port
+    ##
+    port: 9122
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
+    ## Annotations for the Prometheus metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    enabled: false
+    ## Namespace in which Prometheus is running
+    ##
+    # namespace: monitoring
+
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # interval: 10s
+
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # scrapeTimeout: 10s
+
+    ## ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # selector:
+    #   prometheus: my-prometheus
