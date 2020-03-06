@@ -152,9 +152,20 @@ spec:
         - --prometheus.url=http://localhost:9090
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:10902
+        {{- if .Values.prometheus.thanos.objectStorageConfig }}
+        - --objstore.config=$(OBJSTORE_CONFIG)
+        {{- end }}
         {{- if .Values.prometheus.thanos.extraArgs }}
         {{ toYaml .Values.prometheus.thanos.extraArgs | indent 8  | trim }}
         {{- end }}
+      {{- if .Values.prometheus.thanos.objectStorageConfig }}
+      env:
+        - name: OBJSTORE_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
+              key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
+      {{- end }}
       ports:
         - name: grpc
           containerPort: 10901
