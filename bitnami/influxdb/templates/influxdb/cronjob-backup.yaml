@@ -20,8 +20,8 @@ spec:
             {{- toYaml .Values.backup.cronjob.Podannotations | nindent 12 }}
         spec:
           securityContext:
-            runAsUser: 0
-            runAsGroup: 0
+            fsGroup: {{ .Values.influxdb.securityContext.fsGroup }}            
+            runAsUser: {{ .Values.influxdb.securityContext.runAsUser }}            
           restartPolicy: OnFailure
           volumes:
           - name: backup-scripts
@@ -72,13 +72,13 @@ spec:
             command:
               - "/tmp/upload-google.sh"
             volumeMounts:
-            - name: {{ include "influxdb.fullname" . }}-backups
-              mountPath: {{ .Values.backup.directory | quote }}
-            - name: backup-scripts
-              mountPath: /tmp/upload-google.sh
-              subPath: upload-google.sh
-            - name: google-cloud-key
-              mountPath: /var/secrets/google/
+              - name: {{ include "influxdb.fullname" . }}-backups
+                mountPath: {{ .Values.backup.directory | quote }}
+              - name: backup-scripts
+                mountPath: /tmp/upload-google.sh
+                subPath: upload-google.sh
+              - name: google-cloud-key
+                mountPath: /var/secrets/google/
           {{- end }}
           {{- if .Values.backup.uploadProviders.azure.enabled }}
           - name: azure-cli
@@ -92,10 +92,10 @@ spec:
                     name: {{ .Values.backup.uploadProviders.azure.secret }}
                     key: {{ .Values.backup.uploadProviders.azure.secretKey }}
             volumeMounts:
-            - name: {{ include "influxdb.fullname" . }}-backups
-              mountPath: {{ .Values.backup.directory | quote }}
-            - name: backup-scripts
-              mountPath: /tmp/upload-azure.sh
-              subPath: upload-azure.sh
+              - name: {{ include "influxdb.fullname" . }}-backups
+                mountPath: {{ .Values.backup.directory | quote }}
+              - name: backup-scripts
+                mountPath: /tmp/upload-azure.sh
+                subPath: upload-azure.sh
           {{- end }}
 {{- end }}
