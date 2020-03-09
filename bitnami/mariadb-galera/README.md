@@ -20,6 +20,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - Kubernetes 1.10+
 - PV provisioner support in the underlying infrastructure
 
+> Note: Please, note that mariadb-galera container runs as root by default due to it is necessary to enable LDAP support
+
 ## Installing the Chart
 
 Add the `bitnami` charts repo to Helm:
