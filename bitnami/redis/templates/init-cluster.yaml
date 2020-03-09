@@ -1,0 +1,55 @@
+{{- if or (and ( and .Values.cluster.enabled .Values.cluster.externalAccess.enabled ) .Values.cluster.externalAccess.service.loadBalancerIP) ( and .Values.cluster.enabled ( not .Values.cluster.externalAccess.enabled )) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "redis.fullname" . }}-cluster-create
+  labels: {{- include "redis.labels" . | nindent 4 }}
+spec:
+  activeDeadlineSeconds: {{ .Values.cluster.initTimeout }}
+  template:
+    spec:
+      containers:
+        - name: trigger
+          image: "{{ template "redis.image" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- end }}
+          env:
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "redis.secretName" . }}
+                  key: {{ template "redis.secretPasswordKey" . }}
+          command:
+            - /bin/bash
+            - -c
+            - |
+              {{- if and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP }}
+              nodes=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              port={{ .Values.cluster.externalAccess.service.port }}
+              {{- else }}
+              port={{ .Values.redisPort }}
+              # Wait until all the nodes are running
+              while [[ $(getent hosts {{ template "redis.fullname" . }}-headless | awk '{ print $1}' | wc -l) < {{ .Values.cluster.nodes }} ]]; do
+                echo "Waiting for the {{ .Values.cluster.nodes }} Redis nodes to be running..."
+                sleep 10
+              done
+              # Get nodes IPs
+              nodes=($(getent hosts {{ template "redis.fullname" . }}-headless | awk '{ print $1}'))
+              {{- end }}
+
+              for node in ${nodes[@]}; do
+              echo "Checking node ${node}"
+              while [[ $(redis-cli -h $node -p ${port} ping) != 'PONG' ]]; do
+                  echo "Node $node not ready, waiting for all the nodes to be ready..."
+                  sleep 1
+                done
+              done
+              # Initialize the cluster
+              echo "All nodes are ready to create the cluster, initializing cluster..."
+              echo "Executing: redis-cli --cluster create ${nodes[@]/%/:${port}} --cluster-replicas {{ .Values.cluster.replicas }}"
+              redis-cli --cluster create ${nodes[@]/%/:${port}} --cluster-replicas {{ .Values.cluster.replicas }} --cluster-yes
+      restartPolicy: OnFailure
+{{- end }}

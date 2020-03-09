@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "redis.fullname" . }}-scripts
+  labels: {{- include "redis.labels" . | nindent 4 }}
+data:
+  ping_readiness_local.sh: |-
+    {{- if .Values.usePasswordFile }}
+    password_aux=`cat ${REDIS_PASSWORD_FILE}`
+    export REDISCLI_AUTH=$password_aux
+    {{- else }}
+    export REDISCLI_AUTH=$REDIS_PASSWORD
+    {{- end }}
+    response=$(
+      timeout -s 9 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_liveness_local.sh: |-
+    {{- if .Values.usePasswordFile }}
+    password_aux=`cat ${REDIS_PASSWORD_FILE}`
+    export REDISCLI_AUTH=$password_aux
+    {{- else }}
+    export REDISCLI_AUTH=$REDIS_PASSWORD
+    {{- end }}
+    response=$(
+      timeout -s 9 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$response" != "PONG" ] && [ "$response" != "LOADING Redis is loading the dataset in memory" ]; then
+      echo "$response"
+      exit 1
+    fi
+
+  run.sh: |-
+    {{- if (eq (.Values.securityContext.runAsUser | int) 0) }}
+    useradd redis
+    chown -R redis {{ .Values.persistence.path }}
+    {{- end }}
+    if [[ -n $REDIS_PASSWORD_FILE ]]; then
+      password_aux=`cat ${REDIS_PASSWORD_FILE}`
+      export REDIS_PASSWORD=$password_aux
+    fi
+    if [[ -n $REDIS_MASTER_PASSWORD_FILE ]]; then
+      password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
+      export REDIS_MASTER_PASSWORD=$password_aux
+    fi
+    if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]]; then
+      cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
+    fi
+    {{- if and .Values.cluster.enabled .Values.cluster.externalAccess.enabled }}
+    # Set the loadBalancerIP as the advertising node IP
+    podIndex=($(echo $POD_NAME | tr "-" "\n"))
+    podIndex=${podIndex[-1]}
+    ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+    printf "\ncluster-announce-ip ${ips[$podIndex]}" >> /opt/bitnami/redis/etc/redis.conf
+    {{- end }}
+    ARGS=("--port" "${REDIS_PORT}")
+    {{- if .Values.usePassword }}
+    ARGS+=("--requirepass" "${REDIS_PASSWORD}")
+    ARGS+=("--masterauth" "${REDIS_PASSWORD}")
+    {{- else }}
+    ARGS+=("--protected-mode" "no")
+    {{- end }}
+    ARGS+=("--include" "/opt/bitnami/redis/etc/redis.conf")
+    {{- if .Values.extraFlags }}
+    {{- range .Values.extraFlags }}
+    ARGS+=({{ . | quote }})
+    {{- end }}
+    {{- end }}
+    {{- if .Values.command }}
+    {{ .Values.command }} ${ARGS[@]}
+    {{- else }}
+      redis-server "${ARGS[@]}"
+    {{- end }}
