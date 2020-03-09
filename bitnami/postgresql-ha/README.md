@@ -21,6 +21,8 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](http
 - Kubernetes 1.12+
 - Helm 2.11+ or Helm 3.0-beta3+
 
+> Note: Please, note that pgpool runs the container as root by default setting the `pgpool.securityContext.runAsUser` to `0` (_root_ user) in order to enable LDAP support for now.
+
 ## Installing the Chart
 
 Install the PostgreSQL HA helm chart with a release name `my-release`:
