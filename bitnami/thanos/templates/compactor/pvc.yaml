@@ -1,4 +1,4 @@
-{{- if and .Values.compactor.persistence.enabled (not .Values.compactor.persistence.existingClaim) }}
+{{- if and .Values.compactor.persistence.enabled (not .Values.compactor.persistence.existingClaim) .Values.compactor.enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
