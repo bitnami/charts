@@ -66,11 +66,12 @@ querier:
   dnsDiscovery:
     enabled: true
     ## Sidecars service name to discover them using DNS discovery
+    ## It is templateable from above
     ##
-    # sidecarsService:
+    # sidecarsService: "{{ .Release.Name }}-prometheus-thanos"
     ## Sidecars namespace to discover them using DNS discovery
     ##
-    # sidecarsNamespace
+    # sidecarsNamespace "{{ .Release.Namespace }}"
   
   ## Statically configure store APIs to connect with Thanos Querier
   ##
