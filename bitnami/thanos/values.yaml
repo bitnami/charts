@@ -71,7 +71,7 @@ querier:
     # sidecarsService: "{{ .Release.Name }}-prometheus-thanos"
     ## Sidecars namespace to discover them using DNS discovery
     ##
-    # sidecarsNamespace "{{ .Release.Namespace }}"
+    # sidecarsNamespace: "{{ .Release.Namespace }}"
 
   ## Statically configure store APIs to connect with Thanos Querier
   ##
