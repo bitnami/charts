@@ -105,6 +105,8 @@ sentinel:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+  customLivenessProbe: {}
+  customReadinessProbe: {}
   ## Redis Sentinel resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   # resources:
@@ -283,6 +285,28 @@ master:
     successThreshold: 1
     failureThreshold: 5
 
+  ## Configure custom probes for images other images like
+  ## rhscl/redis-32-rhel7 rhscl/redis-5-rhel7
+  ## Only used if readinessProbe.enabled: false / livenessProbe.enabled: false
+  ##
+  # customLivenessProbe:
+  #  tcpSocket:
+  #    port: 6379
+  #  initialDelaySeconds: 10
+  #  periodSeconds: 5
+  # customReadinessProbe:
+  #  initialDelaySeconds: 30
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  exec:
+  #    command:
+  #    - "container-entrypoint"
+  #    - "bash"
+  #    - "-c"
+  #    - "redis-cli set liveness-probe \"`date`\" | grep OK"
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+
   ## Redis Master Node selectors and tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
@@ -414,6 +438,28 @@ slave:
     timeoutSeconds: 10
     successThreshold: 1
     failureThreshold: 5
+
+  ## Configure custom probes for images other images like
+  ## rhscl/redis-32-rhel7 rhscl/redis-5-rhel7
+  ## Only used if readinessProbe.enabled: false / livenessProbe.enabled: false
+  ##
+  # customLivenessProbe:
+  #  tcpSocket:
+  #    port: 6379
+  #  initialDelaySeconds: 10
+  #  periodSeconds: 5
+  # customReadinessProbe:
+  #  initialDelaySeconds: 30
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  exec:
+  #    command:
+  #    - "container-entrypoint"
+  #    - "bash"
+  #    - "-c"
+  #    - "redis-cli set liveness-probe \"`date`\" | grep OK"
+  customLivenessProbe: {}
+  customReadinessProbe: {}
 
   ## Redis slave Resource
   # resources:
