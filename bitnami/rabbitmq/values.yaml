@@ -236,9 +236,15 @@ service:
 
   ## Extra ports to expose
   # extraPorts:
+  # - name: new_svc_name
+  #   port: 1234
+  #   targetPort: 1234
 
   ## Extra ports to be included in container spec, primarily informational
   # extraContainerPorts:
+  # - name: new_svc_name
+  #   port: 1234
+  #   targetPort: 1234
 
 # Additional pod labels to apply
 podLabels: {}
