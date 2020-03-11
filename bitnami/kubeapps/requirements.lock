@@ -1,9 +1,9 @@
 dependencies:
 - name: mongodb
   repository: https://kubernetes-charts.storage.googleapis.com
-  version: 7.8.6
+  version: 7.8.7
 - name: postgresql
   repository: https://kubernetes-charts.storage.googleapis.com
-  version: 8.4.2
-digest: sha256:50d16adab428d7a83c2c394ddd532cff6edb208bd2523e4dd837f950162a7c02
-generated: "2020-02-26T13:27:30.52726+01:00"
+  version: 8.6.1
+digest: sha256:11a7b8e79e9182b04cd4ca1b70634085515aa6a1090839a1e320de6c1477228b
+generated: "2020-03-09T11:14:46.301696723+01:00"

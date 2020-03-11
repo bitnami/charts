@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: {{ .Release.Name }}-tiller-proxy-test
-      image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
+      image: {{ template "kubeapps.image" (list .Values.testImage .Values.global) }}
       env:
         - name: TILLER_PROXY_HOST
           value: {{ template "kubeapps.tiller-proxy.fullname" . }}.{{ .Release.Namespace }}
