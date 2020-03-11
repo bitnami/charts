@@ -14,4 +14,4 @@ maintainers:
 name: logstash
 sources:
   - https://github.com/bitnami/bitnami-docker-logstash
-version: 0.2.13
+version: 0.2.14
