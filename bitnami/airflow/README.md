@@ -306,4 +306,4 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 
 ### 1.0.0
 
-This release updates the PostgreSQL chart dependency to use PostgreSQL 11.x. You need to migrate the existing PostgreSQL data to this version before upgrading to this release. For more information follow [this link](https://github.com/helm/charts/tree/master/stable/postgresql#500).
+This release updates the PostgreSQL chart dependency to use PostgreSQL 11.x. You need to migrate the existing PostgreSQL data to this version before upgrading to this release. For more information follow [this link](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#500).

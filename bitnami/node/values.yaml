@@ -226,7 +226,7 @@ ingress:
   #   certificate:
 
 ## MongoDB chart configuration
-## ref: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
   ## Whether to deploy a mongodb server to satisfy the applications database requirements.
