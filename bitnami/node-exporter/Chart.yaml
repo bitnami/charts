@@ -8,7 +8,7 @@ keywords:
   - node-exporter
   - monitoring
 home: https://prometheus.io/
-icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220.2.5.png
+icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-node-exporter
   - https://github.com/prometheus/node_exporter
