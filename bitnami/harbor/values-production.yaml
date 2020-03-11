@@ -1211,7 +1211,7 @@ notary:
       successThreshold: 1
 
 ## Redis chart configuration
-## ref: https://github.com/helm/charts/blob/master/stable/redis/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
   enabled: true
@@ -1251,7 +1251,7 @@ externalRedis:
 
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
   enabled: true

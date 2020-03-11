@@ -7,11 +7,13 @@
 
 ```bash
 # Testing configuration
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/redis
 ```
 
 ```bash
 # Production configuration
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/redis --values values-production.yaml
 ```
 
