@@ -206,6 +206,10 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{ include "kafka.tplValue" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          command: ["/bin/bash", "-c"]
+          args:
+            - export KAFKA_CFG_BROKER_ID=${MY_POD_NAME##*-};
+              exec /entrypoint.sh /run.sh;
           ports:
             - name: kafka
               containerPort: {{ .Values.service.port }}
