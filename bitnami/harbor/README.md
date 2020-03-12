@@ -418,8 +418,8 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 PostgreSQL and Redis dependencies were updated to the use the latest major versions, `8.x.x` and `10.x.x`, respectively. These major versions do not include changes that should break backwards compatibilities, check the links below for more information:
 
-- [PostgreSQL Upgrade notes](https://github.com/bitnami/charts/blob/master/upstreamed/postgresql/README.md#upgrade)
-- [Redis Upgrade notes](https://github.com/bitnami/charts/blob/master/upstreamed/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
+- [PostgreSQL Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/README.md#upgrade)
+- [Redis Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
 
 ## 3.0.0
 

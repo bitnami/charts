@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 5.0.7-debian-10-r48
+  tag: 5.0.7-debian-10-r51
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -60,7 +60,7 @@ sentinel:
     ## Bitnami Redis image tag
     ## ref: https://github.com/bitnami/bitnami-docker-redis-sentinel#supported-tags-and-respective-dockerfile-links
     ##
-    tag: 5.0.7-debian-10-r40
+    tag: 5.0.7-debian-10-r42
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -480,7 +480,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.4.0-debian-10-r16
+    tag: 1.4.0-debian-10-r18
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -512,9 +512,9 @@ metrics:
     # namespace: monitoring
     # fallback to the prometheus default unless specified
     # interval: 10s
-    ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/helm/charts/tree/master/stable/prometheus-operator#tldr)
-    ## [Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#prometheus-operator-1)
-    ## [Kube Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#exporters)
+    ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
+    ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
+    ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     selector:
       prometheus: kube-prometheus
 
