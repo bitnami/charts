@@ -151,8 +151,6 @@ spec:
             {{- end }}
             - name: ALLOW_PLAINTEXT_LISTENER
               value: {{ ternary "yes" "no" (or .Values.auth.enabled .Values.allowPlaintextListener) | quote }}
-            - name: KAFKA_CFG_BROKER_ID
-              value: {{ .Values.brokerId | quote }}
             - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
               value: {{ .Values.deleteTopicEnable | quote }}
             - name: KAFKA_HEAP_OPTS

@@ -119,7 +119,7 @@ allowPlaintextListener: true
 # interBrokerListenerName:
 
 ## ID of the Kafka node.
-brokerId: -1
+# brokerId: -1
 
 ## Switch to enable topic deletion or not.
 deleteTopicEnable: false
