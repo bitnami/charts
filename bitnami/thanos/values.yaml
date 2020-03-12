@@ -61,16 +61,17 @@ querier:
   ##
   replicaLabel: replica
   
-  ## Dinamically configure store APIs using DNS discovery
+  ## Dynamically configure store APIs using DNS discovery
   ##
   dnsDiscovery:
     enabled: true
-    ## Sidecars service name to discover them using DNS discovery
+    ## Sidecars service name to discover them using DNS discovery 
+    ## Evaluated as a template.
+    # sidecarsService: "{{ .Release.Name }}-prometheus-thanos"
     ##
-    # sidecarsService:
     ## Sidecars namespace to discover them using DNS discovery
-    ##
-    # sidecarsNamespace
+    ## Evaluated as a template.
+    # sidecarsNamespace: "{{ .Release.Namespace }}"
 
   ## Statically configure store APIs to connect with Thanos Querier
   ##
