@@ -62,7 +62,7 @@ spec:
             - --store.sd-files=/conf/servicediscovery.yml
             {{- end }}
             {{- if and .Values.querier.dnsDiscovery.enabled .Values.querier.dnsDiscovery.sidecarsService .Values.querier.dnsDiscovery.sidecarsNamespace }}
-            - --store=dnssrv+_grpc._tcp.{{ .Values.querier.dnsDiscovery.sidecarsService }}.{{ .Values.querier.dnsDiscovery.sidecarsNamespace }}.svc.{{ .Values.clusterDomain }}
+            - --store=dnssrv+_grpc._tcp.{{- include "thanos.tplValue" ( dict "value" .Values.querier.dnsDiscovery.sidecarsService "context" $) -}}.{{- include "thanos.tplValue"  ( dict "value" .Values.querier.dnsDiscovery.sidecarsNamespace "context" $) -}}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.storegateway.enabled .Values.querier.dnsDiscovery.enabled }}
             - --store=dnssrv+_grpc._tcp.{{ include "thanos.fullname" . }}-storegateway.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 10.19.0-debian-10-r18
+  tag: 10.19.0-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -72,7 +72,7 @@ volumePermissions:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.25.1-debian-10-r15
+  tag: 2.25.1-debian-10-r22
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -226,7 +226,7 @@ ingress:
   #   certificate:
 
 ## MongoDB chart configuration
-## ref: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
   ## Whether to deploy a mongodb server to satisfy the applications database requirements.
