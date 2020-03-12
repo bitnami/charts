@@ -41,7 +41,6 @@ image:
 
 ## Cluster settings
 cluster:
-  enabled: true
   # Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
   activeDeadlineSeconds: 600
   # Number of Redis nodes to be deployed

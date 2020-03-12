@@ -293,17 +293,6 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 
 {{/*
-Return the proper number of Redis instances
-*/}}
-{{- define "redis.replicaCount" -}}
-{{- if and .Values.cluster.enabled .Values.cluster.nodes -}}
-replicas: {{ .Values.cluster.nodes }}
-{{- else -}}
-replicas: 1
-{{- end -}}
-{{- end -}}
-
-{{/*
 Renders a value that contains template.
 Usage:
 {{ include "redis.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
@@ -320,15 +309,11 @@ Usage:
 Determines whether or not to create the Statefulset
 */}}
 {{- define "redis.createStatefulSet" -}}
-    {{- if not .Values.cluster.enabled -}}
+    {{- if not .Values.cluster.externalAccess.enabled -}}
         {{- true -}}
-    {{- else -}}
-        {{- if not .Values.cluster.externalAccess.enabled -}}
-            {{- true -}}
-        {{- end -}}
-        {{- if and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP -}}
-            {{- true -}}
-        {{- end -}}
+    {{- end -}}
+    {{- if and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP -}}
+        {{- true -}}
     {{- end -}}
 {{- end -}}
 

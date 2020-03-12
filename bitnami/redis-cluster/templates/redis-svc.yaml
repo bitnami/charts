@@ -1,4 +1,3 @@
-{{- if not .Values.cluster.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,22 +10,9 @@ metadata:
   annotations: {{ toYaml .Values.service.annotations | nindent 4 }}
 {{- end }}
 spec:
-  type: {{ .Values.service.type }}
-  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
-  {{- end }}
-  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges:
-  {{- with .Values.service.loadBalancerSourceRanges }}
-{{ toYaml . | indent 4 }}
-{{- end }}
-  {{- end }}
+  type: ClusterIP
   ports:
-  - name: redis
-    port: {{ .Values.service.port }}
-    targetPort: tcp-redis
-    {{- if .Values.service.nodePort }}
-    nodePort: {{ .Values.service.nodePort }}
-    {{- end }}
+    - name: redis
+      port: {{ .Values.service.port }}
+      targetPort: tcp-redis
   selector: {{- include "redis.matchLabels" $ | nindent 4 }}
-{{- end }}

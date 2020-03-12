@@ -10,12 +10,8 @@ spec:
   {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
-  {{ include "redis.replicaCount" . | nindent 2}}
-  {{- if and .Values.cluster.enabled }}
+  replicas: {{ .Values.cluster.nodes }}
   serviceName: {{ include "redis.fullname" . }}-headless
-  {{- else }}
-  serviceName: {{ include "redis.fullname" . }}
-  {{- end }}
   template:
     metadata:
       labels: {{- include "redis.labels" . | nindent 8 }}
@@ -103,10 +99,8 @@ spec:
           ports:
             - name: tcp-redis
               containerPort: {{ .Values.redisPort }}
-            {{- if .Values.cluster.enabled }}
             - name: tcp-redis-bus
               containerPort: {{ .Values.cluster.busPort }}
-            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}

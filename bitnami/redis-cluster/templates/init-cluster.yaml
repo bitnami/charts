@@ -1,4 +1,4 @@
-{{- if or (and ( and .Values.cluster.enabled .Values.cluster.externalAccess.enabled ) .Values.cluster.externalAccess.service.loadBalancerIP) ( and .Values.cluster.enabled ( not .Values.cluster.externalAccess.enabled )) }}
+{{- if or (and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP) ( not .Values.cluster.externalAccess.enabled ) }}
 apiVersion: batch/v1
 kind: Job
 metadata:

@@ -7,10 +7,8 @@ data:
   redis.conf: |-
     dir {{ .Values.persistence.path }}
     port {{ .Values.redisPort }}
-{{- if .Values.cluster.enabled }}
     cluster-enabled yes
     cluster-config-file /data/nodes.conf
-{{- end }}
     appendonly yes
 {{- if .Values.configmap }}
 {{- include "redis.tplValue" (dict "value" .Values.configmap "context" $) | nindent 4 }}

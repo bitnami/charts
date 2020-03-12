@@ -22,20 +22,10 @@
       "title": "Cluster Settings",
       "form": true,
       "properties": {
-        "enabled": {
-          "type": "boolean",
-          "form": true,
-          "title": "Enable master-slave",
-          "description": "Enable master-slave architecture"
-        },
         "slaveCount": {
           "type": "integer",
           "title": "Slave Replicas",
-          "form": true,
-          "hidden": {
-            "condition": false,
-            "value": "cluster.enabled"
-          }
+          "form": true
         }
       }
     },

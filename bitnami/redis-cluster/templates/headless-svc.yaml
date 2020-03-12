@@ -1,4 +1,3 @@
-{{- if not .Values.cluster.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,13 +7,11 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-  - name: redis
-    port: {{ .Values.redisPort }}
-    targetPort: tcp-redis
-{{- if .Values.cluster.enabled }}
-  - name: redis-cluster
-    port: {{ .Values.cluster.busPort }}
-    targetPort: tcp-redis-bus
-{{- end }}
+    - name: redis
+      port: {{ .Values.redisPort }}
+      targetPort: tcp-redis
+    - name: redis-cluster
+      port: {{ .Values.cluster.busPort }}
+      targetPort: tcp-redis-bus
   selector: {{- include "redis.matchLabels" . | nindent 4 }}
-{{- end }}
+

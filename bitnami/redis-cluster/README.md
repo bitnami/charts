@@ -66,7 +66,6 @@ The following table lists the configurable parameters of the Redis chart and the
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `nil`                                                   |
 | `nameOverride`                                | String to partially override redis.fullname template with a string (will prepend the release name)                                                  | `nil`                                                   |
 | `fullnameOverride`                            | String to fully override redis.fullname template with a string                                                                                      | `nil`                                                   |
-| `cluster.enabled`                             | Use master-slave topology                                                                                                                           | `true`                                                  |
 | `cluster.activeDeadlineSeconds`               | Number of seconds that the job to create the cluster will be waiting for the nodes to be ready                                                      | `600`                                                   |
 | `cluster.nodes`                               | Number of nodes in the Redis cluster                                                                                                                | `6`                                                     |
 | `cluster.replicas`                            | Number of replicas for every master in the cluster                                                                                                  | `1`                                                     |
@@ -139,13 +138,9 @@ The following table lists the configurable parameters of the Redis chart and the
 | `tolerations`                                 | Toleration labels for Redis pod assignment                                                                                                          | []                                                      |
 | `affinity`                                    | Affinity settings for Redis pod assignment                                                                                                          | {}                                                      |
 | `schedulerName`                               | Name of an alternate scheduler                                                                                                                      | `nil`                                                   |
-| `service.type`                                | Kubernetes Service type.                                                                                                                            | `ClusterIP`                                             |
 | `service.port`                                | Kubernetes Service port.                                                                                                                            | `6379`                                                  |
-| `service.nodePort`                            | Kubernetes Service nodePort.                                                                                                                        | `nil`                                                   |
 | `service.annotations`                         | annotations for redis service                                                                                                                       | {}                                                      |
 | `service.labels`                              | Additional labels for redis service                                                                                                                 | {}                                                      |
-| `service.loadBalancerIP`                      | loadBalancerIP if redis service type is `LoadBalancer`                                                                                              | `nil`                                                   |
-| `service.loadBalancerSourceRanges`            | loadBalancerSourceRanges if redis service type is `LoadBalancer`                                                                                    | `nil`                                                   |
 | `resources`                                   | Redis CPU/Memory resource requests/limits                                                                                                           | Memory: `256Mi`, CPU: `100m`                            |
 | `livenessProbe.enabled`                       | Turn on and off liveness probe.                                                                                                                     | `true`                                                  |
 | `livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated.                                                                                                           | `30`                                                    |
@@ -220,11 +215,9 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
-### Cluster topologies
+### Cluster topology
 
-#### Default: Master-Slave
-
-When installing the chart with `cluster.enabled=true`, it will deploy by default 3 redis masters and 3 replicas. By default the Redis Cluster is not accessible from outside the Kubernetes cluster, to the Redis cluster to the outside set `cluster.externalAccess.enabled=true`, it will create in the first installation only 6 LoadBalancer services, one for each Redis node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
+The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default the Redis Cluster is not accessible from outside the Kubernetes cluster, to the Redis cluster to the outside set `cluster.externalAccess.enabled=true`, it will create in the first installation only 6 LoadBalancer services, one for each Redis node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
 
 The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the master node. For example, using `redis-cli` you will need to provide the `-c` flag for `redis-cli` to follow the redirection automatically.
 
@@ -320,99 +313,3 @@ networkPolicy:
   ingressNSPodMatchLabels:
     redis-client: true
 ```
-
-## Upgrading an existing Release to a new major version
-
-A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an
-incompatible breaking change needing manual actions.
-
-### To 11.0.0
-
-**Major refactor of the complete Helm Chart**
-Using the master/slave topology it will create by default a 6 nodes Redis Cluster containing 3 masters and 3 slaves.
-Redis Sentinel is no more necessary as the Redis Cluster topology manages the failover.
-Only one statefulset will be deployed without previous knowledge of which pods will be masters and which ones will be slaves.
-For external access, it is needed to provide a LoadBalancerIP for each redis node.
-
-### To 10.0.0
-
-For releases with `usePassword: true`, the value `sentinel.usePassword` controls whether the password authentication also applies to the sentinel port. This defaults to `true` for a secure configuration, however it is possible to disable to account for the following cases:
-* Using a version of redis-sentinel prior to `5.0.1` where the authentication feature was introduced.
-* Where redis clients need to be updated to support sentinel authentication.
-
-If using a master/slave topology, or with `usePassword: false`, no action is required.
-
-### To 8.0.18
-
-For releases with `metrics.enabled: true` the default tag for the exporter image is now `v1.x.x`. This introduces many changes including metrics names. You'll want to use [this dashboard](https://github.com/oliver006/redis_exporter/blob/master/contrib/grafana_prometheus_redis_dashboard.json) now. Please see the [redis_exporter github page](https://github.com/oliver006/redis_exporter#upgrading-from-0x-to-1x) for more details.
-
-### To 7.0.0
-
-This version causes a change in the Redis Master StatefulSet definition, so the command helm upgrade would not work out of the box. As an alternative, one of the following could be done:
-
-  - Recommended: Create a clone of the Redis Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
-
-   ```
-   helm install my-release stable/redis --set persistence.existingClaim=<NEW PVC>
-   ```
-
-  - Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
-
-   ```
-   helm delete --purge <RELEASE>
-   helm install <RELEASE> stable/redis
-   ```
-
-Previous versions of the chart were not using persistence in the slaves, so this upgrade would add it to them. Another important change is that no values are inherited from master to slaves. For example, in 6.0.0 `slaves.readinessProbe.periodSeconds`, if empty, would be set to `master.readinessProbe.periodSeconds`. This approach lacked transparency and was difficult to maintain. From now on, all the slave parameters must be configured just as it is done with the masters.
-
-Some values have changed as well:
-
-   - `master.port` and `slave.port` have been changed to `redisPort` (same value for both master and slaves)
-   - `master.securityContext` and `slave.securityContext` have been changed to `securityContext`(same values for both master and slaves)
-
-By default, the upgrade will not change the cluster topology. In case you want to use Redis Sentinel, you must explicitly set `sentinel.enabled` to `true`.
-
-### To 6.0.0
-
-Previous versions of the chart were using an init-container to change the permissions of the volumes. This was done in case the `securityContext` directive in the template was not enough for that (for example, with cephFS). In this new version of the chart, this container is disabled by default (which should not affect most of the deployments). If your installation still requires that init container, execute `helm upgrade` with the `--set volumePermissions.enabled=true`.
-
-### To 5.0.0
-
-The default image in this release may be switched out for any image containing the `redis-server`
-and `redis-cli` binaries. If `redis-server` is not the default image ENTRYPOINT, `master.command`
-must be specified.
-
-#### Breaking changes
-- `master.args` and `slave.args` are removed. Use `master.command` or `slave.command` instead in order to override the image entrypoint, or `master.extraFlags` to pass additional flags to `redis-server`.
-- `disableCommands` is now interpreted as an array of strings instead of a string of comma separated values.
-- `master.persistence.path` now defaults to `/data`.
-
-### 4.0.0
-
-This version removes the `chart` label from the `spec.selector.matchLabels`
-which is immutable since `StatefulSet apps/v1beta2`. It has been inadvertently
-added, causing any subsequent upgrade to fail. See https://github.com/helm/charts/issues/7726.
-
-It also fixes https://github.com/helm/charts/issues/7726 where a deployment `extensions/v1beta1` can not be upgraded if `spec.selector` is not explicitly set.
-
-Finally, it fixes https://github.com/helm/charts/issues/7803 by removing mutable labels in `spec.VolumeClaimTemplate.metadata.labels` so that it is upgradable.
-
-In order to upgrade, delete the Redis StatefulSet before upgrading:
-```bash
-$ kubectl delete statefulsets.apps --cascade=false my-release-redis-master
-```
-And edit the Redis slave (and metrics if enabled) deployment:
-```bash
-kubectl patch deployments my-release-redis-slave --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-```
-
-## Notable changes
-
-### 9.0.0
-The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).
-
-### 7.0.0
-In order to improve the performance in case of slave failure, we added persistence to the read-only slaves. That means that we moved from Deployment to StatefulSets. This should not affect upgrades from previous versions of the chart, as the deployments did not contain any persistence at all.
-
-This version also allows enabling Redis Sentinel containers inside of the Redis Pods (feature disabled by default). In case the master crashes, a new Redis node will be elected as master. In order to query the current master (no redis master service is exposed), you need to query first the Sentinel cluster. Find more information [in this section](#master-slave-with-sentinel).

@@ -57,7 +57,7 @@ data:
     if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]]; then
       cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
-    {{- if and .Values.cluster.enabled .Values.cluster.externalAccess.enabled }}
+    {{- if .Values.cluster.externalAccess.enabled }}
     # Set the loadBalancerIP as the advertising node IP
     podIndex=($(echo $POD_NAME | tr "-" "\n"))
     podIndex=${podIndex[-1]}

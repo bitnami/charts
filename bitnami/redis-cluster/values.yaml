@@ -41,7 +41,6 @@ image:
 
 ## Cluster settings
 cluster:
-  enabled: true
   # Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
   activeDeadlineSeconds: 600
   # Number of Redis nodes to be deployed
@@ -214,14 +213,7 @@ affinity: {}
 
 ## Redis Service properties for standalone mode.
 service:
-  ##  Redis Service type
-  type: ClusterIP
   port: 6379
-
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ##
-  # nodePort:
 
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
@@ -229,8 +221,6 @@ service:
   ##
   annotations: {}
   labels: {}
-  loadBalancerIP:
-  # loadBalancerSourceRanges: ["10.0.0.0/8"]
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
