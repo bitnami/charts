@@ -151,8 +151,6 @@ spec:
             {{- end }}
             - name: ALLOW_PLAINTEXT_LISTENER
               value: {{ ternary "yes" "no" (or .Values.auth.enabled .Values.allowPlaintextListener) | quote }}
-            - name: KAFKA_CFG_BROKER_ID
-              value: {{ .Values.brokerId | quote }}
             - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
               value: {{ .Values.deleteTopicEnable | quote }}
             - name: KAFKA_HEAP_OPTS
@@ -206,6 +204,10 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{ include "kafka.tplValue" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          command: ["/bin/bash", "-c"]
+          args:
+            - export KAFKA_CFG_BROKER_ID=${MY_POD_NAME##*-};
+              exec /entrypoint.sh /run.sh;
           ports:
             - name: kafka
               containerPort: {{ .Values.service.port }}
