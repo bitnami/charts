@@ -15,6 +15,7 @@ spec:
     metadata:
       labels: {{- include "kafka.labels" . | nindent 8 }}
         app.kubernetes.io/component: metrics
+      annotations: {{ include "kafka.tplValue" ( dict "value" .Values.metrics.kafka.podAnnotations "context" $) | nindent 8 }}
     spec:
 {{- include "kafka.imagePullSecrets" . | indent 6 }}
       containers:
