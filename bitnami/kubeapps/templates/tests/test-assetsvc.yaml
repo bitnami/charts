@@ -16,5 +16,5 @@ spec:
       command:
         - sh
         - -c
-        - curl -o /tmp/output $ASSETSVC_HOST:$ASSETSVC_PORT/v1/charts && cat /tmp/output && cat /tmp/output | grep wordpress
+        - curl -o /tmp/output $ASSETSVC_HOST:$ASSETSVC_PORT/v1/ns/{{ .Release.Namespace }}/charts && cat /tmp/output && cat /tmp/output | grep wordpress
   restartPolicy: Never

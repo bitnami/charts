@@ -457,7 +457,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.8.2-debian-10-r20
+    tag: 1.8.2-debian-10-r25
   ## Dashboard service parameters
   ##
   service:
@@ -506,7 +506,7 @@ dashboard:
   tolerations: {}
 
 ## MongoDB chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
+## ref: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
 ##
 mongodb:
   ## Whether to deploy a mongodb server to satisfy the applications database requirements.
@@ -539,7 +539,7 @@ mongodb:
       memory: 256Mi
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
 ##
 postgresql:
   ## Whether to deploy a postgresql server to satisfy the applications database requirements.
