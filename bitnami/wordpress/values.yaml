@@ -465,3 +465,13 @@ metrics:
 ##         containerPort: 1234
 ##
 sidecars: {}
+
+## Add init containers to the pod.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## Example:
+## initContainers:
+##  - name: update-wp-content
+##    image: busybox:1.28
+##    command: ['sh', '-c', 'copy themes and plugins from git and push to /bitnami/wordpress/wp-conntent. Should work with extraVolumeMounts and extraVolumes']
+##
+initContainers: {}
