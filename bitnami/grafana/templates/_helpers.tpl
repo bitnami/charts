@@ -137,6 +137,81 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 
 {{/*
+Return the Grafana admin credentials secret
+*/}}
+{{- define "grafana.adminSecretName" -}}
+{{- if .Values.admin.existingSecret -}}
+    {{- printf "%s" (tpl .Values.admin.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-admin" (include "grafana.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Grafana admin password key
+*/}}
+{{- define "grafana.adminSecretPasswordKey" -}}
+{{- if and .Values.admin.existingSecret .Values.admin.existingSecretPasswordKey -}}
+    {{- printf "%s" (tpl .Values.admin.existingSecretPasswordKey $) -}}
+{{- else -}}
+    {{- printf "GF_SECURITY_ADMIN_PASSWORD" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created
+*/}}
+{{- define "grafana.createAdminSecret" -}}
+{{- if not .Values.admin.existingSecret }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Grafana SMTP credentials secret
+*/}}
+{{- define "grafana.smtpSecretName" -}}
+{{- if .Values.smtp.existingSecret }}
+    {{- printf "%s" (tpl .Values.smtp.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-smtp" (include "grafana.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Grafana SMTP user key
+*/}}
+{{- define "grafana.smtpSecretUserKey" -}}
+{{- if and .Values.smtp.existingSecret .Values.smtp.existingSecretUserKey -}}
+    {{- printf "%s" (tpl .Values.smtp.existingSecretUserKey $) -}}
+{{- else -}}
+    {{- printf "GF_SMTP_USER" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Grafana SMTP password key
+*/}}
+{{- define "grafana.smtpSecretPasswordKey" -}}
+{{- if and .Values.smtp.existingSecret .Values.smtp.existingSecretPasswordKey -}}
+    {{- printf "%s" (tpl .Values.smtp.existingSecretPasswordKey $) -}}
+{{- else -}}
+    {{- printf "GF_SMTP_PASSWORD" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created
+*/}}
+{{- define "grafana.createSMTPSecret" -}}
+{{- if and .Values.smtp.enabled (not .Values.smtp.existingSecret) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate values for Grafana.
 */}}
 {{- define "grafana.validateValues" -}}
