@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "discourse.fullname" . }}-sidekiq
+  labels:
+    {{- include "discourse.labels" . | nindent 4 }}
+    component: sidekiq
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "discourse.selectorLabels" . | nindent 6 }}
+      component: sidekiq
+  template:
+    metadata:
+      labels:
+        {{- include "discourse.selectorLabels" . | nindent 8 }}
+        component: sidekiq
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "discourse.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/app-entrypoint.sh"]
+          args:
+            - nami
+            - start
+            - --foreground
+            - discourse-sidekiq
+          env:
+            - name: DISCOURSE_HOST
+              value: {{ include "discourse.fullname" . }}
+            - name: DISCOURSE_PORT
+              value: "3000"
+          envFrom:
+            - configMapRef:
+                name: {{ include "discourse.fullname" . }}-envs
+            - secretRef:
+                name: {{ include "discourse.fullname" . }}-envs
+            # {{ .Values.additionalEnvs | toYaml | indent 6 }}
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          readinessProbe:
+            exec:
+              command: [nami status discourse-sidekiqa]
+            initialDelaySeconds: 60
+            periodSeconds: 60
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

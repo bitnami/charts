@@ -1,0 +1,183 @@
+## This is test deployment for Kubernetes platforms.
+## This is not intended to be used in production.
+##
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test-postgresql
+  name: test-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-postgresql
+  template:
+    metadata:
+      labels:
+        app: test-postgresql
+    spec:
+      containers:
+      - image: bitnami/postgresql
+        name: test-postgresql
+        env:
+          - name: ALLOW_EMPTY_PASSWORD
+            value: "yes"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test-postgresql
+  name: test-postgresql
+spec:
+  ports:
+  - port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app: test-postgresql
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test-redis
+  name: test-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-redis
+  template:
+    metadata:
+      labels:
+        app: test-redis
+    spec:
+      containers:
+      - image: bitnami/redis
+        name: test-redis
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes" 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test-redis
+  name: test-redis
+spec:
+  ports:
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    app: test-redis
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test-discourse
+  name: test-discourse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-discourse
+  template:
+    metadata:
+      labels:
+        app: test-discourse
+    spec:
+      containers:
+      - image: bitnami/discourse
+        name: test-discourse
+        env:
+        - name: POSTGRESQL_HOST
+          value: test-postgresql
+        - name: POSTGRESQL_ROOT_USER
+          value: postgres
+        - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
+          value: bitnami_application
+        - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
+          value: bn_discourse
+        - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+          value: bitnami1
+        - name: DISCOURSE_POSTGRESQL_NAME
+          value: bitnami_application
+        - name: DISCOURSE_POSTGRESQL_USERNAME
+          value: bn_discourse
+        - name: DISCOURSE_POSTGRESQL_PASSWORD
+          value: bitnami1
+        - name: DISCOURSE_HOSTNAME
+          value: www.example.com
+        - name: REDIS_HOST
+          value: test-redis
+        - name: REDIS_PORT_NUMBER
+          value: "6379"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test-discourse
+  name: test-discourse
+spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: test-discourse
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-sidekiq
+  labels:
+    app: test-sidekiq
+spec:
+  containers:
+  - name: sidekiq
+    image: bitnami/discourse
+    args:
+    - nami
+    - start
+    - --foreground
+    - discourse-sidekiq
+    env:
+    - name: POSTGRESQL_HOST
+      value: test-postgresql
+    - name: POSTGRESQL_ROOT_USER
+      value: postgres
+    - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
+      value: bitnami_application
+    - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
+      value: bn_discourse
+    - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+      value: bitnami1
+    - name: DISCOURSE_POSTGRESQL_NAME
+      value: bitnami_application
+    - name: DISCOURSE_POSTGRESQL_USERNAME
+      value: bn_discourse
+    - name: DISCOURSE_POSTGRESQL_PASSWORD
+      value: bitnami1
+    - name: DISCOURSE_HOST
+      value: test-discourse
+    - name: DISCOURSE_PORT
+      value: "3000"
+    - name: DISCOURSE_HOSTNAME
+      value: www.example.com
+    - name: REDIS_HOST
+      value: test-redis
+    - name: REDIS_PORT_NUMBER
+      value: "6379"
+

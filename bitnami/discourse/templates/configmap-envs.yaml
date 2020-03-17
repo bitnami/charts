@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "discourse.fullname" . }}-envs
+  labels:
+    {{- include "discourse.labels" . | nindent 4 }}
+data:
+  DISCOURSE_HOSTNAME: {{ .Values.hostname }}
+  DISCOURSE_USERNAME: {{ .Values.admin.username }}
+  DISCOURSE_EMAIL: {{ .Values.admin.email }}
+  DISCOURSE_SITENAME: {{ .Values.sitename }}
+  POSTGRESQL_HOST: {{ include "discourse.fullname" . }}-postgresql
+  DISCOURSE_POSTGRESQL_NAME: "{{ .Values.postgresql.postgresqlDatabase }}"
+  DISCOURSE_POSTGRESQL_USERNAME: "{{ .Values.postgresql.postgresqlUsername }}"
+  POSTGRESQL_ROOT_USER: "postgres"
+  POSTGRESQL_CLIENT_CREATE_DATABASE_NAME: "{{ .Values.postgresql.postgresqlDatabase }}"
+  POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME: "{{ .Values.postgresql.postgresqlUsername }}"
+  REDIS_HOST: {{ include "discourse.fullname" . }}-redis-master
+  REDIS_PORT_NUMBER: "6379"
+  {{- if .Release.IsUpgrade }}
+  DISCOURSE_SKIP_INSTALL: "yes"
+  {{- end }}

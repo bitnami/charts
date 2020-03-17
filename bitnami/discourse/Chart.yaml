@@ -1,0 +1,22 @@
+apiVersion: v2
+name: discourse
+description: A Helm chart for deploying Discourse to Kubernetes
+type: application
+version: 0.1.0
+appVersion: 2.4.1
+home: https://www.discourse.org/
+sources:
+- https://github.com/spinnaker
+maintainers:
+- name: paulczar
+  email: username.taken@gmail.com
+
+dependencies:
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 8.6.4
+    condition: postgresql.enabled
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.5.11
+    condition: redis.enabled
