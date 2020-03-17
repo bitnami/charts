@@ -154,7 +154,7 @@ spec:
         - name: dashboards-provider
           configMap:
             {{- if .Values.dashboardsProvider.configMapName }}
-            name: {{ .Values.dashboardsProvider.configMapName }}
+            name: {{ include "grafana.tplValue" ( dict "value" .Values.dashboardsProvider.configMapName "context" $) }}
             {{- else }}
             name: {{ include "grafana.fullname" . }}-provider
             {{- end }}
