@@ -1,0 +1,641 @@
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: httpproxies.projectcontour.io
+spec:
+  additionalPrinterColumns:
+    - JSONPath: .spec.virtualhost.fqdn
+      description: Fully qualified domain name
+      name: FQDN
+      type: string
+    - JSONPath: .spec.virtualhost.tls.secretName
+      description: Secret with TLS credentials
+      name: TLS Secret
+      type: string
+    - JSONPath: .status.currentStatus
+      description: The current status of the HTTPProxy
+      name: Status
+      type: string
+    - JSONPath: .status.description
+      description: Description of the current status
+      name: Status Description
+      type: string
+  group: projectcontour.io
+  names:
+    kind: HTTPProxy
+    listKind: HTTPProxyList
+    plural: httpproxies
+    shortNames:
+      - proxy
+      - proxies
+    singular: httpproxy
+  scope: Namespaced
+  subresources: {}
+  validation:
+    openAPIV3Schema:
+      description: HTTPProxy is an Ingress CRD specification
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: HTTPProxySpec defines the spec of the CRD.
+          properties:
+            includes:
+              description: Includes allow for specific routing configuration to be
+                appended to another HTTPProxy in another namespace.
+              items:
+                description: Include describes a set of policies that can be applied
+                  to an HTTPProxy in a namespace.
+                properties:
+                  conditions:
+                    description: Conditions are a set of routing properties that is
+                      applied to an HTTPProxy in a namespace.
+                    items:
+                      description: Condition are policies that are applied on top
+                        of HTTPProxies. One of Prefix or Header must be provided.
+                      properties:
+                        header:
+                          description: Header specifies the header condition to match.
+                          properties:
+                            contains:
+                              description: Contains is true if the Header containing
+                                this string is present in the request.
+                              type: string
+                            exact:
+                              description: Exact is true if the Header containing
+                                this string matches exactly in the request.
+                              type: string
+                            name:
+                              description: Name is the name of the header to match
+                                on. Name is required. Header names are case insensitive.
+                              type: string
+                            notcontains:
+                              description: NotContains is true if the Header containing
+                                this string is not present in the request.
+                              type: string
+                            notexact:
+                              description: NotExact is true if the Header containing
+                                this string doesn't match exactly in the request.
+                              type: string
+                            present:
+                              description: Present is true if the Header is present
+                                in the request.
+                              type: boolean
+                          required:
+                            - name
+                          type: object
+                        prefix:
+                          description: Prefix defines a prefix match for a request.
+                          type: string
+                      type: object
+                    type: array
+                  name:
+                    description: Name of the HTTPProxy
+                    type: string
+                  namespace:
+                    description: Namespace of the HTTPProxy to include. Defaults to
+                      the current namespace if not supplied.
+                    type: string
+                required:
+                  - name
+                type: object
+              type: array
+            routes:
+              description: Routes are the ingress routes. If TCPProxy is present,
+                Routes is ignored.
+              items:
+                description: Route contains the set of routes for a virtual host.
+                properties:
+                  conditions:
+                    description: Conditions are a set of routing properties that is
+                      applied to an HTTPProxy in a namespace.
+                    items:
+                      description: Condition are policies that are applied on top
+                        of HTTPProxies. One of Prefix or Header must be provided.
+                      properties:
+                        header:
+                          description: Header specifies the header condition to match.
+                          properties:
+                            contains:
+                              description: Contains is true if the Header containing
+                                this string is present in the request.
+                              type: string
+                            exact:
+                              description: Exact is true if the Header containing
+                                this string matches exactly in the request.
+                              type: string
+                            name:
+                              description: Name is the name of the header to match
+                                on. Name is required. Header names are case insensitive.
+                              type: string
+                            notcontains:
+                              description: NotContains is true if the Header containing
+                                this string is not present in the request.
+                              type: string
+                            notexact:
+                              description: NotExact is true if the Header containing
+                                this string doesn't match exactly in the request.
+                              type: string
+                            present:
+                              description: Present is true if the Header is present
+                                in the request.
+                              type: boolean
+                          required:
+                            - name
+                          type: object
+                        prefix:
+                          description: Prefix defines a prefix match for a request.
+                          type: string
+                      type: object
+                    type: array
+                  enableWebsockets:
+                    description: Enables websocket support for the route.
+                    type: boolean
+                  healthCheckPolicy:
+                    description: The health check policy for this route.
+                    properties:
+                      healthyThresholdCount:
+                        description: The number of healthy health checks required
+                          before a host is marked healthy
+                        format: int32
+                        type: integer
+                      host:
+                        description: The value of the host header in the HTTP health
+                          check request. If left empty (default value), the name "contour-envoy-healthcheck"
+                          will be used.
+                        type: string
+                      intervalSeconds:
+                        description: The interval (seconds) between health checks
+                        format: int64
+                        type: integer
+                      path:
+                        description: HTTP endpoint used to perform health checks on
+                          upstream service
+                        type: string
+                      timeoutSeconds:
+                        description: The time to wait (seconds) for a health check
+                          response
+                        format: int64
+                        type: integer
+                      unhealthyThresholdCount:
+                        description: The number of unhealthy health checks required
+                          before a host is marked unhealthy
+                        format: int32
+                        type: integer
+                    required:
+                      - path
+                    type: object
+                  loadBalancerPolicy:
+                    description: The load balancing policy for this route.
+                    properties:
+                      strategy:
+                        type: string
+                    type: object
+                  pathRewritePolicy:
+                    description: The policy for rewriting the path of the request
+                      URL after the request has been routed to a Service.
+                    properties:
+                      replacePrefix:
+                        description: ReplacePrefix describes how the path prefix should
+                          be replaced.
+                        items:
+                          description: ReplacePrefix describes a path prefix replacement.
+                          properties:
+                            prefix:
+                              description: "Prefix specifies the URL path prefix to
+                                be replaced. \n If Prefix is specified, it must exactly
+                                match the Condition prefix that is rendered by the
+                                chain of including HTTPProxies and only that path
+                                prefix will be replaced by Replacement. This allows
+                                HTTPProxies that are included through multiple roots
+                                to only replace specific path prefixes, leaving others
+                                unmodified. \n If Prefix is not specified, all routing
+                                prefixes rendered by the include chain will be replaced."
+                              minLength: 1
+                              type: string
+                            replacement:
+                              description: Replacement is the string that the routing
+                                path prefix will be replaced with. This must not be
+                                empty.
+                              minLength: 1
+                              type: string
+                          required:
+                            - replacement
+                          type: object
+                        type: array
+                    type: object
+                  permitInsecure:
+                    description: Allow this path to respond to insecure requests over
+                      HTTP which are normally not permitted when a `virtualhost.tls`
+                      block is present.
+                    type: boolean
+                  requestHeadersPolicy:
+                    description: The policy for managing request headers during proxying
+                    properties:
+                      remove:
+                        description: Remove specifies a list of HTTP header names
+                          to remove
+                        items:
+                          type: string
+                        type: array
+                      set:
+                        description: Set specifies a list of HTTP header values that
+                          will be set in the HTTP header
+                        items:
+                          description: HeaderValue represents a header name/value
+                            pair
+                          properties:
+                            name:
+                              description: Name represents a key of a header
+                              minLength: 1
+                              type: string
+                            value:
+                              description: Value represents the value of a header
+                                specified by a key
+                              minLength: 1
+                              type: string
+                          required:
+                            - name
+                            - value
+                          type: object
+                        type: array
+                    type: object
+                  responseHeadersPolicy:
+                    description: The policy for managing response headers during proxying
+                    properties:
+                      remove:
+                        description: Remove specifies a list of HTTP header names
+                          to remove
+                        items:
+                          type: string
+                        type: array
+                      set:
+                        description: Set specifies a list of HTTP header values that
+                          will be set in the HTTP header
+                        items:
+                          description: HeaderValue represents a header name/value
+                            pair
+                          properties:
+                            name:
+                              description: Name represents a key of a header
+                              minLength: 1
+                              type: string
+                            value:
+                              description: Value represents the value of a header
+                                specified by a key
+                              minLength: 1
+                              type: string
+                          required:
+                            - name
+                            - value
+                          type: object
+                        type: array
+                    type: object
+                  retryPolicy:
+                    description: The retry policy for this route.
+                    properties:
+                      count:
+                        description: NumRetries is maximum allowed number of retries.
+                          If not supplied, the number of retries is one.
+                        format: int32
+                        type: integer
+                      perTryTimeout:
+                        description: PerTryTimeout specifies the timeout per retry
+                          attempt. Ignored if NumRetries is not supplied.
+                        type: string
+                    type: object
+                  services:
+                    description: Services are the services to proxy traffic.
+                    items:
+                      description: Service defines an Kubernetes Service to proxy
+                        traffic.
+                      properties:
+                        mirror:
+                          description: If Mirror is true the Service will receive
+                            a read only mirror of the traffic for this route.
+                          type: boolean
+                        name:
+                          description: Name is the name of Kubernetes service to proxy
+                            traffic. Names defined here will be used to look up corresponding
+                            endpoints which contain the ips to route.
+                          type: string
+                        port:
+                          description: Port (defined as Integer) to proxy traffic
+                            to since a service can have multiple defined.
+                          type: integer
+                        protocol:
+                          description: Protocol may be used to specify (or override)
+                            the protocol used to reach this Service. Values may be
+                            tls, h2, h2c.  It ommitted protocol-selection falls back
+                            on Service annotations.
+                          type: string
+                        requestHeadersPolicy:
+                          description: The policy for managing request headers during
+                            proxying
+                          properties:
+                            remove:
+                              description: Remove specifies a list of HTTP header
+                                names to remove
+                              items:
+                                type: string
+                              type: array
+                            set:
+                              description: Set specifies a list of HTTP header values
+                                that will be set in the HTTP header
+                              items:
+                                description: HeaderValue represents a header name/value
+                                  pair
+                                properties:
+                                  name:
+                                    description: Name represents a key of a header
+                                    minLength: 1
+                                    type: string
+                                  value:
+                                    description: Value represents the value of a header
+                                      specified by a key
+                                    minLength: 1
+                                    type: string
+                                required:
+                                  - name
+                                  - value
+                                type: object
+                              type: array
+                          type: object
+                        responseHeadersPolicy:
+                          description: The policy for managing response headers during
+                            proxying
+                          properties:
+                            remove:
+                              description: Remove specifies a list of HTTP header
+                                names to remove
+                              items:
+                                type: string
+                              type: array
+                            set:
+                              description: Set specifies a list of HTTP header values
+                                that will be set in the HTTP header
+                              items:
+                                description: HeaderValue represents a header name/value
+                                  pair
+                                properties:
+                                  name:
+                                    description: Name represents a key of a header
+                                    minLength: 1
+                                    type: string
+                                  value:
+                                    description: Value represents the value of a header
+                                      specified by a key
+                                    minLength: 1
+                                    type: string
+                                required:
+                                  - name
+                                  - value
+                                type: object
+                              type: array
+                          type: object
+                        validation:
+                          description: UpstreamValidation defines how to verify the
+                            backend service's certificate
+                          properties:
+                            caSecret:
+                              description: Name of the Kubernetes secret be used to
+                                validate the certificate presented by the backend
+                              type: string
+                            subjectName:
+                              description: Key which is expected to be present in
+                                the 'subjectAltName' of the presented certificate
+                              type: string
+                          required:
+                            - caSecret
+                            - subjectName
+                          type: object
+                        weight:
+                          description: Weight defines percentage of traffic to balance
+                            traffic
+                          format: int32
+                          type: integer
+                      required:
+                        - name
+                        - port
+                      type: object
+                    type: array
+                  timeoutPolicy:
+                    description: The timeout policy for this route.
+                    properties:
+                      idle:
+                        description: Timeout after which if there are no active requests
+                          for this route, the connection between Envoy and the backend
+                          will be closed. If not specified, there is no per-route
+                          idle timeout.
+                        type: string
+                      response:
+                        description: Timeout for receiving a response from the server
+                          after processing a request from client. If not supplied
+                          the timeout duration is undefined.
+                        type: string
+                    type: object
+                type: object
+              type: array
+            tcpproxy:
+              description: TCPProxy holds TCP proxy information.
+              properties:
+                includes:
+                  description: Include specifies that this tcpproxy should be delegated
+                    to another HTTPProxy.
+                  properties:
+                    name:
+                      description: Name of the child HTTPProxy
+                      type: string
+                    namespace:
+                      description: Namespace of the HTTPProxy to include. Defaults
+                        to the current namespace if not supplied.
+                      type: string
+                  required:
+                    - name
+                  type: object
+                loadBalancerPolicy:
+                  description: The load balancing policy for the backend services.
+                  properties:
+                    strategy:
+                      type: string
+                  type: object
+                services:
+                  description: Services are the services to proxy traffic
+                  items:
+                    description: Service defines an Kubernetes Service to proxy traffic.
+                    properties:
+                      mirror:
+                        description: If Mirror is true the Service will receive a
+                          read only mirror of the traffic for this route.
+                        type: boolean
+                      name:
+                        description: Name is the name of Kubernetes service to proxy
+                          traffic. Names defined here will be used to look up corresponding
+                          endpoints which contain the ips to route.
+                        type: string
+                      port:
+                        description: Port (defined as Integer) to proxy traffic to
+                          since a service can have multiple defined.
+                        type: integer
+                      protocol:
+                        description: Protocol may be used to specify (or override)
+                          the protocol used to reach this Service. Values may be tls,
+                          h2, h2c.  It ommitted protocol-selection falls back on Service
+                          annotations.
+                        type: string
+                      requestHeadersPolicy:
+                        description: The policy for managing request headers during
+                          proxying
+                        properties:
+                          remove:
+                            description: Remove specifies a list of HTTP header names
+                              to remove
+                            items:
+                              type: string
+                            type: array
+                          set:
+                            description: Set specifies a list of HTTP header values
+                              that will be set in the HTTP header
+                            items:
+                              description: HeaderValue represents a header name/value
+                                pair
+                              properties:
+                                name:
+                                  description: Name represents a key of a header
+                                  minLength: 1
+                                  type: string
+                                value:
+                                  description: Value represents the value of a header
+                                    specified by a key
+                                  minLength: 1
+                                  type: string
+                              required:
+                                - name
+                                - value
+                              type: object
+                            type: array
+                        type: object
+                      responseHeadersPolicy:
+                        description: The policy for managing response headers during
+                          proxying
+                        properties:
+                          remove:
+                            description: Remove specifies a list of HTTP header names
+                              to remove
+                            items:
+                              type: string
+                            type: array
+                          set:
+                            description: Set specifies a list of HTTP header values
+                              that will be set in the HTTP header
+                            items:
+                              description: HeaderValue represents a header name/value
+                                pair
+                              properties:
+                                name:
+                                  description: Name represents a key of a header
+                                  minLength: 1
+                                  type: string
+                                value:
+                                  description: Value represents the value of a header
+                                    specified by a key
+                                  minLength: 1
+                                  type: string
+                              required:
+                                - name
+                                - value
+                              type: object
+                            type: array
+                        type: object
+                      validation:
+                        description: UpstreamValidation defines how to verify the
+                          backend service's certificate
+                        properties:
+                          caSecret:
+                            description: Name of the Kubernetes secret be used to
+                              validate the certificate presented by the backend
+                            type: string
+                          subjectName:
+                            description: Key which is expected to be present in the
+                              'subjectAltName' of the presented certificate
+                            type: string
+                        required:
+                          - caSecret
+                          - subjectName
+                        type: object
+                      weight:
+                        description: Weight defines percentage of traffic to balance
+                          traffic
+                        format: int32
+                        type: integer
+                    required:
+                      - name
+                      - port
+                    type: object
+                  type: array
+              type: object
+            virtualhost:
+              description: Virtualhost appears at most once. If it is present, the
+                object is considered to be a "root".
+              properties:
+                fqdn:
+                  description: The fully qualified domain name of the root of the
+                    ingress tree all leaves of the DAG rooted at this object relate
+                    to the fqdn
+                  type: string
+                tls:
+                  description: If present describes tls properties. The CNI names
+                    that will be matched on are described in fqdn, the tls.secretName
+                    secret must contain a matching certificate
+                  properties:
+                    minimumProtocolVersion:
+                      description: Minimum TLS version this vhost should negotiate
+                      type: string
+                    passthrough:
+                      description: If Passthrough is set to true, the SecretName will
+                        be ignored and the encrypted handshake will be passed through
+                        to the backing cluster.
+                      type: boolean
+                    secretName:
+                      description: required, the name of a secret in the current namespace
+                      type: string
+                  type: object
+              required:
+                - fqdn
+              type: object
+          type: object
+        status:
+          description: Status reports the current state of the HTTPProxy.
+          properties:
+            currentStatus:
+              type: string
+            description:
+              type: string
+          type: object
+      required:
+        - metadata
+        - spec
+      type: object
+  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

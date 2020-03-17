@@ -1,0 +1,12 @@
+{{- if .Values.configInline }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "contour.fullname" . }}
+  labels: {{- include "contour.labels" . | nindent 4}}
+    component: contour
+data:
+  contour.yaml: |
+{{ toYaml .Values.configInline | indent 4 }}
+{{- end }}

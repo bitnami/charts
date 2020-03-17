@@ -1,0 +1,140 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "contour.fullname" . }}-envoy
+  labels: {{- include "contour.labels" . | nindent 4 }}
+    component: envoy
+spec:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 10%
+  selector:
+    matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
+      component: envoy
+  template:
+    metadata:
+      labels: {{- include "contour.labels" . | nindent 8 }}
+        component: envoy
+    spec:
+{{- include "envoy.imagePullSecrets" . | nindent 6 }}
+    {{- with .Values.envoy.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.envoy.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.envoy.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      containers:
+      - args:
+        - -c
+        - /config/envoy.json
+        - --service-cluster $(CONTOUR_NAMESPACE)
+        - --service-node $(ENVOY_POD_NAME)
+        - --log-level info
+        command:
+        - envoy
+        image: {{ include "envoy.image" . }}
+        imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+        name: envoy
+        env:
+        - name: CONTOUR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: ENVOY_POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        ports:
+        - containerPort: 80
+          hostPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          hostPort: 443
+          name: https
+          protocol: TCP
+        - containerPort: 8002
+          name: http-metrics
+          protocol: TCP
+        {{- if .Values.envoy.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8002
+          initialDelaySeconds: {{ .Values.envoy.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.envoy.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.envoy.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.envoy.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.envoy.readinessProbe.failureThreshold }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.envoy.resources | indent 10 }}
+        volumeMounts:
+        - name: envoy-config
+          mountPath: /config
+        - name: envoycert
+          mountPath: /certs
+        - name: cacert
+          mountPath: /ca
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - bash
+              - -c
+              - --
+              - echo
+              - -ne
+              - "POST /healthcheck/fail HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n"
+              - '>/dev/tcp/localhost/9001'
+      initContainers:
+      - args:
+        - bootstrap
+        - /config/envoy.json
+        - --xds-address=contour
+        - --xds-port=8001
+        - --envoy-cafile=/ca/cacert.pem
+        - --envoy-cert-file=/certs/tls.crt
+        - --envoy-key-file=/certs/tls.key
+        command:
+        - contour
+        image: {{ include "contour.image" . }}
+        imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+        name: envoy-initconfig
+        resources:
+{{ toYaml .Values.contour.resources | indent 10 }}
+        volumeMounts:
+        - name: envoy-config
+          mountPath: /config
+        - name: envoycert
+          mountPath: /certs
+          readOnly: true
+        - name: cacert
+          mountPath: /ca
+          readOnly: true
+        env:
+        - name: CONTOUR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      automountServiceAccountToken: false
+      volumes:
+      - name: envoy-config
+        emptyDir: {}
+      - name: envoycert
+        secret:
+          secretName: envoycert
+      - name: cacert
+        secret:
+          secretName: cacert
+      restartPolicy: Always
