@@ -559,3 +559,13 @@ extraSecrets: {}
   #     {
   #       ...
   #     }
+
+## Adding optionals volumeMount
+extraVolumeMounts: []
+  # - name: extras
+  #   mountPath: /usr/share/extras
+  #   readOnly: true
+
+extraVolumes: []
+  # - name: extras
+  #   emptyDir: {}

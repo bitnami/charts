@@ -106,6 +106,9 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
         {{- end }}
         volumeMounts:
+          {{- if .Values.extraVolumeMounts }}
+{{ toYaml .Values.extraVolumeMounts | indent 10 }}
+          {{- end }}
           - name: config-volume
             mountPath: /opt/bitnami/rabbitmq/conf
           - name: healthchecks
@@ -344,6 +347,9 @@ spec:
         - name: load-definition-volume
           secret:
             secretName: {{ .Values.rabbitmq.loadDefinition.secretName | quote }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+{{ toYaml .Values.extraVolumes | indent 8 }}
         {{- end }}
       {{- if not .Values.persistence.enabled }}
         - name: data
