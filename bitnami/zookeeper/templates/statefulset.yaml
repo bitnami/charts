@@ -5,6 +5,10 @@ metadata:
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     role: zookeeper
+{{- if .Values.annotations }}
+  annotations:
+  {{- .Values.annotations |toYaml |nindent 4 }}
+{{- end }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
