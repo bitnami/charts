@@ -1,0 +1,29 @@
+{{- if .Values.rbac.create -}}
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "metallb.fullname" . }}-speaker
+  labels: {{- include "metallb.labels" . | nindent 4}}
+spec:
+  hostNetwork: true
+  hostPorts:
+  - max: 7472
+    min: 7472 
+  privileged: true
+  allowPrivilegeEscalation: false
+  allowedCapabilities:
+  - 'NET_ADMIN'
+  - 'NET_RAW'
+  - 'SYS_ADMIN'
+  volumes:
+  - '*'
+  fsGroup:
+    rule: RunAsAny
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+{{- end -}}

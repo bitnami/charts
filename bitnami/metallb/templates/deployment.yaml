@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "metallb.fullname" . }}-controller
+  labels: {{- include "metallb.labels" . | nindent 4 }}
+    component: controller
+spec:
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
+      component: controller
+  template:
+    metadata:
+      labels: {{- include "metallb.labels" . | nindent 8 }}
+        component: controller
+      {{- if .Values.controller.podAnnotations }}
+      annotations: {{- toYaml .Values.controller.podAnnotations | nindent 8 }}
+      {{- end }}
+    spec:
+{{- include "metallb.controller.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "metallb.controllerServiceAccountName" . }}
+      terminationGracePeriodSeconds: 0
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534 # nobody
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+        {{- with .Values.controller.nodeSelector }}
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.controller.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.controller.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      containers:
+      - name: controller
+        image: {{ include "metallb.controller.image" . }}
+        imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+        args:
+        - --port=7472
+        - --config={{ include "metallb.configMapName" . }}
+        ports:
+        - name: http-metrics
+          containerPort: 7472
+      {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: http-metrics
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+      {{- end }}
+        resources:
+{{ toYaml .Values.controller.resources | indent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - all
+          readOnlyRootFilesystem: true

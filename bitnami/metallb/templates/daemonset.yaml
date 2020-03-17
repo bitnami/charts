@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "metallb.fullname" . }}-speaker
+  labels: {{- include "metallb.labels" . | nindent 4 }}
+    component: speaker
+spec:
+  selector:
+    matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
+      component: speaker
+  template:
+    metadata:
+      labels: {{- include "metallb.labels" . | nindent 8 }}
+        component: speaker
+      {{- if .Values.controller.podAnnotations }}
+      annotations: {{- toYaml .Values.controller.podAnnotations | nindent 8 }}
+      {{- end }}
+    spec:
+{{- include "metallb.speaker.imagePullSecrets" . | nindent 6 }}
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      serviceAccountName: {{ include "metallb.speakerServiceAccountName" . }}
+      terminationGracePeriodSeconds: 0
+      hostNetwork: true
+      containers:
+      - name: speaker
+        image: {{ include "metallb.speaker.image" . }}
+        imagePullPolicy: {{ .Values.speaker.image.pullPolicy }}
+        args:
+        - --port=7472
+        - --config={{ include "metallb.configMapName" . }}
+        env:
+        - name: METALLB_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: METALLB_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        ports:
+        - name: http-metrics
+          containerPort: 7472
+      {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: http-metrics
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+      {{- end }}
+        resources:
+{{ toYaml .Values.speaker.resources | indent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            - SYS_ADMIN
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+        {{- with .Values.speaker.nodeSelector }}
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.speaker.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.speaker.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
