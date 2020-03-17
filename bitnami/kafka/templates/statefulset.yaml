@@ -138,14 +138,29 @@ spec:
             - name: SHARED_FILE
               value: "/shared/info.txt"
             {{- end }}
-            {{- if not .Values.externalAccess.enabled }}
+            {{- if .Values.externalAccess.enabled }}
+            - name: KAFKA_INTER_BROKER_LISTENER_NAME
+              value: "INTERNAL"
+            - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
+              {{- if and .Values.auth.enabled .Values.auth.ssl }}
+              value: "INTERNAL:SASL_SSL,EXTERNAL:SASL_SSL"
+              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
+              value: "INTERNAL:SSL,EXTERNAL:SSL"
+              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
+              value: "INTERNAL:SASL_PLAINTEXT,EXTERNAL:SASL_PLAINTEXT"
+              {{- else }}
+              value: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+              {{- end }}
+            {{- else }}
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
               value: {{ .Values.listeners }}
               {{- else if and .Values.auth.ssl .Values.auth.enabled }}
               value: "SASL_SSL://:$(KAFKA_PORT_NUMBER),SSL://:9093"
-              {{- else if .Values.auth.enabled }}
-              value: "SASL_SSL://:$(KAFKA_PORT_NUMBER)"
+              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
+              value: "SSL://:9093"
+              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
+              value: "SASL_PLAINTEXT://:$(KAFKA_PORT_NUMBER)"
               {{- else }}
               value: "PLAINTEXT://:$(KAFKA_PORT_NUMBER)"
               {{- end }}
@@ -154,8 +169,10 @@ spec:
               value: {{ .Values.advertisedListeners }}
               {{- else if and .Values.auth.ssl .Values.auth.enabled }}
               value: "SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER),SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:9093"
-              {{- else if .Values.auth.enabled  }}
-              value: "SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)"
+              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
+              value: "SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:9093"
+              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
+              value: "SASL_PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)"
               {{- else }}
               value: "PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)"
               {{- end }}
@@ -207,6 +224,8 @@ spec:
             {{- end }}
             - name: ALLOW_PLAINTEXT_LISTENER
               value: {{ ternary "yes" "no" (or .Values.auth.enabled .Values.allowPlaintextListener) | quote }}
+            - name: KAFKA_CFG_BROKER_ID
+              value: {{ .Values.brokerId | quote }}
             - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
               value: {{ .Values.deleteTopicEnable | quote }}
             - name: KAFKA_HEAP_OPTS
@@ -256,10 +275,6 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{ include "kafka.tplValue" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          command: ["/bin/bash", "-c"]
-          args:
-            - export KAFKA_CFG_BROKER_ID=${MY_POD_NAME##*-};
-              exec /entrypoint.sh /run.sh;
           ports:
             - name: kafka
               containerPort: 9092
