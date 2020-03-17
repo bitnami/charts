@@ -229,10 +229,8 @@ auth:
 
   ## Kafka inter broker communication password.
   # interBrokerPassword:
-
   ## Kafka Zookeeper user.
   # zookeeperUser:
-
   ## Kafka Zookeeper password.
   # zookeeperPassword:
 
@@ -410,6 +408,10 @@ metrics:
     ##
     annotations: {}
 
+    ## Annotations for the Kafka Exporter pods
+    ##
+    podAnnotations: {}
+
     service:
       ## Kafka Exporter Service type
       ##
@@ -540,7 +542,7 @@ metrics:
     ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
     ## (2) commented out above `overrideConfig`.
     ##
-    whitelistObjectNames:  # []
+    whitelistObjectNames:
       - kafka.controller:*
       - kafka.server:*
       - java.lang:*
@@ -553,17 +555,14 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##

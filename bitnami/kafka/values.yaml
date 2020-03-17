@@ -410,6 +410,10 @@ metrics:
     ##
     annotations: {}
 
+    ## Annotations for the Kafka Exporter pods
+    ##    
+    podAnnotations: {}
+
     service:
       ## Kafka Exporter Service type
       ##
@@ -540,7 +544,7 @@ metrics:
     ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
     ## (2) commented out above `overrideConfig`.
     ##
-    whitelistObjectNames:  # []
+    whitelistObjectNames:
       - kafka.controller:*
       - kafka.server:*
       - java.lang:*
