@@ -14,14 +14,14 @@ spec:
     spec:
       template:
         metadata:
-          labels: 
+          labels:
             {{- include "influxdb.matchLabels" . | nindent 12 }}
           annotations:
             {{- toYaml .Values.backup.cronjob.Podannotations | nindent 12 }}
         spec:
           securityContext:
-            fsGroup: {{ .Values.influxdb.securityContext.fsGroup }}            
-            runAsUser: {{ .Values.influxdb.securityContext.runAsUser }}            
+            fsGroup: {{ .Values.influxdb.securityContext.fsGroup }}
+            runAsUser: {{ .Values.influxdb.securityContext.runAsUser }}
           restartPolicy: OnFailure
           volumes:
           - name: backup-scripts
@@ -33,7 +33,7 @@ spec:
             secret:
           {{- if .Values.backup.uploadProviders.google.existingSecret }}
               secretName: {{ .Values.backup.uploadProviders.google.existingSecret | quote }}
-          {{- else }}   
+          {{- else }}
               secretName: {{ include "influxdb.fullname" . }}-backup-gcloud
           {{- end }}
           {{- end }}
@@ -53,7 +53,7 @@ spec:
                   secretKeyRef:
                     name: {{ include "influxdb.secretName" . }}
                     key: admin-user-password
-            command: 
+            command:
               - "/tmp/backup.sh"
             volumeMounts:
             - name: {{ include "influxdb.fullname" . }}-backups
@@ -64,7 +64,7 @@ spec:
           containers:
           - name: influxdb-backup-dummy-container
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-            command: 
+            command:
               - "/bin/true"
           {{- if .Values.backup.uploadProviders.google.enabled }}
           - name: gsutil-cp
@@ -89,7 +89,11 @@ spec:
               - name: AZURE_STORAGE_CONNECTION_STRING
                 valueFrom:
                   secretKeyRef:
-                    name: {{ .Values.backup.uploadProviders.azure.secret }}
+                    {{- if .Values.backup.uploadProviders.azure.existingSecret }}
+                    name: {{ .Values.backup.uploadProviders.azure.existingSecret | quote }}
+                    {{- else }}
+                    name: {{ include "influxdb.fullname" . }}-backup-azure
+                    {{- end }}
                     key: {{ .Values.backup.uploadProviders.azure.secretKey }}
             volumeMounts:
               - name: {{ include "influxdb.fullname" . }}-backups

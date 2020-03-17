@@ -601,14 +601,14 @@ backup:
       secret: ""
       secretKey: "connection-string"
       existingSecret: ""
-      containerName: "https://blob.core.windows.net/influxdb-container"
+      containerName: "influxdb-container"
       ## Bitnami Azure CLI image
       ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
       ##
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.2.0-debian-10-r4
+        tag: 2.2.0-debian-10-r5
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
