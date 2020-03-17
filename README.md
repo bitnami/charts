@@ -12,13 +12,6 @@ $ helm install my-release bitnami/<chart>
 
 ![Installing a chart](demo.gif)
 
-## Charts
-
-This repository contains:
-
-* [Upstreamed charts](./upstreamed) (contributed to [helm/charts](https://github.com/helm/charts))
-* [Bitnami charts](./bitnami)
-
 ## Before you begin
 
 ### Setup a Kubernetes Cluster
@@ -33,7 +26,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#
 
 ### Add Repo
 
-The stable charts are contributed to the upstream [helm/charts](https://github.com/helm/charts) repository. The following command allows you to download and install all the charts from this repository, both the bitnami and the upstreamed ones.
+The following command allows you to download and install all the charts from this repository:
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

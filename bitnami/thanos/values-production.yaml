@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.11.0-scratch-r2
+  tag: 0.11.0-scratch-r6
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -65,12 +65,13 @@ querier:
   ##
   dnsDiscovery:
     enabled: true
-    ## Sidecars service name to discover them using DNS discovery
+    ## Sidecars service name to discover them using DNS discovery 
+    ## Evaluated as a template.
+    # sidecarsService: "{{ .Release.Name }}-prometheus-thanos"
     ##
-    # sidecarsService:
     ## Sidecars namespace to discover them using DNS discovery
-    ##
-    # sidecarsNamespace
+    ## Evaluated as a template.
+    # sidecarsNamespace: "{{ .Release.Namespace }}"
   
   ## Statically configure store APIs to connect with Thanos Querier
   ##

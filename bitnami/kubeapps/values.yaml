@@ -105,7 +105,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.1-debian-10-r27
+    tag: 1.16.1-debian-10-r42
   ## Frontend service parameters
   ##
   service:
@@ -260,7 +260,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.16.3-r17
+    tag: 1.16.3-debian-10-r40
   ## Affinity for hooks' pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -457,7 +457,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.8.2-debian-10-r7
+    tag: 1.8.2-debian-10-r26
   ## Dashboard service parameters
   ##
   service:
@@ -506,7 +506,7 @@ dashboard:
   tolerations: {}
 
 ## MongoDB chart configuration
-## ref: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
   ## Whether to deploy a mongodb server to satisfy the applications database requirements.
@@ -539,7 +539,7 @@ mongodb:
       memory: 256Mi
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
   ## Whether to deploy a postgresql server to satisfy the applications database requirements.
@@ -590,7 +590,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.1-debian-10-r27
+  tag: 1.16.1-debian-10-r42
 
 # Auth Proxy for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -603,7 +603,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 4.0.0-r92
+    tag: 5.0.0-debian-10-r19
   ## Mandatory parameters
   ##
   provider: ""
@@ -641,3 +641,6 @@ authProxy:
 ## These are used to switch on in development features or new features not yet released.
 featureFlags:
   reposPerNamespace: false
+  # The invalidateCache flag must be set to default to true when we next release the Kubeapps app.
+  invalidateCache: false
+  operators: false

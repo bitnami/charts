@@ -1,9 +1,9 @@
 dependencies:
 - name: mongodb
-  repository: https://kubernetes-charts.storage.googleapis.com
-  version: 7.8.6
+  repository: https://charts.bitnami.com/bitnami
+  version: 7.8.10
 - name: postgresql
-  repository: https://kubernetes-charts.storage.googleapis.com
-  version: 8.4.2
-digest: sha256:50d16adab428d7a83c2c394ddd532cff6edb208bd2523e4dd837f950162a7c02
-generated: "2020-02-26T13:27:30.52726+01:00"
+  repository: https://charts.bitnami.com/bitnami
+  version: 8.6.4
+digest: sha256:79bfab968c079ec3575dee0a727994e2c8e6e20417316d18a157665e36aa4ddc
+generated: "2020-03-16T14:54:18.855302086Z"

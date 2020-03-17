@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: {{ .Release.Name }}-assetsvc-test
-      image: {{ .Values.testImage.repository }}:{{ .Values.testImage.tag }}
+      image: {{ template "kubeapps.image" (list .Values.testImage .Values.global) }}
       env:
         - name: ASSETSVC_HOST
           value: {{ template "kubeapps.assetsvc.fullname" . }}.{{ .Release.Namespace }}
@@ -16,5 +16,5 @@ spec:
       command:
         - sh
         - -c
-        - curl -o /tmp/output $ASSETSVC_HOST:$ASSETSVC_PORT/v1/charts && cat /tmp/output && cat /tmp/output | grep wordpress
+        - curl -o /tmp/output $ASSETSVC_HOST:$ASSETSVC_PORT/v1/ns/{{ .Release.Namespace }}/charts && cat /tmp/output && cat /tmp/output | grep wordpress
   restartPolicy: Never

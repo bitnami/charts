@@ -141,6 +141,8 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                                              | `nil` (Prometheus Operator default value)                    |  |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                                   | `nil` (Prometheus Operator default value)                    |  |
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                       | `nil`                                                        |  |
+| `networkPolicy.enabled`                | Enable NetworkPolicy                                                                                                                                      | `false`                                                        |  |
+| `networkPolicy.allowExternal`          | Don't require client label for connections                                                                                                                | `true`                                                        |  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

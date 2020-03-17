@@ -48,7 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Kafka chart and their default values.
 
-|                Parameter                |                                                                        Description                                                                        |                         Default                         |
+| Parameter                               | Description                                                                                                                                               | Default                                                 |
 |-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`               | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
@@ -163,6 +163,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.port`                    | Kafka Exporter Port which exposes metrics in Prometheus format for scraping                                                                               | `9308`                                                  |
 | `metrics.kafka.resources`               | Allows setting resource limits for kafka-exporter pod                                                                                                     | `{}`                                                    |
 | `metrics.kafka.annotations`             | Annotations for Prometheus metrics deployment                                                                                                             | `{}`                                                    |
+| `metrics.kafka.podAnnotations`          | Annotations for Prometheus metrics pods                                                                                                                   | `{}`                                                    |
 | `metrics.kafka.service.type`            | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                                                    | `ClusterIP`                                             |
 | `metrics.kafka.service.port`            | Kafka Exporter Prometheus port                                                                                                                            | `9308`                                                  |
 | `metrics.kafka.service.nodePort`        | Kubernetes HTTP node port                                                                                                                                 | `""`                                                    |
@@ -301,7 +302,7 @@ If you enabled the authentication for Kafka, the SASL_SSL listener will be confi
  * interBrokerUser/interBrokerPassword: To authenticate kafka brokers between them.
  * zookeeperUser/zookeeperPassword: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
-In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.trustore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
+In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.truststore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
 
 You can create the secret and deploy the chart with authentication using the following parameters:
 

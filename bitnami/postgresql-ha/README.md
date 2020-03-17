@@ -1,6 +1,6 @@
 # PostgreSQL HA
 
-This Helm chart has been developed based on [stable/postgresql](https://github.com/helm/charts/tree/master/stable/postgresql) chart but including some changes to guarantee high availability such as:
+This Helm chart has been developed based on [bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart but including some changes to guarantee high availability such as:
 
 - A new deployment, service and ingress have been added to deploy [Pgpool-II](Pgpool-II) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
 - Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
@@ -20,6 +20,8 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](http
 
 - Kubernetes 1.12+
 - Helm 2.11+ or Helm 3.0-beta3+
+
+> Note: Please, note that pgpool runs the container as root by default setting the `pgpool.securityContext.runAsUser` to `0` (_root_ user) in order to enable LDAP support for now.
 
 ## Installing the Chart
 
