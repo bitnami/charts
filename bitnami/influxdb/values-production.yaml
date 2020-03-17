@@ -580,17 +580,41 @@ backup:
       secretKey: "key.json"
       existingSecret: ""
       bucketName: "gs://bucket/influxdb"
+      ## Bitnami Google Cloud SDK image
+      ## ref: https://hub.docker.com/r/bitnami/google-cloud-sdk/tags/
+      ##
       image:
         registry: docker.io
-        repository: google/cloud-sdk
-        tag: 281.0.0-alpine
+        repository: bitnami/google-cloud-sdk
+        tag: 0.284.0-debian-10-r16
+        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+        ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        ##
+        pullPolicy: IfNotPresent
+        ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ##
+        # pullSecrets:
+        #   - myRegistryKeySecretName
     azure:
       enabled: false
       secret: ""
       secretKey: "connection-string"
       existingSecret: ""
       containerName: "https://blob.core.windows.net/influxdb-container"
+      ## Bitnami Azure CLI image
+      ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
+      ##
       image:
         registry: docker.io
-        repository: microsoft/azure-cli
-        tag: 0.9.9
+        repository: bitnami/azure-cli
+        tag: 2.2.0-debian-10-r4
+        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+        ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        ##
+        pullPolicy: IfNotPresent
+        ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ##
+        # pullSecrets:
+        #   - myRegistryKeySecretName
