@@ -111,6 +111,16 @@ The following tables lists the configurable parameters of the contour chart and 
 | `prometheus.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics.                                                              | `[]`                                                    |
 | `prometheus.serviceMonitor.relabelings`            | Specify general relabeling.                                                                            | `[]`                                                    |
 
+Specify each parameter using the --set key=value[,key=value] argument to helm install. For example,
+
+```console
+    $ helm install my-release \
+      --set envoy.readynessProbe.successThreshold=5 \
+        bitnami/contour
+```
+
+The above command sets the envoy.readynessProbe.successThreshold to 5.
+
 
 ## Configuration and installation details
 
