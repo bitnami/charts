@@ -9,15 +9,19 @@ metadata:
     release: {{ .Release.Name }}
 data:
   ping_readiness_local.sh: |-
+    #!/bin/bash
 {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
+{{- end }}
+{{- if .Values.usePassword }}
+    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
 {{- end }}
     response=$(
       timeout -s 9 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
-        -a $REDIS_PASSWORD --no-auth-warning \
+        -a $REDIS_PASSWORD $no_auth_warning \
 {{- end }}
         -h localhost \
         -p $REDIS_PORT \
@@ -28,15 +32,19 @@ data:
       exit 1
     fi
   ping_liveness_local.sh: |-
+    #!/bin/bash
 {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
+{{- end }}
+{{- if .Values.usePassword }}
+    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
 {{- end }}
     response=$(
       timeout -s 9 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
-        -a $REDIS_PASSWORD --no-auth-warning \
+        -a $REDIS_PASSWORD $no_auth_warning \
 {{- end }}
         -h localhost \
         -p $REDIS_PORT \
@@ -48,15 +56,19 @@ data:
     fi
 {{- if .Values.sentinel.enabled }}
   ping_sentinel.sh: |-
+    #!/bin/bash
 {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
 {{- end }}
-    response=$(
+{{- if .Values.usePassword }}
+    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
+{{- end }}
+     response=$(
       timeout -s 9 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
-        -a $REDIS_PASSWORD --no-auth-warning \
+        -a $REDIS_PASSWORD $no_auth_warning \
 {{- end }}
         -h localhost \
         -p $REDIS_SENTINEL_PORT \
@@ -83,15 +95,19 @@ data:
     }
 {{- end }}
   ping_readiness_master.sh: |-
+    #!/bin/bash
 {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
     export REDIS_MASTER_PASSWORD=$password_aux
 {{- end }}
-    response=$(
+{{- if .Values.usePassword }}
+    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
+{{- end }}
+     response=$(
       timeout -s 9 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
-        -a $REDIS_MASTER_PASSWORD --no-auth-warning \
+        -a $REDIS_MASTER_PASSWORD $no_auth_warning \
 {{- end }}
         -h $REDIS_MASTER_HOST \
         -p $REDIS_MASTER_PORT_NUMBER \
@@ -102,15 +118,19 @@ data:
       exit 1
     fi
   ping_liveness_master.sh: |-
+    #!/bin/bash
 {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
     export REDIS_MASTER_PASSWORD=$password_aux
+{{- end }}
+{{- if .Values.usePassword }}
+    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
 {{- end }}
     response=$(
       timeout -s 9 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
-        -a $REDIS_MASTER_PASSWORD --no-auth-warning \
+        -a $REDIS_MASTER_PASSWORD $no_auth_warning \
 {{- end }}
         -h $REDIS_MASTER_HOST \
         -p $REDIS_MASTER_PORT_NUMBER \
