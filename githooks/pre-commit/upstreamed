@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if git diff --name-only --cached | grep 'upstreamed/'; then
-    printf '\n\U1F6AB Commit cancelled\n\nChanges detected in the "upstreamed" folder.\nPlease, implement them in the Helm Charts repository (https://github.com/helm/charts).\n'
-    exit 1
-fi
-
-exit 0

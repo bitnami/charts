@@ -32,7 +32,7 @@ helm install kubeapps --namespace kubeapps bitnami/kubeapps --set useHelm3=true
 
 This chart bootstraps a [Kubeapps](https://kubeapps.com) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MongoDB chart](https://github.com/helm/charts/tree/master/stable/mongodb) or the [Bitnami PostgreSQL chart](https://github.com/helm/charts/tree/master/stable/postgresql) which is required for bootstrapping a deployment for the database requirements of the Kubeapps application.
+It also packages the [Bitnami MongoDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mongodb) or the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which is required for bootstrapping a deployment for the database requirements of the Kubeapps application.
 
 ## Prerequisites
 

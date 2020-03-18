@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.4.0-debian-10-r21
+  tag: 2.4.1-debian-10-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -119,7 +119,7 @@ allowPlaintextListener: true
 # interBrokerListenerName:
 
 ## ID of the Kafka node.
-brokerId: -1
+# brokerId: -1
 
 ## Switch to enable topic deletion or not.
 deleteTopicEnable: false
@@ -284,6 +284,9 @@ externalAccess:
     ##
     nodePort: []
 
+    ## Service annotations done as key:value pairs
+    annotations: {}
+
 ## Service account for Kafka to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -373,7 +376,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r20
+      tag: 1.2.0-debian-10-r49
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
@@ -402,6 +405,14 @@ metrics:
       requests: {}
       #   cpu: 100m
       #   memory: 128Mi
+
+    ## Annotations for the Kafka Exporter Prometheus metrics deployment
+    ##
+    annotations: {}
+
+    ## Annotations for the Kafka Exporter pods
+    ##    
+    podAnnotations: {}
 
     service:
       ## Kafka Exporter Service type
@@ -440,7 +451,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.12.0-debian-10-r19
+      tag: 0.12.0-debian-10-r48
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
@@ -533,7 +544,7 @@ metrics:
     ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
     ## (2) commented out above `overrideConfig`.
     ##
-    whitelistObjectNames:  # []
+    whitelistObjectNames:
       - kafka.controller:*
       - kafka.server:*
       - java.lang:*

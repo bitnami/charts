@@ -167,7 +167,8 @@ spec:
         {{- end }}
       spec:
         accessModes: {{- toYaml .Values.data.persistence.accessModes | nindent 10 }}
-        {{ include "elasticsearch.data.storageClass" . }}
+        {{ $storage := dict "global" .Values.global "local" .Values.data }}
+        {{ include "elasticsearch.storageClass" $storage }}
         resources:
           requests:
             storage: {{ .Values.data.persistence.size | quote }}

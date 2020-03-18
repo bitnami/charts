@@ -13,7 +13,7 @@ $ helm install my-release bitnami/magento
 
 This chart bootstraps a [Magento](https://github.com/bitnami/bitnami-docker-magento) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/stable/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Magento application.
+It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Magento application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -72,6 +72,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | `magentoFirstName`                      | Magento Admin First Name                                                                             | `FirstName`                                                  |
 | `magentoLastName`                       | Magento Admin Last Name                                                                              | `LastName`                                                   |
 | `magentoMode`                           | Magento mode                                                                                         | `developer`                                                  |
+| `magentoUseSecureAdmin`                 | Use SSL to access the Magento Admin.                                                                 | `false`                                                      |
 | `magentoAdminUri`                       | Magento prefix to access Magento Admin                                                               | `admin`                                                      |
 | `allowEmptyPassword`                    | Allow DB blank passwords                                                                             | `yes`                                                        |
 | `ingress.enabled`                       | Enable ingress controller resource                                                                   | `false`                                                      |

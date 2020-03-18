@@ -14,7 +14,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 1.10.1-debian-10-r0
+  tag: 1.10.1-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -38,7 +38,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 1.10.1-debian-10-r0
+  tag: 1.10.1-debian-10-r23
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -62,7 +62,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 1.10.1-debian-10-r0
+  tag: 1.10.1-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,7 +86,7 @@ jobserviceImage:
 chartMuseumImage:
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.11.0-debian-10-r17
+  tag: 0.11.0-debian-10-r43
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -110,7 +110,7 @@ chartMuseumImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 1.10.1-debian-10-r0
+  tag: 1.10.1-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -134,7 +134,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 1.10.1-debian-10-r0
+  tag: 1.10.1-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -158,7 +158,7 @@ registryctlImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 1.10.1-debian-10-r0
+  tag: 1.10.1-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -182,7 +182,7 @@ clairImage:
 clairAdapterImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 1.0.1-debian-10-r16
+  tag: 1.0.1-debian-10-r43
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -206,7 +206,7 @@ clairAdapterImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 1.10.1-debian-10-r0
+  tag: 1.10.1-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -230,7 +230,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 1.10.1-debian-10-r0
+  tag: 1.10.1-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -254,7 +254,7 @@ notarySignerImage:
 nginxImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.1-debian-10-r17
+  tag: 1.16.1-debian-10-r46
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -328,11 +328,12 @@ service:
     ##
     enabled: true
     ## Fill the name of secret if you want to use your own TLS certificate.
-    ## The secret must contain the keys below:
-    ## - "tls.crt" - the certificate
-    ## - "tls.key" - the private key
-    ## - "ca.crt" - the certificate of CA
-    ## TLS certificates will be generated automatically if the "secretName" is not set
+    ## The secret contains keys named:
+    ## "tls.crt" - the certificate (required)
+    ## "tls.key" - the private key (required)
+    ## "ca.crt" - the certificate of CA (optional), this enables the download
+    ## link on portal to download the certificate of CA
+    ## These files will be generated automatically if the "secretName" is not set
     ##
     secretName: ""
     ## By default, the Notary service will use the same certificat described above.
@@ -1075,8 +1076,8 @@ clair:
       #   memory: 1Gi
       requests: {}
       #   cpu: 250m
-      #   memory: 256Mi  
-      
+      #   memory: 256Mi
+
   replicas: 1
   # The http(s) proxy used to update vulnerabilities database from internet
   httpProxy:
@@ -1142,8 +1143,8 @@ clair:
 ##
 notary:
   enabled: true
-  replicas: 1
   server:
+    replicas: 1
     ## Notary server containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1176,6 +1177,7 @@ notary:
       failureThreshold: 6
       successThreshold: 1
   signer:
+    replicas: 1
     ## Notary signer containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1209,7 +1211,7 @@ notary:
       successThreshold: 1
 
 ## Redis chart configuration
-## ref: https://github.com/helm/charts/blob/master/stable/redis/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
   enabled: true
@@ -1249,7 +1251,7 @@ externalRedis:
 
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
   enabled: true

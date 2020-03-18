@@ -5,6 +5,7 @@ metadata:
   name: {{ template "kafka.fullname" . }}-exporter
   labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: metrics
+  annotations: {{ include "kafka.tplValue" ( dict "value" .Values.metrics.kafka.annotations "context" $) | nindent 4 }}
 spec:
   replicas: 1
   selector:
@@ -14,6 +15,7 @@ spec:
     metadata:
       labels: {{- include "kafka.labels" . | nindent 8 }}
         app.kubernetes.io/component: metrics
+      annotations: {{ include "kafka.tplValue" ( dict "value" .Values.metrics.kafka.podAnnotations "context" $) | nindent 8 }}
     spec:
 {{- include "kafka.imagePullSecrets" . | indent 6 }}
       containers:

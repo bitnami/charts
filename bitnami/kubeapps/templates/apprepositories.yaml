@@ -4,7 +4,8 @@ kind: AppRepository
 metadata:
   name: {{ .name }}
   annotations:
-    "helm.sh/hook": pre-install
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "10"
   labels:
     app: {{ template "kubeapps.apprepository.fullname" $ }}
     chart: {{ template "kubeapps.chart" $ }}

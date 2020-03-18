@@ -15,7 +15,7 @@ spec:
     metadata:
       labels: {{- include "wildfly.labels" . | nindent 8 }}
     {{- if .Values.podAnnotations }}
-    annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
     {{- end }}
     spec:
 {{- include "wildfly.imagePullSecrets" . | indent 6 }}

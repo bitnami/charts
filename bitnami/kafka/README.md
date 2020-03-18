@@ -49,7 +49,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the Kafka chart and their default values.
 
 | Parameter                               | Description                                                                                                                                               | Default                                                 |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`               | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                   | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
@@ -122,12 +122,13 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `service.nodePort`                      | Kubernetes Service nodePort                                                                                                                               | `nil`                                                   |
 | `service.loadBalancerIP`                | loadBalancerIP for Kafka Service                                                                                                                          | `nil`                                                   |
 | `service.annotations`                   | Service annotations                                                                                                                                       | ``                                                      |
-| `externalAccess.enabled`               | Enable Kubernetes external cluster access to Kafka brokers                                                                                                 | `false`                                                 |
-| `externalAccess.service.type`          | Kubernetes Servive type for external access. It can be NodePort or LoadBalancer                                                                            | `LoadBalancer`                                          |
-| `externalAccess.service.port`          | Kafka port used for external access when service type is LoadBalancer                                                                                      | `19092`                                                 |
-| `externalAccess.service.loadBalancerIP`| Array of load balancer IPs for Kafka brokers.                                                                                                              | `[]`                                                    |
-| `externalAccess.service.domain`        | Domain or external ip used to configure Kafka external listener when service type is NodePort                                                              | `nil`                                                   |
-| `externalAccess.service.nodePort`      | Array of node ports used to configure Kafka external listener when service type is NodePort                                                                | `[]`                                                    |
+| `externalAccess.enabled`                | Enable Kubernetes external cluster access to Kafka brokers                                                                                                | `false`                                                 |
+| `externalAccess.service.type`           | Kubernetes Servive type for external access. It can be NodePort or LoadBalancer                                                                           | `LoadBalancer`                                          |
+| `externalAccess.service.port`           | Kafka port used for external access when service type is LoadBalancer                                                                                     | `19092`                                                 |
+| `externalAccess.service.loadBalancerIP` | Array of load balancer IPs for Kafka brokers.                                                                                                             | `[]`                                                    |
+| `externalAccess.service.domain`         | Domain or external ip used to configure Kafka external listener when service type is NodePort                                                             | `nil`                                                   |
+| `externalAccess.service.nodePort`       | Array of node ports used to configure Kafka external listener when service type is NodePort                                                               | `[]`                                                    |
+| `externalAccess.service.annotations`    | Service annotations for external access                                                                                                                   | ``                                                      |
 | `serviceAccount.create`                 | Enable creation of ServiceAccount for kafka pod                                                                                                           | `false`                                                 |
 | `serviceAccount.name`                   | Name of the created serviceAccount                                                                                                                        | Generated using the `kafka.fullname` template           |
 | `persistence.enabled`                   | Enable Kafka persistence using PVC, note that Zookeeper perisstency is unaffected                                                                         | `true`                                                  |
@@ -161,6 +162,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.interval`                | Interval that Prometheus scrapes Kafka metrics when using Prometheus Operator                                                                             | `10s`                                                   |
 | `metrics.kafka.port`                    | Kafka Exporter Port which exposes metrics in Prometheus format for scraping                                                                               | `9308`                                                  |
 | `metrics.kafka.resources`               | Allows setting resource limits for kafka-exporter pod                                                                                                     | `{}`                                                    |
+| `metrics.kafka.annotations`             | Annotations for Prometheus metrics deployment                                                                                                             | `{}`                                                    |
+| `metrics.kafka.podAnnotations`          | Annotations for Prometheus metrics pods                                                                                                                   | `{}`                                                    |
 | `metrics.kafka.service.type`            | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                                                    | `ClusterIP`                                             |
 | `metrics.kafka.service.port`            | Kafka Exporter Prometheus port                                                                                                                            | `9308`                                                  |
 | `metrics.kafka.service.nodePort`        | Kubernetes HTTP node port                                                                                                                                 | `""`                                                    |
@@ -299,7 +302,7 @@ If you enabled the authentication for Kafka, the SASL_SSL listener will be confi
  * interBrokerUser/interBrokerPassword: To authenticate kafka brokers between them.
  * zookeeperUser/zookeeperPassword: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
-In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.trustore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
+In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.truststore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
 
 You can create the secret and deploy the chart with authentication using the following parameters:
 
@@ -367,6 +370,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 8.0.0
+
+There is not backwards compatibility since the brokerID changes to the POD_NAME. For more information see [this PR](https://github.com/bitnami/charts/pull/2028).
 
 ### To 7.0.0
 

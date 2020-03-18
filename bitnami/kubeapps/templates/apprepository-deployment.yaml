@@ -64,6 +64,9 @@ spec:
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}
+            {{- if .Values.featureFlags.reposPerNamespace }}
+            - --repos-per-namespace
+            {{- end }}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
           {{- end }}

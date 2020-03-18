@@ -65,10 +65,12 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `schedulerName`                        | Alternative scheduler                                                                                  | `nil`                                                   |
 | `admin.user`                           | Grafana admin username                                                                                 | `admin`                                                 |
 | `admin.password`                       | Grafana admin password                                                                                 | Randomly generated                                      |
+| `admin.existingSecret`                 | Name of the existing secret containing admin password                                                  | `nil`                                                   |
+| `admin.existingSecretPasswordKey`      | Password key on the existing secret                                                                    | `password`                                              |
 | `smtp.enabled`                         | Enable SMTP configuration                                                                              | `false`                                                 |
-| `smtp.existingSecret`                  | Secret with SMTP credentials                                                                           | `nil`                                                   |
-| `smtp.existingSecretUserKey`           | Key which value is the SMTP user in the SMTP secret                                                    | `user`                                                  |
-| `smtp.existingSecretPasswordKey`       | Key which values is the SMTP password in the SMTP secret                                               | `password`                                              |
+| `smtp.existingSecret`                  | Name of the existing secret with SMTP credentials                                                      | `nil`                                                   |
+| `smtp.existingSecretUserKey`           | User key on the existing secret                                                                        | `user`                                                  |
+| `smtp.existingSecretPasswordKey`       | Password key on the existing secret                                                                    | `password`                                              |
 | `plugins`                              | Grafana plugins to be installed in deployment time separated by commas                                 | `nil`                                                   |
 | `ldap.enabled`                         | Enable LDAP for Grafana                                                                                | `false`                                                 |
 | `ldap.allowSignUp`                     | Allows LDAP sign up for Grafana                                                                        | `false`                                                 |
@@ -82,7 +84,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `config.customIniConfigMap`            | Name of the ConfigMap containing the `custom.ini` file                                                 | `nil`                                                   |
 | `config.customIniSecret`               | Name of the Secret containing the `custom.ini` file                                                    | `nil`                                                   |
 | `dashboardsProvider.enabled`           | Enable the use of a Grafana dashboard provider                                                         | `false`                                                 |
-| `dashboardsProvider.configMapName`     | Name of a ConfigMap containing a custom dashboard provider                                             | `nil`                                                   |
+| `dashboardsProvider.configMapName`     | Name of a ConfigMap containing a custom dashboard provider                                             | `nil` (evaluated as a template)                         |
 | `dashboardsConfigMaps`                 | Array with the names of a series of ConfigMaps containing dashboards files                             | `nil`                                                   |
 | `datasources.secretName`               | Secret name containing custom datasource files                                                         | `nil`                                                   |
 | `persistence.enabled`                  | Enable persistence                                                                                     | `true`                                                  |

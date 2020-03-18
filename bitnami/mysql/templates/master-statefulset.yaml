@@ -61,6 +61,9 @@ spec:
         - name: mysql
           image: {{ template "mysql.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.master.containerSecurityContext }}
+          securityContext: {{- toYaml .Values.master.containerSecurityContext | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
@@ -149,11 +152,7 @@ spec:
           resources: {{- toYaml .Values.master.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.master.persistence.existingClaim }}
-            - name: {{ .Values.master.persistence.existingClaim }}
-            {{- else }}
             - name: data
-            {{- end }}
               mountPath: {{ .Values.master.persistence.mountPath }}
             {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
@@ -213,7 +212,7 @@ spec:
           {{- if or .Values.root.injectSecretsAsVolume }}
           volumeMounts:
             - name: mysql-credentials
-              mountPath: /opt/bitnami/mysql/secrets/
+              mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
         {{- end }}
       volumes:
@@ -249,7 +248,7 @@ spec:
         - name: "data"
           emptyDir: {}
 {{- else if and .Values.master.persistence.enabled .Values.master.persistence.existingClaim }}
-        - name: {{ .Values.master.persistence.existingClaim }}
+        - name: "data"
           persistentVolumeClaim:
             claimName: {{ .Values.master.persistence.existingClaim }}
 {{- else if and .Values.master.persistence.enabled (not .Values.master.persistence.existingClaim) }}

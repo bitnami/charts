@@ -97,8 +97,7 @@ spec:
               subPath: tls.key
             {{- if .Values.service.tls.enabled }}
             - name: ca-download
-              mountPath: /etc/core/ca/ca.crt
-              subPath: ca.crt
+              mountPath: /etc/core/ca
             {{- end }}
             {{- if .Values.uaaSecretName }}
             - name: auth-ca-cert
@@ -140,9 +139,6 @@ spec:
           {{- else }}
             secretName: {{ .Values.service.tls.secretName }}
           {{- end }}
-            items:
-              - key: ca.crt
-                path: ca.crt
         {{- end }}
         {{- if .Values.uaaSecretName }}
         - name: auth-ca-cert

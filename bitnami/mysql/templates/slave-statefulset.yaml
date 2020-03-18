@@ -44,6 +44,9 @@ spec:
         - name: volume-permissions
           image: {{ template "mysql.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          {{- if .Values.slave.containerSecurityContext }}
+          securityContext: {{- toYaml .Values.slave.containerSecurityContext | nindent 12 }}
+          {{- end }}
           command:
             - /bin/bash
             - -ec
@@ -136,11 +139,7 @@ spec:
           resources: {{- toYaml .Values.slave.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.slave.persistence.existingClaim }}
-            - name: {{ .Values.slave.persistence.existingClaim }}
-            {{- else }}
             - name: data
-            {{- end }}
               mountPath: {{ .Values.slave.persistence.mountPath }}
             {{- if .Values.slave.config }}
             - name: config
@@ -196,7 +195,7 @@ spec:
           {{- if or .Values.root.injectSecretsAsVolume }}
           volumeMounts:
             - name: mysql-credentials
-              mountPath: /opt/bitnami/mysql/secrets/
+              mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
         {{- end }}
       volumes:
@@ -223,7 +222,7 @@ spec:
         - name: "data"
           emptyDir: {}
 {{- else if and .Values.slave.persistence.enabled .Values.slave.persistence.existingClaim }}
-        - name: {{ .Values.slave.persistence.existingClaim }}
+        - name: "data"
           persistentVolumeClaim:
             claimName: {{ .Values.slave.persistence.existingClaim }}
 {{- else if and .Values.slave.persistence.enabled (not .Values.slave.persistence.existingClaim) }}

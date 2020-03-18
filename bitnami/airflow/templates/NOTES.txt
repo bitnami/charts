@@ -36,8 +36,8 @@ host. To configure Airflow with the URL of your service:
   export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   export APP_PORT=80
   {{- end }}
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.postgresql.fullname" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.secretName" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
   export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
 
 {{- end }}
@@ -73,7 +73,7 @@ host. To configure Airflow with the URL of your service:
 2. Get your Airflow login credentials by running:
 
   echo User:    {{ .Values.airflow.auth.username }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.fullname" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "airflow.secretName" . }} -o jsonpath="{.data.airflow-password}" | base64 --decode)
 
 {{- end  }}
 

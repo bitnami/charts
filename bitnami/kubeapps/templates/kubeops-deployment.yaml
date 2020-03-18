@@ -20,50 +20,48 @@ spec:
         app: {{ template "kubeapps.kubeops.fullname" . }}
         release: {{ .Release.Name }}
     spec:
+{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ template "kubeapps.kubeops.fullname" . }}
       # Increase termination timeout to let remaining operations to finish before killing the pods
       # This is because new releases/upgrades/deletions are synchronous operations
       terminationGracePeriodSeconds: 300
-{{- include "kubeapps.imagePullSecrets" . | indent 6 }}
-      containers:
-      - name: kubeops
-        image: {{ template "kubeapps.image" (list .Values.kubeops.image .Values.global) }}
-        command:
-        - /kubeops
-        args:
-        - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
-        - --assetsvc-url=http://{{ template "kubeapps.assetsvc.fullname" . }}:{{ .Values.assetsvc.service.port }}
-        ports:
-        - name: http
-          containerPort: {{ .Values.kubeops.service.port }}
-        {{- if .Values.kubeops.livenessProbe }}
-        livenessProbe: {{- toYaml .Values.kubeops.livenessProbe | nindent 12 }}
-        {{- end }}
-        {{- if .Values.kubeops.readinessProbe }}
-        readinessProbe: {{- toYaml .Values.kubeops.readinessProbe | nindent 12 }}
-        {{- end }}
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        resources:
-{{ toYaml .Values.kubeops.resources | indent 12 }}
-    {{- with .Values.kubeops.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- if .Values.kubeops.affinity }}
+      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.kubeops.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubeops.nodeSelector }}
+      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.kubeops.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubeops.tolerations }}
+      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.kubeops.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-    {{- with .Values.kubeops.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.kubeops.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      containers:
+        - name: kubeops
+          image: {{ template "kubeapps.image" (list .Values.kubeops.image .Values.global) }}
+          command:
+            - /kubeops
+          args:
+            - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
+            - --assetsvc-url=http://{{ template "kubeapps.assetsvc.fullname" . }}:{{ .Values.assetsvc.service.port }}
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - name: http
+              containerPort: {{ .Values.kubeops.service.port }}
+          {{- if .Values.kubeops.livenessProbe }}
+          livenessProbe: {{- toYaml .Values.kubeops.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.kubeops.readinessProbe }}
+          readinessProbe: {{- toYaml .Values.kubeops.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.kubeops.resources }}
+          resources: {{- toYaml .Values.kubeops.resources | nindent 12 }}
+          {{- end }}
 {{- end }}{{/* matches useHelm3 */}}
