@@ -64,44 +64,44 @@ spec:
               mountPath: /tmp/backup.sh
               subPath: backup.sh
           containers:
-          - name: influxdb-backup-dummy-container
-            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-            command:
-              - "/bin/true"
-          {{- if .Values.backup.uploadProviders.google.enabled }}
-          - name: gsutil-cp
-            image: {{ include "gcloudSdk.image" . }}
-            command:
-              - "/tmp/upload-google.sh"
-            volumeMounts:
-              - name: {{ include "influxdb.fullname" . }}-backups
-                mountPath: {{ .Values.backup.directory | quote }}
-              - name: backup-scripts
-                mountPath: /tmp/upload-google.sh
-                subPath: upload-google.sh
-              - name: google-cloud-key
-                mountPath: /var/secrets/google/
-          {{- end }}
-          {{- if .Values.backup.uploadProviders.azure.enabled }}
-          - name: azure-cli
-            image: {{ include "azureCli.image" . }}
-            command:
-            - "/tmp/upload-azure.sh"
-            env:
-              - name: AZURE_STORAGE_CONNECTION_STRING
-                valueFrom:
-                  secretKeyRef:
-                    {{- if .Values.backup.uploadProviders.azure.existingSecret }}
-                    name: {{ .Values.backup.uploadProviders.azure.existingSecret | quote }}
-                    {{- else }}
-                    name: {{ include "influxdb.fullname" . }}-backup-azure
-                    {{- end }}
-                    key: {{ .Values.backup.uploadProviders.azure.secretKey }}
-            volumeMounts:
-              - name: {{ include "influxdb.fullname" . }}-backups
-                mountPath: {{ .Values.backup.directory | quote }}
-              - name: backup-scripts
-                mountPath: /tmp/upload-azure.sh
-                subPath: upload-azure.sh
-          {{- end }}
+            - name: influxdb-backup-dummy-container
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              command:
+                - "/bin/true"
+            {{- if .Values.backup.uploadProviders.google.enabled }}
+            - name: gsutil-cp
+              image: {{ include "gcloudSdk.image" . }}
+              command:
+                - "/tmp/upload-google.sh"
+              volumeMounts:
+                - name: {{ include "influxdb.fullname" . }}-backups
+                  mountPath: {{ .Values.backup.directory | quote }}
+                - name: backup-scripts
+                  mountPath: /tmp/upload-google.sh
+                  subPath: upload-google.sh
+                - name: google-cloud-key
+                  mountPath: /var/secrets/google/
+            {{- end }}
+            {{- if .Values.backup.uploadProviders.azure.enabled }}
+            - name: azure-cli
+              image: {{ include "azureCli.image" . }}
+              command:
+              - "/tmp/upload-azure.sh"
+              env:
+                - name: AZURE_STORAGE_CONNECTION_STRING
+                  valueFrom:
+                    secretKeyRef:
+                      {{- if .Values.backup.uploadProviders.azure.existingSecret }}
+                      name: {{ .Values.backup.uploadProviders.azure.existingSecret | quote }}
+                      {{- else }}
+                      name: {{ include "influxdb.fullname" . }}-backup-azure
+                      {{- end }}
+                      key: {{ .Values.backup.uploadProviders.azure.secretKey }}
+              volumeMounts:
+                - name: {{ include "influxdb.fullname" . }}-backups
+                  mountPath: {{ .Values.backup.directory | quote }}
+                - name: backup-scripts
+                  mountPath: /tmp/upload-azure.sh
+                  subPath: upload-azure.sh
+            {{- end }}
 {{- end }}
