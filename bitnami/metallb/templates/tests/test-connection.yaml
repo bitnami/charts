@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: busybox
+      image: bitnami/minideb:buster
       command: ['wget']
       args:  ['{{ include "metallb.fullname" . }}:7472']
   restartPolicy: Never
