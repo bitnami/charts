@@ -108,7 +108,13 @@ The following tables lists the configurable parameters of the contour chart and 
 | `prometheus.serviceMonitor.relabelings`            | Specify general relabeling.                                                                            | `[]`                                                    |
 
 
-## Configuration
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 To configure [Contour](https://projectcontour.io) please look into the configuration section [Contour Configuration](https://github.com/projectcontour/contour/blob/master/site/docs/v1.2.1/configuration.md).
 
