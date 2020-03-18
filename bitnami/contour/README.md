@@ -114,9 +114,9 @@ The following tables lists the configurable parameters of the contour chart and 
 Specify each parameter using the --set key=value[,key=value] argument to helm install. For example,
 
 ```console
-    $ helm install my-release \
-      --set envoy.readynessProbe.successThreshold=5 \
-        bitnami/contour
+$ helm install my-release \
+  --set envoy.readynessProbe.successThreshold=5 \
+    bitnami/contour
 ```
 
 The above command sets the envoy.readynessProbe.successThreshold to 5.
