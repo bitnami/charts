@@ -19,9 +19,11 @@ spec:
           annotations:
             {{- toYaml .Values.backup.cronjob.Podannotations | nindent 12 }}
         spec:
+          {{- if .Values.backup.cronjob.securityContext.enabled }}
           securityContext:
-            fsGroup: {{ .Values.influxdb.securityContext.fsGroup }}
-            runAsUser: {{ .Values.influxdb.securityContext.runAsUser }}
+            fsGroup: {{ .Values.backup.cronjob.securityContext.fsGroup }}
+            runAsUser: {{ .Values.backup.cronjob.securityContext.runAsUser }}
+          {{- end }}
           restartPolicy: OnFailure
           volumes:
           - name: backup-scripts
