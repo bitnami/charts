@@ -580,7 +580,6 @@ backup:
   ##
   cronjob:
     ## Schedule in Cron format to save snapshots
-    |
     ## See https://en.wikipedia.org/wiki/Cron
     ##
     schedule: "0 2 * * *"
