@@ -470,8 +470,9 @@ sidecars: {}
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## Example:
 ## initContainers:
-##  - name: update-wp-content
-##    image: busybox:1.28
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
 ##    command: ['sh', '-c', 'copy themes and plugins from git and push to /bitnami/wordpress/wp-conntent. Should work with extraVolumeMounts and extraVolumes']
 ##
 initContainers: {}
