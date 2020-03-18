@@ -596,6 +596,8 @@ backup:
         ##
         # pullSecrets:
         #   - myRegistryKeySecretName
+    ## Azure Storage Container configuration 
+    ##
     azure:
       enabled: false
       secret: ""
