@@ -18,7 +18,7 @@
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 1.7.10-debian-10-r32
+  tag: 1.7.10-debian-10-r35
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -210,7 +210,7 @@ influxdb:
   ##
   containerPorts:
     http: 8086
-    rcp: 8088
+    rpc: 8088
 
   ## Service paramaters
   ##
@@ -223,13 +223,13 @@ influxdb:
     port: 8086
     ## InfluxDB RPC Port
     ##
-    rcpPort: 8088
+    rpcPort: 8088
     ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
       http: ""
-      rcp: ""
+      rpc: ""
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -564,3 +564,87 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+## InfluxDB backup parameters
+##
+backup:
+  enabled: false
+  ## Directory where backups are stored
+  ##
+  directory: "/backups"
+  ## Retention time in days for backups 
+  ##
+  retentionDays: 10
+  ## Cronjob configuration
+  ## This cronjob is used to create InfluxDB backups
+  ##
+  cronjob:
+    ## Schedule in Cron format to save snapshots
+    ## See https://en.wikipedia.org/wiki/Cron
+    ##
+    schedule: "0 2 * * *"
+    ## Number of successful finished jobs to retain
+    ##
+    historyLimit: 1
+    ## Pod annotations
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## K8s Security Context for Backup Cronjob pods
+    ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ##
+    securityContext:
+      enabled: true
+      fsGroup: 1001
+      runAsUser: 1001
+  ## Storage providers where to upload backups
+  ##
+  uploadProviders:
+    ## Google Storage Bucket configuration 
+    ##
+    google: 
+      enabled: false
+      secret: ""
+      secretKey: "key.json"
+      existingSecret: ""
+      bucketName: "gs://bucket/influxdb"
+      ## Bitnami Google Cloud SDK image
+      ## ref: https://hub.docker.com/r/bitnami/google-cloud-sdk/tags/
+      ##
+      image:
+        registry: docker.io
+        repository: bitnami/google-cloud-sdk
+        tag: 0.284.0-debian-10-r17
+        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+        ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        ##
+        pullPolicy: IfNotPresent
+        ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ##
+        # pullSecrets:
+        #   - myRegistryKeySecretName
+    ## Azure Storage Container configuration 
+    ##
+    azure:
+      enabled: false
+      secret: ""
+      secretKey: "connection-string"
+      existingSecret: ""
+      containerName: "influxdb-container"
+      ## Bitnami Azure CLI image
+      ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
+      ##
+      image:
+        registry: docker.io
+        repository: bitnami/azure-cli
+        tag: 2.2.0-debian-10-r5
+        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+        ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        ##
+        pullPolicy: IfNotPresent
+        ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ##
+        # pullSecrets:
+        #   - myRegistryKeySecretName
