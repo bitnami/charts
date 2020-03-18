@@ -314,7 +314,7 @@ spec:
             - name: data
               mountPath: /bitnami/kafka
             {{- end }}
-            {{- if .Values.auth.enabled }}
+            {{- if .Values.auth.ssl }}
             - name: kafka-certificates
               mountPath: /opt/bitnami/kafka/conf/certs/
               readOnly: true
@@ -343,6 +343,9 @@ spec:
             - name: jmx-config
               mountPath: /etc/jmx-kafka
         {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "kafka.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if or .Values.config .Values.existingConfigmap }}
         - name: kafka-config
@@ -364,10 +367,10 @@ spec:
           configMap:
             name: {{ include "kafka.metrics.jmx.configmapName" . }}
         {{- end }}
-        {{- if .Values.auth.enabled }}
+        {{- if .Values.auth.ssl }}
         - name: kafka-certificates
           secret:
-            secretName: {{ required "A secret containing the Kafka JKS certificates is required when authentication in enabled" .Values.auth.certificatesSecret }}
+            secretName: {{ required "A secret containing the Kafka JKS certificates is required when SSL in enabled" .Values.auth.certificatesSecret }}
             defaultMode: 256
         {{- end }}
 {{- if not .Values.persistence.enabled }}

@@ -74,7 +74,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `image.pullPolicy`                     | Kafka image pull policy                                                                                  | `IfNotPresent`                                          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                         | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                          | Set to true if you would like to see extra information on logs                                           | `false`                                                 |
-| `config`                               | Configuration file for Kafka                                                                             | `nil`                                                   |
+| `config`                               | Configuration file for Kafka. Auto-generated based on other parameters when not specified                | `nil`                                                   |
 | `existingConfigmap`                    | Name of existing ConfigMap with Kafka configuration                                                      | `nil`                                                   |
 | `allowPlaintextListener`               | Allow to use the PLAINTEXT listener                                                                      | `true`                                                  |
 | `listeners`                            | The address(es) the socket server listens on                                                             | `[]`                                                    |
@@ -137,6 +137,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `pdb.create`                | Enable/disable a Pod Disruption Budget creation                    | `false`                        |
 | `pdb.minAvailable`          | Minimum number/percentage of pods that should remain scheduled     | `nil`                          |
 | `pdb.maxUnavailable`        | Maximum number/percentage of pods that may be made unavailable     | `1`                            |
+| `sidecars`                  | Attach additional sidecar containers to the Kafka pod              | `{}`                           |
 
 ### Exposure parameters
 
@@ -446,6 +447,20 @@ externalAccess.serivce.nodePorts[1]='node-port-2'
 Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
 
 The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` is provided.
+
+### Sidecars
+
+If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
 
 ## Persistence
 

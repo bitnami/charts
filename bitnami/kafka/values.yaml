@@ -46,6 +46,8 @@ clusterDomain: cluster.local
 
 ## Kafka Configuration
 ## Specify content for server.properties
+## The server.properties is auto-generated based on other parameters when this paremeter is not specified
+##
 ## Example:
 ## config: |-
 ##   broker.id=-1
@@ -195,6 +197,8 @@ socketSendBufferBytes: 102400
 zookeeperConnectionTimeoutMs: 6000
 
 ## The endpoint identification algorithm to validate server hostname using server certificate.
+## Disable server host name verification by setting it to an empty string
+## See: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
 ##
 sslEndpointIdentificationAlgorithm: https
 
@@ -352,6 +356,18 @@ pdb:
   ## Max number of pods that can be unavailable after the eviction
   ##
   maxUnavailable: 1
+
+## Add sidecars to the pod.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 ## Service parameters
 ##
