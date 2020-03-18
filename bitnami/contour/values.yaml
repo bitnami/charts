@@ -47,9 +47,9 @@ configInline:
   #   minimum-protocol-version: "1.1"
   # The following config shows the defaults for the leader election.
   ## This needs to be edited by when you deploy to a namespace other than projectcontour
-  # leaderelection:
+  leaderelection:
   #   configmap-name: leader-elect
-  #   configmap-namespace: projectcontour
+    configmap-namespace: '{{ .Release.Namespace }}'
   ### Logging options
   # Default setting
   accesslog-format: envoy

@@ -8,5 +8,5 @@ metadata:
     component: contour
 data:
   contour.yaml: |
-{{ toYaml .Values.configInline | indent 4 }}
+{{ include "contour.tplValue" ( dict "value" .Values.configInline "context" $) | indent 4 }}
 {{- end }}
