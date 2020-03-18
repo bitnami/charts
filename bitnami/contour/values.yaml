@@ -26,6 +26,7 @@
 ## existingConfigMap is ignored.
 ## Refer to https://projectcontour.io/docs/v1.2.1/configuration/ for
 ## available options.
+## Evaluated as a template
 #
 configInline:
   # should contour expect to be running inside a k8s cluster
