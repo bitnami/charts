@@ -97,6 +97,15 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `prometheus.serviceMonitor.relabelings`            | Specify general relabeling.                                                                            | `[]`                                                    |
 | `prometheus.serviceMonitor.prometheusRule.enabled` | Enable prometheus alertmanager basic alerts.                                                           | `true`                                                  |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
+```console
+$ helm install my-release \
+  --set livenessProbe.successThreshold=5 \
+    bitnami/metallb
+```
+The above command sets the `livenessProbe.successThreshold` to `5`.
+
 ## Configuration
 
 To configure [MetalLB](https://metallb.universe.tf) please look into the configuration section [MetalLB Configuration](https://metallb.universe.tf/configuration/).
