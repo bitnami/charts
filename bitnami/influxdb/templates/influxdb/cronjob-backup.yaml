@@ -26,26 +26,26 @@ spec:
           {{- end }}
           restartPolicy: OnFailure
           volumes:
-          - name: backup-scripts
-            configMap:
-              name: {{ include "influxdb.fullname" . }}-backup
-              defaultMode: 0755
-          {{- if .Values.backup.uploadProviders.google.enabled }}
-          - name: google-cloud-key
-            secret:
-          {{- if .Values.backup.uploadProviders.google.existingSecret }}
-              secretName: {{ .Values.backup.uploadProviders.google.existingSecret | quote }}
-          {{- else }}
-              secretName: {{ include "influxdb.fullname" . }}-backup-gcloud
-          {{- end }}
-          {{- end }}
-          - name: {{ include "influxdb.fullname" . }}-backups
-          {{- if .Values.persistence.enabled }}
-            persistentVolumeClaim:
-              claimName: {{ include "influxdb.fullname" . }}-backups
-          {{- else }}
-              emptyDir: {}
-          {{- end }}
+            - name: backup-scripts
+              configMap:
+                name: {{ include "influxdb.fullname" . }}-backup
+                defaultMode: 0755
+            {{- if .Values.backup.uploadProviders.google.enabled }}
+            - name: google-cloud-key
+              secret:
+            {{- if .Values.backup.uploadProviders.google.existingSecret }}
+                secretName: {{ .Values.backup.uploadProviders.google.existingSecret | quote }}
+            {{- else }}
+                secretName: {{ include "influxdb.fullname" . }}-backup-gcloud
+            {{- end }}
+            {{- end }}
+            - name: {{ include "influxdb.fullname" . }}-backups
+            {{- if .Values.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ include "influxdb.fullname" . }}-backups
+            {{- else }}
+                emptyDir: {}
+            {{- end }}
           initContainers:
           - name: influxdb-backup
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
