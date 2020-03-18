@@ -179,7 +179,7 @@ replicaSet:
     minAvailable:
       secondary: 1
       arbiter: 1
-    # maxUnavailable:
+      # maxUnavailable:
       # secondary: 1
       # arbiter: 1
 

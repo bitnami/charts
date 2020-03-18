@@ -180,7 +180,7 @@ replicaSet:
       primary: 1
       secondary: 1
       arbiter: 1
-    # maxUnavailable:
+      # maxUnavailable:
       # primary: 1
       # secondary: 1
       # arbiter: 1
