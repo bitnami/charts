@@ -119,7 +119,7 @@ $ helm install my-release \
     bitnami/contour
 ```
 
-The above command sets the envoy.readynessProbe.successThreshold to 5.
+The above command sets the `envoy.readynessProbe.successThreshold` to `5`.
 
 
 ## Configuration and installation details
