@@ -102,7 +102,7 @@ spec:
           - name: MONGODB_REPLICA_SET_MODE
             value: "arbiter"
           - name: MONGODB_PRIMARY_HOST
-            value: {{ template "mongodb.fullname" . }}
+            value: {{ template "mongodb.serviceName" . }}
           - name: MONGODB_REPLICA_SET_NAME
             value: {{ .Values.replicaSet.name | quote }}
             {{- if .Values.replicaSet.useHostnames }}
