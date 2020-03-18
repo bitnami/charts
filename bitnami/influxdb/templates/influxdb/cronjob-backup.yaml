@@ -47,22 +47,22 @@ spec:
                 emptyDir: {}
             {{- end }}
           initContainers:
-          - name: influxdb-backup
-            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-            env:
-              - name: INFLUXDB_ADMIN_USER_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ include "influxdb.secretName" . }}
-                    key: admin-user-password
-            command:
-              - "/tmp/backup.sh"
-            volumeMounts:
-            - name: {{ include "influxdb.fullname" . }}-backups
-              mountPath: {{ .Values.backup.directory | quote }}
-            - name: backup-scripts
-              mountPath: /tmp/backup.sh
-              subPath: backup.sh
+            - name: influxdb-backup
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              env:
+                - name: INFLUXDB_ADMIN_USER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "influxdb.secretName" . }}
+                      key: admin-user-password
+              command:
+                - "/tmp/backup.sh"
+              volumeMounts:
+                - name: {{ include "influxdb.fullname" . }}-backups
+                  mountPath: {{ .Values.backup.directory | quote }}
+                - name: backup-scripts
+                  mountPath: /tmp/backup.sh
+                  subPath: backup.sh
           containers:
             - name: influxdb-backup-dummy-container
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
