@@ -565,16 +565,45 @@ volumePermissions:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+## InfluxDB backup parameters
+##
 backup:
   enabled: false
+  ## Directory where backups are stored
+  ##
   directory: "/backups"
+  ## Retention time in days for backups 
+  ##
   retentionDays: 10
+  ## Cronjob configuration
+  ## This cronjob is used to create InfluxDB backups
+  ##
   cronjob:
+    ## Schedule in Cron format to save snapshots
+    |
+    ## See https://en.wikipedia.org/wiki/Cron
+    ##
     schedule: "0 2 * * *"
+    ## Number of successful finished jobs to retain
+    ##
     historyLimit: 1
+    ## Pod annotations
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
     podAnnotations: {}
+    ## K8s Security Context for Backup Cronjob pods
+    ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ##
+    securityContext:
+      enabled: true
+      fsGroup: 1001
+      runAsUser: 1001
+  ## Storage providers where to upload backups
+  ##
   uploadProviders:
-    google:
+    ## Google Storage Bucket configuration 
+    ##
+    google: 
       enabled: false
       secret: ""
       secretKey: "key.json"
