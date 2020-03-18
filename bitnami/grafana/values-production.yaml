@@ -139,6 +139,7 @@ dashboardsProvider:
   enabled: false
   ## ConfigMap with a custom provider file.
   ## Important to set the Path to "/opt/bitnami/grafana/dashboards"
+  ## Evaluated as a template.
   configMapName:
 
 ## Create dashboards from a custom configMap that contains the file.
