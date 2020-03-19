@@ -25,9 +25,9 @@ spec:
       name: {{ template "zookeeper.fullname" . }}
       labels: {{- include "zookeeper.labels" . | nindent 8 }}
         app.kubernetes.io/component: zookeeper
-    {{- if .Values.annotations }}
+    {{- if .Values.podAnnotations }}
       annotations:
-    {{- .Values.annotations |toYaml |nindent 8 }}
+    {{- .Values.podAnnotations |toYaml |nindent 8 }}
     {{- end }}
     spec:
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}

@@ -211,7 +211,7 @@ tolerations: []
 
 ## Annotations
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-annotations: {}
+podAnnotations: {}
 
 
 ## Affinity for pod assignment
