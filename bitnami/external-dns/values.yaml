@@ -424,7 +424,7 @@ rbac:
   ##
   serviceAccount:
     crete: true
-    name: default
+  serviceAccountName: default
   ## Annotations for the Service Account
   ##
   serviceAccountAnnotations: {}

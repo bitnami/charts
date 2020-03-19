@@ -436,6 +436,6 @@ Create the name of the service account to use
 {{- if and .Values.rbac.create .Values.rbac.serviceAccount.create -}}
 {{ include "external-dns.fullname" . }}
 {{- else -}}
-{{ .Values.rbac.serviceAccount.name }}
+{{ .Values.rbac.serviceAccountName }}
 {{- end -}}
 {{- end -}}
