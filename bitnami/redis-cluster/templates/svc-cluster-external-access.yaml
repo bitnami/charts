@@ -21,19 +21,8 @@ spec:
   {{- end }}
   ports:
     - name: redis
-      {{- if eq $root.Values.cluster.externalAccess.service.type "LoadBalancer" }}
       port: {{ $root.Values.cluster.externalAccess.service.port }}
-      {{- else }}
-      port: {{ index $root.Values.cluster.externalAccess.service.nodePort $i }}
-      {{- end }}
-      {{- if $root.Values.cluster.externalAccess.service.nodePort }}
-      nodePort: {{ index $root.Values.cluster.externalAccess.service.nodePort $i }}
-      {{- end }}
-      {{- if eq $root.Values.cluster.externalAccess.service.type "LoadBalancer" }}
       targetPort: redis
-      {{- else }}
-      targetPort: {{ index $root.Values.cluster.externalAccess.service.nodePort $i }}
-      {{- end }}
     - name: redis-cluster
       targetPort: redis-cluster
       port: {{ $root.Values.cluster.busPort }}

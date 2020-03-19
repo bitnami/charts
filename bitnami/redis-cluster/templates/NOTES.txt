@@ -10,8 +10,6 @@ To get your password run:
 
 To connect to your Redis server from outside the cluster check the following information:
 
-{{- if contains "LoadBalancer" .Values.cluster.externalAccess.service.type }}
-
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "redis-cluster.fullname" . }}'
 
@@ -29,8 +27,6 @@ To connect to your Redis server from outside the cluster check the following inf
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "redis-cluster.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     redis-cli -c -h $SERVICE_IP -p {{ .Values.service.port }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}
     {{- end }}
-
-{{- end }}
 
 {{- else }}
 

@@ -55,7 +55,7 @@ cluster:
   externalAccess:
     enabled: false
     service:
-      ## Type of service for external access. It can be LoadBalancer or NodePort.
+      ## Type of service for external access. At this moment only LoadBalancer is supported.
       ##
       type: LoadBalancer
       ## Port used when service type is LoadBalancer
