@@ -1,20 +1,20 @@
-{{- if (include "redis.createStatefulSet" .) }}
+{{- if (include "redis-cluster.createStatefulSet" .) }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "redis.fullname" . }}
-  labels: {{- include "redis.labels" . | nindent 4 }}
+  name: {{ include "redis-cluster.fullname" . }}
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels: {{- include "redis.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 6 }}
   {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   replicas: {{ .Values.cluster.nodes }}
-  serviceName: {{ include "redis.fullname" . }}-headless
+  serviceName: {{ include "redis-cluster.fullname" . }}-headless
   template:
     metadata:
-      labels: {{- include "redis.labels" . | nindent 8 }}
+      labels: {{- include "redis-cluster.labels" . | nindent 8 }}
       {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
       {{ toYaml .Values.metrics.podLabels | nindent 8 }}
       {{- end }}
@@ -29,7 +29,7 @@ spec:
       {{ toYaml .Values.metrics.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "redis.imagePullSecrets" . | nindent 6 }}
+      {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -38,7 +38,7 @@ spec:
           {{ toYaml .Values.securityContext.sysctls | nindent 8 }}
         {{- end }}
       {{- end }}
-      serviceAccountName: "{{ template "redis.serviceAccountName" . }}"
+      serviceAccountName: "{{ template "redis-cluster.serviceAccountName" . }}"
       {{- if .Values.priorityClassName }}
       priorityClassName: "{{ .Values.priorityClassName }}"
       {{- end }}
@@ -58,8 +58,8 @@ spec:
       schedulerName: "{{ .Values.schedulerName }}"
       {{- end }}
       containers:
-        - name: {{ include "redis.fullname" . }}
-          image: "{{ include "redis.image" . }}"
+        - name: {{ include "redis-cluster.fullname" . }}
+          image: "{{ include "redis-cluster.image" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.securityContext.enabled }}
           securityContext:
@@ -74,8 +74,8 @@ spec:
             - name: REDISCLI_AUTH
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "redis.secretName" . }}
-                  key: {{ template "redis.secretPasswordKey" . }}
+                  name: {{ template "redis-cluster.secretName" . }}
+                  key: {{ template "redis-cluster.secretPasswordKey" . }}
             {{- if .Values.usePasswordFile }}
             - name: REDIS_PASSWORD_FILE
               value: "/opt/bitnami/redis/secrets/redis-password"
@@ -83,8 +83,8 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "redis.secretName" . }}
-                  key: {{ template "redis.secretPasswordKey" . }}
+                  name: {{ template "redis-cluster.secretName" . }}
+                  key: {{ template "redis-cluster.secretPasswordKey" . }}
             {{- end }}
             {{- else }}
             - name: ALLOW_EMPTY_PASSWORD
@@ -125,7 +125,7 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources:
-          {{- include "redis.tplValue" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          {{- include "redis-cluster.tplValue" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -143,7 +143,7 @@ spec:
               mountPath: /opt/bitnami/redis/etc/
         {{- if .Values.metrics.enabled }}
         - name: metrics
-          image: {{ template "redis.metrics.image" . }}
+          image: {{ template "redis-cluster.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           command:
             - /bin/bash
@@ -155,13 +155,13 @@ spec:
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           env:
             - name: REDIS_ALIAS
-              value: {{ template "redis.fullname" . }}
+              value: {{ template "redis-cluster.fullname" . }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "redis.secretName" . }}
-                  key: {{ template "redis.secretPasswordKey" . }}
+                  name: {{ template "redis-cluster.secretName" . }}
+                  key: {{ template "redis-cluster.secretPasswordKey" . }}
             {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
@@ -179,7 +179,7 @@ spec:
       initContainers:
         {{- if $needsVolumePermissions }}
         - name: volume-permissions
-          image: "{{ template "redis.volumePermissions.image" . }}"
+          image: "{{ template "redis-cluster.volumePermissions.image" . }}"
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command: ["/bin/chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
           securityContext:
@@ -193,7 +193,7 @@ spec:
         {{- end }}
         {{- if .Values.sysctlImage.enabled }}
         - name: init-sysctl
-          image: {{ template "redis.sysctl.image" . }}
+          image: {{ template "redis-cluster.sysctl.image" . }}
           imagePullPolicy: {{ default "" .Values.sysctlImage.pullPolicy | quote }}
           resources:
           {{ toYaml .Values.sysctlImage.resources | nindent 12 }}
@@ -212,19 +212,19 @@ spec:
       volumes:
         - name: scripts
           configMap:
-            name: {{ include "redis.fullname" . }}-scripts
+            name: {{ include "redis-cluster.fullname" . }}-scripts
             defaultMode: 0755
         {{- if .Values.usePasswordFile }}
         - name: redis-password
           secret:
-            secretName: {{ include "redis.secretName" . }}
+            secretName: {{ include "redis-cluster.secretName" . }}
             items:
-              - key: {{ include "redis.secretPasswordKey" . }}
+              - key: {{ include "redis-cluster.secretPasswordKey" . }}
                 path: redis-password
         {{- end }}
         - name: config
           configMap:
-            name: {{ include "redis.fullname" . }}
+            name: {{ include "redis-cluster.fullname" . }}
         {{- if not .Values.persistence.enabled }}
         - name: "redis-data"
           emptyDir: {}
@@ -246,7 +246,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: redis-data
-        labels: {{- include "redis.labels" . | nindent 10 }}
+        labels: {{- include "redis-cluster.labels" . | nindent 10 }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
@@ -255,7 +255,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{ include "redis.storageClass" . }}
+        {{ include "redis-cluster.storageClass" . }}
         selector:
         {{- if .Values.persistence.matchLabels }}
           matchLabels:

@@ -2,18 +2,18 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "redis.fullname" . }}
+  name: {{ template "redis-cluster.fullname" . }}
 {{- with .Values.metrics.prometheusRule.namespace }}
   namespace: {{ . }}
 {{- end }}
-  labels: {{- include "redis.labels" . | nindent 4 }}
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
 {{- with .Values.metrics.prometheusRule.additionalLabels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
 {{- with .Values.metrics.prometheusRule.rules }}
   groups:
-    - name: {{ template "redis.name" $ }}
+    - name: {{ template "redis-cluster.name" $ }}
       rules: {{ tpl (toYaml .) $ | nindent 8 }}
 {{- end }}
 {{- end }}

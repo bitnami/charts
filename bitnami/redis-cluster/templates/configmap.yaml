@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "redis.fullname" . }}
-  labels: {{- include "redis.labels" . | nindent 4 }}
+  name: {{ include "redis-cluster.fullname" . }}
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
 data:
   redis.conf: |-
     dir {{ .Values.persistence.path }}
@@ -11,5 +11,5 @@ data:
     cluster-config-file /data/nodes.conf
     appendonly yes
 {{- if .Values.configmap }}
-{{- include "redis.tplValue" (dict "value" .Values.configmap "context" $) | nindent 4 }}
+{{- include "redis-cluster.tplValue" (dict "value" .Values.configmap "context" $) | nindent 4 }}
 {{- end }}

@@ -2,15 +2,15 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "redis.fullname" . }}-cluster-create
-  labels: {{- include "redis.labels" . | nindent 4 }}
+  name: {{ template "redis-cluster.fullname" . }}-cluster-create
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
 spec:
   activeDeadlineSeconds: {{ .Values.cluster.initTimeout }}
   template:
     spec:
       containers:
         - name: trigger
-          image: "{{ template "redis.image" . }}"
+          image: "{{ template "redis-cluster.image" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.securityContext.enabled }}
           securityContext:
@@ -20,8 +20,8 @@ spec:
             - name: REDISCLI_AUTH
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "redis.secretName" . }}
-                  key: {{ template "redis.secretPasswordKey" . }}
+                  name: {{ template "redis-cluster.secretName" . }}
+                  key: {{ template "redis-cluster.secretPasswordKey" . }}
           command:
             - /bin/bash
             - -c
@@ -32,12 +32,12 @@ spec:
               {{- else }}
               port={{ .Values.redisPort }}
               # Wait until all the nodes are running
-              while [[ $(getent hosts {{ template "redis.fullname" . }}-headless | awk '{ print $1}' | wc -l) < {{ .Values.cluster.nodes }} ]]; do
+              while [[ $(getent hosts {{ template "redis-cluster.fullname" . }}-headless | awk '{ print $1}' | wc -l) < {{ .Values.cluster.nodes }} ]]; do
                 echo "Waiting for the {{ .Values.cluster.nodes }} Redis nodes to be running..."
                 sleep 10
               done
               # Get nodes IPs
-              nodes=($(getent hosts {{ template "redis.fullname" . }}-headless | awk '{ print $1}'))
+              nodes=($(getent hosts {{ template "redis-cluster.fullname" . }}-headless | awk '{ print $1}'))
               {{- end }}
 
               for node in ${nodes[@]}; do

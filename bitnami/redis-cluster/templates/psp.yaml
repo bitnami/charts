@@ -2,8 +2,8 @@
 apiVersion: {{ template "podSecurityPolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "redis.fullname" . }}
-  labels: {{- include "redis.labels" . | nindent 4 }}
+  name: {{ template "redis-cluster.fullname" . }}
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
 spec:
   allowPrivilegeEscalation: false
   fsGroup:

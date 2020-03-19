@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "redis.fullname" . }}-metrics
-  labels: {{- include "redis.labels" . | nindent 4 }}
+  name: {{ template "redis-cluster.fullname" . }}-metrics
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
     {{- if .Values.metrics.service.labels -}}
     {{ toYaml .Values.metrics.service.labels | nindent 4 }}
     {{- end -}}
@@ -20,5 +20,5 @@ spec:
   - name: metrics
     port: 9121
     targetPort: http-metrics
-  selector: {{- include "redis.matchLabels" $ | nindent 4 }}
+  selector: {{- include "redis-cluster.matchLabels" $ | nindent 4 }}
 {{- end }}
