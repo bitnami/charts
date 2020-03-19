@@ -146,9 +146,9 @@ spec:
             - name: POSTGRES_INITDB_WALDIR
               value: {{ .Values.postgresqlInitdbWalDir | quote }}
             {{- end }}
-            {{- if .Values.initdbUsername }}
+            {{- if .Values.initdbUser }}
             - name: POSTGRESQL_INITSCRIPTS_USERNAME
-              value: {{ .Values.initdbUsername }}
+              value: {{ .Values.initdbUser }}
             {{- end }}
             {{- if .Values.initdbPassword }}
             - name: POSTGRESQL_INITSCRIPTS_PASSWORD
