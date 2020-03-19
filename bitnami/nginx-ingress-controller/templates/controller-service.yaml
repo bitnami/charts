@@ -56,7 +56,7 @@ spec:
       targetPort: {{ $key }}-tcp
       {{- if and (or (eq $.Values.service.type "NodePort") (eq $.Values.service.type "LoadBalancer")) (index $.Values.service.nodePorts.tcp $key) }}
       nodePort: {{ index $.Values.service.nodePorts.tcp $key }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- else if eq $.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- end }}
@@ -67,7 +67,7 @@ spec:
       targetPort: {{ $key }}-udp
       {{- if and (or (eq $.Values.service.type "NodePort") (eq $.Values.service.type "LoadBalancer")) (index $.Values.service.nodePorts.udp $key) }}
       nodePort: {{ index $.Values.service.nodePorts.udp $key }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- else if eq $.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- end }}
