@@ -14,7 +14,7 @@ global:
 ##
 image:
   registry: docker.io
-  repository: bitnami/redis
+  repository: bitnami/redis-cluster
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##

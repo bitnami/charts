@@ -65,10 +65,6 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
-          command: 
-            - /bin/bash
-            - -c
-            - /scripts/run.sh
           env:
             - name: POD_NAME
               valueFrom:
