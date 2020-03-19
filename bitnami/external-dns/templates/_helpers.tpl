@@ -428,3 +428,14 @@ external-dns: transip.apiKey
     Please set the apiKey parameter (--set transip.apiKey="xxxx")
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "serviceaccount.name" -}}
+{{- if and .Values.rbac.create .Values.rbac.serviceAccount.create -}}
+{{ include "external-dns.fullname" . }}
+{{- else -}}
+{{ .Values.rbac.serviceAccount.name }}
+{{- end -}}
+{{- end -}}

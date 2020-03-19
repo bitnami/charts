@@ -34,11 +34,7 @@ spec:
       {{- with .Values.tolerations }}
       tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
-      {{- if .Values.rbac.create }}
-      serviceAccountName: {{ template "external-dns.fullname" . }}
-      {{- else }}
-      serviceAccountName: {{ .Values.rbac.serviceAccountName | quote }}
-      {{- end }}
+      serviceAccountName: {{ template "serviceaccount.name" . }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
