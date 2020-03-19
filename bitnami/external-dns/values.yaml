@@ -419,10 +419,11 @@ service:
 ##
 rbac:
   create: true
-  ## Service Account for pods
-  ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccountName: default
+  ## if rbac.create is false or (if rbac.create is true and rbac.serviceAccount.create is false)
+  ## the service account rbac.serviceAccount.name will be used instead
+  serviceAccount:
+    create: true
+    name: default
   ## Annotations for the Service Account
   ##
   serviceAccountAnnotations: {}
