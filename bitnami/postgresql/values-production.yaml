@@ -15,7 +15,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.7.0-debian-10-r26
+  tag: 11.7.0-debian-10-r36
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -366,10 +366,14 @@ slave:
   podLabels: {}
   podAnnotations: {}
   priorityClassName: ""
-  extraInitContainers: |
-    # - name: do-something
-    #   image: busybox
-    #   command: ['do', 'something']
+  ## Extra init containers
+  ## Example
+  ## 
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something'] 
+  extraInitContainers: []
   ## Additional PostgreSQL Slave Volume mounts
   ##
   extraVolumeMounts: []
@@ -413,11 +417,13 @@ networkPolicy:
   ## But sometimes, we want the DB to be accessible to clients from other namespaces, in this case, we can use this
   ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
   ##
-  # explicitNamespacesSelector:
-    # matchLabels:
-      # role: frontend
-    # matchExpressions:
-      # - {key: role, operator: In, values: [frontend]}
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  explicitNamespacesSelector: {}
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -461,21 +467,23 @@ metrics:
     enabled: false
     additionalLabels: {}
     namespace: ""
+    ## These are just examples rules, please adapt them to your needs.
+    ## Make sure to constraint the rules to the current postgresql service.
+    ## rules:
+    ##   - alert: HugeReplicationLag
+    ##     expr: pg_replication_lag{service="{{ template "postgresql.fullname" . }}-metrics"} / 3600 > 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
+    ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
     rules: []
-      ## These are just examples rules, please adapt them to your needs.
-      ## Make sure to constraint the rules to the current postgresql service.
-      # - alert: HugeReplicationLag
-      #   expr: pg_replication_lag{service="{{ template "postgresql.fullname" . }}-metrics"} / 3600 > 1
-      #   for: 1m
-      #   labels:
-      #     severity: critical
-      #   annotations:
-      #     description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
-      #     summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
+
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.8.0-debian-10-r42
+    tag: 0.8.0-debian-10-r52
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
