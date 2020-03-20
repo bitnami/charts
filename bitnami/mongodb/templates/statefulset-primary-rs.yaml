@@ -284,9 +284,10 @@ spec:
 {{ toYaml .Values.extraVolumes | indent 8}}
         {{- end }}
 {{- if .Values.persistence.enabled }}
-  {{- if.Values.persistence.existingClaim -}}
+  {{- if.Values.persistence.existingClaim }}
         - name: datadir
-          claimName: {{ .Values.persistence.existingClaim }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:
