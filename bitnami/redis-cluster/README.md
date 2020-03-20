@@ -119,7 +119,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `metrics.prometheusRule.rules`                | [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.                     | `[]`                                                    |
 | `persistence.existingClaim`                   | Provide an existing PersistentVolumeClaim                                                                                                           | `nil`                                                   |
 | `persistence.enabled`                         | Use a PVC to persist data.                                                                                                                          | `true`                                                  |
-| `persistence.path`                            | Path to mount the volume at, to use other images                                                                                                    | `/data`                                                 |
+| `persistence.path`                            | Path to mount the volume at, to use other images                                                                                                    | `/bitnami`                                                 |
 | `persistence.subPath`                         | Subdirectory of the volume to mount at                                                                                                              | `""`                                                    |
 | `persistence.storageClass`                    | Storage class of backing PVC                                                                                                                        | `generic`                                               |
 | `persistence.accessModes`                     | Persistent Volume Access Modes                                                                                                                      | `[ReadWriteOnce]`                                       |
@@ -276,7 +276,7 @@ Note that this will not disable transparent huge tables.
 
 ## Persistence
 
-By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at the `/data` path. The volume is created using dynamic volume provisioning. If a Persistent Volume Claim already exists, specify it during installation.
+By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at the `/bitnami` path. The volume is created using dynamic volume provisioning. If a Persistent Volume Claim already exists, specify it during installation.
 
 ### Existing PersistentVolumeClaim
 

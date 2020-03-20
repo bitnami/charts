@@ -8,7 +8,7 @@ data:
     dir {{ .Values.persistence.path }}
     port {{ .Values.redisPort }}
     cluster-enabled yes
-    cluster-config-file /data/nodes.conf
+    cluster-config-file /bitnami/nodes.conf
     appendonly yes
 {{- if .Values.configmap }}
 {{- include "redis-cluster.tplValue" (dict "value" .Values.configmap "context" $) | nindent 4 }}
