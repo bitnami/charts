@@ -106,7 +106,7 @@ advertisedListeners: []
 ## Kafka broker ID.
 ## If unset, a unique broker id will be generated.
 ##
-brokerId: -1
+# brokerId: -1
 
 ## Kafka's Java Heap size
 ##

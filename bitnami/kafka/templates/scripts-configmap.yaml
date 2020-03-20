@@ -1,4 +1,3 @@
-{{- if .Values.externalAccess.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -58,7 +57,9 @@ data:
     #!/bin/bash
 
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+    export KAFKA_CFG_BROKER_ID="$ID"
 
+    {{- if .Values.externalAccess.enabled }}
     # Configure external ip and port
     {{- if eq .Values.externalAccess.service.type "LoadBalancer" }}
     {{- if .Values.externalAccess.autoDiscovery.enabled }}
@@ -87,6 +88,6 @@ data:
     {{- else }}
     export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
     {{- end }}
+    {{- end }}
 
     exec /entrypoint.sh /run.sh
-{{- end }}

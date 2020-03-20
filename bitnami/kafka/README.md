@@ -81,7 +81,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `advertisedListeners`                  | The address(es) (hostname:port) the broker will advertise to producers and consumers                     | `[]`                                                    |
 | `listenerSecurityProtocolMap`          | The protocol->listener mapping                                                                           | `nil`                                                   |
 | `interBrokerListenerName`              | The listener that the brokers should communicate on                                                      | `nil`                                                   |
-| `brokerId`                             | ID of the Kafka node                                                                                     | `-1`                                                    |
+| `brokerId`                             | ID of the Kafka node                                                                                     | `nil`                                                    |
 | `heapOpts`                             | Kafka's Java Heap size                                                                                   | `-Xmx1024m -Xms1024m`                                   |
 | `deleteTopicEnable`                    | Switch to enable topic deletion or not                                                                   | `false`                                                 |
 | `logFlushIntervalMessages`             | The number of messages to accept before forcing a flush of data to disk                                  | `10000`                                                 |
@@ -480,9 +480,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrading
 
-### To 8.0.0
-
-There is not backwards compatibility since the brokerID changes to the POD_NAME. For more information see [this PR](https://github.com/bitnami/charts/pull/2028).
+### To 9.0.0
 
 Backwards compatibility is not guaranteed you adapt your values.yaml to the new format. Here you can find some parameters that were renamed on this major version:
 
@@ -501,6 +499,10 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 - metrics.jmx.configMap.overrideName
 + metrics.jmx.existingConfigmap
 ```
+
+### To 8.0.0
+
+There is not backwards compatibility since the brokerID changes to the POD_NAME. For more information see [this PR](https://github.com/bitnami/charts/pull/2028).
 
 ### To 7.0.0
 

@@ -111,10 +111,8 @@ spec:
         - name: kafka
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.externalAccess.enabled }}
           command:
             - /scripts/setup.sh
-          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
@@ -301,14 +299,12 @@ spec:
               mountPath: /opt/bitnami/kafka/conf/server.properties
               subPath: server.properties
             {{- end }}
-            {{- if .Values.externalAccess.enabled }}
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
             {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
             - name: shared
               mountPath: /shared
-            {{- end }}
             {{- end }}
             {{- if .Values.persistence.enabled }}
             - name: data
@@ -352,7 +348,6 @@ spec:
           configMap:
             name: {{ include "kafka.configmapName" . }}
         {{- end }}
-        {{- if .Values.externalAccess.enabled }}
         - name: scripts
           configMap:
             name: {{ include "kafka.fullname" . }}-scripts
@@ -360,7 +355,6 @@ spec:
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
         - name: shared
           emptyDir: {}
-        {{- end }}
         {{- end }}
         {{- if .Values.metrics.jmx.enabled }}
         - name: jmx-config
