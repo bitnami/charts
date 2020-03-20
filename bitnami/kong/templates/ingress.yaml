@@ -1,0 +1,44 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "kong.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kong.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if .Values.ingress.annotations }}
+    {{- include "kong.tplValue" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+        {{- $paths := default (list "/") .paths }}
+        {{- $servicePort := default "http-proxy" .servicePort }}
+        {{- range $paths }}
+          - path: {{ . }}
+            backend:
+              serviceName: {{ include "kong.fullname" $ }}
+              servicePort: {{ $servicePort }}
+        {{- end }}
+  {{- end }}
+  tls:
+  {{- range .Values.ingress.hosts }}
+  {{- if .tls }}
+    - hosts:
+    {{- if .tlsHosts }}
+      {{- range $host := .tlsHosts }}
+        - {{ $host }}
+      {{- end }}
+    {{- else }}
+        - {{ .name }}
+    {{- end }}
+      secretName: {{ .tlsSecret }}
+  {{- end }}
+{{- end }}
+{{- end }}
