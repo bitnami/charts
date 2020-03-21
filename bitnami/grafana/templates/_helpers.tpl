@@ -268,3 +268,16 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{/*
+Returns the proper service account name depending if an explicit service account name is set
+in the values file. If the name is not set it will default to either grafana.fullname if serviceAccount.create
+is true or default otherwise.
+*/}}
+{{- define "grafana.serviceAccountName" -}}
+    {{- if .Values.serviceAccount.create -}}
+        {{ default (include "grafana.fullname" .) .Values.serviceAccount.name }}
+    {{- else -}}
+        {{ default "default" .Values.serviceAccount.name }}
+    {{- end -}}
+{{- end -}}
