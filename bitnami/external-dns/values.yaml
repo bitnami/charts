@@ -422,6 +422,8 @@ rbac:
   ## Service Account for pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
+  serviceAccount: 
+    create: true
   serviceAccountName: default
   ## Annotations for the Service Account
   ##
