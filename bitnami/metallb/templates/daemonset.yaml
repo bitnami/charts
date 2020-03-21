@@ -13,8 +13,8 @@ spec:
     metadata:
       labels: {{- include "metallb.labels" . | nindent 8 }}
         component: speaker
-      {{- if .Values.controller.podAnnotations }}
-      annotations: {{- toYaml .Values.controller.podAnnotations | nindent 8 }}
+      {{- if .Values.speaker.podAnnotations }}
+      annotations: {{- toYaml .Values.speaker.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
 {{- include "metallb.speaker.imagePullSecrets" . | nindent 6 }}
@@ -66,16 +66,11 @@ spec:
             - NET_ADMIN
             - NET_RAW
             - SYS_ADMIN
-      nodeSelector:
+      nodeSelector: {{- include "metallb.tplValue" (dict "value" .Values.speaker.nodeSelector "context" $) | nindent 8 }}
         "beta.kubernetes.io/os": linux
-        {{- with .Values.speaker.nodeSelector }}
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.speaker.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.speaker.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- if .Values.speaker.affinity }}
+      affinity: {{- include "metallb.tplValue" (dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.speaker.tolerations}}
+      tolerations: {{- include "metallb.tplValue" (dict "value" .Values.speaker.tolerations "context" $) | nindent 8 }}
+      {{- end }}

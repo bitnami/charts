@@ -20,22 +20,20 @@ spec:
 {{- include "metallb.controller.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "metallb.controllerServiceAccountName" . }}
       terminationGracePeriodSeconds: 0
+      {{- if .Values.controller.securityContext.enabled }}
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534 # nobody
-      nodeSelector:
+        runAsUser: {{ .Values.controller.securityContext.runAsUser }}
+        fsGroup: {{ .Values.controller.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.controller.securityContext.runAsNonRoot }}
+      {{- end }}
+      nodeSelector: {{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | nindent 8 }}
         "beta.kubernetes.io/os": linux
-        {{- with .Values.controller.nodeSelector }}
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.controller.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.controller.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- if .Values.controller.affinity }}
+      affinity: {{- include "metallb.tplValue" (dict "value" .Values.controller.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controller.tolerations}}
+      tolerations: {{- include "metallb.tplValue" (dict "value" .Values.controller.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       containers:
       - name: controller
         image: {{ include "metallb.controller.image" . }}
