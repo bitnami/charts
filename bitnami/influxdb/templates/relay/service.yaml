@@ -3,7 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "influxdb.fullname" . }}-relay
-  labels: {{- include "influxdb.labels" . | nindent 4 }}
+  labels: 
+    {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: relay
   {{- if .Values.relay.service.annotations }}
   annotations: {{- include "influxdb.tplValue" ( dict "value" .Values.relay.service.annotations "context" $) | nindent 4 }}
@@ -32,6 +33,7 @@ spec:
       {{- else if eq .Values.relay.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "influxdb.matchLabels" . | nindent 4 }}
+  selector: 
+    {{- include "influxdb.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: relay
   {{- end }}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 6.6.2-debian-10-r21
+  tag: 6.7.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -139,6 +139,7 @@ dashboardsProvider:
   enabled: false
   ## ConfigMap with a custom provider file.
   ## Important to set the Path to "/opt/bitnami/grafana/dashboards"
+  ## Evaluated as a template.
   configMapName:
 
 ## Create dashboards from a custom configMap that contains the file.

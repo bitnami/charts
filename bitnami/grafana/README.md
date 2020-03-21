@@ -84,7 +84,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `config.customIniConfigMap`            | Name of the ConfigMap containing the `custom.ini` file                                                 | `nil`                                                   |
 | `config.customIniSecret`               | Name of the Secret containing the `custom.ini` file                                                    | `nil`                                                   |
 | `dashboardsProvider.enabled`           | Enable the use of a Grafana dashboard provider                                                         | `false`                                                 |
-| `dashboardsProvider.configMapName`     | Name of a ConfigMap containing a custom dashboard provider                                             | `nil`                                                   |
+| `dashboardsProvider.configMapName`     | Name of a ConfigMap containing a custom dashboard provider                                             | `nil` (evaluated as a template)                         |
 | `dashboardsConfigMaps`                 | Array with the names of a series of ConfigMaps containing dashboards files                             | `nil`                                                   |
 | `datasources.secretName`               | Secret name containing custom datasource files                                                         | `nil`                                                   |
 | `persistence.enabled`                  | Enable persistence                                                                                     | `true`                                                  |

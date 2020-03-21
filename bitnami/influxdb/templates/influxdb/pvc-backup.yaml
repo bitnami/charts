@@ -1,8 +1,8 @@
-{{- if and (eq .Values.architecture "standalone") .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+{{- if and .Values.backup.enabled .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "influxdb.fullname" . }}
+  name: {{ include "influxdb.fullname" . }}-backups
   labels: 
     {{- include "influxdb.labels" . | nindent 4 }}
 spec:
