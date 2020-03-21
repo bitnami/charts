@@ -200,12 +200,12 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Prometheus BaseImage name
+Return the proper Prometheus Image name
 */}}
 {{- define "prometheus-operator.prometheus.image" -}}
 {{- $registryName := .Values.prometheus.image.registry -}}
 {{- $repositoryName := .Values.prometheus.image.repository -}}
-{{- $tag := .Values.prometheus.thanos.image.tag | toString -}}
+{{- $tag := .Values.prometheus.prometheus.image.tag | toString -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
@@ -246,12 +246,12 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Alertmanager BaseImage name
+Return the proper Alertmanager Image name
 */}}
 {{- define "prometheus-operator.alertmanager.image" -}}
 {{- $registryName := .Values.alertmanager.image.registry -}}
 {{- $repositoryName := .Values.alertmanager.image.repository -}}
-{{- $tag := .Values.prometheus.thanos.image.tag | toString -}}
+{{- $tag := .Values.prometheus.alertmanager.image.tag | toString -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
