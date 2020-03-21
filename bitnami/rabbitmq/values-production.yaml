@@ -104,7 +104,7 @@ rabbitmq:
   onlineSchedulers: 1
 
   ## Plugins to enable
-  plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
+  plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s rabbitmq_prometheus"
 
   ## Extra plugins to enable
   ## Use this instead of `plugins` to add new plugins
@@ -235,9 +235,15 @@ service:
 
   ## Extra ports to expose
   # extraPorts:
+  # - name: new_svc_name
+  #   port: 1234
+  #   targetPort: 1234
 
   ## Extra ports to be included in container spec, primarily informational
   # extraContainerPorts:
+  # - name: new_svc_name
+  #   port: 1234
+  #   targetPort: 1234
 
 # Additional pod labels to apply
 podLabels: {}
@@ -346,7 +352,9 @@ affinity: {}
 ##           topologyKey: failure-domain.beta.kubernetes.io/zone
 
 ## annotations for rabbitmq pods
-podAnnotations: {}
+podAnnotations:
+  prometheus.io/port: "15692"
+  prometheus.io/scrape: "true"
 
 ## Configure the podDisruptionBudget
 podDisruptionBudget: {}
@@ -402,31 +410,40 @@ readinessProbe:
   failureThreshold: 3
   successThreshold: 1
 
-metrics:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: bitnami/rabbitmq-exporter
-    tag: 0.29.0-debian-10-r52
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## environment variables to configure rabbitmq_exporter
-  ## ref: https://github.com/kbudde/rabbitmq_exporter#configuration
-  env: {}
-  ## Metrics exporter port
-  port: 9419
-  ## Comma-separated list of extended scraping capabilities supported by the target RabbitMQ server
-  ## ref: https://github.com/kbudde/rabbitmq_exporter#extended-rabbitmq-capabilities
-  capabilities: "bert,no_sort"
-  resources: {}
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9419"
+## metrics function is obsolete, it dates to pre 3.8.0 version of RabbitMQ
+#  enabling this functionality creates another pod in the namespace to export the metrics and requires
+#  configuring Prometheus to add a specific scrape job and target.
+#  This functionality has been superseded in v3.8.0 with the inclusion of the plugin rabbitmq_prometheus
+#  To be able to log the metrics via Prometheus, enable the plugin "rabbitmq_prometheus" in the plugins section
+# metrics:
+#   enabled: false
+#    image:
+#      registry: docker.io
+#      repository: bitnami/rabbitmq-exporter
+#      tag: 0.29.0-debian-10-r42
+#      pullPolicy: IfNotPresent
+#      ## Optionally specify an array of imagePullSecrets.
+#      ## Secrets must be manually created in the namespace.
+#      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+#      ##
+#     # pullSecrets:
+#      #   - myRegistryKeySecretName
+#   ## environment variables to configure rabbitmq_exporter
+#   ## ref: https://github.com/kbudde/rabbitmq_exporter#configuration
+#   env: {}
+#   ## Metrics exporter port
+#   port: 9419
+#   ## RabbitMQ address to connect to (from the same Pod, usually the local loopback address).
+#   ## If your Kubernetes cluster does not support IPv6, you can change to `127.0.0.1` in order to force IPv4.
+#   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/#networking
+#   rabbitmqAddress: localhost
+#   ## Comma-separated list of extended scraping capabilities supported by the target RabbitMQ server
+#   ## ref: https://github.com/kbudde/rabbitmq_exporter#extended-rabbitmq-capabilities
+#   capabilities: "bert,no_sort"
+#   resources: {}
+#   annotations:
+#     prometheus.io/scrape: "true"
+#     prometheus.io/port: "9419"
 
   livenessProbe:
     enabled: true
