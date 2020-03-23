@@ -22,7 +22,7 @@ spec:
   clusterIP: {{ .Values.metrics.kafka.service.clusterIP }}
   {{- end }}
   ports:
-    - name: metrics
+    - name: http-metrics
       port: {{ .Values.metrics.kafka.service.port }}
       protocol: TCP
       targetPort: metrics

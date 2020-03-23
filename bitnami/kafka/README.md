@@ -500,6 +500,8 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 + metrics.jmx.existingConfigmap
 ```
 
+Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
+
 ### To 8.0.0
 
 There is not backwards compatibility since the brokerID changes to the POD_NAME. For more information see [this PR](https://github.com/bitnami/charts/pull/2028).

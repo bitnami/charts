@@ -293,7 +293,6 @@ Return true if a secret object should be created
 {{- define "kafka.createSecret" -}}
 {{- if and .Values.auth.enabled (not .Values.auth.existingSecret) }}
     {{- true -}}
-{{- else -}}
 {{- end -}}
 {{- end -}}
 
@@ -314,7 +313,6 @@ Return true if a configmap object should be created
 {{- define "kafka.createConfigmap" -}}
 {{- if and .Values.config (not .Values.existingConfigmap) }}
     {{- true -}}
-{{- else -}}
 {{- end -}}
 {{- end -}}
 
@@ -335,7 +333,6 @@ Return true if a configmap object should be created
 {{- define "kafka.metrics.jmx.createConfigmap" -}}
 {{- if and .Values.metrics.jmx.enabled .Values.metrics.jmx.config (not .Values.metrics.jmx.existingConfigmap) }}
     {{- true -}}
-{{- else -}}
 {{- end -}}
 {{- end -}}
 
