@@ -48,7 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Kafka chart and their default values.
 
-|                Parameter                |                                                                        Description                                                                        |                         Default                         |
+| Parameter                               | Description                                                                                                                                               | Default                                                 |
 |-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`               | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
@@ -163,6 +163,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.port`                    | Kafka Exporter Port which exposes metrics in Prometheus format for scraping                                                                               | `9308`                                                  |
 | `metrics.kafka.resources`               | Allows setting resource limits for kafka-exporter pod                                                                                                     | `{}`                                                    |
 | `metrics.kafka.annotations`             | Annotations for Prometheus metrics deployment                                                                                                             | `{}`                                                    |
+| `metrics.kafka.podAnnotations`          | Annotations for Prometheus metrics pods                                                                                                                   | `{}`                                                    |
 | `metrics.kafka.service.type`            | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                                                    | `ClusterIP`                                             |
 | `metrics.kafka.service.port`            | Kafka Exporter Prometheus port                                                                                                                            | `9308`                                                  |
 | `metrics.kafka.service.nodePort`        | Kubernetes HTTP node port                                                                                                                                 | `""`                                                    |
@@ -369,6 +370,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 8.0.0
+
+There is not backwards compatibility since the brokerID changes to the POD_NAME. For more information see [this PR](https://github.com/bitnami/charts/pull/2028).
 
 ### To 7.0.0
 

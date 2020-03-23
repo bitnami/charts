@@ -14,11 +14,17 @@ spec:
     metadata:
       labels: {{- include "grafana.labels" . | nindent 8 }}
       annotations:
+        {{- if (include "grafana.createAdminSecret" .) }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if (include "grafana.createSMTPSecret" .) }}
+        checksum/smtp-secret: {{ include (print $.Template.BasePath "/smtp-secret.yaml") . | sha256sum }}
+        {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/dashboard-provider: {{ include (print $.Template.BasePath "/dashboard-provider.yaml") . | sha256sum }}
-{{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
-{{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
     spec:
 {{- include "grafana.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
@@ -46,20 +52,23 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "grafana.fullname" . }}-envvars
-            - secretRef:
-                name: {{ include "grafana.fullname" . }}-secret
           env:
-            {{- if .Values.smtp.existingSecret }}
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana.adminSecretName" . }}
+                  key: {{ include "grafana.adminSecretPasswordKey" . }}
+            {{- if .Values.smtp.enabled }}
             - name: GF_SMTP_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.smtp.existingSecret }}
-                  key: {{ .Values.smtp.existingSecretUserKey }}
+                  name: {{ include "grafana.smtpSecretName" . }}
+                  key: {{ include "grafana.smtpSecretUserKey" . }}
             - name: GF_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.smtp.existingSecret }}
-                  key: {{ .Values.smtp.existingSecretPasswordKey }}
+                  name: {{ include "grafana.smtpSecretName" . }}
+                  key: {{ include "grafana.smtpSecretPasswordKey" . }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- toYaml .Values.extraEnvVars | nindent 12 }}
@@ -145,7 +154,7 @@ spec:
         - name: dashboards-provider
           configMap:
             {{- if .Values.dashboardsProvider.configMapName }}
-            name: {{ .Values.dashboardsProvider.configMapName }}
+            name: {{ include "grafana.tplValue" ( dict "value" .Values.dashboardsProvider.configMapName "context" $) }}
             {{- else }}
             name: {{ include "grafana.fullname" . }}-provider
             {{- end }}

@@ -1,0 +1,17 @@
+{{- if and .Values.backup.enabled .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "influxdb.fullname" . }}-backups
+  labels: 
+    {{- include "influxdb.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  {{- range .Values.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size | quote }}
+{{- include "influxdb.storageClass" . | nindent 2 }}
+{{- end }}

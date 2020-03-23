@@ -43,6 +43,13 @@ image:
 ##
 # fullnameOverride:
 
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -180,7 +187,7 @@ replicaSet:
       primary: 1
       secondary: 1
       arbiter: 1
-    # maxUnavailable:
+      # maxUnavailable:
       # primary: 1
       # secondary: 1
       # arbiter: 1
@@ -335,15 +342,15 @@ ingress:
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
-  - name: mongodb.local
-    path: /
+    - name: mongodb.local
+      path: /
 
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   tls:
-  - hosts:
-      - mongodb.local
-    secretName: mongodb.local-tls
+    - hosts:
+        - mongodb.local
+      secretName: mongodb.local-tls
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets

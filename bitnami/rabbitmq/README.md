@@ -185,6 +185,8 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `volumePermissions.resources`                | Init container resource requests/limit               | `nil`                                               |
 | `forceBoot.enabled`                          | Executes 'rabbitmqctl force_boot' to force boot cluster shut down unexpectedly in an unknown order. Use it only if you prefer availability over integrity. | `false` |
 | `extraSecrets`                               | Optionally specify extra secrets to be created by the chart. | `{}`                                        |
+| `extraVolumeMounts`                          | Optionally specify extra list of additional volumeMounts . | `{}`                                        |
+| `extraVolumes`                               | Optionally specify extra list of additional volumes . | `{}`                                        |
 
 The above parameters map to the env variables defined in [bitnami/rabbitmq](http://github.com/bitnami/bitnami-docker-rabbitmq). For more information please refer to the [bitnami/rabbitmq](http://github.com/bitnami/bitnami-docker-rabbitmq) image documentation.
 
