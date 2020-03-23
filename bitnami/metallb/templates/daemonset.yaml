@@ -22,7 +22,7 @@ spec:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
       serviceAccountName: {{ include "metallb.speakerServiceAccountName" . }}
-      terminationGracePeriodSeconds: 0
+      terminationGracePeriodSeconds: 2
       hostNetwork: true
       containers:
       - name: speaker
