@@ -147,6 +147,11 @@ replication:
 ## Note: This will override initdbScripts
 # initdbScriptsConfigMap:
 
+serviceAccount:
+  create: true
+  ## Specify the name of the service account created/used
+  # name:
+
 ## Master nodes parameters
 ##
 master:
