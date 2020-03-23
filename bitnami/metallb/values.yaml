@@ -18,7 +18,7 @@
 ## ConfigMap to use as the configuration. Helm will not manage the
 ## contents of this ConfigMap, it is your responsibility to create it.
 #
-existingConfigMap: metallb-config
+# existingConfigMap: metallb-config
 #
 ## configInline specifies MetalLB's configuration directly, in yaml
 ## format. When configInline is used, Helm manages MetalLB's

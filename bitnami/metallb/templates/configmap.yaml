@@ -6,5 +6,5 @@ metadata:
   labels: {{- include "metallb.labels" . | nindent 4}}
 data:
   config: |
-{{ toYaml .Values.configInline | indent 4 }}
+{{ include "metallb.tplValue" ( dict "value" .Values.configInline "context" $) | indent 4 }}
 {{- end }}

@@ -53,7 +53,7 @@ spec:
         - name: METALLB_ML_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: memberlist
+              name: {{ include "metallb.fullname" . }}-memberlist
               key: secretkey
         ports:
         - name: metrics
@@ -93,7 +93,7 @@ spec:
             - NET_ADMIN
             - NET_RAW
             - SYS_ADMIN
-      nodeSelector: 
+      nodeSelector:
       {{- if .Values.controller.nodeSelector }}
 {{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | indent 8 }}
       {{- end }}
