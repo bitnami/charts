@@ -11,10 +11,10 @@ spec:
   selector: {{- include "metallb.matchLabels" . | nindent 4 }}
     component: controller
   ports:
-  - name: http-metrics
-    port: 7472
+  - name: metrics
+    port: {{ .Values.controller.containerPort.metrics }}
     protocol: TCP
-    targetPort: 7472
+    targetPort: {{ .Values.controller.containerPort.metrics }}
 ---
 apiVersion: v1
 kind: Service
@@ -28,10 +28,10 @@ spec:
   selector: {{- include "metallb.matchLabels" . | nindent 4 }}
     component: speaker
   ports:
-  - name: http-metrics
-    port: 7472
+  - name: metrics
+    port: {{ .Values.speaker.daemonset.hostPorts.metrics }}
     protocol: TCP
-    targetPort: 7472
+    targetPort: {{ .Values.speaker.daemonset.hostPorts.metrics }}
 
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -49,7 +49,7 @@ spec:
     matchNames:
     - {{ .Release.Namespace }}
   endpoints:
-  - port: http-metrics
+  - port: metrics
     {{- if .Values.prometheus.serviceMonitor.interval }}
     interval: {{ .Values.prometheus.serviceMonitor.interval }}
     {{- end }}
@@ -77,7 +77,7 @@ spec:
     matchNames:
     - {{ .Release.Namespace }}
   endpoints:
-  - port: http-metrics
+  - port: metrics
     {{- if .Values.prometheus.serviceMonitor.interval }}
     interval: {{ .Values.prometheus.serviceMonitor.interval }}
     {{- end }}

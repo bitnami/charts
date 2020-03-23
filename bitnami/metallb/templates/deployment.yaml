@@ -26,7 +26,10 @@ spec:
         fsGroup: {{ .Values.controller.securityContext.fsGroup }}
         runAsNonRoot: {{ .Values.controller.securityContext.runAsNonRoot }}
       {{- end }}
-      nodeSelector: {{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: 
+      {{- if .Values.controller.nodeSelector }}
+{{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | indent 8 }}
+      {{- end }}
         "beta.kubernetes.io/os": linux
       {{- if .Values.controller.affinity }}
       affinity: {{- include "metallb.tplValue" (dict "value" .Values.controller.affinity "context" $) | nindent 8 }}
@@ -39,24 +42,36 @@ spec:
         image: {{ include "metallb.controller.image" . }}
         imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
         args:
-        - --port=7472
+        - --port={{ .Values.controller.containerPort.metrics }}
         - --config={{ include "metallb.configMapName" . }}
         ports:
-        - name: http-metrics
-          containerPort: 7472
-      {{- if .Values.livenessProbe.enabled }}
+        - name: metrics
+          containerPort: {{ .Values.controller.containerPort.metrics }}
+      {{- if .Values.controller.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path: /metrics
-            port: http-metrics
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            port: metrics
+          initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.controller.livenessProbe.failureThreshold }}
       {{- end }}
-        resources:
-{{ toYaml .Values.controller.resources | indent 10 }}
+      {{- if .Values.controller.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
+      {{- end }}
+      {{- if .Values.controller.resources }}
+        resources: {{- toYaml .Values.controller.resources | nindent 10 }}
+      {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:

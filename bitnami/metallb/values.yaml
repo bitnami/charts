@@ -79,17 +79,17 @@ controller:
   ## Controller container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-      # cpu: 100m
-      # memory: 100Mi
-    requests: {}
-      # memory: 25Mi
-      # cpu: 25m
+  resources: {}
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 100Mi
+    # requests:
+    #   memory: 25Mi
+    #   cpu: 25m
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -121,6 +121,27 @@ controller:
     runAsUser: 65534 # nobody
     fsGroup: 65534
 
+  ## Configures the ports the MetalLB Controller listens on for metrics
+  ##
+  containerPort:
+    metrics: 7472
+
+  ## Liveness and readiness probe values
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+
 ## Metallb Speaker daemonset.
 ## ref: https://hub.docker.com/r/metallb/speaker/tags
 speaker:
@@ -143,17 +164,17 @@ speaker:
   ## Speaker container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-      # cpu: 100m
-      # memory: 100Mi
-    requests: {}
-      # memory: 25Mi
-      # cpu: 25m
+  resources: {}
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 100Mi
+    # requests:
+    #   memory: 25Mi
+    #   cpu: 25m
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -179,14 +200,26 @@ speaker:
     # The name of the ServiceAccount to use.  If not set and create is
     # true, a name is generated using the fullname template
     name: ""
+  ## Daemonset configuration
+  ##
+  daemonset:
+    ## HTTP Metrics Endpoint
+    ##
+    hostPorts:
+      metrics: 7472
 
-
-## Configure extra options for liveness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 180
-  periodSeconds: 20
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
+  ## Liveness and readiness probe values
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1

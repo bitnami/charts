@@ -7,8 +7,12 @@ metadata:
     "helm.sh/hook": test-success
 spec:
   containers:
-    - name: wget
+    - name: wget-controller
       image: bitnami/minideb:buster
       command: ['wget']
-      args:  ['{{ include "metallb.fullname" . }}:7472']
+      args:  ['{{ include "metallb.fullname" . }}-controller-metrics:{{ .Values.controller.containerPort.metrics }}']
+    - name: wget-controller
+      image: bitnami/minideb:buster
+      command: ['wget']
+      args:  ['{{ include "metallb.fullname" . }}-speaker-metrics:{{ .Values.speaker.daemonset.hostPorts.metrics }}']
   restartPolicy: Never

@@ -29,7 +29,7 @@ spec:
         image: {{ include "metallb.speaker.image" . }}
         imagePullPolicy: {{ .Values.speaker.image.pullPolicy }}
         args:
-        - --port=7472
+        - --port={{ .Values.speaker.daemonset.hostPorts.metrics }}
         - --config={{ include "metallb.configMapName" . }}
         env:
         - name: METALLB_NODE_NAME
@@ -41,21 +41,33 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         ports:
-        - name: http-metrics
-          containerPort: 7472
-      {{- if .Values.livenessProbe.enabled }}
+        - name: metrics
+          containerPort: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+      {{- if .Values.speaker.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path: /metrics
-            port: http-metrics
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            port: metrics
+          initialDelaySeconds: {{ .Values.speaker.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.speaker.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.speaker.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.speaker.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.speaker.livenessProbe.failureThreshold }}
       {{- end }}
-        resources:
-{{ toYaml .Values.speaker.resources | indent 10 }}
+      {{- if .Values.speaker.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: {{ .Values.speaker.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.speaker.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.speaker.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.speaker.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.speaker.readinessProbe.failureThreshold }}
+      {{- end }}
+      {{- if .Values.speaker.resources }}
+        resources: {{- toYaml .Values.speaker.resources | nindent 10 }}
+      {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
@@ -66,7 +78,10 @@ spec:
             - NET_ADMIN
             - NET_RAW
             - SYS_ADMIN
-      nodeSelector: {{- include "metallb.tplValue" (dict "value" .Values.speaker.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: 
+      {{- if .Values.controller.nodeSelector }}
+{{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | indent 8 }}
+      {{- end }}
         "beta.kubernetes.io/os": linux
       {{- if .Values.speaker.affinity }}
       affinity: {{- include "metallb.tplValue" (dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}

@@ -1,5 +1,4 @@
 {{- if .Values.rbac.create -}}
----
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -8,8 +7,8 @@ metadata:
 spec:
   hostNetwork: true
   hostPorts:
-  - max: 7472
-    min: 7472 
+  - max: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+    min: {{ .Values.speaker.daemonset.hostPorts.metrics }}
   privileged: true
   allowPrivilegeEscalation: false
   allowedCapabilities:
