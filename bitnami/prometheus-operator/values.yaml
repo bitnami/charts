@@ -469,6 +469,12 @@ prometheus:
   ##
   retentionSize: ""
 
+  ## Disable the compaction of the Prometheus TSDB
+  ## See https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ## ref: https://prometheus.io/docs/prometheus/latest/storage/#compaction
+  ##
+  disableCompaction: false
+
   ## Enable compression of the write-ahead log using Snappy.
   ##
   walCompression: false
