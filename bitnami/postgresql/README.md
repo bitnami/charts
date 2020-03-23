@@ -166,7 +166,7 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `livenessProbe.enabled`                       | Would you like a livenessProbe to be enabled                                                                                                                              | `true`                                                        |
 | `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                                                      | `false`                                                       |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                                                | `true`                                                        |
-| `networkPolicy.explicitNamespacesSelector`    | A Kubernetes LabelSelector to explicitly select namespaces from which ingress traffic could be allowed                                                                    | `nil`                                                         |
+| `networkPolicy.explicitNamespacesSelector`    | A Kubernetes LabelSelector to explicitly select namespaces from which ingress traffic could be allowed                                                                    | `{}`                                                          |
 | `livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated                                                                                                                                  | 30                                                            |
 | `livenessProbe.periodSeconds`                 | How often to perform the probe                                                                                                                                            | 10                                                            |
 | `livenessProbe.timeoutSeconds`                | When the probe times out                                                                                                                                                  | 5                                                             |
@@ -415,12 +415,10 @@ From chart version 4.0.0, it is possible to use this chart with the Docker Offic
 Besides specifying the new Docker repository and tag, it is important to modify the PostgreSQL data directory and volume mount point. Basically, the PostgreSQL data dir cannot be the mount point directly, it has to be a subdirectory.
 
 ```
-helm install postgres \
-             --set image.repository=postgres \
-             --set image.tag=10.6 \
-             --set postgresqlDataDir=/data/pgdata \
-             --set persistence.mountPath=/data/ \
-             bitnami/postgresql
+image.repository=postgres
+image.tag=10.6
+postgresqlDataDir=/data/pgdata
+persistence.mountPath=/data/
 ```
 
 ## Upgrade
@@ -457,11 +455,11 @@ This major version bump signifies this change.
 
 In this version, the chart will use PostgreSQL with the Postgis extension included. The version used with Postgresql version 10, 11 and 12 is Postgis 2.5. It has been compiled with the following dependencies:
 
- - protobuf
- - protobuf-c
- - json-c
- - geos
- - proj
+- protobuf
+- protobuf-c
+- json-c
+- geos
+- proj
 
 ## 5.0.0
 
@@ -469,7 +467,7 @@ In this version, the **chart is using PostgreSQL 11 instead of PostgreSQL 10**. 
 
 For major releases of PostgreSQL, the internal data storage format is subject to change, thus complicating upgrades, you can see some errors like the following one in the logs:
 
-```bash
+```console
 Welcome to the Bitnami postgresql container
 Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-postgresql
 Submit issues and feature requests at https://github.com/bitnami/bitnami-docker-postgresql/issues
@@ -491,6 +489,7 @@ INFO  ==> ** Starting PostgreSQL **
   [1] FATAL:  database files are incompatible with server
   [1] DETAIL:  The data directory was initialized by PostgreSQL version 10, which is not compatible with this version 11.3.
 ```
+
 In this case, you should migrate the data from the old chart to the new one following an approach similar to that described in [this section](https://www.postgresql.org/docs/current/upgrading.html#UPGRADING-VIA-PGDUMPALL) from the official documentation. Basically, create a database dump in the old chart, move and restore it in the new one.
 
 ### 4.0.0
@@ -520,9 +519,9 @@ In order to upgrade from the `0.X.X` branch to `1.X.X`, you should follow the be
 
  - Obtain the service name (`SERVICE_NAME`) and password (`OLD_PASSWORD`) of the existing postgresql chart. You can find the instructions to obtain the password in the NOTES.txt, the service name can be obtained by running
 
- ```console
+```console
 $ kubectl get svc
- ```
+```
 
 - Install (not upgrade) the new version
 
