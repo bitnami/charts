@@ -802,3 +802,16 @@ externalZookeeper:
   ## Server or list of external zookeeper servers to use.
   ##
   servers: []
+
+## Kafka Log4J Configuration
+## An optional log4j.properties file to overwrite the default of the Kafka brokers.
+## See an example log4j.properties at:
+## https://github.com/apache/kafka/blob/trunk/config/log4j.properties
+##
+# log4j:
+
+## Kafka Log4j ConfigMap
+## The name of an existing ConfigMap containing a log4j.properties file.
+## NOTE: this will override log4j.
+##
+# existingLog4jConfigMap:
