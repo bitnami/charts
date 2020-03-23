@@ -28,6 +28,14 @@ rules:
     verbs:
       - create
       - patch
+  - apiGroups:
+      - policy
+    resourceNames:
+      - controller
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -53,7 +61,7 @@ rules:
       - create
       - patch
   - apiGroups:
-      - extensions
+      - policy
     resourceNames:
       - speaker
     resources:

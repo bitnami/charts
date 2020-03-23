@@ -40,6 +40,21 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: METALLB_ML_BIND_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: METALLB_ML_LABELS
+          value: "app=metallb,component=speaker"
+        - name: METALLB_ML_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: METALLB_ML_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: memberlist
+              key: secretkey
         ports:
         - name: metrics
           containerPort: {{ .Values.speaker.daemonset.hostPorts.metrics }}
