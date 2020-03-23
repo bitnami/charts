@@ -2,34 +2,36 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.2.4
   creationTimestamp: null
   name: httpproxies.projectcontour.io
 spec:
   additionalPrinterColumns:
-    - JSONPath: .spec.virtualhost.fqdn
-      description: Fully qualified domain name
-      name: FQDN
-      type: string
-    - JSONPath: .spec.virtualhost.tls.secretName
-      description: Secret with TLS credentials
-      name: TLS Secret
-      type: string
-    - JSONPath: .status.currentStatus
-      description: The current status of the HTTPProxy
-      name: Status
-      type: string
-    - JSONPath: .status.description
-      description: Description of the current status
-      name: Status Description
-      type: string
+  - JSONPath: .spec.virtualhost.fqdn
+    description: Fully qualified domain name
+    name: FQDN
+    type: string
+  - JSONPath: .spec.virtualhost.tls.secretName
+    description: Secret with TLS credentials
+    name: TLS Secret
+    type: string
+  - JSONPath: .status.currentStatus
+    description: The current status of the HTTPProxy
+    name: Status
+    type: string
+  - JSONPath: .status.description
+    description: Description of the current status
+    name: Status Description
+    type: string
   group: projectcontour.io
   names:
     kind: HTTPProxy
     listKind: HTTPProxyList
     plural: httpproxies
     shortNames:
-      - proxy
-      - proxies
+    - proxy
+    - proxies
     singular: httpproxy
   scope: Namespaced
   subresources: {}
@@ -70,31 +72,34 @@ spec:
                           description: Header specifies the header condition to match.
                           properties:
                             contains:
-                              description: Contains is true if the Header containing
-                                this string is present in the request.
+                              description: Contains specifies a substring that must
+                                be present in the header value.
                               type: string
                             exact:
-                              description: Exact is true if the Header containing
-                                this string matches exactly in the request.
+                              description: Exact specifies a string that the header
+                                value must be equal to.
                               type: string
                             name:
                               description: Name is the name of the header to match
-                                on. Name is required. Header names are case insensitive.
+                                against. Name is required. Header names are case insensitive.
                               type: string
                             notcontains:
-                              description: NotContains is true if the Header containing
-                                this string is not present in the request.
+                              description: NotContains specifies a substring that
+                                must not be present in the header value.
                               type: string
                             notexact:
-                              description: NotExact is true if the Header containing
-                                this string doesn't match exactly in the request.
+                              description: NoExact specifies a string that the header
+                                value must not be equal to. The condition is true
+                                if the header has any other value.
                               type: string
                             present:
-                              description: Present is true if the Header is present
-                                in the request.
+                              description: Present specifies that condition is true
+                                when the named header is present, regardless of its
+                                value. Note that setting Present to false does not
+                                make the condition true if the named header is absent.
                               type: boolean
                           required:
-                            - name
+                          - name
                           type: object
                         prefix:
                           description: Prefix defines a prefix match for a request.
@@ -109,7 +114,7 @@ spec:
                       the current namespace if not supplied.
                     type: string
                 required:
-                  - name
+                - name
                 type: object
               type: array
             routes:
@@ -129,31 +134,34 @@ spec:
                           description: Header specifies the header condition to match.
                           properties:
                             contains:
-                              description: Contains is true if the Header containing
-                                this string is present in the request.
+                              description: Contains specifies a substring that must
+                                be present in the header value.
                               type: string
                             exact:
-                              description: Exact is true if the Header containing
-                                this string matches exactly in the request.
+                              description: Exact specifies a string that the header
+                                value must be equal to.
                               type: string
                             name:
                               description: Name is the name of the header to match
-                                on. Name is required. Header names are case insensitive.
+                                against. Name is required. Header names are case insensitive.
                               type: string
                             notcontains:
-                              description: NotContains is true if the Header containing
-                                this string is not present in the request.
+                              description: NotContains specifies a substring that
+                                must not be present in the header value.
                               type: string
                             notexact:
-                              description: NotExact is true if the Header containing
-                                this string doesn't match exactly in the request.
+                              description: NoExact specifies a string that the header
+                                value must not be equal to. The condition is true
+                                if the header has any other value.
                               type: string
                             present:
-                              description: Present is true if the Header is present
-                                in the request.
+                              description: Present specifies that condition is true
+                                when the named header is present, regardless of its
+                                value. Note that setting Present to false does not
+                                make the condition true if the named header is absent.
                               type: boolean
                           required:
-                            - name
+                          - name
                           type: object
                         prefix:
                           description: Prefix defines a prefix match for a request.
@@ -169,7 +177,8 @@ spec:
                       healthyThresholdCount:
                         description: The number of healthy health checks required
                           before a host is marked healthy
-                        format: int32
+                        format: int64
+                        minimum: 0
                         type: integer
                       host:
                         description: The value of the host header in the HTTP health
@@ -192,15 +201,22 @@ spec:
                       unhealthyThresholdCount:
                         description: The number of unhealthy health checks required
                           before a host is marked unhealthy
-                        format: int32
+                        format: int64
+                        minimum: 0
                         type: integer
                     required:
-                      - path
+                    - path
                     type: object
                   loadBalancerPolicy:
                     description: The load balancing policy for this route.
                     properties:
                       strategy:
+                        description: Strategy specifies the policy used to balance
+                          requests across the pool of backend pods. Valid policy names
+                          are `Random`, `RoundRobin`, `WeightedLeastRequest`, `Random`
+                          and `Cookie`. If an unknown strategy name is specified or
+                          no policy is supplied, the default `RoundRobin` policy is
+                          used.
                         type: string
                     type: object
                   pathRewritePolicy:
@@ -232,7 +248,7 @@ spec:
                               minLength: 1
                               type: string
                           required:
-                            - replacement
+                          - replacement
                           type: object
                         type: array
                     type: object
@@ -267,8 +283,8 @@ spec:
                               minLength: 1
                               type: string
                           required:
-                            - name
-                            - value
+                          - name
+                          - value
                           type: object
                         type: array
                     type: object
@@ -298,8 +314,8 @@ spec:
                               minLength: 1
                               type: string
                           required:
-                            - name
-                            - value
+                          - name
+                          - value
                           type: object
                         type: array
                     type: object
@@ -309,7 +325,8 @@ spec:
                       count:
                         description: NumRetries is maximum allowed number of retries.
                           If not supplied, the number of retries is one.
-                        format: int32
+                        format: int64
+                        minimum: 0
                         type: integer
                       perTryTimeout:
                         description: PerTryTimeout specifies the timeout per retry
@@ -338,8 +355,12 @@ spec:
                         protocol:
                           description: Protocol may be used to specify (or override)
                             the protocol used to reach this Service. Values may be
-                            tls, h2, h2c.  It ommitted protocol-selection falls back
+                            tls, h2, h2c. If omitted, protocol-selection falls back
                             on Service annotations.
+                          enum:
+                          - h2
+                          - h2c
+                          - tls
                           type: string
                         requestHeadersPolicy:
                           description: The policy for managing request headers during
@@ -368,8 +389,8 @@ spec:
                                     minLength: 1
                                     type: string
                                 required:
-                                  - name
-                                  - value
+                                - name
+                                - value
                                 type: object
                               type: array
                           type: object
@@ -400,8 +421,8 @@ spec:
                                     minLength: 1
                                     type: string
                                 required:
-                                  - name
-                                  - value
+                                - name
+                                - value
                                 type: object
                               type: array
                           type: object
@@ -418,18 +439,20 @@ spec:
                                 the 'subjectAltName' of the presented certificate
                               type: string
                           required:
-                            - caSecret
-                            - subjectName
+                          - caSecret
+                          - subjectName
                           type: object
                         weight:
                           description: Weight defines percentage of traffic to balance
                             traffic
-                          format: int32
+                          format: int64
+                          minimum: 0
                           type: integer
                       required:
-                        - name
-                        - port
+                      - name
+                      - port
                       type: object
+                    minItems: 1
                     type: array
                   timeoutPolicy:
                     description: The timeout policy for this route.
@@ -446,12 +469,36 @@ spec:
                           the timeout duration is undefined.
                         type: string
                     type: object
+                required:
+                - services
                 type: object
               type: array
             tcpproxy:
               description: TCPProxy holds TCP proxy information.
               properties:
-                includes:
+                healthCheckPolicy:
+                  description: The health check policy for this tcp proxy
+                  properties:
+                    healthyThresholdCount:
+                      description: The number of healthy health checks required before
+                        a host is marked healthy
+                      format: int32
+                      type: integer
+                    intervalSeconds:
+                      description: The interval (seconds) between health checks
+                      format: int64
+                      type: integer
+                    timeoutSeconds:
+                      description: The time to wait (seconds) for a health check response
+                      format: int64
+                      type: integer
+                    unhealthyThresholdCount:
+                      description: The number of unhealthy health checks required
+                        before a host is marked unhealthy
+                      format: int32
+                      type: integer
+                  type: object
+                include:
                   description: Include specifies that this tcpproxy should be delegated
                     to another HTTPProxy.
                   properties:
@@ -463,12 +510,34 @@ spec:
                         to the current namespace if not supplied.
                       type: string
                   required:
-                    - name
+                  - name
+                  type: object
+                includes:
+                  description: "IncludesDeprecated allow for specific routing configuration
+                    to be appended to another HTTPProxy in another namespace. \n Exists
+                    due to a mistake when developing HTTPProxy and the field was marked
+                    plural when it should have been singular. This field should stay
+                    to not break backwards compatibility to v1 users."
+                  properties:
+                    name:
+                      description: Name of the child HTTPProxy
+                      type: string
+                    namespace:
+                      description: Namespace of the HTTPProxy to include. Defaults
+                        to the current namespace if not supplied.
+                      type: string
+                  required:
+                  - name
                   type: object
                 loadBalancerPolicy:
                   description: The load balancing policy for the backend services.
                   properties:
                     strategy:
+                      description: Strategy specifies the policy used to balance requests
+                        across the pool of backend pods. Valid policy names are `Random`,
+                        `RoundRobin`, `WeightedLeastRequest`, `Random` and `Cookie`.
+                        If an unknown strategy name is specified or no policy is supplied,
+                        the default `RoundRobin` policy is used.
                       type: string
                   type: object
                 services:
@@ -492,8 +561,12 @@ spec:
                       protocol:
                         description: Protocol may be used to specify (or override)
                           the protocol used to reach this Service. Values may be tls,
-                          h2, h2c.  It ommitted protocol-selection falls back on Service
+                          h2, h2c. If omitted, protocol-selection falls back on Service
                           annotations.
+                        enum:
+                        - h2
+                        - h2c
+                        - tls
                         type: string
                       requestHeadersPolicy:
                         description: The policy for managing request headers during
@@ -522,8 +595,8 @@ spec:
                                   minLength: 1
                                   type: string
                               required:
-                                - name
-                                - value
+                              - name
+                              - value
                               type: object
                             type: array
                         type: object
@@ -554,8 +627,8 @@ spec:
                                   minLength: 1
                                   type: string
                               required:
-                                - name
-                                - value
+                              - name
+                              - value
                               type: object
                             type: array
                         type: object
@@ -572,19 +645,23 @@ spec:
                               'subjectAltName' of the presented certificate
                             type: string
                         required:
-                          - caSecret
-                          - subjectName
+                        - caSecret
+                        - subjectName
                         type: object
                       weight:
                         description: Weight defines percentage of traffic to balance
                           traffic
-                        format: int32
+                        format: int64
+                        minimum: 0
                         type: integer
                     required:
-                      - name
-                      - port
+                    - name
+                    - port
                     type: object
+                  minItems: 1
                   type: array
+              required:
+              - services
               type: object
             virtualhost:
               description: Virtualhost appears at most once. If it is present, the
@@ -596,7 +673,7 @@ spec:
                     to the fqdn
                   type: string
                 tls:
-                  description: If present describes tls properties. The CNI names
+                  description: If present describes tls properties. The SNI names
                     that will be matched on are described in fqdn, the tls.secretName
                     secret must contain a matching certificate
                   properties:
@@ -613,7 +690,7 @@ spec:
                       type: string
                   type: object
               required:
-                - fqdn
+              - fqdn
               type: object
           type: object
         status:
@@ -625,14 +702,14 @@ spec:
               type: string
           type: object
       required:
-        - metadata
-        - spec
+      - metadata
+      - spec
       type: object
   version: v1
   versions:
-    - name: v1
-      served: true
-      storage: true
+  - name: v1
+    served: true
+    storage: true
 status:
   acceptedNames:
     kind: ""

@@ -12,7 +12,7 @@ spec:
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
     component: contour
   ports:
-  - name: http-metrics
+  - name: metrics
     port: 8000
     protocol: TCP
     targetPort: 8000
@@ -32,7 +32,7 @@ spec:
     matchNames:
     - {{ .Release.Namespace }}
   endpoints:
-  - port: http-metrics
+  - port: metrics
     {{- if .Values.prometheus.serviceMonitor.interval }}
     interval: {{ .Values.prometheus.serviceMonitor.interval }}
     {{- end }}
@@ -57,7 +57,7 @@ spec:
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
     component: envoy
   ports:
-  - name: http-metrics
+  - name: metrics
     port: 8002
     protocol: TCP
     targetPort: 8002
@@ -77,7 +77,7 @@ spec:
     matchNames:
     - {{ .Release.Namespace }}
   endpoints:
-  - port: http-metrics
+  - port: metrics
     path: /stats/prometheus
     {{- if .Values.prometheus.serviceMonitor.interval }}
     interval: {{ .Values.prometheus.serviceMonitor.interval }}

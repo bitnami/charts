@@ -46,6 +46,7 @@ spec:
       {{- if .Values.contour.securityContext.enabled }}
       securityContext:
         runAsUser: {{ .Values.contour.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
         fsGroup: {{ .Values.contour.securityContext.fsGroup }}
         runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
       {{- end }}

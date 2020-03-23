@@ -2,6 +2,8 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.2.4
   creationTimestamp: null
   name: tlscertificatedelegations.contour.heptio.com
 spec:
@@ -50,22 +52,22 @@ spec:
                       type: string
                     type: array
                 required:
-                  - secretName
-                  - targetNamespaces
+                - secretName
+                - targetNamespaces
                 type: object
               type: array
           required:
-            - delegations
+          - delegations
           type: object
       required:
-        - metadata
-        - spec
+      - metadata
+      - spec
       type: object
   version: v1beta1
   versions:
-    - name: v1beta1
-      served: true
-      storage: true
+  - name: v1beta1
+    served: true
+    storage: true
 status:
   acceptedNames:
     kind: ""
@@ -76,6 +78,8 @@ status:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.2.4
   creationTimestamp: null
   name: tlscertificatedelegations.projectcontour.io
 spec:
@@ -85,7 +89,7 @@ spec:
     listKind: TLSCertificateDelegationList
     plural: tlscertificatedelegations
     shortNames:
-      - tlscerts
+    - tlscerts
     singular: tlscertificatedelegation
   scope: Namespaced
   validation:
@@ -126,22 +130,22 @@ spec:
                       type: string
                     type: array
                 required:
-                  - secretName
-                  - targetNamespaces
+                - secretName
+                - targetNamespaces
                 type: object
               type: array
           required:
-            - delegations
+          - delegations
           type: object
       required:
-        - metadata
-        - spec
+      - metadata
+      - spec
       type: object
   version: v1
   versions:
-    - name: v1
-      served: true
-      storage: true
+  - name: v1
+    served: true
+    storage: true
 status:
   acceptedNames:
     kind: ""

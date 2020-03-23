@@ -65,6 +65,15 @@ rules:
       - put
       - post
       - patch
+  - apiGroups: ["networking.x.k8s.io"]
+    resources: ["gatewayclasses", "gateways", "httproutes", "tcproutes"]
+    verbs:
+      - get
+      - list
+      - watch
+      - put
+      - post
+      - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role

@@ -31,15 +31,41 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      terminationGracePeriodSeconds: 300
       containers:
-      - args:
+      - command:
+        - /bin/contour
+        args:
+          - envoy
+          - shutdown-manager
+        image: {{ include "contour.image" . }}
+        imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+        lifecycle:
+          preStop:
+            httpGet:
+              path: /shutdown
+              port: 8090
+              scheme: HTTP
+        {{- if .Values.contour.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8090
+          initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
+        {{- end }}
+        name: shutdown-manager
+      - command:
+        - envoy
+        args:
         - -c
         - /config/envoy.json
         - --service-cluster $(CONTOUR_NAMESPACE)
         - --service-node $(ENVOY_POD_NAME)
         - --log-level info
-        command:
-        - envoy
         image: {{ include "envoy.image" . }}
         imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
         name: envoy
@@ -64,7 +90,7 @@ spec:
           name: https
           protocol: TCP
         - containerPort: 8002
-          name: http-metrics
+          name: metrics
           protocol: TCP
         {{- if .Values.envoy.readinessProbe.enabled }}
         readinessProbe:
@@ -88,15 +114,10 @@ spec:
           mountPath: /ca
         lifecycle:
           preStop:
-            exec:
-              command:
-              - bash
-              - -c
-              - --
-              - echo
-              - -ne
-              - "POST /healthcheck/fail HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n"
-              - '>/dev/tcp/localhost/9001'
+            httpGet:
+              path: /shutdown
+              port: 8090
+              scheme: HTTP
       initContainers:
       - args:
         - bootstrap

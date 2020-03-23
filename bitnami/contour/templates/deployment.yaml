@@ -46,7 +46,6 @@ spec:
       - args:
         - serve
         - --incluster
-        - --use-extensions-v1beta1-ingress
         - --xds-address=0.0.0.0
         - --xds-port=8001
         - --envoy-service-http-port=80
@@ -64,7 +63,7 @@ spec:
           name: xds
           protocol: TCP
         - containerPort: 8000
-          name: http-metrics
+          name: metrics
           protocol: TCP
       {{- if .Values.contour.livenessProbe.enabled }}
         livenessProbe:
@@ -110,6 +109,7 @@ spec:
       {{- if .Values.contour.securityContext.enabled }}
       securityContext:
         runAsUser: {{ .Values.contour.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
         fsGroup: {{ .Values.contour.securityContext.fsGroup }}
         runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
       {{- end }}
