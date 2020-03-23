@@ -125,7 +125,7 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /healthcheck.sh
+                - /opt/bitnami/scripts/pgpool/healthcheck.sh
             initialDelaySeconds: {{ .Values.pgpool.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.pgpool.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.pgpool.livenessProbe.timeoutSeconds }}
