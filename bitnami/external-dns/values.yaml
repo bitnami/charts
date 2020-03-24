@@ -424,7 +424,7 @@ rbac:
   ##
   serviceAccount: 
     create: true
-  serviceAccountName: default
+    name: default
   ## Annotations for the Service Account
   ##
   serviceAccountAnnotations: {}

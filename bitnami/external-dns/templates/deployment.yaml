@@ -37,7 +37,7 @@ spec:
       {{- if .Values.rbac.create }}
       serviceAccountName: {{ template "external-dns.fullname" . }}
       {{- else }}
-      serviceAccountName: {{ .Values.rbac.serviceAccountName | quote }}
+      serviceAccountName: {{ .Values.rbac.serviceAccount.name | quote }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
