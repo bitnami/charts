@@ -60,14 +60,14 @@ ingressController:
       cpu: 1000m
       memory: 2Gi
 
-sidecars:
+sidecars: |-
   - name: test-sidecar
     image: bitnami/minideb
     command:
       - echo
       - hi
 
-initContainers:
+initContainers: |-
   - name: test-init
     image: bitnami/git
     command:
