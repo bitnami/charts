@@ -146,11 +146,13 @@ cloudflare:
   ## `CF_API_KEY` to set in the environment
   ##
   apiKey: ""
-  ## Use an existing secret with keys "cloudflare_api_token" or "cloudflare_api_key" defined.
+  ## Use an existing secret with keys "cloudflare_api_token" and "cloudflare_api_key" defined. 
+  ## The one you don't need must still be present and set to an empty string.
   ## This ignores cloudflare.apiToken, and cloudflare.apiKey
   ##
   # secretName:
-  ## `CF_API_EMAIL` to set in the environment
+  ##
+  ## `CF_API_EMAIL` to set in the environment. Always set this field if you want to use the secret. It can be an empty string.
   ##
   email: ""
   ## Enable the proxy feature of Cloudflare
