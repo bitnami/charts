@@ -314,8 +314,8 @@ pgpool:
   ##
   securityContext:
     enabled: true
-    fsGroup: 0
-    runAsUser: 0
+    fsGroup: 1001
+    runAsUser: 1001
 
   ## Pgpool containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
