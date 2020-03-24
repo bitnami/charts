@@ -103,7 +103,7 @@ rbac:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 securityContext:
-  enabled: false
+  enabled: true
   fsGroup: 1001
   runAsUser: 1001
 
