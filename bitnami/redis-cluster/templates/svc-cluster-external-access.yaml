@@ -20,11 +20,11 @@ spec:
   loadBalancerIP: {{ index $root.Values.cluster.externalAccess.service.loadBalancerIP $i }}
   {{- end }}
   ports:
-    - name: redis
+    - name: tcp-redis
       port: {{ $root.Values.cluster.externalAccess.service.port }}
-      targetPort: redis
-    - name: redis-cluster
-      targetPort: redis-cluster
+      targetPort: tcp-redis
+    - name: tcp-redis-bus
+      targetPort: tcp-redis-bus
       port: {{ $root.Values.cluster.busPort }}
   selector: {{- include "redis-cluster.matchLabels" $ | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

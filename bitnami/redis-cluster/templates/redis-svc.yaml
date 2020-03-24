@@ -12,7 +12,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: redis
+    - name: tcp-redis
       port: {{ .Values.service.port }}
       targetPort: tcp-redis
   selector: {{- include "redis-cluster.matchLabels" $ | nindent 4 }}
