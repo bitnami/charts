@@ -166,7 +166,7 @@ spec:
                   key: redis-password
             - name: AIRFLOW_EXECUTOR
               value: "CeleryExecutor"
-            - name: AIRFLOW_FERNET_KEY
+            - name: AIRFLOW__CORE__FERNET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}

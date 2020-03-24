@@ -168,7 +168,7 @@ spec:
                 secretKeyRef:
                   name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
                   key: airflow-password
-            - name: AIRFLOW_FERNET_KEY
+            - name: AIRFLOW__CORE__FERNET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
