@@ -201,8 +201,8 @@ influxdb:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 180
-    periodSeconds: 45
-    timeoutSeconds: 30
+    periodSeconds: 60
+    timeoutSeconds: 60
     successThreshold: 1
     failureThreshold: 6
 
