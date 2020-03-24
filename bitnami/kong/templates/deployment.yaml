@@ -120,15 +120,15 @@ spec:
             {{- end }}
           {{- if or .Values.kong.extraEnvVarsCM .Values.kong.extraEnvVarsSecret }}
           envFrom:
-          {{- if .Values.kong.extraEnvVarsCM }}
-          - configMapRef:
-              name: {{ .Values.kong.extraEnvVarsCM }}
-          {{- end }}
-          {{- if .Values.kong.extraEnvVarsSecret }}
-          - secretRef:
-              name: {{ .Values.kong.extraEnvVarsSecret }}
-          {{- end }}
-          {{- end }}
+            {{- if .Values.kong.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.kong.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.kong.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.kong.extraEnvVarsSecret }}
+            {{- end }}
+            {{- end }}
           ports:
             - name: http-proxy
               containerPort: 8000
@@ -238,15 +238,15 @@ spec:
             {{- end }}
           {{- if or .Values.ingressController.extraEnvVarsCM .Values.ingressController.extraEnvVarsSecret }}
           envFrom:
-          {{- if .Values.ingressController.extraEnvVarsCM }}
-          - configMapRef:
-              name: {{ .Values.ingressController.extraEnvVarsCM }}
-          {{- end }}
-          {{- if .Values.ingressController.extraEnvVarsSecret }}
-          - secretRef:
-              name: {{ .Values.ingressController.extraEnvVarsSecret }}
-          {{- end }}
-          {{- end }}
+            {{- if .Values.ingressController.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.ingressController.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.ingressController.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.ingressController.extraEnvVarsSecret }}
+            {{- end }}
+            {{- end }}
           ports:
             - name: http-health
               containerPort: 10254

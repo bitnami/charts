@@ -72,6 +72,28 @@ spec:
             - name: KONG_CASSANDRA_USER
               value: {{ include "kong.cassandra.user" . | quote }}
             {{- end }}
+            {{- if .Values.migration.extraEnvVars }}
+            {{- include "kong.tplValue" (dict "value" .Values.migration.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.migration.extraEnvVarsCM .Values.migration.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.migration.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.migration.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.migration.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.migration.extraEnvVarsSecret }}
+            {{- end }}
+            {{- end }}
+          {{- if .Values.migration.extraVolumeMounts }}
+          volumeMounts:
+            {{- include "kong.tplValue" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.migration.resources }}
           resources: {{- toYaml .Values.migration.resources | nindent 12 }}
           {{- end }}
+      {{- if .Values.extraVolumes }}
+      volumes:
+      {{- include "kong.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}

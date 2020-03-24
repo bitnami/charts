@@ -112,7 +112,7 @@ kong:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
 
   ## ConfigMap with extra env vars:
   ##
@@ -228,7 +228,7 @@ migration:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
 
   ## ConfigMap with extra env vars:
   ##
@@ -239,6 +239,7 @@ migration:
   extraEnvVarsSecret:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
+  extraVolumeMounts:
   ## Liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -453,15 +454,14 @@ metrics:
 ##
 autoscaling:
   enabled: false
+  apiVersion: autoscaling/v2beta1
   minReplicas: 2
   maxReplicas: 5
   metrics:
     - type: Resource
       resource:
         name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 80
+        targetAverageUtilization: 80
 
 ## Kong Pod Disruption Budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
