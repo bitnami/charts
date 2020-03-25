@@ -68,7 +68,10 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: ["/bin/sh", "-c", "kong quit"]
+                command:
+                  - /bin/sh
+                  - -c
+                  - kong quit
           env:
             {{- if .Values.service.exposeAdmin }}
             - name: KONG_ADMIN_LISTEN_ADDRESS
@@ -129,7 +132,7 @@ spec:
             - secretRef:
                 name: {{ .Values.kong.extraEnvVarsSecret }}
             {{- end }}
-            {{- end }}
+          {{- end }}
           ports:
             - name: http-proxy
               containerPort: 8000
@@ -225,7 +228,7 @@ spec:
             - secretRef:
                 name: {{ .Values.ingressController.extraEnvVarsSecret }}
             {{- end }}
-            {{- end }}
+          {{- end }}
           ports:
             - name: http-health
               containerPort: 10254

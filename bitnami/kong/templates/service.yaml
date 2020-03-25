@@ -58,4 +58,3 @@ spec:
     {{- end }}
   selector: {{- include "kong.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: server
-

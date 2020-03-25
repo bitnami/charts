@@ -1,10 +1,13 @@
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.ingress.enabled }}
-    Kong is available in the following URLs:
+    Kong URL(s):
+{{- if .Values.ingress.hostname }}
+    - http://{{ .Values.ingress.hostname }}
+{{- end }}
 {{- range $host := .Values.ingress.hosts }}
   {{- range .paths }}
-      http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.name }}{{ . }}
+    - http://{{ $host.name }}{{ . }}
   {{- end }}
 {{- end }}
 {{- else if contains "NodePort" .Values.service.type }}

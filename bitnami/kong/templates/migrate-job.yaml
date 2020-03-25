@@ -86,7 +86,7 @@ spec:
             - secretRef:
                 name: {{ .Values.migration.extraEnvVarsSecret }}
             {{- end }}
-            {{- end }}
+          {{- end }}
           {{- if .Values.migration.extraVolumeMounts }}
           volumeMounts:
             {{- include "kong.tplValue" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
