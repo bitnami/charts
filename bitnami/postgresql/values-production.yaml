@@ -349,6 +349,13 @@ master:
   ##         containerPort: 1234
   sidecars: []
 
+  ## Override the service configuration for master
+  ##
+  # service:
+  #   type:
+  #   nodePort:
+  #   clusterIP:
+
 ##
 ## PostgreSQL Slave parameters
 ##
@@ -391,6 +398,13 @@ slave:
   ##       - name: portname
   ##         containerPort: 1234
   sidecars: []
+
+  ## Override the service configuration for slave
+  ##
+  # service:
+  #   type:
+  #   nodePort:
+  #   clusterIP:
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
