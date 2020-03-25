@@ -55,29 +55,6 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-Return the proper PostgreSQL image name
-*/}}
-{{- define "postgresql.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return PostgreSQL postgres user password
 */}}
 {{- define "postgresql.postgres.password" -}}
@@ -162,52 +139,6 @@ Return PostgreSQL created database
 {{- end -}}
 
 {{/*
-Return the proper image name to change the volume permissions
-*/}}
-{{- define "postgresql.volumePermissions.image" -}}
-{{- $registryName := .Values.volumePermissions.image.registry -}}
-{{- $repositoryName := .Values.volumePermissions.image.repository -}}
-{{- $tag := .Values.volumePermissions.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper PostgreSQL metrics image name
-*/}}
-{{- define "postgresql.metrics.image" -}}
-{{- $registryName :=  default "docker.io" .Values.metrics.image.registry -}}
-{{- $repositoryName := .Values.metrics.image.repository -}}
-{{- $tag := default "latest" .Values.metrics.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Get the password secret.
 */}}
 {{- define "postgresql.secretName" -}}
@@ -279,47 +210,6 @@ Get the metrics ConfigMap name.
 {{- end -}}
 
 {{/*
-Return the proper Docker Image Registry Secret Names
-*/}}
-{{- define "postgresql.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Get the readiness probe command
 */}}
 {{- define "postgresql.readinessProbeCommand" -}}
@@ -329,7 +219,7 @@ Get the readiness probe command
 {{- else }}
   exec pg_isready -U {{ include "postgresql.username" . | quote }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
 {{- end }}
-{{- if contains "bitnami/" .Values.image.repository }}
+{{- if contains "bitnami/" (include "postgresql.registryImage" (dict "image" .Values.images.postgresql "values" .Values "name" "postgresql")) }}
   [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
 {{- end -}}
 {{- end -}}
@@ -417,4 +307,97 @@ postgresql: ldap.url, ldap.server
     Please provide a unique way to configure LDAP.
     More info at https://www.postgresql.org/docs/current/auth-ldap.html
 {{- end -}}
+{{- end -}}
+
+{{/*
+Create a registry image reference for use in a spec.
+Includes the `image` and `imagePullPolicy` keys.
+*/}}
+{{- define "postgresql.registryImage" -}}
+    image: {{ include "postgresql.imageReference" . }}
+    {{- $pullPolicy := include "postgresql.imagePullPolicy" . -}}
+    {{- if $pullPolicy }}
+        {{ $pullPolicy }}
+    {{- end -}}
+{{- end -}}
+
+{{- define "postgresql.imageReference" -}}
+    {{- $registry := include "postgresql.imageRegistry" . -}}
+    {{- $namespace := include "postgresql.imageNamespace" . -}}
+    {{- printf "%s/%s/%s" $registry $namespace .image.name -}}
+    {{- if .image.tag -}}
+        {{- printf ":%s" .image.tag -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "postgresql.imageRegistry" -}}
+    {{- if or (and .image.useOriginalRegistry (empty .image.registry)) (and .values.useOriginalRegistry (empty .values.imageRegistry)) -}}
+        {{- include "postgresql.originalImageRegistry" . -}}
+    {{- else -}}
+        {{- include "postgresql.customImageRegistry" . -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "postgresql.originalImageRegistry" -}}
+    {{- printf (coalesce .image.originalRegistry .values.originalImageRegistry "docker.io") -}}
+{{- end -}}
+
+{{- define "postgresql.customImageRegistry" -}}
+    {{- printf (coalesce .image.registry .values.imageRegistry .values.global.imageRegistry (include "postgresql.originalImageRegistry" .)) -}}
+{{- end -}}
+
+{{- define "postgresql.imageNamespace" -}}
+    {{- if or (and .image.useOriginalNamespace (empty .image.namespace)) (and .values.useOriginalNamespace (empty .values.imageNamespace)) -}}
+        {{- include "postgresql.originalImageNamespace" . -}}
+    {{- else -}}
+        {{- include "postgresql.customImageNamespace" . -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "postgresql.originalImageNamespace" -}}
+    {{- printf (coalesce .image.originalNamespace .values.originalImageNamespace "bitnami") -}}
+{{- end -}}
+
+{{- define "postgresql.customImageNamespace" -}}
+    {{- printf (coalesce .image.namespace .values.imageNamespace .values.global.imageNamespace (include "postgresql.originalImageNamespace" .)) -}}
+{{- end -}}
+
+{{/*
+Specify the image pull policy
+*/}}
+{{- define "postgresql.imagePullPolicy" -}}
+    {{- $image := dict -}}
+    {{- $policy := coalesce $image.pullPolicy .image.pullPolicy .values.imagePullPolicy .values.global.imagePullPolicy -}}
+    {{- if $policy -}}
+        imagePullPolicy: "{{- $policy -}}"
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Use the image pull secrets. All of the specified secrets will be used
+*/}}
+{{- define "postgresql.imagePullSecrets" -}}
+    {{- $secrets := .Values.global.imagePullSecrets -}}
+    {{- range $_, $chartSecret := .Values.imagePullSecrets -}}
+        {{- if $secrets -}}
+            {{- $secrets = append $secrets $chartSecret -}}
+        {{- else -}}
+            {{- $secrets = list $chartSecret -}}
+        {{- end -}}
+    {{- end -}}
+    {{- range $_, $image := .Values.images -}}
+        {{- range $_, $s := $image.pullSecrets -}}
+            {{- if $secrets -}}
+                {{- $secrets = append $secrets $s -}}
+            {{- else -}}
+                {{- $secrets = list $s -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+    {{- if $secrets }}
+        imagePullSecrets:
+        {{- range $secrets }}
+            - name: {{ . }}
+        {{- end }}
+    {{- end -}}
 {{- end -}}

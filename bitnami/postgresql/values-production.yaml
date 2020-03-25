@@ -1,37 +1,56 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imageNamespace and imagePullSecrets
 ##
 global:
   postgresql: {}
 #   imageRegistry: myRegistryName
+#   imageNamespace: myNamespace
+#   imagePullPolicy: IfNotPresent
 #   imagePullSecrets:
-#     - myRegistryKeySecretName
+#   - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami PostgreSQL image version
-## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
+## Set the registry for the image
+##  e.g. <registry>/namespace/image-name
+## ref: https://docs.docker.com/engine/reference/commandline/tag/#extended-description
 ##
-image:
-  registry: docker.io
-  repository: bitnami/postgresql
-  tag: 11.7.0-debian-10-r40
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+imageRegistry: docker.io
 
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
+## Set the namespace for the image in the registry
+##  e.g. docker.io/<namespace>/image-name
+## ref: https://docs.docker.com/engine/reference/commandline/tag/#extended-description
+##
+imageNamespace: bitnami
+
+## Specify a imagePullPolicy
+## Override the global.imagePullPolicy
+## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+imagePullPolicy: "IfNotPresent"
+
+## Append secrets to the global.imagePullSecrets
+imagePullSecrets: []
+
+images:
+  postgresql:
+    name: postgresql
+    tag: 11.7.0-debian-10-r40
+
+    ## Set to true if you would like to see extra information on logs
+    ## It turns BASH and NAMI debugging in minideb
+    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    debug: false
+
+  volumePermissions:
+    name: minideb
+    tag: buster
+    pullPolicy: Always
+
+  metrics:
+    name: postgres-exporter
+    tag: 0.8.0-debian-10-r55
 
 ## String to partially override postgresql.fullname template (will maintain the release name)
 ##
@@ -47,21 +66,6 @@ image:
 ##
 volumePermissions:
   enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
   ## Init container Security Context
   ## Note: the chown of the data folder is done to securityContext.runAsUser
   ## and not the below volumePermissions.securityContext.runAsUser
@@ -480,17 +484,6 @@ metrics:
     ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
     rules: []
 
-  image:
-    registry: docker.io
-    repository: bitnami/postgres-exporter
-    tag: 0.8.0-debian-10-r55
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
   ## Define additional custom metrics
   ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
   # customMetrics:
