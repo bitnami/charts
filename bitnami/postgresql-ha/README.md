@@ -391,7 +391,7 @@ The [Bitnami Pgpool](https://github.com/bitnami/bitnami-docker-pgpool) image was
 
 Consequences:
 
-- No backwards compatibility issues are expected.
+- No backwards compatibility issues are expected since all the data is at PostgreSQL pods, and Pgpool uses a deployment without persistence. Therefore, upgrades should work smoothly from `1.x.x` versions.
 - Environment variables related to LDAP configuration were renamed removing the `PGPOOL_` prefix. For instance, to indicate the LDAP URI to use, you must set `LDAP_URI` instead of `PGPOOL_LDAP_URI`
 
 ## 1.0.0
@@ -423,9 +423,9 @@ $ helm upgrade my-release --version 1.0.0 bitnami/postgresql-ha \
 
 In this version, the chart will use PostgreSQL-Repmgr container images with the Postgis extension included. The version used in Postgresql version 10, 11 and 12 is Postgis 2.5, and in Postgresql 9.6 is Postgis 2.3. Postgis has been compiled with the following dependencies:
 
- - protobuf
- - protobuf-c
- - json-c
- - geos
- - proj
- - gdal
+- protobuf
+- protobuf-c
+- json-c
+- geos
+- proj
+- gdal
