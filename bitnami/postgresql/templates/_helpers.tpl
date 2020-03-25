@@ -151,6 +151,96 @@ Return PostgreSQL port
 {{- end -}}
 
 {{/*
+Return PostgreSQL master service type
+*/}}
+{{- define "postgresql.masterServiceType" -}}
+{{- if .Values.master.service -}}
+    {{- if .Values.master.service.type -}}
+      {{- .Values.master.service.type -}}
+    {{- else if .Values.service.type -}}
+      {{- .Values.service.type -}}
+    {{- end -}}
+{{- else if .Values.service.type -}}
+  {{- .Values.service.type -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return PostgreSQL slave service type
+*/}}
+{{- define "postgresql.slaveServiceType" -}}
+{{- if .Values.slave.service -}}
+    {{- if .Values.slave.service.type -}}
+      {{- .Values.slave.service.type -}}
+    {{- else if .Values.service.type -}}
+      {{- .Values.service.type -}}
+    {{- end -}}
+{{- else if .Values.service.type -}}
+  {{- .Values.service.type -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return PostgreSQL master nodePort
+*/}}
+{{- define "postgresql.masterNodePort" -}}
+{{- if .Values.master.service -}}
+    {{- if .Values.master.service.nodePort -}}
+      nodePort: {{ .Values.master.service.nodePort -}}
+    {{- else if .Values.service.nodePort -}}
+      nodePort: {{ .Values.service.nodePort -}}
+    {{- end -}}
+{{- else if .Values.service.nodePort -}}
+  nodePort: {{ .Values.service.nodePort -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return PostgreSQL slave nodePort
+*/}}
+{{- define "postgresql.slaveNodePort" -}}
+{{- if .Values.slave.service -}}
+    {{- if .Values.slave.service.nodePort -}}
+      nodePort: {{ .Values.slave.service.nodePort -}}
+    {{- else if .Values.service.nodePort -}}
+      nodePort: {{ .Values.service.nodePort -}}
+    {{- end -}}
+{{- else if .Values.service.nodePort -}}
+  nodePort: {{ .Values.service.nodePort -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return PostgreSQL master clusterIP
+*/}}
+{{- define "postgresql.masterClusterIP" -}}
+{{- if .Values.master.service -}}
+    {{- if .Values.master.service.clusterIP -}}
+      clusterIP: {{ .Values.master.service.clusterIP -}}
+    {{- else if .Values.service.clusterIP -}}
+      clusterIP: {{ .Values.service.clusterIP -}}
+    {{- end -}}
+{{- else if .Values.service.clusterIP -}}
+  clusterIP: {{ .Values.service.clusterIP -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return PostgreSQL slave clusterIP
+*/}}
+{{- define "postgresql.slaveClusterIP" -}}
+{{- if .Values.slave.service -}}
+    {{- if .Values.slave.service.clusterIP -}}
+      clusterIP: {{ .Values.slave.service.clusterIP -}}
+    {{- else if .Values.service.clusterIP -}}
+      clusterIP: {{ .Values.service.clusterIP -}}
+    {{- end -}}
+{{- else if .Values.service.clusterIP -}}
+  clusterIP: {{ .Values.service.clusterIP -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return PostgreSQL created database
 */}}
 {{- define "postgresql.database" -}}
