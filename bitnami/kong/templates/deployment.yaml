@@ -32,6 +32,9 @@ spec:
       {{- if .Values.ingressController.enabled }}
       serviceAccountName: {{ include "kong.serviceAccount" . }}
       {{- end }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "kong.tplValue" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
       {{- include "kong.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
@@ -53,10 +56,8 @@ spec:
         - name: kong
           image: {{ template "kong.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "kong.tplValue" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kong.command }}
           command: {{- include "kong.tplValue" (dict "value" .Values.kong.command "context" $) | nindent 12 }}
@@ -147,31 +148,11 @@ spec:
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
-          {{- if .Values.kong.livenessProbe.enabled }}
-          livenessProbe:
-            exec:
-              command:
-                - /bin/bash
-                - -ec
-                - /health/kong-container-health.sh
-            initialDelaySeconds: {{ .Values.kong.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.kong.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.kong.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.kong.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.kong.livenessProbe.failureThreshold }}
+          {{- if .Values.kong.livenessProbe }}
+          livenessProbe: {{- include "kong.tplValue" (dict "value" .Values.kong.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kong.readinessProbe.enabled }}
-          readinessProbe:
-            exec:
-              command:
-                - bash
-                - -ec
-                - /health/kong-container-health.sh
-            initialDelaySeconds: {{ .Values.kong.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.kong.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.kong.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.kong.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.kong.readinessProbe.failureThreshold }}
+          {{- if .Values.kong.readinessProbe }}
+          readinessProbe: {{- include "kong.tplValue" (dict "value" .Values.kong.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kong.resources }}
           resources: {{- toYaml .Values.kong.resources | nindent 12 }}
@@ -199,11 +180,9 @@ spec:
         {{- if .Values.ingressController.enabled }}
         - name: kong-ingress-controller
           image: {{ template "kong.ingress-controller.image" . }}
-          imagePullPolicy: {{ .Values.ingressControllerImage.pullPolicy }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+          imagePullPolicy: {{ .Values.ingressController.image.pullPolicy }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "kong.tplValue" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ingressController.args }}
           command: {{- include "kong.tplValue" (dict "value" .Values.ingressController.command "context" $) | nindent 12 }}
@@ -251,29 +230,11 @@ spec:
             - name: http-health
               containerPort: 10254
               protocol: TCP
-          {{- if .Values.ingressController.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: "/healthz"
-              port: http-health
-              scheme: HTTP
-            initialDelaySeconds: {{ .Values.ingressController.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.ingressController.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.ingressController.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.ingressController.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.ingressController.livenessProbe.failureThreshold }}
+          {{- if .Values.ingressController.livenessProbe }}
+          livenessProbe: {{- include "kong.tplValue" (dict "value" .Values.ingressController.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingressController.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: "/healthz"
-              port: 10254
-              scheme: HTTP
-            initialDelaySeconds: {{ .Values.ingressController.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.ingressController.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.ingressController.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.ingressController.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.ingressController.readinessProbe.failureThreshold }}
+          {{- if .Values.ingressController.readinessProbe }}
+          readinessProbe: {{- include "kong.tplValue" (dict "value" .Values.ingressController.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ingressController.resources }}
           resources: {{- toYaml .Values.ingressController.resources | nindent 12 }}

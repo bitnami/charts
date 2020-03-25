@@ -3,5 +3,5 @@ metrics:
 autoscaling:
   enabled: true
 
-podDisruptionBudget:
+pdb:
   enabled: true

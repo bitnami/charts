@@ -27,41 +27,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-ingressControllerImage:
-  registry: docker.io
-  repository: bitnami/kong-ingress-controller
-  tag: 0.7.1-debian-10-r4
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## Bitnami kong image version
-## ref: https://hub.docker.com/r/bitnami/kong/tags/
-##
-migrationImage:
-  registry: docker.io
-  repository: bitnami/kong
-  tag: 2.0.2-debian-10-r23
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
 ## Select database: can be either postgresql or cassandra
 database: postgresql
 
@@ -75,7 +40,7 @@ fullnameOverride:
 
 ## Number of kong Pod replicas
 ##
-replicaCount: 2
+replicaCount: 4
 
 ## Set up update strategy for kong installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -112,7 +77,7 @@ kong:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
 
   ## ConfigMap with extra env vars:
   ##
@@ -128,15 +93,23 @@ kong:
   ## Liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
-  livenessProbe:
-    enabled: true
+  livenessProbe: |-
+    exec:
+      command:
+        - /bin/bash
+        - -ec
+        - /health/kong-container-health.sh
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  readinessProbe:
-    enabled: true
+  readinessProbe: |-
+    exec:
+      command:
+        - /bin/bash
+        - -ec
+        - /health/kong-container-health.sh
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -159,6 +132,21 @@ kong:
 
 ingressController:
   enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/kong-ingress-controller
+    tag: 0.7.1-debian-10-r4
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
   proxyReadyTimeout: 300
   rbac:
     create: true
@@ -189,15 +177,21 @@ ingressController:
   ## Liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
-  livenessProbe:
-    enabled: true
+  livenessProbe: |-
+    httpGet:
+      path: "/healthz"
+      port: http-health
+      scheme: HTTP
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  readinessProbe:
-    enabled: true
+  readinessProbe: |-
+    httpGet:
+      path: "/healthz"
+      port: http-health
+      scheme: HTTP
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -219,6 +213,21 @@ ingressController:
     #   memory: 256Mi
 
 migration:
+  image:
+    registry: docker.io
+    repository: bitnami/kong
+    tag: 2.0.2-debian-10-r23
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
   ## Command and args for running the container (set to default if not set). Use array form
   command:
   args:
@@ -228,7 +237,7 @@ migration:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
 
   ## ConfigMap with extra env vars:
   ##
@@ -239,6 +248,7 @@ migration:
   extraEnvVarsSecret:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
+  extraVolumeMounts:
   ## Liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -383,11 +393,11 @@ ingress:
 ## SecurityContext configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-securityContext:
-  enabled: true
+containerSecurityContext:
   runAsUser: 1001
-  fsGroup: 1001
   runAsNonRoot: true
+
+podSecurityContext: {}
 
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -412,7 +422,7 @@ podAnnotations: {}
 ## Prometheus metrics
 ##
 metrics:
-  enabled: true
+  enabled: false
 
   ## Kong metrics service configuration
   ##
@@ -453,21 +463,20 @@ metrics:
 ##
 autoscaling:
   enabled: false
+  apiVersion: autoscaling/v2beta1
   minReplicas: 2
   maxReplicas: 5
   metrics:
     - type: Resource
       resource:
         name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 80
+        targetAverageUtilization: 80
 
 ## Kong Pod Disruption Budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ##
-podDisruptionBudget:
-  enabled: false
+pdb:
+  enabled: true
   maxUnavailable: "50%"
 
 ## PostgreSQL properties

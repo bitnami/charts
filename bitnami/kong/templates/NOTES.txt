@@ -68,9 +68,18 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 
 {{- end }}
 
+If you want to upgrade the installation you will need to re-set the database credentials. Execute the following command
+{{- if eq .Values.database "postgresql" }}
+
+  kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode
+{{- else }}
+
+  kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.cassandra.secretName" . }} -o jsonpath="{.data.cassandra-password}" | base64 --decode
+{{- end }}
+
 {{- if .Values.service.exposeAdmin }}
 
-   WARNING: You made the Kong admin {{ if contains "ClusterIP" .Values.service.type }}accessible from other pods in the cluster{{ else }}externally accessible{{- end }}. We do not recommend this configuration in production. For accessing the admin, using pod port-forwarding or using the Kong Ingress Controller is preferred.
+WARNING: You made the Kong admin {{ if contains "ClusterIP" .Values.service.type }}accessible from other pods in the cluster{{ else }}externally accessible{{- end }}. We do not recommend this configuration in production. For accessing the admin, using pod port-forwarding or using the Kong Ingress Controller is preferred.
 {{- end }}
 
 {{ include "kong.validateValues" . }}

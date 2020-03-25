@@ -15,19 +15,20 @@ spec:
     spec:
       {{- include "kong.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "kong.tplValue" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: kong-migrate
-          image: {{ template "kong.image" . }}
+          image: {{ template "kong.migration.image" . }}
           {{- if .Values.migration.command }}
           command: {{- include "kong.tplValue" (dict "value" .Values.migration.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.migration.args }}
           args: {{- include "kong.tplValue" (dict "value" .Values.migration.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "kong.tplValue" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: KONG_MIGRATE
