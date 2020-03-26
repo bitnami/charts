@@ -429,13 +429,13 @@ external-dns: transip.apiKey
 {{- end -}}
 {{- end -}}
 
-{{/*
-Create the name of the service account to use
+{/*
+Return the ExternalDNS service account name
 */}}
 {{- define "external-dns.serviceAccountName" -}}
 {{- if .Values.rbac.serviceAccountName -}}
-{{ .Values.rbac.serviceAccountName }}
+    {{- printf "%s" (tpl .Values.rbac.serviceAccountName . ) -}}
 {{- else -}}
-{{ include "external-dns.fullname" . }}
+    {{- printf "%s" (include "external-dns.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
