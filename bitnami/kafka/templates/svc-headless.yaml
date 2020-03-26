@@ -8,12 +8,14 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: kafka
+    - name: tcp-kafka
       port: {{ .Values.service.port }}
+      protocol: TCP
       targetPort: kafka
     {{- if .Values.auth.ssl }}
-    - name: kafka-ssl
-      port: 9093
+    - name: tls-kafka
+      port: {{ .Values.service.sslPort }}
+      protocol: TCP
       targetPort: kafka-ssl
     {{- end }}
   selector: {{- include "kafka.matchLabels" . | nindent 4 }}

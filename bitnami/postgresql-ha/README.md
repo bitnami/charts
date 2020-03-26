@@ -21,8 +21,6 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](http
 - Kubernetes 1.12+
 - Helm 2.11+ or Helm 3.0-beta3+
 
-> Note: Please, note that pgpool runs the container as root by default setting the `pgpool.securityContext.runAsUser` to `0` (_root_ user) in order to enable LDAP support for now.
-
 ## Installing the Chart
 
 Install the PostgreSQL HA helm chart with a release name `my-release`:
@@ -122,8 +120,8 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `pgpool.nodeSelector`                          | Node labels for pod assignment                                                                                                                                       | `{}` (The value is evaluated as a template)                  |
 | `pgpool.tolerations`                           | Tolerations for pod assignment                                                                                                                                       | `[]` (The value is evaluated as a template)                  |
 | `pgpool.securityContext.enabled`               | Enable security context for Pgpool                                                                                                                                   | `true`                                                       |
-| `pgpool.securityContext.fsGroup`               | Group ID for the Pgpool filesystem                                                                                                                                   | `0`                                                          |
-| `pgpool.securityContext.runAsUser`             | User ID for the Pgpool container                                                                                                                                     | `0`                                                          |
+| `pgpool.securityContext.fsGroup`               | Group ID for the Pgpool filesystem                                                                                                                                   | `1001`                                                       |
+| `pgpool.securityContext.runAsUser`             | User ID for the Pgpool container                                                                                                                                     | `1001`                                                       |
 | `pgpool.resources`                             | The [resources] to allocate for container                                                                                                                            | `{}`                                                         |
 | `pgpool.livenessProbe`                         | Liveness probe configuration for Pgpool                                                                                                                              | `Check values.yaml file`                                     |
 | `pgpool.readinessProbe`                        | Readiness probe configuration for Pgpool                                                                                                                             | `Check values.yaml file`                                     |
@@ -170,7 +168,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `volumePermissionsImage.pullPolicy`            | Bitnami Minideb exporter image pull policy                                                                                                                           | `Always`                                                     |
 | `volumePermissionsImage.pullSecrets`           | Specify docker-registry secret names as an array                                                                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `volumePermissions.enabled`                    | Enable init container to adapt volume permissions                                                                                                                    | `false`                                                      |
-| `volumePermissions.securityContext.enabled`    | Enable security context for Bitnami Minideb                                                                                                                          | `true`                                                       |
+| `volumePermissions.securityContext.enabled`    | Enable security context for Bitnami Minideb                                                                                                                          | `false`                                                      |
 | `volumePermissions.securityContext.runAsUser`  | User ID for the Bitnami Minideb container                                                                                                                            | `0`                                                          |
 | **Persistence**                                |                                                                                                                                                                      |                                                              |
 | `persistence.enabled`                          | Enable data persistence                                                                                                                                              | `true`                                                       |
@@ -387,6 +385,15 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
+## 2.0.0
+
+The [Bitnami Pgpool](https://github.com/bitnami/bitnami-docker-pgpool) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Pgpool daemon was started as the `pgpool` user. From now on, both the container and the Pgpool daemon run as user `1001`. You can revert this behavior by setting the parameters `pgpool.securityContext.runAsUser`, and `pgpool.securityContext.fsGroup` to `0`.
+
+Consequences:
+
+- No backwards compatibility issues are expected since all the data is at PostgreSQL pods, and Pgpool uses a deployment without persistence. Therefore, upgrades should work smoothly from `1.x.x` versions.
+- Environment variables related to LDAP configuration were renamed removing the `PGPOOL_` prefix. For instance, to indicate the LDAP URI to use, you must set `LDAP_URI` instead of `PGPOOL_LDAP_URI`
+
 ## 1.0.0
 
 A new major version of repmgr (5.0.0) was included. To upgrade to this major version, it's necessary to upgrade the repmgr extension installed on the database. To do so, follow the steps below:
@@ -416,9 +423,9 @@ $ helm upgrade my-release --version 1.0.0 bitnami/postgresql-ha \
 
 In this version, the chart will use PostgreSQL-Repmgr container images with the Postgis extension included. The version used in Postgresql version 10, 11 and 12 is Postgis 2.5, and in Postgresql 9.6 is Postgis 2.3. Postgis has been compiled with the following dependencies:
 
- - protobuf
- - protobuf-c
- - json-c
- - geos
- - proj
- - gdal
+- protobuf
+- protobuf-c
+- json-c
+- geos
+- proj
+- gdal

@@ -91,8 +91,13 @@ spec:
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
+            {{- if .Values.aggregator.persistence.enabled }}
+            - name: {{ include "fluentd.fullname" . }}-buffer
+              mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- else }}
             - name: buffer
               mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: certs
               mountPath: /opt/bitnami/fluentd/certs
@@ -111,6 +116,20 @@ spec:
         - name: fluentd-config
           configMap:
             name: {{ template "fluentd.aggregator.configMap" . }}
+        {{- if not .Values.aggregator.persistence.enabled }}
         - name: buffer
           emptyDir: {}
+        {{- end }}
+
+  {{- if .Values.aggregator.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "fluentd.fullname" . }}-buffer
+      spec:
+        accessModes: [{{ .Values.aggregator.persistence.accessMode }}]
+        storageClassName: {{ .Values.aggregator.persistence.storageClass }}
+        resources:
+          requests:
+            storage: {{ .Values.aggregator.persistence.size }}
+  {{- end }}
 {{- end -}}
