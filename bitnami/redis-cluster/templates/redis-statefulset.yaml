@@ -65,16 +65,25 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.cluster.externalAccess.enabled }}
+          command: ['/bin/bash', '-c']
+          args:
+            - |
+              podIndex=($(echo "$POD_NAME" | tr "-" "\n"))
+              podIndex="${podIndex[-1]}"
+              ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$podIndex]}"
+              export REDIS_NODES="${ips[@]}"
+              /entrypoint.sh /run.sh
+          {{- end }}
           env:
             {{- if .Values.cluster.externalAccess.enabled }}
+            - name: REDIS_CLUSTER_DYNAMIC_IPS
+              value: "no"
             - name: POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: REDIS_EXTERNAL_ACCESS
-              value: "yes"
-            - name: REDIS_LOAD_BALANCER_IPS
-              value: {{ .Values.cluster.externalAccess.service.loadBalancerIP | quote}}
             {{- else }}
             - name: REDIS_NODES
               value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "redis-cluster.fullname" $ }}-{{ $i }}.{{ template "redis-cluster.fullname" $ }}-headless {{ end }}"

@@ -16,12 +16,16 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.cluster.externalAccess.enabled }}
+          command: ['/bin/bash', '-c']
+          args:
+            - |
+              ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              export REDIS_NODES="${ips[@]}"
+              /entrypoint.sh /run.sh
+          {{- end }}
           env:
             {{- if .Values.cluster.externalAccess.enabled }}
-            - name: REDIS_EXTERNAL_ACCESS
-              value: "yes"
-            - name: REDIS_LOAD_BALANCER_IPS
-              value: {{ .Values.cluster.externalAccess.service.loadBalancerIP | quote}}
             - name: REDIS_PORT
               value: {{ .Values.cluster.externalAccess.service.port | quote }}
             {{- else }}
@@ -39,5 +43,7 @@ spec:
             {{- end }}
             - name: REDIS_CLUSTER_CREATOR
               value: "yes"
+            - name: REDIS_CLUSTER_REPLICAS
+              value: {{ .Values.cluster.replicas | quote }}
       restartPolicy: OnFailure
 {{- end }}
