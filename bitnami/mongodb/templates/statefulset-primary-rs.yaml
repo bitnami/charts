@@ -285,6 +285,11 @@ spec:
 {{ toYaml .Values.extraVolumes | indent 8}}
         {{- end }}
 {{- if .Values.persistence.enabled }}
+  {{- if.Values.persistence.existingClaim }}
+        - name: datadir
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
+  {{- else }}
   volumeClaimTemplates:
     - metadata:
         name: datadir
@@ -301,6 +306,7 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{ include "mongodb.storageClass" . }}
+  {{- end }}
 {{- else }}
         - name: datadir
           emptyDir: {}
