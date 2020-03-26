@@ -3,11 +3,12 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ template "rabbitmq.fullname" . }}-certs
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "rabbitmq.name" . }}
     chart: {{ template "rabbitmq.chart" .  }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 type: kubernetes.io/tls
 data:
   ca.crt:
