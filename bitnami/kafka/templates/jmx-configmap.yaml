@@ -1,25 +1,12 @@
-{{- if and .Values.metrics.jmx.enabled .Values.metrics.jmx.configMap.enabled }}
+{{- if (include "kafka.metrics.jmx.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kafka.fullname" . }}-jmx-configuration
-  labels:
-    app.kubernetes.io/name: {{ template "kafka.name" . }}
-    helm.sh/chart: {{ template "kafka.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "kafka.labels" . | nindent 4 }}
 data:
-  jmx-kafka-prometheus.yml: |+
-{{- if .Values.metrics.jmx.configMap.overrideConfig }}
-{{ toYaml .Values.metrics.jmx.configMap.overrideConfig | indent 4 }}
-{{- else }}
-    jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:{{ .Values.metrics.jmx.jmxPort }}/jmxrmi
-    lowercaseOutputName: true
-    lowercaseOutputLabelNames: true
-    ssl: false
-    {{ if .Values.metrics.jmx.whitelistObjectNames }}
-    whitelistObjectNames: ["{{ join "\",\"" .Values.metrics.jmx.whitelistObjectNames }}"]
-    {{ end }}
+  jmx-kafka-prometheus.yml: |-
+    {{- include "kafka.tplValue" ( dict "value" .Values.metrics.jmx.config "context" $ ) | nindent 4 }}
     rules:
       - pattern: kafka.controller<type=(ControllerChannelManager), name=(QueueSize), broker-id=(\d+)><>(Value)
         name: kafka_controller_$1_$2_$4
@@ -63,5 +50,4 @@ data:
         labels:
           topic: $3
           partition: $4
-{{- end }}
 {{- end -}}

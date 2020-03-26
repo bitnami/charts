@@ -39,6 +39,7 @@ spec:
         fsGroup: {{ .Values.slave.securityContext.fsGroup }}
         runAsUser: {{ .Values.slave.securityContext.runAsUser }}
       {{- end }}
+      serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       {{- if and .Values.volumePermissions.enabled .Values.slave.persistence.enabled }}
       initContainers:
         - name: volume-permissions

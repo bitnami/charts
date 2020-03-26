@@ -91,14 +91,16 @@ spec:
                   name: {{ template "mariadb-galera.fullname" . }}
                   {{- end }}
                   key: mariadb-galera-mariabackup-password
+            - name: MARIADB_ENABLE_LDAP
+              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
-            - name: MARIADB_LDAP_URI
+            - name: LDAP_URI
               value: {{ .Values.ldap.uri }}
-            - name: MARIADB_LDAP_BASE
+            - name: LDAP_BASE
               value: {{ .Values.ldap.base }}
-            - name: MARIADB_LDAP_BIND_DN
+            - name: LDAP_BIND_DN
               value: {{ .Values.ldap.binddn }}
-            - name: MARIADB_LDAP_BIND_PASSWORD
+            - name: LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
                   {{- if .Values.existingSecret }}
@@ -107,18 +109,18 @@ spec:
                   name: {{ template "mariadb-galera.fullname" . }}
                   {{- end }}
                   key: ldap-bindpw
-            - name: MARIADB_LDAP_NSS_INITGROUPS_IGNOREUSERS
+            - name: LDAP_NSS_INITGROUPS_IGNOREUSERS
               value: {{ .Values.ldap.nss_initgroups_ignoreusers | quote }}
             {{- if .Values.ldap.bslookup }}
-            - name: MARIADB_LDAP_BASE_LOOKUP
+            - name: LDAP_BASE_LOOKUP
               value: {{ .Values.ldap.bslookup }}
             {{- end }}
             {{- if .Values.ldap.scope }}
-            - name: MARIADB_LDAP_SCOPE
+            - name: LDAP_SCOPE
               value: {{ .Values.ldap.scope }}
             {{- end }}
             {{- if .Values.ldap.tls_reqcert }}
-            - name: MARIADB_LDAP_TLS_REQCERT
+            - name: LDAP_TLS_REQCERT
               value: {{ .Values.ldap.tls_reqcert }}
             {{- end }}
             {{- end }}

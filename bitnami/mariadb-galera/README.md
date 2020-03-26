@@ -20,8 +20,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - Kubernetes 1.10+
 - PV provisioner support in the underlying infrastructure
 
-> Note: Please, note that mariadb-galera container runs as root by default in order to enable LDAP support for now.
-
 ## Installing the Chart
 
 Add the `bitnami` charts repo to Helm:
@@ -85,7 +83,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `serviceAccount.create`              | Specify whether a ServiceAccount should be created                                                                                                          | `false`                                                           |
 | `serviceAccount.name`                | The name of the ServiceAccount to create                                                                                                                    | Generated using the mariadb-galera.fullname template              |
 | `rbac.create`                        | Specify whether RBAC resources should be created and used                                                                                                   | `false`                                                           |
-| `securityContext.enabled`            | Enable security context                                                                                                                                     | `false`                                                           |
+| `securityContext.enabled`            | Enable security context                                                                                                                                     | `true`                                                            |
 | `securityContext.fsGroup`            | Group ID for the container filesystem                                                                                                                       | `1001`                                                            |
 | `securityContext.runAsUser`          | User ID for the container                                                                                                                                   | `1001`                                                            |
 | `existingSecret`                     | Use existing secret for password details (`rootUser.password`, `db.password`, `galera.mariabackup.password` will be ignored and picked up from this secret) | `nil`                                                             |
@@ -333,3 +331,16 @@ $ helm upgrade my-release bitnami/mariadb-galera \
 ```
 
 | Note: you need to substitute the placeholders _[ROOT_PASSWORD]_, _[MARIADB_PASSWORD]_ and _[MARIABACKUP_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 1.0.0
+
+The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the MySQL daemon was started as the `mysql` user. From now on, both the container and the MySQL daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
+
+Consequences:
+
+- Backwards compatibility is not guaranteed.
+- Environment variables related to LDAP configuration were renamed removing the `MARIADB_` prefix. For instance, to indicate the LDAP URI to use, you must set `LDAP_URI` instead of `MARIADB_LDAP_URI`
+
+To upgrade to `1.0.0`, install a new release of the MariaDB Galera chart, and migrate your data by creating a backup of the database, and restoring it on the new release. In the link below you can find a guide that explain the whole process:
+
+- [Create And Restore MySQL/MariaDB Backups](https://docs.bitnami.com/general/infrastructure/mariadb/administration/backup-restore-mysql-mariadb/)
