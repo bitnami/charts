@@ -159,6 +159,9 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
+  ## Name of an existing PVC
+  ##
+  existingClaim:
 
 ## Service parameters
 ##
