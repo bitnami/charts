@@ -423,6 +423,11 @@ service:
 ##
 rbac:
   create: true
+  ## Determine whether a Service Account should be created
+  ## or reuse a exiting one
+  ##
+  serviceAccountCreate: true
+
   ## Service Account for pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
