@@ -35,9 +35,9 @@ image:
 ## K8s resources type to be observed for new DNS entries by ExternalDNS
 ##
 sources:
-- service
-- ingress
-# - crd
+  # - crd
+  - service
+  - ingress
 
 ## DNS provider where the DNS records will be created. Available providers are:
 ## - aws, azure, cloudflare, coredns, designate, digitalocoean, google, infoblox, rfc2136, transip
@@ -197,6 +197,21 @@ coredns:
 ## OpenStack Designate provider configuration to be set via arguments/env. variables
 ##
 designate:
+  ## Set Openstack environment variables (optional). Username and password will be saved in a kubernetes secret
+  ## The alternative to this is to export the necessary Openstack environment variables in the extraEnv argument
+  ##
+  # username: "someuser"
+  # password: "p@55w0rd"
+  # authUrl: "https://mykeystone.example.net:5000/v3/"
+  # regionName: "dev"
+  # userDomainName: "development"
+  # projectName: "myteamname"
+
+  ## Use a host path custom CA (optional)
+  ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
+  ##
+  # customCAHostPath: /path/to/cafile
+
   ## Use a custom CA (optional)
   ##
   customCA:
