@@ -897,8 +897,7 @@ spec:
                             type: object
                           tcpSocket:
                             description: 'TCPSocket specifies an action involving
-                              a TCP port. TCP hooks not yet supported TODO: implement
-                              a realistic TCP lifecycle hook'
+                              a TCP port. TCP hooks not yet supported'
                             properties:
                               host:
                                 description: 'Optional: Host name to connect to, defaults
@@ -993,8 +992,7 @@ spec:
                             type: object
                           tcpSocket:
                             description: 'TCPSocket specifies an action involving
-                              a TCP port. TCP hooks not yet supported TODO: implement
-                              a realistic TCP lifecycle hook'
+                              a TCP port. TCP hooks not yet supported'
                             properties:
                               host:
                                 description: 'Optional: Host name to connect to, defaults
@@ -1104,8 +1102,7 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported TODO: implement a realistic
-                          TCP lifecycle hook'
+                          port. TCP hooks not yet supported'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -1266,8 +1263,7 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported TODO: implement a realistic
-                          TCP lifecycle hook'
+                          port. TCP hooks not yet supported'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -1537,8 +1533,7 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported TODO: implement a realistic
-                          TCP lifecycle hook'
+                          port. TCP hooks not yet supported'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -1957,8 +1952,7 @@ spec:
                             type: object
                           tcpSocket:
                             description: 'TCPSocket specifies an action involving
-                              a TCP port. TCP hooks not yet supported TODO: implement
-                              a realistic TCP lifecycle hook'
+                              a TCP port. TCP hooks not yet supported'
                             properties:
                               host:
                                 description: 'Optional: Host name to connect to, defaults
@@ -2053,8 +2047,7 @@ spec:
                             type: object
                           tcpSocket:
                             description: 'TCPSocket specifies an action involving
-                              a TCP port. TCP hooks not yet supported TODO: implement
-                              a realistic TCP lifecycle hook'
+                              a TCP port. TCP hooks not yet supported'
                             properties:
                               host:
                                 description: 'Optional: Host name to connect to, defaults
@@ -2164,8 +2157,7 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported TODO: implement a realistic
-                          TCP lifecycle hook'
+                          port. TCP hooks not yet supported'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -2326,8 +2318,7 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported TODO: implement a realistic
-                          TCP lifecycle hook'
+                          port. TCP hooks not yet supported'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -2597,8 +2588,7 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported TODO: implement a realistic
-                          TCP lifecycle hook'
+                          port. TCP hooks not yet supported'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -3277,9 +3267,7 @@ spec:
                           to mount. Tip: Ensure that the filesystem type is supported
                           by the host operating system. Examples: "ext4", "xfs", "ntfs".
                           Implicitly inferred to be "ext4" if unspecified. More info:
-                          https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore
-                          TODO: how do we prevent errors in the filesystem from compromising
-                          the machine'
+                          https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore'
                         type: string
                       partition:
                         description: 'The partition in the volume that you want to
@@ -3619,9 +3607,7 @@ spec:
                       fsType:
                         description: 'Filesystem type to mount. Must be a filesystem
                           type supported by the host operating system. Ex. "ext4",
-                          "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
-                          TODO: how do we prevent errors in the filesystem from compromising
-                          the machine'
+                          "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.'
                         type: string
                       lun:
                         description: 'Optional: FC target lun number'
@@ -3705,9 +3691,7 @@ spec:
                           to mount. Tip: Ensure that the filesystem type is supported
                           by the host operating system. Examples: "ext4", "xfs", "ntfs".
                           Implicitly inferred to be "ext4" if unspecified. More info:
-                          https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk
-                          TODO: how do we prevent errors in the filesystem from compromising
-                          the machine'
+                          https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk'
                         type: string
                       partition:
                         description: 'The partition in the volume that you want to
@@ -3809,9 +3793,7 @@ spec:
                           to mount. Tip: Ensure that the filesystem type is supported
                           by the host operating system. Examples: "ext4", "xfs", "ntfs".
                           Implicitly inferred to be "ext4" if unspecified. More info:
-                          https://kubernetes.io/docs/concepts/storage/volumes#iscsi
-                          TODO: how do we prevent errors in the filesystem from compromising
-                          the machine'
+                          https://kubernetes.io/docs/concepts/storage/volumes#iscsi'
                         type: string
                       initiatorName:
                         description: Custom iSCSI Initiator Name. If initiatorName
@@ -4208,9 +4190,7 @@ spec:
                           to mount. Tip: Ensure that the filesystem type is supported
                           by the host operating system. Examples: "ext4", "xfs", "ntfs".
                           Implicitly inferred to be "ext4" if unspecified. More info:
-                          https://kubernetes.io/docs/concepts/storage/volumes#rbd
-                          TODO: how do we prevent errors in the filesystem from compromising
-                          the machine'
+                          https://kubernetes.io/docs/concepts/storage/volumes#rbd'
                         type: string
                       image:
                         description: 'The rados image name. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it'
