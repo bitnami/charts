@@ -148,6 +148,7 @@ resources:
 ## Secret with keystore, keystore password, truststore, truststore password
 ##
 # tlsEncryptionSecretName:
+
 ## ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
 ##
 # existingConfiguration:
