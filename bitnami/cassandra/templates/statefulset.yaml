@@ -245,12 +245,12 @@ spec:
         {{- if .Values.existingConfiguration }}
         - name: configurations
           configMap:
-            name: {{ .Values.existingConfiguration }}
+            name: {{ tpl .Values.existingConfiguration $ }}
         {{- end }}
         {{- if .Values.initDBConfigMap }}
         - name: init-db
           configMap:
-            name: {{ .Values.initDBConfigMap }}
+            name: {{ tpl .Values.initDBConfigMap $ }}
         {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data
