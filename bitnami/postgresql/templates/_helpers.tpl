@@ -209,6 +209,7 @@ Get the metrics ConfigMap name.
 {{- printf "%s-metrics" (include "postgresql.fullname" .) -}}
 {{- end -}}
 
+
 {{/*
 Get the readiness probe command
 */}}
@@ -288,8 +289,8 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "postgresql.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "postgresql.validateValues.ldapConfigurationMethod" .) -}}
-{{- $messages := without $messages "" -}}
+{{- $messages = append $messages (include "postgresql.validateValues.ldapConfigurationMethod" .) -}}
+{{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
@@ -314,11 +315,11 @@ Create a registry image reference for use in a spec.
 Includes the `image` and `imagePullPolicy` keys.
 */}}
 {{- define "postgresql.registryImage" -}}
-    image: {{ include "postgresql.imageReference" . }}
-    {{- $pullPolicy := include "postgresql.imagePullPolicy" . -}}
-    {{- if $pullPolicy }}
-        {{ $pullPolicy }}
-    {{- end -}}
+image: {{ include "postgresql.imageReference" . }}
+{{- $pullPolicy := include "postgresql.imagePullPolicy" . -}}
+{{- if $pullPolicy }}
+{{ $pullPolicy }}
+{{- end -}}
 {{- end -}}
 
 {{- define "postgresql.imageReference" -}}
