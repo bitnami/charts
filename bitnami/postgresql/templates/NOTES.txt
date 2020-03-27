@@ -20,9 +20,7 @@ To get the password for "{{ template "postgresql.username" . }}" run:
 
 To connect to your database run the following command:
 {{- $postgresqlImage := dict "image" .Values.images.postgresql "values" .Values "name" "postgresql" }}
-    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ template "postgresql.imageReference" $postgresqlImage }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
-    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ template "postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
-   --labels="{{ template "postgresql.fullname" . }}-client=true" {{- end }} --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresqlUsername }} -d {{- if .Values.postgresqlDatabase }} {{ .Values.postgresqlDatabase }}{{- else }} postgres{{- end }} -p {{ template "postgresql.port" . }}
+    kubectl run {{ template "postgresql.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ template "postgresql.imageReference" $postgresqlImage }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }} --labels="{{ template "postgresql.fullname" . }}-client=true" {{- end }} --command -- psql --host {{ template "postgresql.fullname" . }} -U {{ .Values.postgresqlUsername }} -d {{- if .Values.postgresqlDatabase }} {{ .Values.postgresqlDatabase }}{{- else }} postgres{{- end }} -p {{ template "postgresql.port" . }}
 
 {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 Note: Since NetworkPolicy is enabled, only pods with label {{ template "postgresql.fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
