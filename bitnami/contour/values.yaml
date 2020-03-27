@@ -103,7 +103,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.3.0-debian-10-r0
+    tag: 1.3.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -161,8 +161,8 @@ contour:
 
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 3
-    periodSeconds: 10
+    initialDelaySeconds: 120
+    periodSeconds: 20
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
