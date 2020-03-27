@@ -53,14 +53,12 @@ spec:
     {{- if .Values.prometheus.serviceMonitor.interval }}
     interval: {{ .Values.prometheus.serviceMonitor.interval }}
     {{- end }}
-{{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
-    metricRelabelings:
-{{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | indent 4 }}
-{{- end }}
-{{- if .Values.prometheus.serviceMonitor.relabelings }}
-    relabelings:
-{{ toYaml .Values.prometheus.serviceMonitor.relabelings | indent 4 }}
-{{- end }}
+    {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
+    metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.relabelings }}
+    relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 4 }}
+    {{- end }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -81,12 +79,10 @@ spec:
     {{- if .Values.prometheus.serviceMonitor.interval }}
     interval: {{ .Values.prometheus.serviceMonitor.interval }}
     {{- end }}
-{{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
-    metricRelabelings:
-{{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | indent 4 }}
-{{- end }}
-{{- if .Values.prometheus.serviceMonitor.relabelings }}
-    relabelings:
-{{ toYaml .Values.prometheus.serviceMonitor.relabelings | indent 4 }}
-{{- end }}
+    {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
+    metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.relabelings }}
+    relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 4 }}
+    {{- end }}
 {{- end }}
