@@ -17,20 +17,19 @@ spec:
     metadata:
       labels: {{- include "contour.labels" . | nindent 8 }}
         component: envoy
-    spec:
-{{- include "envoy.imagePullSecrets" . | nindent 6 }}
-    {{- with .Values.envoy.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.envoy.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.envoy.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+    spec: {{- include "envoy.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.envoy.affinity }}
+      affinity: {{- include "contour.tplValue" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.envoy.nodeSelector }}
+      nodeSelector: {{- include "contour.tplValue" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.envoy.affinity }}
+      affinity: {{- include "contour.tplValue" (dict "value" .Values.envoy.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.envoy.tolerations}}
+      tolerations: {{- include "contour.tplValue" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       terminationGracePeriodSeconds: 300
       containers:
       - command:
@@ -102,6 +101,17 @@ spec:
           timeoutSeconds: {{ .Values.envoy.readinessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.envoy.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.envoy.readinessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.envoy.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /ready
+            port: 8002
+          initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.envoy.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.envoy.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.envoy.livenessProbe.failureThreshold }}
         {{- end }}
         resources:
 {{ toYaml .Values.envoy.resources | indent 10 }}

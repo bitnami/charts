@@ -132,9 +132,26 @@ contour:
       # cpu: 100m
       # memory: 25Mi
 
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
   nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
   affinity: {}
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
   serviceAccount:
     # Specifies whether a ServiceAccount should be created
     create: true
@@ -205,15 +222,41 @@ envoy:
     requests: {}
       # cpu: 100m
       # memory: 25Mi
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
   nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
   affinity: {}
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
   serviceAccount:
     # Specifies whether a ServiceAccount should be created
     create: true
     # The name of the ServiceAccount to use.  If not set and create is
     # true, a name is generated using the fullname template
     name: ""
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10
@@ -226,10 +269,10 @@ prometheus:
   # Prometheus Operator service monitors
   serviceMonitor:
     # enable support for Prometheus Operator
-    enabled: true
+    enabled: false
     # Job label for scrape target
     jobLabel: contour
     # Scrape interval. If not set, the Prometheus default scrape interval is used.
-    interval: 15s
+    interval: ""
     metricRelabelings: []
     relabelings: []
