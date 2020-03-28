@@ -132,6 +132,8 @@ kong:
 
 ingressController:
   enabled: true
+  installCRDs: false
+  customResourceDeletePolicy: {}
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
