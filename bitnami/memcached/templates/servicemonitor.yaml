@@ -13,7 +13,7 @@ metadata:
 spec:
   selector:
     matchLabels: {{ include "memcached.matchLabels" . | nindent 6 }}
-    app.kubernetes.io/component: metrics
+      app.kubernetes.io/component: metrics
   endpoints:
     - port: metrics
       path: /metrics
