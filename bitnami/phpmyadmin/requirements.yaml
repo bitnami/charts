@@ -1,7 +1,7 @@
 dependencies:
-- name: mariadb
-  version: 6.x.x
-  repository: https://charts.bitnami.com/bitnami
-  condition: db.bundleTestDB
-  tags:
-    - phpmyadmin-database
+  - name: mariadb
+    version: 6.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: db.bundleTestDB
+    tags:
+      - phpmyadmin-database
