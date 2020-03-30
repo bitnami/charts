@@ -63,6 +63,8 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `replicaCount`                         | Number of replicas of the Grafana Pod                                                                  | `1`                                                     |
 | `updateStrategy`                       | Update strategy for deployment                                                                         | `{type: "RollingUpdate"}`                               |
 | `schedulerName`                        | Alternative scheduler                                                                                  | `nil`                                                   |
+| `serviceAccount.create`                | Specifies whether a ServiceAccount should be created                                                   | `true`                                                  |
+| `serviceAccount.name`                  | If serviceAccount.create is enabled, what should the serviceAccount name be - otherwise defaults to the fullname    | `nil`                                      |
 | `admin.user`                           | Grafana admin username                                                                                 | `admin`                                                 |
 | `admin.password`                       | Grafana admin password                                                                                 | Randomly generated                                      |
 | `admin.existingSecret`                 | Name of the existing secret containing admin password                                                  | `nil`                                                   |
