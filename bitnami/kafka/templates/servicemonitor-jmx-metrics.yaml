@@ -16,7 +16,7 @@ spec:
     matchLabels: {{- include "kafka.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: kafka
   endpoints:
-    - port: metrics
+    - port: http-metrics
       path: "/"
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}

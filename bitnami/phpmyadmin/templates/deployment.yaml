@@ -101,18 +101,14 @@ spec:
             - name: https
               containerPort: 443
               protocol: TCP
-          {{- if .Values.probesEnabled }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          {{- if .Values.livenessProbe }}
+          livenessProbe: {{- include "phpmyadmin.tplValue" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe: {{- include "phpmyadmin.tplValue" (dict "value" .Values.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.db.enableSsl }}
           volumeMounts:
