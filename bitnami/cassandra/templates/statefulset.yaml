@@ -200,11 +200,11 @@ spec:
             - name: encryption-secrets
               mountPath: /bitnami/cassandra/secrets
             {{- end }}
-            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*") (.Values.initDBConfigMap) }}
+            {{- if .Values.initDBConfigMap }}
             - name: init-db
               mountPath: /docker-entrypoint-initdb.d
             {{- end }}
-            {{ if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
+            {{ if .Values.existingConfiguration }}
             - name: configurations
               mountPath: /bitnami/cassandra/conf
             {{- end }}
@@ -242,15 +242,15 @@ spec:
               - key: truststore
                 path: truststore
         {{- end }}
-        {{- if or (.Files.Glob "files/conf/*") .Values.existingConfiguration }}
+        {{- if .Values.existingConfiguration }}
         - name: configurations
           configMap:
-            name: {{ include "cassandra.configurationCM" . }}
+            name: {{ tpl .Values.existingConfiguration $ }}
         {{- end }}
-        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*") (.Values.initDBConfigMap) }}
+        {{- if .Values.initDBConfigMap }}
         - name: init-db
           configMap:
-            name: {{ include "cassandra.initDbCM" . }}
+            name: {{ tpl .Values.initDBConfigMap $ }}
         {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data
