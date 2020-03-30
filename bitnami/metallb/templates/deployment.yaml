@@ -16,7 +16,8 @@ spec:
       {{- if .Values.controller.podAnnotations }}
       annotations: {{- toYaml .Values.controller.podAnnotations | nindent 8 }}
       {{- end }}
-    spec: {{- include "metallb.controller.imagePullSecrets" . | nindent 6 }}
+    spec:
+{{- include "metallb.controller.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "metallb.controllerServiceAccountName" . }}
       terminationGracePeriodSeconds: 0
       {{- if .Values.controller.securityContext.enabled }}

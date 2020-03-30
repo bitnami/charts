@@ -32,7 +32,6 @@ spec:
     port: {{ .Values.speaker.daemonset.hostPorts.metrics }}
     protocol: TCP
     targetPort: {{ .Values.speaker.daemonset.hostPorts.metrics }}
-
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
