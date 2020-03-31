@@ -31,14 +31,12 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-
 {{/*
 Full path to CA Cert file
 */}}
 {{- define "airflow.ldapCAFilename"}}
-{{- printf "/opt/bitnami/airflow/conf/certs/%s" (include "airflow.tls.CAcertificateFilename" .) -}}
+{{- printf "/opt/bitnami/airflow/certs/%s" .Values.ldap.tls.CAcertificateFilename -}}
 {{- end -}}
-
 
 {{/*
 Fully qualified app name for LDAP
@@ -48,9 +46,9 @@ Fully qualified app name for LDAP
 {{- end -}}
 
 {{/*
-Return the LDAP bind password
+Return the LDAP credentials secret.
 */}}
-{{- define "airflow.ldapPassword" -}}
+{{- define "airflow.ldapSecretName" -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
@@ -58,16 +56,24 @@ Also, we can't use a single if because lazy evaluation is not an option
 */}}
 {{- if .Values.global }}
     {{- if .Values.global.ldap }}
-        {{- if .Values.global.ldap.bindpw }}
-            {{- .Values.global.ldap.bindpw -}}
+        {{- if .Values.global.ldap.existingSecret }}
+            {{- printf "%s" .Values.global.ldap.existingSecret -}}
+        {{- else if .Values.ldap.existingSecret -}}
+            {{- printf "%s" .Values.ldap.existingSecret -}}
         {{- else -}}
-            {{- ternary (randAlphaNum 10) .Values.ldap.bindpw (empty .Values.ldap.bindpw) -}}
+            {{- printf "%s" (include "airflow.ldap" .) -}}
         {{- end -}}
-    {{- else -}}
-        {{- ternary (randAlphaNum 10) .Values.ldap.bindpw (empty .Values.ldap.bindpw) -}}
-    {{- end -}}
+     {{- else if .Values.ldap.existingSecret -}}
+         {{- printf "%s" .Values.ldap.existingSecret -}}
+     {{- else -}}
+         {{- printf "%s" (include "airflow.ldap" .) -}}
+     {{- end -}}
 {{- else -}}
-    {{- ternary (randAlphaNum 10) .Values.ldap.bindpw (empty .Values.ldap.bindpw) -}}
+     {{- if .Values.ldap.existingSecret -}}
+         {{- printf "%s" .Values.ldap.existingSecret -}}
+     {{- else -}}
+         {{- printf "%s" (include "airflow.ldap" .) -}}
+     {{- end -}}
 {{- end -}}
 {{- end -}}
 
