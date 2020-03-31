@@ -232,6 +232,34 @@ airflow:
     ##
     # existingSecret:
 
+## LDAP configuration
+##
+ldap:
+  # Enable LDAP authentication
+  enabled: false
+  # Server URI, eg. ldap://ldap_server:389
+  uri: "ldap://ldap_server:389"
+  # Base of the search, eg. ou=example,o=org
+  base: "ou=example,o=org"
+  # Bind DN
+  binddn: "cn=user,ou=example,o=org"
+  # Bind Password
+  bindpw: ""
+  # Field used for uid
+  uidField: "uid"
+  # SSL/TLS parameters for LDAP
+  tls:
+    # Enabled TLS/SSL for LDAP, you must include the CA file.
+    enabled: false
+    ## Allow to use self signed certificates
+    allowSelfSigned: true
+    ## Name of the existing secret containing the certificate CA file that will be used by ldap client.
+    ## Cloud be create with: kubectl create secret generic airflow-secret --from-file=./ca.pem
+    CAcertificateSecret: ""
+    ## LDAP CA cert filename
+    ## eg. ca.pem
+    CAcertificateFilename: ""
+
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
