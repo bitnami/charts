@@ -281,6 +281,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 To horizontally scale this chart, you can use the `--replicas` flag to modify the number of nodes in your PostgreSQL deployment. Also you can use the `values-production.yaml` file or modify the parameters shown above.
 
+### Customizing Master and Slave services in a replicated configuration
+
+At the top level, there is a service object which defines the services for both master and slave. For deeper customization, there are service objects for both the master and slave types individually. This allows you to override the values in the top level service object so that the master and slave can be of different service types and with different clusterIPs / nodePorts. Also in the case you want the master and slave to be of type nodePort, you will need to set the nodePorts to different values to prevent a collision. The values that are deeper in the master.service or slave.service objects will take precedence over the top level service object.
+
 ### Change PostgreSQL version
 
 To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql/tags/) using the `image.tag` parameter. For example, `image.tag=12.0.0`
