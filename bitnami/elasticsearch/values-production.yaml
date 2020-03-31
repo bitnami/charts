@@ -176,7 +176,7 @@ master:
     ## resources, such as Minikube.
     limits: {}
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 384Mi
     requests:
       cpu: 25m
       memory: 256Mi
@@ -300,7 +300,7 @@ coordinating:
     ## resources, such as Minikube.
     limits: {}
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 384Mi
     requests:
       cpu: 25m
       memory: 256Mi
@@ -367,7 +367,7 @@ data:
   updateStrategy:
     type: RollingUpdate
     # rollingUpdatePartition
-  heapSize: 128m
+  heapSize: 1024m
   ## Provide annotations for the data pods.
   ##
   podAnnotations: {}
@@ -399,10 +399,10 @@ data:
     ## resources, such as Minikube.
     limits: {}
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 2176Mi
     requests:
       cpu: 25m
-      memory: 1152Mi
+      memory: 2048Mi
   ## Elasticsearch data container's liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -496,7 +496,7 @@ ingest:
     ## resources, such as Minikube.
     limits: {}
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 384Mi
     requests:
       cpu: 25m
       memory: 256Mi
