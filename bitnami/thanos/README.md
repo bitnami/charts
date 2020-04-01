@@ -137,6 +137,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                           |
 | `querier.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer          | `[]`                            |
 | `querier.service.annotations`              | Annotations for Thanos Querier service                         | `{}`                            |
+| `querier.serviceAccount.annotations`       | Annotations for Thanos Querier Service Account                 | `{}`                            |
 | `querier.autoscaling.enabled`              | Enable autoscaling for Thanos Querier                          | `false`                         |
 | `querier.autoscaling.minReplicas`          | Minimum number of Thanos Querier replicas                      | `nil`                           |
 | `querier.autoscaling.maxReplicas`          | Maximum number of Thanos Querier replicas                      | `nil`                           |
@@ -174,6 +175,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                          |
 | `bucketweb.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer          | `[]`                           |
 | `bucketweb.service.annotations`              | Annotations for Thanos Bucket Web service                      | `{}`                           |
+| `bucketweb.serviceAccount.annotations`       | Annotations for Thanos Bucket Web Service Account              | `{}`                           |
 | `bucketweb.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                | `false`                        |
 | `bucketweb.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled | `1`                            |
 | `bucketweb.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable | `nil`                          |
@@ -207,6 +209,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                          |
 | `compactor.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer          | `[]`                           |
 | `compactor.service.annotations`              | Annotations for Thanos Compactor service                       | `{}`                           |
+| `compactor.serviceAccount.annotations`       | Annotations for Thanos Compactor Service Account               | `{}`                           |
 | `compactor.persistence.enabled`              | Enable data persistence                                        | `true`                         |
 | `compactor.persistence.existingClaim`        | Use a existing PVC which must be created manually before bound | `nil`                          |
 | `compactor.persistence.storageClass`         | Specify the `storageClass` used to provision the volume        | `nil`                          |
@@ -241,6 +244,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                          |
 | `storegateway.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer          | `[]`                           |
 | `storegateway.service.annotations`              | Annotations for Thanos Store Gateway service                   | `{}`                           |
+| `storegateway.serviceAccount.annotations`       | Annotations for Thanos Store Gateway Service Account           | `{}`                           |
 | `storegateway.persistence.enabled`              | Enable data persistence                                        | `true`                         |
 | `storegateway.persistence.existingClaim`        | Use a existing PVC which must be created manually before bound | `nil`                          |
 | `storegateway.persistence.storageClass`         | Specify the `storageClass` used to provision the volume        | `nil`                          |
@@ -284,6 +288,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                          |
 | `ruler.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer          | `[]`                           |
 | `ruler.service.annotations`              | Annotations for Thanos Ruler service                           | `{}`                           |
+| `ruler.serviceAccount.annotations`       | Annotations for Thanos Ruler Service Account                   | `{}`                           |
 | `ruler.persistence.enabled`              | Enable data persistence                                        | `true`                         |
 | `ruler.persistence.existingClaim`        | Use a existing PVC which must be created manually before bound | `nil`                          |
 | `ruler.persistence.storageClass`         | Specify the `storageClass` used to provision the volume        | `nil`                          |
