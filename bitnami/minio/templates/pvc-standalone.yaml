@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "minio.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "minio.labels" . | nindent 4 }}
 spec:
   accessModes:
