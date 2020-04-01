@@ -60,6 +60,26 @@ spec:
               name: {{ template "testlink.mariadb.fullname" . }}
               key: mariadb-password
         {{- else }}
+        {{- if .Values.externalDatabase.create }}
+        - name: MARIADB_ROOT_USER
+          value: {{ .Values.externalDatabase.root.user | quote }}
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+              key: root-password
+        - name: MYSQL_CLIENT_CREATE_DATABASE_NAME
+          value: {{ .Values.externalDatabase.database | quote }}
+        - name: MYSQL_CLIENT_CREATE_DATABASE_USER
+          value: {{ .Values.externalDatabase.user | quote }}
+        - name: MYSQL_CLIENT_CREATE_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+              key: db-password
+        - name: MYSQL_CLIENT_CREATE_DATABASE_PRIVILEGES
+          value: {{ .Values.externalDatabase.privileges | quote }}
+        {{- end }}
         - name: MARIADB_HOST
           value: {{ .Values.externalDatabase.host | quote }}
         - name: MARIADB_PORT_NUMBER

@@ -71,6 +71,18 @@ allowEmptyPassword: "yes"
 ## External database configuration
 ##
 externalDatabase:
+
+  ##If set to 'true' db and db user will be created as specified
+  create: false
+  
+  ## Database user privileges
+#  privileges: ALL
+
+  ##admin user to create db and user.
+#  root:
+#    user:
+#    password:
+
   ## Database host
   host:
 
