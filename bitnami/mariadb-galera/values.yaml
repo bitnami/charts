@@ -178,6 +178,22 @@ ldap:
   scope:
   tls_reqcert:
 
+## SSL configuration
+##
+ssl:
+  ## Replicaction traffic
+  rt:
+    ## Enable SSL for replication traffic
+    enabled: false
+    ## Name of the secret that contains the certificates
+    certificatesSecret:
+    ## Certificate filename
+    certFilename:
+    ## Certificate Key filename
+    certKeyFilename:
+    ## CA Certificate filename
+    certCAFilename:
+
 ## Configure MariaDB with a custom my.cnf file
 ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
 ## Alternatively, you can put your my.cnf under the files/ directory

@@ -232,6 +232,28 @@ mariadb-galera: LDAP
 {{- end -}}
 
 {{/*
+Return the path to the cert file.
+*/}}
+{{- define "airflow.sslRTCert" -}}
+{{- printf "/bitnami/mariadb/cert/%s" .Values.ssl.rt.certFilename -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "airflow.sslRTCertKey" -}}
+{{- printf "/bitnami/mariadb/cert/%s" .Values.ssl.rt.certKeyFilename -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "airflow.sslRTCACert" -}}
+{{- printf "/bitnami/mariadb/cert/%s" .Values.ssl.rt.certCAFilename -}}
+{{- end -}}
+
+
+{{/*
 Return the proper Storage Class
 */}}
 {{- define "mariadb-galera.storageClass" -}}
