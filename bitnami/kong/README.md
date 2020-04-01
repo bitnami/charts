@@ -370,7 +370,7 @@ initScriptsSecret=special-scripts-sensitive
 
 ## Upgrade
 
-It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.password` or `cassandra.password` parameters when upgrading the chart:
+It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
 ```bash
 $ helm upgrade my-release bitnami/kong \
