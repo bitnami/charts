@@ -131,13 +131,13 @@ spec:
             {{- if .Values.ssl.rt.enabled }}
             - name:  MARIADB_ENABLE_SSL_RT
               value: yes
-#            - name:  MARIADB_SSL_RT_CERT
-#              value: {{- include "airflow.sslRTCert" . }}
-#            - name:  MARIADB_SSL_RT_KEY
-#              value: {{- include "airflow.sslRTCertKey" . }}
-#            - name:  MARIADB_SSL_RT_CA
-#              value: {{- include "airflow.sslRTCACert" . }}
-            {{- end }}
+            - name:  MARIADB_SSL_RT_CERT
+              value: {{ template "mariadb-galera.sslRTCert" . }}
+            - name:  MARIADB_SSL_RT_KEY
+              value: {{ template "mariadb-galera.sslRTCertKey" . }}
+            - name:  MARIADB_SSL_RT_CA
+              value: {{ template "mariadb-galera.sslRTCACert" . }}
+             {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -193,13 +193,13 @@ spec:
               mountPath: /opt/bitnami/mariadb/conf/my.cnf
               subPath: my.cnf
             {{- end }}
-            {{- if .Values.ssl.rt.enabled }}
-             - name: mariadb-rt-certificates
-              mountPath: /bitnami/mariadb/certs/
-              readOnly: true
-            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+            {{- if .Values.ssl.rt.enabled }}
+            - name: mariadb-galera-rt-certificates
+              mountPath: /bitnami/mariadb/certs/
+              readOnly: true
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -244,7 +244,7 @@ spec:
         {{- end }}
       volumes:
         {{- if .Values.ssl.rt.enabled }}
-        - name: mariadb-ssl-rt-certificates
+        - name: mariadb-galera-rt-certificates
           secret:
             secretName: {{ required "A secret containing the ertificates for the SSL replication traffic is required when SSL RT in enabled" .Values.ssl.rt.certificatesSecret }}
             defaultMode: 256
