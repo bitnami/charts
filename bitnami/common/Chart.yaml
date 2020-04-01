@@ -1,0 +1,11 @@
+apiVersion: v1
+name: common
+description: A Library Helm Chart for grouping common logic between bitnami charts. This chart is not deployable by itself.
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application.
+appVersion: 0.1.0
