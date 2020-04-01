@@ -20,7 +20,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - Kubernetes 1.12+
 - Helm 2.11+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -378,7 +377,7 @@ $ helm upgrade my-release bitnami/kong \
     --set database=postgresql
     --set postgresql.enabled=true
     --set
-    --set postgresql.password=[POSTGRESQL_PASSWORD]
+    --set postgresql.postgresqlPassword=[POSTGRESQL_PASSWORD]
 ```
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.

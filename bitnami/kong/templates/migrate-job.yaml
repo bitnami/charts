@@ -4,11 +4,15 @@ metadata:
   name: {{ include "kong.fullname" . }}-migrate
   namespace: {{ .Release.Namespace }}
   labels: {{- include "kong.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: post-install, post-upgrade
 spec:
   template:
     metadata:
       labels: {{- include "kong.labels" . | nindent 8 }}
         app.kubernetes.io/component: migration
+      annotations:
+        helm.sh/hook: post-install, post-upgrade
       {{- if .Values.migration.podAnnotations }}
       {{- include "kong.tplValue" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
