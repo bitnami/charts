@@ -15,6 +15,7 @@ global:
 ##  e.g. <registry>/namespace/image-name
 ## ref: https://docs.docker.com/engine/reference/commandline/tag/#extended-description
 ##
+
 imageRegistry: docker.io
 
 ## Set the namespace for the image in the registry
@@ -36,7 +37,7 @@ imagePullSecrets: []
 images:
   postgresql:
     name: postgresql
-    tag: 11.7.0-debian-10-r43
+    tag: 11.7.0-debian-10-r51
     ## Set to true if you would like to see extra information on logs
     ## It turns BASH and NAMI debugging in minideb
     ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
@@ -49,7 +50,7 @@ images:
 
   metrics:
     name: postgres-exporter
-    tag: 0.8.0-debian-10-r55
+    tag: 0.8.0-debian-10-r63
 
 ## String to partially override postgresql.fullname template (will maintain the release name)
 ##

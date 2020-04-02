@@ -3,9 +3,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ template "redis.fullname" . }}
-{{- with .Values.metrics.prometheusRule.namespace }}
-  namespace: {{ . }}
-{{- end }}
+  {{- if .Values.metrics.prometheusRule.namespace }}
+  namespace: {{ .Values.metrics.prometheusRule.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}

@@ -198,7 +198,7 @@ spec:
   {{ toYaml .Values.extraVolumeMounts | indent 8}}
             {{- end }}
           resources:
-  {{ toYaml .Values.resources | indent 10 }}
+  {{- toYaml .Values.resources | nindent 12 }}
   {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "mongodb.metrics.image" . }}
