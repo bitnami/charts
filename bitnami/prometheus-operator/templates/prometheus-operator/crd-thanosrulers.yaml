@@ -2,7 +2,7 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: alertmanagers.monitoring.coreos.com
+  name: thanosrulers.monitoring.coreos.com
   annotations:
     controller-gen.kubebuilder.io/version: v0.2.4
     "helm.sh/hook": crd-install
@@ -10,30 +10,17 @@ metadata:
     "helm.sh/hook-delete-policy": {{ .Values.operator.customResourceDeletePolicy }}
     {{- end }}
 spec:
-  additionalPrinterColumns:
-  - JSONPath: .spec.version
-    description: The version of Alertmanager
-    name: Version
-    type: string
-  - JSONPath: .spec.replicas
-    description: The desired replicas number of Alertmanagers
-    name: Replicas
-    type: integer
-  - JSONPath: .metadata.creationTimestamp
-    name: Age
-    type: date
   group: monitoring.coreos.com
   names:
-    kind: Alertmanager
-    listKind: AlertmanagerList
-    plural: alertmanagers
-    singular: alertmanager
+    kind: ThanosRuler
+    listKind: ThanosRulerList
+    plural: thanosrulers
+    singular: thanosruler
   preserveUnknownFields: false
   scope: Namespaced
-  subresources: {}
   validation:
     openAPIV3Schema:
-      description: Alertmanager describes an Alertmanager cluster.
+      description: ThanosRuler defines a ThanosRuler deployment.
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -48,15 +35,9 @@ spec:
         metadata:
           type: object
         spec:
-          description: 'Specification of the desired behavior of the Alertmanager
-            cluster. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status'
+          description: 'Specification of the desired behavior of the ThanosRuler cluster.
+            More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status'
           properties:
-            additionalPeers:
-              description: AdditionalPeers allows injecting a set of additional Alertmanagers
-                to peer with to form a highly available cluster.
-              items:
-                type: string
-              type: array
             affinity:
               description: If specified, the pod's scheduling constraints.
               properties:
@@ -629,26 +610,50 @@ spec:
                       type: array
                   type: object
               type: object
-            baseImage:
-              description: Base image that is used to deploy pods, without tag.
-              type: string
-            configMaps:
-              description: ConfigMaps is a list of ConfigMaps in the same namespace
-                as the Alertmanager object, which shall be mounted into the Alertmanager
-                Pods. The ConfigMaps are mounted into /etc/alertmanager/configmaps/<configmap-name>.
+            alertDropLabels:
+              description: AlertDropLabels configure the label names which should
+                be dropped in ThanosRuler alerts. If `labels` field is not provided,
+                `thanos_ruler_replica` will be dropped in alerts by default.
               items:
                 type: string
               type: array
-            configSecret:
-              description: ConfigSecret is the name of a Kubernetes Secret in the
-                same namespace as the Alertmanager object, which contains configuration
-                for this Alertmanager instance. Defaults to 'alertmanager-<alertmanager-name>'
-                The secret is mounted into /etc/alertmanager/config.
-              type: string
+            alertmanagersConfig:
+              description: Define configuration for connecting to alertmanager.  Only
+                available with thanos v0.10.0 and higher.  Maps to the `alertmanagers.config`
+                arg.
+              properties:
+                key:
+                  description: The key of the secret to select from.  Must be a valid
+                    secret key.
+                  type: string
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                  type: string
+                optional:
+                  description: Specify whether the Secret or its key must be defined
+                  type: boolean
+              required:
+              - key
+              type: object
+            alertmanagersUrl:
+              description: 'Define URLs to send alerts to Alertmanager.  For Thanos
+                v0.10.0 and higher, AlertManagersConfig should be used instead.  Note:
+                this field will be ignored if AlertManagersConfig is specified. Maps
+                to the `alertmanagers.url` arg.'
+              items:
+                type: string
+              type: array
             containers:
-              description: Containers allows injecting additional containers. This
-                is meant to allow adding an authentication proxy to an Alertmanager
-                pod.
+              description: 'Containers allows injecting additional containers or modifying
+                operator generated containers. This can be used to allow adding an
+                authentication proxy to a ThanosRuler pod or to change the behavior
+                of an operator generated container. Containers described here modify
+                an operator generated container if they share the same name and modifications
+                are done via a strategic merge patch. The current container names
+                are: `thanos-ruler` and `rules-configmap-reloader`. Overriding containers
+                is entirely outside the scope of what the maintainers will support
+                and by doing so, you accept that this behaviour may break at any time
+                without notice.'
               items:
                 description: A single application container that you want to run within
                   a pod.
@@ -1670,21 +1675,140 @@ spec:
                 - name
                 type: object
               type: array
-            externalUrl:
-              description: The external URL the Alertmanager instances will be available
-                under. This is necessary to generate correct URLs. This is necessary
-                if Alertmanager is not served from root of a DNS name.
+            enforcedNamespaceLabel:
+              description: EnforcedNamespaceLabel enforces adding a namespace label
+                of origin for each alert and metric that is user created. The label
+                value will always be the namespace of the object that is being created.
               type: string
+            evaluationInterval:
+              description: Interval between consecutive evaluations.
+              type: string
+            externalPrefix:
+              description: The external URL the Thanos Ruler instances will be available
+                under. This is necessary to generate correct URLs. This is necessary
+                if Thanos Ruler is not served from root of a DNS name.
+              type: string
+            grpcServerTlsConfig:
+              description: 'GRPCServerTLSConfig configures the gRPC server from which
+                Thanos Querier reads recorded rule data. Note: Currently only the
+                CAFile, CertFile, and KeyFile fields are supported. Maps to the ''--grpc-server-tls-*''
+                CLI args.'
+              properties:
+                ca:
+                  description: Stuct containing the CA cert to use for the targets.
+                  properties:
+                    configMap:
+                      description: ConfigMap containing data to use for the targets.
+                      properties:
+                        key:
+                          description: The key to select.
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        optional:
+                          description: Specify whether the ConfigMap or its key must
+                            be defined
+                          type: boolean
+                      required:
+                      - key
+                      type: object
+                    secret:
+                      description: Secret containing data to use for the targets.
+                      properties:
+                        key:
+                          description: The key of the secret to select from.  Must
+                            be a valid secret key.
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        optional:
+                          description: Specify whether the Secret or its key must
+                            be defined
+                          type: boolean
+                      required:
+                      - key
+                      type: object
+                  type: object
+                caFile:
+                  description: Path to the CA cert in the Prometheus container to
+                    use for the targets.
+                  type: string
+                cert:
+                  description: Struct containing the client cert file for the targets.
+                  properties:
+                    configMap:
+                      description: ConfigMap containing data to use for the targets.
+                      properties:
+                        key:
+                          description: The key to select.
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        optional:
+                          description: Specify whether the ConfigMap or its key must
+                            be defined
+                          type: boolean
+                      required:
+                      - key
+                      type: object
+                    secret:
+                      description: Secret containing data to use for the targets.
+                      properties:
+                        key:
+                          description: The key of the secret to select from.  Must
+                            be a valid secret key.
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        optional:
+                          description: Specify whether the Secret or its key must
+                            be defined
+                          type: boolean
+                      required:
+                      - key
+                      type: object
+                  type: object
+                certFile:
+                  description: Path to the client cert file in the Prometheus container
+                    for the targets.
+                  type: string
+                insecureSkipVerify:
+                  description: Disable target certificate validation.
+                  type: boolean
+                keyFile:
+                  description: Path to the client key file in the Prometheus container
+                    for the targets.
+                  type: string
+                keySecret:
+                  description: Secret containing the client key file for the targets.
+                  properties:
+                    key:
+                      description: The key of the secret to select from.  Must be
+                        a valid secret key.
+                      type: string
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                    optional:
+                      description: Specify whether the Secret or its key must be defined
+                      type: boolean
+                  required:
+                  - key
+                  type: object
+                serverName:
+                  description: Used to verify the hostname for the targets.
+                  type: string
+              type: object
             image:
-              description: Image if specified has precedence over baseImage, tag and
-                sha combinations. Specifying the version is still necessary to ensure
-                the Prometheus Operator knows what version of Alertmanager is being
-                configured.
+              description: Thanos container image URL.
               type: string
             imagePullSecrets:
               description: An optional list of references to secrets in the same namespace
-                to use for pulling prometheus and alertmanager images from registries
-                see http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
+                to use for pulling thanos images from registries see http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
               items:
                 description: LocalObjectReference contains enough information to let
                   you locate the referenced object inside the same namespace.
@@ -1697,7 +1821,7 @@ spec:
             initContainers:
               description: 'InitContainers allows adding initContainers to the pod
                 definition. Those can be used to e.g. fetch secrets for injection
-                into the Alertmanager configuration from external sources. Any errors
+                into the ThanosRuler configuration from external sources. Any errors
                 during the execution of an initContainer will lead to a restart of
                 the Pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
                 Using initContainers for any use case other then secret fetching is
@@ -2725,29 +2849,51 @@ spec:
                 - name
                 type: object
               type: array
+            labels:
+              additionalProperties:
+                type: string
+              description: Labels configure the external label pairs to ThanosRuler.
+                If not provided, default replica label `thanos_ruler_replica` will
+                be added as a label and be dropped in alerts.
+              type: object
             listenLocal:
-              description: ListenLocal makes the Alertmanager server listen on loopback,
-                so that it does not bind against the Pod IP. Note this is only for
-                the Alertmanager UI, not the gossip communication.
+              description: ListenLocal makes the Thanos ruler listen on loopback,
+                so that it does not bind against the Pod IP.
               type: boolean
             logFormat:
-              description: Log format for Alertmanager to be configured with.
+              description: Log format for ThanosRuler to be configured with.
               type: string
             logLevel:
-              description: Log level for Alertmanager to be configured with.
+              description: Log level for ThanosRuler to be configured with.
               type: string
             nodeSelector:
               additionalProperties:
                 type: string
               description: Define which Nodes the Pods are scheduled on.
               type: object
+            objectStorageConfig:
+              description: ObjectStorageConfig configures object storage in Thanos.
+              properties:
+                key:
+                  description: The key of the secret to select from.  Must be a valid
+                    secret key.
+                  type: string
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                  type: string
+                optional:
+                  description: Specify whether the Secret or its key must be defined
+                  type: boolean
+              required:
+              - key
+              type: object
             paused:
-              description: If set to true all actions on the underlaying managed objects
-                are not goint to be performed, except for delete actions.
+              description: When a ThanosRuler deployment is paused, no actions except
+                for deletion will be performed on the underlying objects.
               type: boolean
             podMetadata:
-              description: PodMetadata configures Labels and Annotations which are
-                propagated to the alertmanager pods.
+              description: PodMetadata contains Labels and Annotations gets propagated
+                to the thanos ruler pods.
               properties:
                 annotations:
                   additionalProperties:
@@ -2773,14 +2919,38 @@ spec:
             priorityClassName:
               description: Priority class assigned to the Pods
               type: string
+            queryConfig:
+              description: Define configuration for connecting to thanos query instances.
+                If this is defined, the QueryEndpoints field will be ignored. Maps
+                to the `query.config` CLI argument. Only available with thanos v0.11.0
+                and higher.
+              properties:
+                key:
+                  description: The key of the secret to select from.  Must be a valid
+                    secret key.
+                  type: string
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                  type: string
+                optional:
+                  description: Specify whether the Secret or its key must be defined
+                  type: boolean
+              required:
+              - key
+              type: object
+            queryEndpoints:
+              description: QueryEndpoints defines Thanos querier endpoints from which
+                to query metrics. Maps to the --query flag of thanos ruler.
+              items:
+                type: string
+              type: array
             replicas:
-              description: Size is the expected size of the alertmanager cluster.
-                The controller will eventually make the size of the running cluster
-                equal to the expected size.
+              description: Number of thanos ruler instances to deploy.
               format: int32
               type: integer
             resources:
-              description: Define resources requests and limits for single Pods.
+              description: Resources defines the resource requirements for single
+                Pods. If not provided, no requests/limits will be set
               properties:
                 limits:
                   additionalProperties:
@@ -2798,24 +2968,102 @@ spec:
                   type: object
               type: object
             retention:
-              description: Time duration Alertmanager shall retain data for. Default
-                is '120h', and must match the regular expression `[0-9]+(ms|s|m|h)`
-                (milliseconds seconds minutes hours).
+              description: Time duration ThanosRuler shall retain data for. Default
+                is '24h', and must match the regular expression `[0-9]+(ms|s|m|h|d|w|y)`
+                (milliseconds seconds minutes hours days weeks years).
               type: string
             routePrefix:
-              description: The route prefix Alertmanager registers HTTP handlers for.
-                This is useful, if using ExternalURL and a proxy is rewriting HTTP
-                routes of a request, and the actual ExternalURL is still true, but
-                the server serves requests under a different route prefix. For example
-                for use with `kubectl proxy`.
+              description: The route prefix ThanosRuler registers HTTP handlers for.
+                This allows thanos UI to be served on a sub-path.
               type: string
-            secrets:
-              description: Secrets is a list of Secrets in the same namespace as the
-                Alertmanager object, which shall be mounted into the Alertmanager
-                Pods. The Secrets are mounted into /etc/alertmanager/secrets/<secret-name>.
-              items:
-                type: string
-              type: array
+            ruleNamespaceSelector:
+              description: Namespaces to be selected for Rules discovery. If unspecified,
+                only the same namespace as the ThanosRuler object is in is used.
+              properties:
+                matchExpressions:
+                  description: matchExpressions is a list of label selector requirements.
+                    The requirements are ANDed.
+                  items:
+                    description: A label selector requirement is a selector that contains
+                      values, a key, and an operator that relates the key and values.
+                    properties:
+                      key:
+                        description: key is the label key that the selector applies
+                          to.
+                        type: string
+                      operator:
+                        description: operator represents a key's relationship to a
+                          set of values. Valid operators are In, NotIn, Exists and
+                          DoesNotExist.
+                        type: string
+                      values:
+                        description: values is an array of string values. If the operator
+                          is In or NotIn, the values array must be non-empty. If the
+                          operator is Exists or DoesNotExist, the values array must
+                          be empty. This array is replaced during a strategic merge
+                          patch.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                    - key
+                    - operator
+                    type: object
+                  type: array
+                matchLabels:
+                  additionalProperties:
+                    type: string
+                  description: matchLabels is a map of {key,value} pairs. A single
+                    {key,value} in the matchLabels map is equivalent to an element
+                    of matchExpressions, whose key field is "key", the operator is
+                    "In", and the values array contains only "value". The requirements
+                    are ANDed.
+                  type: object
+              type: object
+            ruleSelector:
+              description: A label selector to select which PrometheusRules to mount
+                for alerting and recording.
+              properties:
+                matchExpressions:
+                  description: matchExpressions is a list of label selector requirements.
+                    The requirements are ANDed.
+                  items:
+                    description: A label selector requirement is a selector that contains
+                      values, a key, and an operator that relates the key and values.
+                    properties:
+                      key:
+                        description: key is the label key that the selector applies
+                          to.
+                        type: string
+                      operator:
+                        description: operator represents a key's relationship to a
+                          set of values. Valid operators are In, NotIn, Exists and
+                          DoesNotExist.
+                        type: string
+                      values:
+                        description: values is an array of string values. If the operator
+                          is In or NotIn, the values array must be non-empty. If the
+                          operator is Exists or DoesNotExist, the values array must
+                          be empty. This array is replaced during a strategic merge
+                          patch.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                    - key
+                    - operator
+                    type: object
+                  type: array
+                matchLabels:
+                  additionalProperties:
+                    type: string
+                  description: matchLabels is a map of {key,value} pairs. A single
+                    {key,value} in the matchLabels map is equivalent to an element
+                    of matchExpressions, whose key field is "key", the operator is
+                    "In", and the values array contains only "value". The requirements
+                    are ANDed.
+                  type: object
+              type: object
             securityContext:
               description: SecurityContext holds pod-level security attributes and
                 common container settings. This defaults to the default PodSecurityContext.
@@ -2936,17 +3184,10 @@ spec:
               type: object
             serviceAccountName:
               description: ServiceAccountName is the name of the ServiceAccount to
-                use to run the Prometheus Pods.
-              type: string
-            sha:
-              description: SHA of Alertmanager container image to be deployed. Defaults
-                to the value of `version`. Similar to a tag, but the SHA explicitly
-                deploys an immutable container image. Version and Tag are ignored
-                if SHA is set.
+                use to run the Thanos Ruler Pods.
               type: string
             storage:
-              description: Storage is the definition of how storage will be used by
-                the Alertmanager instances.
+              description: Storage spec to specify how storage shall be used.
               properties:
                 emptyDir:
                   description: 'EmptyDirVolumeSource to be used by the Prometheus
@@ -3165,10 +3406,6 @@ spec:
                       type: object
                   type: object
               type: object
-            tag:
-              description: Tag of Alertmanager container image to be deployed. Defaults
-                to the value of `version`. Version is ignored if Tag is set.
-              type: string
             tolerations:
               description: If specified, the pod's tolerations.
               items:
@@ -3209,50 +3446,24 @@ spec:
                     type: string
                 type: object
               type: array
-            version:
-              description: Version the cluster should be on.
-              type: string
-            volumeMounts:
-              description: VolumeMounts allows configuration of additional VolumeMounts
-                on the output StatefulSet definition. VolumeMounts specified will
-                be appended to other VolumeMounts in the alertmanager container, that
-                are generated as a result of StorageSpec objects.
-              items:
-                description: VolumeMount describes a mounting of a Volume within a
-                  container.
-                properties:
-                  mountPath:
-                    description: Path within the container at which the volume should
-                      be mounted.  Must not contain ':'.
-                    type: string
-                  mountPropagation:
-                    description: mountPropagation determines how mounts are propagated
-                      from the host to container and the other way around. When not
-                      set, MountPropagationNone is used. This field is beta in 1.10.
-                    type: string
-                  name:
-                    description: This must match the Name of a Volume.
-                    type: string
-                  readOnly:
-                    description: Mounted read-only if true, read-write otherwise (false
-                      or unspecified). Defaults to false.
-                    type: boolean
-                  subPath:
-                    description: Path within the volume from which the container's
-                      volume should be mounted. Defaults to "" (volume's root).
-                    type: string
-                  subPathExpr:
-                    description: Expanded path within the volume from which the container's
-                      volume should be mounted. Behaves similarly to SubPath but environment
-                      variable references $(VAR_NAME) are expanded using the container's
-                      environment. Defaults to "" (volume's root). SubPathExpr and
-                      SubPath are mutually exclusive.
-                    type: string
-                required:
-                - mountPath
-                - name
-                type: object
-              type: array
+            tracingConfig:
+              description: TracingConfig configures tracing in Thanos. This is an
+                experimental feature, it may change in any upcoming release in a breaking
+                way.
+              properties:
+                key:
+                  description: The key of the secret to select from.  Must be a valid
+                    secret key.
+                  type: string
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                  type: string
+                optional:
+                  description: Specify whether the Secret or its key must be defined
+                  type: boolean
+              required:
+              - key
+              type: object
             volumes:
               description: Volumes allows configuration of additional volumes on the
                 output StatefulSet definition. Volumes specified will be appended
@@ -4412,32 +4623,32 @@ spec:
               type: array
           type: object
         status:
-          description: 'Most recent observed status of the Alertmanager cluster. Read-only.
-            Not included when requesting from the apiserver, only from the Prometheus
+          description: 'Most recent observed status of the ThanosRuler cluster. Read-only.
+            Not included when requesting from the apiserver, only from the ThanosRuler
             Operator API itself. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status'
           properties:
             availableReplicas:
               description: Total number of available pods (ready for at least minReadySeconds)
-                targeted by this Alertmanager cluster.
+                targeted by this ThanosRuler deployment.
               format: int32
               type: integer
             paused:
-              description: Represents whether any actions on the underlaying managed
+              description: Represents whether any actions on the underlying managed
                 objects are being performed. Only delete actions will be performed.
               type: boolean
             replicas:
-              description: Total number of non-terminated pods targeted by this Alertmanager
-                cluster (their labels match the selector).
+              description: Total number of non-terminated pods targeted by this ThanosRuler
+                deployment (their labels match the selector).
               format: int32
               type: integer
             unavailableReplicas:
-              description: Total number of unavailable pods targeted by this Alertmanager
-                cluster.
+              description: Total number of unavailable pods targeted by this ThanosRuler
+                deployment.
               format: int32
               type: integer
             updatedReplicas:
-              description: Total number of non-terminated pods targeted by this Alertmanager
-                cluster that have the desired version spec.
+              description: Total number of non-terminated pods targeted by this ThanosRuler
+                deployment that have the desired version spec.
               format: int32
               type: integer
           required:
