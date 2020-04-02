@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "rabbitmq.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "rabbitmq.name" . }}
     chart: {{ template "rabbitmq.chart" .  }}
@@ -375,4 +376,10 @@ spec:
             requests:
               storage: {{ .Values.persistence.size | quote }}
         {{ include "rabbitmq.storageClass" . }}
+        {{- if .Values.persistence.selector }}
+        selector:
+          {{- with .Values.persistence.selector -}}
+          {{ toYaml . | nindent 10 }}
+          {{- end -}}
+        {{- end -}}
   {{- end }}

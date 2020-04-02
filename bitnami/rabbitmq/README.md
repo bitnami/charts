@@ -108,6 +108,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `schedulerName`                              | Name of the k8s service (other than default)     | `nil`                                                   |
 | `persistence.storageClass`                   | Storage class of backing PVC                     | `nil` (uses alpha storage class annotation)             |
 | `persistence.existingClaim`                  | RabbitMQ data Persistent Volume existing claim name, evaluated as a template |  ""                         |
+| `persistence.selector`                       | Selector to match an existing Persistent Volume  | `nil`                                                   |
 | `persistence.accessMode`                     | Use volume as ReadOnly or ReadWrite              | `ReadWriteOnce`                                         |
 | `persistence.size`                           | Size of data volume                              | `8Gi`                                                   |
 | `persistence.path`                           | Mount path of the data volume                    | `/opt/bitnami/rabbitmq/var/lib/rabbitmq`                |

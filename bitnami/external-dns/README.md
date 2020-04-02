@@ -170,7 +170,8 @@ The following table lists the configurable parameters of the external-dns chart 
 | `service.loadBalancerSourceRanges`  | List of IP CIDRs allowed access to load balancer (if supported)                                          | `[]`                                                        |
 | `service.annotations`               | Annotations to add to service                                                                            | `{}`                                                        |
 | `rbac.create`                       | Weather to create & use RBAC resources or not                                                            | `true`                                                      |
-| `rbac.serviceAccountName`           | ServiceAccount (ignored if rbac.create == true)                                                          | `default`                                                   |
+| `rbac.serviceAccountCreate`         | Determine whether a Service Account should be created or it should reuse a exiting one.                  | `true`                                                      |
+| `rbac.serviceAccountName`           | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set     | `nil`                                                       |
 | `rbac.serviceAccountAnnotations`    | Additional Service Account annotations                                                                   | `{}`                                                        |
 | `rbac.apiVersion`                   | Version of the RBAC API                                                                                  | `v1beta1`                                                   |
 | `rbac.pspEnabled`                   | PodSecurityPolicy                                                                                        | `false`                                                     |

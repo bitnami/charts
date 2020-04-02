@@ -108,28 +108,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Get the init db configmap.
-*/}}
-{{- define "cassandra.initDbCM" -}}
-{{- if .Values.initDBConfigMap -}}
-{{- printf "%s" .Values.initDBConfigMap -}}
-{{- else -}}
-{{- printf "%s-init-scripts" (include "cassandra.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the configuration configmap.
-*/}}
-{{- define "cassandra.configurationCM" -}}
-{{- if .Values.existingConfiguration -}}
-{{- printf "%s" .Values.existingConfiguration -}}
-{{- else -}}
-{{- printf "%s-configuration" (include "cassandra.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "cassandra.imagePullSecrets" -}}

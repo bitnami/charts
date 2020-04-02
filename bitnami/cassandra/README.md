@@ -72,7 +72,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `service.type`                       | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                                  |
 | `service.port`                       | CQL Port for the Kubernetes service                                                                                                                       | `9042`                                                       |
 | `service.thriftPort`                 | Thrift Port for the Kubernetes service                                                                                                                    | `9160`                                                       |
-| `service.nodePorts.cql`             | Kubernetes CQL node port                                                                                                                                  | `""`                                                         |
+| `service.nodePorts.cql`              | Kubernetes CQL node port                                                                                                                                  | `""`                                                         |
 | `service.nodePorts.rcp`              | Kubernetes Thrift node port                                                                                                                               | `""`                                                         |
 | `service.loadBalancerIP`             | LoadBalancerIP if service type is `LoadBalancer`                                                                                                          | `nil`                                                        |
 | `service.annotations`                | Annotations for the service                                                                                                                               | {}                                                           |
@@ -83,7 +83,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `persistence.size`                   | Persistent Volume Size                                                                                                                                    | `8Gi`                                                        |
 | `tlsEncryptionSecretName`            | Secret with keystore, keystore password, truststore and truststore password                                                                               | `{}`                                                         |
 | `resources`                          | CPU/Memory resource requests/limits                                                                                                                       | `{}`                                                         |
-| `existingConfiguration`              | Pointer to a configMap that contains custom Cassandra configuration files. This will override any Cassandra configuration variable set in the chart       | `{}`                                                         |
+| `existingConfiguration`              | Pointer to a configMap that contains custom Cassandra configuration files. This will override any Cassandra configuration variable set in the chart       | `nil` (evaluated as a template)                              |
 | `cluster.name`                       | Cassandra cluster name                                                                                                                                    | `cassandra`                                                  |
 | `cluster.replicaCount`               | Number of Cassandra nodes                                                                                                                                 | `1`                                                          |
 | `cluster.seedCount`                  | Number of seed nodes (note: must be greater or equal than 1 and less or equal to `cluster.replicaCount`)                                                  | `1`                                                          |
@@ -103,7 +103,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `dbUser.forcePassword`               | Force the user to provide a non-empty password for `dbUser.user`                                                                                          | `false`                                                      |
 | `dbUser.password`                    | Password for `dbUser.user`. Randomly generated if empty                                                                                                   | (Random generated)                                           |
 | `dbUser.existingSecret`              | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                                                                  | `nil`                                                        |
-| `initDBConfigMap`                    | Configmap for initialization CQL commands (done in the first node). Useful for creating keyspaces at startup, for instance                                | `nil`                                                        |
+| `initDBConfigMap`                    | Configmap for initialization CQL commands (done in the first node). Useful for creating keyspaces at startup, for instance                                | `nil` (evaluated as a template)                              |
 | `livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                                            | `true`                                                       |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                  | `30`                                                         |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                            | `30`                                                         |
@@ -142,15 +142,15 @@ The above parameters map to the env variables defined in [bitnami/cassandra](htt
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
-  --set dbUser.user=admin,dbUser.password=password\
+helm install my-release \
+    --set dbUser.user=admin,dbUser.password=password\
     bitnami/cassandra
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/cassandra
+helm install my-release -f values.yaml bitnami/cassandra
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -168,6 +168,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Number of Cassandra and seed nodes:
+
 ```diff
 - master.replicaCount: 1
 - master.seedCount: 1
@@ -176,24 +177,28 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```
 
 - Minimum nuber of instances that must be available in the cluster:
+
 ```diff
 - cluster.minimumAvailable: 1
 + cluster.minimumAvailable: 2
 ```
 
 - Force the user to provide a non-empty password for `dbUser.user`:
+
 ```diff
 - dbUser.forcePassword: false
 + dbUser.forcePassword: true
 ```
 
 - Enable NetworkPolicy:
+
 ```diff
 - networkPolicy.enabled: false
 + networkPolicy.enabled: true
 ```
 
 - Start a side-car prometheus exporter:
+
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true
@@ -203,8 +208,8 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 You can enable TLS between client and server and between nodes. In order to do so, you need to set the following values:
 
- * For internode cluster encryption, set `cluster.internodeEncryption` to a value different from `none`. Available values are `all`, `dc` or `rack`.
- * For client-server encryption, set `cluster.clientEncryption` to true.
+- For internode cluster encryption, set `cluster.internodeEncryption` to a value different from `none`. Available values are `all`, `dc` or `rack`.
+- For client-server encryption, set `cluster.clientEncryption` to true.
 
 In addition to this, you **must** create a secret containing the *keystore* and *truststore* certificates and their corresponding protection passwords. Then, set the `tlsEncryptionSecretName`  when deploying the chart.
 
@@ -216,9 +221,19 @@ cluster.clientEncryption=true
 tlsEncryptionSecretName=cassandra-tls
 ```
 
+### Using custom configuration
+
+This helm chart supports mounting your custom configuration file(s) for Cassandra. This is done by setting the `existingConfiguration` parameter with the name of a configmap (for example, `cassandra-configuration`) that includes the custom configuration file(s):
+
+```console
+existingConfiguration=cassandra-configuration
+```
+
+> Note: this will override any other Cassandra configuration variable set in the chart.
+
 ### Initializing the database
 
-The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image allows having initialization scripts mounted in `/docker-entrypoint.initdb`. This is done in the chart by adding files in the `files/docker-entrypoint-initdb.d` folder (in order to do so, clone this chart) or by setting the `initDBConfigMap` value with a `ConfigMap` (named, for example, `init-db`) that includes the necessary `sh` or `cql` scripts:
+The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image allows having initialization scripts mounted in `/docker-entrypoint.initdb`. This is done in the chart by setting the parameter `initDBConfigMap` with the name of a configmap (for example, `init-db`) that includes the necessary `sh` or `cql` scripts:
 
 ```console
 initDBConfigMap=init-db
@@ -247,8 +262,8 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 An issue in StatefulSet manifest of the 4.x chart series rendered chart upgrades to be broken. The 5.0.0 series fixes this issue. To upgrade to the 5.x series you need to manually delete the Cassandra StatefulSet before executing the `helm upgrade` command.
 
 ```bash
-$ kubectl delete sts -l release=<RELEASE_NAME>
-$ helm upgrade <RELEASE_NAME> ...
+kubectl delete sts -l release=<RELEASE_NAME>
+helm upgrade <RELEASE_NAME> ...
 ```
 
 ### 4.0.0

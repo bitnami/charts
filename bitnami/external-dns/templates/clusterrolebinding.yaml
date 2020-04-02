@@ -9,7 +9,7 @@ roleRef:
   kind: ClusterRole
   name: {{ template "external-dns.fullname" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ template "external-dns.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ template "external-dns.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
 {{- end }}
