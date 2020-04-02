@@ -1,9 +1,0 @@
-{{ if and (.Files.Glob "files/conf/*") (not .Values.existingConfiguration) }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "cassandra.fullname" . }}-configuration
-  labels: {{- include "cassandra.labels" . | nindent 4 }}
-data:
-{{ (.Files.Glob "files/conf/*").AsConfig | indent 2 }}
-{{ end }}

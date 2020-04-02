@@ -67,30 +67,30 @@ spec:
             - name: PGPOOL_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
-            - name: PGPOOL_LDAP_URI
+            - name: LDAP_URI
               value: {{ .Values.ldap.uri | quote }}
-            - name: PGPOOL_LDAP_BASE
+            - name: LDAP_BASE
               value: {{ .Values.ldap.base | quote }}
-            - name: PGPOOL_LDAP_BIND_DN
+            - name: LDAP_BIND_DN
               value: {{ .Values.ldap.binddn | quote }}
-            - name: PGPOOL_LDAP_BIND_PASSWORD
+            - name: LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql-ha.ldapSecretName" . }}
                   key: bind-password
             {{- if .Values.ldap.bslookup }}
-            - name: PGPOOL_LDAP_BASE_LOOKUP
+            - name: LDAP_BASE_LOOKUP
               value: {{ .Values.ldap.bslookup | quote }}
             {{- end }}
             {{- if .Values.ldap.scope }}
-            - name: PGPOOL_LDAP_SCOPE
+            - name: LDAP_SCOPE
               value: {{ .Values.ldap.scope | quote }}
             {{- end }}
             {{- if .Values.ldap.tlsReqcert }}
-            - name: PGPOOL_LDAP_TLS_REQCERT
+            - name: LDAP_TLS_REQCERT
               value: {{ .Values.ldap.tlsReqcert | quote }}
             {{- end }}
-            - name: PGPOOL_LDAP_NSS_INITGROUPS_IGNOREUSERS
+            - name: LDAP_NSS_INITGROUPS_IGNOREUSERS
               value: {{ .Values.ldap.nssInitgroupsIgnoreusers | quote }}
             {{- end }}
             - name: PGPOOL_POSTGRES_USERNAME
@@ -149,7 +149,7 @@ spec:
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if or (.Files.Glob "files/pgool.conf") .Values.pgpool.configuration }}
+            {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration }}
             - name: pgpool-config
               mountPath: /opt/bitnami/pgpool/conf/
             {{- end }}
@@ -166,7 +166,7 @@ spec:
               mountPath: /opt/bitnami/pgpool/secrets/
             {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/pgool.conf") .Values.pgpool.configuration }}
+        {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration }}
         - name: pgpool-config
           configMap:
             name: {{ include "postgresql-ha.pgpoolConfigurationCM" . }}

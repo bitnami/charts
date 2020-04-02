@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.7.0-debian-10-r42
+  tag: 11.7.0-debian-10-r61
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.1-debian-10-r32
+  tag: 4.1.1-debian-10-r41
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r55
+  tag: 0.8.0-debian-10-r63
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -314,8 +314,8 @@ pgpool:
   ##
   securityContext:
     enabled: true
-    fsGroup: 0
-    runAsUser: 0
+    fsGroup: 1001
+    runAsUser: 1001
 
   ## Pgpool containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

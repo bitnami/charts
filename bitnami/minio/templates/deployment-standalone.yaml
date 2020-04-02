@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "minio.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "minio.labels" . | nindent 4 }}
 spec:
   {{- if .Values.deployment.updateStrategy }}

@@ -26,6 +26,7 @@ spec:
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
     spec:
+      serviceAccountName: {{ template "grafana.serviceAccountName" . }}
 {{- include "grafana.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}

@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.0.2-debian-10-r0
+  tag: 5.0.2-debian-10-r14
   ## Specify a imagePullPolicy
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -103,34 +103,56 @@ ingress:
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   ##
   hosts:
-  - name: phpmyadmin.local
+    - name: phpmyadmin.local
+      path: /
+
+      ## Set this to true in order to enable TLS on the ingress record
+      tls: false
+
+      ## Optionally specify the TLS hosts for the ingress record
+      ## Useful when the Ingress controller supports www-redirection
+      ## If not specified, the above host name will be used
+      # tlsHosts:
+      # - www.phpmyadmin.local
+      # - phpmyadmin.local
+
+      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+      tlsSecret: phpmyadmin.local-tls
+
+## PhpMyAdmin containers' liveness and readiness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+livenessProbe:
+  # initialDelaySeconds: 30
+  # timeoutSeconds: 30
+  # periodSeconds: 10
+  # successThreshold: 1
+  # failureThreshold: 6
+  httpGet:
     path: /
+    port: http
+readinessProbe:
+  # initialDelaySeconds: 30
+  # timeoutSeconds: 30
+  # periodSeconds: 10
+  # successThreshold: 1
+  # failureThreshold: 6
+  httpGet:
+    path: /
+    port: http
 
-    ## Set this to true in order to enable TLS on the ingress record
-    tls: false
-
-    ## Optionally specify the TLS hosts for the ingress record
-    ## Useful when the Ingress controller supports www-redirection
-    ## If not specified, the above host name will be used
-    # tlsHosts:
-    # - www.phpmyadmin.local
-    # - phpmyadmin.local
-
-    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-    tlsSecret: phpmyadmin.local-tls
-
-## Enable liveness and readiness probes
-probesEnabled: true
-
-resources: {}
+## PhpMyAdmin containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources
+##
+resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
+  limits: {}
   #  cpu: 100m
   #  memory: 128Mi
-  # requests:
+  requests: {}
   #  cpu: 100m
   #  memory: 128Mi
 
@@ -162,7 +184,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.7.0-debian-10-r54
+    tag: 0.7.0-debian-10-r66
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -170,11 +192,12 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-     ## Metrics exporter pod Annotation and Labels
+  ## Metrics exporter pod Annotation and Labels
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  # resources: {}
+  resources: {}
