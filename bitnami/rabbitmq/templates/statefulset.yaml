@@ -376,4 +376,10 @@ spec:
             requests:
               storage: {{ .Values.persistence.size | quote }}
         {{ include "rabbitmq.storageClass" . }}
+        {{- if .Values.persistence.selector }}
+        selector:
+          {{- with .Values.persistence.selector -}}
+          {{ toYaml . | nindent 10 }}
+          {{- end -}}
+        {{- end -}}
   {{- end }}
