@@ -145,6 +145,11 @@ postgresql:
   ##
   nodeSelector: {}
 
+  ## Pod priority class
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
   ## Tolerations for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -303,6 +308,11 @@ pgpool:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
+
+  ## Pod priority class
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
 
   ## Tolerations for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
