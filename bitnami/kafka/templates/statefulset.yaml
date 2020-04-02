@@ -294,6 +294,8 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: data
+              mountPath: /bitnami/kafka
             {{- if or .Values.config .Values.existingConfigmap }}
             - name: kafka-config
               mountPath: /opt/bitnami/kafka/conf/server.properties
@@ -305,10 +307,6 @@ spec:
             {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
             - name: shared
               mountPath: /shared
-            {{- end }}
-            {{- if .Values.persistence.enabled }}
-            - name: data
-              mountPath: /bitnami/kafka
             {{- end }}
             {{- if .Values.auth.ssl }}
             - name: kafka-certificates
