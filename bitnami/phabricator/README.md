@@ -200,6 +200,21 @@ phabricatorHost=example.com
 
 Everything looks great but requests over https will cause asset requests to fail. Assuming you want to use HTTPS/TLS you will need to set the base-uri to an https schema.
 
+### Using an external database
+
+Sometimes you may want to have Phabricator connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [`externalDatabase` parameter](#parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. For example with the following parameters:
+
+```console
+mariadb.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.rootUser=myuser
+externalDatabase.rootPassword=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=3306
+```
+
+Note also if you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
+
 ## Persistence
 
 The [Bitnami Phabricator](https://github.com/bitnami/bitnami-docker-phabricator) image stores the Phabricator data and configurations at the `/bitnami/phabricator` path of the container.
