@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - Kubernetes 1.12+
 - Helm 2.16+ or Helm 3.0-beta3+
 
-## Helpers
+## Parameters
 
 The following table lists the helpers available in the library which are scoped in different sections.
 
