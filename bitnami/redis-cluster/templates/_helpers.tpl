@@ -293,19 +293,6 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 
 {{/*
-Renders a value that contains template.
-Usage:
-{{ include "redis-cluster.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "redis-cluster.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
-{{- end -}}
-
-{{/*
 Determines whether or not to create the Statefulset
 */}}
 {{- define "redis-cluster.createStatefulSet" -}}

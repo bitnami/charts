@@ -1377,5 +1377,5 @@ data:
     # the main dictionary scan
     # active-defrag-max-scan-fields 1000
 {{- if .Values.configmap }}
-{{- include "redis-cluster.tplValue" (dict "value" .Values.configmap "context" $) | nindent 4 }}
+{{- include "common.tplValues.render" (dict "value" .Values.configmap "context" $) | nindent 4 }}
 {{- end }}

@@ -22,6 +22,10 @@ To connect to your Redis server from outside the cluster check the following inf
     helm upgrade {{ .Release.Name }} --set "cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer{{- $root := . }}{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }},cluster.externalAccess.service.loadBalancerIP[{{ $i }}]=load-balancerip-{{- $i }}{{- end }}" bitnami/redis
     Where loadbalancer-ip-i are the LoadBalancerIPs provided by the cluster.
     {{- else -}}
+    {{- if .Values.cluster.init -}}
+    INFO: The Job to create the cluster will be created.
+    {{- end -}}
+
     To connect to your database from outside the cluster execute the following commands:
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "redis-cluster.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
@@ -31,6 +35,11 @@ To connect to your Redis server from outside the cluster check the following inf
 {{- else }}
 
 You have deployed a Redis Cluster accessible only from within you Kubernetes Cluster.
+
+{{- if .Values.cluster.init -}}
+INFO: The Job to create the cluster will be created.
+{{- end -}}
+
 To connect to your Redis cluster:
 
 1. Run a Redis pod that you can use as a client:

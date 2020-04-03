@@ -1,9 +1,11 @@
-{{- if or (and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP) ( not .Values.cluster.externalAccess.enabled ) }}
+{{- if and .Values.cluster.init (or (and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP) ( not .Values.cluster.externalAccess.enabled )) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ template "redis-cluster.fullname" . }}-cluster-create
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
 spec:
   activeDeadlineSeconds: {{ .Values.cluster.initTimeout }}
   template:

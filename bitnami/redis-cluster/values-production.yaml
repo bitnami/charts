@@ -14,11 +14,11 @@ global:
 ##
 image:
   registry: docker.io
-  repository: bitnami/redis
+  repository: bitnami/redis-cluster
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 5.0.7-debian-10-r48
+  tag: 5.0.8-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,16 +39,24 @@ image:
 ##
 # fullnameOverride:
 
-## Cluster settings
+## Redis Cluster settings
+##
 cluster:
-  # Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
+  ## Enable the creation of a Job that will execute the proper command to create the Redis Cluster.
+  ##
+  init: true
+  ## Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
+  ##
   activeDeadlineSeconds: 600
-  # Number of Redis nodes to be deployed
+  ## Number of Redis nodes to be deployed
+  ##
   nodes: 6
-  # Parameter to be passed as --cluster-replicas to the redic-cli --cluster create
-  # 1 means that we want a replica for every master created
+  ## Parameter to be passed as --cluster-replicas to the redic-cli --cluster create
+  ## 1 means that we want a replica for every master created
+  ##
   replicas: 1
-  # The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
+  ## The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
+  ##
   busPort: 16379
 
   ## Configuration to access the Redis Cluster from outside the Kubernetes cluster
@@ -66,6 +74,20 @@ cluster:
       loadBalancerIP: []
       ## Service annotations done as key:value pairs
       annotations: {}
+
+  ## This section allows to update the Redis cluster nodes.
+  ##
+  update:
+    ## Setting this to true a hook will add nodes to the Redis cluster after the upgrade.
+    ## currentNumberOfNodes is required
+    ##
+    addNodes: false
+    ## Set to the number of nodes that are already deployed
+    ##
+    currentNumberOfNodes: 6
+    ## When using external access set the new externalIPs here as an array
+    ##
+    newExternalIPs: []
 
 ## Specifies the Kubernetes Cluster's Domain Name.
 ##
@@ -150,11 +172,13 @@ redisPort: 6379
 ## Redis parameters
 ##
 
-## Redis command arguments
+## Custom command to override image cmd
 ##
-## Can be used to specify command line arguments, for example:
-##
-command: "/run.sh"
+# command: []
+
+## Custom args for the cutom commad:
+# args: []
+
 ## Additional Redis configuration for the nodes
 ## ref: https://redis.io/topics/config
 ##
@@ -213,14 +237,7 @@ affinity: {}
 
 ## Redis Service properties for standalone mode.
 service:
-  ##  Redis Service type
-  type: ClusterIP
   port: 6379
-
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ##
-  # nodePort:
 
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
@@ -228,8 +245,6 @@ service:
   ##
   annotations: {}
   labels: {}
-  loadBalancerIP:
-  # loadBalancerSourceRanges: ["10.0.0.0/8"]
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -420,3 +435,27 @@ podSecurityPolicy:
   ## Specifies whether a PodSecurityPolicy should be created
   ##
   create: false
+
+## Array to add extra volumes
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes)
+##
+extraVolumeMounts: []
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: MY_ENV_VAR
+##    value: env_var_value
+##
+extraEnvVars: []
+
+## Name of a ConfigMap containing extra env vars
+##
+extraEnvVarsConfigMap:
+
+## Name of a Secret containing extra env vars
+##
+extraEnvVarsSecret:

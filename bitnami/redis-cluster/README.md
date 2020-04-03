@@ -7,12 +7,12 @@
 
 ```bash
 # Testing configuration
-$ helm install my-release stable/redis
+$ helm install my-release bitnami/redis-cluster
 ```
 
 ```bash
 # Production configuration
-$ helm install my-release stable/redis --values values-production.yaml
+$ helm install my-release bitnami/redis-cluster --values values-production.yaml
 ```
 
 ## Introduction
@@ -32,10 +32,16 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release stable/redis
+$ helm install my-release bitnami/redis-cluster
 ```
 
 The command deploys Redis on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+NOTE: if you get a timeout error waiting for the hook to complete increase the default timeout (300s) to a higher one, for example:
+
+```
+helm install --timeout 600s myrelease bitnami/redis-cluster
+```
 
 > **Tip**: List all releases using `helm list`
 
@@ -66,6 +72,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `nil`                                                   |
 | `nameOverride`                                | String to partially override redis.fullname template with a string (will prepend the release name)                                                  | `nil`                                                   |
 | `fullnameOverride`                            | String to fully override redis.fullname template with a string                                                                                      | `nil`                                                   |
+| `cluster.init`                                | Enable the creation of a job that initializes the Redis Cluster | `true`                                                  |
 | `cluster.activeDeadlineSeconds`               | Number of seconds that the job to create the cluster will be waiting for the nodes to be ready                                                      | `600`                                                   |
 | `cluster.nodes`                               | Number of nodes in the Redis cluster                                                                                                                | `6`                                                     |
 | `cluster.replicas`                            | Number of replicas for every master in the cluster                                                                                                  | `1`                                                     |
@@ -75,6 +82,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `cluster.externalAccess.service.port`         | Port for the services used to expose every Pod                                                                                                      | `6379`                                                  |
 | `cluster.externalAccess.service.loadBalancerIP` | Array of LoadBalancer IPs used to expose every Pod of the Redis cluster when `cluster.externalAccess.service.type` is `LoadBalancer`              | `[]`                                                    |
 | `cluster.externalAccess.service.annotations`  | Annotations to add to the services used to expose every Pod of the Redis Cluster                                                                    | `{}`                                                    |
+| `cluster.update.addNodes`                      | Boolean to specify if you want to add nodes after the upgrade | `false`                                                 |
+| `cluster.update.currentNumberOfNodes`         | Number of currently deployed Redis  nodes                         | `6`                                                     |
 | `existingSecret`                              | Name of existing secret object (for password authentication)                                                                                        | `nil`                                                   |
 | `existingSecretPasswordKey`                   | Name of key containing password to be retrieved from the existing secret                                                                            | `nil`                                                   |
 | `usePassword`                                 | Use password                                                                                                                                        | `true`                                                  |
@@ -91,23 +100,23 @@ The following table lists the configurable parameters of the Redis chart and the
 | `securityContext.runAsUser`                   | User ID for the container.                                                                                                                          | `1001`                                                  |
 | `securityContext.sysctls`                     | Set namespaced sysctls for the container.                                                                                                           | `nil`                                                   |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                | `false`                                                 |
-| `serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                                            | Generated using the fullname template                   |
+| `serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                                            | Generated using the fullname template                                   |
 | `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                  | `false`                                                 |
 | `rbac.role.rules`                             | Rules to create                                                                                                                                     | `[]`                                                    |
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                                                                                | `false`                                                 |
 | `metrics.image.registry`                      | Redis exporter image registry                                                                                                                       | `docker.io`                                             |
-| `metrics.image.repository`                    | Redis exporter image name                                                                                                                           | `bitnami/redis-exporter`                                |
+| `metrics.image.repository`                    | Redis exporter image name                                                                                                                           | `bitnami/redis-exporter`                                               |
 | `metrics.image.tag`                           | Redis exporter image tag                                                                                                                            | `{TAG_NAME}`                                            |
 | `metrics.image.pullPolicy`                    | Image pull policy                                                                                                                                   | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                    | `nil`                                                   |
 | `metrics.extraArgs`                           | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter#flags)                                           | {}                                                      |
 | `metrics.podLabels`                           | Additional labels for Metrics exporter pod                                                                                                          | {}                                                      |
 | `metrics.podAnnotations`                      | Additional annotations for Metrics exporter pod                                                                                                     | {}                                                      |
-| `metrics.resources`                           | Exporter resource requests/limit                                                                                                                    | Memory: `256Mi`, CPU: `100m`                            |
+| `metrics.resources`                           | Exporter resource requests/limit                                                                                                                    | Memory: `256Mi`, CPU: `100m`                                             |
 | `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                              | `false`                                                 |
 | `metrics.serviceMonitor.namespace`            | Optional namespace which Prometheus is running in                                                                                                   | `nil`                                                   |
 | `metrics.serviceMonitor.interval`             | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                              | `nil`                                                   |
-| `metrics.serviceMonitor.selector`             | Default to kube-prometheus install (CoreOS recommended), but should be set according to Prometheus install                                          | `{ prometheus: kube-prometheus }`                       |
+| `metrics.serviceMonitor.selector`             | Default to kube-prometheus install (CoreOS recommended), but should be set according to Prometheus install                                          | `{ prometheus: kube-prometheus }`                                      |
 | `metrics.service.type`                        | Kubernetes Service type (redis metrics)                                                                                                             | `ClusterIP`                                             |
 | `metrics.service.annotations`                 | Annotations for the services to monitor.                                                                                                            | {}                                                      |
 | `metrics.service.labels`                      | Additional labels for the metrics service                                                                                                           | {}                                                      |
@@ -115,7 +124,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `metrics.priorityClassName`                   | Metrics exporter pod priorityClassName                                                                                                              | {}                                                      |
 | `metrics.prometheusRule.enabled`              | Set this to true to create prometheusRules for Prometheus operator                                                                                  | `false`                                                 |
 | `metrics.prometheusRule.additionalLabels`     | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                              | `{}`                                                    |
-| `metrics.prometheusRule.namespace`            | namespace where prometheusRules resource should be created                                                                                          | Same namespace as redis                                 |
+| `metrics.prometheusRule.namespace`            | namespace where prometheusRules resource should be created                                                                                          | Same namespace as redis                                                   |
 | `metrics.prometheusRule.rules`                | [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.                     | `[]`                                                    |
 | `persistence.existingClaim`                   | Provide an existing PersistentVolumeClaim                                                                                                           | `nil`                                                   |
 | `persistence.enabled`                         | Use a PVC to persist data.                                                                                                                          | `true`                                                  |
@@ -131,7 +140,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `podLabels`                                   | Additional labels for Redis pod                                                                                                                     | {}                                                      |
 | `podAnnotations`                              | Additional annotations for Redis pod                                                                                                                | {}                                                      |
 | `redisPort`                                   | Redis port.                                                                                                                                         | `6379`                                                  |
-| `command`                                     | Redis entrypoint string. The command `redis-server` is executed if this is not provided.                                                            | `/run.sh`                                               |
+| `command`                                     | Redis entrypoint string. The command `redis-server` is executed if this is not provided.                                                            | `nil`                                                   |
+| `args`                                        | Arguments for the provided command if needed                                                                                                        |              `nil`                                                   |
 | `configmap`                                   | Additional Redis configuration for the nodes (this value is evaluated as a template)                                                                | `nil`                                                   |
 | `extraFlags`                                  | Redis additional command line flags                                                                                                                 | []                                                      |
 | `nodeSelector`                                | Redis Node labels for pod assignment                                                                                                                | {"beta.kubernetes.io/arch": "amd64"}                    |
@@ -141,7 +151,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `service.port`                                | Kubernetes Service port.                                                                                                                            | `6379`                                                  |
 | `service.annotations`                         | annotations for redis service                                                                                                                       | {}                                                      |
 | `service.labels`                              | Additional labels for redis service                                                                                                                 | {}                                                      |
-| `resources`                                   | Redis CPU/Memory resource requests/limits                                                                                                           | Memory: `256Mi`, CPU: `100m`                            |
+| `resources`                                   | Redis CPU/Memory resource requests/limits                                                                                                           | Memory: `256Mi`, CPU: `100m`                                             |
 | `livenessProbe.enabled`                       | Turn on and off liveness probe.                                                                                                                     | `true`                                                  |
 | `livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated.                                                                                                           | `30`                                                    |
 | `livenessProbe.periodSeconds`                 | How often to perform the probe.                                                                                                                     | `30`                                                    |
@@ -157,14 +167,19 @@ The following table lists the configurable parameters of the Redis chart and the
 | `priorityClassName`                           | Redis Master pod priorityClassName                                                                                                                  | {}                                                      |
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`                                             |
-| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                                        | `bitnami/minideb`                                       |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                                        | `bitnami/minideb`                                                |
 | `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `buster`                                                |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `Always`                                                |
 | `volumePermissions.resources`                 | Init container volume-permissions CPU/Memory resource requests/limits                                                                               | {}                                                      |
+| `extraVolumes`                                | Array of extra volumes to be added to all pods (evaluated as a template). Requires setting `extraVolumeMounts`                                      | `[]`                                                    |
+| `extraVolumeMounts`                           | Array of extra volume mounts to be added to all pods (evaluated as a template). Normally used with `extraVolumes`                                   | `[]`                                                    |
+| `extraEnvVars`                                | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                                                    |
+| `extraEnvVarsConfigMap`                       | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `nil`                                                   |
+| `extraEnvVarsSecret`                          | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `nil`                                                   |
 | `sysctlImage.enabled`                         | Enable an init container to modify Kernel settings                                                                                                  | `false`                                                 |
 | `sysctlImage.command`                         | sysctlImage command to execute                                                                                                                      | []                                                      |
 | `sysctlImage.registry`                        | sysctlImage Init container registry                                                                                                                 | `docker.io`                                             |
-| `sysctlImage.repository`                      | sysctlImage Init container name                                                                                                                     | `bitnami/minideb`                                       |
+| `sysctlImage.repository`                      | sysctlImage Init container name                                                                                                                     | `bitnami/minideb`                                                |
 | `sysctlImage.tag`                             | sysctlImage Init container tag                                                                                                                      | `buster`                                                |
 | `sysctlImage.pullPolicy`                      | sysctlImage Init container pull policy                                                                                                              | `Always`                                                |
 | `sysctlImage.mountHostSys`                    | Mount the host `/sys` folder to `/host-sys`                                                                                                         | `false`                                                 |
@@ -176,7 +191,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set password=secretpassword \
-    stable/redis
+    bitnami/redis-cluster
 ```
 
 The above command sets the Redis server password to `secretpassword`.
@@ -184,7 +199,7 @@ The above command sets the Redis server password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml stable/redis
+$ helm install my-release -f values.yaml bitnami/redis-cluster
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -221,13 +236,66 @@ The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default
 
 The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the master node. For example, using `redis-cli` you will need to provide the `-c` flag for `redis-cli` to follow the redirection automatically.
 
-Using the external access mode, you can connect to any of the pods and the slaves will redirect the client in the same way as exaplined before, but the all the IPs will be public.
+Using the external access mode, you can connect to any of the pods and the slaves will redirect the client in the same way as explained before, but the all the IPs will be public.
 
 In case the master crashes, one of his slaves will be promoted to master. The slots stored by the crashed master will be unavailable until the slave finish the promotion. If a master and all his slaves crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Redis nodes with `cluster.nodes` and the number of replicas that will be assigned to each master with `cluster.replicas`. For example:
   - `cluster.nodes=9` ( 3 master plus 2 replicas for each master)
   - `cluster.replicas=2`
 
 Providing the values above, the cluster will have 3 masters and, each master, will have 2 replicas.
+
+> NOTE: By default `cluster.init` will be set to `true` in order to create initialize the Redis Cluster in the first installation. If for testing purpose you only want to deploy the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
+
+#### Adding a new node to the cluster
+
+There is a job that will be executed using a `post-upgrade` hook that will allow you to add a new node. To use it, you should provide some parameters to the upgrade:
+
+- Pass as `password` the password used in the installation time. If you did not provide a password follow the intructions from the NOTES.txt to get the generated password.
+- Set the desired number of nodes at `cluster.nodes`.
+- Set the number of current nodes at `cluster.update.currentNumberOfNodes`.
+- Set to true `cluster.update.addNodes`.
+
+The following will be an example to add one more node:
+
+```
+helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=7,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" .
+```
+
+Where `REDIS_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
+The cluster will continue up while restarting pods one by one as the quorum is not lost.
+
+##### External Access
+
+If you are using external access, to add a new node you will need to perform two upgrades. First upgrade the release to add a new Redis node and to get a LoadBalancerIP service. For example:
+
+```
+helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false bitnami/redis-cluster
+```
+
+As we want to add a new node, we are setting `cluster.nodes=7` and we leave empty the LoadBalancerIP for the new node, so the cluster will provide the correct one.
+`REDIS_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
+At this point, you will have a new Redis Pod that will remain in `crashLoopBackOff` state until we provide the LoadBalancerIP for the new service.
+Now, wait until the cluster provides the new LoadBalancerIP for the new service and perform the second upgrade:
+
+```
+helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadbalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalancerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=<loadbalancerip-6>,cluster.nodes=7,cluster.init=false,cluster.update.addNodes=true,cluster.update.newExternalIPs[0]=52.186.44.47" bitnami/redis-cluster
+```
+
+Note we are providing the new IPs at `cluster.update.newExternalIPs`, the flag `cluster.update.addNodes=true` to enable the creation of the Job that adds a new node and now we are setting the LoadBalancerIP of the new service instead of leave it empty.
+
+> NOTE: To avoid the creation of the Job that initializes the Redis Cluster again, you will need to provide `cluster.init=false`.
+
+#### Scale down the cluster
+
+To scale down the redis cluster just perform a normal upgrade setting the `cluster.nodes` to desired number of nodes. It should be not less than `6`. Also it is needed to provide the password as `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
+
+```
+helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=6" .
+```
+
+The cluster will continue working during the update as long as the quorum is not lost.
+
+> NOTE: To avoid the creation of the Job that initializes the Redis Cluster again, you will need to provide `cluster.init=false`.
 
 ### Using password file
 To use a password file for Redis you need to create a secret containing the password.
@@ -285,7 +353,7 @@ By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/use
 3. Install the chart
 
 ```bash
-$ helm install my-release --set persistence.existingClaim=PVC_NAME stable/redis
+$ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/redis-cluster
 ```
 
 ## NetworkPolicy

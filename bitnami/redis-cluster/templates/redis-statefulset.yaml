@@ -65,6 +65,13 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if and (not .Values.command) (not .Values.args) }}
           {{- if .Values.cluster.externalAccess.enabled }}
           command: ['/bin/bash', '-c']
           args:
@@ -75,6 +82,7 @@ spec:
               export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$podIndex]}"
               export REDIS_NODES="${ips[@]}"
               /entrypoint.sh /run.sh
+          {{- end }}
           {{- end }}
           env:
             {{- if .Values.cluster.externalAccess.enabled }}
@@ -110,6 +118,20 @@ spec:
             {{- end }}
             - name: REDIS_PORT
               value: {{ .Values.redisPort | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 8 }}
+            {{- end }}
+            {{- if or .Values.extraEnvVarsConfigMap .Values.extraEnvVarsSecret }}
+            envFrom:
+              {{- if .Values.extraEnvVarsConfigMap }}
+              - configMapRef:
+                  name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsConfigMap "context" $ ) }}
+              {{- end }}
+              {{- if .Values.extraEnvVarsSecret }}
+              - secretRef:
+                  name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+              {{- end }}
+              {{- end }}
           ports:
             - name: tcp-redis
               containerPort: {{ .Values.redisPort }}
@@ -143,7 +165,7 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources:
-          {{- include "redis-cluster.tplValue" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -160,6 +182,9 @@ spec:
               subPath: redis-default.conf
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc/
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 8 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "redis-cluster.metrics.image" . }}
@@ -261,6 +286,9 @@ spec:
         {{- end }}
         - name: redis-tmp-conf
           emptyDir: {}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 6 }}
+        {{- end }}
   {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:
     - metadata:
