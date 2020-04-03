@@ -112,6 +112,9 @@ service:
   # loadBalancerSourceRanges:
   # - 10.10.10.0/24
 
+  # Add the `prometheus.io/scrape: "true"` annotation to the service
+  addPrometheusScrapeAnnotation: true
+
   ## Provide any additional service annotations
   ##
   annotations: {}
