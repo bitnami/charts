@@ -222,7 +222,12 @@ serviceMonitor:
   # selector:
   #   prometheus: my-prometheus
 
-  ## Metric relabeling
+  ## RelabelConfigs to apply to samples before scraping
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+  ##
+  # relabelings: []
+
+  ## MetricRelabelConfigs to apply to samples before ingestion
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
   # metricRelabelings: []
