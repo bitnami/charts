@@ -382,9 +382,6 @@ livenessProbe:
   successThreshold: 1
   commandOverride: []
 
-
-
-
 readinessProbe:
   enabled: true
   initialDelaySeconds: 10
