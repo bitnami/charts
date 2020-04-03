@@ -84,6 +84,7 @@ spec:
         resources: {{- toYaml .Values.speaker.resources | nindent 10 }}
       {{- end }}
         securityContext:
+          runAsUser: 0
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities:
