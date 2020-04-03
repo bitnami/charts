@@ -195,7 +195,7 @@ spec:
               subPath: mongodb.conf
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-  {{ toYaml .Values.extraVolumeMounts | indent 8}}
+  {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
           resources:
   {{- toYaml .Values.resources | nindent 12 }}
