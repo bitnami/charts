@@ -6,9 +6,9 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 
 ```yaml
 dependencies:
-- name: common
-  version: 0.1.0
-  repository: https://charts.bitnami.com/bitnami
+  - name: common
+    version: 0.1.0
+    repository: https://charts.bitnami.com/bitnami
 ```
 
 ```bash
@@ -23,9 +23,10 @@ metadata:
 data:
   myvalue: "Hello World"
 ```
+
 ## Introduction
 
-This chart provide a common template helpers which can be used to develop new charts using [Helm](https://helm.sh) package manager.
+This chart provides a common template helpers which can be used to develop new charts using [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -33,8 +34,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 - Kubernetes 1.12+
 - Helm 2.16+ or Helm 3.0-beta3+
-- PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Helpers
 
@@ -44,8 +43,8 @@ The following table lists the helpers available in the library which are scoped 
 | Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
 |---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `common.names.name`                         | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context                                                                                                                                        |
-| `common.names.chart`                        | Chart name plus version                                    | `.` Chart context                                                                                                                                        |
 | `common.names.fullname`                     | Create a default fully qualified app name.                 | `.` Chart context                                                                                                                                        |
+| `common.names.chart`                        | Chart name plus version                                    | `.` Chart context                                                                                                                                        |
 
 **Images**
 | Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
@@ -73,7 +72,6 @@ The following table lists the helpers available in the library which are scoped 
 | Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
 |---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `common.capabilities.deployment.apiVersion` | Return the appropriate apiVersion for deployment.          | `.` Chart context                                                                                                                                        |
-
 
 ## Special input schemas
 
