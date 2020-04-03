@@ -103,8 +103,8 @@ The following table lists the configurable parameters of the external-dns chart 
 | `designate.customCA.filename`       | When using the Designate provider, set the custom CA configuration filename                              | "designate-ca.pem"                                          |
 | `designate.customCAHostPath`        | When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled` | `none`            |
 | `designate.password`                | When using the Designate provider, specify the OpenStack authentication password. (optional)             | `none`                                                      |
-| `designate.projectName              | When using the Designate provider, specify the OpenStack project name. (optional)                        | `none`                                                      |
-| `designate.regionName               | When using the Designate provider, specify the OpenStack region name. (optional)                         | `none`                                                      |
+| `designate.projectName`              | When using the Designate provider, specify the OpenStack project name. (optional)                        | `none`                                                      |
+| `designate.regionName`               | When using the Designate provider, specify the OpenStack region name. (optional)                         | `none`                                                      |
 | `designate.userDomainName`          | When using the Designate provider, specify the OpenStack user domain name. (optional)                    | `none`                                                      |
 | `designate.username`                | When using the Designate provider, specify the OpenStack authentication username. (optional)             | `none`                                                      |
 | `digitalocean.apiToken`             | When using the DigitalOcean provider, `DO_TOKEN` to set (optional)                                       | `""`                                                        |
@@ -156,7 +156,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `nodeSelector`                      | Node labels for pod assignment (this value is evaluated as a template)                                   | `{}`                                                        |
 | `tolerations`                       | Tolerations for pod assignment (this value is evaluated as a template)                                   | `[]`                                                        |
 | `podAnnotations`                    | Additional annotations to apply to the pod.                                                              | `{}`                                                        |
-| `podLabels`                         | Additional labels to be added to pods                                                                    | {}                                                          |
+| `podLabels`                         | Additional labels to be added to pods                                                                    | `{}`                                                          |
 | `podSecurityContext.fsGroup`        | Group ID for the container                                                                               | `1001`                                                      |
 | `podSecurityContext.runAsUser`      | User ID for the container                                                                                | `1001`                                                      |
 | `priorityClassName`                 | priorityClassName                                                                                        | `""`                                                        |

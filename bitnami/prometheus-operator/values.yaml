@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.38.0-debian-10-r15
+    tag: 0.38.0-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -468,6 +468,12 @@ prometheus:
   ## Maximum size of metrics
   ##
   retentionSize: ""
+
+  ## Disable the compaction of the Prometheus TSDB
+  ## See https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ## ref: https://prometheus.io/docs/prometheus/latest/storage/#compaction
+  ##
+  disableCompaction: false
 
   ## Enable compression of the write-ahead log using Snappy.
   ##
