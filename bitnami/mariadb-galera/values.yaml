@@ -178,13 +178,13 @@ ldap:
   scope:
   tls_reqcert:
 
-## TSL configuration
+## TLS configuration
 ##
-tsl:
+tls:
   ## Replicaction traffic
   ##
   rt:
-    ## Enable TSL for replication traffic
+    ## Enable TLS for replication traffic
     ##
     enabled: false
     ## Name of the secret that contains the certificates
