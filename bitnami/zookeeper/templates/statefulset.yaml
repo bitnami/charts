@@ -146,7 +146,7 @@ spec:
             - name: ZOO_ENABLE_PROMETHEUS_METRICS
               value: "yes"
             - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
-              value: {{ .Values.metrics.port }}
+              value: {{ .Values.metrics.port | quote }}
             {{- end }}
           ports:
             - name: client
