@@ -137,6 +137,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `livenessProbe.periodSeconds`                | number of seconds                                | 30                                                      |
 | `livenessProbe.failureThreshold`             | number of failures                               | 6                                                       |
 | `livenessProbe.successThreshold`             | number of successes                              | 1                                                       |
+| `livenessProbe.commandOverride`              | Custom command for liveness probe                | []                                                      |
 | `podDisruptionBudget`                        | Pod Disruption Budget settings                   | {}                                                      |
 | `readinessProbe.enabled`                     | would you like a readinessProbe to be enabled    | `true`                                                  |
 | `readinessProbe.initialDelaySeconds`         | number of seconds                                | 10                                                      |
@@ -144,6 +145,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `readinessProbe.periodSeconds`               | number of seconds                                | 30                                                      |
 | `readinessProbe.failureThreshold`            | number of failures                               | 3                                                       |
 | `readinessProbe.successThreshold`            | number of successes                              | 1                                                       |
+| `readinessProbe.commandOverride`             | Custom command for readiness probe               | []                                                      |
 | `metrics.enabled`                            | Start a side-car prometheus exporter             | `false`                                                 |
 | `metrics.image.registry`                     | Exporter image registry                          | `docker.io`                                             |
 | `metrics.image.repository`                   | Exporter image name                              | `bitnami/rabbitmq-exporter`                             |
