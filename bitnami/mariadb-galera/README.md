@@ -106,11 +106,11 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `ldap.nss_initgroups_ignoreusers`    | LDAP ignored users                                                                                                                                          | `root,nslcd`                                                      |
 | `ldap.scope`                         | LDAP search scope                                                                                                                                           | `nil`                                                             |
 | `ldap.tls_reqcert`                   | LDAP TLS check on server certificates                                                                                                                       | `nil`                                                             |
-| `ssl.rt.enabled`                     | Enable SSL support for replication traffic                                                                                                                  | `false`                                                           |
-| `ssl.rt.certificatesSecret`          | Name of the secret that contains the certificates                                                                                                           | `nil`                                                             |
-| `ssl.rt.certFilename`                | Certificate filename                                                                                                                                        | `nil`                                                             |
-| `ssl.rt.certKeyFilename`             | Certificate key filename                                                                                                                                    | `nil`                                                             |
-| `ssl.rt.certCAFilename`              | CA Certificate filename                                                                                                                                     | `nil`                                                             |
+| `tsl.rt.enabled`                     | Enable TSL support for replication traffic                                                                                                                  | `false`                                                           |
+| `tsl.rt.certificatesSecret`          | Name of the secret that contains the certificates                                                                                                           | `nil`                                                             |
+| `tsl.rt.certFilename`                | Certificate filename                                                                                                                                        | `nil`                                                             |
+| `tsl.rt.certKeyFilename`             | Certificate key filename                                                                                                                                    | `nil`                                                             |
+| `tsl.rt.certCAFilename`              | CA Certificate filename                                                                                                                                     | `nil`                                                             |
 | `mariadbConfiguration`               | Configuration for the MariaDB server                                                                                                                        | `_default values in the values.yaml file_`                        |
 | `configurationConfigMap`             | ConfigMap with the MariaDB configuration files (Note: Overrides `mariadbConfiguration`). The value is evaluated as a template.                              | `nil`                                                             |
 | `initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                | `nil`                                                             |
@@ -266,32 +266,32 @@ CREATE USER 'bitnami'@'localhost' IDENTIFIED VIA pam USING 'mariadb';
 
 With the above example, when the `bitnami` user attempts to login to the MariaDB server, he/she will be authenticated against the LDAP server.
 
-### SSL for Replication Traffic
+### TSL for Replication Traffic
 
-SSL support for replication traffic can be enabled in the chart by specifying the `ssl.rt.` parameters while creating a release. The followin parameters should be configured to properly enable the SSL support for replication traffic in the chart.
+TSL support for replication traffic can be enabled in the chart by specifying the `tsl.rt.` parameters while creating a release. The following parameters should be configured to properly enable the TSL support for replication traffic in the chart:
 
-- `ssl.rt.enabled`: Enable SSL support for replication traffic. Defaults to `false`
-- `ssl.rt.certificatesSecret`: Name of the secret that contains the certificates. No defaults.
-- `ssl.rt.certFilename`: Certificate filename. No defaults.
-- `ssl.rt.certKeyFilename`: Certificate key filename. No defaults.
-- `ssl.rt.certCAFilename`: CA Certificate filename. No defaults.
+- `tsl.rt.enabled`: Enable TSL support for replication traffic. Defaults to `false`
+- `tsl.rt.certificatesSecret`: Name of the secret that contains the certificates. No defaults.
+- `tsl.rt.certFilename`: Certificate filename. No defaults.
+- `tsl.rt.certKeyFilename`: Certificate key filename. No defaults.
+- `tsl.rt.certCAFilename`: CA Certificate filename. No defaults.
 
 For example:
 
 First, create the secret with the cetificates files:
 
 ```console
-kubectl create secret generic certificates-ssl-rt-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+kubectl create secret generic certificates-tsl-rt-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
 ```
 
 Then, use the following parameters:
 
 ```console
-ssl.rt.enabled="true"
-ssl.rt.certificatesSecret="certificates-ssl-rt-secret"
-ssl.rt.certFilename="cert.pem"
-ssl.rt.certKeyFilename="cert.key"
-ssl.rt.certCAFilename="ca.pem"
+tsl.rt.enabled="true"
+tsl.rt.certificatesSecret="certificates-tsl-rt-secret"
+tsl.rt.certFilename="cert.pem"
+tsl.rt.certKeyFilename="cert.key"
+tsl.rt.certCAFilename="ca.pem"
 ```
 
 ### Initialize a fresh instance

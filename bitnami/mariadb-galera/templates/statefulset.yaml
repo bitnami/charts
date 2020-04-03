@@ -128,16 +128,16 @@ spec:
             - name: MARIADB_EXTRA_FLAGS
               value: {{ .Values.extraFlags | quote }}
             {{- end }}
-            {{- if .Values.ssl.rt.enabled }}
-            - name:  MARIADB_ENABLE_SSL_RT
-              value: yes
-            - name:  MARIADB_SSL_RT_CERT
-              value: {{ template "mariadb-galera.sslRTCert" . }}
-            - name:  MARIADB_SSL_RT_KEY
-              value: {{ template "mariadb-galera.sslRTCertKey" . }}
-            - name:  MARIADB_SSL_RT_CA
-              value: {{ template "mariadb-galera.sslRTCACert" . }}
-             {{- end }}
+            - name:  MARIADB_ENABLE_TSL_RT
+              value: {{ ternary "yes" "no" .Values.tsl.rt.enabled | quote }}
+            {{- if .Values.tsl.rt.enabled }}
+            - name:  MARIADB_TSL_RT_CERT
+              value: {{ template "mariadb-galera.tslRTCert" . }}
+            - name:  MARIADB_TSL_RT_KEY
+              value: {{ template "mariadb-galera.tslRTCertKey" . }}
+            - name:  MARIADB_TSL_RT_CA
+              value: {{ template "mariadb-galera.tslRTCACert" . }}
+            {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -196,7 +196,7 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
-            {{- if .Values.ssl.rt.enabled }}
+            {{- if .Values.tsl.rt.enabled }}
             - name: mariadb-galera-rt-certificates
               mountPath: /bitnami/mariadb/certs/
               readOnly: true
@@ -243,10 +243,10 @@ spec:
         {{- include "mariadb-galera.tplValue" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.ssl.rt.enabled }}
+        {{- if .Values.tsl.rt.enabled }}
         - name: mariadb-galera-rt-certificates
           secret:
-            secretName: {{ required "A secret containing the ertificates for the SSL replication traffic is required when SSL RT in enabled" .Values.ssl.rt.certificatesSecret }}
+            secretName: {{ required "A secret containing the ertificates for the TSL replication traffic is required when TSL RT in enabled" .Values.tsl.rt.certificatesSecret }}
             defaultMode: 256
         {{- end }}
         {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
