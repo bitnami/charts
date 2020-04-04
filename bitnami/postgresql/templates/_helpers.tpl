@@ -212,9 +212,9 @@ Get the password secret.
 */}}
 {{- define "postgresql.secretName" -}}
 {{- if .Values.global.postgresql.existingSecret }}
-    {{- printf "%s" .Values.global.postgresql.existingSecret -}}
+    {{- printf "%s" (tpl .Values.global.postgresql.existingSecret $) -}}
 {{- else if .Values.existingSecret -}}
-    {{- printf "%s" .Values.existingSecret -}}
+    {{- printf "%s" (tpl .Values.existingSecret $) -}}
 {{- else -}}
     {{- printf "%s" (include "postgresql.fullname" .) -}}
 {{- end -}}
