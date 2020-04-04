@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.6.2-debian-10-r1
+  tag: 7.6.2-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -176,7 +176,7 @@ master:
     ## resources, such as Minikube.
     limits: {}
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 384Mi
     requests:
       cpu: 25m
       memory: 256Mi
@@ -300,7 +300,7 @@ coordinating:
     ## resources, such as Minikube.
     limits: {}
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 384Mi
     requests:
       cpu: 25m
       memory: 256Mi
@@ -367,7 +367,7 @@ data:
   updateStrategy:
     type: RollingUpdate
     # rollingUpdatePartition
-  heapSize: 128m
+  heapSize: 1024m
   ## Provide annotations for the data pods.
   ##
   podAnnotations: {}
@@ -399,10 +399,10 @@ data:
     ## resources, such as Minikube.
     limits: {}
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 2176Mi
     requests:
       cpu: 25m
-      memory: 1152Mi
+      memory: 2048Mi
   ## Elasticsearch data container's liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -496,7 +496,7 @@ ingest:
     ## resources, such as Minikube.
     limits: {}
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 384Mi
     requests:
       cpu: 25m
       memory: 256Mi
@@ -548,7 +548,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.1-debian-10-r64
+    tag: 5.8.1-debian-10-r65
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -713,7 +713,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r63
+    tag: 1.1.0-debian-10-r64
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
