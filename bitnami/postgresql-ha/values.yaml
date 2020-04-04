@@ -121,6 +121,14 @@ clusterDomain: cluster.local
 ## PostgreSQL parameters
 ##
 postgresql:
+  ## Labels to add to the StatefulSet
+  ##
+  labels: {}
+
+  ## Labels to add to the StatefulSet pods
+  ##
+  podLabels: {}
+
   ## Number of replicas to deploy
   ##
   replicaCount: 2
@@ -287,9 +295,22 @@ postgresql:
   ##
   # initdbScriptsCM:
 
+  ## Secret with scripts to be run at first boot
+  ## Note: can be used with initdbScriptsCM or initdbScripts
+  ##
+  # initdbScriptsSecret:
+
 ## Pgpool parameters
 ##
 pgpool:
+  ## Labels to add to the Deployment
+  ##
+  labels: {}
+
+  ## Labels to add to the pods
+  ##
+  podLabels: {}
+
   ## Number of replicas to deploy
   ##
   replicaCount: 1
@@ -399,6 +420,11 @@ pgpool:
   ## NOTE: This will override pgpool.initdbScripts
   ##
   # initdbScriptsCM:
+
+  ## Secret with scripts to be run everytime Pgpool container is initialized
+  ## Note: can be used with initdbScriptsCM or initdbScripts
+  ##
+  # initdbScriptsSecret:
 
   ## Use Pgpool Load-Balancing
   ##
