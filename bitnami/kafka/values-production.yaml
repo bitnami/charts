@@ -116,6 +116,11 @@ heapOpts: -Xmx1024m -Xms1024m
 ##
 deleteTopicEnable: false
 
+## Switch to enable auto creation of topics.
+## Enabling auto creation of topics not recommended for production or similar environments.
+##
+autoCreateTopicsEnable: false
+
 ## The number of messages to accept before forcing a flush of data to disk.
 ##
 logFlushIntervalMessages: 10000
