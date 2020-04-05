@@ -259,6 +259,170 @@ spec:
           {{- end }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
+        {{- range $car := $.Values.mongos.sidecars }}
+        - name: {{ $car.name }}
+          image: {{ $car.image }}
+          {{- if $car.imagePullPolicy }}
+          imagePullPolicy: {{ $car.imagePullPolicy }}
+          {{- else }}
+          imagePullPolicy: IfNotPresent
+          {{- end }}
+          {{- if $car.securityContext }}
+          securityContext: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.securityContext "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.command }}
+          command: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.command "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.args }}
+          args: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.args "context" $ ) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if $.Values.image.debug }}
+            - name: BITNAMI_DEBUG
+              value: "true"
+            {{- end }}
+            {{- if $.Values.usePasswordFile }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+            {{- else }}
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" $ }}
+                  key: mongodb-root-password
+            {{- end }}
+          {{- if $car.envFrom }}
+          envFrom: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.envFrom "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.lifecycle }}
+          lifecycle: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.lifecycle "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.startupProbe }}
+          startupProbe: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.startupProbe "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if and $car.livenessProbe $.Values.livenessProbe.enabled }}
+          livenessProbe: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.livenessProbe "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if and $car.readinessProbe $.Values.readinessProbe.enabled }}
+          readinessProbe: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.readinessProbe "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if or $.Values.usePasswordFile $car.volumeMounts }}
+          volumeMounts:
+          {{- end }}
+          {{- if $.Values.usePasswordFile }}
+            - name: secrets
+              mountPath: /bitnami/mongodb/secrets/
+          {{- end }}
+          {{- if $car.volumeMounts }}
+            {{- include "mongodb-sharded.tplValue" ( dict "value" $car.volumeMounts "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.resources }}
+          resources: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.resources "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.stdin }}
+          stdin: {{ $car.stdin }}
+          {{- end }}
+          {{- if $car.stdinOnce }}
+          stdinOnce: {{ $car.stdinOnce }}
+          {{- end }}
+          {{- if $car.terminationMessagePath }}
+          terminationMessagePath: {{ $car.terminationMessagePath | quote }}
+          {{- end }}
+          {{- if $car.terminationMessagePolicy }}
+          terminationMessagePolicy: {{ $car.terminationMessagePolicy | quote }}
+          {{- end }}
+          {{- if $car.tty }}
+          tty: {{ $car.tty }}
+          {{- end }}
+          {{- if $car.volumeDevices }}
+          volumeDevices: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.volumeDevices "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.workingDir }}
+          workingDir: {{ $car.workingDir | quote }}
+          {{- end }}
+        {{- end }}
+        {{- range $car := $.Values.common.sidecars }}
+        - name: {{ $car.name }}
+          image: {{ $car.image }}
+          {{- if $car.imagePullPolicy }}
+          imagePullPolicy: {{ $car.imagePullPolicy }}
+          {{- else }}
+          imagePullPolicy: IfNotPresent
+          {{- end }}
+          {{- if $car.securityContext }}
+          securityContext: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.securityContext "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.command }}
+          command: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.command "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.args }}
+          args: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.args "context" $ ) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if $.Values.image.debug }}
+            - name: BITNAMI_DEBUG
+              value: "true"
+            {{- end }}
+            {{- if $.Values.usePasswordFile }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+            {{- else }}
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" $ }}
+                  key: mongodb-root-password
+            {{- end }}
+          {{- if $car.envFrom }}
+          envFrom: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.envFrom "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.lifecycle }}
+          lifecycle: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.lifecycle "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.startupProbe }}
+          startupProbe: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.startupProbe "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if and $car.livenessProbe $.Values.livenessProbe.enabled }}
+          livenessProbe: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.livenessProbe "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if and $car.readinessProbe $.Values.readinessProbe.enabled }}
+          readinessProbe: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.readinessProbe "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if or $.Values.usePasswordFile $car.volumeMounts }}
+          volumeMounts:
+          {{- end }}
+          {{- if $.Values.usePasswordFile }}
+            - name: secrets
+              mountPath: /bitnami/mongodb/secrets/
+          {{- end }}
+          {{- if $car.volumeMounts }}
+            {{- include "mongodb-sharded.tplValue" ( dict "value" $car.volumeMounts "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.resources }}
+          resources: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.resources "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.stdin }}
+          stdin: {{ $car.stdin }}
+          {{- end }}
+          {{- if $car.stdinOnce }}
+          stdinOnce: {{ $car.stdinOnce }}
+          {{- end }}
+          {{- if $car.terminationMessagePath }}
+          terminationMessagePath: {{ $car.terminationMessagePath | quote }}
+          {{- end }}
+          {{- if $car.terminationMessagePolicy }}
+          terminationMessagePolicy: {{ $car.terminationMessagePolicy | quote }}
+          {{- end }}
+          {{- if $car.tty }}
+          tty: {{ $car.tty }}
+          {{- end }}
+          {{- if $car.volumeDevices }}
+          volumeDevices: {{- include "mongodb-sharded.tplValue" ( dict "value" $car.volumeDevices "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if $car.workingDir }}
+          workingDir: {{ $car.workingDir | quote }}
+          {{- end }}
+        {{- end }}
       volumes:
         {{- if .Values.usePasswordFile }}
         - name: secrets
