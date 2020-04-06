@@ -36,5 +36,5 @@ spec:
 
     # Allow prometheus scrapes
     - ports:
-        - port: {{ .Values.metrics.port }}
+        - port: 15692
 {{- end }}
