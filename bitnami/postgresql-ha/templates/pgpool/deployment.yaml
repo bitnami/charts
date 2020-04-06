@@ -4,8 +4,8 @@ metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
   labels: {{ include "postgresql-ha.labels" . | nindent 4 }}
     app.kubernetes.io/component: pgpool
-    {{- with .Values.pgpool.labels }}
-    {{- toYaml . | nindent 4 }}
+    {{- if .Values.pgpool.labels }}
+    {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.labels "context" $) | nindent 4 }}
     {{- end }}
 spec:
   replicas: {{ .Values.pgpool.replicaCount }}
@@ -16,8 +16,8 @@ spec:
     metadata:
       labels: {{ include "postgresql-ha.labels" . | nindent 8 }}
         app.kubernetes.io/component: pgpool
-        {{- with .Values.pgpool.podLabels }}
-        {{- toYaml . | nindent 8 }}
+        {{- if .Values.pgpool.podLabels }}
+        {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.pgpool.podAnnotations }}
       annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.podAnnotations "context" $) | nindent 8 }}

@@ -550,7 +550,9 @@ Return the PostgreSQL initdb scripts configmap.
 Get the initialization scripts Secret name.
 */}}
 {{- define "postgresql-ha.postgresqlInitdbScriptsSecret" -}}
-{{- printf "%s" (tpl .Values.postgresql.initdbScriptsSecret $) -}}
+{{- if .Values.postgresql.initdbScriptsSecret -}}
+{{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.initdbScriptsSecret "context" $) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -568,7 +570,9 @@ Return the Pgpool initdb scripts configmap.
 Get the pgpool initialization scripts Secret name.
 */}}
 {{- define "postgresql-ha.pgpoolInitdbScriptsSecret" -}}
-{{- printf "%s" (tpl .Values.pgpool.initdbScriptsSecret $) -}}
+{{- if .Values.pgpool.initdbScriptsSecret -}}
+{{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.initdbScriptsSecret "context" $) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

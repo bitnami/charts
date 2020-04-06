@@ -4,8 +4,8 @@ metadata:
   name: {{ include "postgresql-ha.postgresql" . }}
   labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
-    {{- with .Values.postgresql.labels }}
-    {{- toYaml . | nindent 4 }}
+    {{- if .Values.postgresql.labels }}
+    {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.labels "context" $) | nindent 4 }}
     {{- end }}
 spec:
   serviceName: {{ include "postgresql-ha.postgresql" . }}-headless
@@ -22,8 +22,8 @@ spec:
     metadata:
       labels: {{- include "postgresql-ha.labels" . | nindent 8 }}
         app.kubernetes.io/component: postgresql
-        {{- with .Values.postgresql.podLabels }}
-        {{- toYaml . | nindent 8 }}
+        {{- if .Values.postgresql.podLabels }}
+        {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.postgresql.podAnnotations }}
       annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}

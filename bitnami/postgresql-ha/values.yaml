@@ -121,11 +121,11 @@ clusterDomain: cluster.local
 ## PostgreSQL parameters
 ##
 postgresql:
-  ## Labels to add to the StatefulSet
+  ## Labels to add to the StatefulSet. Evaluated as template
   ##
   labels: {}
 
-  ## Labels to add to the StatefulSet pods
+  ## Labels to add to the StatefulSet pods. Evaluated as template
   ##
   podLabels: {}
 
@@ -303,11 +303,11 @@ postgresql:
 ## Pgpool parameters
 ##
 pgpool:
-  ## Labels to add to the Deployment
+  ## Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
 
-  ## Labels to add to the pods
+  ## Labels to add to the pods. Evaluated as template
   ##
   podLabels: {}
 
