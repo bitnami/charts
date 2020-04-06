@@ -103,8 +103,8 @@ The following table lists the configurable parameters of the external-dns chart 
 | `designate.customCA.filename`       | When using the Designate provider, set the custom CA configuration filename                              | "designate-ca.pem"                                          |
 | `designate.customCAHostPath`        | When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled` | `none`            |
 | `designate.password`                | When using the Designate provider, specify the OpenStack authentication password. (optional)             | `none`                                                      |
-| `designate.projectName              | When using the Designate provider, specify the OpenStack project name. (optional)                        | `none`                                                      |
-| `designate.regionName               | When using the Designate provider, specify the OpenStack region name. (optional)                         | `none`                                                      |
+| `designate.projectName`              | When using the Designate provider, specify the OpenStack project name. (optional)                        | `none`                                                      |
+| `designate.regionName`               | When using the Designate provider, specify the OpenStack region name. (optional)                         | `none`                                                      |
 | `designate.userDomainName`          | When using the Designate provider, specify the OpenStack user domain name. (optional)                    | `none`                                                      |
 | `designate.username`                | When using the Designate provider, specify the OpenStack authentication username. (optional)             | `none`                                                      |
 | `digitalocean.apiToken`             | When using the DigitalOcean provider, `DO_TOKEN` to set (optional)                                       | `""`                                                        |
@@ -156,7 +156,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `nodeSelector`                      | Node labels for pod assignment (this value is evaluated as a template)                                   | `{}`                                                        |
 | `tolerations`                       | Tolerations for pod assignment (this value is evaluated as a template)                                   | `[]`                                                        |
 | `podAnnotations`                    | Additional annotations to apply to the pod.                                                              | `{}`                                                        |
-| `podLabels`                         | Additional labels to be added to pods                                                                    | {}                                                          |
+| `podLabels`                         | Additional labels to be added to pods                                                                    | `{}`                                                          |
 | `podSecurityContext.fsGroup`        | Group ID for the container                                                                               | `1001`                                                      |
 | `podSecurityContext.runAsUser`      | User ID for the container                                                                                | `1001`                                                      |
 | `priorityClassName`                 | priorityClassName                                                                                        | `""`                                                        |
@@ -170,7 +170,8 @@ The following table lists the configurable parameters of the external-dns chart 
 | `service.loadBalancerSourceRanges`  | List of IP CIDRs allowed access to load balancer (if supported)                                          | `[]`                                                        |
 | `service.annotations`               | Annotations to add to service                                                                            | `{}`                                                        |
 | `rbac.create`                       | Weather to create & use RBAC resources or not                                                            | `true`                                                      |
-| `rbac.serviceAccountName`           | ServiceAccount (ignored if rbac.create == true)                                                          | `default`                                                   |
+| `rbac.serviceAccountCreate`         | Determine whether a Service Account should be created or it should reuse a exiting one.                  | `true`                                                      |
+| `rbac.serviceAccountName`           | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set     | `nil`                                                       |
 | `rbac.serviceAccountAnnotations`    | Additional Service Account annotations                                                                   | `{}`                                                        |
 | `rbac.apiVersion`                   | Version of the RBAC API                                                                                  | `v1beta1`                                                   |
 | `rbac.pspEnabled`                   | PodSecurityPolicy                                                                                        | `false`                                                     |

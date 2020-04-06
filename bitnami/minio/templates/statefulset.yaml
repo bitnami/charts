@@ -5,6 +5,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "minio.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "minio.labels" . | nindent 4 }}
 spec:
   selector:
@@ -24,6 +25,7 @@ spec:
       annotations: {{- include "minio.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      serviceAccountName: {{ template "minio.serviceAccountName" . }}
 {{- include "minio.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "minio.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}

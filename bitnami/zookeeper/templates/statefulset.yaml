@@ -25,6 +25,9 @@ spec:
       name: {{ template "zookeeper.fullname" . }}
       labels: {{- include "zookeeper.labels" . | nindent 8 }}
         app.kubernetes.io/component: zookeeper
+      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      annotations: {{- include "zookeeper.podAnnotations" . | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.serviceAccount.create }}
@@ -139,6 +142,12 @@ spec:
             - name: JVMFLAGS
               value: {{ .Values.jvmFlags | quote }}
             {{- end }}
+            {{- if .Values.metrics.enabled }}
+            - name: ZOO_ENABLE_PROMETHEUS_METRICS
+              value: "yes"
+            - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
+              value: {{ .Values.metrics.port | quote }}
+            {{- end }}
           ports:
             - name: client
               containerPort: {{ .Values.service.port }}
@@ -146,6 +155,10 @@ spec:
               containerPort: {{ .Values.service.followerPort }}
             - name: election
               containerPort: {{ .Values.service.electionPort }}
+            {{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.metrics.port }}
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
