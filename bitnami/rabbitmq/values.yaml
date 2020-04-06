@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.3-debian-10-r31
+  tag: 3.8.3-debian-10-r36
 
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
@@ -389,51 +389,18 @@ readinessProbe:
   failureThreshold: 3
   successThreshold: 1
 
+## Prometheus Metrics
+##
 metrics:
   enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/rabbitmq-exporter
-    tag: 0.29.0-debian-10-r66
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## environment variables to configure rabbitmq_exporter
-  ## ref: https://github.com/kbudde/rabbitmq_exporter#configuration
-  env: {}
-  ## Metrics exporter port
   port: 9419
-  ## RabbitMQ address to connect to (from the same Pod, usually the local loopback address).
-  ## If your Kubernetes cluster does not support IPv6, you can change to `127.0.0.1` in order to force IPv4.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/#networking
-  rabbitmqAddress: localhost
-  ## Comma-separated list of extended scraping capabilities supported by the target RabbitMQ server
-  ## ref: https://github.com/kbudde/rabbitmq_exporter#extended-rabbitmq-capabilities
-  capabilities: "bert,no_sort"
-  resources: {}
-  annotations:
+  plugins: "rabbitmq_prometheus"
+  ## Prometheus pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9419"
-
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 15
-    timeoutSeconds: 5
-    periodSeconds: 30
-    failureThreshold: 6
-    successThreshold: 1
-
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    timeoutSeconds: 5
-    periodSeconds: 30
-    failureThreshold: 3
-    successThreshold: 1
+    prometheus.io/port: "{{ .Values.metrics.port }}"
 
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
