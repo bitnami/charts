@@ -7,6 +7,35 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
+Allow the release namespace to be overridden for multi-namespace deployments in combined charts.
+*/}}
+{{- define "mongodb.namespace" -}}
+    {{- if .Values.namespaceOverride }}
+        {{- .Values.namespaceOverride -}}
+    {{- else if .values.global -}}
+        {{- if .Values.global.namespaceOverride }}
+            {{- .Values.global.namespaceOverride -}}
+        {{- else -}}
+            {{- .Release.Namespace -}}
+        {{- end -}}
+    {{- end }}
+{{- end -}}
+
+{{- define "mongodb.serviceMonitor.namespace" -}}
+    {{- if .Values.metrics.serviceMonitor.namespace -}}
+        {{- .Values.metrics.serviceMonitor.namespace -}}
+    {{- else if .Values.namespaceOverride }}
+        {{- .Values.namespaceOverride -}}
+    {{- else if .values.global -}}
+        {{- if .Values.global.namespaceOverride }}
+            {{- .Values.global.namespaceOverride -}}
+        {{- else -}}
+            {{- .Release.Namespace -}}
+        {{- end -}}
+    {{- end }}
+{{- end -}}
+
+{{/*
 Renders a value that contains template.
 Usage:
 {{ include "mongodb.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
