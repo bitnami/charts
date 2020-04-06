@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.0-debian-10-r11
+  tag: 0.7.1-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -35,9 +35,9 @@ image:
 ## K8s resources type to be observed for new DNS entries by ExternalDNS
 ##
 sources:
-- service
-- ingress
-# - crd
+  # - crd
+  - service
+  - ingress
 
 ## DNS provider where the DNS records will be created. Available providers are:
 ## - aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, infoblox, rfc2136, transip
@@ -196,6 +196,21 @@ coredns:
 ## OpenStack Designate provider configuration to be set via arguments/env. variables
 ##
 designate:
+  ## Set Openstack environment variables (optional). Username and password will be saved in a kubernetes secret
+  ## The alternative to this is to export the necessary Openstack environment variables in the extraEnv argument
+  ##
+  # username: "someuser"
+  # password: "p@55w0rd"
+  # authUrl: "https://mykeystone.example.net:5000/v3/"
+  # regionName: "dev"
+  # userDomainName: "development"
+  # projectName: "myteamname"
+
+  ## Use a host path custom CA (optional)
+  ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
+  ##
+  # customCAHostPath: /path/to/cafile
+
   ## Use a custom CA (optional)
   ##
   customCA:
@@ -210,18 +225,6 @@ designate:
     ##
     filename: "designate-ca.pem"
 
-  ## Use a host path custom CA (optional)
-  ##  This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
-  # customCAHostPath: /path/to/cafile
-
-  ## Set Openstack environment variables (optional).  Username and password will be saved in a kubernetes secret.
-  ## The alternative to this is to export the necessary Openstack environment variables in the extraEnv argument.
-  # username: "someuser"
-  # password: "p@55w0rd"
-  # authUrl: "https://mykeystone.example.net:5000/v3/"
-  # regionName: "dev"
-  # userDomainName: "development"
-  # projectName: "myteamname"
 ## DigitalOcean configuration to be set via arguments/env. variables
 ##
 digitalocean:
@@ -419,10 +422,16 @@ service:
 ##
 rbac:
   create: true
+  ## Determine whether a Service Account should be created
+  ## or reuse a exiting one
+  ##
+  serviceAccountCreate: true
+
   ## Service Account for pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
-  serviceAccountName: default
+  serviceAccountName:
+
   ## Annotations for the Service Account
   ##
   serviceAccountAnnotations: {}
@@ -435,12 +444,14 @@ rbac:
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## Example:
+## securityContext:
+##   allowPrivilegeEscalation: false
+##   readOnlyRootFilesystem: true
+##   capabilities:
+##     drop: ["ALL"]
 ##
 securityContext: {}
-  # allowPrivilegeEscalation: false
-  # readOnlyRootFilesystem: true
-  # capabilities:
-  #   drop: ["ALL"]
 podSecurityContext:
   fsGroup: 1001
   runAsUser: 1001
