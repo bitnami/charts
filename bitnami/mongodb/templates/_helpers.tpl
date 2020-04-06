@@ -18,6 +18,8 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
         {{- else -}}
             {{- .Release.Namespace -}}
         {{- end -}}
+    {{- else -}}
+        {{- .Release.Namespace -}}
     {{- end }}
 {{- end -}}
 
@@ -32,6 +34,8 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
         {{- else -}}
             {{- .Release.Namespace -}}
         {{- end -}}
+    {{- else -}}
+        {{- .Release.Namespace -}}
     {{- end }}
 {{- end -}}
 
