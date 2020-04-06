@@ -302,7 +302,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + defaultReplicationFactor: 3
 ```
 
-- Enable auto creation of topics.
+- Allow auto creation of topics.
 
 ```diff
 - autoCreateTopicsEnable: true
