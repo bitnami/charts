@@ -144,7 +144,7 @@ spec:
           containerPort: {{ .Values.service.managerPort }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
-          containerPort: 15692
+          containerPort: {{ .Values.metrics.port }}
         {{- end }}
 {{- if .Values.service.extraContainerPorts }}
 {{ toYaml .Values.service.extraContainerPorts | indent 8 }}

@@ -237,6 +237,6 @@ Return podAnnotations
 {{- toYaml .Values.podAnnotations }}
 {{- end }}
 {{- if .Values.metrics.enabled }}
-{{- toYaml .Values.metrics.podAnnotations }}
+{{- include "rabbitmq.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) }}
 {{- end }}
 {{- end -}}

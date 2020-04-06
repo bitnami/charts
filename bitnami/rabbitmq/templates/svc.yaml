@@ -60,7 +60,7 @@ spec:
     {{- end }}
 {{- if .Values.metrics.enabled }}
   - name: metrics
-    port: 15692
+    port: {{ .Values.metrics.port }}
     targetPort: metrics
     {{- if (eq .Values.service.type "ClusterIP") }}
     nodePort: null
