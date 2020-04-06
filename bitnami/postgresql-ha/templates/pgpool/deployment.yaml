@@ -24,6 +24,7 @@ spec:
       {{- if .Values.pgpool.nodeSelector }}
       nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      priorityClassName: {{ .Values.pgpool.priorityClassName }}
       {{- if .Values.pgpool.tolerations }}
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -149,7 +150,7 @@ spec:
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if or (.Files.Glob "files/pgool.conf") .Values.pgpool.configuration }}
+            {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration }}
             - name: pgpool-config
               mountPath: /opt/bitnami/pgpool/conf/
             {{- end }}
@@ -166,7 +167,7 @@ spec:
               mountPath: /opt/bitnami/pgpool/secrets/
             {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/pgool.conf") .Values.pgpool.configuration }}
+        {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration }}
         - name: pgpool-config
           configMap:
             name: {{ include "postgresql-ha.pgpoolConfigurationCM" . }}
