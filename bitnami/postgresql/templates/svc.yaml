@@ -1,3 +1,4 @@
+{{- $service := merge (deepCopy .Values.master.service) (deepCopy .Values.service) -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,26 +8,26 @@ metadata:
     chart: {{ template "postgresql.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
-  {{- if .Values.service.annotations }}
-  annotations: {{- include "postgresql.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- if $service.annotations }}
+  annotations: {{- include "postgresql.tplValue" (dict "value" $service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.service.type }}
-  {{- if and .Values.service.loadBalancerIP (eq .Values.service.type "LoadBalancer") }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  type: {{ $service.type }}
+  {{- if and $service.loadBalancerIP (eq $service.type "LoadBalancer") }}
+  loadBalancerIP: {{ $service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- include "postgresql.tplValue" (dict "value" .Values.service.loadBalancerSourceRanges "context" $) | nindent 4 }}
+  {{- if and (eq $service.type "LoadBalancer") $service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- include "postgresql.tplValue" (dict "value" $service.loadBalancerSourceRanges "context" $) | nindent 4 }}
   {{- end }}
-  {{- if and (eq .Values.service.type "ClusterIP") .Values.service.clusterIP }}
-  clusterIP: {{ .Values.service.clusterIP }}
+  {{- if and (eq $service.type "ClusterIP") $service.clusterIP }}
+  clusterIP: {{ $service.clusterIP }}
   {{- end }}
   ports:
     - name: tcp-postgresql
       port: {{ template "postgresql.port" . }}
       targetPort: tcp-postgresql
-      {{- if .Values.service.nodePort }}
-      nodePort: {{ .Values.service.nodePort }}
+      {{- if $service.nodePort }}
+      nodePort: {{ $service.nodePort }}
       {{- end }}
   selector:
     app: {{ template "postgresql.name" . }}

@@ -35,6 +35,9 @@ data:
     auth_ldap.use_ssl = true
 {{- end }}
 {{- end }}
+{{- if .Values.metrics.enabled }}
+    prometheus.tcp.port = {{ .Values.metrics.port }}
+{{- end }}
 
 {{ if .Values.rabbitmq.advancedConfiguration}}
   advanced.config: |-
