@@ -34,8 +34,8 @@ spec:
         {{- if or (not .Values.rabbitmq.existingErlangSecret) (not .Values.rabbitmq.existingPasswordSecret) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
-      {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
+      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+        {{- include "rabbitmq.podAnnotations" . | nindent 8 }}
       {{- end }}
     spec:
       {{- if .Values.schedulerName }}
@@ -142,6 +142,10 @@ spec:
           containerPort: {{ .Values.service.distPort }}
         - name: stats
           containerPort: {{ .Values.service.managerPort }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          containerPort: {{ .Values.metrics.port }}
+        {{- end }}
 {{- if .Values.service.extraContainerPorts }}
 {{ toYaml .Values.service.extraContainerPorts | indent 8 }}
 {{- end }}
@@ -249,58 +253,6 @@ spec:
           - name: {{ $key }}
             value: {{ $value | quote }}
           {{- end }}
-{{- if .Values.metrics.enabled }}
-      - name: metrics
-        image: {{ template "rabbitmq.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        env:
-        - name: RABBIT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "rabbitmq.secretPasswordName" . }}
-              key: rabbitmq-password
-        - name: RABBIT_URL
-          value: "http://{{ .Values.metrics.rabbitmqAddress }}:{{ .Values.service.managerPort }}"
-        - name: RABBIT_USER
-          value: {{ .Values.rabbitmq.username }}
-        - name: PUBLISH_PORT
-          value: "{{ .Values.metrics.port }}"
-        {{ if .Values.metrics.capabilities }}
-        - name: RABBIT_CAPABILITIES
-          value: "{{ .Values.metrics.capabilities }}"
-        {{- end }}
-        {{- range $key, $value := .Values.metrics.env }}
-        - name: {{ $key }}
-          value: {{ $value | quote }}
-        {{- end }}
-        ports:
-        - name: metrics
-          containerPort: {{ .Values.metrics.port }}
-        {{- if .Values.metrics.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
-          timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
-          periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
-          failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
-          successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
-        {{- end }}
-        {{- if .Values.metrics.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
-          timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
-          periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
-          failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
-          successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
-        {{- end }}
-        resources:
-{{ toYaml .Values.metrics.resources | indent 10 }}
-{{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}

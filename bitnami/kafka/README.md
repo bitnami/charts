@@ -117,6 +117,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `auth.zookeeperUser`                   | Kafka Zookeeper user                                                                                     | `nil`                                                   |
 | `auth.zookeeperPassword`               | Kafka Zookeeper password                                                                                 | `nil`                                                   |
 | `auth.existingSecret`                  | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser     | `nil`                                                   |
+| `log4j`                                | An optional log4j.properties file to overwrite the default of the Kafka brokers.                         | `nil`                                                   |
+| `existingLog4jConfigMap`               | The name of an existing ConfigMap containing a log4j.properties file.                                    | `nil`                                                   |
 
 ### Statefulset parameters
 
@@ -480,6 +482,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 10.0.0
+
+If you are setting the `config` or `log4j` parameter, backwards compatibility is not guaranteed, because the `KAFKA_MOUNTED_CONFDIR` has moved from `/opt/bitnami/kafka/conf` to `/bitnami/kafka/config`. In order to continue using these parameters, you must also upgrade your image to `docker.io/bitnami/kafka:2.4.1-debian-10-r38` or later.
 
 ### To 9.0.0
 

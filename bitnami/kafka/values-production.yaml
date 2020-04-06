@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.4.1-debian-10-r41
+  tag: 2.4.1-debian-10-r45
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -596,7 +596,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r66
+      tag: 1.2.0-debian-10-r69
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -671,7 +671,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.12.0-debian-10-r65
+      tag: 0.12.0-debian-10-r68
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -804,3 +804,16 @@ externalZookeeper:
   ## Server or list of external zookeeper servers to use.
   ##
   servers: []
+
+## Kafka Log4J Configuration
+## An optional log4j.properties file to overwrite the default of the Kafka brokers.
+## See an example log4j.properties at:
+## https://github.com/apache/kafka/blob/trunk/config/log4j.properties
+##
+# log4j:
+
+## Kafka Log4j ConfigMap
+## The name of an existing ConfigMap containing a log4j.properties file.
+## NOTE: this will override log4j.
+##
+# existingLog4jConfigMap:
