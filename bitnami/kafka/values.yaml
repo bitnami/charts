@@ -119,7 +119,7 @@ deleteTopicEnable: false
 ## Switch to enable auto creation of topics.
 ## Enabling auto creation of topics not recommended for production or similar environments.
 ##
-autoCreateTopicsEnable: false
+autoCreateTopicsEnable: true
 
 ## The number of messages to accept before forcing a flush of data to disk.
 ##
