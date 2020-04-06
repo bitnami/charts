@@ -362,9 +362,9 @@ master:
   ## Override the service configuration for master
   ##
   service: {}
-   # type:
-   # nodePort:
-   # clusterIP:
+  # type:
+  # nodePort:
+  # clusterIP:
 
 ##
 ## PostgreSQL Slave parameters
@@ -408,9 +408,9 @@ slave:
   ## Override the service configuration for slave
   ##
   service: {}
-   # type:
-   # nodePort:
-   # clusterIP:  
+  # type:
+  # nodePort:
+  # clusterIP:
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
