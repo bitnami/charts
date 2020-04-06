@@ -164,7 +164,7 @@ postgresql:
   ## Pod priority class
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  priorityClassName: ""
+  priorityClassName: ''
 
   ## Tolerations for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -331,23 +331,23 @@ postgresql:
     logDisconnections: false
     ## Operation to audit using pgAudit (default if not set)
     ##
-    pgAuditLog: ""
+    pgAuditLog: ''
     ## Log catalog using pgAudit
     ##
-    pgAuditLogCatalog: "off"
+    pgAuditLogCatalog: 'off'
     ## Log level for clients
     ##
     clientMinMessages: error
     ## Template for log line prefix (default if not set)
     ##
-    logLinePrefix: ""
+    logLinePrefix: ''
     ## Log timezone
     ##
-    logTimezone: ""
+    logTimezone: ''
 
   ## Shared preload libraries
   ##
-  sharedPreloadLibraries: "pgaudit, repmgr"
+  sharedPreloadLibraries: 'pgaudit, repmgr'
 
   ## Maximum total connections
   ##
@@ -552,7 +552,7 @@ pgpool:
   ## Pod priority class
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  priorityClassName: ""
+  priorityClassName: ''
 
   ## Tolerations for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -690,6 +690,11 @@ pgpool:
   ##
   useLoadBalancing: true
 
+  ## LoadBalancer on write actions behavior
+  ## one of: [off, transaction, trans_transaction, always]
+  ##
+  loadBalancingOnWrite: transaction
+
   ## Pgpool configuration
   ## Specify content for pgpool.conf
   ## Alternatively, you can put your pgpool.conf under the files/ directory
@@ -735,15 +740,15 @@ pgpool:
     ##
     ## Name of the Secret that contains the certificates
     ##
-    certificatesSecret: ""
+    certificatesSecret: ''
     ##
     ## Certificate filename
     ##
-    certFilename: ""
+    certFilename: ''
     ##
     ## Certificate Key filename
     ##
-    certKeyFilename: ""
+    certKeyFilename: ''
     ##
     ## CA Certificate filename
     ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
@@ -838,8 +843,8 @@ metrics:
   ## Annotations for Prometheus exporter
   ##
   annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9187"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9187'
 
   ## Enable this if you're using Prometheus Operator
   ##
