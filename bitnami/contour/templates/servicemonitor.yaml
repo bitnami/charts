@@ -1,4 +1,5 @@
-{{- if .Values.prometheus.serviceMonitor.enabled }}
+{{- if .Values.prometheus.serviceMonitor.enabled -}}
+{{- if .Values.contour.enabled }}
 ---
 apiVersion: v1
 kind: Service
@@ -42,6 +43,8 @@ spec:
     {{- if .Values.prometheus.serviceMonitor.relabelings }}
     relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 4 }}
     {{- end }}
+{{- end -}}
+{{- if .Values.envoy.enabled -}}
 ---
 apiVersion: v1
 kind: Service
@@ -86,4 +89,5 @@ spec:
     {{- if .Values.prometheus.serviceMonitor.relabelings }}
     relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 4 }}
     {{- end }}
+{{- end -}}
 {{- end }}

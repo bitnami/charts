@@ -1,3 +1,4 @@
+{{- if .Values.contour.enabled -}}
 ---
 apiVersion: v1
 kind: Service
@@ -14,6 +15,8 @@ spec:
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
     component: contour
   type: ClusterIP
+{{- end -}}
+{{- if .Values.envoy.enabled -}}
 ---
 apiVersion: v1
 kind: Service
@@ -41,3 +44,4 @@ spec:
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
     component: envoy
   type: LoadBalancer
+{{- end -}}

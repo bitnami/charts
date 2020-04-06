@@ -1,3 +1,4 @@
+{{- if .Values.envoy.enabled -}}
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -169,3 +170,4 @@ spec:
         secret:
           secretName: cacert
       restartPolicy: Always
+{{- end -}}

@@ -1,9 +1,14 @@
+{{- if and .Values.contour.enabled .Values.contour.createCustomResource -}}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.2.4
+    "helm.sh/hook": crd-install
+    {{- if .Values.contour.customResourceDeletePolicy }}
+    "helm.sh/hook-delete-policy": {{ .Values.contour.customResourceDeletePolicy }}
+    {{- end }}
   name: tlscertificatedelegations.contour.heptio.com
 spec:
   group: contour.heptio.com
@@ -151,3 +156,4 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
+{{- end -}}

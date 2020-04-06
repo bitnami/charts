@@ -100,6 +100,7 @@ rbac:
   create: true
 
 contour:
+  enabled: true
   image:
     registry: docker.io
     repository: bitnami/contour
@@ -131,6 +132,14 @@ contour:
     requests: {}
       # cpu: 100m
       # memory: 25Mi
+
+  ## Create Contour CRDs
+  createCustomResource: true
+
+  ## Contour CRD deletion policy
+  ## ref: https://v3.helm.sh/docs/topics/charts_hooks/
+  ##
+  # customResourceDeletePolicy: before-hook-creation
 
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -190,6 +199,7 @@ contour:
       name: ""
 
 envoy:
+  enabled: true
   image:
     registry: docker.io
     repository: bitnami/envoy
