@@ -207,6 +207,10 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## Labels
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
 ## Annotations
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
