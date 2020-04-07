@@ -245,7 +245,6 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```
 
 - Increase performance by setting pod anti-affinity.
-
 ```diff
 - affinity: {}
 ---
