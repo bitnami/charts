@@ -37,7 +37,7 @@ It also packages the [Bitnami MongoDB chart](https://github.com/bitnami/charts/t
 ## Prerequisites
 
 - Kubernetes 1.8+ (tested with Azure Kubernetes Service, Google Kubernetes Engine, minikube and Docker for Desktop Kubernetes)
-- Helm 2.10.0+
+- Helm 2.14.0+
 - Administrative access to the cluster to create Custom Resource Definitions (CRDs)
 
 ## Installing the Chart
@@ -57,6 +57,7 @@ For Helm 3:
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
+kubectl create namespace kubeapps
 helm install kubeapps --namespace kubeapps bitnami/kubeapps --set useHelm3=true
 ```
 
@@ -97,6 +98,10 @@ By default, Kubeapps will track the [community Helm charts](https://github.com/h
 Kubeapps supports two database types: MongoDB or PostgreSQL. By default MongoDB is installed. If you want to enable PostgreSQL instead set the following values when installing the application: `mongodb.enabled=false` and `postresql.enabled=true`.
 
 > **Note**: Changing the database type when upgrading is not supported.
+
+### Enabling Operators
+
+Since v1.9.0, Kubeapps supports to deploy and manage Operators within its dashboard. To enable this feature, set the flag `featureFlags.operators=true`. More information about how to enable and use this feature can be found in [this guide](https://github.com/kubeapps/kubeapps/blob/master/docs/user/operators.md).
 
 ### [Only for Helm 2] Configuring connection to a custom namespace Tiller instance
 
