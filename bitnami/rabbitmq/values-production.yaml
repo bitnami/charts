@@ -403,6 +403,7 @@ livenessProbe:
   periodSeconds: 30
   failureThreshold: 6
   successThreshold: 1
+  commandOverride: []
 
 readinessProbe:
   enabled: true
@@ -411,6 +412,7 @@ readinessProbe:
   periodSeconds: 30
   failureThreshold: 3
   successThreshold: 1
+  commandOverride: []
 
 ## Prometheus Metrics
 ##
