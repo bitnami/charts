@@ -176,8 +176,13 @@ spec:
       volumes:
       - name: ghost-data
       {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.existingClaim }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim }}
+        {{- else }}
         persistentVolumeClaim:
           claimName: {{ template "ghost.fullname" . }}
+        {{- end }}
       {{- else }}
         emptyDir: {}
       {{- end }}
