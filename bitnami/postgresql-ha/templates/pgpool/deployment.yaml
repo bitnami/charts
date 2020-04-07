@@ -118,6 +118,14 @@ spec:
                   name: {{ include "postgresql-ha.pgpoolSecretName" . }}
                   key: admin-password
             {{- end }}
+            {{- if .Values.pgpool.maxPool }}
+            - name: PGPOOL_MAX_POOL
+              value: {{ .Values.pgpool.maxPool | quote }}
+            {{- end }}
+            {{- if .Values.pgpool.numInitChildren }}
+            - name: PGPOOL_NUM_INIT_CHILDREN
+              value: {{ .Values.pgpool.numInitChildren | quote }}
+            {{- end }}
           ports:
             - name: postgresql
               containerPort: 5432

@@ -84,6 +84,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `brokerId`                             | ID of the Kafka node                                                                                     | `nil`                                                    |
 | `heapOpts`                             | Kafka's Java Heap size                                                                                   | `-Xmx1024m -Xms1024m`                                   |
 | `deleteTopicEnable`                    | Switch to enable topic deletion or not                                                                   | `false`                                                 |
+| `autoCreateTopicsEnable`               | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments | `false`                                                 |
 | `logFlushIntervalMessages`             | The number of messages to accept before forcing a flush of data to disk                                  | `10000`                                                 |
 | `logFlushIntervalMs`                   | The maximum amount of time a message can sit in a log before we force a flush                            | `1000`                                                  |
 | `logRetentionBytes`                    | A size-based retention policy for logs                                                                   | `_1073741824`                                           |
@@ -299,6 +300,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - defaultReplicationFactor: 1
 + defaultReplicationFactor: 3
+```
+
+- Allow auto creation of topics.
+
+```diff
+- autoCreateTopicsEnable: true
++ autoCreateTopicsEnable: false
 ```
 
 - The replication factor for the offsets topic:
