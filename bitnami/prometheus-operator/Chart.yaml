@@ -4,16 +4,16 @@ description: The Prometheus Operator for Kubernetes provides easy monitoring def
 name: prometheus-operator
 version: 0.15.0
 keywords:
-- prometheus
-- alertmanager
-- operator
-- monitoring
+  - prometheus
+  - alertmanager
+  - operator
+  - monitoring
 home: https://github.com/coreos/prometheus-operator/
 icon: https://bitnami.com/assets/stacks/prometheus-operator/img/prometheus-operator-stack-220x234.png
 sources:
-- https://github.com/bitnami/bitnami-docker-prometheus-operator
-- https://github.com/coreos/prometheus-operator/
+  - https://github.com/bitnami/bitnami-docker-prometheus-operator
+  - https://github.com/coreos/prometheus-operator/
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl
