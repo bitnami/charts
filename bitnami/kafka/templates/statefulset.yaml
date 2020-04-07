@@ -226,6 +226,8 @@ spec:
               value: {{ .Values.brokerId | quote }}
             - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
               value: {{ .Values.deleteTopicEnable | quote }}
+            - name: KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE
+              value: {{ .Values.autoCreateTopicsEnable | quote }}              
             - name: KAFKA_HEAP_OPTS
               value: {{ .Values.heapOpts | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES
@@ -298,8 +300,13 @@ spec:
               mountPath: /bitnami/kafka
             {{- if or .Values.config .Values.existingConfigmap }}
             - name: kafka-config
-              mountPath: /opt/bitnami/kafka/conf/server.properties
+              mountPath: /bitnami/kafka/config/server.properties
               subPath: server.properties
+            {{- end }}
+            {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
+            - name: log4j-config
+              mountPath: /bitnami/kafka/config/log4j.properties
+              subPath: log4j.properties
             {{- end }}
             - name: scripts
               mountPath: /scripts/setup.sh
@@ -346,6 +353,11 @@ spec:
           configMap:
             name: {{ include "kafka.configmapName" . }}
         {{- end }}
+        {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
+        - name: log4j-config
+          configMap:
+            name: {{ include "kafka.log4j.configMapName" . }}
+        {{ end }}
         - name: scripts
           configMap:
             name: {{ include "kafka.fullname" . }}-scripts

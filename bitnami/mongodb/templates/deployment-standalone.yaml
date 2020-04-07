@@ -195,7 +195,7 @@ spec:
               subPath: mongodb.conf
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-  {{ toYaml .Values.extraVolumeMounts | indent 8}}
+  {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
           resources:
   {{- toYaml .Values.resources | nindent 12 }}
@@ -245,7 +245,7 @@ spec:
             successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
           {{- end }}
           resources:
-{{ toYaml .Values.metrics.resources | indent 10 }}
+{{ toYaml .Values.metrics.resources | indent 12 }}
 {{- end }}
 {{- if .Values.sidecars }}
 {{ toYaml .Values.sidecars | indent 6 }}
