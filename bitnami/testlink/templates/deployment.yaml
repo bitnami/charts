@@ -62,7 +62,7 @@ spec:
         {{- else }}
         {{- if .Values.externalDatabase.create }}
         - name: MARIADB_ROOT_USER
-          value: {{ .Values.externalDatabase.root.user | quote }}
+          value: {{ .Values.externalDatabase.rootUser | quote }}
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:

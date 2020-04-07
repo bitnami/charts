@@ -79,9 +79,8 @@ externalDatabase:
 #  privileges: ALL
 
   ##admin user to create db and user.
-#  root:
-#    user:
-#    password:
+#  rootUser:
+#  rootPassword:
 
   ## Database host
   host:

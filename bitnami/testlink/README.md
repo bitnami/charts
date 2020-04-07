@@ -85,8 +85,8 @@ The following table lists the configurable parameters of the TestLink chart and 
 | `ingress.secrets[0].key`            | TLS Secret Key                                                                                        | `nil`                                                        |
 | `externalDatabase.create`           | Create user and db on external instance                                                               | `false`                                                      |
 | `externalDatabase.privileges`       | Privileges granted to db user                                                                         | `nil`                                                        |
-| `externalDatabase.root.user`        | DB admin username                                                                                     | `nil`                                                        |
-| `externalDatabase.root.password`    | DB admin password                                                                                     | `nil`                                                        |
+| `externalDatabase.rootUser`         | DB admin username                                                                                     | `nil`                                                        |
+| `externalDatabase.rootPassword`     | DB admin password                                                                                     | `nil`                                                        |
 | `externalDatabase.host`             | Host of the external database                                                                         | `nil`                                                        |
 | `externalDatabase.port`             | Port of the external database                                                                         | `3306`                                                       |
 | `externalDatabase.user`             | Existing or to be created username in the external db                                                 | `bn_testlink`                                                |
