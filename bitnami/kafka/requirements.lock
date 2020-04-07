@@ -1,6 +1,6 @@
 dependencies:
 - name: zookeeper
   repository: https://charts.bitnami.com/bitnami
-  version: 5.8.0
-digest: sha256:e4814d7eda55cb7d59351cebf8e69b0f877434b5a1f11562f9e9c7c439e25a95
-generated: "2020-04-06T07:08:29.125125266Z"
+  version: 5.9.0
+digest: sha256:3ff00835a9eadbcf53c7bda171c43bf9237a74f2a298ff8d17763283a66aa3d2
+generated: "2020-04-06T17:31:16.251193652Z"
