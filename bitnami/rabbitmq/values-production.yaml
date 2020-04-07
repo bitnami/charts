@@ -97,11 +97,12 @@ rabbitmq:
   setUlimitNofiles: true
   ulimitNofiles: '65536'
 
-  ## RabbitMQ maximum available scheduler threads and online scheduler threads
+  ## RabbitMQ maximum available scheduler threads and online scheduler threads. By default it will create a thread per CPU detected, with the following parameters you can tune it manually.
   ## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
+  ## ref: https://github.com/bitnami/charts/issues/2189
   ##
-  maxAvailableSchedulers: 2
-  onlineSchedulers: 1
+  # maxAvailableSchedulers: 2
+  # onlineSchedulers: 1
 
   ## Plugins to enable
   plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s rabbitmq_prometheus"
@@ -336,24 +337,25 @@ updateStrategy:
 nodeSelector:
   beta.kubernetes.io/arch: amd64
 tolerations: []
-affinity: {}
 
-## affinity: |
-##   podAntiAffinity:
-##     requiredDuringSchedulingIgnoredDuringExecution:
-##       - labelSelector:
-##           matchLabels:
-##             app: {{ template "rabbitmq.name" . }}
-##             release: {{ .Release.Name | quote }}
-##         topologyKey: kubernetes.io/hostname
-##     preferredDuringSchedulingIgnoredDuringExecution:
-##       - weight: 100
-##         podAffinityTerm:
-##           labelSelector:
-##             matchLabels:
-##               app:  {{ template "rabbitmq.name" . }}
-##               release: {{ .Release.Name | quote }}
-##           topologyKey: failure-domain.beta.kubernetes.io/zone
+## Pod AntiAffinity is set to avoid two pods in the same node and increase performance
+## ref: https://github.com/bitnami/charts/issues/2189
+affinity: 
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app: {{ template "rabbitmq.name" . }}
+            release: {{ .Release.Name | quote }}
+        topologyKey: kubernetes.io/hostname
+     preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app:  {{ template "rabbitmq.name" . }}
+              release: {{ .Release.Name | quote }}
+          topologyKey: failure-domain.beta.kubernetes.io/zone
 
 ## annotations for rabbitmq pods
 podAnnotations: {}
