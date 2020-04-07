@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.11.0-scratch-r8
+  tag: 0.11.0-scratch-r10
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -57,6 +57,11 @@ querier:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Labels to treat as a replica indicator along which data is deduplicated
   ##
   replicaLabel: replica
@@ -65,14 +70,14 @@ querier:
   ##
   dnsDiscovery:
     enabled: true
-    ## Sidecars service name to discover them using DNS discovery 
+    ## Sidecars service name to discover them using DNS discovery
     ## Evaluated as a template.
     # sidecarsService: "{{ .Release.Name }}-prometheus-thanos"
     ##
     ## Sidecars namespace to discover them using DNS discovery
     ## Evaluated as a template.
     # sidecarsNamespace: "{{ .Release.Namespace }}"
-  
+
   ## Statically configure store APIs to connect with Thanos Querier
   ##
   stores: []
@@ -126,7 +131,7 @@ querier:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Querier containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -141,7 +146,7 @@ querier:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
+
   ## Thanos Querier pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -231,6 +236,11 @@ bucketweb:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Refresh interval to download metadata from remote storage
   ##
   refresh: 30m
@@ -278,7 +288,7 @@ bucketweb:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -366,12 +376,17 @@ compactor:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Resolution and Retention flags
   ##
   retentionResolutionRaw: 30d
   retentionResolution5m: 30d
   retentionResolution1h: 10y
-  
+
   ## Minimum age of fresh (non-compacted) blocks
   ## before they are being processed
   ##
@@ -412,7 +427,7 @@ compactor:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Compactor containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -427,7 +442,7 @@ compactor:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
+
   ## Thanos Compactor pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -512,6 +527,11 @@ storegateway:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Extra Flags to passed to Thanos Store Gateway
   ##
   extraFlags: {}
@@ -551,7 +571,7 @@ storegateway:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -566,7 +586,7 @@ storegateway:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
+
   ## Thanos Store Gateway pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -671,6 +691,11 @@ ruler:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Dinamically configure Querier APIs using DNS discovery
   ##
   dnsDiscovery:
@@ -679,24 +704,24 @@ ruler:
   ## Alermanager URLs array
   ##
   alertmanagers: []
-  
+
   ## The default evaluation interval to use
   ##
   evalInterval: 1m
 
   ## Used to set the 'ruler_cluster' label
   ##
-  # clusterName: 
+  # clusterName:
 
   ## Extra Flags to passed to Thanos Ruler
   ##
   extraFlags: {}
-  
+
   ## Ruler Configuration
   ## Specify content for ruler.yml
   ##
   # config:
-  
+
   ## ConfigMap with Ruler Configuration
   ## NOTE: This will override ruler.config
   ##
@@ -737,7 +762,7 @@ ruler:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Ruler containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -752,7 +777,7 @@ ruler:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
+
   ## Thanos Ruler pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -850,7 +875,7 @@ ruler:
 ##
 metrics:
   enabled: true
-  
+
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
