@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.4.1-debian-10-r45
+  tag: 2.4.1-debian-10-r47
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -115,6 +115,11 @@ heapOpts: -Xmx1024m -Xms1024m
 ## Switch to enable topic deletion or not.
 ##
 deleteTopicEnable: false
+
+## Switch to enable auto creation of topics.
+## Enabling auto creation of topics not recommended for production or similar environments.
+##
+autoCreateTopicsEnable: false
 
 ## The number of messages to accept before forcing a flush of data to disk.
 ##
