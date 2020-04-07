@@ -119,6 +119,10 @@ querier:
   ##
   tolerations: {}
 
+  ## Pod annotations which may be required
+  ##
+  podAnnotations: {}
+
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -276,6 +280,10 @@ bucketweb:
   ##
   tolerations: {}
 
+  ## Pod annotations which may be required
+  ##
+  podAnnotations: {}
+
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -414,6 +422,10 @@ compactor:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: {}
+
+  ## Pod annotations which may be required
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -558,6 +570,10 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: {}
+
+  ## Pod annotations which may be required
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -750,6 +766,10 @@ ruler:
   ##
   tolerations: {}
 
+  ## Pod annotations which may be required
+  ##
+  podAnnotations: {}
+  
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
