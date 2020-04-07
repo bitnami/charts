@@ -367,7 +367,7 @@ Validate values of Azure DNS:
 {{- if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (not .Values.azure.secretName) .Values.azure.aadClientId .Values.azure.useManagedIdentityExtension -}}
 external-dns: azure.useManagedIdentityExtension
     You must not provide the Azure AAD Client ID when provider="azure" or provider="azure-private-dns" and useManagedIdentityExtension is "true".
-    Please unset the aadClientId parameter (--set azure.aadClientId="xxxx")
+    Please unset the aadClientId parameter (--set azure.aadClientId="")
 {{- end -}}
 {{- end -}}
 
@@ -379,7 +379,7 @@ Validate values of Azure DNS:
 {{- if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (not .Values.azure.secretName) .Values.azure.aadClientSecret .Values.azure.useManagedIdentityExtension -}}
 external-dns: azure.useManagedIdentityExtension
     You must not provide the Azure AAD Client Secret when provider="azure" or provider="azure-private-dns" and useManagedIdentityExtension is "true".
-    Please unset set the aadClientSecret parameter (--set azure.aadClientSecret="xxxx")
+    Please unset the aadClientSecret parameter (--set azure.aadClientSecret="")
 {{- end -}}
 {{- end -}}
 
