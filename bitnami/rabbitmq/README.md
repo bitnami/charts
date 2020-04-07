@@ -244,6 +244,39 @@ This chart includes a `values-production.yaml` file where you can find some para
 + volumePermissions.enabled: true
 ```
 
+- Increase performance by setting pod anti-affinity, and leaving erlang VM to decide the number of threads
+```diff
+- maxAvailableSchedulers: 2
+- onlineSchedulers: 1
+---
++# maxAvailableSchedulers: 2
++# onlineSchedulers: 1
+```
+
+```diff
+- affinity: {}
+---
++ affinity: 
++   podAntiAffinity:
++     requiredDuringSchedulingIgnoredDuringExecution:
++       - labelSelector:
++           matchLabels:
++             app: {{ template "rabbitmq.name" . }}
++             release: {{ .Release.Name | quote }}
++         topologyKey: kubernetes.io/hostname
++      preferredDuringSchedulingIgnoredDuringExecution:
++       - weight: 100
++         podAffinityTerm:
++           labelSelector:
++             matchLabels:
++               app:  {{ template "rabbitmq.name" . }}
++               release: {{ .Release.Name | quote }}
++           topologyKey: failure-domain.beta.kubernetes.io/zone
++
+```
+
+
+
 To horizontally scale this chart once it has been deployed you have two options:
 
 - Use `kubectl scale` command
