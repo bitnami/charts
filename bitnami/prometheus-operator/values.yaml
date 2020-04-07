@@ -520,6 +520,28 @@ prometheus:
   ##
   storageSpec: {}
 
+  ## Prometheus persistence parameters
+  ##
+  persistence:
+    ## The storageSpec takes precedence before this persistence configuration.
+    ## If you want to use this configuration make sure the storageSpec is not provided.
+    ##
+    enabled: false
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    # storageClass: "-"
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## Persistent Volume Claim size
+    ##
+    size: 8Gi
+
   ## Priority class assigned to the Pods
   ##
   priorityClassName: ""
@@ -554,10 +576,10 @@ prometheus:
       ##
       # pullSecrets:
       #   - myRegistryKeySecretName
-    
+
     ## Extra arguments passed to thanos sidecar 'args' section
     ##
-    extraArgs: [] 
+    extraArgs: []
     # - --log.level=debug
     # - --tsdb.path=/data/
 
@@ -786,7 +808,7 @@ alertmanager:
   ##
   logFormat: logfmt
 
-  ## Standard object’s metadata. 
+  ## Standard object’s metadata.
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##
   podMetadata: {}
@@ -807,6 +829,28 @@ alertmanager:
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/storage.md
   ##
   storageSpec: {}
+
+  ## Alertmanager persistence parameters
+  ##
+  persistence:
+    ## The storageSpec takes precedence before this persistence configuration.
+    ## If you want to use this configuration make sure the storageSpec is not provided.
+    ##
+    enabled: false
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    # storageClass: "-"
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## Persistent Volume Claim size
+    ##
+    size: 8Gi
 
   ## If true, the Operator won't process any Alertmanager configuration changes
   ##
