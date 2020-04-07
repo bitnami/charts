@@ -193,11 +193,15 @@ spec:
           configMap:
             name: {{ template "zookeeper.fullname" . }}
         {{- end }}
-        {{- if not .Values.persistence.enabled }}
+        {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ printf "%s" (tpl .Values.persistence.existingClaim .) }}
+        {{- else if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
         {{- end }}
-  {{- if .Values.persistence.enabled }}
+  {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim )}}
   volumeClaimTemplates:
     - metadata:
         name: data

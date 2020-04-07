@@ -124,6 +124,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `mariadb.db.user`                   | MariaDB Database user to create                               | `bn_ghost`                                               |
 | `mariadb.db.password`               | MariaDB Password for user                                     | _random 10 character long alphanumeric string_           |
 | `persistence.enabled`               | Enable persistence using PVC                                  | `true`                                                   |
+| `persistence.existingClaim`         | Use an existing PVC                                           | `""`
 | `persistence.storageClass`          | PVC Storage Class for Ghost volume                            | `nil` (uses alpha storage annotation)                    |
 | `persistence.accessMode`            | PVC Access Mode for Ghost volume                              | `ReadWriteOnce`                                          |
 | `persistence.size`                  | PVC Storage Request for Ghost volume                          | `8Gi`                                                    |
