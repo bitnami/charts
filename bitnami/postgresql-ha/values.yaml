@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.7.0-debian-10-r68
+  tag: 11.7.0-debian-10-r69
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r69
+  tag: 0.8.0-debian-10-r70
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -373,6 +373,15 @@ pgpool:
   ##
   adminUsername: admin
   # adminPassword:
+
+  ## The number of preforked Pgpool-II server processes.  It is also the concurrent
+  ## connections limit to Pgpool-II from clients. Must be a positive integer. (PGPOOL_NUM_INIT_CHILDREN)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  # numInitChildren:
+
+  ## The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  # maxPools:
 
   ## Pgpool configuration
   ## Specify content for pgpool.conf
