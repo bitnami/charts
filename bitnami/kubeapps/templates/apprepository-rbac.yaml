@@ -93,7 +93,7 @@ rules:
       - secrets
     verbs:
       - create
-{{- end -}}
+{{ end }}
 {{- if .Values.featureFlags.reposPerNamespace -}}
 ---
 # Kubeapps can read and watch its own AppRepository resources cluster-wide.

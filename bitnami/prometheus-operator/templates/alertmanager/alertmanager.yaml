@@ -8,8 +8,7 @@ spec:
   replicas: {{ .Values.alertmanager.replicaCount }}
   serviceAccountName: {{ template "prometheus-operator.alertmanager.serviceAccountName" . }}
   {{- if .Values.alertmanager.image }}
-  baseImage: {{ template "prometheus-operator.alertmanager.baseImage" . }}
-  version: {{ .Values.alertmanager.image.tag }}
+  image: {{ template "prometheus-operator.alertmanager.image" . }}
   {{- end }}
   listenLocal: {{ .Values.alertmanager.listenLocal }}
   {{- if and .Values.alertmanager.ingress.enabled .Values.alertmanager.ingress.hosts }}

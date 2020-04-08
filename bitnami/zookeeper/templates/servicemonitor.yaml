@@ -7,14 +7,14 @@ metadata:
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
-    app.kubernetes.io/component: metrics
+    app.kubernetes.io/component: zookeeper
     {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   selector:
     matchLabels: {{- include "zookeeper.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: metrics
+      app.kubernetes.io/component: zookeeper
   endpoints:
     - port: metrics
       path: "/metrics"
