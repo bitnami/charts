@@ -26,7 +26,7 @@ spec:
       labels: {{- include "zookeeper.labels" . | nindent 8 }}
         app.kubernetes.io/component: zookeeper
         {{- if .Values.podLabels }}
-{{- include "zookeeper.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- include "zookeeper.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations: {{- include "zookeeper.podAnnotations" . | nindent 8 }}
