@@ -385,7 +385,7 @@ spec:
               mountPath: {{ .Values.aws.credentials.mountPath }}
               readOnly: true
             {{- end }}
-            {{- if or (eq .Values.provider "azure") }}
+            {{- if eq .Values.provider "azure" }}
             # Azure mountPath(s)
             - name: azure-config-file
               {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
@@ -437,7 +437,7 @@ spec:
           secret:
             secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
-        {{- if or (eq .Values.provider "azure") }}
+        {{- if eq .Values.provider "azure" }}
         # Azure volume(s)
         - name: azure-config-file
           {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
