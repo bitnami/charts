@@ -273,6 +273,7 @@ resources:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
   enabled: true
+  path: /login
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -280,6 +281,7 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
+  path: /login
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3
