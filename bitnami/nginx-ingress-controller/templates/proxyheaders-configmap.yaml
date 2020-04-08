@@ -9,6 +9,6 @@ data:
 {{- if .Values.proxySetHeaders }}
 {{ toYaml .Values.proxySetHeaders | indent 2 }}
 {{- else if and .Values.headers (not .Values.proxySetHeaders) }}
-{{- toYaml .Values.headers | indent 2 }}
+{{ toYaml .Values.headers | indent 2 }}
 {{- end }}
 {{- end }}
