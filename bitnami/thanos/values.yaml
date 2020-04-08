@@ -119,7 +119,8 @@ querier:
   ##
   tolerations: {}
 
-  ## Pod annotations which may be required
+  ## Annotations for querier pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 
@@ -280,7 +281,8 @@ bucketweb:
   ##
   tolerations: {}
 
-  ## Pod annotations which may be required
+  ## Annotations for bucketweb pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 
@@ -423,7 +425,8 @@ compactor:
   ##
   tolerations: {}
 
-  ## Pod annotations which may be required
+  ## Annotations for compactor pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 
@@ -571,7 +574,8 @@ storegateway:
   ##
   tolerations: {}
 
-  ## Pod annotations which may be required
+  ## Annotations for storegateway pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 
@@ -766,7 +770,8 @@ ruler:
   ##
   tolerations: {}
 
-  ## Pod annotations which may be required
+  ## Annotations for ruler pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 

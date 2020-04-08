@@ -127,6 +127,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.securityContext.runAsUser`        | User ID for the Thanos Querier container                       | `1001`                          |
 | `querier.resources.limits`                 | The resources limits for the Thanos Querier container          | `{}`                            |
 | `querier.resources.requests`               | The requested resources for the Thanos Querier container       | `{}`                            |
+| `querier.podAnnotations`                   | Annotations for Thanos Querier pods                            | `{}`                            |
 | `querier.livenessProbe`                    | Liveness probe configuration for Thanos Querier                | `Check values.yaml file`        |
 | `querier.readinessProbe`                   | Readiness probe configuration for Thanos Querier               | `Check values.yaml file`        |
 | `querier.service.type`                     | Kubernetes service type                                        | `ClusterIP`                     |
@@ -167,6 +168,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.securityContext.runAsUser`        | User ID for the Thanos Bucket Web container                    | `1001`                         |
 | `bucketweb.resources.limits`                 | The resources limits for the Thanos Bucket Web container       | `{}`                           |
 | `bucketweb.resources.requests`               | The requested resources for the Thanos Bucket Web container    | `{}`                           |
+| `bucketweb.podAnnotations`                   | Annotations for Thanos Bucket Web pods                         | `{}`                           |
 | `bucketweb.livenessProbe`                    | Liveness probe configuration for Thanos Compactor              | `Check values.yaml file`       |
 | `bucketweb.readinessProbe`                   | Readiness probe configuration for Thanos Compactor             | `Check values.yaml file`       |
 | `bucketweb.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
@@ -201,6 +203,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.securityContext.runAsUser`        | User ID for the Thanos Compactor container                     | `1001`                         |
 | `compactor.resources.limits`                 | The resources limits for the Thanos Compactor container        | `{}`                           |
 | `compactor.resources.requests`               | The requested resources for the Thanos Compactor container     | `{}`                           |
+| `compactor.podAnnotations`                   | Annotations for Thanos Compactor pods                          | `{}`                           |
 | `compactor.livenessProbe`                    | Liveness probe configuration for Thanos Compactor              | `Check values.yaml file`       |
 | `compactor.readinessProbe`                   | Readiness probe configuration for Thanos Compactor             | `Check values.yaml file`       |
 | `compactor.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
@@ -234,6 +237,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.securityContext.runAsUser`        | User ID for the Thanos Store Gateway container                 | `1001`                         |
 | `storegateway.resources.limits`                 | The resources limits for the Thanos Store Gateway container    | `{}`                           |
 | `storegateway.resources.requests`               | The requested resources for the Thanos Store Gateway container | `{}`                           |
+| `storegateway.podAnnotations`                   | Annotations for Thanos Store Gateway pods                      | `{}`                           |
 | `storegateway.livenessProbe`                    | Liveness probe configuration for Thanos Store Gateway          | `Check values.yaml file`       |
 | `storegateway.readinessProbe`                   | Readiness probe configuration for Thanos Store Gateway         | `Check values.yaml file`       |
 | `storegateway.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
@@ -278,6 +282,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.securityContext.runAsUser`        | User ID for the Thanos Ruler container                         | `1001`                         |
 | `ruler.resources.limits`                 | The resources limits for the Thanos Ruler container            | `{}`                           |
 | `ruler.resources.requests`               | The requested resources for the Thanos Ruler container         | `{}`                           |
+| `ruler.podAnnotations`                   | Annotations for Thanos Ruler pods                              | `{}`                           |
 | `ruler.livenessProbe`                    | Liveness probe configuration for Thanos Ruler                  | `Check values.yaml file`       |
 | `ruler.readinessProbe`                   | Readiness probe configuration for Thanos Ruler                 | `Check values.yaml file`       |
 | `ruler.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
