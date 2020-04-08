@@ -10,6 +10,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.bucketweb.service.type }}
+  {{- if and .Values.bucketweb.service.ClusterIP (eq .Values.bucketweb.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.bucketweb.service.ClusterIP }}
+  {{- end }}
   {{- if and .Values.bucketweb.service.loadBalancerIP (eq .Values.bucketweb.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.bucketweb.service.loadBalancerIP }}
   {{- end }}

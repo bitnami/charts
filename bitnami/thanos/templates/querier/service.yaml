@@ -10,6 +10,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.querier.service.type }}
+  {{- if and .Values.querier.service.ClusterIP (eq .Values.querier.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.querier.service.ClusterIP }}
+  {{- end }}
   {{- if and .Values.querier.service.loadBalancerIP (eq .Values.querier.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.querier.service.loadBalancerIP }}
   {{- end }}

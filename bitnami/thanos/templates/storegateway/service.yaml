@@ -10,6 +10,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.storegateway.service.type }}
+  {{- if and .Values.storegateway.service.ClusterIP (eq .Values.storegateway.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.storegateway.service.ClusterIP }}
+  {{- end }}
   {{- if and .Values.storegateway.service.loadBalancerIP (eq .Values.storegateway.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.storegateway.service.loadBalancerIP }}
   {{- end }}

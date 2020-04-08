@@ -15,4 +15,8 @@ maintainers:
 name: thanos
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
+<<<<<<< HEAD
 version: 0.3.2
+=======
+version: 0.3.2
+>>>>>>> 4a7dbeab... Add support to create headless service
