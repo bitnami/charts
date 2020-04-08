@@ -275,6 +275,10 @@ updateStrategy: RollingUpdate
 ##
 # rollingUpdatePartition:
 
+## Pod labels. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
 ## Pod annotations. Evaluated as a template
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
