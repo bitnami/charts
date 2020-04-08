@@ -9,6 +9,6 @@ roleRef:
   kind: Role
   name: {{ template "redis-cluster.fullname" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ template "redis-cluster.serviceAccountName" . }}
+  - kind: ServiceAccount
+    name: {{ template "redis-cluster.serviceAccountName" . }}
 {{- end -}}

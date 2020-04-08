@@ -14,9 +14,9 @@ spec:
         - name: trigger
           image: "{{ template "redis-cluster.image" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
+          {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
           {{- if .Values.cluster.externalAccess.enabled }}
           command: ['/bin/bash', '-c']

@@ -12,6 +12,6 @@ rules:
     resourceNames: [{{ template "redis-cluster.fullname" . }}]
 {{- end -}}
 {{- if .Values.rbac.role.rules }}
-{{ toYaml .Values.rbac.role.rules | indent 2 }}
+{{- toYaml .Values.rbac.role.rules | nindent 2 }}
 {{- end -}}
 {{- end -}}

@@ -60,4 +60,5 @@ will be able to connect to redis.
 {{- end -}}
 {{- end -}}
 
-{{ include "redis-cluster.checkRollingTags" . }}
+{{- include "redis-cluster.validateValues" . }}
+{{- include "redis-cluster.checkRollingTags" . }}

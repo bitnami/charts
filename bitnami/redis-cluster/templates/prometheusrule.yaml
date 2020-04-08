@@ -8,12 +8,12 @@ metadata:
 {{- end }}
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
 {{- with .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml . | indent 4 }}
+{{- toYaml . | indent 4 }}
 {{- end }}
 spec:
 {{- with .Values.metrics.prometheusRule.rules }}
   groups:
     - name: {{ template "redis-cluster.name" $ }}
-      rules: {{ tpl (toYaml .) $ | nindent 8 }}
+      rules: {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
 {{- end }}
 {{- end }}

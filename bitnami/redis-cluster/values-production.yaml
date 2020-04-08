@@ -137,7 +137,20 @@ rbac:
     rules: []
 
 ## Redis pod Security Context
-securityContext:
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+  ## sysctl settings
+  ##
+  ## Uncomment the setting below to increase the net.core.somaxconn value
+  ##
+  # sysctls:
+  # - name: net.core.somaxconn
+  #   value: "10000"
+
+## Containers Security Context
+containerSecurityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
@@ -272,10 +285,6 @@ persistence:
   ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
   matchLabels: {}
   matchExpressions: {}
-  ## A manually managed Persistent Volume and Claim
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  # existingClaim:
 
 ## Update strategy, can be set to RollingUpdate or onDelete by default.
 ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -459,3 +468,18 @@ extraEnvVarsConfigMap:
 ## Name of a Secret containing extra env vars
 ##
 extraEnvVarsSecret:
+
+## Add your own init container or uncomment and modify the given example.
+##
+extraInitContainers: {}
+
+## Add sidecars to the pod
+##
+sidecars: {}
+## e.g.
+# - name: your-image-name
+#   image: your-image
+#   imagePullPolicy: Always
+#   ports:
+#     - name: portname
+#       containerPort: 1234

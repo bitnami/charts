@@ -321,3 +321,35 @@ Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
 app.kubernetes.io/name: {{ include "redis-cluster.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "redis-cluster.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "redis-cluster.validateValues.updateParameters" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Redis Cluster - check update parameters */}}
+{{- define "redis-cluster.validateValues.updateParameters" -}}
+{{- if and .Values.cluster.update.addNodes ( or (and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP) ( not .Values.cluster.externalAccess.enabled )) -}}
+  {{- if .Values.cluster.externalAccess.enabled }}
+    {{- if not .Values.cluster.update.newExternalIPs -}}
+redis-cluster: newExternalIPs
+     You must provide the newExternalIPs to perform the cluster upgrade when using external access.
+    {{- end -}}
+  {{- else }}
+    {{- if not .Values.cluster.update.currentNumberOfNodes -}}
+redis-cluster: currentNumberOfNodes
+    You must provide the currentNumberOfNodes to perform an upgrade when not using external access.
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
+

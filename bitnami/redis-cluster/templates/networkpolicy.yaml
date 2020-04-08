@@ -19,23 +19,23 @@ spec:
         protocol: UDP
     # Allow outbound connections to other cluster pods
     - ports:
-      - port: {{ .Values.redisPort }}
-      - port: {{ .Values.cluster.busPort }}
+        - port: {{ .Values.redisPort }}
+        - port: {{ .Values.cluster.busPort }}
       to:
-      - podSelector:
-          matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 12 }}
+        - podSelector:
+            matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 14 }}
   ingress:
     # Allow inbound connections
     - ports:
-      - port: {{ .Values.redisPort }}
-      - port: {{ .Values.cluster.busPort }}
+        - port: {{ .Values.redisPort }}
+        - port: {{ .Values.cluster.busPort }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
-      - podSelector:
-          matchLabels:
-            {{ template "redis-cluster.fullname" . }}-client: "true"
-      - podSelector:
-          matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 12 }}
+        - podSelector:
+            matchLabels:
+              {{ template "redis-cluster.fullname" . }}-client: "true"
+        - podSelector:
+            matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 14 }}
       {{- if .Values.networkPolicy.ingressNSMatchLabels }}
       - namespaceSelector:
           matchLabels:
@@ -54,6 +54,6 @@ spec:
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
-      - port: 9121
+        - port: 9121
     {{- end }}
 {{- end }}

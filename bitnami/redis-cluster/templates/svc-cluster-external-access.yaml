@@ -13,7 +13,7 @@ metadata:
   name: {{ template "redis-cluster.fullname" $ }}-{{ $i }}-svc
   labels: {{- include "redis-cluster.labels" $ | nindent 4 }}
     pod: {{ $targetPod }}
-  annotations: {{ include "common.tplValues.render" ( dict "value" $root.Values.cluster.externalAccess.service.annotations "context" $) | nindent 4 }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" $root.Values.cluster.externalAccess.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ $root.Values.cluster.externalAccess.service.type }}
   {{- if $root.Values.cluster.externalAccess.service.loadBalancerIP }}
