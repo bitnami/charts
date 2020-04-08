@@ -346,7 +346,7 @@ Validate values of Azure private DNS:
 {{- define "external-dns.validateValues.azurePrivateDns.resourceGroup" -}}
 {{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.resourceGroup) -}}
 external-dns: azure.resourceGroup
-    You must provide the Azure Resource Group when provider="azure" or provider="azure-private-dns".
+    You must provide the Azure Resource Group when provider="azure-private-dns".
     Please set the resourceGroup parameter (--set azure.resourceGroup="xxxx")
 {{- end -}}
 {{- end -}}
