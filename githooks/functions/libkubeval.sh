@@ -31,9 +31,9 @@ run_kubeval_chart() {
             cmd_output_file=$(mktemp)
             read -r -a opt_array <<< "$options_str"
             # printf '\033[0;34m- Running helm template --values %s %s | kubeval %s \033[0m\n' "$values_file_display" "$chart_name" "${options_str}"
-            if ! helm template --values "$values_file" "$chart_path" | kubeval "${opt_array[@]}" > "$cmd_output_file" 2>&1; then
+            if ! helm template --values "$values_file" "$chart_path" | kubeval --ignore-missing-schemas "${opt_array[@]}" > "$cmd_output_file" 2>&1; then
                 cat "$cmd_output_file"
-                printf '\033[0;31m\U0001F6AB helm template --values %s %s | kubeval %s failed.\033[0m\n' "$values_file_display" "$chart_name" "${options_str}"
+                printf '\033[0;31m\U0001F6AB helm template --values %s %s | kubeval --ignore-missing-schemas %s failed.\033[0m\n' "$values_file_display" "$chart_name" "${options_str}"
                 test_failed=1
             fi
             rm "$cmd_output_file"
