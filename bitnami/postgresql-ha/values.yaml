@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.7.0-debian-10-r74
+  tag: 11.7.0-debian-10-r75
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r71
+  tag: 0.8.0-debian-10-r72
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -121,6 +121,14 @@ clusterDomain: cluster.local
 ## PostgreSQL parameters
 ##
 postgresql:
+  ## Labels to add to the StatefulSet. Evaluated as template
+  ##
+  labels: {}
+
+  ## Labels to add to the StatefulSet pods. Evaluated as template
+  ##
+  podLabels: {}
+
   ## Number of replicas to deploy
   ##
   replicaCount: 2
@@ -287,9 +295,22 @@ postgresql:
   ##
   # initdbScriptsCM:
 
+  ## Secret with scripts to be run at first boot
+  ## Note: can be used with initdbScriptsCM or initdbScripts
+  ##
+  # initdbScriptsSecret:
+
 ## Pgpool parameters
 ##
 pgpool:
+  ## Labels to add to the Deployment. Evaluated as template
+  ##
+  labels: {}
+
+  ## Labels to add to the pods. Evaluated as template
+  ##
+  podLabels: {}
+
   ## Number of replicas to deploy
   ##
   replicaCount: 1
@@ -408,6 +429,11 @@ pgpool:
   ## NOTE: This will override pgpool.initdbScripts
   ##
   # initdbScriptsCM:
+
+  ## Secret with scripts to be run everytime Pgpool container is initialized
+  ## Note: can be used with initdbScriptsCM or initdbScripts
+  ##
+  # initdbScriptsSecret:
 
   ## Use Pgpool Load-Balancing
   ##
