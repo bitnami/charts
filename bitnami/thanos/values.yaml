@@ -182,7 +182,7 @@ querier:
     type: ClusterIP
     ## Thanos Querier service clusterIP IP
     ##
-    ClusterIP: ""
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -347,7 +347,7 @@ bucketweb:
     type: ClusterIP
     ## Thanos Bucket Web service clusterIP IP
     ##
-    ClusterIP: ""
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -494,7 +494,7 @@ compactor:
     type: ClusterIP
     ## Thanos Compactor service clusterIP IP
     ##
-    ClusterIP: ""
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -646,7 +646,7 @@ storegateway:
     type: ClusterIP
     ## Thanos Store Gateway service clusterIP IP
     ##
-    ClusterIP: ""
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -845,7 +845,7 @@ ruler:
     type: ClusterIP
     ## Thanos Ruler service clusterIP IP
     ##
-    ClusterIP: ""
+    # clusterIP: None
     ## HTTP Port
     ##
     http:

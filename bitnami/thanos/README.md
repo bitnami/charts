@@ -131,7 +131,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.livenessProbe`                    | Liveness probe configuration for Thanos Querier                | `Check values.yaml file`        |
 | `querier.readinessProbe`                   | Readiness probe configuration for Thanos Querier               | `Check values.yaml file`        |
 | `querier.service.type`                     | Kubernetes service type                                        | `ClusterIP`                     |
-| `querier.service.clusterIP`                | Thanos Querier service clusterIP IP                            | `""`                            |
+| `querier.service.clusterIP`                | Thanos Querier service clusterIP IP                            | `None`                          |
 | `querier.service.http.port`                | Service HTTP port                                              | `9090`                          |
 | `querier.service.http.nodePort`            | Service HTTP node port                                         | `nil`                           |
 | `querier.service.grpc.port`                | Service GRPC port                                              | `10901`                         |
@@ -173,7 +173,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.livenessProbe`                    | Liveness probe configuration for Thanos Compactor              | `Check values.yaml file`       |
 | `bucketweb.readinessProbe`                   | Readiness probe configuration for Thanos Compactor             | `Check values.yaml file`       |
 | `bucketweb.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
-| `bucketweb.service.clusterIP`                | Thanos Bucket Web service clusterIP IP                         | `""`                           |
+| `bucketweb.service.clusterIP`                | Thanos Bucket Web service clusterIP IP                         | `None`                         |
 | `bucketweb.service.http.port`                | Service HTTP port                                              | `8080`                         |
 | `bucketweb.service.http.nodePort`            | Service HTTP node port                                         | `nil`                          |
 | `bucketweb.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                          |
@@ -209,7 +209,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.livenessProbe`                    | Liveness probe configuration for Thanos Compactor              | `Check values.yaml file`       |
 | `compactor.readinessProbe`                   | Readiness probe configuration for Thanos Compactor             | `Check values.yaml file`       |
 | `compactor.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
-| `compactor.service.clusterIP`                | Thanos Compactor service clusterIP IP                          | `""`                           |
+| `compactor.service.clusterIP`                | Thanos Compactor service clusterIP IP                          | `None`                         |
 | `compactor.service.http.port`                | Service HTTP port                                              | `9090`                         |
 | `compactor.service.http.nodePort`            | Service HTTP node port                                         | `nil`                          |
 | `compactor.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                          |
@@ -244,7 +244,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.livenessProbe`                    | Liveness probe configuration for Thanos Store Gateway          | `Check values.yaml file`       |
 | `storegateway.readinessProbe`                   | Readiness probe configuration for Thanos Store Gateway         | `Check values.yaml file`       |
 | `storegateway.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
-| `storegateway.service.clusterIP`                | Thanos Store Gateway service clusterIP IP                      | `""`                           |
+| `storegateway.service.clusterIP`                | Thanos Store Gateway service clusterIP IP                      | `None`                         |
 | `storegateway.service.http.port`                | Service HTTP port                                              | `9090`                         |
 | `storegateway.service.http.nodePort`            | Service HTTP node port                                         | `nil`                          |
 | `storegateway.service.grpc.port`                | Service GRPC port                                              | `10901`                        |
@@ -290,7 +290,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.livenessProbe`                    | Liveness probe configuration for Thanos Ruler                  | `Check values.yaml file`       |
 | `ruler.readinessProbe`                   | Readiness probe configuration for Thanos Ruler                 | `Check values.yaml file`       |
 | `ruler.service.type`                     | Kubernetes service type                                        | `ClusterIP`                    |
-| `ruler.service.clusterIP`                | Thanos Ruler service clusterIP IP                              | `""`                           |
+| `ruler.service.clusterIP`                | Thanos Ruler service clusterIP IP                              | `None`                         |
 | `ruler.service.http.port`                | Service HTTP port                                              | `9090`                         |
 | `ruler.service.http.nodePort`            | Service HTTP node port                                         | `nil`                          |
 | `ruler.service.grpc.port`                | Service GRPC port                                              | `10901`                        |
