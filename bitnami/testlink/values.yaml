@@ -76,11 +76,11 @@ externalDatabase:
   create: false
   
   ## Database user privileges
-#  privileges: ALL
+  # privileges: ALL
 
   ##admin user to create db and user.
-#  rootUser:
-#  rootPassword:
+  # rootUser:
+  # rootPassword:
 
   ## Database host
   host:
