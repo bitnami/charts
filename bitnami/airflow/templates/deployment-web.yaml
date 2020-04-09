@@ -187,7 +187,7 @@ spec:
               {{- end }}
               {{- if .Values.ldap.enabled }}
             - name: AIRFLOW_LDAP_ENABLE
-              value: yes
+              value: "yes"
             - name: AIRFLOW_LDAP_URI
               value: {{ .Values.ldap.uri }}
             - name: AIRFLOW_LDAP_SEARCH
@@ -204,7 +204,7 @@ spec:
               value: {{ .Values.ldap.uidField }}
               {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_USE_TLS
-              value: {{ .Values.ldap.tls.enabled }}
+              value: "yes"
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
               value: {{ .Values.ldap.tls.allowSelfSigned }}
             - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
