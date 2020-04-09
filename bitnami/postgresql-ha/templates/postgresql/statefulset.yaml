@@ -30,6 +30,7 @@ spec:
       {{- if .Values.postgresql.nodeSelector }}
       nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      priorityClassName: {{ .Values.postgresql.priorityClassName }}
       {{- if .Values.postgresql.tolerations }}
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -46,8 +47,8 @@ spec:
             - sh
             - -c
             - |
-              mkdir -p {{ .Values.persistence.mountPath }}/data
-              chmod 700 {{ .Values.persistence.mountPath }}/data
+              mkdir -p {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
+              chmod 700 {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
                 xargs chown -R {{ .Values.postgresql.securityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }}
           securityContext:

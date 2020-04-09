@@ -15,7 +15,7 @@ spec:
     - ports:
         - port: {{ .Values.influxdb.containerPorts.http }}
           protocol: TCP
-        - port: {{ .Values.influxdb.containerPorts.rcp }}
+        - port: {{ .Values.influxdb.containerPorts.rpc }}
           protocol: TCP
       {{- if not .Values.networkPolicy.allowExternal }}
       from:

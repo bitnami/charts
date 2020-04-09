@@ -3,7 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "influxdb.fullname" . }}-relay
-  labels: {{- include "influxdb.labels" . | nindent 4 }}
+  labels: 
+    {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: relay
 spec:
   replicas: {{ .Values.relay.replicaCount }}
@@ -13,11 +14,13 @@ spec:
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels: {{- include "influxdb.matchLabels" . | nindent 6 }}
+    matchLabels: 
+      {{- include "influxdb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: relay
   template:
     metadata:
-      labels: {{- include "influxdb.labels" . | nindent 8 }}
+      labels: 
+        {{- include "influxdb.labels" . | nindent 8 }}
         app.kubernetes.io/component: relay
     spec:
 {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
@@ -27,7 +30,8 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
-                matchLabels: {{- include "influxdb.matchLabels" . | nindent 18 }}
+                matchLabels: 
+                  {{- include "influxdb.matchLabels" . | nindent 18 }}
                   app.kubernetes.io/component: relay
         {{- else if eq .Values.relay.antiAffinity "soft" }}
         podAntiAffinity:
@@ -36,7 +40,8 @@ spec:
               podAffinityTerm:
                 topologyKey: kubernetes.io/hostname
                 labelSelector:
-                  matchLabels: {{- include "influxdb.matchLabels" . | nindent 20 }}
+                  matchLabels: 
+                    {{- include "influxdb.matchLabels" . | nindent 20 }}
                     app.kubernetes.io/component: relay
         {{- end }}
         {{- if .Values.relay.nodeAffinity }}

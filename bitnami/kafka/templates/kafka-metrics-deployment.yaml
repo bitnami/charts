@@ -1,0 +1,32 @@
+{{- if .Values.metrics.kafka.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "kafka.fullname" . }}-exporter
+  labels: {{- include "kafka.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{- include "kafka.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
+  template:
+    metadata:
+      labels: {{- include "kafka.labels" . | nindent 8 }}
+        app.kubernetes.io/component: metrics
+    spec:
+{{- include "kafka.imagePullSecrets" . | indent 6 }}
+      containers:
+        - name: kafka-exporter
+          image: {{ include  "kafka.metrics.kafka.image" . }}
+          imagePullPolicy: {{ .Values.metrics.kafka.image.pullPolicy | quote }}
+          args:
+            - --kafka.server={{ template "kafka.fullname" . }}:{{ .Values.service.port }}
+            - --web.listen-address=:9308
+          ports:
+            - name: metrics
+              containerPort: 9308
+          {{- if .Values.metrics.kafka.resources }}
+          resources: {{ toYaml .Values.metrics.kafka.resources | nindent 12 }}
+          {{- end }}
+{{- end }}

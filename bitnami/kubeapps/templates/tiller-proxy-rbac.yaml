@@ -79,5 +79,42 @@ subjects:
     name: {{ template "kubeapps.tiller-proxy.fullname" . }}
     namespace: {{ .Release.Namespace }}
 {{- end -}}
+{{- if .Values.allowNamespaceDiscovery }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: "kubeapps:controller:tiller-proxy-operators-{{ .Release.Namespace }}"
+  labels:
+    app: {{ template "kubeapps.tiller-proxy.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - namespaces
+  verbs:
+    - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: "kubeapps:controller:tiller-proxy-operators-{{ .Release.Namespace }}"
+  labels:
+    app: {{ template "kubeapps.tiller-proxy.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "kubeapps:controller:tiller-proxy-operators-{{ .Release.Namespace }}"
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "kubeapps.tiller-proxy.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end -}}
 {{- end -}}
 {{- end }}{{/* matches useHelm3 */}}

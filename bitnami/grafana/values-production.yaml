@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 6.6.2-debian-10-r5
+  tag: 6.7.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,24 +55,43 @@ updateStrategy:
 ##
 # schedulerName:
 
-## Admin access configuration
-## If a password is not provided a random password will be generated
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+## Admin credentials configuration
 ##
 admin:
+  ## Admin username
+  ##
   user: "admin"
+  ## Admin password
+  ## If a password is not provided a random password will be generated
+  ##
   # password:
+  ## Name of the existing secret containing admin password
+  ##
+  # existingSecret:
+  ## Password key on the existing secret
+  ##
+  existingSecretPasswordKey: password
 
 ## SMTP configuration
-## Use either a secret container the credentials or set the credentials through command line.
 ##
 smtp:
   enabled: false
-  # Provide credentials by command line
+  ## SMTP credentials
+  ##
   user: user
   password: password
-  ## Existing secret with SMTP credentials (user and password)
+  ## Name of existing secret containing SMTP credentials (user and password)
+  ##
   # existingSecret:
-  ## User and password key on the existing secret ( "user" and "password" by default )
+  ## User and password key on the existing secret
+  ##
   existingSecretUserKey: user
   existingSecretPasswordKey: password
 
@@ -127,6 +146,7 @@ dashboardsProvider:
   enabled: false
   ## ConfigMap with a custom provider file.
   ## Important to set the Path to "/opt/bitnami/grafana/dashboards"
+  ## Evaluated as a template.
   configMapName:
 
 ## Create dashboards from a custom configMap that contains the file.

@@ -1,4 +1,4 @@
-{{- if .Values.dashboardsProvider.enabled }}
+{{- if and .Values.dashboardsProvider.enabled (not .Values.dashboardsProvider.configMapName) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
