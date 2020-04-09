@@ -146,7 +146,7 @@ Return the name of the Secret used to store the passwords
 {{- define "external-dns.secretName" -}}
 {{- if and (eq .Values.provider "aws") .Values.aws.credentials.secretName }}
 {{- .Values.aws.credentials.secretName }}
-{{- else if and (eq .Values.provider "azure") .Values.azure.secretName }}
+{{- else if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) .Values.azure.secretName }}
 {{- .Values.azure.secretName }}
 {{- else if and (eq .Values.provider "cloudflare") .Values.cloudflare.secretName }}
 {{- .Values.cloudflare.secretName }}
