@@ -191,7 +191,7 @@ spec:
           protocol: TCP
     {{- end }}
     {{- if .Values.prometheus.containers }}
-    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | indent 4 }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- if .Values.prometheus.priorityClassName }}
