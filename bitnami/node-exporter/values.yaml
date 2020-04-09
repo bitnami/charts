@@ -50,7 +50,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 0.18.1-debian-10-r75
+  tag: 0.18.1-debian-10-r77
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -111,6 +111,9 @@ service:
   ##
   # loadBalancerSourceRanges:
   # - 10.10.10.0/24
+
+  # Add the `prometheus.io/scrape: "true"` annotation to the service
+  addPrometheusScrapeAnnotation: true
 
   ## Provide any additional service annotations
   ##

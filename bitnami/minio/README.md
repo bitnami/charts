@@ -136,6 +136,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `ingress.secrets[0].key`             | TLS Secret Key                                                                                                                                            | `nil`                                                   |
 | `networkPolicy.enabled`              | Enable NetworkPolicy                                                                                                                                      | `false`                                                 |
 | `networkPolicy.allowExternal`        | Don't require client label for connections                                                                                                                | `true`                                                  |
+| `prometheusAuthType`                 | Authentication mode for Prometheus (`jwt` or `public`)                                                                                                    | `public`                                                |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -208,6 +209,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - networkPolicy.allowExternal: true
 + networkPolicy.allowExternal: false
+```
+
+- Change Prometheus authentication:
+```diff
+- prometheusAuthType: public
++ prometheusAuthType: jwt
 ```
 
 ### Distributed mode

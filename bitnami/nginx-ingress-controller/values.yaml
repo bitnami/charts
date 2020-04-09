@@ -15,7 +15,7 @@ name: controller
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.30.0-debian-10-r43
+  tag: 0.30.0-debian-10-r52
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -370,7 +370,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.1-debian-10-r70
+    tag: 1.16.1-debian-10-r78
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
