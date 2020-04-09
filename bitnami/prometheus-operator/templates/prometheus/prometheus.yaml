@@ -102,6 +102,20 @@ spec:
   {{- end }}
   {{- if .Values.prometheus.storageSpec }}
   storage: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.storageSpec "context" $) | nindent 4 }}
+  {{- else }}
+  {{- if .Values.prometheus.persistence.enabled }}
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          {{- range .Values.prometheus.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.prometheus.persistence.size | quote }}
+        {{- include "prometheus-operator.prometheus.storageClass" . }}
+  {{- end }}
   {{- end }}
   {{- if .Values.prometheus.podMetadata }}
   podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata "context" $) | nindent 4 }}
