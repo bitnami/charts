@@ -25,8 +25,7 @@ spec:
       []
     {{- end }}
   {{- if .Values.prometheus.image }}
-  baseImage: {{ template "prometheus-operator.prometheus.baseImage" . }}
-  version: {{ .Values.prometheus.image.tag }}
+  image: {{ template "prometheus-operator.prometheus.image" . }}
   {{- end }}
   {{- if .Values.prometheus.externalLabels }}
   externalLabels: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.externalLabels "context" $) | nindent 4 }}
@@ -61,6 +60,9 @@ spec:
   retention: {{ .Values.prometheus.retention }}
   {{- if .Values.prometheus.retentionSize }}
   retentionSize: {{ .Values.prometheus.retentionSize }}
+  {{- end }}
+  {{- if .Values.prometheus.disableCompaction }}
+  disableCompaction: {{ .Values.prometheus.disableCompaction }}
   {{- end }}
   {{- if .Values.prometheus.walCompression }}
   walCompression: {{ .Values.prometheus.walCompression }}
@@ -100,6 +102,20 @@ spec:
   {{- end }}
   {{- if .Values.prometheus.storageSpec }}
   storage: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.storageSpec "context" $) | nindent 4 }}
+  {{- else }}
+  {{- if .Values.prometheus.persistence.enabled }}
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          {{- range .Values.prometheus.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.prometheus.persistence.size | quote }}
+        {{- include "prometheus-operator.prometheus.storageClass" . }}
+  {{- end }}
   {{- end }}
   {{- if .Values.prometheus.podMetadata }}
   podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata "context" $) | nindent 4 }}
@@ -175,7 +191,7 @@ spec:
           protocol: TCP
     {{- end }}
     {{- if .Values.prometheus.containers }}
-    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | indent 4 }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- if .Values.prometheus.priorityClassName }}
