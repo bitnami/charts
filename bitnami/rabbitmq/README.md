@@ -104,6 +104,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.extraPorts`                         | Extra ports to expose in the service             | `nil`                                                   |
 | `service.extraContainerPorts`                | Extra ports to be included in container spec, primarily informational   | `nil`                            |
 | `persistence.enabled`                        | Use a PVC to persist data                        | `true`                                                  |
+| `service.labels`                             | service labels                                   | {}                                                      |
 | `service.annotations`                        | service annotations                              | {}                                                      |
 | `schedulerName`                              | Name of the k8s service (other than default)     | `nil`                                                   |
 | `persistence.storageClass`                   | Storage class of backing PVC                     | `nil` (uses alpha storage class annotation)             |
@@ -137,6 +138,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `livenessProbe.periodSeconds`                | number of seconds                                | 30                                                      |
 | `livenessProbe.failureThreshold`             | number of failures                               | 6                                                       |
 | `livenessProbe.successThreshold`             | number of successes                              | 1                                                       |
+| `livenessProbe.commandOverride`              | Custom command for liveness probe                | []                                                      |
 | `podDisruptionBudget`                        | Pod Disruption Budget settings                   | {}                                                      |
 | `readinessProbe.enabled`                     | would you like a readinessProbe to be enabled    | `true`                                                  |
 | `readinessProbe.initialDelaySeconds`         | number of seconds                                | 10                                                      |
@@ -144,6 +146,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `readinessProbe.periodSeconds`               | number of seconds                                | 30                                                      |
 | `readinessProbe.failureThreshold`            | number of failures                               | 3                                                       |
 | `readinessProbe.successThreshold`            | number of successes                              | 1                                                       |
+| `readinessProbe.commandOverride`             | Custom command for readiness probe               | []                                                      |
 | `metrics.enabled`                            | Enable prometheus to access rabbitmq metrics                                                                                                                                           | `false`                                                      |
 | `metrics.port`                               | Port where the server will expose Prometheus metrics                                                                                                                                   | `9419`                                                       |
 | `metrics.plugins`                            | Plugins to enable prometheus metrics in rabbitmq                                                                                                                                       | `rabbitmq_prometheus`                                        |

@@ -4,6 +4,9 @@ metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
   labels: {{ include "postgresql-ha.labels" . | nindent 4 }}
     app.kubernetes.io/component: pgpool
+    {{- if .Values.pgpool.labels }}
+    {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.labels "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.pgpool.replicaCount }}
   selector:
@@ -13,6 +16,9 @@ spec:
     metadata:
       labels: {{ include "postgresql-ha.labels" . | nindent 8 }}
         app.kubernetes.io/component: pgpool
+        {{- if .Values.pgpool.podLabels }}
+        {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.pgpool.podAnnotations }}
       annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -166,6 +172,10 @@ spec:
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
             {{- end }}
+            {{- if .Values.pgpool.initdbScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/secret
+            {{- end }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: postgresql-password
               mountPath: /opt/bitnami/pgpool/secrets/
@@ -184,6 +194,11 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ template "postgresql-ha.pgpoolInitdbScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.pgpool.initdbScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template "postgresql-ha.pgpoolInitdbScriptsSecret" . }}
         {{- end }}
         {{- if .Values.postgresql.usePasswordFile }}
         - name: postgresql-password

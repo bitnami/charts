@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.11.0-scratch-r11
+  tag: 0.11.0-scratch-r14
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -118,6 +118,11 @@ querier:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: {}
+
+  ## Annotations for querier pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -276,6 +281,11 @@ bucketweb:
   ##
   tolerations: {}
 
+  ## Annotations for bucketweb pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -414,6 +424,11 @@ compactor:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: {}
+
+  ## Annotations for compactor pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -558,6 +573,11 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: {}
+
+  ## Annotations for storegateway pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -749,6 +769,11 @@ ruler:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: {}
+
+  ## Annotations for ruler pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/

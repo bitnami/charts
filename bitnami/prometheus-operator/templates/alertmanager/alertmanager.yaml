@@ -35,6 +35,20 @@ spec:
   {{- end }}
   {{- if .Values.alertmanager.storageSpec }}
   storage: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.storageSpec "context" $) | nindent 4 }}
+  {{- else }}
+  {{- if .Values.alertmanager.persistence.enabled }}
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          {{- range .Values.alertmanager.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.alertmanager.persistence.size | quote }}
+        {{- include "prometheus-operator.alertmanager.storageClass" . }}
+  {{- end }}
   {{- end }}
   {{- if .Values.alertmanager.podMetadata }}
   podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podMetadata "context" $) | nindent 4 }}
