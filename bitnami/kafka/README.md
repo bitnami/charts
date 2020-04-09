@@ -127,6 +127,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `replicaCount`              | Number of Kafka nodes                                              | `1`                            |
 | `updateStrategy`            | Update strategy for the stateful set                               | `RollingUpdate`                |
 | `rollingUpdatePartition`    | Partition update strategy                                          | `nil`                          |
+| `podLabels`                 | Kafka pod labels                                                   | `{}` (evaluated as a template) |
 | `podAnnotations`            | Kafka Pod annotations                                              | `{}` (evaluated as a template) |
 | `affinity`                  | Affinity for pod assignment                                        | `{}` (evaluated as a template) |
 | `nodeSelector`              | Node labels for pod assignment                                     | `{}` (evaluated as a template) |
