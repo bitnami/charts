@@ -149,7 +149,10 @@ spec:
               value: {{ .Values.metrics.port | quote }}
             {{- end }}
             - name: POD_NAME
-              subPathExpr: $(POD_NAME)
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
           ports:
             - name: client
               containerPort: {{ .Values.service.port }}
