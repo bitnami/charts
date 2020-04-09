@@ -432,20 +432,20 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- if .Values.global }}
     {{- if .Values.global.postgresql }}
         {{- if .Values.global.postgresql.existingSecret }}
-            {{- printf "%s" .Values.global.postgresql.existingSecret -}}
+            {{- printf "%s" (tpl .Values.global.postgresql.existingSecret $) -}}
         {{- else if .Values.postgresql.existingSecret -}}
-            {{- printf "%s" .Values.postgresql.existingSecret -}}
+            {{- printf "%s" (tpl .Values.postgresql.existingSecret $) -}}
         {{- else -}}
             {{- printf "%s" (include "postgresql-ha.postgresql" .) -}}
         {{- end -}}
      {{- else if .Values.postgresql.existingSecret -}}
-         {{- printf "%s" .Values.postgresql.existingSecret -}}
+         {{- printf "%s" (tpl .Values.postgresql.existingSecret $) -}}
      {{- else -}}
          {{- printf "%s" (include "postgresql-ha.postgresql" .) -}}
      {{- end -}}
 {{- else -}}
      {{- if .Values.postgresql.existingSecret -}}
-         {{- printf "%s" .Values.postgresql.existingSecret -}}
+         {{- printf "%s" (tpl .Values.postgresql.existingSecret $) -}}
      {{- else -}}
          {{- printf "%s" (include "postgresql-ha.postgresql" .) -}}
      {{- end -}}
