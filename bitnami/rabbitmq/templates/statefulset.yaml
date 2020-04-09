@@ -153,9 +153,13 @@ spec:
         livenessProbe:
           exec:
             command:
+{{- if .Values.livenessProbe.commandOverride }}
+{{ toYaml .Values.livenessProbe.commandOverride | indent 14 }}
+{{- else }}
               - sh
               - -c
               - rabbitmq-api-check "http://{{ .Values.rabbitmq.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
+{{- end }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -166,9 +170,13 @@ spec:
         readinessProbe:
           exec:
             command:
+{{- if .Values.readinessProbe.commandOverride }}
+{{ toYaml .Values.readinessProbe.commandOverride | indent 14 }}
+{{- else }}
               - sh
               - -c
               - rabbitmq-health-check "http://{{ .Values.rabbitmq.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
+{{- end }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
