@@ -154,8 +154,6 @@ Return the name of the Secret used to store the passwords
 {{- .Values.digitalocean.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
-{{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
-{{- .Values.google.serviceAccountSecret }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
