@@ -36,7 +36,7 @@ helm.sh/chart: {{ include "mariadb-galera.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- if .Values.podLabels }}
-{{- toYaml .Values.podLabels -}}
+{{ toYaml .Values.podLabels -}}
 {{- end }}
 {{- end -}}
 
@@ -229,6 +229,27 @@ mariadb-galera: LDAP
       --set ldap.binddn="cn=admin,dc=example,dc=org" \
       --set ldap.bindpw="admin"
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "mariadb-galera.tlsRTCert" -}}
+{{- printf "/bitnami/mariadb/cert/%s" .Values.tls.rt.certFilename -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "mariadb-galera.tlsRTCertKey" -}}
+{{- printf "/bitnami/mariadb/cert/%s" .Values.tls.rt.certKeyFilename -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "mariadb-galera.tlsRTCACert" -}}
+{{- printf "/bitnami/mariadb/cert/%s" .Values.tls.rt.certCAFilename -}}
 {{- end -}}
 
 {{/*

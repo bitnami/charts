@@ -200,11 +200,12 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Prometheus BaseImage name
+Return the proper Prometheus Image name
 */}}
-{{- define "prometheus-operator.prometheus.baseImage" -}}
+{{- define "prometheus-operator.prometheus.image" -}}
 {{- $registryName := .Values.prometheus.image.registry -}}
 {{- $repositoryName := .Values.prometheus.image.repository -}}
+{{- $tag := .Values.prometheus.image.tag | toString -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
@@ -212,12 +213,12 @@ Also, we can't use a single if because lazy evaluation is not an option
 */}}
 {{- if .Values.global }}
     {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s" .Values.global.imageRegistry $repositoryName -}}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
     {{- else -}}
-        {{- printf "%s/%s" $registryName $repositoryName -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
 {{- else -}}
-    {{- printf "%s/%s" $registryName $repositoryName -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
 
@@ -245,11 +246,12 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Alertmanager BaseImage name
+Return the proper Alertmanager Image name
 */}}
-{{- define "prometheus-operator.alertmanager.baseImage" -}}
+{{- define "prometheus-operator.alertmanager.image" -}}
 {{- $registryName := .Values.alertmanager.image.registry -}}
 {{- $repositoryName := .Values.alertmanager.image.repository -}}
+{{- $tag := .Values.alertmanager.image.tag | toString -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
@@ -257,12 +259,12 @@ Also, we can't use a single if because lazy evaluation is not an option
 */}}
 {{- if .Values.global }}
     {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s" .Values.global.imageRegistry $repositoryName -}}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
     {{- else -}}
-        {{- printf "%s/%s" $registryName $repositoryName -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
 {{- else -}}
-    {{- printf "%s/%s" $registryName $repositoryName -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
 
@@ -407,6 +409,76 @@ Return the appropriate apiVersion for PodSecurityPolicy.
 {{- print "policy/v1beta1" -}}
 {{- else -}}
 {{- print "extensions/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Storage Class for Prometheus
+*/}}
+{{- define "prometheus-operator.prometheus.storageClass" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if .Values.prometheus.persistence.storageClass -}}
+              {{- if (eq "-" .Values.prometheus.persistence.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+              {{- else }}
+                  {{- printf "storageClassName: %s" .Values.prometheus.persistence.storageClass -}}
+              {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.prometheus.persistence.storageClass -}}
+        {{- if (eq "-" .Values.prometheus.persistence.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.prometheus.persistence.storageClass -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Storage Class for alertmanager
+*/}}
+{{- define "prometheus-operator.alertmanager.storageClass" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if .Values.alertmanager.persistence.storageClass -}}
+              {{- if (eq "-" .Values.alertmanager.persistence.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+              {{- else }}
+                  {{- printf "storageClassName: %s" .Values.alertmanager.persistence.storageClass -}}
+              {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.alertmanager.persistence.storageClass -}}
+        {{- if (eq "-" .Values.alertmanager.persistence.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.alertmanager.persistence.storageClass -}}
+        {{- end -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
