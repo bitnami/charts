@@ -5,7 +5,9 @@ metadata:
   name: {{ include "thanos.fullname" . }}-ruler
   labels: {{- include "thanos.labels" . | nindent 4 }}
     app.kubernetes.io/component: ruler
-    monitor: "true"
+    {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+    prometheus-operator/monitor: 'true'
+    {{- end }}
   {{- if .Values.ruler.service.annotations }}
   annotations: {{- include "thanos.tplValue" (dict "value" .Values.ruler.service.annotations "context" $) | nindent 4 }}
   {{- end }}
