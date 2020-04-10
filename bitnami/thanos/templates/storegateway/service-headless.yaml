@@ -1,0 +1,22 @@
+{{- if and (.Values.storegateway.enabled) (.Values.storegateway.service.additionalHeadless) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thanos.fullname" . }}-storegateway-headless
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ .Values.storegateway.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.storegateway.service.grpc.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: rcp
+  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+{{- end }}

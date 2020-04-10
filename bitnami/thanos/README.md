@@ -252,6 +252,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                          |
 | `storegateway.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer          | `[]`                           |
 | `storegateway.service.annotations`              | Annotations for Thanos Store Gateway service                   | `{}`                           |
+| `storegateway.service.additionalHeadless`       | Additional Headless service                                    | `false`                        |
 | `storegateway.serviceAccount.annotations`       | Annotations for Thanos Store Gateway Service Account           | `{}`                           |
 | `storegateway.persistence.enabled`              | Enable data persistence                                        | `true`                         |
 | `storegateway.persistence.existingClaim`        | Use a existing PVC which must be created manually before bound | `nil`                          |
@@ -298,6 +299,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`               | `nil`                          |
 | `ruler.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer          | `[]`                           |
 | `ruler.service.annotations`              | Annotations for Thanos Ruler service                           | `{}`                           |
+| `ruler.service.additionalHeadless`       | Additional Headless service                                    | `false`                        |
 | `ruler.serviceAccount.annotations`       | Annotations for Thanos Ruler Service Account                   | `{}`                           |
 | `ruler.persistence.enabled`              | Enable data persistence                                        | `true`                         |
 | `ruler.persistence.existingClaim`        | Use a existing PVC which must be created manually before bound | `nil`                          |

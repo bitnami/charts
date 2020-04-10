@@ -1,0 +1,22 @@
+{{- if and (.Values.ruler.enabled) (.Values.ruler.service.additionalHeadless) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thanos.fullname" . }}-ruler-headless
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ruler
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ .Values.ruler.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.ruler.service.grpc.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: rcp
+  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: ruler
+{{- end }}

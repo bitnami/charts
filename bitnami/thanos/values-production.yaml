@@ -675,6 +675,9 @@ storegateway:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Persistence paramaters
   ##
@@ -874,6 +877,9 @@ ruler:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Persistence paramaters
   ##

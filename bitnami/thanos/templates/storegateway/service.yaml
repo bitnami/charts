@@ -5,6 +5,7 @@ metadata:
   name: {{ include "thanos.fullname" . }}-storegateway
   labels: {{- include "thanos.labels" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
+    monitor: "true"
   {{- if .Values.storegateway.service.annotations }}
   annotations: {{- include "thanos.tplValue" (dict "value" .Values.storegateway.service.annotations "context" $) | nindent 4 }}
   {{- end }}
