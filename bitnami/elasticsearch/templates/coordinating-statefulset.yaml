@@ -1,23 +1,31 @@
-apiVersion: {{ template "deployment.apiVersion" . }}
-kind: Deployment
+apiVersion: {{ template "statefulset.apiVersion" . }}
+kind: StatefulSet
 metadata:
   name: {{ include "elasticsearch.coordinating.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: coordinating-only
+    app.kubernetes.io/component: coordinating-only
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: coordinating-only
 spec:
-  strategy:
+  updateStrategy:
     type: {{ .Values.coordinating.updateStrategy.type }}
-    {{- if (eq "Recreate" .Values.coordinating.updateStrategy.type) }}
+    {{- if (eq "OnDelete" .Values.coordinating.updateStrategy.type) }}
     rollingUpdate: null
+    {{- else if .Values.coordinating.updateStrategy.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.coordinating.updateStrategy.rollingUpdatePartition }}
     {{- end }}
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
-      role: coordinating-only
+      app.kubernetes.io/component: coordinating-only
   replicas: {{ .Values.coordinating.replicas }}
+  serviceName: {{ include "elasticsearch.coordinating.fullname" . }}-headless
   template:
     metadata:
       labels: {{- include "elasticsearch.labels" . | nindent 8 }}
-        role: coordinating-only
+        app.kubernetes.io/component: coordinating-only
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: coordinating-only
       {{- with .Values.coordinating.podAnnotations }}
       annotations: {{- toYaml . | nindent 10 }}
       {{- end }}
@@ -66,7 +74,7 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.name | quote }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
-              value: {{ template "elasticsearch.discovery.fullname" . }}
+              value: {{ include "elasticsearch.hosts" . | quote }}
             {{- if .Values.plugins }}
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}

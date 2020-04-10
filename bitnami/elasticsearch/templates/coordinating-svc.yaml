@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "elasticsearch.coordinating.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: coordinating-only
+    app.kubernetes.io/component: coordinating-only
   annotations: {{ include "elasticsearch.tplValue" ( dict "value" .Values.coordinating.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.coordinating.service.type | quote }}
@@ -20,4 +20,4 @@ spec:
       nodePort: null
       {{- end }}
   selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
-    role: coordinating-only
+    app.kubernetes.io/component: coordinating-only

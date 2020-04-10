@@ -1,0 +1,17 @@
+{{- if .Values.ingest.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "elasticsearch.ingest.fullname" . }}-headless
+  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ingest
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: tcp-transport
+      port: 9300
+      targetPort: transport
+  selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: ingest
+{{- end }}

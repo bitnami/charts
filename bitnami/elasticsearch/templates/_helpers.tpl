@@ -57,18 +57,18 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "elasticsearch.labels" -}}
-app: {{ include "elasticsearch.name" . }}
-chart: {{ include "elasticsearch.chart" . }}
-release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
+app.kubernetes.io/name: {{ include "elasticsearch.name" . }}
+helm.sh/chart: {{ include "elasticsearch.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
 Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
 */}}
 {{- define "elasticsearch.matchLabels" -}}
-app: {{ include "elasticsearch.name" . }}
-release: {{ .Release.Name }}
+app.kubernetes.io/name: {{ include "elasticsearch.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
@@ -131,6 +131,36 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s-%s" .Release.Name $name .Values.global.coordinating.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the hostname of every ElasticSearch node
+*/}}
+{{- define "elasticsearch.hosts" -}}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $coordinatingReplicaCount := int .Values.coordinating.replicas }}
+{{- $coordinatingFullname := include "elasticsearch.coordinating.fullname" . }}
+{{- $masterReplicaCount := int .Values.master.replicas }}
+{{- $masterFullname := include "elasticsearch.master.fullname" . }}
+{{- $dataReplicaCount := int .Values.data.replicas }}
+{{- $dataFullname := include "elasticsearch.data.fullname" . }}
+{{- $ingestReplicaCount := int .Values.ingest.replicas }}
+{{- $ingestFullname := include "elasticsearch.ingest.fullname" . }}
+{{- range $e, $i := until $coordinatingReplicaCount }}
+{{- $coordinatingFullname }}-{{ $i }}.{{ $coordinatingFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- range $e, $i := until $masterReplicaCount }}
+{{- $masterFullname }}-{{ $i }}.{{ $masterFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- range $e, $i := until $dataReplicaCount }}
+{{- $dataFullname }}-{{ $i }}.{{ $dataFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- if .Values.ingest.enabled }}
+{{- range $e, $i := until $ingestReplicaCount }}
+{{- $ingestFullname }}-{{ $i }}.{{ $ingestFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
 {{- end -}}
 {{- end -}}
 

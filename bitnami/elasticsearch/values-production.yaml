@@ -262,8 +262,8 @@ coordinating:
   ##
   replicas: 2
 
-  ## updateStrategy for ElasticSearch coordinating deployment
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## updateStrategy for ElasticSearch coordinating statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
@@ -464,6 +464,11 @@ ingest:
   ## Number of ingest node(s) replicas to deploy
   ##
   replicas: 2
+  ## updateStrategy for ElasticSearch ingest statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
   heapSize: 128m
   ## Provide annotations for the ingest pods.
   ##

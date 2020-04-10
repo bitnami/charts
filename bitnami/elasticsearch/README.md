@@ -106,7 +106,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `clusterDomain`                                   | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                              |
 | `discovery.name`                                  | Discover node pod name                                                                                                                                    | `discovery`                                                  |
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                                                   | `2`                                                          |
-| `coordinating.updateStrategy.type`                | Update strategy for Coordinating Deployment                                                                                                               | `RollingUpdate`                                              |
+| `coordinating.updateStrategy.type`                | Update strategy for Coordinating Statefulset                                                                                                               | `RollingUpdate`                                              |
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                                                          | `128m`                                                       |
 | `coordinating.podAnnotations`                     | Annotations for coordniating pods.                                                                                                                        | `{}`                                                         |
 | `coordinating.service.type`                       | Kubernetes Service type (coordinating-only nodes)                                                                                                         | `ClusterIP`                                                  |
@@ -164,6 +164,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `ingest.enabled`                                  | Enable ingest nodes                                                                                                                                       | `false`                                                      |
 | `ingest.name`                                     | Ingest node pod name                                                                                                                                      | `ingest`                                                     |
 | `ingest.replicas`                                 | Desired number of Elasticsearch ingest nodes                                                                                                              | `2`                                                          |
+| `ingest.updateStrategy.type`                      | Update strategy for Ingest Statefulset                                                                                                                    | `RollingUpdate`                                              |
 | `ingest.heapSize`                                 | Ingest node heap size                                                                                                                                     | `128m`                                                       |
 | `ingest.service.type`                             | Kubernetes Service type (ingest nodes)                                                                                                                    | `ClusterIP`                                                  |
 | `ingest.service.port`                             | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                                                                       | `9300`                                                       |
@@ -478,6 +479,15 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Notable changes
+
+### 12.0.0
+
+Several changes were introduced that breaks backwards compatibilty:
+
+- Data & Ingest nodes now use a statefulset instead of a deployment.
+- Headless services are added to provide a stable network identifier to each Elasticsearch node.
+- Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
+- Labels are adapted to follow the Helm charts best practices.
 
 ### 11.0.0
 

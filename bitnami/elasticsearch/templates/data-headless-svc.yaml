@@ -1,17 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "elasticsearch.discovery.fullname" . }}
+  name: {{ include "elasticsearch.data.fullname" . }}-headless
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+    app.kubernetes.io/component: data
 spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - port: 9300
-      name: transport
+    - name: tcp-transport
+      port: 9300
       targetPort: transport
-  publishNotReadyAddresses: true
-  sessionAffinity: None
   selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: data
