@@ -101,11 +101,21 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `airflow.auth.fernetKey`                  | Fernet key to secure connections                                                                     | `nil`                                                        |
 | `airflow.auth.existingSecret`             | Name of an existing secret containing airflow password and fernet key                                | `nil`                                                        |
 | `airflow.extraEnvVars`                    | Extra environment variables to add to airflow web, worker and scheduler pods                         | `nil`                                                        |
-| `airflow.web.resources.limits`            | The resources limits for the web containers                                                       | `{}`                                                         |
-| `airflow.web.resources.requests`          | The requested resources for the web containers                                                    | `{}`                                                         |
-| `airflow.scheduler.resources.limits`      | The resources limits for the scheduler containers                                                       | `{}`                                                         |
-| `airflow.scheduler.resources.requests`    | The requested resources for the scheduler containers                                                    | `{}`                                                         |
+| `airflow.web.resources.limits`            | The resources limits for the web containers                                                          | `{}`                                                         |
+| `airflow.web.resources.requests`          | The requested resources for the web containers                                                       | `{}`                                                         |
+| `airflow.scheduler.resources.limits`      | The resources limits for the scheduler containers                                                    | `{}`                                                         |
+| `airflow.scheduler.resources.requests`    | The requested resources for the scheduler containers                                                 | `{}`                                                         |
 | `airflow.webserverConfigMap`              | Config map name for ~/airflow/webserver_config.py                                                    | `nil`                                                        |
+| `ldap.enabled`                            | Enable LDAP support                                                                                  | `false`                                                      |
+| `ldap.uri`                                | LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`                                         | `nil`                                                        |
+| `ldap.base`                               | LDAP search base DN                                                                                  | `nil`                                                        |
+| `ldap.binddn`                             | LDAP bind DN                                                                                         | `nil`                                                        |
+| `ldap.bindpw`                             | LDAP bind password                                                                                   | `nil`                                                        |
+| `ldap.uidField`                           | LDAP field used for uid                                                                              | `uid`                                                        |
+| `ldap.tls.enabled`                        | Enable LDAP over TLS (LDAPS)                                                                         | `False`                                                      |
+| `ldap.tls.allowSelfSigned`                | Allow self signed certicates for LDAPS                                                               | `True`                                                       |
+| `ldap.tls.CAcertificateSecret`            | Name of the secret that contains the LDAPS CA cert file                                              | `uid`                                                        |
+| `ldap.tls.CAcertificateFilename`          | LDAPS CA cert filename                                                                               | `uid`                                                        |
 | `securityContext.enabled`                 | Enable security context                                                                              | `true`                                                       |
 | `securityContext.fsGroup`                 | Group ID for the container                                                                           | `1001`                                                       |
 | `securityContext.runAsUser`               | User ID for the container                                                                            | `1001`                                                       |
@@ -303,6 +313,8 @@ This is useful if you plan on using [Bitnami's sealed secrets](https://github.co
 The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
 
 ## Notable changes
+### 6.0.0
+This release adds support for LDAP authentication.
 
 ### 1.0.0
 

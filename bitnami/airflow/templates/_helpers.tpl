@@ -32,6 +32,62 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Full path to CA Cert file
+*/}}
+{{- define "airflow.ldapCAFilename"}}
+{{- printf "/opt/bitnami/airflow/certs/%s" .Values.ldap.tls.CAcertificateFilename -}}
+{{- end -}}
+
+{{/*
+Fully qualified app name for LDAP
+*/}}
+{{- define "airflow.ldap" -}}
+{{- printf "%s-ldap" (include "airflow.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Return the LDAP credentials secret.
+*/}}
+{{- define "airflow.ldapSecretName" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.ldap }}
+        {{- if .Values.global.ldap.existingSecret }}
+            {{- printf "%s" .Values.global.ldap.existingSecret -}}
+        {{- else if .Values.ldap.existingSecret -}}
+            {{- printf "%s" .Values.ldap.existingSecret -}}
+        {{- else -}}
+            {{- printf "%s" (include "airflow.ldap" .) -}}
+        {{- end -}}
+     {{- else if .Values.ldap.existingSecret -}}
+         {{- printf "%s" .Values.ldap.existingSecret -}}
+     {{- else -}}
+         {{- printf "%s" (include "airflow.ldap" .) -}}
+     {{- end -}}
+{{- else -}}
+     {{- if .Values.ldap.existingSecret -}}
+         {{- printf "%s" .Values.ldap.existingSecret -}}
+     {{- else -}}
+         {{- printf "%s" (include "airflow.ldap" .) -}}
+     {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "airflow.labels" -}}
+app.kubernetes.io/name: {{ template "airflow.name" . }}
+helm.sh/chart: {{ template "airflow.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
 Return the proper Airflow image name
 */}}
 {{- define "airflow.image" -}}
