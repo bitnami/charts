@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.11.0-scratch-r14
+  tag: 0.11.0-scratch-r18
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -180,6 +180,9 @@ querier:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Querier service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -342,6 +345,9 @@ bucketweb:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Bucket Web service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -486,6 +492,9 @@ compactor:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Compactor service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -635,6 +644,9 @@ storegateway:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Store Gateway service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -663,6 +675,9 @@ storegateway:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Persistence paramaters
   ##
@@ -831,6 +846,9 @@ ruler:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Ruler service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -859,6 +877,9 @@ ruler:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Persistence paramaters
   ##
