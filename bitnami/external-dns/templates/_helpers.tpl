@@ -134,6 +134,8 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "transip") .Values.transip.apiKey -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -150,6 +152,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.cloudflare.secretName }}
 {{- else if and (eq .Values.provider "digitalocean") .Values.digitalocean.secretName }}
 {{- .Values.digitalocean.secretName }}
+{{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
+{{- .Values.google.serviceAccountSecret }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
 {{- else -}}
@@ -207,6 +211,9 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.azure.aadClientSecret" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.account" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.apiKey" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.ovh.consumerKey" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationKey" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationSecret" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -426,6 +433,42 @@ Validate values of TransIP DNS:
 external-dns: transip.apiKey
     You must provide the TransIP API key when provider="transip".
     Please set the apiKey parameter (--set transip.apiKey="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the OVH consumer key when provider is "ovh"
+*/}}
+{{- define "external-dns.validateValues.ovh.consumerKey" -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.consumerKey) -}}
+external-dns: ovh.consumerKey
+    You must provide the OVH consumer key when provider="ovh".
+    Please set the consumerKey parameter (--set ovh.consumerKey="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the OVH application key when provider is "ovh"
+*/}}
+{{- define "external-dns.validateValues.ovh.applicationKey" -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationKey) -}}
+external-dns: ovh.applicationKey
+    You must provide the OVH appliciation key when provider="ovh".
+    Please set the applicationKey parameter (--set ovh.applicationKey="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the OVH application secret when provider is "ovh"
+*/}}
+{{- define "external-dns.validateValues.ovh.applicationSecret" -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationSecret) -}}
+external-dns: ovh.applicationSecret
+    You must provide the OVH appliciation secret key when provider="ovh".
+    Please set the applicationSecret parameter (--set ovh.applicationSecret="xxxx")
 {{- end -}}
 {{- end -}}
 

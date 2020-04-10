@@ -265,6 +265,13 @@ infoblox:
   wapiConnectionPoolSize: ""
   wapiHttpTimeout: ""
 
+## OVH configuration to be set via arguments/env. variables
+##
+ovh:
+  consumerKey: ""
+  applicationKey: ""
+  applicationSecret: ""
+
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##
 rfc2136:

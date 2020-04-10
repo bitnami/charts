@@ -249,6 +249,13 @@ google:
   serviceAccountSecretKey: "credentials.json"
   serviceAccountKey: ""
 
+## OVH configuration to be set via arguments/env. variables
+##
+ovh:
+  consumerKey: ""
+  applicationKey: ""
+  applicationSecret: ""
+
 ## Infoblox configuration to be set via arguments/env. variables
 ##
 infoblox:
