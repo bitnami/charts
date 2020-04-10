@@ -250,7 +250,6 @@ This chart includes a `values-production.yaml` file where you can find some para
 - Increase performance by setting pod anti-affinity.
 ```diff
 - affinity: {}
----
 + affinity: 
 +   podAntiAffinity:
 +     requiredDuringSchedulingIgnoredDuringExecution:
@@ -269,8 +268,6 @@ This chart includes a `values-production.yaml` file where you can find some para
 +           topologyKey: failure-domain.beta.kubernetes.io/zone
 +
 ```
-
-
 
 To horizontally scale this chart once it has been deployed you have two options:
 
