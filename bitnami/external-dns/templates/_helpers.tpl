@@ -118,7 +118,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "azure") (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "azure-private-dns") (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
+{{- else if and (eq .Values.provider "azure-private-dns") (or (and .Values.azure.aadClientId .Values.azure.aadClientSecret) (not .Values.azure.secretName)) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "cloudflare") (or .Values.cloudflare.apiToken .Values.cloudflare.apiKey) (not .Values.cloudflare.secretName) -}}
     {{- true -}}
@@ -208,8 +208,11 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.azure.aadClientId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.aadClientSecret" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.resourceGroup" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.tenantId" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.subscriptionId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.aadClientId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.aadClientSecret" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.useManagedIdentityExtensionNotSupported" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.account" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.apiKey" .) -}}
 {{- $messages := without $messages "" -}}
@@ -333,20 +336,7 @@ Validate values of Azure DNS:
 {{- define "external-dns.validateValues.azure.resourceGroup" -}}
 {{- if and (eq .Values.provider "azure") (not .Values.azure.resourceGroup) (not .Values.azure.secretName) -}}
 external-dns: azure.resourceGroup
-    You must provide the Azure Resource Group when provider="azure" or provider="azure-private-dns".
-    Please set the resourceGroup parameter (--set azure.resourceGroup="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of Azure private DNS:
-- must provide the Azure Resource Group when provider is "azure-private-dns"
-- azure-private-dns provider does not use azure.json so secretName takes no effect
-*/}}
-{{- define "external-dns.validateValues.azurePrivateDns.resourceGroup" -}}
-{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.resourceGroup) -}}
-external-dns: azure.resourceGroup
-    You must provide the Azure Resource Group when provider="azure-private-dns".
+    You must provide the Azure Resource Group when provider="azure".
     Please set the resourceGroup parameter (--set azure.resourceGroup="xxxx")
 {{- end -}}
 {{- end -}}
@@ -356,9 +346,9 @@ Validate values of Azure DNS:
 - must provide the Azure Tenant ID when provider is "azure" and secretName is not set
 */}}
 {{- define "external-dns.validateValues.azure.tenantId" -}}
-{{- if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (not .Values.azure.tenantId) (not .Values.azure.secretName) -}}
+{{- if and (eq .Values.provider "azure") (not .Values.azure.tenantId) (not .Values.azure.secretName) -}}
 external-dns: azure.tenantId
-    You must provide the Azure Tenant ID when provider="azure" or provider="azure-private-dns".
+    You must provide the Azure Tenant ID when provider="azure".
     Please set the tenantId parameter (--set azure.tenantId="xxxx")
 {{- end -}}
 {{- end -}}
@@ -368,9 +358,9 @@ Validate values of Azure DNS:
 - must provide the Azure Subscription ID when provider is "azure" and secretName is not set
 */}}
 {{- define "external-dns.validateValues.azure.subscriptionId" -}}
-{{- if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (not .Values.azure.subscriptionId) (not .Values.azure.secretName) -}}
+{{- if and (eq .Values.provider "azure") (not .Values.azure.subscriptionId) (not .Values.azure.secretName) -}}
 external-dns: azure.subscriptionId
-    You must provide the Azure Subscription ID when provider="azure" or provider="azure-private-dns".
+    You must provide the Azure Subscription ID when provider="azure".
     Please set the subscriptionId parameter (--set azure.subscriptionId="xxxx")
 {{- end -}}
 {{- end -}}
@@ -380,21 +370,21 @@ Validate values of Azure DNS:
 - must not provide the Azure AAD Client ID when provider is "azure", secretName is not set and MSI is enabled
 */}}
 {{- define "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientId" -}}
-{{- if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (not .Values.azure.secretName) .Values.azure.aadClientId .Values.azure.useManagedIdentityExtension -}}
+{{- if and (eq .Values.provider "azure") (not .Values.azure.secretName) .Values.azure.aadClientId .Values.azure.useManagedIdentityExtension -}}
 external-dns: azure.useManagedIdentityExtension
-    You must not provide the Azure AAD Client ID when provider="azure" or provider="azure-private-dns" and useManagedIdentityExtension is "true".
+    You must not provide the Azure AAD Client ID when provider="azure" and useManagedIdentityExtension is "true".
     Please unset the aadClientId parameter (--set azure.aadClientId="")
 {{- end -}}
 {{- end -}}
 
 {{/*
 Validate values of Azure DNS:
-- must not provide the Azure AAD Client Secret when provider is "azure", secretName is not set and MSI is enabled
+- must not provide the Azure AAD Client secret when provider is "azure", secretName is not set and MSI is enabled
 */}}
 {{- define "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientSecret" -}}
-{{- if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (not .Values.azure.secretName) .Values.azure.aadClientSecret .Values.azure.useManagedIdentityExtension -}}
+{{- if and (eq .Values.provider "azure") (not .Values.azure.secretName) .Values.azure.aadClientSecret .Values.azure.useManagedIdentityExtension -}}
 external-dns: azure.useManagedIdentityExtension
-    You must not provide the Azure AAD Client Secret when provider="azure" or provider="azure-private-dns" and useManagedIdentityExtension is "true".
+    You must not provide the Azure AAD Client Secret when provider="azure" and useManagedIdentityExtension is "true".
     Please unset the aadClientSecret parameter (--set azure.aadClientSecret="")
 {{- end -}}
 {{- end -}}
@@ -407,19 +397,7 @@ Validate values of Azure DNS:
 {{- if and (eq .Values.provider "azure") (not .Values.azure.secretName) (not .Values.azure.aadClientId) (not .Values.azure.useManagedIdentityExtension) -}}
 external-dns: azure.useManagedIdentityExtension
     You must provide the Azure AAD Client ID when provider="azure" and useManagedIdentityExtension is not set.
-    Please set the aadClientId parameter (--set azure.aadClientId="xxxx").
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of Azure private DNS:
-- must provide the Azure AAD Client ID when provider is "azure-private-dns" and MSI is disabled
-*/}}
-{{- define "external-dns.validateValues.azurePrivateDns.aadClientId" -}}
-{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.aadClientId) (not .Values.azure.useManagedIdentityExtension) -}}
-external-dns: azure.useManagedIdentityExtension
-    You must provide the Azure AAD Client ID when provider="azure-private-dns" and useManagedIdentityExtension is not set.
-    Please set the aadClientId parameter (--set azure.aadClientId="xxxx").
+    Please set the aadClientSecret parameter (--set azure.aadClientId="xxxx")
 {{- end -}}
 {{- end -}}
 
@@ -437,14 +415,74 @@ external-dns: azure.useManagedIdentityExtension
 
 {{/*
 Validate values of Azure Private DNS:
-- must provide the Azure AAD Client Secret when provider is "azure" and MSI is disabled
-- azure-private-dns provider does not use azure.json so secretName takes no effect
+- must provide the Azure Resource Group when provider is "azure-private-dns"
+- azure-private-dns provider does not use azure.json for specifying the resource group so it must be set
+*/}}
+{{- define "external-dns.validateValues.azurePrivateDns.resourceGroup" -}}
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.resourceGroup) -}}
+external-dns: azure.resourceGroup
+    You must provide the Azure Resource Group when provider="azure-private-dns".
+    Please set the resourceGroup parameter (--set azure.resourceGroup="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Azure Private DNS:
+- must provide the Azure Tenant ID when provider is "azure-private-dns"
+*/}}
+{{- define "external-dns.validateValues.azurePrivateDns.tenantId" -}}
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.tenantId) -}}
+external-dns: azure.tenantId
+    You must provide the Azure Tenant ID when provider="azure-private-dns".
+    Please set the tenantId parameter (--set azure.tenantId="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Azure Private DNS:
+- must provide the Azure Subscription ID when provider is "azure-private-dns"
+*/}}
+{{- define "external-dns.validateValues.azurePrivateDns.subscriptionId" -}}
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.subscriptionId) -}}
+external-dns: azure.subscriptionId
+    You must provide the Azure Subscription ID when provider="azure-private-dns".
+    Please set the subscriptionId parameter (--set azure.subscriptionId="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Azure Private DNS:
+- must provide the Azure AAD Client ID when provider is "azure-private-dns" and secretName is not set
+*/}}
+{{- define "external-dns.validateValues.azurePrivateDns.aadClientId" -}}
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) (not .Values.azure.aadClientId) -}}
+external-dns: azure.aadClientId
+    You must provide the Azure AAD Client ID when provider="azure-private-dns".
+    Please set the aadClientId parameter (--set azure.aadClientId="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Azure Private DNS:
+- must provide the Azure AAD Client Secret when provider is "azure-private-dns" and secretName is not set
 */}}
 {{- define "external-dns.validateValues.azurePrivateDns.aadClientSecret" -}}
-{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.aadClientSecret) (not .Values.azure.useManagedIdentityExtension) -}}
-external-dns: azure.useManagedIdentityExtension
-    You must provide the Azure AAD Client Secret when provider="azure-private-dns" and useManagedIdentityExtension is not set.
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) (not .Values.azure.aadClientSecret) -}}
+external-dns: azure.aadClientSecret
+    You must provide the Azure AAD Client Secret when provider="azure-private-dns".
     Please set the aadClientSecret parameter (--set azure.aadClientSecret="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Azure Private DNS:
+- MSI is not currently supported by external-dns for azure-private-dns, see https://github.com/kubernetes-sigs/external-dns/issues/1510
+*/}}
+{{- define "external-dns.validateValues.azurePrivateDns.useManagedIdentityExtensionNotSupported" -}}
+{{- if and (eq .Values.provider "azure-private-dns") (.Values.azure.useManagedIdentityExtension) -}}
+external-dns: azure.useManagedIdentityExtension
+    The value useManagedIdentityExtension is not supported in provider "azure-private-dns"
+    Please set the aadClientId & aadClientSecret values and unset useManagedIdentityExtension (--set azure.useManagedIdentityExtension=false,azure.aadClientID="xxxx",azure.aadClientSecret="xxxx")
 {{- end -}}
 {{- end -}}
 
