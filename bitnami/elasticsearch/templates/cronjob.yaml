@@ -6,7 +6,7 @@ metadata:
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
     role: curator
   {{- if .Values.curator.cronjob.annotations }}
-  annotations: {{- toYaml .Values.curator.cronjob.annotations | indent 4 }}
+  annotations: {{- toYaml .Values.curator.cronjob.annotations | nindent 4 }}
   {{- end }}
 spec:
   schedule: "{{ .Values.curator.cronjob.schedule }}"

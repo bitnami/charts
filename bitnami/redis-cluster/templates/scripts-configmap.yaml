@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "redis-cluster.fullname" . }}-scripts
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+data:
+  ping_readiness_local.sh: |-
+    {{- if .Values.usePasswordFile }}
+    password_aux=`cat ${REDIS_PASSWORD_FILE}`
+    export REDISCLI_AUTH=$password_aux
+    {{- else }}
+    export REDISCLI_AUTH=$REDIS_PASSWORD
+    {{- end }}
+    response=$(
+      timeout -s 9 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_liveness_local.sh: |-
+    {{- if .Values.usePasswordFile }}
+    password_aux=`cat ${REDIS_PASSWORD_FILE}`
+    export REDISCLI_AUTH=$password_aux
+    {{- else }}
+    export REDISCLI_AUTH=$REDIS_PASSWORD
+    {{- end }}
+    response=$(
+      timeout -s 9 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$response" != "PONG" ] && [ "$response" != "LOADING Redis is loading the dataset in memory" ]; then
+      echo "$response"
+      exit 1
+    fi
