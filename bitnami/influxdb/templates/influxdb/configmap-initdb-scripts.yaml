@@ -10,7 +10,7 @@ data:
 {{- with .Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,txt}" }}
 {{ .AsConfig | indent 2 }}
 {{- end }}
-{{- with .Values.initdbScripts }}
+{{- with .Values.influxdb.initdbScripts }}
 {{ tpl (toYaml .) $ | indent 2 }}
 {{- end }}
 {{- end }}
