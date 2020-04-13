@@ -164,7 +164,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `ingressController.image.pullPolicy`                     | kong ingress controller image pull policy                                                                              | `IfNotPresent`                                          |
 | `ingressController.image.pullSecrets`                    | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
 | `ingressController.proxyReadyTimeout`                | Maximum time (in seconds) to wait for the Kong container to be ready                                                                      | `300`                                                  |
-| `ingressController.extraEnvVars`                         | Array containing extra env vars to configure Kibana                                                                                                       | `nil`                                                                                                   |             |
+| `ingressController.extraEnvVars`                         | Array containing extra env vars to configure Kong                                                                                                       | `nil`                                                                                                   |             |
 | `ingressController.extraEnvVarsCM`                       | ConfigMap containing extra env vars to configure Kong Ingress Controller                                                                                                   | `nil`                                                                                                   |             |
 | `ingressController.extraEnvVarsSecret`                   | Secret containing extra env vars to configure Kong Ingress Controller (in case of sensitive data)                                                                          | `nil`                                                                                                   |             |
 | `ingressController.rbac.create`                    | Create the necessary Service Accounts, Roles and Rolebindings for the Ingress Controller to work                             | `true`                                                                                                   |             |
@@ -318,7 +318,7 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as Kibana (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as Kong (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -359,7 +359,7 @@ The Kong Ingress Controller and the Kong Migration job also allow this kind of c
 
 ### Using custom init scripts
 
-For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the `kong.initScriptsCM` and `kong.initScriptsSecret` values.
+For advanced operations, the Bitnami Kong charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the `kong.initScriptsCM` and `kong.initScriptsSecret` values.
 
 ```console
 elasticsearch.hosts[0]=elasticsearch-host
