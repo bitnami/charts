@@ -11,7 +11,7 @@ Contributions are welcome via GitHub Pull Requests. This document outlines the p
 
 ### Technical Requirements
 
-- Must pass CI jobs for linting and test the changes on top of different k8s platforms. (Automatically done by Bitnami CI/CD pipeline).
+- Must pass CI jobs for linting and test the changes on top of different k8s platforms. (Automatically done by the Bitnami CI/CD pipeline).
 - Must follow [Helm best practices](https://helm.sh/docs/chart_best_practices/).
 - If the chart contains a _values-production.yaml_ apart from _values.yaml_, ensure that changes are implemented in both files.
 - Our CI/CD needs to modify the PR (`bitnami-bot` will update `values*.yaml`). To do so, it's necessary you allow "edits from maintainers". Find more information in [this link](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork).
@@ -26,7 +26,7 @@ Contributions are welcome via GitHub Pull Requests. This document outlines the p
 ### PR Approval and Release Process
 
 1. Changes are manually reviewed by some Bitnami team members.
-2. Once accepted the changes, the PR is tested into the CI pipeline. The chart is installed and tested on top of different k8s platforms.
+2. Once accepted the changes, the PR is tested into the Bitnami CI/CD pipeline, the chart is installed and tested on top of different k8s platforms.
 3. If everything works fine, `bitnami-bot` will add a new commit to the PR updating the Docker images tags and dependencies. If something fails, we will continue with the review process.
 4. PR is merged in GitHub and the new version of the chart is pushed to the registry, please note that may be a slight difference between the appearance of the code in GitHub and the chart in the repository.
 
