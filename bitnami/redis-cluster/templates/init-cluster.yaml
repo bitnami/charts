@@ -1,0 +1,51 @@
+{{- if and .Values.cluster.init (or (and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP) ( not .Values.cluster.externalAccess.enabled )) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "redis-cluster.fullname" . }}-cluster-create
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  activeDeadlineSeconds: {{ .Values.cluster.initTimeout }}
+  template:
+    spec:
+      containers:
+        - name: trigger
+          image: "{{ template "redis-cluster.image" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          {{- end }}
+          {{- if .Values.cluster.externalAccess.enabled }}
+          command: ['/bin/bash', '-c']
+          args:
+            - |
+              ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              export REDIS_NODES="${ips[@]}"
+              /entrypoint.sh /run.sh
+          {{- end }}
+          env:
+            {{- if .Values.cluster.externalAccess.enabled }}
+            - name: REDIS_PORT
+              value: {{ .Values.cluster.externalAccess.service.port | quote }}
+            {{- else }}
+            - name: REDIS_PORT
+              value: {{ .Values.redisPort | quote }}
+            - name: REDIS_NODES
+              value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "redis-cluster.fullname" $ }}-{{ $i }}.{{ template "redis-cluster.fullname" $ }}-headless {{ end }}"
+            {{- end }}
+            {{- if .Values.usePassword }}
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "redis-cluster.secretName" . }}
+                  key: {{ template "redis-cluster.secretPasswordKey" . }}
+            {{- end }}
+            - name: REDIS_CLUSTER_CREATOR
+              value: "yes"
+            - name: REDIS_CLUSTER_REPLICAS
+              value: {{ .Values.cluster.replicas | quote }}
+      restartPolicy: OnFailure
+{{- end }}

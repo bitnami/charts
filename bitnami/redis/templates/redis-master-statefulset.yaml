@@ -147,6 +147,9 @@ spec:
             - sh
             - -c
             - /health/ping_liveness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}
+        {{- else if .Values.master.customLivenessProbe }}
+        livenessProbe:
+{{ toYaml .Values.master.customLivenessProbe | indent 10 }}
         {{- end }}
         {{- if .Values.master.readinessProbe.enabled}}
         readinessProbe:
@@ -160,6 +163,9 @@ spec:
             - sh
             - -c
             - /health/ping_readiness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}
+        {{- else if .Values.master.customReadinessProbe }}
+        readinessProbe:
+{{ toYaml .Values.master.customReadinessProbe | indent 10 }}
         {{- end }}
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
@@ -244,6 +250,9 @@ spec:
             - sh
             - -c
             - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+        {{- else if .Values.sentinel.customLivenessProbe }}
+        livenessProbe:
+{{ toYaml .Values.sentinel.customLivenessProbe | indent 10 }}
         {{- end }}
         {{- if .Values.sentinel.readinessProbe.enabled}}
         readinessProbe:
@@ -257,6 +266,9 @@ spec:
             - sh
             - -c
             - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+        {{- else if .Values.sentinel.customReadinessProbe }}
+        readinessProbe:
+{{ toYaml .Values.sentinel.customReadinessProbe | indent 10 }}
         {{- end }}
         resources:
 {{ toYaml .Values.sentinel.resources | indent 10 }}

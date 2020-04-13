@@ -26,6 +26,9 @@ spec:
     metadata:
       labels: {{- include "kafka.labels" . | nindent 8 }}
         app.kubernetes.io/component: kafka
+        {{- if .Values.podLabels }}
+        {{- include "kafka.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or (include "kafka.createConfigmap" .) (include "kafka.createSecret" .) .Values.externalAccess.enabled (include "kafka.metrics.jmx.createConfigmap" .) .Values.podAnnotations }}
       annotations:
         {{- if (include "kafka.createConfigmap" .) }}
