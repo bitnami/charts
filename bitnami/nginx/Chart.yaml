@@ -1,7 +1,7 @@
 apiVersion: v1
 name: nginx
-version: 5.1.14
-appVersion: 1.17.9
+version: 5.1.15
+appVersion: 1.17.10
 description: Chart for the nginx server
 keywords:
   - nginx
