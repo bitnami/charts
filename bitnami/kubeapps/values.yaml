@@ -185,7 +185,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.9.1-scratch-r0
+    tag: 1.9.2-scratch-r0
   ## Kubeapps assets synchronization tool
   ## Image used to perform chart repository syncs
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-asset-syncer/tags/
@@ -193,7 +193,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 1.9.1-scratch-r0
+    tag: 1.9.2-scratch-r0
   ## Initial charts repo proxies to configure
   ##
   initialReposProxy:
@@ -281,7 +281,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 1.9.1-scratch-r0
+    tag: 1.9.2-scratch-r0
   service:
     port: 8080
   resources:
@@ -323,7 +323,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.9.1-scratch-r0
+    tag: 1.9.2-scratch-r0
 
   ## Tiller Proxy service parameters
   ##
@@ -397,7 +397,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 1.9.1-scratch-r0
+    tag: 1.9.2-scratch-r0
   ## Assetsvc service parameters
   ##
   service:
@@ -457,7 +457,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.9.1-debian-10-r0
+    tag: 1.9.2-debian-10-r0
   ## Dashboard service parameters
   ##
   service:
