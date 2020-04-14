@@ -95,6 +95,16 @@ serviceAccount:
   ## Name of an already existing service account. Setting this value disables the automatic service account creation.
   # name:
 
+## Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+psp:
+  create: false
+
+## Creates role for ServiceAccount
+## Required for PSP
+rbac:
+  create: false
+
 replication:
   enabled: false
   user: repl_user
