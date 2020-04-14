@@ -219,10 +219,15 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   # nodePort:
-  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
+  ## loadBalancerIP for the Grafana Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   # loadBalancerIP:
+  ## loadBalancerSourceRanges for the Grafana Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerSourceRanges:
+  #   - 10.10.10.0/24
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
