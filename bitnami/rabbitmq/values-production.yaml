@@ -343,22 +343,22 @@ tolerations: []
 
 ## Pod AntiAffinity is set to avoid two pods in the same node and increase performance
 ## ref: https://github.com/bitnami/charts/issues/2189
-affinity: 
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchLabels:
-            app: {{ template "rabbitmq.name" . }}
-            release: {{ .Release.Name | quote }}
-        topologyKey: kubernetes.io/hostname
-     preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchLabels:
-              app:  {{ template "rabbitmq.name" . }}
-              release: {{ .Release.Name | quote }}
-          topologyKey: failure-domain.beta.kubernetes.io/zone
+## affinity: |
+##   podAntiAffinity:
+##     requiredDuringSchedulingIgnoredDuringExecution:
+##       - labelSelector:
+##           matchLabels:
+##             app: {{ template "rabbitmq.name" . }}
+##             release: {{ .Release.Name | quote }}
+##         topologyKey: kubernetes.io/hostname
+##     preferredDuringSchedulingIgnoredDuringExecution:
+##       - weight: 100
+##         podAffinityTerm:
+##           labelSelector:
+##             matchLabels:
+##               app:  {{ template "rabbitmq.name" . }}
+##               release: {{ .Release.Name | quote }}
+##           topologyKey: failure-domain.beta.kubernetes.io/zone
 
 ## annotations for rabbitmq pods
 podAnnotations: {}
