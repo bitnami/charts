@@ -259,6 +259,12 @@ spec:
           {{- end }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
+        {{- with $.Values.mongos.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       volumes:
         {{- if .Values.usePasswordFile }}
         - name: secrets
