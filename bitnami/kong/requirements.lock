@@ -1,0 +1,9 @@
+dependencies:
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 8.7.3
+- name: cassandra
+  repository: https://charts.bitnami.com/bitnami
+  version: 5.2.0
+digest: sha256:1226cdb56471225d70ca9a1245cc76f5ec5de36fb7e3d9475d4067726c190a3d
+generated: "2020-04-14T17:44:44.956443056Z"

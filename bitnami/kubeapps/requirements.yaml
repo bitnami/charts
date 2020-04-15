@@ -1,7 +1,7 @@
 dependencies:
   - name: mongodb
     # Versions above 7.8 (<7.10.2) contains an error 
-    version: "7.8.10"
+    version: "> 7.10.2"
     repository: https://charts.bitnami.com/bitnami
     condition: mongodb.enabled
   - name: postgresql
