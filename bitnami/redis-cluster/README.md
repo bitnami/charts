@@ -1,5 +1,5 @@
 
-# Redis
+# Redis Cluster
 
 [Redis](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
 
@@ -20,6 +20,18 @@ $ helm install my-release bitnami/redis-cluster --values values-production.yaml
 This chart bootstraps a [Redis](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+
+### Choose between Redis Helm Chart and Redis Cluster Helm Chart
+
+You can choose any of the two Redis Helm charts for deploying a Redis cluster.
+While [Redis Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis Sentinel, the [Redis Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis Cluster topology with sharding.
+The main features of each chart are the following:
+| Redis                                     | Redis Cluster                                               |
+| ----------------------------------------- | ----------------------------------------------------------- |
+| Supports multiple databases               | Supports only one database. Better if you have a big dataset |
+| Single write point (single master)        | Multiple write points (multiple masters)                    |
+| ![Redis Topology](img/redis-topology.png) | ![Redis Cluster Topology](img/redis-cluster-topology.png)   |
+
 
 ## Prerequisites
 
@@ -446,3 +458,9 @@ networkPolicy:
   ingressNSPodMatchLabels:
     redis-client: true
 ```
+
+## Notable changes
+
+### 2.0.0
+
+The version `1.0.0` was using a label in the Statefulset's volumeClaimTemplate that didn't allow to upgrade the chart. The version `2.0.0` fixed that issue. Also it adds more docs in the README.md.

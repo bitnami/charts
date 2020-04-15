@@ -185,6 +185,32 @@ spec:
               {{- else }}
               value: "no"
               {{- end }}
+              {{- if .Values.ldap.enabled }}
+            - name: AIRFLOW_LDAP_ENABLE
+              value: "yes"
+            - name: AIRFLOW_LDAP_URI
+              value: {{ .Values.ldap.uri }}
+            - name: AIRFLOW_LDAP_SEARCH
+              value: {{ .Values.ldap.base }}
+            - name: AIRFLOW_LDAP_BIND_USER
+              value: {{ .Values.ldap.binddn }}
+            - name: AIRFLOW_LDAP_BIND_PASSWORD
+              value: {{ .Values.ldap.bindpw }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "airflow.ldapSecretName" . }}
+                  key: bind-password
+            - name: AIRFLOW_LDAP_UID_FIELD
+              value: {{ .Values.ldap.uidField }}
+              {{- if .Values.ldap.tls.enabled }}
+            - name: AIRFLOW_LDAP_USE_TLS
+              value: "yes"
+            - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
+              value: {{ .Values.ldap.tls.allowSelfSigned }}
+            - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
+              value: {{ include "airflow.ldapCAFilename" . | quote }}
+              {{- end }}
+            {{- end }}
             {{- if .Values.airflow.extraEnvVars }}
               {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
             {{- end }}
@@ -246,6 +272,11 @@ spec:
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: webserver_config.py
             {{- end }}
+            {{- if .Values.ldap.tls.enabled }}
+            - name: airflow-ldap-ca-certificate
+              mountPath: /opt/bitnami/airflow/conf/certs/
+              readOnly: true
+            {{- end }}
           {{- if .Values.airflow.web.resources }}
           resources: {{- toYaml .Values.airflow.web.resources | nindent 12 }}
           {{- end }}
@@ -277,4 +308,10 @@ spec:
         - name: custom-webserver-configuration-file
           configMap:
             name: {{ .Values.airflow.webserverConfigMap }}
+        {{- end }}
+        {{- if .Values.ldap.tls.enabled }}
+        - name: airflow-ldap-ca-certificate
+          secret:
+            secretName: {{ required "A secret containing the LDAP CA certificate. It is required when SSL in enabled" .Values.ldap.tls.CAcertificateSecret }}
+            defaultMode: 256
         {{- end }}

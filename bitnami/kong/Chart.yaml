@@ -1,0 +1,22 @@
+apiVersion: v1
+name: kong
+version: 0.0.1
+appVersion: 2.0.2
+description: Kong is a scalable, open source API layer (aka API gateway or API middleware) that runs in front of any RESTful API. Extra functionalities beyond the core platform are extended through plugins. Kong is built on top of reliable technologies like NGINX and provides an easy-to-use RESTful API to operate and configure the system.
+keywords:
+  - kong
+  - ingress
+  - openresty
+  - controller
+  - http
+  - web
+  - www
+  - reverse proxy
+home: https://konghq.com/
+sources:
+  - https://github.com/bitnami/bitnami-docker-kong
+maintainers:
+  - name: Bitnami
+    email: containers@bitnami.com
+engine: gotpl
+icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
