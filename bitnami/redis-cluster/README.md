@@ -458,3 +458,9 @@ networkPolicy:
   ingressNSPodMatchLabels:
     redis-client: true
 ```
+
+## Notable changes
+
+### 2.0.0
+
+The version `1.0.0` was using a label in the Statefulset's volumeClaimTemplate that didn't allow to upgrade the chart. The version `2.0.0` fixed that issue. Also it adds more docs in the README.md.
