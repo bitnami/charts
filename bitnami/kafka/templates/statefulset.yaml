@@ -320,7 +320,7 @@ spec:
             {{- end }}
             {{- if .Values.auth.ssl }}
             - name: kafka-certificates
-              mountPath: /opt/bitnami/kafka/conf/certs/
+              mountPath: /opt/bitnami/kafka/config/certs/
               readOnly: true
             {{- end }}
         {{- if .Values.metrics.jmx.enabled }}
