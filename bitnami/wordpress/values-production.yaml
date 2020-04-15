@@ -105,6 +105,11 @@ allowEmptyPassword: true
 ##
 allowOverrideNone: true
 
+## Make $WORDPRESS_ROOT/.htaccess file to be persited.
+## Create a `/opt/bitnami/wordpress/.htaccess` and make it persistence so that the user can customize it
+##
+htaccessPersistenceEnabled: false
+
 # ConfigMap with custom wordpress-htaccess.conf file (requires allowOverrideNone to true)
 customHTAccessCM:
 
