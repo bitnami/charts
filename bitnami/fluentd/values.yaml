@@ -45,6 +45,11 @@ forwarder:
   ##
   enabled: true
 
+  ## Forwarder daemon user and group (set to root by default because it reads from host paths)
+  ##
+  daemonUser: root
+  daemonGroup: root
+
   ## K8s Security Context for forwarder pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
