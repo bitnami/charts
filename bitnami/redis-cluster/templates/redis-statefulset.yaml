@@ -313,7 +313,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{- include "redis-cluster.storageClass" . | nindent 10 }}
+        {{- include "redis-cluster.storageClass" . | nindent 8 }}
         selector:
         {{- if .Values.persistence.matchLabels }}
           matchLabels:
