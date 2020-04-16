@@ -40,38 +40,49 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 The following table lists the helpers available in the library which are scoped in different sections.
 
 **Names**
-| Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
-|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.names.name`                         | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context                                                                                                                                        |
-| `common.names.fullname`                     | Create a default fully qualified app name.                 | `.` Chart context                                                                                                                                        |
-| `common.names.chart`                        | Chart name plus version                                    | `.` Chart context                                                                                                                                        |
+| Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
+|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.names.name`                         | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context                                                                                                                                              |
+| `common.names.fullname`                     | Create a default fully qualified app name.                 | `.` Chart context                                                                                                                                              |
+| `common.names.chart`                        | Chart name plus version                                    | `.` Chart context                                                                                                                                              |
 
 **Images**
-| Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
-|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.images.image`                       | Return the proper and full image name                      | `dict "imageRoot" .Values.path.to.the.image "global" $`, see [ImageRoot](#imageRoot) for the structure.                                                  |
-| `common.images.pullSecrets`                 | Return the proper Docker Image Registry Secret Names       | `dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" $`                                                                 |
+| Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
+|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.images.image`                       | Return the proper and full image name                      | `dict "imageRoot" .Values.path.to.the.image "global" $`, see [ImageRoot](#imageroot) for the structure.                                                        |
+| `common.images.pullSecrets`                 | Return the proper Docker Image Registry Secret Names       | `dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" $`                                                                       |
 
 **Labels**
-| Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
-|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.labels.standard`                    | Return Kubernetes standard labels                          | `.` Chart context                                                                                                                                        |
-| `common.labels.matchLabels`                 | Return the proper Docker Image Registry Secret Names       | `.` Chart context                                                                                                                                        |
+| Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
+|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.labels.standard`                    | Return Kubernetes standard labels                          | `.` Chart context                                                                                                                                              |
+| `common.labels.matchLabels`                 | Return the proper Docker Image Registry Secret Names       | `.` Chart context                                                                                                                                              |
 
 **Storage**
-| Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
-|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.storage.class`                      | Return the proper Storage Class                            | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure.                                      |
+| Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
+|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.storage.class`                      | Return the proper Storage Class                            | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure.                                            |
 
 **TplValues**
-| Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
-|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.tplvalues.render`                   | Renders a value that contains template                     | `dict "value" .Values.path.to.the.Value "context" $`, value is the value should rendered as template, context frecuently is the chart context `$` or `.` |
+| Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
+|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.tplvalues.render`                   | Renders a value that contains template                     | `dict "value" .Values.path.to.the.Value "context" $`, value is the value should rendered as template, context frecuently is the chart context `$` or `.`       |
 
 **Capabilities**
-| Helper identifier                           | Description                                                | Expected Input                                                                                                                                           |
-|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.capabilities.deployment.apiVersion` | Return the appropriate apiVersion for deployment.          | `.` Chart context                                                                                                                                        |
+| Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
+|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.capabilities.deployment.apiVersion` | Return the appropriate apiVersion for deployment.          | `.` Chart context                                                                                                                                              |
+
+**Warnings**
+| Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
+|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.warnings.rollingTag`                | Warning about using rolling tag.                           | `ImageRoot` see [ImageRoot](#imageroot) for the structure.                                                                                                     |
+
+**Secrets**
+| Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
+|---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.secrets.name`                       | Generate the name of the secret.                           | `dict "existingSecret" .Values.path.to.the.existingSecret "defaultNameSuffix" "mySuffix" "context" $` see [ExistingSecret](#existingsecret) for the structure. |
+| `common.secrets.key`                        | Generate secret key.                                       | `dict "existingSecret" .Values.path.to.the.existingSecret "key" "keyName"` see [ExistingSecret](#existingsecret) for the structure.                            |
 
 ## Special input schemas
 
@@ -150,6 +161,22 @@ path:
 # accessMode: ReadWriteOnce
 # size: 8Gi
 # path: /bitnami
+```
+
+### ExistingSecret
+```yaml
+name:
+  type: string
+  description: Name of the existing secret.
+  example: mySecret
+keyMapping:
+  description: Mapping between the expected key name and the name of the key in the existing secret.
+  type: object
+
+## An instance would be:
+# name: mySecret
+# keyMapping:
+#   password: myPasswordKey
 ```
 
 ## Notable changes
