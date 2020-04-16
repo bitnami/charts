@@ -7,13 +7,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: client
+    - name: tcp-client
       port: 2181
       targetPort: client
-    - name: follower
+    - name: tcp-follower
       port: 2888
       targetPort: follower
-    - name: election
+    - name: tcp-election
       port: 3888
       targetPort: election
   selector: {{- include "zookeeper.matchLabels" . | nindent 4 }}
