@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels: {{- include "nginx.labels" . | nindent 8 }}
-      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (and .Values.serverBlock (not .Values.existingServerBlockConfigmap)) }}
       annotations:
         {{- if .Values.podAnnotations }}
         {{- include "nginx.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
