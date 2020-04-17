@@ -91,6 +91,8 @@ spec:
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.name | quote }}
+            - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
+              value: {{ include "elasticsearch.masterHosts" . | quote }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
               value: {{ include "elasticsearch.hosts" . | quote }}
             - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
