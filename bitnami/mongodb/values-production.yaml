@@ -45,10 +45,6 @@ image:
 ##
 # fullnameOverride:
 
-## String to override the release namespace
-##
-# namespaceOverride:
-
 serviceAccount:
   # Specifies whether a ServiceAccount should be created
   create: true

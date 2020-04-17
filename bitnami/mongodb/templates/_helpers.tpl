@@ -10,9 +10,7 @@ Expand the name of the chart.
 Allow the release namespace to be overridden for multi-namespace deployments in combined charts.
 */}}
 {{- define "mongodb.namespace" -}}
-    {{- if .Values.namespaceOverride }}
-        {{- .Values.namespaceOverride -}}
-    {{- else if .values.global -}}
+    {{- if .values.global -}}
         {{- if .Values.global.namespaceOverride }}
             {{- .Values.global.namespaceOverride -}}
         {{- else -}}
