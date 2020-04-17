@@ -26,16 +26,8 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
 {{- define "mongodb.serviceMonitor.namespace" -}}
     {{- if .Values.metrics.serviceMonitor.namespace -}}
         {{- .Values.metrics.serviceMonitor.namespace -}}
-    {{- else if .Values.namespaceOverride }}
-        {{- .Values.namespaceOverride -}}
-    {{- else if .values.global -}}
-        {{- if .Values.global.namespaceOverride }}
-            {{- .Values.global.namespaceOverride -}}
-        {{- else -}}
-            {{- .Release.Namespace -}}
-        {{- end -}}
     {{- else -}}
-        {{- .Release.Namespace -}}
+        {{- template "mongodb.namespace" . -}}
     {{- end }}
 {{- end -}}
 
