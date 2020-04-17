@@ -215,21 +215,12 @@ ingressController:
     #   memory: 256Mi
 
 migration:
-  image:
-    registry: docker.io
-    repository: bitnami/kong
-    tag: 2.0.2-debian-10-r49
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+  ## In case you want to use a custom image for Kong migration, set this value
+  ##
+  # image:
+  #   registry:
+  #   repository:
+  #   tag:
   ## Command and args for running the container (set to default if not set). Use array form
   command:
   args:

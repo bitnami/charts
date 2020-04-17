@@ -25,6 +25,7 @@ spec:
       containers:
         - name: kong-migrate
           image: {{ template "kong.migration.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.migration.command }}
           command: {{- include "kong.tplValue" (dict "value" .Values.migration.command "context" $) | nindent 12 }}
           {{- end }}
