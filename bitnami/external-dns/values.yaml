@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.1-debian-10-r15
+  tag: 0.7.1-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -264,6 +264,13 @@ infoblox:
   wapiVersion: ""
   wapiConnectionPoolSize: ""
   wapiHttpTimeout: ""
+
+## OVH configuration to be set via arguments/env. variables
+##
+ovh:
+  consumerKey: ""
+  applicationKey: ""
+  applicationSecret: ""
 
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##

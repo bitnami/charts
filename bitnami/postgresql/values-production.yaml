@@ -15,7 +15,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.7.0-debian-10-r71
+  tag: 11.7.0-debian-10-r73
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -93,6 +93,16 @@ serviceAccount:
   enabled: false
   ## Name of an already existing service account. Setting this value disables the automatic service account creation.
   # name:
+
+## Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+psp:
+  create: false
+
+## Creates role for ServiceAccount
+## Required for PSP
+rbac:
+  create: false
 
 replication:
   enabled: true
@@ -497,7 +507,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.8.0-debian-10-r78
+    tag: 0.8.0-debian-10-r80
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
