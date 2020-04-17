@@ -1,0 +1,104 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "kong.fullname" . }}-migrate
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kong.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: post-install, post-upgrade
+spec:
+  template:
+    metadata:
+      labels: {{- include "kong.labels" . | nindent 8 }}
+        app.kubernetes.io/component: migration
+      annotations:
+        helm.sh/hook: post-install, post-upgrade
+      {{- if .Values.migration.podAnnotations }}
+      {{- include "kong.tplValue" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "kong.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "kong.tplValue" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: kong-migrate
+          image: {{ template "kong.migration.image" . }}
+          {{- if .Values.migration.command }}
+          command: {{- include "kong.tplValue" (dict "value" .Values.migration.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.migration.args }}
+          args: {{- include "kong.tplValue" (dict "value" .Values.migration.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "kong.tplValue" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: KONG_MIGRATE
+              value: "yes"
+            - name: KONG_EXIT_AFTER_MIGRATE
+              value: "yes"
+            {{- if (eq .Values.database "postgresql") }}
+            - name: KONG_DATABASE
+              value: "postgres"
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: KONG_POSTGRESQL_PASSWORD_FILE
+              value: "/bitnami/kong/secrets/postgresql-password"
+            {{- else }}
+            - name: KONG_PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kong.postgresql.secretName" . }}
+                  key: postgresql-password
+            {{- end }}
+            - name: KONG_PG_HOST
+              value: {{ include "kong.postgresql.host" . }}
+            - name: KONG_PG_USER
+              value: {{ include "kong.postgresql.user" . }}
+            {{- end }}
+            {{- if (eq .Values.database "cassandra") }}
+            - name: KONG_DATABASE
+              value: "cassandra"
+            {{- if .Values.cassandra.usePasswordFile }}
+            - name: KONG_CASSANDRA_PASSWORD_FILE
+              value: "/bitnami/kong/secrets/cassandra-password"
+            {{- else }}
+            - name: KONG_CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kong.cassandra.secretName" . }}
+                  key: cassandra-password
+            {{- end }}
+            - name: KONG_CASSANDRA_CONTACT_POINTS
+              value: {{ include "kong.cassandra.contactPoints" . }}
+            - name: KONG_CASSANDRA_PORT
+              value: {{ include "kong.cassandra.port" . | quote }}
+            - name: KONG_CASSANDRA_USER
+              value: {{ include "kong.cassandra.user" . | quote }}
+            {{- end }}
+            {{- if .Values.migration.extraEnvVars }}
+            {{- include "kong.tplValue" (dict "value" .Values.migration.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.migration.extraEnvVarsCM .Values.migration.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.migration.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.migration.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.migration.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.migration.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.migration.extraVolumeMounts }}
+          volumeMounts:
+            {{- include "kong.tplValue" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.migration.resources }}
+          resources: {{- toYaml .Values.migration.resources | nindent 12 }}
+          {{- end }}
+      {{- if .Values.extraVolumes }}
+      volumes:
+      {{- include "kong.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}

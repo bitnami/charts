@@ -1,0 +1,30 @@
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "kong.fullname" . }}
+  {{- if .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  labels: {{- include "kong.labels" . | nindent 4 }}
+    {{- if .Values.metrics.serviceMonitor.selector }}
+    {{- include "kong.tplValue" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels: {{ include "kong.matchLabels" . | nindent 6 }}
+  endpoints:
+    - port: metrics
+      path: "/metrics"
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

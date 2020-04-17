@@ -133,11 +133,13 @@ spec:
             {{- if and (kindIs "bool" .Values.aws.evaluateTargetHealth) (not .Values.aws.evaluateTargetHealth) }}
             - --no-aws-evaluate-target-health
             {{- end }}
-            {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
+            {{- if or (and (eq .Values.provider "azure") (not .Values.azure.secretName)) (eq .Values.provider "azure-private-dns") }}
             # Azure Arguments
             {{- if .Values.azure.resourceGroup }}
             - --azure-resource-group={{ .Values.azure.resourceGroup }}
             {{- end }}
+            {{- end }}
+            {{- if eq .Values.provider "azure-private-dns" }}
             {{- if .Values.azure.subscriptionId }}
             - --azure-subscription-id={{ .Values.azure.subscriptionId }}
             {{- end }}
@@ -225,13 +227,17 @@ spec:
             - name: AZURE_TENANT_ID
               value: {{ .Values.azure.tenantId }}
             {{- end }}
-            {{- if .Values.azure.aadClientId }}
-            - name: AZURE_CLIENT_ID
-              value: {{ .Values.azure.aadClientId }}
-            {{- end }}
-            {{- if .Values.azure.aadClientSecret }}
+            {{- if or .Values.azure.aadClientId .Values.azure.aadClientSecret .Values.azure.secretName }}
             - name: AZURE_CLIENT_SECRET
-              value: {{ .Values.azure.aadClientSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: azure_aad_client_secret
+            - name: AZURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: azure_aad_client_id
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
@@ -320,6 +326,30 @@ spec:
               value: /etc/secrets/service-account/credentials.json
             {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "ovh" }}
+            # OVH environment variables
+            {{- if .Values.ovh.consumerKey }}
+            - name: OVH_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: ovh_consumer_key
+            {{- end }}
+            {{- if .Values.ovh.applicationKey }}
+            - name: OVH_APPLICATION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: ovh_application_key
+            {{- end }}
+            {{- if .Values.ovh.applicationSecret }}
+            - name: OVH_APPLICATION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: ovh_application_secret
+            {{- end }}
+            {{- end }}            
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox environment variables
             {{- if .Values.infoblox.wapiConnectionPoolSize }}

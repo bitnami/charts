@@ -84,6 +84,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `brokerId`                             | ID of the Kafka node                                                                                     | `nil`                                                    |
 | `heapOpts`                             | Kafka's Java Heap size                                                                                   | `-Xmx1024m -Xms1024m`                                   |
 | `deleteTopicEnable`                    | Switch to enable topic deletion or not                                                                   | `false`                                                 |
+| `autoCreateTopicsEnable`               | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments | `false`                                                 |
 | `logFlushIntervalMessages`             | The number of messages to accept before forcing a flush of data to disk                                  | `10000`                                                 |
 | `logFlushIntervalMs`                   | The maximum amount of time a message can sit in a log before we force a flush                            | `1000`                                                  |
 | `logRetentionBytes`                    | A size-based retention policy for logs                                                                   | `_1073741824`                                           |
@@ -116,6 +117,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `auth.zookeeperUser`                   | Kafka Zookeeper user                                                                                     | `nil`                                                   |
 | `auth.zookeeperPassword`               | Kafka Zookeeper password                                                                                 | `nil`                                                   |
 | `auth.existingSecret`                  | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser     | `nil`                                                   |
+| `log4j`                                | An optional log4j.properties file to overwrite the default of the Kafka brokers.                         | `nil`                                                   |
+| `existingLog4jConfigMap`               | The name of an existing ConfigMap containing a log4j.properties file.                                    | `nil`                                                   |
 
 ### Statefulset parameters
 
@@ -124,6 +127,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `replicaCount`              | Number of Kafka nodes                                              | `1`                            |
 | `updateStrategy`            | Update strategy for the stateful set                               | `RollingUpdate`                |
 | `rollingUpdatePartition`    | Partition update strategy                                          | `nil`                          |
+| `podLabels`                 | Kafka pod labels                                                   | `{}` (evaluated as a template) |
 | `podAnnotations`            | Kafka Pod annotations                                              | `{}` (evaluated as a template) |
 | `affinity`                  | Affinity for pod assignment                                        | `{}` (evaluated as a template) |
 | `nodeSelector`              | Node labels for pod assignment                                     | `{}` (evaluated as a template) |
@@ -297,6 +301,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - defaultReplicationFactor: 1
 + defaultReplicationFactor: 3
+```
+
+- Allow auto creation of topics.
+
+```diff
+- autoCreateTopicsEnable: true
++ autoCreateTopicsEnable: false
 ```
 
 - The replication factor for the offsets topic:
@@ -479,6 +490,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 10.0.0
+
+If you are setting the `config` or `log4j` parameter, backwards compatibility is not guaranteed, because the `KAFKA_MOUNTED_CONFDIR` has moved from `/opt/bitnami/kafka/conf` to `/bitnami/kafka/config`. In order to continue using these parameters, you must also upgrade your image to `docker.io/bitnami/kafka:2.4.1-debian-10-r38` or later.
 
 ### To 9.0.0
 

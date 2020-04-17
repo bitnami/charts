@@ -104,10 +104,12 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.extraPorts`                         | Extra ports to expose in the service             | `nil`                                                   |
 | `service.extraContainerPorts`                | Extra ports to be included in container spec, primarily informational   | `nil`                            |
 | `persistence.enabled`                        | Use a PVC to persist data                        | `true`                                                  |
+| `service.labels`                             | service labels                                   | {}                                                      |
 | `service.annotations`                        | service annotations                              | {}                                                      |
 | `schedulerName`                              | Name of the k8s service (other than default)     | `nil`                                                   |
 | `persistence.storageClass`                   | Storage class of backing PVC                     | `nil` (uses alpha storage class annotation)             |
 | `persistence.existingClaim`                  | RabbitMQ data Persistent Volume existing claim name, evaluated as a template |  ""                         |
+| `persistence.selector`                       | Selector to match an existing Persistent Volume  | `nil`                                                   |
 | `persistence.accessMode`                     | Use volume as ReadOnly or ReadWrite              | `ReadWriteOnce`                                         |
 | `persistence.size`                           | Size of data volume                              | `8Gi`                                                   |
 | `persistence.path`                           | Mount path of the data volume                    | `/opt/bitnami/rabbitmq/var/lib/rabbitmq`                |
@@ -136,6 +138,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `livenessProbe.periodSeconds`                | number of seconds                                | 30                                                      |
 | `livenessProbe.failureThreshold`             | number of failures                               | 6                                                       |
 | `livenessProbe.successThreshold`             | number of successes                              | 1                                                       |
+| `livenessProbe.commandOverride`              | Custom command for liveness probe                | []                                                      |
 | `podDisruptionBudget`                        | Pod Disruption Budget settings                   | {}                                                      |
 | `readinessProbe.enabled`                     | would you like a readinessProbe to be enabled    | `true`                                                  |
 | `readinessProbe.initialDelaySeconds`         | number of seconds                                | 10                                                      |
@@ -143,39 +146,23 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `readinessProbe.periodSeconds`               | number of seconds                                | 30                                                      |
 | `readinessProbe.failureThreshold`            | number of failures                               | 3                                                       |
 | `readinessProbe.successThreshold`            | number of successes                              | 1                                                       |
-| `metrics.enabled`                            | Start a side-car prometheus exporter             | `false`                                                 |
-| `metrics.image.registry`                     | Exporter image registry                          | `docker.io`                                             |
-| `metrics.image.repository`                   | Exporter image name                              | `bitnami/rabbitmq-exporter`                             |
-| `metrics.image.tag`                          | Exporter image tag                               | `{TAG_NAME}`                                            |
-| `metrics.image.pullPolicy`                   | Exporter image pull policy                       | `IfNotPresent`                                          |
-| `metrics.livenessProbe.enabled`              | would you like a livenessProbed to be enabled    | `true`                                                  |
-| `metrics.livenessProbe.initialDelaySeconds`  | number of seconds                                | 15                                                      |
-| `metrics.livenessProbe.timeoutSeconds`       | number of seconds                                | 5                                                       |
-| `metrics.livenessProbe.periodSeconds`        | number of seconds                                | 30                                                      |
-| `metrics.livenessProbe.failureThreshold`     | number of failures                               | 6                                                       |
-| `metrics.livenessProbe.successThreshold`     | number of successes                              | 1                                                       |
-| `metrics.readinessProbe.enabled`             | would you like a readinessProbe to be enabled    | `true`                                                  |
-| `metrics.readinessProbe.initialDelaySeconds` | number of seconds                                | 5                                                       |
-| `metrics.readinessProbe.timeoutSeconds`      | number of seconds                                | 5                                                       |
-| `metrics.readinessProbe.periodSeconds`       | number of seconds                                | 30                                                      |
-| `metrics.readinessProbe.failureThreshold`    | number of failures                               | 3                                                       |
-| `metrics.readinessProbe.successThreshold`    | number of successes                              | 1                                                       |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator   | `false`                   |
-| `metrics.serviceMonitor.namespace`           | Namespace where servicemonitor resource should be created                      | `nil`                     |
-| `metrics.serviceMonitor.interval`            | Specify the interval at which metrics should be scraped                        | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                            | `nil`                     |
-| `metrics.serviceMonitor.relabellings`        | Specify Metric Relabellings to add to the scrape endpoint                      | `nil`                     |
-| `metrics.serviceMonitor.honorLabels`         | honorLabels chooses the metric's labels on collisions with target labels.      | `false`                   |
-| `metrics.serviceMonitor.additionalLabels`    | Used to pass Labels that are required by the Installed Prometheus Operator     | `{}`                      |
-| `metrics.serviceMonitor.release`             | Used to pass Labels release that sometimes should be custom for Prometheus Operator     | `nil`                      |
-| `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                              | `false`                    |
-| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                          | `{}`                       |
-| `metrics.prometheusRule.namespace`           | namespace where prometheusRules resource should be created                                                                      | Same namespace as rabbitmq |
-| `metrics.prometheusRule.rules`               | [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.  | `[]`                       |
-| `metrics.port`                               | Prometheus metrics exporter port                 | `9419`                                                  |
-| `metrics.env`                                | Exporter [configuration environment variables](https://github.com/kbudde/rabbitmq_exporter#configuration) | `{}` |
-| `metrics.resources`                          | Exporter resource requests/limit                 | `nil`                                                   |
-| `metrics.capabilities`                       | Exporter: Comma-separated list of extended [scraping capabilities supported by the target RabbitMQ server](https://github.com/kbudde/rabbitmq_exporter#extended-rabbitmq-capabilities) | `bert,no_sort` |
+| `readinessProbe.commandOverride`             | Custom command for readiness probe               | []                                                      |
+| `metrics.enabled`                            | Enable prometheus to access rabbitmq metrics                                                                                                                                           | `false`                                                      |
+| `metrics.port`                               | Port where the server will expose Prometheus metrics                                                                                                                                   | `9419`                                                       |
+| `metrics.plugins`                            | Plugins to enable prometheus metrics in rabbitmq                                                                                                                                       | `rabbitmq_prometheus`                                        |
+| `metrics.podAnnotations`                     | Annotations for enabling prometheus to access the metrics endpoint                                                                                                                     | `{prometheus.io/scrape: "true", prometheus.io/port: "9419"}` |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                                                                           | `false`                                                      |
+| `metrics.serviceMonitor.namespace`           | Namespace where servicemonitor resource should be created                                                                                                                              | `nil`                                                        |
+| `metrics.serviceMonitor.interval`            | Specify the interval at which metrics should be scraped                                                                                                                                | `30s`                                                        |
+| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                                                                                    | `nil`                                                        |
+| `metrics.serviceMonitor.relabellings`        | Specify Metric Relabellings to add to the scrape endpoint                                                                                                                              | `nil`                                                        |
+| `metrics.serviceMonitor.honorLabels`         | honorLabels chooses the metric's labels on collisions with target labels.                                                                                                              | `false`                                                      |
+| `metrics.serviceMonitor.additionalLabels`    | Used to pass Labels that are required by the Installed Prometheus Operator                                                                                                             | `{}`                                                         |
+| `metrics.serviceMonitor.release`             | Used to pass Labels release that sometimes should be custom for Prometheus Operator                                                                                                    | `nil`                                                        |
+| `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                                                                                     | `false`                                                      |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                                                                 | `{}`                                                         |
+| `metrics.prometheusRule.namespace`           | namespace where prometheusRules resource should be created                                                                                                                             | Same namespace as rabbitmq                                   |
+| `metrics.prometheusRule.rules`               | [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.                                                        | `[]`                                                         |
 | `podLabels`                                  | Additional labels for the statefulset pod(s).    | {}                                                      |
 | `volumePermissions.enabled`                  | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false |
 | `volumePermissions.image.registry`           | Init container volume-permissions image registry     | `docker.io`                                         |
@@ -218,7 +205,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one. In case you want to spread the deployment accross nodes you should configure the affinity parameters.
 
 - Resource needs and limits to apply to the pod:
 ```diff
@@ -248,7 +235,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + ingress.tls: true
 ```
 
-- Start a side-car prometheus exporter:
+- Enable prometheus metrics:
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true
@@ -259,7 +246,6 @@ This chart includes a `values-production.yaml` file where you can find some para
 - volumePermissions.enabled: false
 + volumePermissions.enabled: true
 ```
-
 To horizontally scale this chart once it has been deployed you have two options:
 
 - Use `kubectl scale` command

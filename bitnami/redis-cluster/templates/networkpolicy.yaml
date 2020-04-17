@@ -1,0 +1,59 @@
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ template "networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "redis-cluster.fullname" . }}
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ template "redis-cluster.name" . }}
+      release: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    # Allow dns resolution
+    - ports:
+      - port: 53
+        protocol: UDP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.redisPort }}
+        - port: {{ .Values.cluster.busPort }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 14 }}
+  ingress:
+    # Allow inbound connections
+    - ports:
+        - port: {{ .Values.redisPort }}
+        - port: {{ .Values.cluster.busPort }}
+      {{- if not .Values.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels:
+              {{ template "redis-cluster.fullname" . }}-client: "true"
+        - podSelector:
+            matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 14 }}
+      {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+      - namespaceSelector:
+          matchLabels:
+            {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+            {{ $key | quote }}: {{ $value | quote }}
+            {{- end }}
+        {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+        podSelector:
+          matchLabels:
+            {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+            {{ $key | quote }}: {{ $value | quote }}
+            {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
+    {{- if .Values.metrics.enabled }}
+    # Allow prometheus scrapes for metrics
+    - ports:
+        - port: 9121
+    {{- end }}
+{{- end }}

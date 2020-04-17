@@ -30,7 +30,14 @@ data:
     k8s_svc_lb_ip() {
         local namespace=${1:?namespace is missing}
         local service=${2:?service is missing}
-        echo "$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].ip}")"
+        local service_ip=$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+        local service_hostname=$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+
+        if [[ -n ${service_ip} ]]; then
+            echo "${service_ip}"
+        else
+            echo "${service_hostname}"
+        fi
     }
     k8s_svc_lb_ip_ready() {
         local namespace=${1:?namespace is missing}
@@ -47,7 +54,7 @@ data:
         local service=${2:?service is missing}
         local index=${3:-0}
         local node_port="$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.spec.ports[$index].nodePort}")"
-        kubectl patch svc "$service" -n "$namespace" --type='json' -p="[{\"op\": \"replace\", \"path\": \"/spec/ports/0/targetPort\", \"value\": $node_port}]"
+        kubectl patch svc "$service" -n "$namespace" --type='json' -p="[{\"op\": \"replace\", \"path\": \"/spec/ports/0/targetPort\", \"value\": $node_port}]" >/dev/null 2>&1
         echo "$node_port"
     }
     k8s_svc_node_port "{{ $releaseNamespace }}" "$SVC_NAME" | tee "$SHARED_FILE"

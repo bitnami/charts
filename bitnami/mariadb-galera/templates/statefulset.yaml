@@ -128,6 +128,16 @@ spec:
             - name: MARIADB_EXTRA_FLAGS
               value: {{ .Values.extraFlags | quote }}
             {{- end }}
+            - name:  MARIADB_ENABLE_TLS_RT
+              value: {{ ternary "yes" "no" .Values.tls.rt.enabled | quote }}
+            {{- if .Values.tls.rt.enabled }}
+            - name:  MARIADB_TLS_RT_CERT
+              value: {{ template "mariadb-galera.tlsRTCert" . }}
+            - name:  MARIADB_TLS_RT_KEY
+              value: {{ template "mariadb-galera.tlsRTCertKey" . }}
+            - name:  MARIADB_TLS_RT_CA
+              value: {{ template "mariadb-galera.tlsRTCACert" . }}
+            {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -186,6 +196,11 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
+            {{- if .Values.tls.rt.enabled }}
+            - name: mariadb-galera-rt-certificates
+              mountPath: /bitnami/mariadb/certs/
+              readOnly: true
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "mariadb-galera.metrics.image" . }}
@@ -228,6 +243,12 @@ spec:
         {{- include "mariadb-galera.tplValue" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.tls.rt.enabled }}
+        - name: mariadb-galera-rt-certificates
+          secret:
+            secretName: {{ required "A secret containing the ertificates for the TLS replication traffic is required when TLS RT in enabled" .Values.tls.rt.certificatesSecret }}
+            defaultMode: 256
+        {{- end }}
         {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
         - name: mariadb-galera-config
           configMap:

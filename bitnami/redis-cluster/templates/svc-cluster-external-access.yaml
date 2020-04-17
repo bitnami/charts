@@ -1,0 +1,33 @@
+{{- if .Values.cluster.externalAccess.enabled }}
+{{- $fullName := include "redis-cluster.fullname" . }}
+{{- $nodesCount := .Values.cluster.nodes | int }}
+{{- $root := . }}
+
+{{- range $i, $e := until $nodesCount }}
+{{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "redis-cluster.fullname" $ }}-{{ $i }}-svc
+  labels: {{- include "redis-cluster.labels" $ | nindent 4 }}
+    pod: {{ $targetPod }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" $root.Values.cluster.externalAccess.service.annotations "context" $) | nindent 4 }}
+spec:
+  type: {{ $root.Values.cluster.externalAccess.service.type }}
+  {{- if $root.Values.cluster.externalAccess.service.loadBalancerIP }}
+  loadBalancerIP: {{ index $root.Values.cluster.externalAccess.service.loadBalancerIP $i }}
+  {{- end }}
+  ports:
+    - name: tcp-redis
+      port: {{ $root.Values.cluster.externalAccess.service.port }}
+      targetPort: tcp-redis
+    - name: tcp-redis-bus
+      targetPort: tcp-redis-bus
+      port: {{ $root.Values.cluster.busPort }}
+  selector: {{- include "redis-cluster.matchLabels" $ | nindent 4 }}
+    statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+---
+{{- end }}
+{{- end }}
