@@ -179,6 +179,41 @@ keyMapping:
 #   password: myPasswordKey
 ```
 
+**Example of use**
+
+When we store sensitive data for a deployment in a secret, some times we want to give to users the possiblity of using theirs existing secrets.
+
+```yaml
+# templates/secret.yaml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels:
+    app: {{ include "common.names.fullname" . }}
+type: Opaque
+data:
+  password: {{ .Values.password | b64enc | quote }}
+
+# templates/dpl.yaml
+---
+...
+      env:
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
+              key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "password") }}
+...
+
+# values.yaml
+---
+name: mySecret
+keyMapping:
+  password: myPasswordKey
+```
+
 ## Notable changes
 
 N/A

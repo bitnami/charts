@@ -1,10 +1,15 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Generate secret name.
+
 Usage:
 {{ include "common.secrets.name" (dict "existingSecret" .Values.path.to.the.existingSecret "defaultNameSuffix" "mySuffix" "context" $) }}
+
 Params:
-defaultNameSuffix - optional is used only if we have several secrets in the same deployment.
+  - existingSecret - ExistingSecret - Optional. The path to the existing secrets in the values.yaml given by the user
+    to be used istead of the default one. +info: https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret
+  - defaultNameSuffix - String - Optional. It is used only if we have several secrets in the same deployment.
+  - context - Dict - Required. The context for the template evaluation.
 */}}
 {{- define "common.secrets.name" -}}
 {{- $name := (include "common.names.fullname" .context) -}}
@@ -22,8 +27,14 @@ defaultNameSuffix - optional is used only if we have several secrets in the same
 
 {{/*
 Generate secret key.
+
 Usage:
 {{ include "common.secrets.key" (dict "existingSecret" .Values.path.to.the.existingSecret "key" "keyName") }}
+
+Params:
+  - existingSecret - ExistingSecret - Optional. The path to the existing secrets in the values.yaml given by the user
+    to be used istead of the default one. +info: https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret
+  - key - String - Required. Name of the key in the secret.
 */}}
 {{- define "common.secrets.key" -}}
 {{- $key := .key -}}
