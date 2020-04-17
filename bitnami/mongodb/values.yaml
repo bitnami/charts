@@ -7,11 +7,7 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
-
-## Global namespace override
 ## Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
-##
-# global:
 #   namespaceOverride: my-global-namespace
 
 image:
