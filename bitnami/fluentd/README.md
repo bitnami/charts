@@ -51,7 +51,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the kibana chart and their default values.
 
 | Parameter                                       | Description                                                                                                    | Default                                                                                                 |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | `global.imageRegistry`                          | Global Docker image registry                                                                                   | `nil`                                                                                                   |
 | `global.imagePullSecrets`                       | Global Docker registry secret names as an array                                                                | `[]` (does not add image pull secrets to deployed pods)                                                 |
 | `image.registry`                                | Fluentd image registry                                                                                         | `docker.io`                                                                                             |
@@ -62,7 +62,9 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `nameOverride`                                  | String to partially override fluentd.fullname template with a string (will prepend the release name)           | `nil`                                                                                                   |
 | `fullnameOverride`                              | String to fully override fluentd.fullname template with a string                                               | `nil`                                                                                                   |
 | `clusterDomain`                                 | Kubernetes DNS domain name to use                                                                              | `cluster.local`                                                                                         |
-| `forwarder.enabled`                             | Enable Fluentd aggregator                                                                                      | `true`                                                                                                  |
+| `forwarder.enabled`                             | Enable Fluentd forwarder                                                                                       | `true`                                                                                                  |
+| `forwarder.daemonUser`                          | Fluentd forwarder daemon system user                                                                           | `root`                                                                                                  |
+| `forwarder.daemonGroup`                         | Fluentd forwarder daemon system group                                                                          | `root`                                                                                                  |
 | `forwarder.securityContext.enabled`             | Enable security context for forwarder pods                                                                     | `true`                                                                                                  |
 | `forwarder.securityContext.fsGroup`             | Group ID for forwarder's containers filesystem                                                                 | `0`                                                                                                     |
 | `forwarder.securityContext.runAsUser`           | User ID for forwarder's containers                                                                             | `0`                                                                                                     |
@@ -152,7 +154,6 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `tls.serverCertificate`                         | Server certificate                                                                                             | Server certificate content                                                                              |
 | `tls.serverKey`                                 | Server Key                                                                                                     | Server private key content                                                                              |
 | `tls.existingSecret`                            | Existing secret with certificate content                                                                       | `nil`                                                                                                   |
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -283,3 +284,11 @@ aggregator.extraEnv[0].value=your-ip-here
 aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
 aggregator.extraEnv[1].value=your-port-here
 ```
+
+### Notable changes
+
+## 1.0.0
+
+In this version of the chart the Fluentd forwarder daemon system user will be root by default. This is done to ensure that mounted host paths are readable by the forwarder. For more context, check this [support case](https://github.com/bitnami/charts/issues/1905).
+
+No issues are expected in the upgrade process. However, please ensure that you add extra security measures in your cluster as you will be running root containers. If you want the daemon to be run as a user different from root, you can change the `forwarder.daemonUser` and `forwarder.daemonGroup` values. In this case make sure that the user you choose has sufficient permissions to read log files under `/var/lib/docker/containers` directory.

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "zookeeper.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     role: zookeeper
@@ -25,6 +26,9 @@ spec:
       name: {{ template "zookeeper.fullname" . }}
       labels: {{- include "zookeeper.labels" . | nindent 8 }}
         app.kubernetes.io/component: zookeeper
+        {{- if .Values.podLabels }}
+        {{- include "zookeeper.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations: {{- include "zookeeper.podAnnotations" . | nindent 8 }}
       {{- end }}
@@ -148,6 +152,11 @@ spec:
             - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
               value: {{ .Values.metrics.port | quote }}
             {{- end }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
           ports:
             - name: client
               containerPort: {{ .Values.service.port }}
@@ -187,17 +196,27 @@ spec:
               mountPath: /opt/bitnami/zookeeper/conf/zoo.cfg
               subPath: zoo.cfg
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
         {{- if .Values.config }}
         - name: config
           configMap:
             name: {{ template "zookeeper.fullname" . }}
         {{- end }}
-        {{- if not .Values.persistence.enabled }}
+        {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ printf "%s" (tpl .Values.persistence.existingClaim .) }}
+        {{- else if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
         {{- end }}
-  {{- if .Values.persistence.enabled }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+  {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim )}}
   volumeClaimTemplates:
     - metadata:
         name: data

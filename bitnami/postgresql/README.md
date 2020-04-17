@@ -218,6 +218,9 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `metrics.readinessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                                | 6                                                             |
 | `metrics.readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed                                                                               | 1                                                             |
 | `updateStrategy`                              | Update strategy policy                                                                                                                                                    | `{type: "RollingUpdate"}`                                     |
+| `psp.create`                                  | Create Pod Security Policy                                                                                                                                                | `false`                                                       |
+| `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                                                    | `false`                                                       |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

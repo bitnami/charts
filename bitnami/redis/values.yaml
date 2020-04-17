@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 5.0.8-debian-10-r28
+  tag: 5.0.8-debian-10-r42
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -60,7 +60,7 @@ sentinel:
     ## Bitnami Redis image tag
     ## ref: https://github.com/bitnami/bitnami-docker-redis-sentinel#supported-tags-and-respective-dockerfile-links
     ##
-    tag: 5.0.8-debian-10-r21
+    tag: 5.0.8-debian-10-r34
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -105,6 +105,8 @@ sentinel:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+  customLivenessProbe: {}
+  customReadinessProbe: {}
   ## Redis Sentinel resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   # resources:
@@ -283,6 +285,28 @@ master:
     successThreshold: 1
     failureThreshold: 5
 
+  ## Configure custom probes for images other images like
+  ## rhscl/redis-32-rhel7 rhscl/redis-5-rhel7
+  ## Only used if readinessProbe.enabled: false / livenessProbe.enabled: false
+  ##
+  # customLivenessProbe:
+  #  tcpSocket:
+  #    port: 6379
+  #  initialDelaySeconds: 10
+  #  periodSeconds: 5
+  # customReadinessProbe:
+  #  initialDelaySeconds: 30
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  exec:
+  #    command:
+  #    - "container-entrypoint"
+  #    - "bash"
+  #    - "-c"
+  #    - "redis-cli set liveness-probe \"`date`\" | grep OK"
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+
   ## Redis Master Node selectors and tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
@@ -415,6 +439,28 @@ slave:
     successThreshold: 1
     failureThreshold: 5
 
+  ## Configure custom probes for images other images like
+  ## rhscl/redis-32-rhel7 rhscl/redis-5-rhel7
+  ## Only used if readinessProbe.enabled: false / livenessProbe.enabled: false
+  ##
+  # customLivenessProbe:
+  #  tcpSocket:
+  #    port: 6379
+  #  initialDelaySeconds: 10
+  #  periodSeconds: 5
+  # customReadinessProbe:
+  #  initialDelaySeconds: 30
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  exec:
+  #    command:
+  #    - "container-entrypoint"
+  #    - "bash"
+  #    - "-c"
+  #    - "redis-cli set liveness-probe \"`date`\" | grep OK"
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+
   ## Redis slave Resource
   # resources:
   #   requests:
@@ -480,7 +526,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.5.2-debian-10-r17
+    tag: 1.5.3-debian-10-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

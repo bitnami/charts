@@ -46,7 +46,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
       {{- if .Values.initContainers }}
-        {{- include "wordpress.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      initContainers: {{- include "wordpress.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: wordpress
@@ -184,7 +184,7 @@ spec:
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           command:
             - /bin/apache_exporter
-            - -scrape_uri
+            - --scrape_uri
             - http://status.localhost:8080/server-status/?auto
           ports:
             - name: metrics
