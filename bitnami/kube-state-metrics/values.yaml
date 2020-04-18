@@ -244,6 +244,16 @@ serviceMonitor:
   # selector:
   #   prometheus: my-prometheus
 
+  ## Honor metric labels
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  # honorLabels: false
+
+  ## Relabeling (before scrape)
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+  ##
+  # relabelings: []
+
   ## Metric relabeling
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
