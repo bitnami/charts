@@ -106,9 +106,6 @@ spec:
             {{- if .Values.crd.kind }}
             - --crd-source-kind={{ .Values.crd.kind }}
             {{- end }}
-            {{- range .Values.istioIngressGateways }}
-            - --istio-ingress-gateway={{ . }}
-            {{- end }}
             {{- range .Values.sources }}
             - --source={{ . }}
             {{- end }}
