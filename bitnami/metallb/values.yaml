@@ -211,10 +211,22 @@ speaker:
   ## Daemonset configuration
   ##
   daemonset:
+    ## Configure the grace time period for sig term 
+    ## Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+    ## 
+    terminationGracePeriodSeconds: 2
     ## HTTP Metrics Endpoint
     ##
     hostPorts:
       metrics: 7472
+  
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV_VAR
+  ##    value: env_var_value
+  ##
+  extraEnvVars: []
 
   ## Liveness and readiness probe values
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes

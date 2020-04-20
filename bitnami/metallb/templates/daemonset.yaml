@@ -20,7 +20,7 @@ spec:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
       serviceAccountName: {{ include "metallb.speakerServiceAccountName" . }}
-      terminationGracePeriodSeconds: 2
+      terminationGracePeriodSeconds: {{ .Values.speaker.daemonset.terminationGracePeriodSeconds }}
       hostNetwork: true
       containers:
       - name: speaker
@@ -53,6 +53,9 @@ spec:
             secretKeyRef:
               name: {{ include "metallb.fullname" . }}-memberlist
               key: secretkey
+        {{- if .Values.speaker.extraEnvVars }}
+        {{- include "metallb.tplValue" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 8 }}
+        {{- end }}
         ports:
         - name: metrics
           containerPort: {{ .Values.speaker.daemonset.hostPorts.metrics }}
