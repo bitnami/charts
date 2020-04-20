@@ -18,6 +18,7 @@ spec:
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: coordinating-only
+  podManagementPolicy: Parallel
   replicas: {{ .Values.coordinating.replicas }}
   serviceName: {{ include "elasticsearch.coordinating.fullname" . }}-headless
   template:

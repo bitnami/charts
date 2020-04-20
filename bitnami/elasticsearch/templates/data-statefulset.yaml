@@ -19,6 +19,7 @@ spec:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: data
   serviceName: {{ include "elasticsearch.data.fullname" . }}-headless
+  podManagementPolicy: Parallel
   replicas: {{ .Values.data.replicas }}
   template:
     metadata:

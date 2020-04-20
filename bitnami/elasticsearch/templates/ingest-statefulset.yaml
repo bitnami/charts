@@ -19,6 +19,7 @@ spec:
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: ingest
+  podManagementPolicy: Parallel
   replicas: {{ .Values.ingest.replicas }}
   serviceName: {{ include "elasticsearch.ingest.fullname" . }}-headless
   template:
