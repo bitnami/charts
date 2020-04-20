@@ -15,8 +15,7 @@ spec:
       {{- if .Values.speaker.podAnnotations }}
       annotations: {{- toYaml .Values.speaker.podAnnotations | nindent 8 }}
       {{- end }}
-    spec:
-{{- include "metallb.speaker.imagePullSecrets" . | indent 6 }}
+    spec: {{- include "metallb.speaker.imagePullSecrets" . | nindent 6 }}
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
