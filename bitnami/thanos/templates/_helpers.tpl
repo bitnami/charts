@@ -371,6 +371,7 @@ thanos: objstore configuration
       1) Provide it using the 'objstoreConfig' parameter
       2) Provide it using an existing Configmap and using the 'existingObjstoreConfigmap' parameter
       3) Put your objstore.yml under the 'files/conf/' directory
+      4) Provide it using an existing Secret and using the 'existingObjstoreSecret' parameters
 {{- end -}}
 {{- end -}}
 
