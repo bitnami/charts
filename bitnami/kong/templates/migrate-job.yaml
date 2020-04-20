@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels: {{- include "kong.labels" . | nindent 4 }}
   annotations:
-    helm.sh/hook: post-install, post-upgrade
+    helm.sh/hook: pre-install, pre-upgrade
 spec:
   template:
     metadata:

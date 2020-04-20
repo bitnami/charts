@@ -506,6 +506,12 @@ postgresql:
   ##
   postgresqlUsername: kong
 
+  ##
+  ## Annotations to make it work with helm install --wait
+  commonAnnotations:
+    helm.sh/hook: "pre-install, pre-upgrade"
+    helm.sh/hook-weight: "-1"
+
 ## Cassandra properties
 ##
 cassandra:
