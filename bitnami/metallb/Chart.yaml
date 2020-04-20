@@ -18,6 +18,6 @@ sources:
 version: 0.1.10
 maintainers:
   - name: cellebyte
-    url: https://github.com/Cellebyte
+    email: cellebyte@gmail.com
   - name: Bitnami
     email: containers@bitnami.com
