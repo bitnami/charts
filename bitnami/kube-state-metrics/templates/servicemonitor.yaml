@@ -24,8 +24,8 @@ spec:
       {{- if .Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
       {{- end }}
-      {{- if .Values.serviceMonitor.honorLabels }}
-      honorLabels: true
+      {{- if hasKey .Values.serviceMonitor "honorLabels" }}
+      honorLabels: {{ .Values.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.serviceMonitor.relabelings }}
       relabelings: {{- include "kube-state-metrics.tplValue" ( dict "value" .Values.serviceMonitor.relabelings "context" $) | nindent 8 }}
