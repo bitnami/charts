@@ -159,7 +159,7 @@ Create the name of the controller service account to use
 */}}
 {{- define "metallb.controllerServiceAccountName" -}}
 {{- if .Values.controller.serviceAccount.create -}}
-    {{ default (printf "%s-controller" (include "metallb.fullname" .)) .Values.controller.serviceAccount.name }}
+    {{ default (printf "%s-controller" (include "metallb.fullname" .)) .Values.controller.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
     {{ default "default" .Values.controller.serviceAccount.name }}
 {{- end -}}
@@ -170,7 +170,7 @@ Create the name of the speaker service account to use
 */}}
 {{- define "metallb.speakerServiceAccountName" -}}
 {{- if .Values.speaker.serviceAccount.create -}}
-    {{ default (printf "%s-speaker" (include "metallb.fullname" .)) .Values.speaker.serviceAccount.name }}
+    {{ default (printf "%s-speaker" (include "metallb.fullname" .)) .Values.speaker.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
     {{ default "default" .Values.speaker.serviceAccount.name }}
 {{- end -}}
