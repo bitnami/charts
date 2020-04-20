@@ -51,7 +51,7 @@ cluster:
   ## Number of Redis nodes to be deployed
   ##
   nodes: 6
-  ## Parameter to be passed as --cluster-replicas to the redic-cli --cluster create
+  ## Parameter to be passed as --cluster-replicas to the redis-cli --cluster create
   ## 1 means that we want a replica for every master created
   ##
   replicas: 1
