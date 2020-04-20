@@ -103,8 +103,13 @@ spec:
               mountPath: /data
       volumes:
         - name: objstore-config
+          {{- if .Values.existingObjstoreSecret }}
+          secret:
+            secretName: {{ .Values.existingObjstoreSecret }}
+          {{- else }}
           configMap:
             name: {{ include "thanos.objstoreConfigmapName" . }}
+          {{- end }}
         - name: data
           {{- if .Values.compactor.persistence.enabled }}
           persistentVolumeClaim:

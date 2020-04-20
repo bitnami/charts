@@ -47,6 +47,11 @@ clusterDomain: cluster.local
 ##
 # existingObjstoreConfigmap:
 
+## Secret with Objstore Configuration
+## Note: This will override objstoreConfig
+##
+# existingObjstoreSecret:
+
 ## Thanos Querier parameters
 ##
 querier:

@@ -129,8 +129,13 @@ spec:
           configMap:
             name: {{ include "thanos.ruler.configmapName" . }}
         - name: objstore-config
+          {{- if .Values.existingObjstoreSecret }}
+          secret:
+            secretName: {{ .Values.existingObjstoreSecret }}
+          {{- else }}
           configMap:
             name: {{ include "thanos.objstoreConfigmapName" . }}
+          {{- end }}
   {{- if and .Values.ruler.persistence.enabled .Values.ruler.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:

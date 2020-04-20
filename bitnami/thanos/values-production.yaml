@@ -47,6 +47,11 @@ clusterDomain: cluster.local
 ##
 # existingObjstoreConfigmap:
 
+## Secret with Objstore Configuration
+## Note: This will override objstoreConfig
+##
+# existingObjstoreSecret:
+
 ## Thanos Querier parameters
 ##
 querier:
@@ -930,12 +935,10 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##

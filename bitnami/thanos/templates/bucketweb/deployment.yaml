@@ -82,6 +82,11 @@ spec:
               subPath: objstore.yml
       volumes:
         - name: objstore-config
+          {{- if .Values.existingObjstoreSecret }}
+          secret:
+            secretName: {{ .Values.existingObjstoreSecret }}
+          {{- else }}
           configMap:
             name: {{ include "thanos.objstoreConfigmapName" . }}
+          {{- end }}
 {{- end }}

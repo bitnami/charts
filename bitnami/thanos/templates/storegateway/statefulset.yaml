@@ -104,8 +104,13 @@ spec:
               mountPath: /data
       volumes:
         - name: objstore-config
+          {{- if .Values.existingObjstoreSecret }}
+          secret:
+            secretName: {{ .Values.existingObjstoreSecret }}
+          {{- else }}
           configMap:
             name: {{ include "thanos.objstoreConfigmapName" . }}
+          {{- end }}
   {{- if and .Values.storegateway.persistence.enabled .Values.storegateway.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:

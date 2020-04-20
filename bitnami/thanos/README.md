@@ -101,6 +101,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `clusterDomain`             | Default Kubernetes cluster domain                      | `cluster.local`                                         |
 | `objstoreConfig`            | Objstore configuration                                 | `nil`                                                   |
 | `existingObjstoreConfigmap` | Name of existing ConfigMap with Objstore configuration | `nil`                                                   |
+| `existingObjstoreSecret`    | Name of existing secret with Objstore configuration    | `nil`                                                   |
 
 ### Thanos Querier parameters
 
