@@ -9,7 +9,10 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
   annotations:
-{{ toYaml .Values.metrics.service.annotations | indent 4 }}
+  {{- if .Values.commonAnnotations }}
+    {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+    {{- toYaml .Values.metrics.service.annotations | nindent 4 }}
 spec:
   type: {{ .Values.metrics.service.type }}
   {{- if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerIP }}
