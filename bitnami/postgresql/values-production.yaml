@@ -385,11 +385,11 @@ slave:
   priorityClassName: ""
   ## Extra init containers
   ## Example
-  ## 
+  ##
   ## extraInitContainers:
   ##   - name: do-something
   ##     image: busybox
-  ##     command: ['do', 'something'] 
+  ##     command: ['do', 'something']
   extraInitContainers: []
   ## Additional PostgreSQL Slave Volume mounts
   ##
@@ -423,6 +423,10 @@ resources:
   requests:
     memory: 256Mi
     cpu: 250m
+
+## Add annotations to all the deployed resources
+##
+commonAnnotiations: {}
 
 networkPolicy:
   ## Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
