@@ -3,11 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ include "metallb.fullname" . }}
-  labels:
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-    chart: {{ include "metallb.chart" . }}
-    app: {{ include "metallb.name" . }}
+  labels: {{ include "metallb.labels" . | nindent 4 }}
 spec:
   groups:
   - name: {{ include "metallb.fullname" . }}.alerts

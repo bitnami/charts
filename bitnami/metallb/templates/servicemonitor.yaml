@@ -5,11 +5,11 @@ metadata:
   name: {{ include "metallb.fullname" . }}-controller-metrics
   labels: {{- include "metallb.labels" . | nindent 4 }}
     jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel }}
-    component: controller
+    app.kubernetes.io/component: controller
 spec:
   type: ClusterIP
   selector: {{- include "metallb.matchLabels" . | nindent 4 }}
-    component: controller
+    app.kubernetes.io/component: controller
   ports:
   - name: metrics
     port: {{ .Values.controller.containerPort.metrics }}
@@ -22,11 +22,11 @@ metadata:
   name: {{ include "metallb.fullname" . }}-speaker-metrics
   labels: {{- include "metallb.labels" . | nindent 4 }}
     jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel }}
-    component: speaker
+    app.kubernetes.io/component: speaker
 spec:
   type: ClusterIP
   selector: {{- include "metallb.matchLabels" . | nindent 4 }}
-    component: speaker
+    app.kubernetes.io/component: speaker
   ports:
   - name: metrics
     port: {{ .Values.speaker.daemonset.hostPorts.metrics }}
@@ -38,12 +38,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "metallb.fullname" . }}-controller
   labels: {{- include "metallb.labels" . | nindent 4 }}
-    component: controller
+    app.kubernetes.io/component: controller
 spec:
   jobLabel: jobLabel
   selector:
     matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
-      component: controller
+      app.kubernetes.io/component: controller
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
@@ -64,12 +64,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "metallb.fullname" . }}-speaker
   labels: {{- include "metallb.labels" . | nindent 4}}
-    component: speaker
+    app.kubernetes.io/component: speaker
 spec:
   jobLabel: jobLabel
   selector:
     matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
-      component: speaker
+      app.kubernetes.io/component: speaker
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

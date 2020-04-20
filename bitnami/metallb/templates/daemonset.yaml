@@ -1,18 +1,17 @@
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ include "metallb.fullname" . }}-speaker
   labels: {{- include "metallb.labels" . | nindent 4 }}
-    component: speaker
+    app.kubernetes.io/component: speaker
 spec:
   selector:
     matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
-      component: speaker
+      app.kubernetes.io/component: speaker
   template:
     metadata:
       labels: {{- include "metallb.labels" . | nindent 8 }}
-        component: speaker
+        app.kubernetes.io/component: speaker
       {{- if .Values.speaker.podAnnotations }}
       annotations: {{- toYaml .Values.speaker.podAnnotations | nindent 8 }}
       {{- end }}
@@ -45,7 +44,7 @@ spec:
             fieldRef:
               fieldPath: status.podIP
         - name: METALLB_ML_LABELS
-          value: "app=metallb,component=speaker"
+          value: "app.kubernetes.io/name=metallb,app.kubernetes.io/component=speaker"
         - name: METALLB_ML_NAMESPACE
           valueFrom:
             fieldRef:

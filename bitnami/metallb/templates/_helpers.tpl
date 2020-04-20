@@ -56,7 +56,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 Common labels
 */}}
 {{- define "metallb.labels" -}}
-app: {{ include "metallb.name" . }}
 app.kubernetes.io/name: {{ include "metallb.name" . }}
 helm.sh/chart: {{ include "metallb.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}

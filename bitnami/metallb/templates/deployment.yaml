@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: {{ include "metallb.fullname" . }}-controller
   labels: {{- include "metallb.labels" . | nindent 4 }}
-    component: controller
+    app.kubernetes.io/component: controller
 spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
-      component: controller
+      app.kubernetes.io/component: controller
   template:
     metadata:
       labels: {{- include "metallb.labels" . | nindent 8 }}
-        component: controller
+        app.kubernetes.io/component: controller
       {{- if .Values.controller.podAnnotations }}
       annotations: {{- toYaml .Values.controller.podAnnotations | nindent 8 }}
       {{- end }}
