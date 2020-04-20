@@ -93,10 +93,9 @@ spec:
             - NET_RAW
             - SYS_ADMIN
       nodeSelector:
-      {{- if .Values.controller.nodeSelector }}
-{{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | indent 8 }}
+      {{- if .Values.controller.nodeSelector }} {{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-        "beta.kubernetes.io/os": linux
+        "kubernetes.io/os": linux
       {{- if .Values.speaker.affinity }}
       affinity: {{- include "metallb.tplValue" (dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
       {{- end }}

@@ -5,7 +5,7 @@ metadata:
   labels: {{- include "metallb.labels" . | nindent 4 }}
     app.kubernetes.io/component: controller
 spec:
-  revisionHistoryLimit: 3
+  revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
   selector:
     matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: controller
@@ -26,10 +26,9 @@ spec:
         runAsNonRoot: {{ .Values.controller.securityContext.runAsNonRoot }}
       {{- end }}
       nodeSelector: 
-      {{- if .Values.controller.nodeSelector }}
-{{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | indent 8 }}
+      {{- if .Values.controller.nodeSelector }} {{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-        "beta.kubernetes.io/os": linux
+        "kubernetes.io/os": linux
       {{- if .Values.controller.affinity }}
       affinity: {{- include "metallb.tplValue" (dict "value" .Values.controller.affinity "context" $) | nindent 8 }}
       {{- end }}

@@ -122,6 +122,11 @@ controller:
     runAsUser: 65534 # nobody
     fsGroup: 65534
 
+  ## Configure the revisionHistoryLimit of the Controller deployment
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
+  ##
+  revisionHistoryLimit: 3
+
   ## Configures the ports the MetalLB Controller listens on for metrics
   ##
   containerPort:
