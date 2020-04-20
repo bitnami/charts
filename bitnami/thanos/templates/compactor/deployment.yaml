@@ -97,15 +97,22 @@ spec:
           {{- end }}
           volumeMounts:
             - name: objstore-config
+              {{- if .Values.existingObjstoreSecret.items }}
+              mountPath: /conf
+              {{- else }}
               mountPath: /conf/objstore.yml
               subPath: objstore.yml
+              {{- end }}
             - name: data
               mountPath: /data
       volumes:
         - name: objstore-config
           {{- if .Values.existingObjstoreSecret }}
           secret:
-            secretName: {{ .Values.existingObjstoreSecret }}
+            secretName: {{ .Values.existingObjstoreSecret.name }}
+            {{- if .Values.existingObjstoreSecret.items }}
+            items: {{- toYaml .Values.existingObjstoreSecret.items | nindent 14 }}
+            {{- end }}
           {{- else }}
           configMap:
             name: {{ include "thanos.objstoreConfigmapName" . }}

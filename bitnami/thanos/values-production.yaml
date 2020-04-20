@@ -51,6 +51,8 @@ clusterDomain: cluster.local
 ## Note: This will override objstoreConfig
 ##
 # existingObjstoreSecret:
+#   name:
+#   items: []
 
 ## Thanos Querier parameters
 ##

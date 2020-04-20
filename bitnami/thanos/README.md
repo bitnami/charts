@@ -89,19 +89,20 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Common parameters
 
-| Parameter                   | Description                                            | Default                                                 |
-|-----------------------------|--------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`            | Thanos image registry                                  | `docker.io`                                             |
-| `image.repository`          | Thanos image name                                      | `bitnami/thanos`                                        |
-| `image.tag`                 | Thanos image tag                                       | `{TAG_NAME}`                                            |
-| `image.pullPolicy`          | Thanos image pull policy                               | `IfNotPresent`                                          |
-| `image.pullSecrets`         | Specify docker-registry secret names as an array       | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`              | String to partially override thanos.fullname           | `nil`                                                   |
-| `fullnameOverride`          | String to fully override thanos.fullname               | `nil`                                                   |
-| `clusterDomain`             | Default Kubernetes cluster domain                      | `cluster.local`                                         |
-| `objstoreConfig`            | Objstore configuration                                 | `nil`                                                   |
-| `existingObjstoreConfigmap` | Name of existing ConfigMap with Objstore configuration | `nil`                                                   |
-| `existingObjstoreSecret`    | Name of existing secret with Objstore configuration    | `nil`                                                   |
+| Parameter                       | Description                                            | Default                                                 |
+|---------------------------------|--------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`                | Thanos image registry                                  | `docker.io`                                             |
+| `image.repository`              | Thanos image name                                      | `bitnami/thanos`                                        |
+| `image.tag`                     | Thanos image tag                                       | `{TAG_NAME}`                                            |
+| `image.pullPolicy`              | Thanos image pull policy                               | `IfNotPresent`                                          |
+| `image.pullSecrets`             | Specify docker-registry secret names as an array       | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                  | String to partially override thanos.fullname           | `nil`                                                   |
+| `fullnameOverride`              | String to fully override thanos.fullname               | `nil`                                                   |
+| `clusterDomain`                 | Default Kubernetes cluster domain                      | `cluster.local`                                         |
+| `objstoreConfig`                | Objstore configuration                                 | `nil`                                                   |
+| `existingObjstoreConfigmap`     | Name of existing ConfigMap with Objstore configuration | `nil`                                                   |
+| `existingObjstoreSecret.name`   | Name of existing secret with Objstore configuration    | `nil`                                                   |
+| `existingObjstoreSecret.items`  | List of secrets keys to paths                          | `[]`                                                    |
 
 ### Thanos Querier parameters
 
