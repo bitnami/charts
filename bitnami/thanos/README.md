@@ -115,7 +115,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.stores`                           | Store APIs to connect with Thanos Querier                      | `[]`                            |
 | `querier.sdConfig`                         | Service Discovery configuration                                | `nil`                           |
 | `querier.existingSDConfigmap`              | Name of existing ConfigMap with Ruler configuration            | `nil`                           |
-| `querier.extraFlags`                       | Extra Flags to passed to Thanos Compactor                      | `{}`                            |
+| `querier.extraFlags`                       | Extra Flags to passed to Thanos Querier                        | `{}`                            |
 | `querier.replicaCount`                     | Number of Thanos Querier replicas to deploy                    | `1`                             |
 | `querier.strategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                 |
 | `querier.affinity`                         | Affinity for pod assignment                                    | `{}` (evaluated as a template)  |
@@ -157,7 +157,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.logLevel`                         | Thanos Bucket Web log level                                    | `info`                         |
 | `bucketweb.refresh`                          | Refresh interval to download metadata from remote storage      | `30m`                          |
 | `bucketweb.timeout`                          | Timeout to download metadata from remote storage               | `5m`                           |
-| `bucketweb.extraFlags`                       | Extra Flags to passed to Thanos Compactor                      | `{}`                           |
+| `bucketweb.extraFlags`                       | Extra Flags to passed to Thanos Bucket Web                     | `{}`                           |
 | `bucketweb.replicaCount`                     | Number of Thanos Bucket Web replicas to deploy                 | `1`                            |
 | `bucketweb.strategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                |
 | `bucketweb.affinity`                         | Affinity for pod assignment                                    | `{}` (evaluated as a template) |
