@@ -11,7 +11,6 @@ spec:
       labels: {{- include "kong.labels" . | nindent 8 }}
         app.kubernetes.io/component: migration
       annotations:
-        helm.sh/hook: post-install, post-upgrade
       {{- if .Values.migration.podAnnotations }}
       {{- include "kong.tplValue" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
