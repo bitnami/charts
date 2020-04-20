@@ -4,8 +4,7 @@ metadata:
   name: {{ include "kong.fullname" . }}-migrate
   namespace: {{ .Release.Namespace }}
   labels: {{- include "kong.labels" . | nindent 4 }}
-  annotations:
-    helm.sh/hook: pre-install, pre-upgrade
+  annotations: {{- include "kong.tplValue" ( dict "value" .Values.migration.annotations "context" $ ) | nindent 4 }}
 spec:
   template:
     metadata:

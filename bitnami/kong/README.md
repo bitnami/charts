@@ -142,17 +142,17 @@ The following tables list the configurable parameters of the kong chart and thei
 
 ### Kong Migration job Parameters
 
-| Parameter                      | Description                                                                                      | Default |
-|--------------------------------|--------------------------------------------------------------------------------------------------|---------|
-| `migration.image.registry`     | Override Kong migration job image registry (Kong image if not set)                               | `nil`   |
-| `migration.image.repository`   | Override Kong migration job image name (Kong image if not set)                                   | `nil`   |
-| `migration.image.tag`          | Override Kong migration job image tag (Kong image if not set)                                    | `nil`   |
-| `migration.extraEnvVars`       | Array containing extra env vars to configure the Kong migration job                              | `nil`   |
-| `migration.extraEnvVarsCM`     | ConfigMap containing extra env vars to configure the Kong migration job                          | `nil`   |
-| `migration.extraEnvVarsSecret` | Secret containing extra env vars to configure the Kong migration job (in case of sensitive data) | `nil`   |
-| `migration.command`            | Override default container command (useful when using custom images)                             | `nil`   |
-| `migration.args`               | Override default container args (useful when using custom images)                                | `nil`   |
-
+| Parameter                      | Description                                                                                      | Default                                    |
+|--------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------|
+| `migration.image.registry`     | Override Kong migration job image registry (Kong image if not set)                               | `nil`                                      |
+| `migration.image.repository`   | Override Kong migration job image name (Kong image if not set)                                   | `nil`                                      |
+| `migration.image.tag`          | Override Kong migration job image tag (Kong image if not set)                                    | `nil`                                      |
+| `migration.extraEnvVars`       | Array containing extra env vars to configure the Kong migration job                              | `nil`                                      |
+| `migration.extraEnvVarsCM`     | ConfigMap containing extra env vars to configure the Kong migration job                          | `nil`                                      |
+| `migration.extraEnvVarsSecret` | Secret containing extra env vars to configure the Kong migration job (in case of sensitive data) | `nil`                                      |
+| `migration.command`            | Override default container command (useful when using custom images)                             | `nil`                                      |
+| `migration.args`               | Override default container args (useful when using custom images)                                | `nil`                                      |
+| `migration.annotations`        | Add annotations to the job                                                                       | `helm.sh/hook: post-install, post-upgrade` |
 ### Kong Ingress Controller Container Parameters
 
 | Parameter                                       | Description                                                                                                         | Default                                                 |

@@ -224,6 +224,11 @@ migration:
   ## Command and args for running the container (set to default if not set). Use array form
   command:
   args:
+
+  ## Job annotation. By defeault set to post-install and post-upgrade
+  annotations:
+    helm.sh/hook: post-install, post-upgrade
+
   ## An array to add extra env vars
   ## For example:
   ## extraEnvVars:
@@ -231,6 +236,7 @@ migration:
   ##    value: my-instance
   ##
   extraEnvVars: []
+
 
   ## ConfigMap with extra env vars:
   ##
@@ -510,12 +516,6 @@ postgresql:
   ## Create a username in the bundled PostgreSQL installation
   ##
   postgresqlUsername: kong
-
-  ##
-  ## Annotations to make it work with helm install --wait
-  commonAnnotations:
-    helm.sh/hook: "pre-install, pre-upgrade"
-    helm.sh/hook-weight: "-1"
 
 ## Cassandra properties
 ##
