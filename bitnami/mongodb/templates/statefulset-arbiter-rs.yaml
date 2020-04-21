@@ -60,11 +60,7 @@ spec:
       {{- end -}}
       {{- if (or .Values.nodeSelector .Values.nodeSelectorArbiter) }}
       nodeSelector:
-      {{- if .Values.nodeSelectorArbiter }}
-{{ toYaml .Values.nodeSelectorArbiter | indent 8 }}
-      {{- else }}
-{{ toYaml .Values.nodeSelector | indent 8 }}
-      {{- end }}
+{{ toYaml (default .Values.nodeSelector .Values.nodeSelectorArbiter) | indent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations:
