@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.12.0-scratch-r5
+  tag: 0.12.0-scratch-r6
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -42,10 +42,12 @@ clusterDomain: cluster.local
 ##
 # objstoreConfig:
 
-## ConfigMap with Objstore Configuration
-## NOTE: This will override objstoreConfig
+## Secret with Objstore Configuration
+## Note: This will override objstoreConfig
 ##
-# existingObjstoreConfigmap:
+# existingObjstoreSecret:
+##  optional item list for specifying a custom Secret key. If so, path should be objstore.yml
+# existingObjstoreSecretItems: []
 
 ## Thanos Querier parameters
 ##
@@ -930,12 +932,10 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
