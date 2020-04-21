@@ -72,6 +72,8 @@ The following table lists the configurable parameters of the JasperReports chart
 | `smtpPassword`                   | SMTP password                                | `nil`                                                    |
 | `smtpProtocol`                   | SMTP protocol [`ssl`, `none`]                | `nil`                                                    |
 | `allowEmptyPassword`             | Allow DB blank passwords                     | `yes`                                                    |
+| `nodeSelector`                   | Node labels for pod assignment               | `{}`                                                     |
+| `tolerations`                    | List of node taints to tolerate              | `[]`                                                     |
 | `ingress.enabled`                | Enable ingress controller resource           | `false`                                                  |
 | `ingress.annotations`            | Ingress annotations                          | `[]`                                                     |
 | `ingress.certManager`            | Add annotations for cert-manager             | `false`                                                  |

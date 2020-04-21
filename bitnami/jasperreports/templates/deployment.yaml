@@ -19,6 +19,12 @@ spec:
         chart: "{{ template "jasperreports.chart" . }}"
         release: {{ .Release.Name | quote }}
     spec:
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end -}}
+      {{- with .Values.tolerations }}
+      tolerations: {{ toYaml . | nindent 8 }}
+      {{- end }}
 {{- include "jasperreports.imagePullSecrets" . | indent 6 }}
       containers:
       - name: {{ template "jasperreports.fullname" . }}
