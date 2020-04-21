@@ -104,9 +104,8 @@ spec:
             timeoutSeconds: {{ .Values.coordinating.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.coordinating.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.coordinating.readinessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: http
+            tcpSocket:
+              port: 9300
           {{- end }}
           {{- if .Values.coordinating.resources }}
           resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}
