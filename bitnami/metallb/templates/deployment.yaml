@@ -75,4 +75,3 @@ spec:
       {{- if .Values.controller.resources }}
         resources: {{- toYaml .Values.controller.resources | nindent 10 }}
       {{- end }}
-
