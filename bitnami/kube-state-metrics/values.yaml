@@ -51,7 +51,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 1.9.5-debian-10-r61
+  tag: 1.9.5-debian-10-r66
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -243,6 +243,16 @@ serviceMonitor:
   ##
   # selector:
   #   prometheus: my-prometheus
+
+  ## Honor metric labels
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  # honorLabels: false
+
+  ## Relabeling (before scrape)
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+  ##
+  # relabelings: []
 
   ## Metric relabeling
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
