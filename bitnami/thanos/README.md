@@ -100,9 +100,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `fullnameOverride`              | String to fully override thanos.fullname               | `nil`                                                   |
 | `clusterDomain`                 | Default Kubernetes cluster domain                      | `cluster.local`                                         |
 | `objstoreConfig`                | Objstore configuration                                 | `nil`                                                   |
-| `existingObjstoreConfigmap`     | Name of existing ConfigMap with Objstore configuration | `nil`                                                   |
-| `existingObjstoreSecret.name`   | Name of existing secret with Objstore configuration    | `nil`                                                   |
-| `existingObjstoreSecret.items`  | List of secrets keys to paths                          | `[]`                                                    |
+| `existingObjstoreSecret`        | Name of existing secret with Objstore configuration    | `nil`                                                   |
+| `existingObjstoreSecretItems`   | List of Secret Keys and Paths                          | `[]`                                                    |
 
 ### Thanos Querier parameters
 
@@ -431,7 +430,7 @@ This helm chart supports using custom Objstore configuration.
 
 You can specify the Objstore configuration using the `objstoreConfig` parameter.
 
-In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingObjstoreConfigmap` parameter. Note that this will override the previous option.
+In addition, you can also set an external Secret with the configuration file. This is done by setting the `existingObjstoreSecret` parameter. Note that this will override the previous option. If needed you can also provide a custom Secret Key with `existingObjstoreSecretItems`, please be aware that the Path of your Secret should be `objstore.yml`.
 
 ### Using custom Querier Service Discovery configuration
 

@@ -42,17 +42,12 @@ clusterDomain: cluster.local
 ##
 # objstoreConfig:
 
-## ConfigMap with Objstore Configuration
-## NOTE: This will override objstoreConfig
-##
-# existingObjstoreConfigmap:
-
 ## Secret with Objstore Configuration
 ## Note: This will override objstoreConfig
 ##
 # existingObjstoreSecret:
-#   name:
-#   items: []
+##  optional item list for specifying a custom Secret key. If so, path should be objstore.yml
+# existingObjstoreSecretItems: []
 
 ## Thanos Querier parameters
 ##
