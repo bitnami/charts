@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ template "redis-cluster.fullname" . }}-metrics
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
-    {{- if .Values.metrics.service.labels -}}
+    {{- if .Values.metrics.service.labels }}
     {{- toYaml .Values.metrics.service.labels | nindent 4 }}
     {{- end -}}
     app.kubernetes.io/component: "metrics"
