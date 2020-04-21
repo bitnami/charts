@@ -135,45 +135,20 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return the hostname of every ElasticSearch master-eligible node
-*/}}
-{{- define "elasticsearch.masterHosts" -}}
-{{- $clusterDomain := .Values.clusterDomain }}
-{{- $releaseNamespace := .Release.Namespace }}
-{{- $masterReplicaCount := int .Values.master.replicas }}
-{{- $masterFullname := include "elasticsearch.master.fullname" . }}
-{{- range $e, $i := until $masterReplicaCount }}
-{{- $masterFullname }}-{{ $i }}.{{ $masterFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the hostname of every ElasticSearch seed node
 */}}
 {{- define "elasticsearch.hosts" -}}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $releaseNamespace := .Release.Namespace }}
-{{- $masterReplicaCount := int .Values.master.replicas }}
 {{- $masterFullname := include "elasticsearch.master.fullname" . }}
-{{- $coordinatingReplicaCount := int .Values.coordinating.replicas }}
 {{- $coordinatingFullname := include "elasticsearch.coordinating.fullname" . }}
-{{- $dataReplicaCount := int .Values.data.replicas }}
 {{- $dataFullname := include "elasticsearch.data.fullname" . }}
-{{- $ingestReplicaCount := int .Values.ingest.replicas }}
 {{- $ingestFullname := include "elasticsearch.ingest.fullname" . }}
-{{- range $e, $i := until $masterReplicaCount }}
-{{- $masterFullname }}-{{ $i }}.{{ $masterFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- end -}}
-{{- range $e, $i := until $coordinatingReplicaCount }}
-{{- $coordinatingFullname }}-{{ $i }}.{{ $coordinatingFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- end -}}
-{{- range $e, $i := until $dataReplicaCount }}
-{{- $dataFullname }}-{{ $i }}.{{ $dataFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- end -}}
+{{- $masterFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- $coordinatingFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- $dataFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- if .Values.ingest.enabled }}
-{{- range $e, $i := until $ingestReplicaCount }}
-{{- $ingestFullname }}-{{ $i }}.{{ $ingestFullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- end -}}
+{{- $ingestFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- end -}}
 {{- end -}}
 
