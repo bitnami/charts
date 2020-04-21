@@ -10,8 +10,12 @@ metadata:
   {{- with .Values.master.labels }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.master.annotations }}
-  annotations: {{ toYaml . | nindent 4 }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- with .Values.slave.annotations }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   serviceName: {{ template "postgresql.fullname" . }}-headless

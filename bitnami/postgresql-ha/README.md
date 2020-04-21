@@ -7,7 +7,7 @@ This Helm chart has been developed based on [bitnami/postgresql](https://github.
 
 ## TL;DR;
 
-```
+```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/postgresql-ha
 ```
@@ -25,7 +25,7 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](http
 
 Install the PostgreSQL HA helm chart with a release name `my-release`:
 
-```bash
+```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/postgresql-ha
 ```
@@ -34,7 +34,7 @@ $ helm install my-release bitnami/postgresql-ha
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete --purge my-release
 ```
 
@@ -224,7 +224,9 @@ The above command sets the password for user `postgres` to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/postgresql-ha
+$ helm install my-release \
+    -f values.yaml \
+    bitnami/postgresql-ha
 ```
 
 ## Configuration and installation details
@@ -342,7 +344,7 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
 In more complex scenarios, we may have the following tree of dependencies
 
-```
+```bash
                      +--------------+
                      |              |
         +------------+   Chart 1    +-----------+
@@ -362,7 +364,7 @@ In more complex scenarios, we may have the following tree of dependencies
 
 The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
 
-```
+```bash
 postgresql.postgresqlPassword=testtest
 subchart1.postgresql.postgresqlPassword=testtest
 subchart2.postgresql.postgresqlPassword=testtest
@@ -373,7 +375,7 @@ subchart2.postgresql.postgresqlDatabase=db1
 
 If the number of dependent sub-charts increases, installing the chart with parameters can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
 
-```
+```bash
 global.postgresql.postgresqlPassword=testtest
 global.postgresql.postgresqlDatabase=db1
 ```
@@ -393,6 +395,31 @@ It's necessary to specify the existing passwords while performing a upgrade to e
 $ helm upgrade my-release bitnami/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
+```
+
+> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+## 3.0.0
+
+A new major version of repmgr (5.1.0) was included. To upgrade to this major version, it's necessary to upgrade the repmgr extension installed on the database. To do so, follow the steps below:
+
+- Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `3.0.0`, enabling the repmgr extension upgrade:
+
+```bash
+$ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=1 \
+    --set postgresql.upgradeRepmgrExtension=true
+```
+
+- Scale your PostgreSQL setup to the original number of replicas:
+
+```bash
+$ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
