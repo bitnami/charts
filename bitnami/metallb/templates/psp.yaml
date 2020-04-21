@@ -13,8 +13,8 @@ spec:
   defaultAllowPrivilegeEscalation: false
   fsGroup:
     ranges:
-    - max: 65535
-      min: 1
+    - max: {{ .Values.controller.securityContext.fsGroup }}
+      min: {{ .Values.controller.securityContext.fsGroup }}
     rule: MustRunAs
   hostIPC: false
   hostNetwork: false
@@ -25,15 +25,15 @@ spec:
   - ALL
   runAsUser:
     ranges:
-    - max: 65535
-      min: 1
+    - max: {{ .Values.controller.securityContext.runAsUser }}
+      min: {{ .Values.controller.securityContext.runAsUser }}
     rule: MustRunAs
   seLinux:
     rule: RunAsAny
   supplementalGroups:
     ranges:
-    - max: 65535
-      min: 1
+    - max: {{ .Values.controller.securityContext.runAsUser }}
+      min: {{ .Values.controller.securityContext.runAsUser }}
     rule: MustRunAs
   volumes:
   - configMap
@@ -46,14 +46,11 @@ metadata:
   name: {{ include "metallb.fullname" . }}-speaker
   labels: {{- include "metallb.labels" . | nindent 4}}
 spec:
-  allowPrivilegeEscalation: false
-  allowedCapabilities:
-  - NET_ADMIN
-  - NET_RAW
-  - SYS_ADMIN
+  allowPrivilegeEscalation: {{ .Values.speaker.securityContext.allowPrivilegeEscalation }}
+  allowedCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 2 }}
   allowedHostPaths: []
-  defaultAddCapabilities: []
-  defaultAllowPrivilegeEscalation: false
+  defaultAddCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 2 }}
+  defaultAllowPrivilegeEscalation: {{ .Values.speaker.securityContext.allowPrivilegeEscalation }}
   fsGroup:
     rule: RunAsAny
   hostIPC: false
@@ -63,9 +60,8 @@ spec:
   - max: {{ .Values.speaker.daemonset.hostPorts.metrics }}
     min: {{ .Values.speaker.daemonset.hostPorts.metrics }}
   privileged: true
-  readOnlyRootFilesystem: true
-  requiredDropCapabilities:
-  - ALL
+  readOnlyRootFilesystem: {{ .Values.speaker.securityContext.readOnlyRootFilesystem }}
+  requiredDropCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.drop | nindent 2 }}
   runAsUser:
     rule: RunAsAny
   seLinux:
