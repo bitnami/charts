@@ -10,6 +10,7 @@ spec:
   {{- if and (eq .Values.coordinating.service.type "LoadBalancer") (not (empty .Values.coordinating.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.coordinating.service.loadBalancerIP }}
   {{- end }}
+  publishNotReadyAddresses: true
   ports:
     - name: http
       port: {{ .Values.coordinating.service.port }}

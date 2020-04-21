@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/component: data
 spec:
   type: ClusterIP
+  publishNotReadyAddresses: true
   ports:
     - name: tcp-transport
       port: 9300

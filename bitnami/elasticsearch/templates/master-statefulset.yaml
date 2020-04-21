@@ -130,8 +130,9 @@ spec:
             timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.master.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
-            tcpSocket:
-              port: 9300
+            httpGet:
+              path: /_cluster/health?local=true
+              port: 9200
           {{- end }}
           {{- if .Values.master.resources }}
           resources: {{- toYaml .Values.master.resources | nindent 12 }}

@@ -11,6 +11,7 @@ spec:
   {{- if and (eq .Values.ingest.service.type "LoadBalancer") (not (empty .Values.ingest.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.ingest.service.loadBalancerIP }}
   {{- end }}
+  publishNotReadyAddresses: true
   ports:
     - name: tcp-transport
       port: {{ .Values.ingest.service.port }}

@@ -98,8 +98,9 @@ spec:
             timeoutSeconds: {{ .Values.ingest.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.ingest.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.ingest.readinessProbe.failureThreshold }}
-            tcpSocket:
-              port: 9300
+            httpGet:
+              path: /_cluster/health?local=true
+              port: 9200
             initialDelaySeconds: 5
           {{- end}}
           {{- if .Values.ingest.resources }}
