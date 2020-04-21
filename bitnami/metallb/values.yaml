@@ -118,6 +118,9 @@ controller:
     name: ""
 
 
+  ## Pod securityContext
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## 
   securityContext:
     enabled: true
     runAsNonRoot: true
@@ -241,6 +244,9 @@ speaker:
   # secretName:
   # secretKey:
 
+  ## Pod securityContext
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## 
   securityContext:
     enabled: true
     runAsUser: 0
