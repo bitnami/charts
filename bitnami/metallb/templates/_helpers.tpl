@@ -180,11 +180,22 @@ Create the name of the speaker service account to use
 Create the name of the settings ConfigMap to use.
 */}}
 {{- define "metallb.configMapName" -}}
-{{- if .Values.configInline -}}
-    {{ include "metallb.fullname" . }}
-{{- else -}}
-    {{ .Values.existingConfigMap }}
+    {{ default ( printf "%s" (include "metallb.fullname" .)) .Values.existingConfigMap | trunc 63 | trimSuffix "-" }}
 {{- end -}}
+
+{{/*
+Create the name of the settings Secret to use.
+*/}}
+{{- define "metallb.secretName" -}}
+    {{ default ( printf "%s-memberlist" (include "metallb.fullname" .)) .Values.speaker.secretName | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+
+{{/*
+Create the key of the settings Secret to use.
+*/}}
+{{- define "metallb.secretKey" -}}
+    {{ default "secretkey" .Values.speaker.secretKey | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*

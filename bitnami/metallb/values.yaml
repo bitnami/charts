@@ -119,8 +119,8 @@ controller:
   securityContext:
     enabled: true
     runAsNonRoot: true
-    runAsUser: 65534 # nobody
-    fsGroup: 65534
+    runAsUser: 1001
+    fsGroup: 1001
 
   ## Configure the revisionHistoryLimit of the Controller deployment
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
@@ -208,6 +208,7 @@ speaker:
     # The name of the ServiceAccount to use.  If not set and create is
     # true, a name is generated using the fullname template
     name: ""
+  
   ## Daemonset configuration
   ##
   daemonset:
@@ -220,6 +221,27 @@ speaker:
     hostPorts:
       metrics: 7472
   
+  ## Defines a secret to use outside of the auto generated
+  ## Default: {{ randAlphaNum 256 | b64enc | quote }}
+  ## The auto generated has secretName: {{ "metallb.fullname" }}-memberlist
+  ## and secretKey: secretkey
+  ##
+  # secretName:
+  # secretKey:
+
+  securityContext:
+    enabled: true
+    runAsUser: 0
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+      - ALL
+      add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+
   ## An array to add extra env vars
   ## For example:
   ## extraEnvVars:
