@@ -20,16 +20,6 @@ spec:
       {{- include "metallb.controller.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "metallb.controllerServiceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
-      {{- if .Values.controller.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.controller.securityContext.runAsUser }}
-        fsGroup: {{ .Values.controller.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.controller.securityContext.runAsNonRoot }}
-        allowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
-        readOnlyRootFilesystem: {{ .Values.controller.securityContext.readOnlyRootFilesystem }}
-        capabilities:
-          drop: {{- toYaml .Values.controller.securityContext.capabilities.drop | nindent 12 }}
-      {{- end }}
       nodeSelector: 
       {{- if .Values.controller.nodeSelector }} {{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -72,6 +62,19 @@ spec:
           successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
       {{- end }}
+      {{- if .Values.controller.securityContext.enabled }}
+        securityContext:
+          allowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.controller.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop: {{- toYaml .Values.controller.securityContext.capabilities.drop | nindent 12 }}
+      {{- end }}
       {{- if .Values.controller.resources }}
         resources: {{- toYaml .Values.controller.resources | nindent 10 }}
+      {{- end }}
+      {{- if .Values.controller.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.controller.securityContext.runAsUser }}
+        fsGroup: {{ .Values.controller.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.controller.securityContext.runAsNonRoot }}
       {{- end }}
