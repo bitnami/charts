@@ -6,11 +6,11 @@ metadata:
   name: {{ include "metallb.fullname" . }}-controller
   labels: {{- include "metallb.labels" . | nindent 4}}
 spec:
-  allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
   allowedCapabilities: []
   allowedHostPaths: []
   defaultAddCapabilities: []
-  defaultAllowPrivilegeEscalation: false
+  defaultAllowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
   fsGroup:
     ranges:
     - max: {{ .Values.controller.securityContext.fsGroup }}
@@ -20,9 +20,8 @@ spec:
   hostNetwork: false
   hostPID: false
   privileged: false
-  readOnlyRootFilesystem: true
-  requiredDropCapabilities:
-  - ALL
+  readOnlyRootFilesystem: {{ .Values.controller.securityContext.readOnlyRootFilesystem }}
+  requiredDropCapabilities: {{- toYaml .Values.controller.securityContext.capabilities.drop | nindent 2 }}
   runAsUser:
     ranges:
     - max: {{ .Values.controller.securityContext.runAsUser }}

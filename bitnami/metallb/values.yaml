@@ -121,11 +121,21 @@ controller:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+      - ALL
 
   ## Configure the revisionHistoryLimit of the Controller deployment
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
   ##
   revisionHistoryLimit: 3
+
+  ## Configure the grace time period for sig term 
+  ## Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+  ## 
+  terminationGracePeriodSeconds: 0
 
   ## Configures the ports the MetalLB Controller listens on for metrics
   ##
