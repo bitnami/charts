@@ -1,4 +1,4 @@
-{{- if .Values.configInline }}
+{{- if not .Values.existingConfigMap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
