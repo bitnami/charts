@@ -67,43 +67,43 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 
 ### Jenkins parameters
 
-| Parameter                            | Description                                                     | Default                                                 |
-|--------------------------------------|-----------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                     | Jenkins image registry                                          | `docker.io`                                             |
-| `image.repository`                   | Jenkins Image name                                              | `bitnami/jenkins`                                       |
-| `image.tag`                          | Jenkins Image tag                                               | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                   | Jenkins image pull policy                                       | `IfNotPresent`                                          |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array                | `[]` (does not add image pull secrets to deployed pods) |
-| `jenkinsUser`                        | User of the application                                         | `user`                                                  |
-| `jenkinsPassword`                    | Application password                                            | _random 10 character alphanumeric string_               |
-| `jenkinsHome`                        | Jenkins home directory                                          | `/opt/bitnami/jenkins/jenkins_home`                     |
-| `disableInitialization`              | Allows to disable the initial Bitnami configuration for Jenkins | `no`                                                    |
-| `javaOpts`                           | Customize JVM parameters                                        | `nil`                                                   |
-| `persistence.enabled`                | Enable persistence using PVC                                    | `true`                                                  |
-| `persistence.storageClass`           | PVC Storage Class for Jenkins volume                            | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`             | PVC Access Mode for Jenkins volume                              | `ReadWriteOnce`                                         |
-| `persistence.size`                   | PVC Storage Request for Jenkins volume                          | `8Gi`                                                   |
-| `persistence.annotations`            | Prsistence annotations                                          | `{}`                                                    |
-| `resources.limits`                   | Jenkins resource  limits                                        | `{}`                                                    |
-| `resources.requests`                 | Jenkins resource  requests                                      | `{ cpu: "300m", memory: "512Mi" }`                      |
-| `livenessProbe.enabled`              | Turn on and off liveness probe                                  | `true`                                                  |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                        | `180`                                                   |
-| `livenessProbe.periodSeconds`        | How often to perform the probe                                  | `10`                                                    |
-| `livenessProbe.timeoutSeconds`       | When the probe times out                                        | `5`                                                     |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                     | `1`                                                     |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                      | `6`                                                     |
-| `readinessProbe.enabled`             | Turn on and off readiness probe                                 | `true`                                                  |
-| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                       | `30`                                                    |
-| `readinessProbe.periodSeconds`       | How often to perform the probe                                  | `5`                                                     |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                        | `3`                                                     |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                     | `1`                                                     |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                      | `3`                                                     |
-| `podAnnotations`                     | Pod annotations                                                 | `{}`                                                    |
-| `affinity`                           | Map of node/pod affinities                                      | `{}` (The value is evaluated as a template)             |
-| `nodeSelector`                       | Node labels for pod assignment                                  | `{}` (The value is evaluated as a template)             |
-| `tolerations`                        | Tolerations for pod assignment                                  | `[]` (The value is evaluated as a template)             |
-| `podSecurityContext`                 | Jenkins pods' Security Context                                  | `{ fsGroup: "1001" }`                                   |
-| `containerSecurityContext`           | Jenkins containers' Security Context                            | `{ runAsUser: "1001" }`                                 |
+| Parameter                            | Description                                                     | Default                                                              |
+|--------------------------------------|-----------------------------------------------------------------|----------------------------------------------------------------------|
+| `image.registry`                     | Jenkins image registry                                          | `docker.io`                                                          |
+| `image.repository`                   | Jenkins Image name                                              | `bitnami/jenkins`                                                    |
+| `image.tag`                          | Jenkins Image tag                                               | `{TAG_NAME}`                                                         |
+| `image.pullPolicy`                   | Jenkins image pull policy                                       | `IfNotPresent`                                                       |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                | `[]` (does not add image pull secrets to deployed pods)              |
+| `jenkinsUser`                        | User of the application                                         | `user`                                                               |
+| `jenkinsPassword`                    | Application password                                            | _random 10 character alphanumeric string_                            |
+| `jenkinsHome`                        | Jenkins home directory                                          | `/bitnami/jenkins/jenkins_home` (do not modify if using persistence) |
+| `disableInitialization`              | Allows to disable the initial Bitnami configuration for Jenkins | `no`                                                                 |
+| `javaOpts`                           | Customize JVM parameters                                        | `nil`                                                                |
+| `persistence.enabled`                | Enable persistence using PVC                                    | `true`                                                               |
+| `persistence.storageClass`           | PVC Storage Class for Jenkins volume                            | `nil` (uses alpha storage class annotation)                          |
+| `persistence.accessMode`             | PVC Access Mode for Jenkins volume                              | `ReadWriteOnce`                                                      |
+| `persistence.size`                   | PVC Storage Request for Jenkins volume                          | `8Gi`                                                                |
+| `persistence.annotations`            | Prsistence annotations                                          | `{}`                                                                 |
+| `resources.limits`                   | Jenkins resource  limits                                        | `{}`                                                                 |
+| `resources.requests`                 | Jenkins resource  requests                                      | `{ cpu: "300m", memory: "512Mi" }`                                   |
+| `livenessProbe.enabled`              | Turn on and off liveness probe                                  | `true`                                                               |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                        | `180`                                                                |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                                  | `10`                                                                 |
+| `livenessProbe.timeoutSeconds`       | When the probe times out                                        | `5`                                                                  |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                     | `1`                                                                  |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                      | `6`                                                                  |
+| `readinessProbe.enabled`             | Turn on and off readiness probe                                 | `true`                                                               |
+| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                       | `30`                                                                 |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                                  | `5`                                                                  |
+| `readinessProbe.timeoutSeconds`      | When the probe times out                                        | `3`                                                                  |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                     | `1`                                                                  |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                      | `3`                                                                  |
+| `podAnnotations`                     | Pod annotations                                                 | `{}`                                                                 |
+| `affinity`                           | Map of node/pod affinities                                      | `{}` (The value is evaluated as a template)                          |
+| `nodeSelector`                       | Node labels for pod assignment                                  | `{}` (The value is evaluated as a template)                          |
+| `tolerations`                        | Tolerations for pod assignment                                  | `[]` (The value is evaluated as a template)                          |
+| `podSecurityContext`                 | Jenkins pods' Security Context                                  | `{ fsGroup: "1001" }`                                                |
+| `containerSecurityContext`           | Jenkins containers' Security Context                            | `{ runAsUser: "1001" }`                                              |
 
 ### Exposure parameters
 
