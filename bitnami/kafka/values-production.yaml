@@ -385,19 +385,14 @@ service:
   ## Kafka port
   ##
   port: 9092
-  ## Kafka SSL port
-  ##
-  sslPort: 9093
-  ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
+  ## Specify the nodePort value for the NodePort service type.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePorts:
-    kafka: ""
-    ssl: ""
+  nodePort:
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
+  loadBalancerIP:
   ## Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## Example:
@@ -467,7 +462,7 @@ externalAccess:
     type: LoadBalancer
     ## Port used when service type is LoadBalancer
     ##
-    port: 19092
+    port: 9092
     ## Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount
     ## Example:
     ## loadBalancerIPs:

@@ -139,45 +139,18 @@ spec:
             - name: SHARED_FILE
               value: "/shared/info.txt"
             {{- end }}
-            {{- if .Values.externalAccess.enabled }}
-            - name: KAFKA_INTER_BROKER_LISTENER_NAME
-              value: "INTERNAL"
-            - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
-              {{- if and .Values.auth.enabled .Values.auth.ssl }}
-              value: "INTERNAL:SASL_SSL,EXTERNAL:SASL_SSL"
-              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
-              value: "INTERNAL:SSL,EXTERNAL:SSL"
-              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
-              value: "INTERNAL:SASL_PLAINTEXT,EXTERNAL:SASL_PLAINTEXT"
-              {{- else }}
-              value: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
-              {{- end }}
-            {{- else }}
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
               value: {{ .Values.listeners }}
-              {{- else if and .Values.auth.ssl .Values.auth.enabled }}
-              value: "SASL_SSL://:$(KAFKA_PORT_NUMBER),SSL://:9093"
-              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
-              value: "SSL://:9093"
-              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
-              value: "SASL_PLAINTEXT://:$(KAFKA_PORT_NUMBER)"
               {{- else }}
-              value: "PLAINTEXT://:$(KAFKA_PORT_NUMBER)"
+              value: "{{ template "kafka.listenerType" . }}://:$(KAFKA_PORT_NUMBER)"
               {{- end }}
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
               {{- if .Values.advertisedListeners }}
               value: {{ .Values.advertisedListeners }}
-              {{- else if and .Values.auth.ssl .Values.auth.enabled }}
-              value: "SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER),SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:9093"
-              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
-              value: "SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:9093"
-              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
-              value: "SASL_PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)"
               {{- else }}
-              value: "PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)"
+              value: "{{ template "kafka.listenerType" . }}://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)"
               {{- end }}
-            {{- end }}
             {{- if .Values.listenerSecurityProtocolMap }}
             - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
               value: {{ .Values.listenerSecurityProtocolMap }}
@@ -280,15 +253,7 @@ spec:
             {{- end }}
           ports:
             - name: kafka
-              containerPort: 9092
-            {{- if .Values.auth.ssl }}
-            - name: kafka-ssl
-              containerPort: 9093
-            {{- end }}
-            {{- if and .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
-            - name: kafka-external
-              containerPort: 19092
-            {{- end }}
+              containerPort: {{ .Values.service.port }}
           {{- if .Values.livenessProbe }}
           livenessProbe: {{- include "kafka.tplValue" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
           {{- end }}

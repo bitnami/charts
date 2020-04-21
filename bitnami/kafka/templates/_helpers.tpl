@@ -277,6 +277,21 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 
 {{/*
+Return the type of listener
+*/}}
+{{- define "kafka.listenerType" -}}
+{{- if and .Values.auth.ssl .Values.auth.enabled -}}
+SASL_SSL
+{{- else if and .Values.auth.ssl (not .Values.auth.enabled) -}}
+SSL
+{{- else if and .Values.auth.enabled (not .Values.auth.ssl) -}}
+SASL_PLAINTEXT
+{{- else -}}
+PLAINTEXT
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka auth credentials secret
 */}}
 {{- define "kafka.secretName" -}}

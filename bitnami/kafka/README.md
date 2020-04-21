@@ -149,9 +149,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 |---------------------------------------------------|----------------------------------------------------------------------------------------------------------|-------------------------------|
 | `service.type`                                    | Kubernetes Service type                                                                                  | `ClusterIP`                   |
 | `service.port`                                    | Kafka port                                                                                               | `9092`                        |
-| `service.sslPort`                                 | Kafka SSL port                                                                                           | `9093`                        |
-| `service.nodePorts.kafka`                         | Kubernetes Kafka node port                                                                               | `""`                          |
-| `service.nodePorts.ssl`                           | Kubernetes Kafka SSL node port                                                                           | `""`                          |
+| `service.nodePort`                                | Kubernetes node port                                                                                     | `nil`                         |
 | `service.loadBalancerIP`                          | loadBalancerIP for Kafka Service                                                                         | `nil`                         |
 | `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                                | `[]`                          |
 | `service.annotations`                             | Service annotations                                                                                      | `{}`(evaluated as a template) |
@@ -164,7 +162,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                            | `{}`                          |
 | `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                          | `{}`                          |
 | `externalAccess.service.type`                     | Kubernetes Servive type for external access. It can be NodePort or LoadBalancer                          | `LoadBalancer`                |
-| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                                    | `19092`                       |
+| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                                    | `9092`                        |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for Kafka brokers                                                             | `[]`                          |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                | `[]`                          |
 | `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort            | `nil`                         |
@@ -410,7 +408,7 @@ You have two alternatives to use LoadBalancer services:
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
-externalAccess.service.port=19092
+externalAccess.service.port=9092
 externalAccess.autoDiscovery.enabled=true
 serviceAccount.create=true
 rbac.create=true
@@ -423,9 +421,9 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
-externalAccess.service.port=19092
+externalAccess.service.port=9092
 externalAccess.service.loadBalancerIPs[0]='external-ip-1'
-externalAccess.service.loadBalancerIPs[1]='external-ip-2'}
+externalAccess.service.loadBalancerIPs[1]='external-ip-2'
 ```
 
 Note: You need to know in advance the load balancer IPs so each Kafka broker advertised listener is configured with it.

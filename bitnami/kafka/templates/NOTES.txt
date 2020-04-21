@@ -101,9 +101,9 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 {{- end }}
 {{- if .Values.auth.enabled }}
     PRODUCER:
-        kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/conf/producer.properties
+        kafka-console-producer.sh --broker-list 127.0.0.1:{{ .Values.service.port }} --topic test --producer.config /opt/bitnami/kafka/conf/producer.properties
     CONSUMER:
-        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning --consumer.config /opt/bitnami/kafka/conf/consumer.properties
+        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:{{ .Values.service.port }} --topic test --from-beginning --consumer.config /opt/bitnami/kafka/conf/consumer.properties
 
   NOTE: In order to connect to the cluster with an external client you need to properly specify the credentials stored in the JAAS file generated in the Kafka image.
         You should get the content of that file and write it in your host machine:
@@ -116,9 +116,9 @@ To connect to your Kafka server from outside the cluster, follow the instruction
         export KAFKA_OPTS="-Djava.security.auth.login.config=/path/to/kafka_jaas.conf"
 {{- else }}
     PRODUCER:
-        kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test
+        kafka-console-producer.sh --broker-list 127.0.0.1:{{ .Values.service.port }} --topic test
     CONSUMER:
-        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning
+        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:{{ .Values.service.port }} --topic test --from-beginning
 {{- end }}
 {{- end }}
 

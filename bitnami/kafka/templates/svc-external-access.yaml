@@ -19,7 +19,7 @@ metadata:
 spec:
   type: {{ $root.Values.externalAccess.service.type }}
   {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
-  {{- if not (empty $root.Values.externalAccess.service.loadBalancerIPs) }}
+  {{- if $root.Values.externalAccess.service.loadBalancerIPs }}
   loadBalancerIP: {{ index $root.Values.externalAccess.service.loadBalancerIPs $i }}
   {{- end }}
   {{- if $root.Values.externalAccess.service.loadBalancerSourceRanges }}
@@ -27,20 +27,15 @@ spec:
   {{- end }}
   {{- end }}
   ports:
-    - name: tcp-kafka
+    - name: kafka
+      {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
       port: {{ $root.Values.externalAccess.service.port }}
-      {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
+      {{- end }}
+      {{- if eq $root.Values.externalAccess.service.type "NodePort" }}
+      port: {{ $root.Values.service.port }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- else }}
-      nodePort: null
       {{- end }}
-      {{- if or (eq $root.Values.externalAccess.service.type "LoadBalancer") }}
-      targetPort: kafka-external
-      {{- else if $root.Values.externalAccess.autoDiscovery.enabled }}
-      targetPort: null
-      {{- else }}
-      targetPort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- end }}
+      targetPort: kafka
   selector: {{- include "kafka.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: kafka
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
