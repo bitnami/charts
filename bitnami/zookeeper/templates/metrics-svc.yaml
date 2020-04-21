@@ -5,6 +5,7 @@ metadata:
   name: {{ template "zookeeper.fullname" . }}-metrics
   namespace: {{ .Release.Namespace }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
+    app.kubernetes.io/component: zookeeper
 spec:
   type: ClusterIP
   ports:
