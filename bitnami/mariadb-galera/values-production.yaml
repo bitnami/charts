@@ -503,10 +503,14 @@ metrics:
     registry: docker.io
     repository: bitnami/mysqld-exporter
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.12.1-debian-10-r85
 =======
     tag: 0.12.1-debian-10-r78
 >>>>>>> 198ed3a4... [bitnami/mariadb-galera] Update components versions
+=======
+    tag: 0.12.1-debian-10-r78
+>>>>>>> f2770c7568d81b858df602339f887ebeca4720f6
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
