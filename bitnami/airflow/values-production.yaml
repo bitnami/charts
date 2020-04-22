@@ -382,7 +382,7 @@ postgresql:
   postgresqlUsername: bn_airflow
   # postgresqlPassword:
   postgresqlDatabase: bitnami_airflow
-  #In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
+  ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
   existingSecret: ""
 
 externalDatabase:
@@ -408,7 +408,7 @@ externalDatabase:
 redis:
   enabled: true
   # password: ""
-  #In case of redis.enabled = true, allow the usage of existing secrets for redis
+  ## In case of redis.enabled = true, allow the usage of existing secrets for redis
   existingSecret: ""
 
 externalRedis:
