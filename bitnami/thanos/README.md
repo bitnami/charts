@@ -89,18 +89,19 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Common parameters
 
-| Parameter                   | Description                                            | Default                                                 |
-|-----------------------------|--------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`            | Thanos image registry                                  | `docker.io`                                             |
-| `image.repository`          | Thanos image name                                      | `bitnami/thanos`                                        |
-| `image.tag`                 | Thanos image tag                                       | `{TAG_NAME}`                                            |
-| `image.pullPolicy`          | Thanos image pull policy                               | `IfNotPresent`                                          |
-| `image.pullSecrets`         | Specify docker-registry secret names as an array       | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`              | String to partially override thanos.fullname           | `nil`                                                   |
-| `fullnameOverride`          | String to fully override thanos.fullname               | `nil`                                                   |
-| `clusterDomain`             | Default Kubernetes cluster domain                      | `cluster.local`                                         |
-| `objstoreConfig`            | Objstore configuration                                 | `nil`                                                   |
-| `existingObjstoreConfigmap` | Name of existing ConfigMap with Objstore configuration | `nil`                                                   |
+| Parameter                       | Description                                            | Default                                                 |
+|---------------------------------|--------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`                | Thanos image registry                                  | `docker.io`                                             |
+| `image.repository`              | Thanos image name                                      | `bitnami/thanos`                                        |
+| `image.tag`                     | Thanos image tag                                       | `{TAG_NAME}`                                            |
+| `image.pullPolicy`              | Thanos image pull policy                               | `IfNotPresent`                                          |
+| `image.pullSecrets`             | Specify docker-registry secret names as an array       | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                  | String to partially override thanos.fullname           | `nil`                                                   |
+| `fullnameOverride`              | String to fully override thanos.fullname               | `nil`                                                   |
+| `clusterDomain`                 | Default Kubernetes cluster domain                      | `cluster.local`                                         |
+| `objstoreConfig`                | Objstore configuration                                 | `nil`                                                   |
+| `existingObjstoreSecret`        | Name of existing secret with Objstore configuration    | `nil`                                                   |
+| `existingObjstoreSecretItems`   | List of Secret Keys and Paths                          | `[]`                                                    |
 
 ### Thanos Querier parameters
 
@@ -115,7 +116,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.stores`                           | Store APIs to connect with Thanos Querier                      | `[]`                            |
 | `querier.sdConfig`                         | Service Discovery configuration                                | `nil`                           |
 | `querier.existingSDConfigmap`              | Name of existing ConfigMap with Ruler configuration            | `nil`                           |
-| `querier.extraFlags`                       | Extra Flags to passed to Thanos Compactor                      | `{}`                            |
+| `querier.extraFlags`                       | Extra Flags to passed to Thanos Querier                        | `{}`                            |
 | `querier.replicaCount`                     | Number of Thanos Querier replicas to deploy                    | `1`                             |
 | `querier.strategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                 |
 | `querier.affinity`                         | Affinity for pod assignment                                    | `{}` (evaluated as a template)  |
@@ -157,7 +158,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.logLevel`                         | Thanos Bucket Web log level                                    | `info`                         |
 | `bucketweb.refresh`                          | Refresh interval to download metadata from remote storage      | `30m`                          |
 | `bucketweb.timeout`                          | Timeout to download metadata from remote storage               | `5m`                           |
-| `bucketweb.extraFlags`                       | Extra Flags to passed to Thanos Compactor                      | `{}`                           |
+| `bucketweb.extraFlags`                       | Extra Flags to passed to Thanos Bucket Web                     | `{}`                           |
 | `bucketweb.replicaCount`                     | Number of Thanos Bucket Web replicas to deploy                 | `1`                            |
 | `bucketweb.strategyType`                     | Deployment Strategy Type                                       | `RollingUpdate`                |
 | `bucketweb.affinity`                         | Affinity for pod assignment                                    | `{}` (evaluated as a template) |
@@ -429,7 +430,7 @@ This helm chart supports using custom Objstore configuration.
 
 You can specify the Objstore configuration using the `objstoreConfig` parameter.
 
-In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingObjstoreConfigmap` parameter. Note that this will override the previous option.
+In addition, you can also set an external Secret with the configuration file. This is done by setting the `existingObjstoreSecret` parameter. Note that this will override the previous option. If needed you can also provide a custom Secret Key with `existingObjstoreSecretItems`, please be aware that the Path of your Secret should be `objstore.yml`.
 
 ### Using custom Querier Service Discovery configuration
 

@@ -15,4 +15,4 @@ maintainers:
 name: influxdb
 sources:
   - https://github.com/bitnami/bitnami-docker-influxdb
-version: 0.4.6
+version: 0.4.7

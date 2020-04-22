@@ -22,7 +22,7 @@ spec:
       labels: {{- include "thanos.labels" . | nindent 8 }}
         app.kubernetes.io/component: ruler
       annotations:
-        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-configmap.yaml") . | sha256sum }}
+        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         checksum/ruler-configuration: {{ include (print $.Template.BasePath "/ruler/configmap.yaml") . | sha256sum }}
         {{- if .Values.ruler.podAnnotations }}
         {{- include "thanos.tplValue" (dict "value" .Values.ruler.podAnnotations "context" $) | nindent 8 }}
@@ -120,8 +120,12 @@ spec:
               mountPath: /conf/ruler.yml
               subPath: ruler.yml
             - name: objstore-config
+              {{- if .Values.existingObjstoreSecretItems }}
+              mountPath: /conf
+              {{- else }}
               mountPath: /conf/objstore.yml
               subPath: objstore.yml
+              {{- end }}
             - name: data
               mountPath: /data
       volumes:
@@ -129,8 +133,11 @@ spec:
           configMap:
             name: {{ include "thanos.ruler.configmapName" . }}
         - name: objstore-config
-          configMap:
-            name: {{ include "thanos.objstoreConfigmapName" . }}
+          secret:
+            secretName: {{ include "thanos.objstoreSecretName" . }}
+            {{- if .Values.existingObjstoreSecretItems }}
+            items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
+            {{- end }}
   {{- if and .Values.ruler.persistence.enabled .Values.ruler.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:
