@@ -133,6 +133,8 @@ The following table lists the configurable parameters of the kube-state-metrics 
 | `serviceMonitor.interval`               | Scrape interval (use by default, falling back to Prometheus' default)                                         | `nil`                                                      |
 | `serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                             | `nil`                                                      |
 | `serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                | `[]`                                                       |
+| `serviceMonitor.honorLabels`            | Honor metrics labels                                                                                          | `false`                                                       |
+| `serviceMonitor.relabelings`            | ServiceMonitor relabelings                                                                                    | `[]`                                                       |
 | `serviceMonitor.metricRelabelings`      | ServiceMonitor metricRelabelings                                                                              | `[]`                                                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
