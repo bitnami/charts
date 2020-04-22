@@ -155,10 +155,12 @@ spec:
             - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
               value: {{ .Values.listenerSecurityProtocolMap }}
             {{- end }}
-            {{- if .Values.interBrokerListenerName }}
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
+              {{- if .Values.interBrokerListenerName }}
               value: {{ .Values.interBrokerListenerName }}
-            {{- end }}
+              {{- else }}
+              value: "{{ template "kafka.listenerType" . }}"
+              {{- end }}
             {{- if .Values.metrics.jmx.enabled }}
             - name: JMX_PORT
               value: "5555"

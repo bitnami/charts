@@ -23,19 +23,22 @@ spec:
   loadBalancerIP: {{ index $root.Values.externalAccess.service.loadBalancerIPs $i }}
   {{- end }}
   {{- if $root.Values.externalAccess.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml $root.Values.service.loadBalancerSourceRanges | nindent 4 }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- end }}
   ports:
-    - name: kafka
+    - name: tcp-kafka
+      protocol: TCP
+      targetPort: kafka
       {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
       port: {{ $root.Values.externalAccess.service.port }}
       {{- end }}
       {{- if eq $root.Values.externalAccess.service.type "NodePort" }}
       port: {{ $root.Values.service.port }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
+      {{- else }}
+      nodePort: null
       {{- end }}
-      targetPort: kafka
   selector: {{- include "kafka.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: kafka
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

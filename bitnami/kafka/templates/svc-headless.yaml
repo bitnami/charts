@@ -8,8 +8,9 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: kafka
+    - name: tcp-kafka
       port: {{ .Values.service.port }}
+      protocol: TCP
       targetPort: kafka
   selector: {{- include "kafka.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka

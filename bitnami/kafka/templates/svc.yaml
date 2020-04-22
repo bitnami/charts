@@ -18,11 +18,14 @@ spec:
   {{- end }}
   {{- end }}
   ports:
-    - name: kafka
+    - name: tcp-kafka
       port: {{ .Values.service.port }}
+      protocol: TCP
       targetPort: kafka
-      {{- if eq .Values.service.type "NodePort" }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) .Values.service.nodePort }}
       nodePort: {{ .Values.service.nodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
       {{- end }}
   selector: {{- include "kafka.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka
