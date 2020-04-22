@@ -72,6 +72,29 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Return the proper Git image name
+*/}}
+{{- define "cloneStaticSiteFromGit.image" -}}
+{{- $registryName := .Values.cloneStaticSiteFromGit.image.registry -}}
+{{- $repositoryName := .Values.cloneStaticSiteFromGit.image.repository -}}
+{{- $tag := .Values.cloneStaticSiteFromGit.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "nginx.metrics.image" -}}
@@ -109,23 +132,82 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.cloneStaticSiteFromGit.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.cloneStaticSiteFromGit.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.metrics.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.cloneStaticSiteFromGit.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.cloneStaticSiteFromGit.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.metrics.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Check if there are rolling tags in the images
+*/}}
+{{- define "nginx.checkRollingTags" -}}
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.cloneStaticSiteFromGit.image.repository) (not (.Values.cloneStaticSiteFromGit.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.cloneStaticSiteFromGit.image.repository }}:{{ .Values.cloneStaticSiteFromGit.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.metrics.image.repository) (not (.Values.metrics.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- end -}}
+
+{{/*
+Return true if a static site should be mounted in the NGINX container
+*/}}
+{{- define "nginx.useStaticSite" -}}
+{{- if or .Values.cloneStaticSiteFromGit.enabled .Values.staticSiteConfigmap .Values.staticSitePVC }}
+    {- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the volume to use to mount the static site in the NGINX container
+*/}}
+{{- define "nginx.staticSiteVolume" -}}
+{{- if .Values.cloneStaticSiteFromGit.enabled }}
+emptyDir: {}
+{{- else if .Values.staticSiteConfigmap }}
+configMap:
+  name: {{ .Values.staticSiteConfigmap }}
+{{- else if .Values.staticSitePVC }}
+persistentVolumeClaim:
+  claimName: {{ .Values.staticSitePVC }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Return the custom NGINX server block configmap.
+*/}}
+{{- define "nginx.serverBlockConfigmapName" -}}
+{{- if .Values.existingServerBlockConfigmap -}}
+    {{- printf "%s" (tpl .Values.existingServerBlockConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-server-block" (include "nginx.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -140,4 +222,27 @@ Usage:
     {{- else }}
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "nginx.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "nginx.validateValues.cloneStaticSiteFromGit" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of NGINX - Clone StaticSite from Git configuration */}}
+{{- define "nginx.validateValues.cloneStaticSiteFromGit" -}}
+{{- if and .Values.cloneStaticSiteFromGit.enabled (or (not .Values.cloneStaticSiteFromGit.repository) (not .Values.cloneStaticSiteFromGit.branch)) -}}
+nginx: cloneStaticSiteFromGit
+    When enabling cloing a static site from a Git repository, both the Git repository and the Git branch must be provided.
+    Please provide them by setting the `cloneStaticSiteFromGit.repository` and `cloneStaticSiteFromGit.branch` parameters.
+{{- end -}}
 {{- end -}}

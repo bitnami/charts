@@ -1,3 +1,4 @@
+{{- if .Values.cluster.pdbEnabled }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -11,3 +12,4 @@ spec:
   {{- else }}
   maxUnavailable: 1
   {{- end }}
+{{- end }}

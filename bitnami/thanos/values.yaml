@@ -6,6 +6,7 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 ## Bitnami Thanos image
 ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
@@ -13,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.11.0-scratch-r18
+  tag: 0.12.1-scratch-r4
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -41,10 +42,12 @@ clusterDomain: cluster.local
 ##
 # objstoreConfig:
 
-## ConfigMap with Objstore Configuration
-## NOTE: This will override objstoreConfig
+## Secret with Objstore Configuration
+## Note: This will override objstoreConfig
 ##
-# existingObjstoreConfigmap:
+# existingObjstoreSecret:
+##  optional item list for specifying a custom Secret key. If so, path should be objstore.yml
+# existingObjstoreSecretItems: []
 
 ## Thanos Querier parameters
 ##
