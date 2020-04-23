@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.2.6-debian-10-r11
+  tag: 4.2.6-debian-10-r13
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -124,7 +124,7 @@ securityContext:
   runAsUser: 1001
 
 ## Kubernetes Cluster Domain
-clusterDomain: cluster.local
+#clusterDomain: cluster.local
 
 ## Kubernetes service type
 service:
