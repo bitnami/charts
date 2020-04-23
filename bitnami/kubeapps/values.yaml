@@ -105,7 +105,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.1-debian-10-r42
+    tag: 1.17.10-debian-10-r10
   ## Frontend service parameters
   ##
   service:
@@ -260,7 +260,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.16.3-debian-10-r40
+    tag: 1.16.3-debian-10-r85
   ## Affinity for hooks' pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -457,7 +457,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.9.2-debian-10-r0
+    tag: 1.9.2-debian-10-r9
   ## Dashboard service parameters
   ##
   service:
@@ -590,7 +590,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.1-debian-10-r42
+  tag: 1.17.10-debian-10-r10
 
 # Auth Proxy for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -603,7 +603,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 5.0.0-debian-10-r19
+    tag: 5.1.0-debian-10-r24
   ## Mandatory parameters
   ##
   provider: ""
