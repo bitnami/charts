@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: {{ if .Values.useStatefulSet }}{{ "StatefulSet" }}{{- else }}{{ "Deployment" }}{{- end }}
 metadata:
   name: {{ template "mongodb.fullname" . }}
+  namespace: {{ template "mongodb.namespace" . }}
   labels:
     app: {{ template "mongodb.name" . }}
     chart: {{ template "mongodb.chart" . }}
