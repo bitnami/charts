@@ -49,6 +49,7 @@ data:
     <source>
       @type http
       port 9880
+      bind ::
     </source>
 
     # Throw the healthcheck to the standard output instead of forwarding it

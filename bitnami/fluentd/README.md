@@ -215,6 +215,7 @@ data:
     <source>
       @type prometheus
       port {{ .Values.metrics.service.port }}
+      bind ::
     </source>
 
     # input plugin that collects metrics from MonitorAgent
@@ -242,14 +243,14 @@ data:
     # TCP input to receive logs from the forwarders
     <source>
       @type forward
-      bind 0.0.0.0
+      bind ::
       port {{ .Values.aggregator.port }}
     </source>
 
     # HTTP input for the liveness and readiness probes
     <source>
       @type http
-      bind 0.0.0.0
+      bind ::
       port 9880
     </source>
 
