@@ -2,15 +2,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "zookeeper.fullname" . }}-exporter
+  name: {{ template "zookeeper.fullname" . }}-metrics
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
-    app.kubernetes.io/component: metrics
+    app.kubernetes.io/component: zookeeper
 spec:
   type: ClusterIP
   ports:
-    - name: metrics
-      port: 9141
+    - name: tcp-metrics
+      port: {{ .Values.metrics.port }}
       targetPort: metrics
   selector: {{- include "zookeeper.matchLabels" . | nindent 4 }}
-    app.kubernetes.io/component: metrics
+    app.kubernetes.io/component: zookeeper
 {{- end }}

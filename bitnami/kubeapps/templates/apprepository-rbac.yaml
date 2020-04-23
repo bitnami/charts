@@ -93,14 +93,14 @@ rules:
       - secrets
     verbs:
       - create
-{{- end -}}
-{{- if .Values.featureFlags.reposPerNamespace -}}
 ---
-# Kubeapps can read and watch its own AppRepository resources cluster-wide.
+# The Kubeapps app repository controller can read and watch its own
+# AppRepository resources cluster-wide. The read and write cluster-roles can
+# also be bound to users in specific namespaces as required.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: "kubeapps:controller:apprepository-reader-{{ .Release.Namespace }}"
+  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-read"
   labels:
     app: {{ template "kubeapps.apprepository.fullname" . }}
     chart: {{ template "kubeapps.chart" . }}
@@ -115,13 +115,12 @@ rules:
     verbs:
       - get
       - list
-      - update
       - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: "kubeapps:controller:apprepository-reader-{{ .Release.Namespace }}"
+  name: "kubeapps:controller:{{ .Release.Namespace }}:apprepositories-read"
   labels:
     app: {{ template "kubeapps.apprepository.fullname" . }}
     chart: {{ template "kubeapps.chart" . }}
@@ -130,9 +129,32 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: "kubeapps:controller:apprepository-reader-{{ .Release.Namespace }}"
+  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-read"
 subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.apprepository.fullname" . }}
     namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-write"
+  labels:
+    app: {{ template "kubeapps.apprepository.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - kubeapps.com
+    resources:
+      - apprepositories
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
 {{- end -}}

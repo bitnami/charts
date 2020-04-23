@@ -115,7 +115,8 @@ spec:
             {{- end }}
             {{- if .Values.localConfig }}
             - name: CONSUL_LOCAL_CONFIG
-              value: |- {{- .Values.localConfig | nindent 12 }}
+              value: |-
+                {{- .Values.localConfig | nindent 16 }}
             {{- end }}
             - name: CONSUL_UI
               value: "{{ .Values.ui.service.enabled }}"

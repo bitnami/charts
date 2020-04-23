@@ -74,7 +74,7 @@ spec:
 {{ tpl (toYaml .) $ | indent 8 }}
     {{- end }}
       containers:
-      - name: {{ template "redis.fullname" . }}
+      - name: {{ template "redis.name" . }}
         image: {{ template "redis.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.securityContext.enabled }}
@@ -173,8 +173,10 @@ spec:
             {{- else }}
             - /health/ping_liveness_local_and_master.sh {{ .Values.slave.livenessProbe.timeoutSeconds }}
             {{- end }}
+        {{- else if .Values.slave.customLivenessProbe }}
+        livenessProbe:
+ {{ toYaml .Values.slave.customLivenessProbe | indent 10 }}
         {{- end }}
-
         {{- if .Values.slave.readinessProbe.enabled }}
         readinessProbe:
           initialDelaySeconds: {{ .Values.slave.readinessProbe.initialDelaySeconds }}
@@ -191,6 +193,9 @@ spec:
             {{- else }}
             - /health/ping_readiness_local_and_master.sh {{ .Values.slave.livenessProbe.timeoutSeconds }}
             {{- end }}
+        {{- else if .Values.slave.customReadinessProbe }}
+        readinessProbe:
+{{ toYaml .Values.slave.customReadinessProbe | indent 10 }}
         {{- end }}
         resources:
 {{ toYaml .Values.slave.resources | indent 10 }}
@@ -270,6 +275,9 @@ spec:
             - sh
             - -c
             - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+        {{- else if .Values.sentinel.customLivenessProbe }}
+        livenessProbe:
+{{ toYaml .Values.sentinel.customLivenessProbe | indent 10 }}
         {{- end }}
         {{- if .Values.sentinel.readinessProbe.enabled}}
         readinessProbe:
@@ -283,6 +291,9 @@ spec:
             - sh
             - -c
             - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+        {{- else if .Values.sentinel.customReadinessProbe }}
+        readinessProbe:
+{{ toYaml .Values.sentinel.customReadinessProbe | indent 10 }}
         {{- end }}
         resources:
 {{ toYaml .Values.sentinel.resources | indent 10 }}

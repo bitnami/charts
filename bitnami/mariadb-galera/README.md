@@ -106,6 +106,11 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `ldap.nss_initgroups_ignoreusers`    | LDAP ignored users                                                                                                                                          | `root,nslcd`                                                      |
 | `ldap.scope`                         | LDAP search scope                                                                                                                                           | `nil`                                                             |
 | `ldap.tls_reqcert`                   | LDAP TLS check on server certificates                                                                                                                       | `nil`                                                             |
+| `tls.enabled`                        | Enable TLS support for replication traffic                                                                                                                  | `false`                                                           |
+| `tls.certificatesSecret`             | Name of the secret that contains the certificates                                                                                                           | `nil`                                                             |
+| `tls.certFilename`                   | Certificate filename                                                                                                                                        | `nil`                                                             |
+| `tls.certKeyFilename`                | Certificate key filename                                                                                                                                    | `nil`                                                             |
+| `tls.certCAFilename`                 | CA Certificate filename                                                                                                                                     | `nil`                                                             |
 | `mariadbConfiguration`               | Configuration for the MariaDB server                                                                                                                        | `_default values in the values.yaml file_`                        |
 | `configurationConfigMap`             | ConfigMap with the MariaDB configuration files (Note: Overrides `mariadbConfiguration`). The value is evaluated as a template.                              | `nil`                                                             |
 | `initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                | `nil`                                                             |
@@ -260,6 +265,34 @@ CREATE USER 'bitnami'@'localhost' IDENTIFIED VIA pam USING 'mariadb';
 ```
 
 With the above example, when the `bitnami` user attempts to login to the MariaDB server, he/she will be authenticated against the LDAP server.
+
+### Securing traffic using TLS
+
+TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+
+- `tls.enabled`: Enable TLS support. Defaults to `false`
+- `tls.certificatesSecret`: Name of the secret that contains the certificates. No defaults.
+- `tls.certFilename`: Certificate filename. No defaults.
+- `tls.certKeyFilename`: Certificate key filename. No defaults.
+- `tls.certCAFilename`: CA Certificate filename. No defaults.
+
+For example:
+
+First, create the secret with the cetificates files:
+
+```console
+kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+```
+
+Then, use the following parameters:
+
+```console
+tls.enabled="true"
+tls.certificatesSecret="certificates-tls-secret"
+tls.certFilename="cert.pem"
+tls.certKeyFilename="cert.key"
+tls.certCAFilename="ca.pem"
+```
 
 ### Initialize a fresh instance
 

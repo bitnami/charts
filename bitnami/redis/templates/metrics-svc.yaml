@@ -9,6 +9,7 @@ metadata:
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    app.kubernetes.io/component: "metrics"
     {{- if .Values.metrics.service.labels -}}
     {{ toYaml .Values.metrics.service.labels | nindent 4 }}
     {{- end -}}
@@ -17,10 +18,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
-  {{ if eq .Values.metrics.service.type "LoadBalancer" -}} {{ if .Values.metrics.service.loadBalancerIP }}
+  {{ if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
-  {{ end -}}
-  {{- end -}}
+  {{- end }}
   ports:
   - name: metrics
     port: 9121

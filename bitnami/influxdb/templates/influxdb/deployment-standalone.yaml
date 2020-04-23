@@ -63,7 +63,7 @@ spec:
           image: {{ include "influxdb.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
-            - sh
+            - /bin/bash
             - -c
             - |
               mkdir -p /bitnami/influxdb/{data,meta,wal}

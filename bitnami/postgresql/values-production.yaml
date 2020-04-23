@@ -15,7 +15,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.7.0-debian-10-r51
+  tag: 11.7.0-debian-10-r82
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -93,6 +93,16 @@ serviceAccount:
   enabled: false
   ## Name of an already existing service account. Setting this value disables the automatic service account creation.
   # name:
+
+## Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+psp:
+  create: false
+
+## Creates role for ServiceAccount
+## Required for PSP
+rbac:
+  create: false
 
 replication:
   enabled: true
@@ -349,6 +359,13 @@ master:
   ##         containerPort: 1234
   sidecars: []
 
+  ## Override the service configuration for master
+  ##
+  service: {}
+  # type:
+  # nodePort:
+  # clusterIP:
+
 ##
 ## PostgreSQL Slave parameters
 ##
@@ -368,11 +385,11 @@ slave:
   priorityClassName: ""
   ## Extra init containers
   ## Example
-  ## 
+  ##
   ## extraInitContainers:
   ##   - name: do-something
   ##     image: busybox
-  ##     command: ['do', 'something'] 
+  ##     command: ['do', 'something']
   extraInitContainers: []
   ## Additional PostgreSQL Slave Volume mounts
   ##
@@ -392,6 +409,13 @@ slave:
   ##         containerPort: 1234
   sidecars: []
 
+  ## Override the service configuration for slave
+  ##
+  service: {}
+  # type:
+  # nodePort:
+  # clusterIP:
+
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
@@ -399,6 +423,10 @@ resources:
   requests:
     memory: 256Mi
     cpu: 250m
+
+## Add annotations to all the deployed resources
+##
+commonAnnotiations: {}
 
 networkPolicy:
   ## Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
@@ -483,7 +511,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.8.0-debian-10-r63
+    tag: 0.8.0-debian-10-r87
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

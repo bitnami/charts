@@ -10,13 +10,16 @@ spec:
   template:
     metadata:
       labels: {{- include "nginx.labels" . | nindent 8 }}
-      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (and .Values.serverBlock (not .Values.existingServerBlockConfigmap)) }}
       annotations:
         {{- if .Values.podAnnotations }}
         {{- include "nginx.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
         {{- include "nginx.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
+        checksum/server-block-configuration: {{ include (print $.Template.BasePath "/server-block-configmap.yaml") . | sha256sum }}
         {{- end }}
       {{- end }}
     spec:
@@ -30,7 +33,37 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "nginx.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.cloneStaticSiteFromGit.enabled }}
+      initContainers:
+        - name: git-clone-repository
+          image: {{ include "cloneStaticSiteFromGit.image" . }}
+          imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              git clone {{ .Values.cloneStaticSiteFromGit.repository }} --branch {{ .Values.cloneStaticSiteFromGit.branch }} /app
+          volumeMounts:
+            - name: staticsite
+              mountPath: /app
       containers:
+        - name: git-repo-syncer
+          image: {{ include "cloneStaticSiteFromGit.image" . }}
+          imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              while true; do
+                  cd /app && git pull origin {{ .Values.cloneStaticSiteFromGit.branch }}
+                  sleep {{ .Values.cloneStaticSiteFromGit.interval }}
+              done
+          volumeMounts:
+            - name: staticsite
+              mountPath: /app
+      {{- else }}
+      containers:
+      {{- end }}
         - name: nginx
           image: {{ template "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -46,10 +79,16 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.serverBlock }}
+          {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
           volumeMounts:
+            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks
+            {{- end }}
+            {{- if (include "nginx.useStaticSite" .) }}
+            - name: staticsite
+              mountPath: /app
+            {{- end }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -75,9 +114,15 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if .Values.serverBlock }}
+      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
       volumes:
+        {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
           configMap:
-            name: {{ template "nginx.fullname" . }}
+            name: {{ include "nginx.serverBlockConfigmapName" . }}
+        {{- end }}
+        {{- if (include "nginx.useStaticSite" .) }}
+        - name: staticsite
+          {{- include "nginx.staticSiteVolume" . | nindent 10 }}
+        {{- end }}
       {{- end }}
