@@ -805,6 +805,12 @@ core:
 ## Harbor Jobservice parameters
 ##
 jobservice:
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  updateStrategy:
+    type: RollingUpdate   
   replicas: 1
   maxJobWorkers: 10
   # The logger for jobs: "file", "database" or "stdout"
@@ -870,6 +876,12 @@ jobservice:
 
 registry:
   replicas: 1
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  updateStrategy:
+    type: RollingUpdate     
   ## Harbor Registry parameters
   ##
   registry:
@@ -971,6 +983,12 @@ registry:
 ##
 chartmuseum:
   enabled: true
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  updateStrategy:
+    type: RollingUpdate   
   replicas: 1
   port: 8080
 
