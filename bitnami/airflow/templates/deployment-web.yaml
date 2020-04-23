@@ -219,9 +219,14 @@ spec:
               containerPort: 8080
         {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
+          {{- if .Values.airflow.baseUrl }}
+            tcpSocket:
+              port: http
+          {{- else }}
             httpGet:
               path: /health
               port: http
+          {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -230,9 +235,14 @@ spec:
         {{- end }}
         {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
+          {{- if .Values.airflow.baseUrl }}
+            tcpSocket:
+              port: http
+          {{- else }}
             httpGet:
               path: /health
               port: http
+          {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
