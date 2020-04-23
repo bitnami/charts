@@ -9,7 +9,7 @@ spec:
     matchLabels: {{- include "phabricator.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "phabricator.matchLabels" . | nindent 8 }}
+      labels: {{- include "phabricator.labels" . | nindent 8 }}
       {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
         {{- if .Values.podAnnotations }}
