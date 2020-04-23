@@ -688,6 +688,11 @@ service:
   ## Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
+  ## Specify the sessionAffinity setting for the service. Can be "None" or "ClientIP".
+  ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
 
 ## Configure extra options for liveness and readiness probes
 ## This applies to all the MongoDB in the sharded cluster
