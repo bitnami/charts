@@ -233,6 +233,10 @@ resourcesArbiter: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
 
+## Define Separate nodeSelector for secondaries
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+nodeSelectorSecondary: {}
+
 ## Define Separate nodeSelector for arbiter
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelectorArbiter: {}
