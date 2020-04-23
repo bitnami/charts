@@ -59,9 +59,8 @@ spec:
       affinity:
 {{ toYaml .Values.affinityArbiter | indent 8 }}
       {{- end -}}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- if (or .Values.nodeSelector .Values.nodeSelectorArbiter) }}
+      nodeSelector: {{ toYaml (default .Values.nodeSelector .Values.nodeSelectorArbiter) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations:
