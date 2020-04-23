@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.2.6-debian-10-r10
+  tag: 4.2.6-debian-10-r11
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -227,6 +227,10 @@ resourcesArbiter: {}
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
+
+## Define Separate nodeSelector for secondaries
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+nodeSelectorSecondary: {}
 
 ## Define Separate nodeSelector for arbiter
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
