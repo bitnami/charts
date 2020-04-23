@@ -319,6 +319,7 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
+  # storageClassSecondary: "-"
   accessModes:
     - ReadWriteOnce
   size: 8Gi
