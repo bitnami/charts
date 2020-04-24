@@ -479,6 +479,14 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Notable changes
 
+### 12.0.0
+
+Several changes were introduced that breaks backwards compatibilty:
+
+- Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
+- Labels are adapted to follow the Helm charts best practices.
+- Elasticsearch data pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
+
 ### 11.0.0
 
 Elasticsearch master pods are now deployed in parallel in order to bootstrap the cluster and be discovered.

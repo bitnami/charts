@@ -4,7 +4,9 @@ kind: CronJob
 metadata:
   name: {{ template "elasticsearch.curator.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: curator
+    app.kubernetes.io/component: curator
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: curator
   {{- if .Values.curator.cronjob.annotations }}
   annotations: {{- toYaml .Values.curator.cronjob.annotations | nindent 4 }}
   {{- end }}
@@ -21,15 +23,17 @@ spec:
   {{- end }}
   jobTemplate:
     metadata:
-      labels:
-        app: {{ template "elasticsearch.name" . }}
-        release: {{ .Release.Name | quote }}
+      labels: {{- include "elasticsearch.labels" . | nindent 8 }}
+        app.kubernetes.io/component: curator
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: curator
     spec:
       template:
         metadata:
-          labels:
-            app: {{ template "elasticsearch.name" . }}
-            release: {{ .Release.Name | quote }}
+          labels: {{- include "elasticsearch.labels" . | nindent 12 }}
+            app.kubernetes.io/component: curator
+            ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+            app: curator
           {{- if .Values.curator.podAnnotations }}
           annotations: {{- toYaml .Values.curator.podAnnotations | nindent 12 }}
           {{- end }}
