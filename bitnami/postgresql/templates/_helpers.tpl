@@ -399,6 +399,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "postgresql.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "postgresql.validateValues.ldapConfigurationMethod" .) -}}
+{{- $messages := append $messages (include "postgresql.validateValues.psp" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -416,5 +417,27 @@ postgresql: ldap.url, ldap.server
     You cannot set both `ldap.url` and `ldap.server` at the same time.
     Please provide a unique way to configure LDAP.
     More info at https://www.postgresql.org/docs/current/auth-ldap.html
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Postgresql - If PSP is enabled RBAC should be enabled too
+*/}}
+{{- define "postgresql.validateValues.psp" -}}
+{{- if and .Values.psp.create (not .Values.rbac.create) }}
+postgresql: psp.create, rbac.create
+    RBAC should be enabled if PSP is enabled in order for PSP to work.
+    More info at https://kubernetes.io/docs/concepts/policy/pod-security-policy/#authorizing-policies
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for podsecuritypolicy.
+*/}}
+{{- define "podsecuritypolicy.apiVersion" -}}
+{{- if semverCompare "<1.10-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "policy/v1beta1" -}}
 {{- end -}}
 {{- end -}}

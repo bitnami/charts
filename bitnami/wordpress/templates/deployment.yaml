@@ -46,7 +46,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
       {{- if .Values.initContainers }}
-        {{- include "wordpress.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      initContainers: {{- include "wordpress.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: wordpress

@@ -45,6 +45,10 @@ spec:
               value: {{ .Values.forwarder.configFile }}
             - name: FLUENTD_OPT
               value: {{ .Values.forwarder.extraArgs | quote }}
+            - name: FLUENTD_DAEMON_USER
+              value: {{ .Values.forwarder.daemonUser | quote }}
+            - name: FLUEND_DAEMON_GROUP
+              value: {{ .Values.forwarder.daemonGroup | quote }}
             {{- if .Values.forwarder.extraEnv }}
             {{- toYaml .Values.forwarder.extraEnv | nindent 12 }}
             {{- end }}

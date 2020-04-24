@@ -56,6 +56,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return the proper kong migration image name
 */}}
 {{- define "kong.migration.image" -}}
+{{- if .Values.migration.image -}}
 {{- $registryName := .Values.migration.image.registry -}}
 {{- $repositoryName := .Values.migration.image.repository -}}
 {{- $tag := .Values.migration.image.tag | toString -}}
@@ -72,6 +73,9 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- end -}}
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- else -}}
+{{- template "kong.image" . -}}
 {{- end -}}
 {{- end -}}
 
@@ -250,19 +254,13 @@ imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- range .Values.migration.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
 {{- range .Values.ingressController.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if (or .Values.image.pullSecrets .Values.ingressController.image.pullSecrets .Values.migration.image.pullSecrets)}}
+{{- else if (or .Values.image.pullSecrets .Values.ingressController.image.pullSecrets)}}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.migration.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.ingressController.image.pullSecrets }}

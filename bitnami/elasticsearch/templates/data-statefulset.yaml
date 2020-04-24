@@ -3,7 +3,9 @@ kind: StatefulSet
 metadata:
   name: {{ include "elasticsearch.data.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: data
+    app.kubernetes.io/component: data
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: data
 spec:
   updateStrategy:
     type: {{ .Values.data.updateStrategy.type }}
@@ -15,13 +17,16 @@ spec:
     {{- end }}
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
-      role: data
-  serviceName: {{ include "elasticsearch.data.fullname" . }}
+      app.kubernetes.io/component: data
+  podManagementPolicy: Parallel
   replicas: {{ .Values.data.replicas }}
+  serviceName: {{ template "elasticsearch.data.fullname" . }}
   template:
     metadata:
       labels: {{- include "elasticsearch.labels" . | nindent 8 }}
-        role: data
+        app.kubernetes.io/component: data
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: data
       {{- with .Values.data.podAnnotations }}
       annotations: {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -90,7 +95,7 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.name | quote }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
-              value: {{ template "elasticsearch.discovery.fullname" . }}
+              value: {{ include "elasticsearch.hosts" . | quote }}
             {{- if .Values.plugins }}
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}
