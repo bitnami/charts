@@ -7,6 +7,9 @@ metadata:
     app.kubernetes.io/component: chartmuseum
 spec:
   replicas: {{ .Values.chartmuseum.replicas }}
+  {{- if .Values.chartmuseum.strategy }}
+  strategy: {{- toYaml .Values.chartmuseum.strategy | nindent 4 }}
+  {{- end }}  
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: chartmuseum
