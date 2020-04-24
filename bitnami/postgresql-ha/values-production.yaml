@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.7.0-debian-10-r86
+  tag: 11.7.0-debian-10-r87
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -543,6 +543,18 @@ metrics:
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     selector:
       prometheus: kube-prometheus
+    
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    # relabelings: []
+
+    ## MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    # metricRelabelings: []
 
 ## Persistence paramaters
 ##
