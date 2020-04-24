@@ -215,7 +215,6 @@ data:
     <source>
       @type prometheus
       port {{ .Values.metrics.service.port }}
-      bind ::
     </source>
 
     # input plugin that collects metrics from MonitorAgent
