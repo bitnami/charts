@@ -2,11 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "phabricator.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "phabricator.name" . }}
-    helm.sh/chart: {{ include "phabricator.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "phabricator.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   {{- if eq .Values.service.type "LoadBalancer" }}
@@ -28,6 +24,4 @@ spec:
       {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.https)) }}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- end }}
-  selector:
-    app.kubernetes.io/name: {{ include "phabricator.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  selector: {{- include "phabricator.matchLabels" . | nindent 4 }}

@@ -173,6 +173,8 @@ spec:
                   key: airflow-fernetKey
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ template "airflow.fullname" . }}
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
             {{- if .Values.airflow.extraEnvVars }}
               {{ toYaml .Values.airflow.extraEnvVars | nindent 12 }}
             {{- end }}
