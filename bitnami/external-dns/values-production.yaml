@@ -301,6 +301,13 @@ transip:
   ## API key that is authorised for the account
   apiKey: ""
 
+## VinylDNS configuration to be set via arguments/env. variables
+##
+vinyldns:
+  host: ""
+  accessKey: ""
+  secretKey: ""
+
 ## Limit possible target zones by domain suffixes (optional)
 ##
 domainFilters: []
