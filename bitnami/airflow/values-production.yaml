@@ -148,6 +148,10 @@ airflow:
   worker:
     port: 8793
     replicas: 3
+    ## podManagementPolicy to manage scaling operation of worker pods
+    # Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+    # podManagementPolicy: Parallel
+
     ## Worker containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
