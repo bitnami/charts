@@ -265,6 +265,11 @@ persistence:
     accessMode: ReadWriteOnce
     size: 8Gi
 
+## Configure strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+strategy:
+  type: RollingUpdate
+
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
