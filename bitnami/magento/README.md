@@ -137,6 +137,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | `persistence.magento.storageClass`      | PVC Storage Class for Magento volume                                                                 | `nil`  (uses alpha storage annotation)                       |
 | `persistence.magento.accessMode`        | PVC Access Mode for Magento volume                                                                   | `ReadWriteOnce`                                              |
 | `persistence.magento.size`              | PVC Storage Request for Magento volume                                                               | `8Gi`                                                        |
+| `strategy.type`                         | Deployment's strategy type                                                                           | `RollingUpdate`                                              |
 | `resources`                             | CPU/Memory resource requests/limits                                                                  | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                        | Pod annotations                                                                                      | `{}`                                                         |
 | `affinity`                              | Map of node/pod affinities                                                                           | `{}`                                                         |
