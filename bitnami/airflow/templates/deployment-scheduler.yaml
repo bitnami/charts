@@ -168,6 +168,8 @@ spec:
                   key: airflow-fernetKey
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ template "airflow.fullname" . }}
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
             - name: AIRFLOW_LOAD_EXAMPLES
               {{- if .Values.airflow.loadExamples }}
               value: "yes"

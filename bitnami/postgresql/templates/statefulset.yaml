@@ -40,7 +40,7 @@ spec:
         heritage: {{ .Release.Service | quote }}
         role: master
       {{- with .Values.master.podLabels }}
-      {{- toYaml . | indent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.master.podAnnotations }}
       annotations: {{- toYaml . | nindent 8 }}

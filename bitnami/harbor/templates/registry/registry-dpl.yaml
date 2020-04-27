@@ -6,6 +6,9 @@ metadata:
     app.kubernetes.io/component: registry
 spec:
   replicas: {{ .Values.registry.replicas }}
+  {{- if .Values.registry.strategy }}
+  strategy: {{- toYaml .Values.registry.strategy | nindent 4 }}
+  {{- end }}  
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: registry

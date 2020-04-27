@@ -19,7 +19,11 @@
 
 MongoDB can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
+    {{- if .Values.replicaSet.clusterDomain }}
     {{ template "mongodb.serviceName" . }}.{{ template "mongodb.namespace" . }}.svc.{{ .Values.clusterDomain }}
+    {{- else }}
+    {{ template "mongodb.serviceName" . }}.{{ template "mongodb.namespace" . }}
+    {{- end }}
 
 {{ if .Values.usePassword -}}
 
