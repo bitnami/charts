@@ -74,6 +74,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `serverBlock`                              | Custom NGINX server block                                                                   | `nil`                                                        |
 | `existingServerBlockConfigmap`             | Name of existing PVC with custom NGINX server block                                         | `nil`                                                        |
 | `replicaCount`                             | Number of replicas to deploy                                                                | `1`                                                          |
+| `containerPort`                            | Deployment Container Port                                                                   | `8080`                                                       |
 | `podAnnotations`                           | Pod annotations                                                                             | `{}`                                                         |
 | `affinity`                                 | Map of node/pod affinities                                                                  | `{}` (The value is evaluated as a template)                  |
 | `nodeSelector`                             | Node labels for pod assignment                                                              | `{}` (The value is evaluated as a template)                  |
