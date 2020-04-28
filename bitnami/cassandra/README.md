@@ -92,8 +92,9 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `cluster.rack`                       | Rack name                                                                                                                                                 | `rack1`                                                      |
 | `cluster.enableRPC`                  | Enable Thrift RPC endpoint                                                                                                                                | `true`                                                       |
 | `cluster.enableUDF'                  | Enable CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS                                                                                                            | `false`                                                      |
-| `cluster.pdbEnabled`                 | Enable the creation of a Pod Disruption Budget to ensure a minimun number of pods are running.                                                            |               `true`                                                      |
-| `cluster.minimumAvailable`           | Minimum number of instances that must be available in the cluster (used of PodDisruptionBudget) Needs `cluster.pdbEnabled=true`                           | `1`                                                          |
+| `cluster.pdbEnabled`                 | Enable the creation of a Pod Disruption Budget to ensure a minimun number of pods are running.                                                            | `true`                                                       |
+| `cluster.minAvailable`               | Minimum number of instances that must be available in the cluster (used of PodDisruptionBudget) Needs `cluster.pdbEnabled=true`                           | `nil`                                                        |
+| `cluster.maxUnavailable`             | Maximum number of instances that can be unavailable in the cluster (used of PodDisruptionBudget) Needs `cluster.pdbEnabled=true`                          | `nil`                                                        |
 | `cluster.internodeEncryption`        | Set internode encryption. NOTE: A value different from 'none' requires setting `tlsEncryptionSecretName`                                                  | `none`                                                       |
 | `cluster.clientEncryption`           | Set client-server encryption. NOTE: A value different from 'false' requires setting `tlsEncryptionSecretName`                                             | `false`                                                      |
 | `cluster.jvm.extraOpts`              | Set the value for Java Virtual Machine extra optinos (JVM_EXTRA_OPTS)                                                                                     | `nil`                                                        |
@@ -257,6 +258,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrade
+
+### 5.4.0
+
+The `minimumAvailable` option has been renamed to `minAvailable` for consistency with other charts. This is not a breaking change as `minimumAvailable` never worked before because of an error in chart templates.
 
 ### 5.0.0
 
