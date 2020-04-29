@@ -14,7 +14,7 @@ spec:
       app: {{ template "magento.fullname" . }}
       release: "{{ .Release.Name }}"
   strategy:
-    type: "{{ .Values.strategy.type }}"
+    type: {{ .Values.updateStrategy }}
   template:
     metadata:
       labels:
