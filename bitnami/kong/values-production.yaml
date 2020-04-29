@@ -478,6 +478,10 @@ pdb:
   enabled: true
   maxUnavailable: "50%"
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## PostgreSQL properties
 ##
 postgresql:
