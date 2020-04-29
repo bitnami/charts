@@ -21,7 +21,7 @@ spec:
     matchLabels:
       app: {{ template "mongodb.name" . }}
       release: {{ .Release.Name }}
-      component: secondary
+      component: replicaset
   podManagementPolicy: "Parallel"
   serviceName: {{ template "mongodb.fullname" . }}-headless
   replicas: {{ .Values.replicaSet.replicas.secondary }}
@@ -36,7 +36,7 @@ spec:
         app: {{ template "mongodb.name" . }}
         chart: {{ template "mongodb.chart" . }}
         release: {{ .Release.Name }}
-        component: secondary
+        component: replicaset
       {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
       {{- end }}

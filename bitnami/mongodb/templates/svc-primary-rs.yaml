@@ -41,5 +41,5 @@ spec:
   selector:
     app: {{ template "mongodb.name" . }}
     release: "{{ .Release.Name }}"
-    component: primary
+    component: replicaset
 {{- end }}

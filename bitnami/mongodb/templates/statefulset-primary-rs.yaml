@@ -28,14 +28,14 @@ spec:
     matchLabels:
       app: {{ template "mongodb.name" . }}
       release: {{ .Release.Name }}
-      component: primary
+      component: replicaset
   template:
     metadata:
       labels:
         app: {{ template "mongodb.name" . }}
         chart: {{ template "mongodb.chart" . }}
         release: {{ .Release.Name }}
-        component: primary
+        component: replicaset
       {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
       {{- end }}
