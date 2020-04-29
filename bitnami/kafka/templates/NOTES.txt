@@ -77,7 +77,7 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 
         2. Obtain pod configuration:
 
-        kubectl exec -it KAFKA_POD -- cat /opt/bitnami/kafka/conf/server.properties | grep advertised.listeners
+        kubectl exec -it KAFKA_POD -- cat /opt/bitnami/kafka/config/server.properties | grep advertised.listeners
 
 {{- end }}
 
@@ -101,15 +101,15 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 {{- end }}
 {{- if .Values.auth.enabled }}
     PRODUCER:
-        kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/conf/producer.properties
+        kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/config/producer.properties
     CONSUMER:
-        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning --consumer.config /opt/bitnami/kafka/conf/consumer.properties
+        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning --consumer.config /opt/bitnami/kafka/config/consumer.properties
 
   NOTE: In order to connect to the cluster with an external client you need to properly specify the credentials stored in the JAAS file generated in the Kafka image.
         You should get the content of that file and write it in your host machine:
 
         export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
-        kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- cat /opt/bitnami/kafka/conf/kafka_jaas.conf >> kafka_jaas.conf
+        kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- cat /opt/bitnami/kafka/config/kafka_jaas.conf >> kafka_jaas.conf
 
         Finally, before using your client you need to export the following env var:
 

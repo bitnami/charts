@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kong.fullname" . }}-scripts
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kong.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server
+data:
+  kong-container-health.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    # Load libraries
+    . /opt/bitnami/scripts/libos.sh
+    . /opt/bitnami/scripts/libkong.sh
+
+    # Load Kong environment variables
+    eval "$(kong_env)"
+
+    is_kong_running
+
+  ingress-container-wait-for-kong.sh: |-
+    #!/bin/bash
+
+    echo "Waiting for the Kong container to be ready"
+    if wait-for-port --timeout={{ .Values.ingressController.proxyReadyTimeout }} --host=127.0.0.1 --state=inuse 8000; then
+      echo "Kong container ready"
+    else
+      echo "Kong not ready after {{ .Values.ingressController.proxyReadyTimeout }} seconds"
+      exit 1
+    fi
+
+  ingress-container-start.sh: |-
+    #!/bin/bash
+
+    . /health/ingress-container-wait-for-kong.sh
+
+    kong-ingress-controller

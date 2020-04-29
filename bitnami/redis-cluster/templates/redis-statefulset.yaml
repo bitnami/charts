@@ -305,7 +305,6 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: redis-data
-        labels: {{- include "redis-cluster.labels" . | nindent 10 }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
@@ -314,7 +313,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{- include "redis-cluster.storageClass" . | nindent 10 }}
+        {{- include "redis-cluster.storageClass" . | nindent 8 }}
         selector:
         {{- if .Values.persistence.matchLabels }}
           matchLabels:

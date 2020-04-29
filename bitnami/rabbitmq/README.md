@@ -205,7 +205,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one. In case you want to spread the deployment accross nodes you should configure the affinity parameters.
 
 - Resource needs and limits to apply to the pod:
 ```diff
@@ -246,7 +246,6 @@ This chart includes a `values-production.yaml` file where you can find some para
 - volumePermissions.enabled: false
 + volumePermissions.enabled: true
 ```
-
 To horizontally scale this chart once it has been deployed you have two options:
 
 - Use `kubectl scale` command

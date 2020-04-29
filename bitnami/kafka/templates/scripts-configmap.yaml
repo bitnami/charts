@@ -30,7 +30,14 @@ data:
     k8s_svc_lb_ip() {
         local namespace=${1:?namespace is missing}
         local service=${2:?service is missing}
-        echo "$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].ip}")"
+        local service_ip=$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+        local service_hostname=$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+
+        if [[ -n ${service_ip} ]]; then
+            echo "${service_ip}"
+        else
+            echo "${service_hostname}"
+        fi
     }
     k8s_svc_lb_ip_ready() {
         local namespace=${1:?namespace is missing}
