@@ -8,6 +8,9 @@ metadata:
     chart: {{ template "postgresql.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   privileged: false
   volumes:

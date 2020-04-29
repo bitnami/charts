@@ -4,15 +4,13 @@ metadata:
   name: {{ include "kong.fullname" . }}-migrate
   namespace: {{ .Release.Namespace }}
   labels: {{- include "kong.labels" . | nindent 4 }}
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
+  annotations: {{- include "kong.tplValue" ( dict "value" .Values.migration.annotations "context" $ ) | nindent 4 }}
 spec:
   template:
     metadata:
       labels: {{- include "kong.labels" . | nindent 8 }}
         app.kubernetes.io/component: migration
       annotations:
-        helm.sh/hook: post-install, post-upgrade
       {{- if .Values.migration.podAnnotations }}
       {{- include "kong.tplValue" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -25,6 +23,7 @@ spec:
       containers:
         - name: kong-migrate
           image: {{ template "kong.migration.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.migration.command }}
           command: {{- include "kong.tplValue" (dict "value" .Values.migration.command "context" $) | nindent 12 }}
           {{- end }}

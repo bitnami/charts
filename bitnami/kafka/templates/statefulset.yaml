@@ -323,6 +323,9 @@ spec:
               mountPath: /opt/bitnami/kafka/conf/certs/
               readOnly: true
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
         {{- if .Values.metrics.jmx.enabled }}
         - name: jmx-exporter
           image: {{ template "kafka.metrics.jmx.image" . }}
@@ -379,6 +382,9 @@ spec:
           secret:
             secretName: {{ required "A secret containing the Kafka JKS certificates is required when SSL in enabled" .Values.auth.certificatesSecret }}
             defaultMode: 256
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data
