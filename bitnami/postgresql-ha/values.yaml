@@ -533,28 +533,30 @@ metrics:
   ##
   serviceMonitor:
     enabled: false
+
     ## Specify a namespace if needed
     # namespace: monitoring
     # fallback to the prometheus default unless specified
     # interval: 10s
     # scrapeTimeout: 10s
+
     ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     selector:
       prometheus: kube-prometheus
-    
+
     ## RelabelConfigs to apply to samples before scraping
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ## Value is evalued as a template
     ##
-    # relabelings: []
+    relabelings: []
 
     ## MetricRelabelConfigs to apply to samples before ingestion
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ## Value is evalued as a template
     ##
-    # metricRelabelings: []
+    metricRelabelings: []
 
 ## Persistence paramaters
 ##
