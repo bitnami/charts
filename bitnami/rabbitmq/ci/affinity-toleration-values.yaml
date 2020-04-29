@@ -5,10 +5,10 @@ tolerations:
 affinity:
   nodeAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 100
-      preference:
-        matchExpressions:
-        - key: foo
-          operator: In
-          values:
-          - bar
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: foo
+              operator: In
+              values:
+                - bar
