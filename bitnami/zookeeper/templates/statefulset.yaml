@@ -158,11 +158,11 @@ spec:
             {{- if .Values.service.tls.client_enable }}
             - name: ZOO_TLS_CLIENT_ENABLE
               value: {{ .Values.service.tls.client_enable | quote }}
-            - name: ZOO_TLS_CLIENT_KEYSTORE_PATH
+            - name: ZOO_TLS_CLIENT_KEYSTORE_FILE
               value: {{ .Values.service.tls.client_keystore_path | quote }}
             - name: ZOO_TLS_CLIENT_KEYSTORE_PASSWORD
               value: {{ .Values.service.tls.client_keystore_password | quote }}
-            - name: ZOO_TLS_CLIENT_TRUSTSTORE_PATH
+            - name: ZOO_TLS_CLIENT_TRUSTTORE_FILE
               value: {{ .Values.service.tls.client_truststore_path | quote }}
             - name: ZOO_TLS_CLIENT_TRUSTSTORE_PASSWORD
               value: {{ .Values.service.tls.client_truststore_password | quote }}
@@ -170,11 +170,11 @@ spec:
             {{- if .Values.service.tls.quorum_enable }}
             - name: ZOO_TLS_QUORUM_ENABLE
               value: {{ .Values.service.tls.quorum_enable | quote }}
-            - name: ZOO_TLS_QUORUM_KEYSTORE_PATH
+            - name: ZOO_TLS_QUORUM_KEYSTORE_FILE
               value: {{ .Values.service.tls.quorum_keystore_path | quote }}
             - name: ZOO_TLS_QUORUM_KEYSTORE_PASSWORD
               value: {{ .Values.service.tls.quorum_keystore_password | quote }}
-            - name: ZOO_TLS_QUORUM_TRUSTSTORE_PATH
+            - name: ZOO_TLS_QUORUM_TRUSTTORE_FILE
               value: {{ .Values.service.tls.quorum_truststore_path | quote }}
             - name: ZOO_TLS_QUORUM_TRUSTSTORE_PASSWORD
               value: {{ .Values.service.tls.quorum_truststore_password | quote }}
