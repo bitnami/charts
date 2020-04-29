@@ -274,10 +274,10 @@ aggregator:
     ## Service ports
     ##
     ports:
-      # http:
-      #   port: 9880
-      #   targetPort: http
-      #   protocol: TCP
+      http:
+        port: 9880
+        targetPort: http
+        protocol: TCP
       tcp:
         port: 24224
         targetPort: tcp
