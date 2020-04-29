@@ -14,6 +14,5 @@ spec:
   ports:
     - name: tcp-metrics
       port: {{ .Values.metrics.service.port }}
-      targetPort: metrics
   selector: {{- include "fluentd.matchLabels" . | nindent 4 }}
 {{- end }}
