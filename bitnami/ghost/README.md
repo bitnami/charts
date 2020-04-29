@@ -210,6 +210,19 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ## Upgrading
 
+### To 10.0.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
+Also, `allowEmptyPassword` has changed its value type from string to boolean, if you were using it please make sure that you are pasing the proper value.
+
+```console
+# before
+--set allowEmptyPassword="no"
+# after
+--set allowEmptyPassword=false
+```
+
 ### To 9.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
