@@ -38,6 +38,13 @@ image:
 ##
 # staticSiteConfigmap
 
+staticSiteVolumeMountPath: /app
+
+staticSiteConfigmapSetting:
+  enabled: false
+  #key: 
+  #value: 
+
 ## Name of existing PVC with the server static site content
 ## NOTE: This will override staticSiteConfigmap
 ##

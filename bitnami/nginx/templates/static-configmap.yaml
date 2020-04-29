@@ -1,0 +1,10 @@
+{{- if .Values.staticSiteConfigmapSetting.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.staticSiteConfigmap }}
+  labels: {{- include "nginx.labels" . | nindent 4 }}
+data:
+  {{ .Values.staticSiteConfigmapSetting.key}}: |-
+{{ .Values.staticSiteConfigmapSetting.value | indent 4 }}
+{{- end }}

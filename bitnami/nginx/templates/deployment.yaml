@@ -87,7 +87,7 @@ spec:
             {{- end }}
             {{- if (include "nginx.useStaticSite" .) }}
             - name: staticsite
-              mountPath: /app
+              mountPath: {{ .Values.staticSiteVolumeMountPath}}
             {{- end }}
           {{- end }}
         {{- if .Values.metrics.enabled }}

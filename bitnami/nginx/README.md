@@ -61,6 +61,10 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `nameOverride`                             | String to partially override nginx.fullname template                                        | `nil`                                                        |
 | `fullnameOverride`                         | String to fully override nginx.fullname template                                            | `nil`                                                        |
 | `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static content                                   | `nil`                                                        |
+| `staticSiteVolumeMountPath`                | Deployment static site volume mount path                                                    | `/app`                                                        |
+| `staticSiteConfigmapSetting.enabled`       | Enable static ConfigMap resource                                                            | `false`                                                      |
+| `staticSiteConfigmapSetting.key`           | Name of static ConfigMap key                                                                | `nil`                                                        |
+| `staticSiteConfigmapSetting.vaue`          | Name of static ConfigMap key value                                                          | `nil`                                                        |
 | `staticSitePVC`                            | Name of existing PVC with the server static content                                         | `nil`                                                        |
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a git repository                                         | `false`                                                      |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                          | `docker.io`                                                  |
