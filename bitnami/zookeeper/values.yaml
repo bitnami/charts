@@ -187,6 +187,22 @@ service:
   followerPort: 2888
   electionPort: 3888
   publishNotReadyAddresses: true
+  tls:
+    client_enable: false
+    quorum_enable: false
+    disable_base_client_port: false
+
+    client_port: 3181
+
+    client_keystore_path: /tls_key_store/key_store_file
+    client_keystore_password: ""
+    client_truststore_path: /tls_trust_store/trust_store_file
+    client_truststore_password: ""
+
+    quorum_keystore_path: /tls_key_store/key_store_file
+    quorum_keystore_password: ""
+    quorum_truststore_path: /tls_trust_store/trust_store_file
+    quorum_truststore_password: ""
 
 ## Service account for Zookeeper to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
