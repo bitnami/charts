@@ -386,6 +386,27 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: pdns_api_key
             {{- end }}
+            {{- if eq .Values.provider "vinyldns" }}
+            # VinylDNS environment variables
+            {{- if .Values.vinyldns.host }}
+            - name: VINYLDNS_HOST
+              value: {{ .Values.vinyldns.host }}
+            {{- end }}
+            {{- if .Values.vinyldns.accessKey }}
+            - name: VINYLDNS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: vinyldns-access-key
+            {{- end }}
+            {{- if .Values.vinyldns.secretKey }}
+            - name: VINYLDNS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: vinyldns-secret-key
+            {{- end }}
+            {{- end }}
             {{- if .Values.extraEnv }}
             # Extra environment variables
             {{- toYaml .Values.extraEnv | nindent 12 }}

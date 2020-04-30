@@ -22,6 +22,9 @@ spec:
       {{- else }}
       targetPort: http
       {{- end }}
+      {{- if and (eq .Values.frontend.service.type "NodePort") (not (empty .Values.frontend.service.nodePort)) }}
+      nodePort: {{ .Values.frontend.service.nodePort }}
+      {{- end }}
       protocol: TCP
       name: http
   selector:
