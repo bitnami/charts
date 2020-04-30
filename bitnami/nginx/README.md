@@ -149,7 +149,7 @@ The NGINX chart allows you to deploy a custom web application using one of the f
 - Cloning from a git repository: Set `cloneStaticSiteFromGit.enabled` to `true` and set the repository and branch using the `cloneStaticSiteFromGit.repository` and  `cloneStaticSiteFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneStaticSitesFromGit.interval`.
 - Providing a ConfigMap: Set the `staticSiteConfigMap` value to mount a ConfigMap in the NGINX html folder.
 - Using an existing PVC: Set the `staticSitePVC` value to mount an PersistentVolumeClaim with the static site content.
-- Providing a default ConfigMap by Set `defaultSiteSetting` value with key value pairs for site configuration and mount these files in the \app folder (mount path can ovveride by set `defaultSiteSettingVolumeMountPath`).
+- Providing a default ConfigMap by Set `defaultSiteSetting` value with key value pairs for site configuration and mount each key as a file in the \app folder (mount path can ovveride by set `defaultSiteSettingVolumeMountPath`).
 
 You can deploy a example web application using git deploying the chart with the following parameters:
 
