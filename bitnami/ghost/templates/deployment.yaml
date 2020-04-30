@@ -77,7 +77,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghostPassword") }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password") }}
             - name: GHOST_EMAIL
               value: {{ .Values.ghostEmail | quote }}
             - name: BLOG_TITLE
@@ -99,7 +99,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "smtpPassword") }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "smtp-password") }}
             {{- end }}
             {{- if .Values.smtpFromAddress }}
             - name: SMTP_FROM_ADDRESS

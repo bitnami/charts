@@ -1,4 +1,4 @@
-{{- $ghostPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghostPassword") ) -}}
+{{- $ghostPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password") ) -}}
 {{- if empty (include "ghost.host" .) -}}
 ###############################################################################
 ### ERROR: You did not provide an external host in your 'helm install' call ###

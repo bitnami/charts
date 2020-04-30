@@ -100,12 +100,12 @@ allowEmptyPassword: true
 #   ## Name of the existing secret
 #   ##
 #   name: mySecret
-#   ## Key mapping where <key> is the value which the deployment is expecting and 
+#   ## Key mapping where <key> is the value which the deployment is expecting and
 #   ## <value> is the name of the key in the existing secret.
 #   ##
 #   keyMapping:
-#     ghostPassword: myGhostPasswordKey
-#     smtpPassword: mySmtpPasswordKey
+#     ghost-password: myGhostPasswordKey
+#     smtp-password: mySmtpPasswordKey
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
