@@ -61,10 +61,6 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `nameOverride`                             | String to partially override nginx.fullname template                                        | `nil`                                                        |
 | `fullnameOverride`                         | String to fully override nginx.fullname template                                            | `nil`                                                        |
 | `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static content                                   | `nil`                                                        |
-| `staticSiteVolumeMountPath`                | Deployment static site volume mount path                                                    | `/app`                                                        |
-| `staticSiteConfigmapSetting.enabled`       | Enable static ConfigMap resource                                                            | `false`                                                      |
-| `staticSiteConfigmapSetting.key`           | Name of static ConfigMap key                                                                | `nil`                                                        |
-| `staticSiteConfigmapSetting.vaue`          | Name of static ConfigMap key value                                                          | `nil`                                                        |
 | `staticSitePVC`                            | Name of existing PVC with the server static content                                         | `nil`                                                        |
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a git repository                                         | `false`                                                      |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                          | `docker.io`                                                  |
@@ -77,6 +73,8 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the repository                                     | `60`                                                         |
 | `serverBlock`                              | Custom NGINX server block                                                                   | `nil`                                                        |
 | `existingServerBlockConfigmap`             | Name of existing PVC with custom NGINX server block                                         | `nil`                                                        |
+| `defaultSiteSetting`                       | ConfigMap with default site settings contains key value pairs for site configuration        | `[]`                                                         |
+| `defaultSiteSettingVolumeMountPath`        | Default site settings volume mount path                                                     | `/app`                                                       |
 | `replicaCount`                             | Number of replicas to deploy                                                                | `1`                                                          |
 | `podAnnotations`                           | Pod annotations                                                                             | `{}`                                                         |
 | `affinity`                                 | Map of node/pod affinities                                                                  | `{}` (The value is evaluated as a template)                  |
@@ -151,6 +149,7 @@ The NGINX chart allows you to deploy a custom web application using one of the f
 - Cloning from a git repository: Set `cloneStaticSiteFromGit.enabled` to `true` and set the repository and branch using the `cloneStaticSiteFromGit.repository` and  `cloneStaticSiteFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneStaticSitesFromGit.interval`.
 - Providing a ConfigMap: Set the `staticSiteConfigMap` value to mount a ConfigMap in the NGINX html folder.
 - Using an existing PVC: Set the `staticSitePVC` value to mount an PersistentVolumeClaim with the static site content.
+- Providing a default ConfigMap by Set `defaultSiteSetting` value with key value pairs for site configuration and mount these files in the \app folder (mount path can ovveride by set `defaultSiteSettingVolumeMountPath`).
 
 You can deploy a example web application using git deploying the chart with the following parameters:
 

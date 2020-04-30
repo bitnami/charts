@@ -38,13 +38,6 @@ image:
 ##
 # staticSiteConfigmap
 
-staticSiteVolumeMountPath: /app
-
-staticSiteConfigmapSetting:
-  enabled: false
-  #key: 
-  #value: 
-
 ## Name of existing PVC with the server static site content
 ## NOTE: This will override staticSiteConfigmap
 ##
@@ -105,6 +98,17 @@ cloneStaticSiteFromGit:
 ## NOTE: This will override serverBlock
 ##
 # existingServerBlockConfigmap:
+
+## ConfigMap with default site settings contains key value pairs for site configuration
+## 
+defaultSiteSetting: {}
+#  key1: value1
+#  key2: value2
+
+## Default site settings volume mount path. 
+## If this is not set, by default it will take as /app.
+##
+# defaultSiteSettingVolumeMountPath:
 
 ## Number of replicas to deploy
 ##
