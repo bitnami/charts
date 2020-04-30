@@ -4,14 +4,14 @@ kind: Service
 metadata:
   name: {{ include "elasticsearch.metrics.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: metrics
+    app.kubernetes.io/component: metrics
   annotations: {{ include "elasticsearch.tplValue" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.metrics.service.type }}
   ports:
-    - name: metrics
+    - name: http-metrics
       port: 9114
       targetPort: metrics
   selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
-    role: metrics
+    app.kubernetes.io/component: metrics
 {{- end }}

@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: {{ include "elasticsearch.coordinating.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: coordinating-only
+    app.kubernetes.io/component: coordinating-only
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: coordinating-only
 spec:
   strategy:
     type: {{ .Values.coordinating.updateStrategy.type }}
@@ -12,12 +14,14 @@ spec:
     {{- end }}
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
-      role: coordinating-only
+      app.kubernetes.io/component: coordinating-only
   replicas: {{ .Values.coordinating.replicas }}
   template:
     metadata:
       labels: {{- include "elasticsearch.labels" . | nindent 8 }}
-        role: coordinating-only
+        app.kubernetes.io/component: coordinating-only
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: coordinating-only
       {{- with .Values.coordinating.podAnnotations }}
       annotations: {{- toYaml . | nindent 10 }}
       {{- end }}
@@ -66,7 +70,7 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.name | quote }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
-              value: {{ template "elasticsearch.discovery.fullname" . }}
+              value: {{ include "elasticsearch.hosts" . | quote }}
             {{- if .Values.plugins }}
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}

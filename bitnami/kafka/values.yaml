@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.5.0-debian-10-r7
+  tag: 2.5.0-debian-10-r16
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -215,6 +215,19 @@ sslEndpointIdentificationAlgorithm: https
 ##     value: "10"
 ##
 extraEnvVars: []
+
+## extraVolumes and extraVolumeMounts allows you to mount other volumes
+## Examples:
+# extraVolumes:
+#   - name: kafka-jaas
+#     secret:
+#       secretName: kafka-jaas
+# extraVolumeMounts:
+#   - name: kafka-jaas
+#     mountPath: /bitnami/kafka/config/kafka_jaas.conf
+#     subPath: kafka_jaas.conf
+extraVolumes: []
+extraVolumeMounts: []
 
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-kafka#security
@@ -432,7 +445,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.3-debian-10-r20
+      tag: 1.17.4-debian-10-r41
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -602,7 +615,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r86
+      tag: 1.2.0-debian-10-r92
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -677,7 +690,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.12.0-debian-10-r85
+      tag: 0.12.0-debian-10-r91
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
