@@ -17,7 +17,7 @@ image:
   ## Bitnami Cassandra image tag
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 3.11.6-debian-10-r72
+  tag: 3.11.6-debian-10-r82
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -167,9 +167,12 @@ cluster:
   ## Enable the creation of the Pod Disruption Budget
   ##
   pdbEnabled: true
-  ## Minimun number of cluster nodes that will be running. Needs pdbEnabled=true
+  ## Minimum number of cluster nodes that will be running. Needs pdbEnabled=true
   ##
-  minimumAvailable: 1
+  minAvailable: 1
+  ## Maximum number of cluster nodes that may not be running. Needs pdbEnabled=true.
+  ##
+  # maxUnavailable: 1
   ## Encryption values. NOTE: They require tlsEncryptionSecretName
   ##
   internodeEncryption: none
@@ -288,7 +291,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.4-debian-10-r50
+    tag: 2.3.4-debian-10-r63
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

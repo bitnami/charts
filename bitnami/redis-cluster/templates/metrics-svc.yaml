@@ -20,5 +20,5 @@ spec:
     - name: metrics
       port: 9121
       targetPort: http-metrics
-  selector: {{- include "redis-cluster.matchLabels" $ | indent 4 }}
+  selector: {{- include "redis-cluster.matchLabels" $ | nindent 4 }}
 {{- end }}

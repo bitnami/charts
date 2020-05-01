@@ -136,6 +136,9 @@ The following table lists the configurable parameters of the external-dns chart 
 | `pdns.apiKey`                       | When using the PowerDNS provider, specify the API key of the server.                                     | `""`                                                        |
 | `transip.account`                   | When using the TransIP provider, specify the account name.                                               | `""`                                                        |
 | `transip.apiKey`                    | When using the TransIP provider, specify the API key to use.                                             | `""`                                                        |
+| `vinyldns.host`                     | When using the VinylDNS provider, specify the VinylDNS API host.                                         | `""`                                                        |
+| `vinyldns.accessKey`                | When using the VinylDNS provider, specify the Access Key to use.                                         | `""`                                                        |
+| `vinyldns.secretKey`                | When using the VinylDNS provider, specify the Secret key to use.                                         | `""`                                                        |
 | `annotationFilter`                  | Filter sources managed by external-dns via annotation using label selector (optional)                    | `""`                                                        |
 | `domainFilters`                     | Limit possible target zones by domain suffixes (optional)                                                | `[]`                                                        |
 | `zoneIdFilters`                     | Limit possible target zones by zone id (optional)                                                        | `[]`                                                        |
