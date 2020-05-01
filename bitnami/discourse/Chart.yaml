@@ -6,7 +6,8 @@ version: 0.1.0
 appVersion: 2.4.1
 home: https://www.discourse.org/
 sources:
-- https://github.com/spinnaker
+  - https://github.com/bitnami/bitnami-docker-discourse
+  - https://github.com/spinnaker
 maintainers:
 - name: paulczar
   email: username.taken@gmail.com
