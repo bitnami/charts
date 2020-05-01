@@ -4,7 +4,7 @@ metadata:
   name: {{ include "discourse.fullname" . }}-sidekiq
   labels:
     {{- include "discourse.labels" . | nindent 4 }}
-    component: sidekiq
+    app.kubernetes.io/component: sidekiq
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
