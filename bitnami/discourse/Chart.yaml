@@ -10,5 +10,7 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
 maintainers:
-- name: paulczar
+  - name: Bitnami
+    email: containers@bitnami.com
+  - name: paulczar
   email: username.taken@gmail.com
