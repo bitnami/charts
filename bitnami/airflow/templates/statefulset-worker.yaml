@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: worker
 spec:
-  {{- if Values.worker.podManagementPolicy }}
+  {{- if .Values.worker.podManagementPolicy }}
   podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
   {{- end }}
   selector:
