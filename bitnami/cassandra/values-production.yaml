@@ -172,7 +172,7 @@ cluster:
   minAvailable: 2
   ## Maximum number of cluster nodes that may not be running. Needs pdbEnabled=true
   ##
-  maxUnavailable: 1
+  # maxUnavailable: 1
   ## Encryption values. NOTE: They require tlsEncryptionSecretName
   ##
   internodeEncryption: none
