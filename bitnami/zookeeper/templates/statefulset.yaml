@@ -162,7 +162,7 @@ spec:
               value: {{ .Values.service.tls.client_keystore_path | quote }}
             - name: ZOO_TLS_CLIENT_KEYSTORE_PASSWORD
               value: {{ .Values.service.tls.client_keystore_password | quote }}
-            - name: ZOO_TLS_CLIENT_TRUSTTORE_FILE
+            - name: ZOO_TLS_CLIENT_TRUSTSTORE_FILE
               value: {{ .Values.service.tls.client_truststore_path | quote }}
             - name: ZOO_TLS_CLIENT_TRUSTSTORE_PASSWORD
               value: {{ .Values.service.tls.client_truststore_password | quote }}
@@ -174,7 +174,7 @@ spec:
               value: {{ .Values.service.tls.quorum_keystore_path | quote }}
             - name: ZOO_TLS_QUORUM_KEYSTORE_PASSWORD
               value: {{ .Values.service.tls.quorum_keystore_password | quote }}
-            - name: ZOO_TLS_QUORUM_TRUSTTORE_FILE
+            - name: ZOO_TLS_QUORUM_TRUSTSTORE_FILE
               value: {{ .Values.service.tls.quorum_truststore_path | quote }}
             - name: ZOO_TLS_QUORUM_TRUSTSTORE_PASSWORD
               value: {{ .Values.service.tls.quorum_truststore_password | quote }}
