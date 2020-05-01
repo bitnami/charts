@@ -148,6 +148,7 @@ service:
   ##
   externalTrafficPolicy: Cluster
   ## Service annotations done as key:value pairs
+  ##
   annotations:
 
 ## Enable persistence using Persistent Volume Claims
