@@ -4,6 +4,7 @@ description: A Helm chart for deploying Discourse to Kubernetes
 type: application
 version: 0.1.0
 appVersion: 2.4.1
+engine: gotpl
 home: https://www.discourse.org/
 icon: https://bitnami.com/assets/stacks/wordpress/img/discourse-stack-220x234.png
 sources:
