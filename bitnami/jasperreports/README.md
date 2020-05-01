@@ -97,6 +97,7 @@ The following table lists the configurable parameters of the JasperReports chart
 | `service.externalTrafficPolicy`  | Enable client source IP preservation         | `Cluster`                                                |
 | `service.port`                   | Service HTTP port                            | `80`                                                     |
 | `service.nodePorts.http`         | Kubernetes http node port                    | `""`                                                     |
+| `service.annotations`            | Service annotations                          | `[]`                                                     |
 | `persistence.enabled`            | Enable persistence using PVC                 | `true`                                                   |
 | `persistence.storageClass`       | PVC Storage Class for JasperReports volume   | `nil` (uses alpha storage annotation)                    |
 | `persistence.accessMode`         | PVC Access Mode for JasperReports volume     | `ReadWriteOnce`                                          |
