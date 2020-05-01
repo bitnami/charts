@@ -93,6 +93,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `airflow.baseUrl`                         | URL used to access to airflow web ui                                                                 | `nil`                                                        |
 | `airflow.worker.port`                     | Airflow Worker port                                                                                  | `8793`                                                       |
 | `airflow.worker.replicas`                 | Number of Airflow Worker replicas                                                                    | `2`                                                          |
+| `airflow.worker.podManagementPolicy `     | podManagementPolicy for Worker replicas                                                              | `OrderedReady`                                               |
 | `airflow.worker.resources.limits`         | The resources limits for the Worker containers                                                       | `{}`                                                         |
 | `airflow.worker.resources.requests`       | The requested resources for the Worker containers                                                    | `{}`                                                         |
 | `airflow.auth.forcePassword`              | Force users to specify a password                                                                    | `false`                                                      |
