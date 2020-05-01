@@ -7,6 +7,13 @@ metrics:
 podDisruptionBudget:
   create: true
 
+extraEnvVars: |-
+  - name: TEST
+    value: {{ include "mariadb-galera.fullname" . | quote }}
+
+extraEnvVarsSecret: example-secret
+extraEnvVarsCM: example-cm
+
 rbac:
   create: true
 
