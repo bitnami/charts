@@ -208,6 +208,22 @@ master:
   ##
   nodeSelector: {}
 
+  ## An array to add extra environment variables
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: TZ
+  ##    value: "Europe/Paris"
+  ##
+  extraEnvVars:
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret:
+
   ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -355,6 +371,22 @@ slave:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
+
+  ## An array to add extra environment variables
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: TZ
+  ##    value: "Europe/Paris"
+  ##
+  extraEnvVars:
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret:
 
   ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/

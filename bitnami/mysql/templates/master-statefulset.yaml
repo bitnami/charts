@@ -110,6 +110,20 @@ spec:
                   key: mysql-replication-password
             {{- end }}
             {{- end }}
+            {{- if .Values.master.extraEnvVars }}
+            {{- include "mysql.tplValue" (dict "value" .Values.master.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.master.extraEnvVarsCM .Values.master.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.master.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.master.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.master.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.master.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: mysql
               containerPort: 3306

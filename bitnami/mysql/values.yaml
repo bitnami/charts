@@ -207,6 +207,22 @@ master:
   ##
   affinity: {}
 
+  ## An array to add extra environment variables
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: TZ
+  ##    value: "Europe/Paris"
+  ##
+  extraEnvVars:
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret:
+
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -354,6 +370,22 @@ slave:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+
+  ## An array to add extra environment variables
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: TZ
+  ##    value: "Europe/Paris"
+  ##
+  extraEnvVars:
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret:
 
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
