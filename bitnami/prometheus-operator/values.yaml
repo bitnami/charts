@@ -551,8 +551,16 @@ prometheus:
   ##
   containers: []
 
-  ## Enable additional scrape configs that are managed externally to this chart
-  ##
+  ## Volumes allows configuration of additonal volumes
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  volumes: []
+
+  ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  volumeMounts: []
+
+  ## Enable additional scrape configs that are managed externally to this chart. Evaluated as a template
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   additionalScrapeConfigsExternal: false
 
   ## Thanos sidecar container configuration
@@ -865,6 +873,14 @@ alertmanager:
   ## Containers allows injecting additional containers
   ##
   containers: []
+
+  ## Volumes allows configuration of additonal volumes. Evaluated as a template
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+  volumes: []
+
+  ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+  volumeMounts: []
 
   ## Priority class assigned to the Pods
   ##
