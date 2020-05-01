@@ -125,7 +125,7 @@ spec:
             mountPath: /docker-entrypoint-initdb.d/secret
           {{- end }}
           {{- if .Values.extraVolumeMounts }}
-          {{- tpl (toYaml .Values.extraVolumeMounts) $ | nindent 6 }}
+          {{- tpl (toYaml .Values.extraVolumeMounts) $ | nindent 10 }}
           {{- end }}
       {{- if .Values.sidecars }}
       {{- tpl (toYaml .Values.sidecars) $ | nindent 8 }}
@@ -171,7 +171,7 @@ spec:
             name: {{ template "kibana.savedObjectsCM" . }}
         {{- end }}
       {{- if .Values.extraVolumes }}
-      {{- tpl (toYaml .Values.extraVolumes) $ | nindent 6 }}
+      {{- tpl (toYaml .Values.extraVolumes) $ | nindent 8 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:

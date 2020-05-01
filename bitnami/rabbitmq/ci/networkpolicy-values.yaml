@@ -3,9 +3,9 @@ networkPolicy:
   allowExternal: false
   additionalRules:
     - matchLabels:
-      - role: foo
+        - role: foo
     - matchExpressions:
-      - key: role
-        operator: In
-        values:
-          - bar
+        - key: role
+          operator: In
+          values:
+            - bar
