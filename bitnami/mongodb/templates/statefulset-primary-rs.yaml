@@ -124,7 +124,7 @@ spec:
             value: {{ .Values.replicaSet.name | quote }}
             {{- if .Values.replicaSet.useHostnames }}
           - name: MONGODB_ADVERTISED_HOSTNAME
-            {{- if .Values.replicaSet.clusterDomain }}
+            {{- if .Values.clusterDomain }}
             value: "$(MONGODB_POD_NAME).{{ template "mongodb.fullname" . }}-headless.{{ template "mongodb.namespace" . }}.svc.{{ .Values.clusterDomain }}"
             {{- else }}
             value: "$(MONGODB_POD_NAME).{{ template "mongodb.fullname" . }}-headless.{{ template "mongodb.namespace" . }}"

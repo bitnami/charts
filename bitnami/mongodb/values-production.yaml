@@ -124,7 +124,7 @@ securityContext:
   runAsUser: 1001
 
 ## Kubernetes Cluster Domain
-#clusterDomain: cluster.local
+clusterDomain: cluster.local
 
 ## Kubernetes service type
 service:
