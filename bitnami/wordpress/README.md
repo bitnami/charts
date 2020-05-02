@@ -85,6 +85,16 @@ The following table lists the configurable parameters of the WordPress chart and
 | `wordpressBlogName`                       | Blog name                                                                             | `User's Blog!`                                               |
 | `wordpressTablePrefix`                    | Table prefix                                                                          | `wp_`                                                        |
 | `wordpressScheme`                         | Scheme to generate application URLs [`http`, `https`]                                 | `http`                                                       |
+| `wordpressAuthKey`                        | Auth key                                                                              | _random 64 character long alphanumeric string_               |
+| `wordpressSecureAuthKey`                  | Secure auth key                                                                       | _random 64 character long alphanumeric string_               |
+| `wordpressLoggedInKey`                    | Logged in key                                                                         | _random 64 character long alphanumeric string_               |
+| `wordpressNonceKey`                       | Nonce key                                                                             | _random 64 character long alphanumeric string_               |
+| `wordpressAuthSalt`                       | Auth salt                                                                             | _random 64 character long alphanumeric string_               |
+| `wordpressSecureAuthSalt`                 | Secure auth salt                                                                      | _random 64 character long alphanumeric string_               |
+| `wordpressLoggedInSalt`                   | Logged in salt                                                                        | _random 64 character long alphanumeric string_               |
+| `wordpressNonceSalt`                      | Nonce salt                                                                            | _random 64 character long alphanumeric string_               |
+| `wordpressConfigDefine`                   | Define key-value pairs to append in wp-config.php                                     | `{}`                                                         |
+| `wordpressConfigBlock`                    | Raw string to append in wp-config.php                                                 | `""`                                                         |
 | `allowEmptyPassword`                      | Allow DB blank passwords                                                              | `true`                                                       |
 | `allowOverrideNone`                       | Set Apache AllowOverride directive to None                                            | `false`                                                      |
 | `htaccessPersistenceEnabled`              | Make `.htaccess` persistence so that it can be customized. [See](#disabling-htaccess) | `false`                                                      |

@@ -84,6 +84,68 @@ wordpressScheme: http
 ##
 wordpressSkipInstall: false
 
+## Application auth key
+## Defaults to a random 64-character alphanumeric string if not set
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+# wordpressAuthKey:
+
+## Application secure auth key
+## Defaults to a random 64-character alphanumeric string if not set
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+# wordpressSecureAuthKey:
+
+## Application logged in key
+## Defaults to a random 64-character alphanumeric string if not set
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+# wordpressLoggedInKey:
+
+## Application nonce key
+## Defaults to a random 64-character alphanumeric string if not set
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+# wordpressNonceKey:
+
+## Application auth salt
+## Defaults to a random 64-character alphanumeric string if not set
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+# wordpressAuthSalt:
+
+## Application secure auth salt
+## Defaults to a random 64-character alphanumeric string if not set
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+# wordpressSecureAuthSalt:
+
+## Application logged in salte
+## Defaults to a random 64-character alphanumeric string if not set
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+# wordpressLoggedInSalt:
+
+## Application nonce salt
+## Defaults to a random 64-character alphanumeric string if not set
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+# wordpressNonceSalt:
+
+## A map of key-value pairs wrapped in define method to append in wp-config.php
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+## Example:
+## wordpressConfigDefine:
+##  WP_HTTP_BLOCK_EXTERNAL: true
+##  WP_ACCESSIBLE_HOSTS: "'api.wordpress.org,*.github.com'"
+##  EMPTY_TRASH_DAYS: 30
+wordpressConfigDefine: {}
+
+## Raw string to append in wp-config.php
+## ref: https://wordpress.org/support/article/editing-wp-config-php/
+##
+wordpressConfigBlock: ""
+
 ## Set up update strategy for wordpress installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## Example:

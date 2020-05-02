@@ -97,6 +97,46 @@ spec:
               value: {{ .Values.wordpressTablePrefix | quote }}
             - name: WORDPRESS_SCHEME
               value: {{ .Values.wordpressScheme | quote }}
+            - name: WORDPRESS_AUTH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}
+                  key: auth_key
+            - name: WORDPRESS_SECURE_AUTH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}
+                  key: secure_auth_key
+            - name: WORDPRESS_LOGGED_IN_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}
+                  key: logged_in_key
+            - name: WORDPRESS_NONCE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}
+                  key: nonce_key
+            - name: WORDPRESS_AUTH_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}
+                  key: auth_salt
+            - name: WORDPRESS_SECURE_AUTH_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}
+                  key: secure_auth_salt
+            - name: WORDPRESS_LOGGED_IN_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}
+                  key: logged_in_salt
+            - name: WORDPRESS_NONCE_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wordpress.fullname" . }}
+                  key: nonce_salt
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
@@ -170,6 +210,9 @@ spec:
             - mountPath: /bitnami/wordpress
               name: wordpress-data
               subPath: wordpress
+            - mountPath: /bitnami/wordpress/wp-config.php
+              name: wp-config
+              subPath: wp-config.php
             {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
             - mountPath: /htaccess
               name: custom-htaccess
@@ -226,6 +269,10 @@ spec:
           {{- else }}
           emptyDir: {}
           {{ end }}
+        - name: wp-config
+          configMap:
+            name: {{ template "wordpress.fullname" . }}
+            defaultMode: 0440
         {{- if .Values.extraVolumes }}
         {{- include "wordpress.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
