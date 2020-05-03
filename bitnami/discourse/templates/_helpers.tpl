@@ -36,7 +36,7 @@ Common labels
 */}}
 {{- define "discourse.labels" -}}
 helm.sh/chart: {{ include "discourse.chart" . }}
-{{ include "discourse.selectorLabels" . }}
+{{ include "discourse.matchLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -46,7 +46,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "discourse.selectorLabels" -}}
+{{- define "discourse.matchLabels" -}}
 app.kubernetes.io/name: {{ include "discourse.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
@@ -59,5 +59,79 @@ Create the name of the service account to use
     {{ default (include "discourse.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "discourse.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "discourse.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "discourse.imagePullSecrets" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+Also, we can not use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+{{- if .Values.global.imagePullSecrets }}
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- else if .Values.image.pullSecrets }}
+imagePullSecrets:
+{{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end -}}
+{{- else if .Values.image.pullSecrets  }}
+imagePullSecrets:
+{{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Gets the host to be used for this application.
+If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+*/}}
+{{- define "discourse.host" -}}
+{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- default (include "discourse.serviceIP" .) $host -}}
+{{- end -}}
+
+{{/*
+Return the proper Discourse image name
+*/}}
+{{- define "discourse.image" -}}
+{{- $registryName := .Values.image.registry -}}
+{{- $repositoryName := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}

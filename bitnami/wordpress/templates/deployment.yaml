@@ -23,7 +23,7 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-{{- include "wordpress.imagePullSecrets" . | indent 6 }}
+      {{- include "wordpress.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}

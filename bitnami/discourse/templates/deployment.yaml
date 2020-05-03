@@ -1,12 +1,13 @@
+{{- if and (include "discourse.host" .) (.Values.postgresql.enabled) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "discourse.fullname" . }}
+  name: {{ template "discourse.fullname" . }}
   labels:
     {{- include "discourse.labels" . | nindent 4 }}
     component: discourse
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount.discourse }}
   selector:
     matchLabels:
       {{- include "discourse.selectorLabels" . | nindent 6 }}
@@ -20,24 +21,57 @@ spec:
         {{- include "discourse.selectorLabels" . | nindent 8 }}
         component: discourse
     spec:
-    {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- include "discourse.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "discourse.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers:
+      {{- tpl (toYaml .Values.initContainers) $ | nindent 8 }}
+      {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: discourse
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          envFrom:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          image: {{ template "discourse.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            - name: DISCOURSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.fullname" . }}
+                  key: discourse-password
+            - name: DISCOURSE_POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.fullname" . }}
+                  key: discourse-postgresql-password
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.fullname" . }}
+                  key: postgresql-client-create-database-password
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.fullname" . }}
+                  key: redis-password
             - configMapRef:
-                name: {{ include "discourse.fullname" . }}-envs
+                name: {{ include "discourse.fullname" . }}
+            {{- if .Values.extraEnvVars.discourse }}
+            {{- tpl (toYaml .Values.extraEnvVars.discourse) $ | nindent 12 }}
+            {{- end }}
+            {{- if or .Values.extraEnvVarsCM.discourse .Values.extraEnvVarsSecret.discourse }}
+            envFrom:
+            {{- if .Values.extraEnvVarsCM.discourse }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM.discourse }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret.discourse }}
             - secretRef:
-                name: {{ include "discourse.fullname" . }}-envs
+                name: {{ .Values.extraEnvVarsSecret.discourse }}
+            {{- end }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 3000
@@ -50,17 +84,18 @@ spec:
             httpGet:
               path: /
               port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.sidecars }}
+        {{- tpl (toYaml .Values.sidecars) $ | nindent 8 }}
+        {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "discourse.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "discourse.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "discourse.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+{{- end -}}
