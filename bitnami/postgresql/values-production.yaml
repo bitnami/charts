@@ -426,7 +426,7 @@ resources:
 
 ## Add annotations to all the deployed resources
 ##
-commonAnnotiations: {}
+commonAnnotations: {}
 
 networkPolicy:
   ## Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
