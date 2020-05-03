@@ -534,5 +534,5 @@ spec:
         {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)
-        {{- toYaml .Values.extraVolumes | indent 8 }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
