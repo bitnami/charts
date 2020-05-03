@@ -156,6 +156,8 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `slave.livenessProbe.successThreshold`      | Minimum consecutive successes for the probe (slave) | `1`                                                               |
 | `slave.livenessProbe.failureThreshold`      | Minimum consecutive failures for the probe (slave)  | `3`                                                               |
 | `slave.readinessProbe.enabled`              | Turn on and off readiness probe (slave)             | `true`                                                            |
+| `slave.readinessProbe.type`                 | Select the type of readiness probe (slave)         | `status`                                                            |
+| `slave.readinessProbe.typeSecondsBehind` | Number of seconds behind master to count as ready  for the seconds_behind readiness check (slave) | `true`                                                            |
 | `slave.readinessProbe.initialDelaySeconds`  | Delay before readiness probe is initiated (slave)   | `45`                                                              |
 | `slave.readinessProbe.periodSeconds`        | How often to perform the probe (slave)              | `10`                                                              |
 | `slave.readinessProbe.timeoutSeconds`       | When the probe times out (slave)                    | `1`                                                               |

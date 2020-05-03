@@ -435,6 +435,10 @@ slave:
     failureThreshold: 3
   readinessProbe:
     enabled: true
+    # "status" or "seconds_behind"
+    type: status
+    # Number of seconds behind for the seconds_behind readiness check
+    # typeSecondsBehind: 60
     initialDelaySeconds: 45
     ##
     ## Default Kubernetes values

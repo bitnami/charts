@@ -167,6 +167,7 @@ spec:
             failureThreshold: {{ .Values.slave.livenessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.slave.readinessProbe.enabled }}
+            {{- if (eq .Values.slave.readinessProbe.type "status") }}
           readinessProbe:
             exec:
               command:
@@ -178,6 +179,23 @@ spec:
                       password_aux=$(cat $MARIADB_MASTER_ROOT_PASSWORD_FILE)
                   fi
                   mysqladmin status -uroot -p$password_aux
+            {{- end }}
+            {{- if (eq .Values.slave.readinessProbe.type "seconds_behind") }}
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  set -e
+                  password_aux="${MARIADB_MASTER_ROOT_PASSWORD:-}"
+                  if [ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]; then
+                      password_aux=$(cat $MARIADB_MASTER_ROOT_PASSWORD_FILE)
+                  fi
+                  seconds_behind=$(mysql -e "show slave status\G" -uroot -p$password_aux | grep "Seconds_Behind_Master" | awk '{print $2}')
+                  seconds_behind=${seconds_behind%.*}
+                  if [[ ${seconds_behind} =~ ^-?[0-9]+$ && {{ .Values.slave.readinessProbe.typeSecondsBehind }} -gt ${seconds_behind} ]]; then exit 0; else exit 1; fi
+            {{- end }}
             initialDelaySeconds: {{ .Values.slave.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.slave.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.slave.readinessProbe.timeoutSeconds }}
