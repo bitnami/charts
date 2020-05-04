@@ -11,7 +11,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 subjects:
   - kind: ServiceAccount
-    name: {{ template "rabbitmq.fullname" . }}
+    name: {{ template "rabbitmq.serviceAccountName" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
