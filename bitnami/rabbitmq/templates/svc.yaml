@@ -70,7 +70,7 @@ spec:
       {{- end }}
   {{- end }}
 {{- if .Values.service.extraPorts }}
-{{ toYaml .Values.service.extraPorts | indent 2 }}
+{{ toYaml .Values.service.extraPorts | indent 4 }}
 {{- end }}
   selector:
     app: {{ template "rabbitmq.name" . }}
