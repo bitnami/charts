@@ -1,8 +1,11 @@
 # Test values file for generating all of the yaml and check that
 # the rendering is correct
 
-volumePermissions:
+metrics:
   enabled: true
+
+podDisruptionBudget:
+  create: true
 
 master:
   extraEnvVars:
@@ -19,11 +22,10 @@ slave:
 
   extraEnvVarsSecret: example-secret-2
   extraEnvVarsCM: example-cm-2
-  replicas: 2
 
-metrics:
-  enabled: true
-  ## Kubeval doesn't recognise ServiceMonitor as a valid K8s object
-  # serviceMonitor:
-  #   enabled: true
+rbac:
+  create: true
 
+serviceAccount:
+  create: true
+  name: mariadb-galera-service-account

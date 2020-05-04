@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.19-debian-10-r94
+  tag: 8.0.20-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -207,6 +207,22 @@ master:
   ##
   affinity: {}
 
+  ## An array to add extra environment variables
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: TZ
+  ##    value: "Europe/Paris"
+  ##
+  extraEnvVars:
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret:
+
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -355,6 +371,22 @@ slave:
   ##
   affinity: {}
 
+  ## An array to add extra environment variables
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: TZ
+  ##    value: "Europe/Paris"
+  ##
+  extraEnvVars:
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret:
+
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -488,7 +520,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r85
+    tag: 0.12.1-debian-10-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
