@@ -219,7 +219,7 @@ spec:
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
-              mountPath: /secrets/
+              mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
           ports:
             - name: http-metrics
