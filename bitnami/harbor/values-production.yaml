@@ -14,7 +14,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r31
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -38,7 +38,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 1.10.2-debian-10-r15
+  tag: 1.10.2-debian-10-r28
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -62,7 +62,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r31
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,7 +86,7 @@ jobserviceImage:
 chartMuseumImage:
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.12.0-debian-10-r28
+  tag: 0.12.0-debian-10-r40
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -110,7 +110,7 @@ chartMuseumImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r31
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -134,7 +134,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r30
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -158,7 +158,7 @@ registryctlImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r31
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -182,7 +182,7 @@ clairImage:
 clairAdapterImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 1.0.2-debian-10-r9
+  tag: 1.0.2-debian-10-r25
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -206,7 +206,7 @@ clairAdapterImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r30
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -230,7 +230,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r31
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -254,7 +254,7 @@ notarySignerImage:
 nginxImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.1-debian-10-r95
+  tag: 1.17.10-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -806,11 +806,11 @@ core:
 ##
 jobservice:
   ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   updateStrategy:
-    type: RollingUpdate   
+    type: RollingUpdate
   replicas: 1
   maxJobWorkers: 10
   # The logger for jobs: "file", "database" or "stdout"
@@ -877,11 +877,11 @@ jobservice:
 registry:
   replicas: 1
   ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   updateStrategy:
-    type: RollingUpdate     
+    type: RollingUpdate
   ## Harbor Registry parameters
   ##
   registry:
@@ -979,16 +979,19 @@ registry:
   ##
   secret: ""
 
+  # If true, the registry returns relative URLs in Location headers. The client is responsible for resolving the correct URL.
+  relativeurls: false
+
 ## Chartmuseum parameters
 ##
 chartmuseum:
   enabled: true
   ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   updateStrategy:
-    type: RollingUpdate   
+    type: RollingUpdate
   replicas: 1
   port: 8080
 
