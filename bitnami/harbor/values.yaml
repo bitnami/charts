@@ -982,7 +982,6 @@ registry:
   # If true, the registry returns relative URLs in Location headers. The client is responsible for resolving the correct URL.
   relativeurls: false
 
-
 ## Chartmuseum parameters
 ##
 chartmuseum:
