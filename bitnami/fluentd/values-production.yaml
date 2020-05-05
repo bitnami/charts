@@ -208,6 +208,9 @@ forwarder:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}
 
 ## Agregator parameters
 ##
@@ -366,6 +369,9 @@ aggregator:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}
 
   ## Persist data to a persistent volume
   persistence:

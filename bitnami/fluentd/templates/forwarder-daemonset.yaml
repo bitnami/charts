@@ -17,6 +17,9 @@ spec:
       labels: {{- include "fluentd.labels" . | nindent 8 }}
         app.kubernetes.io/component: forwarder
         app: forwarder
+        {{- if .Values.forwarder.podLabels }}
+        {{- include "fluentd.tplValue" ( dict "value" $.Values.forwarder.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/forwarder-configmap.yaml") . | sha256sum }}
         {{- if .Values.forwarder.podAnnotations }}
