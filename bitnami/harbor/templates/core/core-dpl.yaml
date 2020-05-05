@@ -12,6 +12,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.core.replicas }}
+  {{- if .Values.core.updateStrategy }}
+  strategy: {{- toYaml .Values.core.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: core
@@ -86,6 +89,8 @@ spec:
             timeoutSeconds: {{ .Values.core.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.core.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.core.readinessProbe.failureThreshold }}
+          {{- else if .Values.core.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.core.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           envFrom:
             - configMapRef:

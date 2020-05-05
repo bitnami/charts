@@ -12,6 +12,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.nginx.replicas }}
+  {{- if .Values.nginx.updateStrategy }}
+  strategy: {{- toYaml .Values.nginx.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: nginx
@@ -95,12 +98,23 @@ spec:
             timeoutSeconds: {{ .Values.nginx.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.nginx.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.nginx.readinessProbe.failureThreshold }}
+          {{- else if .Values.nginx.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.nginx.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.nginxImage.debug | quote }}
             {{- if .Values.nginx.extraEnvVars }}
             {{- include "harbor.tplValue" (dict "value" .Values.nginx.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.nginx.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.nginx.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.nginx.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.nginx.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if .Values.nginx.resources }}
           resources: {{- toYaml .Values.nginx.resources | nindent 12 }}

@@ -178,7 +178,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s-master" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-
 {{- define "harbor.redis.host" -}}
   {{- if eq .Values.redis.enabled true -}}
     {{- template "harbor.redis.fullname" . -}}
@@ -227,6 +226,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{- define "harbor.redis.clairAdapterDatabaseIndex" -}}
+  {{- if eq .Values.redis.enabled true -}}
+    {{- printf "%s" "4" }}
+  {{- else -}}
+    {{- .Values.externalRedis.clairAdapterIndex -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "harbor.redis.rawPassword" -}}
   {{- if and (not .Values.redis.enabled) .Values.externalRedis.password -}}
     {{- .Values.externalRedis.password -}}
@@ -236,12 +243,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
-
-{{- define "harbor.redis.trivyAdapterIndex" -}}
+{{- define "harbor.redis.trivyAdapterDatabaseIndex" -}}
   {{- if .Values.redis.enabled -}}
     {{- printf "%s" "5" }}
   {{- else -}}
-    {{- .Values.redis.external.trivyAdapterIndex -}}
+    {{- .Values.externalRedis.trivyAdapterIndex -}}
   {{- end -}}
 {{- end -}}
 
@@ -274,15 +280,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
     {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) }}
   {{- else }}
-    {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+    {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "harbor.redisForTrivyAdapter" -}}
   {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterIndex" . ) }}
+    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) }}
   {{- else }}
-    {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterIndex" . ) -}}
+    {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
   {{- end -}}
 {{- end -}}
 
@@ -649,8 +655,17 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets .Values.trivyImage.pullSecrets }}
+{{- else if or .Values.coreImage.pullSecrets .Values.chartMuseumImage.pullSecrets .Values.clairImage.pullSecrets .Values.clairAdapterImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets .Values.trivyImage.pullSecrets }}
 imagePullSecrets:
+{{- range .Values.clairAdapterImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.clairImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.chartMuseumImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
 {{- range .Values.coreImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
@@ -682,8 +697,17 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.trivyImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+{{- else if or .Values.coreImage.pullSecrets .Values.chartMuseumImage.pullSecrets .Values.clairImage.pullSecrets .Values.clairAdapterImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.trivyImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
+{{- range .Values.clairAdapterImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.clairImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.chartMuseumImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
 {{- range .Values.coreImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
@@ -719,6 +743,18 @@ imagePullSecrets:
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "harbor.checkRollingTags" -}}
+{{- if and (contains "bitnami/" .Values.chartMuseumImage.repository) (not (.Values.chartMuseumImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.chartMuseumImage.repository }}:{{ .Values.chartMuseumImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.clairImage.repository) (not (.Values.clairImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.clairImage.repository }}:{{ .Values.clairImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.clairAdapterImage.repository) (not (.Values.clairAdapterImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.clairAdapterImage.repository }}:{{ .Values.clairAdapterImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
 {{- if and (contains "bitnami/" .Values.coreImage.repository) (not (.Values.coreImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.coreImage.repository }}:{{ .Values.coreImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/

@@ -13,8 +13,8 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.chartmuseum.replicas }}
-  {{- if .Values.chartmuseum.strategy }}
-  strategy: {{- toYaml .Values.chartmuseum.strategy | nindent 4 }}
+  {{- if .Values.chartmuseum.updateStrategy }}
+  strategy: {{- toYaml .Values.chartmuseum.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
@@ -96,6 +96,8 @@ spec:
             timeoutSeconds: {{ .Values.chartmuseum.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.chartmuseum.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.chartmuseum.readinessProbe.failureThreshold }}
+          {{- else if .Values.chartmuseum.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           envFrom:
             - configMapRef:

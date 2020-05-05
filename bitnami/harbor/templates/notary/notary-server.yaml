@@ -13,6 +13,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.notary.server.replicas }}
+  {{- if .Values.notary.server.updateStrategy }}
+  strategy: {{- toYaml .Values.notary.server.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: notary-server
@@ -29,8 +32,8 @@ spec:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/notary/notary-secret.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
-        {{- if .Values.notary.podAnnotations }}
-        annotations: {{- include "harbor.tplValue" (dict "value" .Values.notary.podAnnotations "context" $) | nindent 8 }}
+        {{- if .Values.notary.server.podAnnotations }}
+        annotations: {{- include "harbor.tplValue" (dict "value" .Values.notary.server.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
@@ -100,6 +103,32 @@ spec:
           ports:
             - containerPort: 4443
               name: notary-server
+          {{- if .Values.notary.server.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: notary-server
+            initialDelaySeconds: {{ .Values.notary.server.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notary.server.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notary.server.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notary.server.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notary.server.livenessProbe.failureThreshold }}
+          {{- else if .Values.notary.server.customLivenessProbe }}
+          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.notary.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notary.server.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: notary-server
+            initialDelaySeconds: {{ .Values.notary.server.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notary.server.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notary.server.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notary.server.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notary.server.readinessProbe.failureThreshold }}
+          {{- else if .Values.notary.server.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.notary.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
         {{- if .Values.notary.server.sidecars }}
         {{- include "harbor.tplValue" (dict "value" .Values.notary.server.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -120,6 +149,6 @@ spec:
             secretName: {{ .Values.notary.secretName }}
         {{- end }}
       {{- if .Values.notary.server.extraVolumes }}
-      {{- include "harbor.tplValue" (dict "value" .Values.notary.extraVolumes "context" $) | nindent 6 }}
+      {{- include "harbor.tplValue" (dict "value" .Values.notary.server.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
 {{- end }}

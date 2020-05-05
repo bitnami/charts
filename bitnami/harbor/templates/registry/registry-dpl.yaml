@@ -12,8 +12,8 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.registry.replicas }}
-  {{- if .Values.registry.strategy }}
-  strategy: {{- toYaml .Values.registry.strategy | nindent 4 }}
+  {{- if .Values.registry.updateStrategy }}
+  strategy: {{- toYaml .Values.registry.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
@@ -109,6 +109,8 @@ spec:
             timeoutSeconds: {{ .Values.registry.server.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.registry.server.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.registry.server.readinessProbe.failureThreshold }}
+          {{- else if .Values.registry.server.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.registry.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.registry.server.resources }}
           resources: {{- toYaml .Values.registry.server.resources | nindent 12 }}
@@ -200,6 +202,8 @@ spec:
             timeoutSeconds: {{ .Values.registry.controller.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.registry.controller.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.registry.controller.readinessProbe.failureThreshold }}
+          {{- else if .Values.registry.controller.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.registry.controller.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.registry.controller.resources }}
           resources: {{- toYaml .Values.registry.controller.resources | nindent 12 }}

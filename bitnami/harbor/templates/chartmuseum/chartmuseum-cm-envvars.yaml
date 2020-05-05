@@ -41,7 +41,7 @@ data:
   {{- if .Values.chartmuseum.indexLimit }}
   INDEX_LIMIT: {{ .Values.chartmuseum.indexLimit | quote }}
   {{- end }}
-  {{- if .Values.chartmuseum.maxUploadSise }}
+  {{- if .Values.chartmuseum.maxUploadSize }}
   MAX_UPLOAD_SIZE: {{ .Values.chartmuseum.maxUploadSize | quote }}
   {{- end }}
   {{- if .Values.chartmuseum.maxStorageObjects }}

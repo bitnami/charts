@@ -13,6 +13,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.clair.replicas }}
+  {{- if .Values.clair.updateStrategy }}
+  strategy: {{- toYaml .Values.clair.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: clair
@@ -51,7 +54,7 @@ spec:
           {{- if .Values.clair.server.command }}
           command: {{- include "harbor.tplValue" (dict "value" .Values.clair.server.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.clair.args }}
+          {{- if .Values.clair.server.args }}
           args: {{- include "harbor.tplValue" (dict "value" .Values.clair.server.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clair.server.livenessProbe.enabled }}
@@ -77,6 +80,8 @@ spec:
             timeoutSeconds: {{ .Values.clair.server.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.clair.server.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.clair.server.readinessProbe.failureThreshold }}
+          {{- else if .Values.clair.server.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.clair.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -120,6 +125,12 @@ spec:
         - name: adapter
           image: {{ include "harbor.clairAdapterImage" . }}
           imagePullPolicy: {{ .Values.clairAdapterImage.pullPolicy }}
+          {{- if .Values.clair.adapter.command }}
+          command: {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clair.adapter.args }}
+          args: {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.args "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.clair.adapter.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -132,7 +143,6 @@ spec:
             failureThreshold: {{ .Values.clair.adapter.livenessProbe.failureThreshold }}
           {{- else if .Values.clair.adapter.customLivenessProbe }}
           livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.customLivenessProbe "context" $) | nindent 12 }}
-
           {{- if .Values.clair.adapter.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
@@ -143,6 +153,8 @@ spec:
             timeoutSeconds: {{ .Values.clair.adapter.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.clair.adapter.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.clair.adapter.readinessProbe.failureThreshold }}
+          {{- else if .Values.clair.adapter.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

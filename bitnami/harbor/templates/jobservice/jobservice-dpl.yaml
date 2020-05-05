@@ -12,8 +12,8 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.jobservice.replicas }}
-  {{- if .Values.jobservice.strategy }}
-  strategy: {{- toYaml .Values.jobservice.strategy | nindent 4 }}
+  {{- if .Values.jobservice.updateStrategy }}
+  strategy: {{- toYaml .Values.jobservice.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
@@ -110,6 +110,8 @@ spec:
             timeoutSeconds: {{ .Values.jobservice.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.jobservice.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.jobservice.readinessProbe.failureThreshold }}
+          {{- else if .Values.jobservice.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.jobservice.resources }}
           resources: {{- toYaml .Values.jobservice.resources | nindent 12 }}

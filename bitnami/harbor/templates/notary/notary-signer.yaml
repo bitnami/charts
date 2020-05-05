@@ -13,6 +13,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.notary.signer.replicas }}
+  {{- if .Values.notary.signer.updateStrategy }}
+  strategy: {{- toYaml .Values.notary.signer.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: notary-server
@@ -28,19 +31,19 @@ spec:
         app.kubernetes.io/component: notary-server
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/notary/notary-secret.yaml") . | sha256sum }}
-        {{- if .Values.notary.podAnnotations }}
-        annotations: {{- include "harbor.tplValue" (dict "value" .Values.notary.podAnnotations "context" $) | nindent 8 }}
+        {{- if .Values.notary.signer.podAnnotations }}
+        annotations: {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.notary.signer.affinity }}
-      affinity: {{- include "harbor.tplValue" (dict "value" .Values.notary.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.notary.signer.nodeSelector }}
-      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.notary.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.notary.signer.tolerations }}
-      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.notary.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -101,6 +104,35 @@ spec:
             {{- if .Values.notary.signer.extraVolumeMounts }}
             {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+          ports:
+            - containerPort: 7899
+              name: notary-server
+          {{- if .Values.notary.signer.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: notary-server
+            initialDelaySeconds: {{ .Values.notary.signer.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notary.signer.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notary.signer.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notary.signer.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notary.signer.livenessProbe.failureThreshold }}
+          {{- else if .Values.notary.signer.customLivenessProbe }}
+          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notary.signer.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: notary-server
+            initialDelaySeconds: {{ .Values.notary.signer.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notary.signer.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notary.signer.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notary.signer.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notary.signer.readinessProbe.failureThreshold }}
+          {{- else if .Values.notary.signer.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
         {{- if .Values.notary.signer.sidecars }}
         {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -113,4 +145,7 @@ spec:
           secret:
             secretName: {{ .Values.notary.secretName }}
         {{- end }}
+      {{- if .Values.notary.signer.extraVolumes }}
+      {{- include "harbor.tplValue" (dict "value" .Values.notary.signer.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
 {{- end }}

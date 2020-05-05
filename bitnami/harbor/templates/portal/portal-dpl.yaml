@@ -12,6 +12,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.portal.replicas }}
+  {{- if .Values.portal.updateStrategy }}
+  strategy: {{- toYaml .Values.portal.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: portal
@@ -83,6 +86,8 @@ spec:
             timeoutSeconds: {{ .Values.portal.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.portal.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.portal.readinessProbe.failureThreshold }}
+          {{- else if .Values.portal.customReadinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.portal.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -113,5 +118,4 @@ spec:
       volumes:
       {{- include "harbor.tplValue" (dict "value" .Values.portal.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
-
 

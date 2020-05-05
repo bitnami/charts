@@ -34,7 +34,9 @@ metadata:
   {{- end }}
 spec:
   ports:
-    - port: 7899
+    - port: notary-signer
+      port: 7899
+      targetPort: notary-signer
   selector: {{- include "harbor.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: notary-signer
 {{- end }}

@@ -25,11 +25,12 @@ coreImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##  - myRegistryKeySecretName
+  #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Portal image
@@ -50,10 +51,12 @@ portalImage:
   ##
   pullSecrets: []
   ##  - myRegistryKeySecretName
+  ##
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Job Service image
@@ -73,11 +76,12 @@ jobserviceImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##  - myRegistryKeySecretName
+  #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami ChartMuseum image
@@ -97,11 +101,12 @@ chartMuseumImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##  - myRegistryKeySecretName
+  #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Registry image
@@ -121,11 +126,12 @@ registryImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##  - myRegistryKeySecretName
+  #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Registryctl image
@@ -145,11 +151,12 @@ registryctlImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##  - myRegistryKeySecretName
+  #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Trivy image
@@ -169,11 +176,12 @@ trivyImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##   - myRegistryKeySecretName
+  #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Clair image
@@ -194,10 +202,12 @@ clairImage:
   ##
   pullSecrets: []
   ##  - myRegistryKeySecretName
+  ##
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Adapter Clair image
@@ -217,11 +227,12 @@ clairAdapterImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##  - myRegistryKeySecretName
+  #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Notary Server image
@@ -241,11 +252,12 @@ notaryServerImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##   - myRegistryKeySecretName
+  #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Notary Signer image
@@ -265,11 +277,12 @@ notarySignerImage:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   pullSecrets: []
-  ##   - myRegistryKeySecretName
+  #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Nginx image
@@ -290,10 +303,12 @@ nginxImage:
   ##
   pullSecrets: []
   ##   - myRegistryKeySecretName
+  ##
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## String to partially override harbor.fullname template (will maintain the release name)
@@ -328,12 +343,15 @@ volumePermissions:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
     ##   cpu: 100m
     ##   memory: 128Mi
+    ##
     requests: {}
     ##   cpu: 100m
     ##   memory: 128Mi
+    ##
 
 ## Service parameters
 ##
@@ -397,11 +415,14 @@ service:
     name: harbor
     ports:
       ## The service port Harbor listens on when serving with HTTP
+      ##
       httpPort: 80
       ## The service port Harbor listens on when serving with HTTPS
+      ##
       httpsPort: 443
       ## The service port Notary listens on. Only needed when notary.enabled
       ## is set to true
+      ##
       notaryPort: 4443
   ## Service parameters when type is "nodePort"
   ##
@@ -474,6 +495,7 @@ externalURL: https://core.harbor.domain
 ## certificate you will need to provide the CA Cert.
 ## Set uaaSecretName below to provide a pre-created secret that
 ## contains a base64 encoded CA Certificate named `ca.crt`.
+##
 uaaSecretName:
 
 ## Kubernetes Security Context
@@ -547,6 +569,9 @@ persistence:
   ## ref: https://github.com/docker/distribution/blob/master/docs/configuration.md#storage
   ##
   imageChartStorage:
+    ## Name of a secret contaning the CA bundle
+    ##
+    caBundleSecretName:
     ## Specify whether to disable `redirect` for images and chart storage, for
     ## backends which not supported it (such as using minio for `s3` storage type), please disable
     ## it. To disable redirects, simply set `disableredirect` to `true` instead.
@@ -576,6 +601,7 @@ persistence:
     gcs:
       bucket: bucketname
       ## The base64 encoded json file which contains the gcs key (file's content)
+      ##
       encodedkey: base64-encoded-json-key-file
       # rootdirectory: /gcs/object/name/prefix
       # chunksize: "5242880"
@@ -629,6 +655,7 @@ persistence:
       ## secure: true
       ## chunksize: 10M
       ## rootdirectory: rootdirectory
+      ##
 
 ## The log level used for Harbor services. Allowed values are [ fatal | error | warn | info | debug | trace ]
 ##
@@ -664,7 +691,59 @@ proxy:
     - clair
 
 nginx:
+  ## NGINX container command (using container default if not set)
+  ##
+  command:
+  ## NGINX container args (using container default if ot set)
+  ##
+  args:
   replicas: 1
+  nameOverride:
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
   ## NGINX containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -673,12 +752,15 @@ nginx:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
     ##   cpu: 500m
     ##   memory: 1Gi
+    ##
     requests: {}
     ##   cpu: 250m
     ##   memory: 256Mi
+    ##
 
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -692,6 +774,10 @@ nginx:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -722,7 +808,61 @@ nginx:
 ## Harbor Portal parameters
 ##
 portal:
+  ## Harbor portal container command (using container default if not set)
+  ##
+  command:
+  ## Harbor portal container args (using container default if ot set)
+  ##
+  args:
+
   replicas: 1
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
+
   ## Harbor Portal containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -731,12 +871,15 @@ portal:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
     ##   cpu: 500m
     ##   memory: 1Gi
+    ##
     requests: {}
     ##   cpu: 250m
     ##   memory: 256Mi
+    ##
 
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -752,6 +895,11 @@ portal:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
 
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -779,7 +927,66 @@ portal:
 ## Harbor Core parameters
 ##
 core:
+  ## Harbor core container command (using container default if not set)
+  ##
+  command:
+  ## Harbor core container args (using container default if ot set)
+  ##
+  args:
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
   replicas: 1
+
+  ## CSRF key
+  ##
+  csrfKey:
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
+
   ## Harbor Core containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -788,12 +995,13 @@ core:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
+    #  cpu: 500m
+    #  memory: 1Gi
     requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
+    #  cpu: 250m
+    #  memory: 256Mi
 
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -809,6 +1017,11 @@ core:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
 
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -828,9 +1041,9 @@ core:
   ## The default key pair will be used if it isn't set
   ##
   secretName: ""
-  ## The XSRF key. Will be generated automatically if it isn't specified
+  ## The CSRF key. Will be generated automatically if it isn't specified
   ##
-  xsrfKey: ""
+  csrfKey: ""
 
   ## Harbor Core containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -853,16 +1066,64 @@ core:
 ## Harbor Jobservice parameters
 ##
 jobservice:
+  ## Harbor Jobservice container command (using container default if not set)
+  ##
+  command:
+  ## Harbor Jobservice container args (using container default if ot set)
+  ##
+  args:
   replicas: 1
   ## Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
   updateStrategy:
     type: RollingUpdate
   maxJobWorkers: 10
   ## The logger for jobs: "file", "database" or "stdout"
+  ##
   jobLogger: file
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
+
   ## Harbor Jobservice containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -871,12 +1132,15 @@ jobservice:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
     ##   cpu: 500m
     ##   memory: 1Gi
+    ##
     requests: {}
     ##   cpu: 250m
     ##   memory: 256Mi
+    ##
 
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -892,6 +1156,11 @@ jobservice:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
 
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -928,11 +1197,34 @@ registry:
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
   updateStrategy:
     type: RollingUpdate
-  ## Harbor Registry parameters
+  ## Harbor Registry main container parameters
   ##
-  registry:
+  server:
+    ## Container command (using container default if not set)
+    ##
+    command:
+    ## Container args (using container default if ot set)
+    ##
+    args:
+    ## An array to add extra env vars
+    ##
+    extraEnvVars: []
+
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
+
+    ## Extra volume mounts to add to the container
+    ##
+    extraVolumeMounts: []
+
     ## Harbor Registry containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -941,9 +1233,11 @@ registry:
       ## choice for the user. This also increases chances charts run on environments with little
       ## resources, such as Minikube. If you do want to specify resources, uncomment the following
       ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
       limits: {}
       ##   cpu: 500m
       ##   memory: 1Gi
+      ##
       requests: {}
       ##   cpu: 250m
       ##   memory: 256Mi
@@ -964,9 +1258,40 @@ registry:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+
+    ## Custom Liveness probe
+    ##
+    customLivenessProbe: {}
+
+    ## Custom Rediness probe
+    ##
+    customReadinessProbe: {}
+
   ## Harbor Registryctl parameters
   ##
   controller:
+    ## Container command (using container default if not set)
+    ##
+    command:
+    ## Container args (using container default if ot set)
+    ##
+    args:
+    ## An array to add extra env vars
+    ##
+    extraEnvVars: []
+
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
+
+    ## Extra volume mounts to add to the container
+    ##
+    extraVolumeMounts: []
+
     ## Harbor Registryctl containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -975,9 +1300,11 @@ registry:
       ## choice for the user. This also increases chances charts run on environments with little
       ## resources, such as Minikube. If you do want to specify resources, uncomment the following
       ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
       limits: {}
       ##   cpu: 500m
       ##   memory: 1Gi
+      ##
       requests: {}
       ##   cpu: 250m
       ##   memory: 256Mi
@@ -999,6 +1326,26 @@ registry:
       failureThreshold: 6
       successThreshold: 1
 
+    ## Custom Liveness probe
+    ##
+    customLivenessProbe: {}
+
+    ## Custom Rediness probe
+    ##
+    customReadinessProbe: {}
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
+
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1014,6 +1361,11 @@ registry:
   ##
   affinity: {}
 
+  ## Pod extra labels. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -1027,12 +1379,14 @@ registry:
   ##
   secret: ""
   ## If true, the registry returns relative URLs in Location headers. The client is responsible for resolving the correct URL.
+  ##
   relativeurls: false
   credentials:
     username: "harbor_registry_user"
     password: "harbor_registry_password"
     ## If you update the username or password of registry, make sure use cli tool htpasswd to generate the bcrypt hash
     ## e.g. "htpasswd -nbBC10 $username $password"
+    ##
     htpasswd: "harbor_registry_user:$2y$10$9L4Tc0DJbFFMB6RdSCunrOpTHdwhid4ktBJmLD00bYgqkkGOvll3m"
 
   middleware:
@@ -1045,8 +1399,8 @@ registry:
       ipfilteredby: none
       ## The secret key that should be present is CLOUDFRONT_KEY_DATA, which should be the encoded private key
       ## that allows access to CloudFront
+      ##
       privateKeySecret: "my-secret"
-
 
 ## Chartmuseum parameters
 ##
@@ -1063,16 +1417,19 @@ chartmuseum:
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
   updateStrategy:
     type: RollingUpdate
 
   port: 8080
 
   ## Set the use of the Redis cache.
+  ##
   useRedisCache: true
 
   ## Set the absolute URL to access the chartmuseum repository and the
   ## endpoint where it will be available.
+  ##
   absoluteUrl: false
   chartRepoName: "chartsRepo"
 
@@ -1088,28 +1445,54 @@ chartmuseum:
   ## ref: https://chartmuseum.com/docs/#other-cli-options
   ##
   contextPath:
-  # indexLimit: 0
   indexLimit:
-  # chartPostFormFieldName: "chart"
   chartPostFormFieldName:
-  ## provPostFormFieldName: "prov"
   provPostFormFieldName:
+  maxStorageObjects:
+  maxUploadSize:
 
   ## Enable the TLS access to the ChartMuseum server.
+  ##
   enableTLS: false
 
   ## Custom Liveness probe
   ##
   customLivenessProbe: {}
+
   ## Custom Rediness probe
   ##
   customReadinessProbe: {}
 
   ## An array to add extra env vars to chartmuseum
   ## For example:
+  ##
   extraEnvVars: []
-  ##  - name: BEARER_AUTH
-  ##    value: true
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
 
   ## Chartmuseum containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -1119,12 +1502,13 @@ chartmuseum:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
+    #  cpu: 500m
+    #  memory: 1Gi
     requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
+    #  cpu: 250m
+    #  memory: 256Mi
 
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -1140,6 +1524,11 @@ chartmuseum:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
 
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -1168,42 +1557,175 @@ chartmuseum:
 ##
 clair:
   enabled: true
+
+  replicas: 1
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## The http(s) proxy used to update vulnerabilities database from internet
+  ##
+  httpProxy:
+  httpsProxy:
+
+  ## The interval of clair updaters, the unit is hour, set to 0 to
+  ## disable the updaters
+  ##
+  updatersInterval: 12
+
   ## Harbor needs Clair adapter to comunicate with Clair API.
+  ##
   adapter:
+    ## Clair adapter container command (using container default if not set)
+    ##
+    command:
+    ## Clair adapter container args (using container default if ot set)
+    ##
+    args:
+    ## An array to add extra env vars
+    ##
+    extraEnvVars: []
+
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
+
+    ## Extra volume mounts to add to the container
+    ##
+    extraVolumeMounts: []
+
+    ## Clair containers' liveness and readiness probes
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+
+    ## Custom Liveness probe
+    ##
+    customLivenessProbe: {}
+
+    ## Custom Rediness probe
+    ##
+    customReadinessProbe: {}
+
+    ## Clair containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
     resources:
       ## We usually recommend not to specify default resources and to leave this as a conscious
       ## choice for the user. This also increases chances charts run on environments with little
       ## resources, such as Minikube. If you do want to specify resources, uncomment the following
       ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
+      limits: {}
+      #   cpu: 500m
+      #   memory: 1Gi
+      requests: {}
+      #   cpu: 250m
+      #   memory: 256Mi
+
+  ## Clair main container properties
+  ##
+  server:
+    ## Clair container command (using container default if not set)
+    ##
+    command:
+    ## Clair container args (using container default if ot set)
+    ##
+    args:
+
+    ## Clair containers' liveness and readiness probes
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+
+    ## Custom Liveness probe
+    ##
+    customLivenessProbe: {}
+
+    ## Custom Rediness probe
+    ##
+    customReadinessProbe: {}
+
+    ## An array to add extra env vars
+    ##
+    extraEnvVars: []
+
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
+
+    ## Extra volume mounts to add to the container
+    ##
+    extraVolumeMounts: []
+
+    ## Clair containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
       limits: {}
       ##   cpu: 500m
       ##   memory: 1Gi
+      ##
       requests: {}
       ##   cpu: 250m
       ##   memory: 256Mi
+      ##
 
-  replicas: 1
-  ## The http(s) proxy used to update vulnerabilities database from internet
-  httpProxy:
-  httpsProxy:
-  ## The interval of clair updaters, the unit is hour, set to 0 to
-  ## disable the updaters
-  updatersInterval: 12
-
-  ## Clair containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## Extra volumes to add to the deployment
   ##
-  resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
-    requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
+  extraVolumes: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
 
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -1220,28 +1742,15 @@ clair:
   ##
   affinity: {}
 
-  ## Pod annotations
+  ## Pod extra labels. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## Pod annotations. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## Clair containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 20
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 20
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
 
 ## Trivy adapter parameters
 ##
@@ -1252,6 +1761,18 @@ trivy:
   ## replicas the number of Pod replicas
   ##
   replicas: 1
+
+  ## Harbor Trivy container command (using container default if not set)
+  ##
+  command:
+  ## Harbor Trivy container args (using container default if ot set)
+  ##
+  args:
+
+  ## Update strategy
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## debugMode the flag to enable Trivy debug mode with more verbose scanning log
   ##
   debugMode: false
@@ -1301,6 +1822,38 @@ trivy:
     limits:
       cpu: 1
       memory: 1Gi
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
+
   ## Trivy containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -1318,6 +1871,13 @@ trivy:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
   ## Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1333,29 +1893,78 @@ trivy:
   ##
   affinity: {}
 
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
 
 ## Notary parameters
 ##
 notary:
   enabled: true
   server:
+    ## Notary server container command (using container default if not set)
+    ##
+    command:
+    ## Notary server container args (using container default if ot set)
+    ##
+    args:
     replicas: 1
     ## Notary server containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
+    ## Update strategy - only really applicable for deployments with RWO PVs attached
+    ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+    ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+    ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+    ##
+    updateStrategy:
+      type: RollingUpdate
+    ## An array to add extra env vars
+    ## For example:
+    ##
+    extraEnvVars: []
+    #  - name: BEARER_AUTH
+    #    value: true
+
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
+
+    ## Extra volumes to add to the deployment
+    ##
+    extraVolumes: []
+
+    ## Extra volume mounts to add to the container
+    ##
+    extraVolumeMounts: []
+
+    ## Extra init containers to add to the deployment
+    ##
+    initContainers: []
+
+    ## Extra sidecar containers to add to the deployment
+    ##
+    sidecars: []
     resources:
       ## We usually recommend not to specify default resources and to leave this as a conscious
       ## choice for the user. This also increases chances charts run on environments with little
       ## resources, such as Minikube. If you do want to specify resources, uncomment the following
       ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
       limits: {}
       ##   cpu: 500m
       ##   memory: 1Gi
+      ##
       requests: {}
       ##   cpu: 250m
       ##   memory: 256Mi
@@ -1376,8 +1985,92 @@ notary:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+    ## Custom Liveness probe
+    ##
+    customLivenessProbe: {}
+
+    ## Custom Rediness probe
+    ##
+    customReadinessProbe: {}
+
+    ## Extra volumes to add to the deployment
+    ##
+    extraVolumes: []
+
+    ## Extra init containers to add to the deployment
+    ##
+    initContainers: []
+
+    ## Extra sidecar containers to add to the deployment
+    ##
+    sidecars: []
+
+    ## Node labels for pod assignment. Evaluated as a template.
+    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+
+    ## Tolerations for pod assignment. Evaluated as a template.
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+
+    ## Affinity for pod assignment. Evaluated as a template.
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ##
+    affinity: {}
+
+    ## Pod extra labels. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+
   signer:
+    ## Notary signer container command (using container default if not set)
+    ##
+    command:
+    ## Notary signer container args (using container default if ot set)
+    ##
+    args:
     replicas: 1
+    ## Update strategy - only really applicable for deployments with RWO PVs attached
+    ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+    ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+    ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+    ##
+    updateStrategy:
+      type: RollingUpdate
+    ## An array to add extra env vars
+    ## For example:
+    ##
+    extraEnvVars: []
+    #  - name: BEARER_AUTH
+    #    value: true
+
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
+
+    ## Extra volumes to add to the deployment
+    ##
+    extraVolumes: []
+
+    ## Extra volume mounts to add to the container
+    ##
+    extraVolumeMounts: []
+
+    ## Extra init containers to add to the deployment
+    ##
+    initContainers: []
+
+    ## Extra sidecar containers to add to the deployment
+    ##
+    sidecars: []
+
     ## Notary signer containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1386,12 +2079,51 @@ notary:
       ## choice for the user. This also increases chances charts run on environments with little
       ## resources, such as Minikube. If you do want to specify resources, uncomment the following
       ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
       limits: {}
       ##   cpu: 500m
       ##   memory: 1Gi
+      ##
       requests: {}
       ##   cpu: 250m
       ##   memory: 256Mi
+    ## Extra volumes to add to the deployment
+    ##
+    extraVolumes: []
+
+    ## Extra init containers to add to the deployment
+    ##
+    initContainers: []
+
+    ## Extra sidecar containers to add to the deployment
+    ##
+    sidecars: []
+
+    ## Node labels for pod assignment. Evaluated as a template.
+    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+
+    ## Tolerations for pod assignment. Evaluated as a template.
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+
+    ## Affinity for pod assignment. Evaluated as a template.
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ##
+    affinity: {}
+
+    ## Pod extra labels. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+
+    ## Pod annotations. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+
     ## Notary signer containers' liveness and readiness probes
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
     ##
@@ -1409,27 +2141,42 @@ notary:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  ## Additional deployment annotations
-  podAnnotations: {}
+    ## Custom Liveness probe
+    ##
+    customLivenessProbe: {}
+
+    ## Custom Rediness probe
+    ##
+    customReadinessProbe: {}
+
   ## Fill the name of a kubernetes secret if you want to use your own
   ## TLS certificate authority, certificate and private key for notary
   ## communications.
   ## The secret must contain keys named ca.crt, tls.crt and tls.key that
   ## contain the CA, certificate and private key.
   ## They will be generated if not set.
+  ##
   secretName: ""
+
+## Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
 
 ## Redis chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
   enabled: true
+  nameOverride:
+  password:
   ## image:
   ##   tag:
   ## password: ""
+  ##
   usePassword: false
   cluster:
     enabled: false
@@ -1463,12 +2210,12 @@ externalRedis:
   clairAdapterIndex: "4"
   trivyAdapterIndex: "5"
 
-
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
   enabled: true
+  nameOverride:
   postgresqlUsername: postgres
   postgresqlPassword: not-secure-database-password
   replication:
@@ -1513,12 +2260,21 @@ externalDatabase:
   ##
   port: 5432
   ## External database ssl mode
-  ## sslmode:
+  ##
+  sslmode:
   ## External database name for core
-  ## coreDatabase:
+  ##
+  coreDatabase:
   ## External database name for clair
-  ## clairDatabase:
+  ##
+  clairDatabase:
   ## External database name for notaryserver
-  ## notaryServerDatabase:
+  ##
+  notaryServerDatabase:
   ## External database name for notaryserver
-  ## notarySignerDatabase:
+  ##
+  notarySignerDatabase:
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

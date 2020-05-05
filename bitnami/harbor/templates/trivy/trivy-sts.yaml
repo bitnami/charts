@@ -15,6 +15,7 @@ metadata:
 spec:
   replicas: {{ .Values.trivy.replicas }}
   serviceName: {{ template "harbor.trivy" . }}
+  updateStrategy: {{- toYaml .Values.trivy.updateStrategy | nindent 4 }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: trivy
@@ -145,7 +146,7 @@ spec:
             timeoutSeconds: {{ .Values.trivy.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.trivy.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.trivy.readinessProbe.failureThreshold }}
-          {{- else if .Values.trivy.customRedinessProbe }}
+          {{- else if .Values.trivy.customReadinessProbe }}
           readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.trivy.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
