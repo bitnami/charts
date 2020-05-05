@@ -219,6 +219,9 @@ postgresql:
   # password:
   # database:
 
+  ## Mount PostgreSQL secret as a file instead of passing environment variable
+  # usePasswordFile: false
+
   ## Upgrade repmgr extension in the database
   ##
   upgradeRepmgrExtension: false
