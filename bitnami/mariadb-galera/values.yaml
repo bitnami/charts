@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.4.12-debian-10-r88
+  tag: 10.4.12-debian-10-r98
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,6 +90,22 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
   # name:
+
+## An array to add extra environment variables
+## For example:
+## extraEnvVars:
+##  - name: TZ
+##    value: "Europe/Paris"
+##
+extraEnvVars:
+
+## ConfigMap with extra env vars:
+##
+extraEnvVarsCM:
+
+## Secret with extra env vars:
+##
+extraEnvVarsSecret:
 
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -501,7 +517,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r87
+    tag: 0.12.1-debian-10-r98
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

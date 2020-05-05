@@ -128,7 +128,7 @@ spec:
             - name: MARIADB_EXTRA_FLAGS
               value: {{ .Values.extraFlags | quote }}
             {{- end }}
-            - name:  MARIADB_ENABLE_TLS
+            - name: MARIADB_ENABLE_TLS
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name:  MARIADB_TLS_CERT_FILE
@@ -138,6 +138,20 @@ spec:
             - name:  MARIADB_TLS_CA_FILE
               value: {{ template "mariadb-galera.tlsCACert" . }}
             {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "mariadb-galera.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
