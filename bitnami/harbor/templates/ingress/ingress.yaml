@@ -28,8 +28,15 @@ kind: Ingress
 metadata:
   name: {{ include "harbor.ingress" . }}
   labels: {{- include "harbor.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
   {{- if $ingress.annotations }}
-  annotations: {{- toYaml $ingress.annotations | nindent 4 }}
+   {{- toYaml $ingress.annotations | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if $tls.enabled }}
@@ -45,11 +52,11 @@ spec:
       {{- end }}
     {{- if .Values.notary.enabled }}
     {{- if $tls.notarySecretName }}
-    - secretName: "{{ $tls.notarySecretName }}"
+    - secretName: {{ $tls.notarySecretName | quote }}
     {{- else if $tls.secretName }}
-    - secretName: "{{ $tls.secretName }}"
+    - secretName: {{ $tls.secretName | quote }}
     {{- else }}
-    - secretName: "{{ template "harbor.ingress" . }}"
+    - secretName: {{ include "harbor.ingress" . | quote }}
     {{- end }}
       {{- if $ingress.hosts.notary }}
       hosts:

@@ -69,6 +69,7 @@ app.kubernetes.io/name: "{{ template "harbor.name" . }}"
   {{- end -}}
 {{- end -}}
 
+{{/*
 Create a default fully qualified postgresql name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -235,6 +236,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+
+{{- define "harbor.redis.trivyAdapterIndex" -}}
+  {{- if .Values.redis.enabled -}}
+    {{- printf "%s" "5" }}
+  {{- else -}}
+    {{- .Values.redis.external.trivyAdapterIndex -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "harbor.redis.escapedRawPassword" -}}
   {{- if (include "harbor.redis.rawPassword" . ) -}}
     {{- include "harbor.redis.rawPassword" . | urlquery | replace "+" "%20" -}}
@@ -265,6 +275,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) }}
   {{- else }}
     {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.redisForTrivyAdapter" -}}
+  {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
+    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterIndex" . ) }}
+  {{- else }}
+    {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterIndex" . ) -}}
   {{- end -}}
 {{- end -}}
 
@@ -308,6 +326,10 @@ host:port,pool_size,password
   {{- printf "%s-clair" (include "harbor.fullname" .) -}}
 {{- end -}}
 
+{{- define "harbor.trivy" -}}
+  {{- printf "%s-trivy" (include "harbor.fullname" .) -}}
+{{- end -}}
+
 {{- define "harbor.notary-server" -}}
   {{- printf "%s-notary-server" (include "harbor.fullname" .) -}}
 {{- end -}}
@@ -322,6 +344,10 @@ host:port,pool_size,password
 
 {{- define "harbor.ingress" -}}
   {{- printf "%s-ingress" (include "harbor.fullname" .) -}}
+{{- end -}}
+
+{{- define "harbor.noProxy" -}}
+  {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.chartmuseum" .) (include "harbor.clair" .) (include "harbor.notary-server" .) (include "harbor.notary-signer" .) (include "harbor.registry" .) (include "harbor.portal" .) .Values.proxy.noProxy -}}
 {{- end -}}
 
 Create a default fully qualified nginx name.
@@ -362,6 +388,29 @@ Return the proper Harbor Portal image name
 {{- $registryName := .Values.portalImage.registry -}}
 {{- $repositoryName := .Values.portalImage.repository -}}
 {{- $tag := .Values.portalImage.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Harbor Trivy Adapter image name
+*/}}
+{{- define "harbor.trivyImage" -}}
+{{- $registryName := .Values.trivyImage.registry -}}
+{{- $repositoryName := .Values.trivyImage.repository -}}
+{{- $tag := .Values.trivyImage.tag | toString -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
@@ -600,7 +649,7 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets .Values.trivyImage.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.coreImage.pullSecrets }}
   - name: {{ . }}
@@ -624,13 +673,16 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- range .Values.nginxImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.trivyImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.volumePermissions.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
+{{- else if or .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.trivyImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.coreImage.pullSecrets }}
   - name: {{ . }}
@@ -654,6 +706,9 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 {{- range .Values.nginxImage.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- range .Values.trivyImage.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- range .Values.volumePermissions.image.pullSecrets }}
@@ -686,6 +741,10 @@ WARNING: Rolling tag detected ({{ .Values.registryctlImage.repository }}:{{ .Val
 {{- end }}
 {{- if and (contains "bitnami/" .Values.nginxImage.repository) (not (.Values.nginxImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.trivyImage.repository) (not (.Values.trivyImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.trivyImage.repository }}:{{ .Values.trivyImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 {{- end }}
 {{- end -}}

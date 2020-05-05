@@ -4,9 +4,18 @@ kind: ConfigMap
 metadata:
   name: {{ include "harbor.nginx" . }}
   labels: {{- include "harbor.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: nginx
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   nginx.conf: |+
     worker_processes auto;
+    pid /opt/bitnami/nginx/tmp/nginx.pid;
+
 
     events {
       worker_connections 1024;
@@ -15,6 +24,12 @@ data:
     }
 
     http {
+      client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
+      proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
+      fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
+      scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
+      uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
+
       tcp_nodelay on;
 
       # this is necessary for us to be able to disable request buffering in all cases
@@ -34,18 +49,12 @@ data:
       }
       {{- end }}
 
-      log_format timed_combined 'remote_addr - '
+      log_format timed_combined '[$time_local]:$remote_addr - '
         '"$request" $status $body_bytes_sent '
         '"$http_referer" "$http_user_agent" '
         '$request_time $upstream_response_time $pipe';
 
       access_log /dev/stdout timed_combined;
-
-      client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
-      proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
-      fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
-      scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
-      uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
 
       {{- if .Values.notary.enabled }}
       server {
@@ -103,6 +112,11 @@ data:
         # required to avoid HTTP 411: see Issue #1486 (https://github.com/docker/docker/issues/1486)
         chunked_transfer_encoding on;
 
+        # Add extra headers
+        add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
+        add_header X-Frame-Options DENY;
+        add_header Content-Security-Policy "frame-ancestors 'none'";
+
         location / {
           proxy_pass http://portal/;
           proxy_set_header Host $http_host;
@@ -114,7 +128,7 @@ data:
           {{- end }}
 
           # Add Secure flag when serving HTTPS
-          proxy_cookie_path / "/; secure";
+          proxy_cookie_path / "/; HttpOnly; Secure";
 
           proxy_buffering off;
           proxy_request_buffering off;
@@ -129,6 +143,7 @@ data:
           {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
           {{- end }}
+          proxy_cookie_path / "/; Secure";
 
           proxy_buffering off;
           proxy_request_buffering off;
@@ -143,6 +158,7 @@ data:
           {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
           {{- end }}
+          proxy_cookie_path / "/; Secure";
 
           proxy_buffering off;
           proxy_request_buffering off;
@@ -157,6 +173,7 @@ data:
           {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
           {{- end }}
+          proxy_cookie_path / "/; Secure";
 
           proxy_buffering off;
           proxy_request_buffering off;
@@ -189,6 +206,7 @@ data:
           {{- if not .Values.nginx.behindReverseProxy }}
           proxy_set_header X-Forwarded-Proto $scheme;
           {{- end }}
+          proxy_cookie_path / "/; Secure";
 
           proxy_buffering off;
           proxy_request_buffering off;

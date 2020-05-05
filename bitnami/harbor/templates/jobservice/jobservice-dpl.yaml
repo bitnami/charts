@@ -3,28 +3,42 @@ kind: Deployment
 metadata:
   name: {{ include "harbor.jobservice" . }}
   labels: {{- include "harbor.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: jobservice
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.jobservice.replicas }}
   {{- if .Values.jobservice.strategy }}
   strategy: {{- toYaml .Values.jobservice.strategy | nindent 4 }}
-  {{- end }}  
+  {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: jobservice
   template:
     metadata:
       labels: {{- include "harbor.labels" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.jobservice.podLabels }}
+        {{- include "harbor.tplValue" (dict "value" .Values.jobservice.podLabels "context" $) | nindent 8 }}
+        {{- end }}
         app.kubernetes.io/component: jobservice
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm.yaml") . | sha256sum }}
+        checksum/configmap-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm-envvars.yaml") . | sha256sum }}
+        checksum/secret-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-secret-envvars.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if .Values.jobservice.podAnnotations }}
         {{- include "harbor.tplValue" (dict "value" .Values.jobservice.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "harbor.imagePullSecrets" . | indent 6 }}
+{{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.jobservice.affinity }}
       affinity: {{- include "harbor.tplValue" (dict "value" .Values.jobservice.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -39,8 +53,8 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "harbor.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -60,10 +74,19 @@ spec:
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
       {{- end }}
+      {{- if .Values.jobservice.initContainers }}
+      {{- include "harbor.tplValue" (dict "value" .Values.jobservice.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: jobservice
           image: {{ include "harbor.jobserviceImage" . }}
           imagePullPolicy: {{ .Values.jobserviceImage.pullPolicy | quote }}
+          {{- if .Values.jobservice.command }}
+          command: {{- include "harbor.tplValue" (dict "value" .Values.jobservice.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.jobservice.args }}
+          args: {{- include "harbor.tplValue" (dict "value" .Values.jobservice.args "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.jobservice.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -74,6 +97,8 @@ spec:
             timeoutSeconds: {{ .Values.jobservice.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.jobservice.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.jobservice.livenessProbe.failureThreshold }}
+          {{- else if .Values.jobservice.customLivenessProbe }}
+          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.jobservice.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.jobservice.readinessProbe.enabled }}
           readinessProbe:
@@ -102,12 +127,22 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
-            - name: CORE_URL
-              value: "http://{{ template "harbor.core" . }}"
-            - name: REGISTRY_CONTROLLER_URL
-              value: "http://{{ template "harbor.registry" . }}:8080"
-            - name: LOG_LEVEL
-              value: debug
+            {{- if .Values.jobservice.extraEnvVars }}
+            {{- include "harbor.tplValue" (dict "value" .Values.jobservice.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ template "harbor.jobservice" . }}-envvars
+            - secretRef:
+                name: {{ template "harbor.jobservice" . }}-envvars
+            {{- if .Values.jobservice.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.jobservice.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.jobservice.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.jobservice.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
             - containerPort: 8080
               name: http
@@ -118,6 +153,12 @@ spec:
             - name: job-logs
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+            {{- if .Values.jobservice.extraVolumeMounts }}
+            {{- include "harbor.tplValue" (dict "value" .Values.jobservice.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.jobservice.sidecars }}
+        {{- include "harbor.tplValue" (dict "value" .Values.jobservice.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: jobservice-config
           configMap:
@@ -129,3 +170,6 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+      {{- if .Values.jobservice.extraVolumes }}
+      {{- include "harbor.tplValue" (dict "value" .Values.jobservice.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}

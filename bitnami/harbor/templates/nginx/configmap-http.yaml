@@ -4,9 +4,17 @@ kind: ConfigMap
 metadata:
   name: {{ include "harbor.nginx" . }}
   labels: {{- include "harbor.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: nginx
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   nginx.conf: |+
     worker_processes auto;
+    pid /opt/bitnami/nginx/tmp/nginx.pid;
 
     events {
       worker_connections 1024;
@@ -15,6 +23,11 @@ data:
     }
 
     http {
+      client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
+      proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
+      fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
+      scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
+      uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
       tcp_nodelay on;
 
       # this is necessary for us to be able to disable request buffering in all cases
@@ -28,24 +41,23 @@ data:
         server {{ template "harbor.portal" . }};
       }
 
-      log_format timed_combined '$remote_addr - '
+      log_format timed_combined '[$time_local]:$remote_addr - '
         '"$request" $status $body_bytes_sent '
         '"$http_referer" "$http_user_agent" '
         '$request_time $upstream_response_time $pipe';
 
       access_log /dev/stdout timed_combined;
 
-      client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
-      proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
-      fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
-      scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
-      uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
-
       server {
         listen 8080;
         server_tokens off;
         # disable any limits to avoid HTTP 413 for large image uploads
         client_max_body_size 0;
+
+        # Add extra headers
+        add_header X-Frame-Options DENY;
+        add_header Content-Security-Policy "frame-ancestors 'none'";
+
 
         location / {
           proxy_pass http://portal/;

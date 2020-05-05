@@ -3,18 +3,30 @@ kind: Deployment
 metadata:
   name: {{ include "harbor.registry" . }}
   labels: {{- include "harbor.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: registry
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.registry.replicas }}
   {{- if .Values.registry.strategy }}
   strategy: {{- toYaml .Values.registry.strategy | nindent 4 }}
-  {{- end }}  
+  {{- end }}
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: registry
   template:
     metadata:
       labels: {{- include "harbor.labels" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.registry.podLabels }}
+        {{- include "harbor.tplValue" (dict "value" .Values.registry.podLabels "context" $) | nindent 8 }}
+        {{- end }}
         app.kubernetes.io/component: registry
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/registry/registry-cm.yaml") . | sha256sum }}
@@ -25,7 +37,7 @@ spec:
         {{- include "harbor.tplValue" (dict "value" .Values.registry.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "harbor.imagePullSecrets" . | indent 6 }}
+      {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.registry.affinity }}
       affinity: {{- include "harbor.tplValue" (dict "value" .Values.registry.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -40,8 +52,8 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "harbor.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -61,41 +73,63 @@ spec:
               mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
               subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
       {{- end }}
+      {{- if .Values.registry.initContainers }}
+      {{- include "harbor.tplValue" (dict "value" .Values.registry.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: registry
           image: {{ include "harbor.registryImage" . }}
           imagePullPolicy: {{ .Values.registryImage.pullPolicy | quote }}
-          {{- if .Values.registry.registry.livenessProbe.enabled }}
+          {{- if .Values.registry.server.command }}
+          command: {{- include "harbor.tplValue" (dict "value" .Values.registry.server.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.registry.server.args }}
+          args: {{- include "harbor.tplValue" (dict "value" .Values.registry.server.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.registry.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /
               port: registry
-            initialDelaySeconds: {{ .Values.registry.registry.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.registry.registry.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.registry.registry.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.registry.registry.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.registry.registry.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.registry.server.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.registry.server.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.registry.server.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.registry.server.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.registry.server.livenessProbe.failureThreshold }}
+          {{- else if .Values.registry.server.customLivenessProbe }}
+          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.registry.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.registry.registry.readinessProbe.enabled }}
+          {{- if .Values.registry.server.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /
               port: registry
-            initialDelaySeconds: {{ .Values.registry.registry.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.registry.registry.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.registry.registry.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.registry.registry.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.registry.registry.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.registry.server.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.registry.server.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.registry.server.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.registry.server.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.registry.server.readinessProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.registry.registry.resources }}
-          resources: {{- toYaml .Values.registry.registry.resources | nindent 12 }}
+          {{- if .Values.registry.server.resources }}
+          resources: {{- toYaml .Values.registry.server.resources | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.registryImage.debug | quote }}
+            {{- if .Values.registry.server.extraEnvVars }}
+            {{- include "harbor.tplValue" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "harbor.registry" . }}
+            {{- if .Values.registry.server.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.registry.server.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.registry.server.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.registry.server.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
             - containerPort: 5000
               name: registry
@@ -108,6 +142,9 @@ spec:
             - name: registry-root-certificate
               mountPath: /etc/registry/root.crt
               subPath: tls.crt
+            - name: registry-htpasswd
+              mountPath: /etc/registry/passwd
+              subPath: passwd
             - name: registry-config
               mountPath: /etc/registry/config.yml
               subPath: config.yml
@@ -116,9 +153,30 @@ spec:
               mountPath: /etc/registry/gcs-key.json
               subPath: gcs-key.json
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.caBundleSecretName }}
+            - name: storage-service-ca
+              mountPath: /harbor_cust_cert/custom-ca-bundle.crt
+              subPath: ca.crt
+            {{- end }}
+            {{- if .Values.registry.middleware.enabled }}
+            {{- if eq .Values.registry.middleware.type "cloudFront" }}
+            - name: cloudfront-key
+              mountPath: /etc/registry/pk.pem
+              subPath: pk.pem
+            {{- end }}
+            {{- end }}
+            {{- if .Values.registry.server.extraVolumeMounts }}
+            {{- include "harbor.tplValue" (dict "value" .Values.registry.server.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         - name: registryctl
           image: {{ include "harbor.registryctlImage" . }}
           imagePullPolicy: {{ .Values.registryctlImage.pullPolicy | quote }}
+          {{- if .Values.registry.controller.command }}
+          command: {{- include "harbor.tplValue" (dict "value" .Values.registry.controller.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.registry.controller.args }}
+          args: {{- include "harbor.tplValue" (dict "value" .Values.registry.controller.args "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.registry.controller.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -129,6 +187,8 @@ spec:
             timeoutSeconds: {{ .Values.registry.controller.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.registry.controller.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.registry.controller.livenessProbe.failureThreshold }}
+          {{- else if .Values.registry.controller.customLivenessProbe }}
+          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.registry.controller.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.registry.controller.readinessProbe.enabled }}
           readinessProbe:
@@ -147,6 +207,14 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ include "harbor.registry" . }}
+            {{- if .Values.registry.controller.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.registry.controller.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.registry.controller.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.registry.controller.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.registryctlImage.debug | quote }}
@@ -160,6 +228,9 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+            {{- if .Values.registry.controller.extraEnvVars }}
+            {{- include "harbor.tplValue" (dict "value" .Values.registry.controller.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - containerPort: 8080
               name: registryctl
@@ -173,7 +244,29 @@ spec:
             - name: registry-config
               mountPath: /etc/registryctl/config.yml
               subPath: ctl-config.yml
+            {{- if .Values.persistence.imageChartStorage.caBundleSecretName }}
+            - name: storage-service-ca
+              mountPath: /harbor_cust_cert/custom-ca-bundle.crt
+              subPath: ca.crt
+            {{- end }}
+            {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+            - name: gcs-key
+              mountPath: /etc/registry/gcs-key.json
+              subPath: gcs-key.json
+            {{- end }}
+            {{- if .Values.registry.controller.extraVolumeMounts }}
+            {{- include "harbor.tplValue" (dict "value" .Values.registry.controller.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.registry.sidecars }}
+        {{- include "harbor.tplValue" (dict "value" .Values.registry.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
+        - name: registry-htpasswd
+          secret:
+            secretName: {{ template "harbor.registry" . }}
+            items:
+              - key: REGISTRY_HTPASSWD
+                path: passwd
         - name: registry-root-certificate
           secret:
             {{- if .Values.core.secretName }}
@@ -199,3 +292,21 @@ spec:
               - key: GCS_KEY_DATA
                 path: gcs-key.json
         {{- end }}
+        {{- if .Values.persistence.imageChartStorage.caBundleSecretName }}
+        - name: storage-service-ca
+          secret:
+            secretName: {{ .Values.persistence.imageChartStorage.caBundleSecretName }}
+        {{- end }}
+        {{- if .Values.registry.middleware.enabled }}
+        {{- if eq .Values.registry.middleware.type "cloudFront" }}
+        - name: cloudfront-key
+          secret:
+            secretName: {{ .Values.registry.middleware.cloudFront.privateKeySecret }}
+            items:
+              - key: CLOUDFRONT_KEY_DATA
+                path: pk.pem
+        {{- end }}
+        {{- end }}
+      {{- if .Values.registry.extraVolumes }}
+      {{- include "harbor.tplValue" (dict "value" .Values.registry.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}

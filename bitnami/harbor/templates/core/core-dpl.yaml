@@ -3,7 +3,13 @@ kind: Deployment
 metadata:
   name: {{ include "harbor.core" . }}
   labels: {{- include "harbor.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: core
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.core.replicas }}
   selector:
@@ -12,6 +18,12 @@ spec:
   template:
     metadata:
       labels: {{- include "harbor.matchLabels" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- end }}
+        {{- if .Values.core.podLabels }}
+        {{- include "harbor.tplValue" (dict "value" .Values.core.podLabels "context" $) | nindent 8 }}
+        {{- end }}
         app.kubernetes.io/component: core
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/core/core-cm.yaml") . | sha256sum }}
@@ -23,7 +35,7 @@ spec:
         {{- include "harbor.tplValue" (dict "value" .Values.core.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "harbor.imagePullSecrets" . | indent 6 }}
+      {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.core.affinity }}
       affinity: {{- include "harbor.tplValue" (dict "value" .Values.core.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -38,10 +50,19 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
+      {{- if .Values.core.initContainers }}
+      initContainers: {{- include "harbor.tplValue" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: core
           image: {{ include "harbor.coreImage" . }}
           imagePullPolicy: {{ .Values.coreImage.pullPolicy | quote }}
+          {{- if .Values.core.command }}
+          command: {{- include "harbor.tplValue" (dict "value" .Values.core.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.core.args }}
+          args: {{- include "harbor.tplValue" (dict "value" .Values.core.args "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.core.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -52,6 +73,8 @@ spec:
             timeoutSeconds: {{ .Values.core.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.core.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.core.livenessProbe.failureThreshold }}
+          {{- else if .Values.core.customLivenessProbe }}
+          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.core.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.core.readinessProbe.enabled }}
           readinessProbe:
@@ -69,6 +92,15 @@ spec:
                 name: {{ include "harbor.core" . }}-envvars
             - secretRef:
                 name: {{ include "harbor.core" . }}-envvars
+            {{- if .Values.core.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.core.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.core.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.core.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.coreImage.debug | quote }}
@@ -82,6 +114,9 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+            {{- if .Values.core.extraEnvVars }}
+            {{- include "harbor.tplValue" (dict "value" .Values.core.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - containerPort: 8080
               name: http
@@ -106,9 +141,15 @@ spec:
             {{- end }}
             - name: psc
               mountPath: /etc/core/token
+            {{- if .Values.core.extraVolumeMounts }}
+            {{- include "harbor.tplValue" (dict "value" .Values.core.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.core.resources }}
           resources: {{- toYaml .Values.core.resources | nindent 12 }}
           {{- end }}
+        {{- if .Values.core.sidecars }}
+        {{- include "harbor.tplValue" (dict "value" .Values.core.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: config
           configMap:
@@ -150,3 +191,6 @@ spec:
         {{- end }}
         - name: psc
           emptyDir: {}
+      {{- if .Values.core.extraVolumes }}
+      {{- include "harbor.tplValue" (dict "value" .Values.core.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}

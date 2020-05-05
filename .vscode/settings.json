@@ -1,0 +1,7 @@
+{
+  "command-runner.commands": {
+    "check vars in all templates are in values.yaml file": "/Users/jsalmeron/.magic/bin/chart-vars-in-values ${file}",
+    "check yaml lint in all templates of the chart": "/Users/jsalmeron/.magic/bin/chart-yaml-lint ${file}",
+    "check values in values.yaml are in README.md": "/Users/jsalmeron/.magic/bin/chart-values-readme-check ${file}"
+},
+}

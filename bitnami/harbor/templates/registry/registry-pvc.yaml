@@ -10,13 +10,19 @@ metadata:
     helm.sh/resource-policy: keep
   {{- end }}
   labels: {{- include "harbor.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: registry
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   accessModes:
     - {{ $registry.accessMode }}
   resources:
     requests:
       storage: {{ $registry.size }}
-  {{ include "harbor.registry.storageClass" . }}
+  {{- include "harbor.registry.storageClass" . | nindent 2 }}
 {{- end }}
 {{- end }}

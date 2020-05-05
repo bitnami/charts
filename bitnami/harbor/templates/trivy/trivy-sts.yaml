@@ -1,0 +1,183 @@
+{{- if .Values.trivy.enabled }}
+{{- $trivyPVC := .Values.persistence.persistentVolumeClaim.trivy -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "harbor.trivy" . }}
+  labels: {{- include "harbor.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: trivy
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.trivy.replicas }}
+  serviceName: {{ template "harbor.trivy" . }}
+  selector:
+    matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: trivy
+  template:
+    metadata:
+      labels: {{- include "harbor.labels" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.trivy.podLabels }}
+        {{- include "harbor.tplValue" (dict "value" .Values.trivy.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+        app.kubernetes.io/component: trivy
+      annotations:
+        checksum/configmap-env: {{ include (print $.Template.BasePath "/trivy/trivy-cm-envvars.yaml") . | sha256sum }}
+        checksum/secret-env: {{ include (print $.Template.BasePath "/trivy/trivy-secret-envvars.yaml") . | sha256sum }}
+        {{- if .Values.trivy.podAnnotations }}
+        {{- include "harbor.tplValue" (dict "value" .Values.trivy.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.trivy.affinity }}
+      affinity: {{- include "harbor.tplValue" (dict "value" .Values.trivy.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.trivy.nodeSelector }}
+      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.trivy.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.trivy.tolerations }}
+      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.trivy.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        fsGroup: 10000
+      {{- /* TODO restore the proper security context
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+       */}}
+      automountServiceAccountToken: {{ .Values.trivy.automountServiceAccountToken }}
+      initContainers:
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "harbor.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "{{ .Values.trivy.cacheDir }}"
+              mkdir -p "{{ .Values.trivy.cacheDir }}/trivy"
+              mkdir -p "{{ .Values.trivy.cacheDir }}/reports"
+              chown -R "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}" "{{ .Values.trivy.cacheDir }}"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: job-logs
+              mountPath: /var/log/jobs
+              subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+      {{- end }}
+      {{- if .Values.trivy.initContainers }}
+      {{- include "harbor.tplValue" (dict "value" .Values.trivy.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: trivy
+          image: {{ include "harbor.trivyImage" . }}
+          imagePullPolicy: {{ .Values.trivyImage.pullPolicy | quote }}
+          {{- if .Values.trivy.command }}
+          command: {{- include "harbor.tplValue" (dict "value" .Values.trivy.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.trivy.args }}
+          args: {{- include "harbor.tplValue" (dict "value" .Values.trivy.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.trivyImage.debug | quote }}
+            {{- if .Values.trivy.extraEnvVars }}
+            {{- include "harbor.tplValue" (dict "value" .Values.trivy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+           envFrom:
+            - configMapRef:
+                name: {{ template "harbor.trivy" . }}-envvars
+            - secretRef:
+                name: {{ template "harbor.trivy" . }}-envvars
+            {{- if .Values.trivy.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.trivy.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.trivy.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "harbor.tplValue" (dict "value" .Values.trivy.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - name: api-server
+              containerPort: 8080
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.trivy.cacheDir }}
+              readOnly: false
+            {{- if .Values.trivy.extraVolumeMounts }}
+            {{- include "harbor.tplValue" (dict "value" .Values.trivy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.trivy.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /probe/healthy
+              port: http
+            initialDelaySeconds: {{ .Values.trivy.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.trivy.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.trivy.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.trivy.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.trivy.livenessProbe.failureThreshold }}
+          {{- else if .Values.trivy.customLivenessProbe }}
+          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.trivy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.trivy.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /probe/ready
+              port: api-server
+            initialDelaySeconds: {{ .Values.trivy.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.trivy.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.trivy.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.trivy.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.trivy.readinessProbe.failureThreshold }}
+          {{- else if .Values.trivy.customRedinessProbe }}
+          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.trivy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          resources: {{- toYaml .Values.trivy.resources | nindent 12 }}
+        {{- if .Values.trivy.sidecars }}
+        {{- include "harbor.tplValue" (dict "value" .Values.trivy.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+    volumes:
+    {{- if not .Values.persistence.enabled }}
+      - name: data
+        emptyDir: {}
+    {{- end }}
+    {{- if .Values.trivy.extraVolumes }}
+    {{- include "harbor.tplValue" (dict "value" .Values.trivy.extraVolumes "context" $) | nindent 6 }}
+    {{- end }}
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels: {{- include "harbor.labels" . | nindent 10 }}
+      spec:
+        accessModes:
+          - {{ $trivyPVC.accessMode | quote }}
+        {{- if $trivyPVC.storageClass }}
+        {{- if (eq "-" $trivyPVC.storageClass) }}
+        storageClassName: ""
+        {{- else }}
+        storageClassName: {{ $trivyPVC.storageClass | quote }}
+        {{- end }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ $trivyPVC.size | quote }}
+  {{- end }}
+{{- end }}
