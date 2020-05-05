@@ -15,7 +15,7 @@ spec:
   alerting:
     alertmanagers:
     {{- if .Values.prometheus.alertingEndpoints }}
-    {{ include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | indent 6 }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | nindent 6 }}
     {{- else if .Values.alertmanager.enabled }}
       - namespace: {{ .Release.Namespace }}
         name: {{ template "prometheus-operator.alertmanager.fullname" . }}
