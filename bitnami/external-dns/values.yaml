@@ -289,6 +289,9 @@ pdns:
   apiUrl: ""
   apiPort: "8081"
   apiKey: ""
+  ## Use an external secret where pdns_api_key is defined
+  ##
+  # secretName: ""
 
 ## TransIP configuration to be set via arguments/env. variables
 ##
