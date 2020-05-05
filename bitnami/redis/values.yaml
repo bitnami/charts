@@ -317,6 +317,14 @@ master:
   ##
   affinity: {}
 
+  ## Kubernetes Spread Constraints for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ##
+  # - maxSkew: 1
+  #   topologyKey: node
+  #   whenUnsatisfiable: DoNotSchedule
+  spreadConstraints: {}
+
   ## Redis Master Service properties
   service:
     ##  Redis Master Service type
@@ -421,6 +429,14 @@ slave:
   ## Redis Slave pod/node affinity/anti-affinity
   ##
   affinity: {}
+
+  ## Kubernetes Spread Constraints for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ##
+  # - maxSkew: 1
+  #   topologyKey: node
+  #   whenUnsatisfiable: DoNotSchedule
+  spreadConstraints: {}
 
   ## Configure extra options for Redis Slave liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)

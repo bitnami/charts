@@ -63,6 +63,9 @@ spec:
       {{- if .Values.master.schedulerName }}
       schedulerName: {{ .Values.master.schedulerName }}
       {{- end }}
+      {{- if .Values.master.spreadConstraints }}
+      topologySpreadConstraints: {{- toYaml .Values.master.spreadConstraints | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ template "redis.name" . }}
           image: {{ template "redis.image" . }}
