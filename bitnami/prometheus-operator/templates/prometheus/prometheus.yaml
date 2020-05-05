@@ -151,6 +151,12 @@ spec:
     {{- if .Values.prometheus.podAffinity }}
     podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podAffinity "context" $) | nindent 6 }}
     {{- end }}
+  {{- if .Values.prometheus.volumes }}
+  volumes: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.volumeMounts }}
+  volumeMounts: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.prometheus.additionalScrapeConfigsExternal }}
   additionalScrapeConfigs:
     name: {{ template "prometheus-operator.prometheus.fullname" . }}-scrape-config
