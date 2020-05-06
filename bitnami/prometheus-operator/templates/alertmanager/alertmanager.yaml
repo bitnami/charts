@@ -81,6 +81,12 @@ spec:
     {{- if .Values.alertmanager.podAffinity }}
     podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podAffinity "context" $) | nindent 6 }}
     {{- end }}
+  {{- if .Values.alertmanager.volumes }}
+  volumes: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.volumes "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.alertmanager.volumeMounts }}
+  volumeMounts: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
+  {{- end }}
 {{- include "prometheus-operator.alertmanager.imagePullSecrets" . | indent 2 }}
   {{- if .Values.alertmanager.containers }}
   containers: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.containers "context" $) | nindent 4 }}

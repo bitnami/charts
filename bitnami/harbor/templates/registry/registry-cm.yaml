@@ -142,6 +142,7 @@ data:
       addr: "{{ template "harbor.redis.host" . }}:{{ template "harbor.redis.port" . }}"
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
     http:
+      relativeurls: {{ .Values.registry.relativeurls }}
       addr: :5000
       # set via environment variable
       # secret: placeholder
