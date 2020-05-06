@@ -15,7 +15,7 @@ spec:
       {{- if .Values.speaker.podAnnotations }}
       annotations: {{- toYaml .Values.speaker.podAnnotations | nindent 8 }}
       {{- end }}
-    spec: 
+    spec:
       {{- include "metallb.speaker.imagePullSecrets" . | nindent 6 }}
       tolerations:
       - key: node-role.kubernetes.io/master
@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.speaker.daemonset.terminationGracePeriodSeconds }}
       hostNetwork: true
       containers:
-      - name: speaker
+      - name: metallb-speaker
         image: {{ include "metallb.speaker.image" . }}
         imagePullPolicy: {{ .Values.speaker.image.pullPolicy }}
         args:
