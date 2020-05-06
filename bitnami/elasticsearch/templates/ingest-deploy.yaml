@@ -18,6 +18,9 @@ spec:
         app.kubernetes.io/component: ingest
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: ingest
+        {{- if .Values.ingest.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.ingest.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- with .Values.ingest.podAnnotations }}
       annotations: {{- toYaml . | nindent 10 }}
       {{- end }}

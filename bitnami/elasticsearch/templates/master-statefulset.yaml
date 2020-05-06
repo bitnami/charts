@@ -24,6 +24,9 @@ spec:
         app.kubernetes.io/component: master
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: master
+        {{- if .Values.master.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.master.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- with .Values.master.podAnnotations }}
       annotations: {{- toYaml . | nindent 8 }}
       {{- end }}

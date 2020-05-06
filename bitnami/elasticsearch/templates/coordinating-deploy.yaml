@@ -22,6 +22,9 @@ spec:
         app.kubernetes.io/component: coordinating-only
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: coordinating-only
+        {{- if .Values.coordinating.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- with .Values.coordinating.podAnnotations }}
       annotations: {{- toYaml . | nindent 10 }}
       {{- end }}
