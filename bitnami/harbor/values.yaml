@@ -783,6 +783,21 @@ core:
   ## The default key pair will be used if it isn't set
   ##
   secretName: ""
+  # lifecycleHooks for the core container to automate configuration before or after startup,
+  # i.e. to set LDAP settings through REST API calls
+  # lifecycleHooks: |
+  #    postStart:
+  #      exec:
+  #        command: ["/bin/bash", "-c", "echo lifecycleHook"]
+  # Other option: Insert scrip file via "helm install --set-file=postStartHookScript=${pwd()}/postStartHook.sh"
+  #  lifecycleHooks: |-
+  #    postStart:
+  #      exec:
+  #        command:
+  #          - "/bin/bash"
+  #          - "-c"
+  #          - >
+  #    {{  tpl (required ".Values.postStartHookScript required!" .Values.postStartHookScript) . | indent 8  }}
 
   ## Harbor Core containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
