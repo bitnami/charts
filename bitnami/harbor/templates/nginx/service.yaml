@@ -5,7 +5,7 @@ metadata:
 {{- if eq .Values.service.type "ClusterIP" }}
 {{- $clusterIP := .Values.service.clusterIP }}
   name: {{ $clusterIP.name }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -32,7 +32,7 @@ spec:
 {{- else if eq .Values.service.type "NodePort" }}
 {{- $nodePort := .Values.service.nodePort }}
   name: {{ $nodePort.name }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -67,7 +67,7 @@ spec:
 {{- else if eq .Values.service.type "LoadBalancer" }}
 {{- $loadBalancer := .Values.service.loadBalancer }}
   name: {{ $loadBalancer.name }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -102,6 +102,6 @@ spec:
       targetPort: 4443
     {{- end }}
 {{- end }}
-  selector: {{- include "harbor.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: nginx
 {{- end }}

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.core" . }}-envvars
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,7 +19,7 @@ data:
   POSTGRESQL_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
   EXT_ENDPOINT: {{ include "harbor.externalUrl" . | quote }}
   CORE_URL: {{ printf "http://%s" (include "harbor.core" .) | quote }}
-  JOBSERVICE_URL: {{ printf "http://%s-jobservice" (include "harbor.fullname" .) | quote }}
+  JOBSERVICE_URL: {{ printf "http://%s-jobservice" (include "common.names.fullname" .) | quote }}
   REGISTRY_URL: {{ printf "http://%s:5000" (include "harbor.registry" .) | quote }}
   TOKEN_SERVICE_URL: {{ printf "http://%s/service/token" (include "harbor.core" .) | quote }}
   WITH_NOTARY: {{ .Values.notary.enabled | quote }}

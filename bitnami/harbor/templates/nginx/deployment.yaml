@@ -3,10 +3,11 @@ apiVersion: {{ template "deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.nginx" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}    app.kubernetes.io/component: nginx
+    {{- end }}
+    app.kubernetes.io/component: nginx
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,11 +17,11 @@ spec:
   strategy: {{- toYaml .Values.nginx.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
-    matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: nginx
   template:
     metadata:
-      labels: {{- include "harbor.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.commonLabels }}
         {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}

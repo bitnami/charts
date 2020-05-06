@@ -102,8 +102,8 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `persistence.imageChartStorage.disableredirect`                             | The configuration for managing redirects from content backends. For backends which do not supported it (such as using minio for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail | `false`     |
 | `persistence.imageChartStorage.type`                                        | The type of storage for images and charts: `filesystem`, `azure`, `gcs`, `s3`, `swift` or `oss`. The type must be `filesystem` if you want to use persistent volumes for registry and chartmuseum. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage) for more information about the detail | `filesystem` |
 | **General**                                                                 |
-| `nameOverride`                                                              | String to partially override harbor.fullname template with a string (will prepend the release name) | `nil`       |
-| `fullnameOverride`                                                          | String to fully override harbor.fullname template with a string | `nil`       |
+| `nameOverride`                                                              | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`       |
+| `fullnameOverride`                                                          | String to fully override common.names.fullname template with a string | `nil`       |
 | `volumePermissions.enabled`                                                 | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`     |
 | `volumePermissions.image.registry`                                          | Init container volume-permissions image registry | `docker.io` |
 | `volumePermissions.image.repository`                                        | Init container volume-permissions image name | `bitnami/minideb` |
@@ -167,7 +167,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `jobserviceImage.pullSecrets`                                               | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `jobserviceImage.debug`                                                     | Specify if debug logs should be enabled      | `false`     |
 | `jobservice.replicas`                                                       | The replica count                            | `1`         |
-| `jobservice.updateStrategy.type`                                            | The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported | `RollingUpdate` 
+| `jobservice.updateStrategy.type`                                            | The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported | `RollingUpdate`
 | `jobservice.maxJobWorkers`                                                  | The max job workers                          | `10`        |
 | `jobservice.jobLogger`                                                      | The logger for jobs: `file`, `database` or `stdout` | `file`      |
 | `jobservice.resources`                                                      | The [resources] to allocate for container    | undefined   |
@@ -198,7 +198,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `registry.controller.livenessProbe`                                         | Liveness probe configuration for Registryctl | `Check values.yaml file` |
 | `registry.controller.readinessProbe`                                        | Readines probe configuration for Registryctl | `Check values.yaml file` |
 | `registry.replicas`                                                         | The replica count                            | `1`         |
-| `registry.updateStrategy.type`                                              | The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported | `RollingUpdate` 
+| `registry.updateStrategy.type`                                              | The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported | `RollingUpdate`
 | `registry.nodeSelector`                                                     | Node labels for pod assignment               | `{}` (The value is evaluated as a template) |
 | `registry.tolerations`                                                      | Tolerations for pod assignment               | `[]` (The value is evaluated as a template) |
 | `registry.affinity`                                                         | Node/Pod affinities                          | `{}` (The value is evaluated as a template) |
@@ -212,7 +212,7 @@ The following table lists the configurable parameters of the Harbor chart and th
 | `chartMuseumImage.debug`                                                    | Specify if debug logs should be enabled      | `false`     |
 | `chartmuseum.enabled`                                                       | Enable ChartMuseum                           | `true`      |
 | `chartmuseum.replicas`                                                      | Number of ChartMuseum replicas               | `1`         |
-| `chartmuseum.updateStrategy.type`                                           | The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported | `RollingUpdate` 
+| `chartmuseum.updateStrategy.type`                                           | The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported | `RollingUpdate`
 | `chartmuseum.port`                                                          | ChartMuseum listen port                      | `8080`      |
 | `chartmuseum.useRedisCache`                                                 | Specify if ChartMuseum will use redis cache  | `true`      |
 | `chartmuseum.absoluteUrl`                                                   | Specify an absolute URL for ChartMuseum registry | `false`     |

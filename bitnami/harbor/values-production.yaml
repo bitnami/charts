@@ -30,6 +30,7 @@ coreImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Portal image
@@ -54,6 +55,7 @@ portalImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Job Service image
@@ -78,6 +80,7 @@ jobserviceImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami ChartMuseum image
@@ -102,6 +105,7 @@ chartMuseumImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Registry image
@@ -126,6 +130,7 @@ registryImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Registryctl image
@@ -150,6 +155,7 @@ registryctlImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Clair image
@@ -174,6 +180,7 @@ clairImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Adapter Clair image
@@ -198,6 +205,7 @@ clairAdapterImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Notary Server image
@@ -222,6 +230,7 @@ notaryServerImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Harbor Notary Signer image
@@ -246,6 +255,7 @@ notarySignerImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## Bitnami Nginx image
@@ -270,13 +280,14 @@ nginxImage:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
-## String to partially override harbor.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override harbor.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
@@ -611,10 +622,12 @@ forcePassword: true
 ## The initial password of Harbor admin. Change it from portal after launching Harbor
 ##
 ## harborAdminPassword:
+##
 
 ## The secret key used for encryption. Must be a string of 16 chars.
 ##
 ## secretKey: "not-a-secure-key"
+##
 
 ## If expose the service via Ingress, the NGINX server will not be used
 ##
@@ -806,11 +819,12 @@ core:
 ##
 jobservice:
   ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
   updateStrategy:
-    type: RollingUpdate   
+    type: RollingUpdate
   replicas: 1
   maxJobWorkers: 10
   # The logger for jobs: "file", "database" or "stdout"
@@ -877,11 +891,12 @@ jobservice:
 registry:
   replicas: 1
   ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
   updateStrategy:
-    type: RollingUpdate     
+    type: RollingUpdate
   ## Harbor Registry parameters
   ##
   registry:
@@ -984,19 +999,22 @@ registry:
 chartmuseum:
   enabled: true
   ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the 
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will 
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
   updateStrategy:
-    type: RollingUpdate   
+    type: RollingUpdate
   replicas: 1
   port: 8080
 
   ## Set the use of the Redis cache.
+  ##
   useRedisCache: true
 
   ## Set the absolute URL to access the chartmuseum repository and the
   ## endpoint where it will be available.
+  ##
   absoluteUrl: false
   chartRepoName: "chartsRepo"
 
@@ -1017,6 +1035,7 @@ chartmuseum:
   # provPostFormFieldName: "prov"
 
   ## Enable the TLS access to the ChartMuseum server.
+  ##
   enableTLS: false
 
   ## An array to add extra env vars to chartmuseum
@@ -1024,6 +1043,7 @@ chartmuseum:
   ## extraEnvVars:
   ##  - name: BEARER_AUTH
   ##    value: true
+  ##
 
   ## Chartmuseum containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -1266,7 +1286,6 @@ externalRedis:
   jobserviceDatabaseIndex: "1"
   registryDatabaseIndex: "2"
   chartmuseumDatabaseIndex: "3"
-
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml

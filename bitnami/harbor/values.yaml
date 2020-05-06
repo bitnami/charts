@@ -311,11 +311,11 @@ nginxImage:
   ##
   debug: false
 
-## String to partially override harbor.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride:
 
-## String to fully override harbor.fullname template
+## String to fully override common.names.fullname template
 ##
 fullnameOverride:
 

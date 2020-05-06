@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "harbor.trivy" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -17,11 +17,11 @@ spec:
   serviceName: {{ template "harbor.trivy" . }}
   updateStrategy: {{- toYaml .Values.trivy.updateStrategy | nindent 4 }}
   selector:
-    matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: trivy
   template:
     metadata:
-      labels: {{- include "harbor.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.commonLabels }}
         {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -166,17 +166,11 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels: {{- include "harbor.labels" . | nindent 10 }}
+        labels: {{- include "common.labels.standard" . | nindent 10 }}
       spec:
         accessModes:
           - {{ $trivyPVC.accessMode | quote }}
-        {{- if $trivyPVC.storageClass }}
-        {{- if (eq "-" $trivyPVC.storageClass) }}
-        storageClassName: ""
-        {{- else }}
-        storageClassName: {{ $trivyPVC.storageClass | quote }}
-        {{- end }}
-        {{- end }}
+        {{- include "harbor.trivy.storageClass" . | nindent 8 }}
         resources:
           requests:
             storage: {{ $trivyPVC.size | quote }}

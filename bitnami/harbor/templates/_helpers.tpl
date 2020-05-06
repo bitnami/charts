@@ -7,44 +7,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- default "harbor" .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "harbor.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "harbor.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Helm required labels */}}
-{{- define "harbor.labels" -}}
-app.kubernetes.io/name: "{{ template "harbor.name" . }}"
-helm.sh/chart: "{{ template "harbor.chart" . }}"
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/* matchLabels */}}
-{{- define "harbor.matchLabels" -}}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/name: "{{ template "harbor.name" . }}"
-{{- end -}}
-
 {{- define "harbor.autoGenCert" -}}
   {{- if and .Values.service.tls.enabled (not .Values.service.tls.secretName) -}}
     {{- printf "true" -}}
@@ -301,61 +263,62 @@ host:port,pool_size,password
 {{- end -}}
 
 {{- define "harbor.portal" -}}
-  {{- printf "%s-portal" (include "harbor.fullname" .) -}}
+  {{- printf "%s-portal" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.core" -}}
-  {{- printf "%s-core" (include "harbor.fullname" .) -}}
+  {{- printf "%s-core" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.redis" -}}
-  {{- printf "%s-redis" (include "harbor.fullname" .) -}}
+  {{- printf "%s-redis" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.jobservice" -}}
-  {{- printf "%s-jobservice" (include "harbor.fullname" .) -}}
+  {{- printf "%s-jobservice" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.registry" -}}
-  {{- printf "%s-registry" (include "harbor.fullname" .) -}}
+  {{- printf "%s-registry" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.chartmuseum" -}}
-  {{- printf "%s-chartmuseum" (include "harbor.fullname" .) -}}
+  {{- printf "%s-chartmuseum" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.database" -}}
-  {{- printf "%s-database" (include "harbor.fullname" .) -}}
+  {{- printf "%s-database" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.clair" -}}
-  {{- printf "%s-clair" (include "harbor.fullname" .) -}}
+  {{- printf "%s-clair" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.trivy" -}}
-  {{- printf "%s-trivy" (include "harbor.fullname" .) -}}
+  {{- printf "%s-trivy" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.notary-server" -}}
-  {{- printf "%s-notary-server" (include "harbor.fullname" .) -}}
+  {{- printf "%s-notary-server" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.notary-signer" -}}
-  {{- printf "%s-notary-signer" (include "harbor.fullname" .) -}}
+  {{- printf "%s-notary-signer" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.nginx" -}}
-  {{- printf "%s-nginx" (include "harbor.fullname" .) -}}
+  {{- printf "%s-nginx" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.ingress" -}}
-  {{- printf "%s-ingress" (include "harbor.fullname" .) -}}
+  {{- printf "%s-ingress" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.noProxy" -}}
   {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.chartmuseum" .) (include "harbor.clair" .) (include "harbor.notary-server" .) (include "harbor.notary-signer" .) (include "harbor.registry" .) (include "harbor.portal" .) .Values.proxy.noProxy -}}
 {{- end -}}
 
+{{/*
 Create a default fully qualified nginx name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -368,421 +331,104 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the proper Harbor Core image name
 */}}
 {{- define "harbor.coreImage" -}}
-{{- $registryName := .Values.coreImage.registry -}}
-{{- $repositoryName := .Values.coreImage.repository -}}
-{{- $tag := .Values.coreImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.coreImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Portal image name
 */}}
 {{- define "harbor.portalImage" -}}
-{{- $registryName := .Values.portalImage.registry -}}
-{{- $repositoryName := .Values.portalImage.repository -}}
-{{- $tag := .Values.portalImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.portalImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Trivy Adapter image name
 */}}
 {{- define "harbor.trivyImage" -}}
-{{- $registryName := .Values.trivyImage.registry -}}
-{{- $repositoryName := .Values.trivyImage.repository -}}
-{{- $tag := .Values.trivyImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.trivyImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Job Service image name
 */}}
 {{- define "harbor.jobserviceImage" -}}
-{{- $registryName := .Values.jobserviceImage.registry -}}
-{{- $repositoryName := .Values.jobserviceImage.repository -}}
-{{- $tag := .Values.jobserviceImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.jobserviceImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper ChartMuseum image name
 */}}
 {{- define "harbor.chartMuseumImage" -}}
-{{- $registryName := .Values.chartMuseumImage.registry -}}
-{{- $repositoryName := .Values.chartMuseumImage.repository -}}
-{{- $tag := .Values.chartMuseumImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.chartMuseumImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Notary Server image name
 */}}
 {{- define "harbor.notaryServerImage" -}}
-{{- $registryName := .Values.notaryServerImage.registry -}}
-{{- $repositoryName := .Values.notaryServerImage.repository -}}
-{{- $tag := .Values.notaryServerImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.notaryServerImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Notary Signer image name
 */}}
 {{- define "harbor.notarySignerImage" -}}
-{{- $registryName := .Values.notarySignerImage.registry -}}
-{{- $repositoryName := .Values.notarySignerImage.repository -}}
-{{- $tag := .Values.notarySignerImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.notarySignerImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Registry image name
 */}}
 {{- define "harbor.registryImage" -}}
-{{- $registryName := .Values.registryImage.registry -}}
-{{- $repositoryName := .Values.registryImage.repository -}}
-{{- $tag := .Values.registryImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.registryImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Registryctl image name
 */}}
 {{- define "harbor.registryctlImage" -}}
-{{- $registryName := .Values.registryctlImage.registry -}}
-{{- $repositoryName := .Values.registryctlImage.repository -}}
-{{- $tag := .Values.registryctlImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.registryctlImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Clair image name
 */}}
 {{- define "harbor.clairImage" -}}
-{{- $registryName := .Values.clairImage.registry -}}
-{{- $repositoryName := .Values.clairImage.repository -}}
-{{- $tag := .Values.clairImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.clairImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Clair image name
 */}}
 {{- define "harbor.clairAdapterImage" -}}
-{{- $registryName := .Values.clairAdapterImage.registry -}}
-{{- $repositoryName := .Values.clairAdapterImage.repository -}}
-{{- $tag := .Values.clairAdapterImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.clairAdapterImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Nginx image name
 */}}
 {{- define "harbor.nginxImage" -}}
-{{- $registryName := .Values.nginxImage.registry -}}
-{{- $repositoryName := .Values.nginxImage.repository -}}
-{{- $tag := .Values.nginxImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.nginxImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "harbor.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if or .Values.coreImage.pullSecrets .Values.chartMuseumImage.pullSecrets .Values.clairImage.pullSecrets .Values.clairAdapterImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets .Values.trivyImage.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.clairAdapterImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.clairImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.chartMuseumImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.coreImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.portalImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.jobserviceImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.notaryServerImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.notarySignerImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.registryImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.registryctlImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.nginxImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.trivyImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if or .Values.coreImage.pullSecrets .Values.chartMuseumImage.pullSecrets .Values.clairImage.pullSecrets .Values.clairAdapterImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.trivyImage.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.clairAdapterImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.clairImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.chartMuseumImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.coreImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.portalImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.jobserviceImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.notaryServerImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.notarySignerImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.registryImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.registryctlImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.nginxImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.trivyImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.clairImage .Values.clairAdapterImage .Values.trivyImage .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets) "global" $) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "harbor.checkRollingTags" -}}
-{{- if and (contains "bitnami/" .Values.chartMuseumImage.repository) (not (.Values.chartMuseumImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.chartMuseumImage.repository }}:{{ .Values.chartMuseumImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.clairImage.repository) (not (.Values.clairImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.clairImage.repository }}:{{ .Values.clairImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.clairAdapterImage.repository) (not (.Values.clairAdapterImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.clairAdapterImage.repository }}:{{ .Values.clairAdapterImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.coreImage.repository) (not (.Values.coreImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.coreImage.repository }}:{{ .Values.coreImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.portalImage.repository) (not (.Values.portalImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.portalImage.repository }}:{{ .Values.portalImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.jobserviceImage.repository) (not (.Values.jobserviceImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.jobserviceImage.repository }}:{{ .Values.jobserviceImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.registryImage.repository) (not (.Values.registryImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.registryImage.repository }}:{{ .Values.registryImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.registryctlImage.repository) (not (.Values.registryctlImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.registryctlImage.repository }}:{{ .Values.registryctlImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.nginxImage.repository) (not (.Values.nginxImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.trivyImage.repository) (not (.Values.trivyImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.trivyImage.repository }}:{{ .Values.trivyImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
+{{- include "common.warnings.rollingTag" .Values.coreImage -}}
+{{- include "common.warnings.rollingTag" .Values.portalImage -}}
+{{- include "common.warnings.rollingTag" .Values.jobserviceImage -}}
+{{- include "common.warnings.rollingTag" .Values.registryImage -}}
+{{- include "common.warnings.rollingTag" .Values.registryctlImage -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
+{{- include "common.warnings.rollingTag" .Values.clairImage -}}
+{{- include "common.warnings.rollingTag" .Values.clairAdapterImage -}}
+{{- include "common.warnings.rollingTag" .Values.trivyImage -}}
 {{- end -}}
 
 {{/*
@@ -820,131 +466,35 @@ harbor: External PostgreSQL password
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "harbor.volumePermissions.image" -}}
-{{- $registryName := .Values.volumePermissions.image.registry -}}
-{{- $repositoryName := .Values.volumePermissions.image.repository -}}
-{{- $tag := .Values.volumePermissions.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" Values.volumePermissions.image "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Storage Class for chartmuseum
 */}}
 {{- define "harbor.chartmuseum.storageClass" -}}
-{{- $chartmuseum := .Values.persistence.persistentVolumeClaim.chartmuseum -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if $chartmuseum.storageClass -}}
-              {{- if (eq "-" $chartmuseum.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" $chartmuseum.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if $chartmuseum.storageClass -}}
-        {{- if (eq "-" $chartmuseum.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" $chartmuseum.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.chartmuseum "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Storage Class for jobservice
 */}}
 {{- define "harbor.jobservice.storageClass" -}}
-{{- $jobservice := .Values.persistence.persistentVolumeClaim.jobservice -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if $jobservice.storageClass -}}
-              {{- if (eq "-" $jobservice.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" $jobservice.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if $jobservice.storageClass -}}
-        {{- if (eq "-" $jobservice.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" $jobservice.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.jobservice "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Storage Class for registry
 */}}
 {{- define "harbor.registry.storageClass" -}}
-{{- $registry := .Values.persistence.persistentVolumeClaim.registry -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if $registry.storageClass -}}
-              {{- if (eq "-" $registry.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" $registry.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if $registry.storageClass -}}
-        {{- if (eq "-" $registry.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" $registry.storageClass -}}
-        {{- end -}}
-    {{- end -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.registry "global" $) -}}
 {{- end -}}
+
+{{/*
+Return the proper Storage Class for trivy
+*/}}
+{{- define "harbor.trivy.storageClass" -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.trivy "global" $) -}}
 {{- end -}}
 
 {{/*
