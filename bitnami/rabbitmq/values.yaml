@@ -198,6 +198,10 @@ service:
   ##
   # nodePort: 30672
 
+  ## Set the ExternalIP
+  ##
+  # externalIPs:
+
   ## Set the LoadBalancerIP
   ##
   # loadBalancerIP:
