@@ -234,6 +234,25 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Return PostgreSQL postgres user password
+*/}}
+{{- define "postgresql-ha.postgresqlPostgresPassword" -}}
+{{- if .Values.global }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.postgresPassword }}
+            {{- .Values.global.postgresql.postgresPassword -}}
+        {{- else -}}
+            {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
+        {{- end -}}
+    {{- else -}}
+        {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
+    {{- end -}}
+{{- else -}}
+    {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the PostgreSQL password
 */}}
 {{- define "postgresql-ha.postgresqlPassword" -}}
