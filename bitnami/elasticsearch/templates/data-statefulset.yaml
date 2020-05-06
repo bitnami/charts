@@ -109,6 +109,8 @@ spec:
             - name: ELASTICSEARCH_NODE_TYPE
               value: "data"
           ports:
+            - name: http
+              containerPort: 9200
             - name: transport
               containerPort: 9300
           {{- if .Values.data.livenessProbe.enabled }}
