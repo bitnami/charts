@@ -1340,7 +1340,21 @@ externalDatabase:
   ## coreDatabase:
   ## External database name for clair
   ## clairDatabase:
+  ## if not set, database.external.user is used
+  ## clairUsername: ""
+  ## if not set, database.external.password is used
+  ## clairPassword: ""
   ## External database name for notaryserver
   ## notaryServerDatabase:
-  ## External database name for notaryserver
+  ## notaryServerDatabase: "notary_server"
+  ## if not set, database.external.user is used
+  ## notaryServerUsername: ""
+  ## if not set, database.external.password is used
+  ## notaryServerPassword: ""
+  ## External database name for notarysigner
   ## notarySignerDatabase:
+  ## notarySignerDatabase: "notary_signer"
+  ## if not set, database.external.user is used
+  ## notarySignerUsername: ""
+  ## if not set, database.external.password is used
+  ## notarySignerPassword: ""
