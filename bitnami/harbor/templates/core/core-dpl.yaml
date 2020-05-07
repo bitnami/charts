@@ -67,6 +67,9 @@ spec:
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.core.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.core.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.core.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

@@ -63,6 +63,9 @@ spec:
           {{- if .Values.clair.server.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.clair.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.clair.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -136,6 +139,9 @@ spec:
           {{- end }}
           {{- if .Values.clair.adapter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clair.adapter.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}

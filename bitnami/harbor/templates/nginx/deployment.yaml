@@ -118,6 +118,9 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.nginx.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- if .Values.nginx.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.nginx.resources }}
           resources: {{- toYaml .Values.nginx.resources | nindent 12 }}
           {{- end }}

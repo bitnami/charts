@@ -68,6 +68,9 @@ spec:
           {{- if .Values.notary.server.resources }}
           resources: {{- toYaml .Values.notary.server.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.notary.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.notaryServerImage.debug | quote }}

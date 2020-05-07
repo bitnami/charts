@@ -61,6 +61,9 @@ spec:
           {{- if .Values.notary.signer.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.notary.signer.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}

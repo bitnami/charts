@@ -11,8 +11,3 @@ redis:
   enabled: true
   cluster:
     enabled: true
-
-postgresql:
-  enabled: true
-  replication:
-    enabled: true

@@ -65,6 +65,9 @@ spec:
           {{- if .Values.chartmuseum.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.chartmuseum.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.chartmuseum.resources }}
           resources: {{- toYaml .Values.chartmuseum.resources | nindent 12 }}
           {{- end }}

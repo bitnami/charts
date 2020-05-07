@@ -14,7 +14,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,7 +39,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 1.10.2-debian-10-r15
+  tag: 1.10.2-debian-10-r31
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -65,7 +65,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,7 +90,7 @@ jobserviceImage:
 chartMuseumImage:
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.12.0-debian-10-r28
+  tag: 0.12.0-debian-10-r41
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -115,7 +115,7 @@ chartMuseumImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -140,7 +140,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -190,7 +190,7 @@ trivyImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r33
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -216,7 +216,7 @@ clairImage:
 clairAdapterImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 1.0.2-debian-10-r9
+  tag: 1.0.2-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -241,7 +241,7 @@ clairAdapterImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -266,7 +266,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.2-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -291,7 +291,7 @@ notarySignerImage:
 nginxImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.1-debian-10-r95
+  tag: 1.17.10-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -774,6 +774,9 @@ nginx:
   ## This is, for example, the case for the OpenShift HAProxy router.
   ##
   behindReverseProxy: false
+  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks:
   ## NGINX containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -810,6 +813,10 @@ portal:
   ##
   updateStrategy:
     type: RollingUpdate
+
+  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks:
 
   ## Custom Liveness probe
   ##
@@ -1040,6 +1047,23 @@ core:
   ## The CSRF key. Will be generated automatically if it isn't specified
   ##
   csrfKey: ""
+  ## lifecycleHooks for the container to automate configuration before or after startup,
+  ## i.e. to set LDAP settings through REST API calls
+  ## lifecycleHooks: |
+  ##    postStart:
+  ##      exec:
+  ##        command: ["/bin/bash", "-c", "echo lifecycleHook"]
+  ## Other option: Insert scrip file via "helm install --set-file=postStartHookScript=${pwd()}/postStartHook.sh"
+  ##  lifecycleHooks: |-
+  ##    postStart:
+  ##      exec:
+  ##        command:
+  ##          - "/bin/bash"
+  ##          - "-c"
+  ##          - >
+  ##    {{  tpl (required ".Values.postStartHookScript required!" .Values.postStartHookScript) . | indent 8  }}
+  ##
+  lifecycleHooks:
 
   ## Harbor Core containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1451,6 +1475,10 @@ chartmuseum:
   ##
   enableTLS: false
 
+  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks:
+
   ## Custom Liveness probe
   ##
   customLivenessProbe: {}
@@ -1617,6 +1645,10 @@ clair:
       failureThreshold: 6
       successThreshold: 1
 
+    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ##
+    lifecycleHooks:
+
     ## Custom Liveness probe
     ##
     customLivenessProbe: {}
@@ -1668,6 +1700,10 @@ clair:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+
+    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ##
+    lifecycleHooks:
 
     ## Custom Liveness probe
     ##
@@ -1867,6 +1903,11 @@ trivy:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+
+  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks:
+
   ## Custom Liveness probe
   ##
   customLivenessProbe: {}
@@ -1970,6 +2011,11 @@ notary:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+
+    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ##
+    lifecycleHooks:
+
     ## Custom Liveness probe
     ##
     customLivenessProbe: {}
@@ -2114,6 +2160,11 @@ notary:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+
+    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ##
+    lifecycleHooks:
+
     ## Custom Liveness probe
     ##
     customLivenessProbe: {}

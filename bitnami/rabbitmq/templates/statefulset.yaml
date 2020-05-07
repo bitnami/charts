@@ -106,7 +106,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- if .Values.extraVolumeMounts }}
-            {{- toYaml .Values.extraVolumeMounts | indent 12 }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
             - name: config-volume
               mountPath: /opt/bitnami/rabbitmq/conf

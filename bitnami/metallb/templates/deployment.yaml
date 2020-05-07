@@ -16,11 +16,11 @@ spec:
       {{- if .Values.controller.podAnnotations }}
       annotations: {{- toYaml .Values.controller.podAnnotations | nindent 8 }}
       {{- end }}
-    spec: 
+    spec:
       {{- include "metallb.controller.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "metallb.controllerServiceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
-      nodeSelector: 
+      nodeSelector:
       {{- if .Values.controller.nodeSelector }} {{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
         "kubernetes.io/os": linux
@@ -31,7 +31,7 @@ spec:
       tolerations: {{- include "metallb.tplValue" (dict "value" .Values.controller.tolerations "context" $) | nindent 8 }}
       {{- end }}
       containers:
-      - name: controller
+      - name: metallb-controller
         image: {{ include "metallb.controller.image" . }}
         imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
         args:

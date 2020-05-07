@@ -114,6 +114,9 @@ spec:
           {{- else if .Values.jobservice.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.jobservice.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.jobservice.resources }}
           resources: {{- toYaml .Values.jobservice.resources | nindent 12 }}
           {{- end }}

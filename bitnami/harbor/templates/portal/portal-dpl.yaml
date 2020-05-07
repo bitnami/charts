@@ -58,6 +58,9 @@ spec:
           {{- if .Values.portal.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.portal.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.portal.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.portal.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.portal.resources }}
           resources: {{- toYaml .Values.portal.resources | nindent 12 }}
           {{- end }}

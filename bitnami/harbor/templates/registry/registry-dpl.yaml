@@ -113,6 +113,9 @@ spec:
           {{- else if .Values.registry.server.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.registry.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.registry.server.resources }}
           resources: {{- toYaml .Values.registry.server.resources | nindent 12 }}
           {{- end }}
@@ -179,6 +182,9 @@ spec:
           {{- end }}
           {{- if .Values.registry.controller.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.registry.controller.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}

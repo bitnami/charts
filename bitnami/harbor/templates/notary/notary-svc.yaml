@@ -34,7 +34,7 @@ metadata:
   {{- end }}
 spec:
   ports:
-    - port: notary-signer
+    - name: notary-signer
       port: 7899
       targetPort: notary-signer
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

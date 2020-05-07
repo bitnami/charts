@@ -124,6 +124,9 @@ spec:
             {{- if .Values.trivy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.trivy.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+          {{- if .Values.trivy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.trivy.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -155,14 +158,14 @@ spec:
         {{- if .Values.trivy.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.trivy.sidecars "context" $) | nindent 8 }}
         {{- end }}
-    volumes:
-    {{- if not .Values.persistence.enabled }}
-      - name: data
-        emptyDir: {}
-    {{- end }}
-    {{- if .Values.trivy.extraVolumes }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.trivy.extraVolumes "context" $) | nindent 6 }}
-    {{- end }}
+      volumes:
+      {{- if not .Values.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+      {{- end }}
+      {{- if .Values.trivy.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.trivy.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
