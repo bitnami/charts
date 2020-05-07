@@ -161,6 +161,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s-%s" .Release.Name $name .Values.data.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{ template "elasticsearch.initdbScriptsCM" . }}
+{{/*
+Get the initialization scripts ConfigMap name.
+*/}}
+{{- define "elasticsearch.initdbScriptsCM" -}}
+{{- if .Values.initdbScriptsConfigMap -}}
+{{- printf "%s" .Values.initdbScriptsConfigMap -}}
+{{- else -}}
+{{- printf "%s-init-scripts" (include "elasticsearch.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
  Create the name of the master service account to use
  */}}

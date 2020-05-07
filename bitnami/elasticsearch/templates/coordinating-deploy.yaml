@@ -122,6 +122,10 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
+            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.sh") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+            {{- end }}
       volumes:
         {{- if .Values.sysctlImage.enabled }}
         - name: initcontainer-script
@@ -138,4 +142,9 @@ spec:
           emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.sh") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "elasticsearch.initdbScriptsCM" . }}
         {{- end }}
