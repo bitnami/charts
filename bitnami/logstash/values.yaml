@@ -130,6 +130,11 @@ updateStrategy: RollingUpdate
 ##
 podManagementPolicy: OrderedReady
 
+## Pod annotations. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##

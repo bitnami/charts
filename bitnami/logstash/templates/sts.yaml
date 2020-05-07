@@ -19,6 +19,9 @@ spec:
       labels: {{- include "logstash.labels" . | nindent 8 }}
       annotations:
         checksum/configuration: {{ include (print $.Template.BasePath "/configuration-cm.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- include "logstash.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
 {{- include "logstash.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
