@@ -76,6 +76,20 @@ spec:
               value: "yes"
             - name: ELASTICSEARCH_NODE_TYPE
               value: "ingest"
+            {{- if .Values.extraEnvVars }}
+            {{- include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsConfigMap .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsConfigMap }}
+            - configMapRef:
+                name: {{ include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVarsConfigMap "context" $ ) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: transport
               containerPort: 9300

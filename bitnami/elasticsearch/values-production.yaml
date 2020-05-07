@@ -143,6 +143,22 @@ discovery:
 ## Note: This will override initdbScripts
 # initdbScriptsConfigMap:
 
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: MY_ENV_VAR
+##    value: env_var_value
+##
+extraEnvVars: []
+
+## Name of a ConfigMap containing extra env vars
+##
+extraEnvVarsConfigMap:
+
+## Name of a Secret containing extra env vars
+##
+extraEnvVarsSecret:
+
 ## Elasticsearch master-eligible node parameters
 ##
 master:

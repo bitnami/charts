@@ -72,6 +72,9 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `extraVolumeMounts`                               | Mount extra volume(s),                                                                                                                                    |                                                              |
 | `initdbScripts`                                   | Dictionary of initdb scripts                                                                                                                              | `nil`                                                        |
 | `initdbScriptsConfigMap`                          | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                       | `nil`                                                        |
+| `extraEnvVars`                                    | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                         | `[]`                                                         |
+| `extraEnvVarsConfigMap`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                                     | `nil`                                                        |
+| `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                        | `nil`                                                        |
 | `master.name`                                     | Master-eligible node pod name                                                                                                                             | `master`                                                     |
 | `master.replicas`                                 | Desired number of Elasticsearch master-eligible nodes                                                                                                     | `2`                                                          |
 | `master.updateStrategy.type`                      | Update strategy for Master statefulset                                                                                                                    | `RollingUpdate`                                              |
@@ -463,6 +466,18 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 
 This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter. It is enabled by default using the `values-production.yaml` file.
 To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: ELASTICSEARCH_VERSION
+    value: 7.0
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsConfigMap` or the `extraEnvVarsSecret` values.
 
 ## Persistence
 
