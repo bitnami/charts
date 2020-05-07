@@ -5,10 +5,10 @@ metadata:
   name: {{ include "harbor.notary-server" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
 {{- if (eq .Values.service.ingress.controller "gce") }}
@@ -27,10 +27,10 @@ metadata:
   name: {{ include "harbor.notary-signer" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   ports:

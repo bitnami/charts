@@ -5,11 +5,11 @@ metadata:
   name: {{ include "harbor.nginx" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: nginx
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.nginx.replicas }}
@@ -23,10 +23,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.commonLabels }}
-        {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.nginx.podLabels }}
-        {{- include "harbor.tplValue" (dict "value" .Values.nginx.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.nginx.podLabels "context" $) | nindent 8 }}
         {{- end }}
         app.kubernetes.io/component: nginx
       annotations:
@@ -39,36 +39,37 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/nginx/secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.nginx.podAnnotations }}
-        annotations: {{- include "harbor.tplValue" (dict "value" .Values.nginx.podAnnotations "context" $) | nindent 8 }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.nginx.affinity }}
-      affinity: {{- include "harbor.tplValue" (dict "value" .Values.nginx.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.nginx.nodeSelector }}
-      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.nginx.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.nginx.tolerations }}
-      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.nginx.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.nginx.initContainers }}
-      initContainers: {{- include "harbor.tplValue" (dict "value" .Values.nginx.initContainers "context" $) | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: nginx
           image: {{ include "harbor.nginxImage" . }}
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | quote }}
           {{- if .Values.nginx.command }}
-          command: {{- include "harbor.tplValue" (dict "value" .Values.nginx.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.nginx.args }}
-          args: {{- include "harbor.tplValue" (dict "value" .Values.nginx.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.nginx.livenessProbe.enabled }}
           livenessProbe:
@@ -84,7 +85,7 @@ spec:
             successThreshold: {{ .Values.nginx.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.nginx.livenessProbe.failureThreshold }}
           {{- else if .Values.nginx.customLivenessProbe }}
-          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.nginx.customLivenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.nginx.readinessProbe.enabled }}
           readinessProbe:
@@ -100,22 +101,22 @@ spec:
             successThreshold: {{ .Values.nginx.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.nginx.readinessProbe.failureThreshold }}
           {{- else if .Values.nginx.customReadinessProbe }}
-          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.nginx.customReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.nginxImage.debug | quote }}
             {{- if .Values.nginx.extraEnvVars }}
-            {{- include "harbor.tplValue" (dict "value" .Values.nginx.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.nginx.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.nginx.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "harbor.tplValue" (dict "value" .Values.nginx.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.nginx.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.nginx.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "harbor.tplValue" (dict "value" .Values.nginx.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.nginx.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if .Values.nginx.resources }}
           resources: {{- toYaml .Values.nginx.resources | nindent 12 }}
@@ -136,10 +137,10 @@ spec:
               mountPath: /etc/nginx/cert
             {{- end }}
             {{- if .Values.nginx.extraVolumeMounts }}
-            {{- include "harbor.tplValue" (dict "value" .Values.nginx.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.nginx.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.nginx.sidecars }}
-        {{- include "harbor.tplValue" (dict "value" .Values.nginx.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.nginx.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: config
@@ -155,6 +156,6 @@ spec:
             {{- end }}
         {{- end }}
       {{- if .Values.nginx.extraVolumes }}
-      {{- include "harbor.tplValue" (dict "value" .Values.nginx.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.nginx.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
 {{- end }}

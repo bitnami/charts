@@ -5,11 +5,11 @@ metadata:
   name: {{ include "harbor.chartmuseum" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: chartmuseum
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.chartmuseum.replicas }}
@@ -23,46 +23,47 @@ spec:
     metadata:
       labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
         {{- if .Values.commonLabels }}
-        {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
         {{- end }}
         {{- if .Values.chartmuseum.podLabels }}
-        {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.podLabels "context" $) | nindent 8 }}
         {{- end }}
         app.kubernetes.io/component: chartmuseum
       annotations:
         checksum/configmap-envvars: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-cm-envvars.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if .Values.chartmuseum.podAnnotations }}
-        {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.chartmuseum.affinity }}
-      affinity: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.chartmuseum.nodeSelector }}
-      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.chartmuseum.tolerations }}
-      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.chartmuseum.initContainers }}
-      initContainers: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.initContainers "context" $) | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: chartmuseum
           image: {{ include "harbor.chartMuseumImage" . }}
           imagePullPolicy: {{ .Values.chartMuseumImage.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.chartmuseum.command }}
-          command: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.chartmuseum.args }}
-          args: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.chartmuseum.resources }}
           resources: {{- toYaml .Values.chartmuseum.resources | nindent 12 }}
@@ -81,7 +82,7 @@ spec:
             successThreshold: {{ .Values.chartmuseum.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.chartmuseum.livenessProbe.failureThreshold }}
           {{- else if .Values.chartmuseum.customLivenessProbe }}
-          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.customLivenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.chartmuseum.readinessProbe.enabled }}
           readinessProbe:
@@ -97,7 +98,7 @@ spec:
             successThreshold: {{ .Values.chartmuseum.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.chartmuseum.readinessProbe.failureThreshold }}
           {{- else if .Values.chartmuseum.customReadinessProbe }}
-          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.customReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           envFrom:
             - configMapRef:
@@ -106,11 +107,11 @@ spec:
                 name: {{ include "harbor.chartmuseum" . }}-secret
             {{- if .Values.chartmuseum.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "harbor.tplValue" (dict "value" .Values.chartmuseum.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.chartmuseum.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "harbor.tplValue" (dict "value" .Values.chartmuseum.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVarsSecret "context" $) }}
             {{- end }}
           env:
             - name: DEBUG
@@ -124,7 +125,7 @@ spec:
               value: {{ include "harbor.noProxy" . | quote }}
             {{- end }}
             {{- if .Values.chartmuseum.extraEnvVars }}
-            {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
             - name: BASIC_AUTH_PASS
               valueFrom:
@@ -138,6 +139,7 @@ spec:
           volumeMounts:
             - name: chartmuseum-data
               mountPath: /bitnami/data
+              subPath: {{ .Values.persistence.persistentVolumeClaim.chartmuseum.subPath }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
             - name: gcs-key
               mountPath: /etc/chartmuseum/gcs-key.json
@@ -153,10 +155,10 @@ spec:
               subPath: ca.crt
             {{- end }}
             {{- if .Values.chartmuseum.extraVolumeMounts }}
-            {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.chartmuseum.sidecars }}
-        {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: chartmuseum-data
@@ -190,6 +192,6 @@ spec:
                 path: server.key
         {{- end }}
       {{- if .Values.chartmuseum.extraVolumes }}
-      {{- include "harbor.tplValue" (dict "value" .Values.chartmuseum.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
 {{- end }}

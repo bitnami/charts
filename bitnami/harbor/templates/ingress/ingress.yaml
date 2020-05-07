@@ -1,6 +1,4 @@
 {{- if eq .Values.service.type "Ingress" }}
-{{- $ingress := .Values.service.ingress -}}
-{{- $tls := .Values.service.tls -}}
 {{- if eq .Values.service.ingress.controller "gce" }}
   {{- $_ := set . "portal_path" "/*" -}}
   {{- $_ := set . "api_path" "/api/*" -}}
@@ -29,38 +27,38 @@ metadata:
   name: {{ include "harbor.ingress" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-  {{- if $ingress.annotations }}
-   {{- toYaml $ingress.annotations | nindent 4 }}
+  {{- if .Values.service.ingress.annotations }}
+   {{- toYaml .Values.service.ingress.annotations | nindent 4 }}
   {{- end }}
   {{- if .Values.commonAnnotations }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if $tls.enabled }}
+  {{- if .Values.service.tls.enabled }}
   tls:
-    {{- if $tls.secretName }}
-    - secretName: {{ $tls.secretName }}
+    {{- if .Values.service.tls.secretName }}
+    - secretName: {{ .Values.service.tls.secretName }}
     {{- else }}
     - secretName: {{ include "harbor.ingress" . }}
     {{- end }}
-      {{- if $ingress.hosts.core }}
+      {{- if .Values.service.ingress.hosts.core }}
       hosts:
-        - {{ $ingress.hosts.core }}
+        - {{ .Values.service.ingress.hosts.core }}
       {{- end }}
     {{- if .Values.notary.enabled }}
-    {{- if $tls.notarySecretName }}
-    - secretName: {{ $tls.notarySecretName | quote }}
-    {{- else if $tls.secretName }}
-    - secretName: {{ $tls.secretName | quote }}
+    {{- if .Values.service.tls.notarySecretName }}
+    - secretName: {{ .Values.service.tls.notarySecretName | quote }}
+    {{- else if .Values.service.tls.secretName }}
+    - secretName: {{ .Values.service.tls.secretName | quote }}
     {{- else }}
     - secretName: {{ include "harbor.ingress" . | quote }}
     {{- end }}
-      {{- if $ingress.hosts.notary }}
+      {{- if .Values.service.ingress.hosts.notary }}
       hosts:
-        - {{ $ingress.hosts.notary }}
+        - {{ .Values.service.ingress.hosts.notary }}
       {{- end }}
     {{- end }}
   {{- end }}
@@ -96,8 +94,8 @@ spec:
             backend:
               serviceName: {{ include "harbor.core" . }}
               servicePort: http
-      {{- if $ingress.hosts.core }}
-      host: {{ $ingress.hosts.core }}
+      {{- if .Values.service.ingress.hosts.core }}
+      host: {{ .Values.service.ingress.hosts.core }}
       {{- end }}
     {{- if .Values.notary.enabled }}
     - http:
@@ -106,8 +104,8 @@ spec:
             backend:
               serviceName: {{ include "harbor.notary-server" . }}
               servicePort: notary-server
-      {{- if $ingress.hosts.notary }}
-      host: {{ $ingress.hosts.notary }}
+      {{- if .Values.service.ingress.hosts.notary }}
+      host: {{ .Values.service.ingress.hosts.notary }}
       {{- end }}
     {{- end }}
 {{- end }}

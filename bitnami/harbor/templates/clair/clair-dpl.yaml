@@ -5,11 +5,11 @@ metadata:
   name: {{ include "harbor.clair" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: clair
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.clair.replicas }}
@@ -23,39 +23,45 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.commonLabels }}
-        {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.clair.podLabels }}
-        {{- include "harbor.tplValue" (dict "value" .Values.clair.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.clair.podLabels "context" $) | nindent 8 }}
         {{- end }}
         app.kubernetes.io/component: clair
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/clair/clair-secret.yaml") . | sha256sum }}
         {{- if .Values.clair.podAnnotations }}
-        {{- include "harbor.tplValue" (dict "value" .Values.clair.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.clair.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- if .Values.clair.affinity }}
-      affinity: {{- include "harbor.tplValue" (dict "value" .Values.clair.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.clair.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.clair.nodeSelector }}
-      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.clair.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.clair.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.clair.tolerations }}
-      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.clair.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.clair.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.clair.initContainers }}
-      initContainers: {{- include "harbor.tplValue" (dict "value" .Values.clair.initContainers "context" $) | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.clair.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: clair
           image: {{ include "harbor.clairImage" . }}
           imagePullPolicy: {{ .Values.clairImage.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.clair.server.command }}
-          command: {{- include "harbor.tplValue" (dict "value" .Values.clair.server.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clair.server.args }}
-          args: {{- include "harbor.tplValue" (dict "value" .Values.clair.server.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clair.server.livenessProbe.enabled }}
           livenessProbe:
@@ -68,7 +74,7 @@ spec:
             successThreshold: {{ .Values.clair.server.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.clair.server.livenessProbe.failureThreshold }}
           {{- else if .Values.clair.server.customLivenessProbe }}
-          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.clair.server.customLivenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clair.server.readinessProbe.enabled }}
           readinessProbe:
@@ -81,7 +87,7 @@ spec:
             successThreshold: {{ .Values.clair.server.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.clair.server.readinessProbe.failureThreshold }}
           {{- else if .Values.clair.server.customReadinessProbe }}
-          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.clair.server.customReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -99,16 +105,16 @@ spec:
               value: {{ include "harbor.noProxy" . | quote }}
             {{- end }}
             {{- if .Values.clair.server.extraEnvVars }}
-            {{- include "harbor.tplValue" (dict "value" .Values.clair.server.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.clair.server.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "harbor.tplValue" (dict "value" .Values.clair.server.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.clair.server.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.clair.server.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "harbor.tplValue" (dict "value" .Values.clair.server.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.clair.server.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if .Values.clair.server.resources }}
           resources: {{- toYaml .Values.clair.server.resources | nindent 12 }}
@@ -120,16 +126,19 @@ spec:
               mountPath: /etc/clair/config.yaml
               subPath: config.yaml
             {{- if .Values.clair.server.extraVolumeMounts }}
-            {{- include "harbor.tplValue" (dict "value" .Values.clair.server.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         - name: adapter
           image: {{ include "harbor.clairAdapterImage" . }}
           imagePullPolicy: {{ .Values.clairAdapterImage.pullPolicy }}
           {{- if .Values.clair.adapter.command }}
-          command: {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clair.adapter.args }}
-          args: {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clair.adapter.livenessProbe.enabled }}
           livenessProbe:
@@ -142,7 +151,8 @@ spec:
             successThreshold: {{ .Values.clair.adapter.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.clair.adapter.livenessProbe.failureThreshold }}
           {{- else if .Values.clair.adapter.customLivenessProbe }}
-          livenessProbe: {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.customLivenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.clair.adapter.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
@@ -154,7 +164,7 @@ spec:
             successThreshold: {{ .Values.clair.adapter.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.clair.adapter.readinessProbe.failureThreshold }}
           {{- else if .Values.clair.adapter.customReadinessProbe }}
-          readinessProbe: {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.customReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -167,16 +177,16 @@ spec:
             - name: SCANNER_CLAIR_DATABASE_URL
               value: {{ include "harbor.database.clair" . }}
             {{- if .Values.clair.adapter.extraEnvVars }}
-            {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.clair.adapter.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "harbor.tplValue" (dict "value" .Values.clair.adapter.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.clair.adapter.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "harbor.tplValue" (dict "value" .Values.clair.adapter.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if .Values.clair.adapter.resources }}
           resources: {{- toYaml .Values.clair.adapter.resources | nindent 12 }}
@@ -185,16 +195,16 @@ spec:
             - containerPort: 8080
           volumeMounts:
             {{- if .Values.clair.adapter.extraVolumeMounts }}
-            {{- include "harbor.tplValue" (dict "value" .Values.clair.adapter.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.clair.sidecars }}
-        {{- include "harbor.tplValue" (dict "value" .Values.clair.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.clair.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: config
           secret:
             secretName: {{ include "harbor.clair" . | quote }}
       {{- if .Values.clair.extraVolumes }}
-      {{- include "harbor.tplValue" (dict "value" .Values.clair.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.clair.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
 {{- end }}

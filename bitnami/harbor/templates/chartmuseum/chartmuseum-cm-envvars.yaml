@@ -5,23 +5,23 @@ metadata:
   name: {{ include "harbor.chartmuseum" . }}-envvars
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: chartmuseum
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
   PORT: {{ .Values.chartmuseum.port | quote }}
   {{- if .Values.chartmuseum.useRedisCache }}
   CACHE: "redis"
-  CACHE_REDIS_ADDR: "{{ include "harbor.redis.host" . }}:{{ include "harbor.redis.port" . }}"
-  CACHE_REDIS_DB: "{{ include "harbor.redis.chartmuseumDatabaseIndex" . }}"
+  CACHE_REDIS_ADDR: {{ printf "%s:%s" ( include "harbor.redis.host" . ) ( include "harbor.redis.port" . ) | quote }}
+  CACHE_REDIS_DB: {{ include "harbor.redis.chartmuseumDatabaseIndex" . | quote }}
   {{- end }}
   # The user is hardcoded because the core binary has it hardcoded so it is not configurable.
   BASIC_AUTH_USER: "chart_controller"
   {{- if .Values.chartmuseum.absoluteUrl }}
-  CHART_URL: "{{ template "harbor.externalUrl" . }}/{{ .Values.chartmuseum.chartRepoName }}"
+  CHART_URL: {{ printf "%s/%s" ( include "harbor.externalUrl" . )  .Values.chartmuseum.chartRepoName | quote }}
   {{- end }}
   DEPTH: {{ .Values.chartmuseum.depth | quote }}
   {{- if or (eq .Values.logLevel "debug") .Values.chartMuseumImage.debug }}
@@ -53,72 +53,70 @@ data:
   {{- if .Values.chartmuseum.provPostFormFieldName }}
   PROV_POST_FORM_FIELD_NAME: {{ .Values.chartmuseum.provPostFormFieldName | quote }}
   {{- end }}
-  {{- $storage := .Values.persistence.imageChartStorage }}
-  {{- $storageType := $storage.type }}
-  {{- if eq $storageType "filesystem" }}
+  {{- if eq .Values.persistence.imageChartStorage.type "filesystem" }}
   STORAGE: "local"
   STORAGE_LOCAL_ROOTDIR: "/bitnami/data"
-  {{- else if eq $storageType "azure" }}
+  {{- else if eq .Values.persistence.imageChartStorage.type "azure" }}
   STORAGE: "microsoft"
-  STORAGE_MICROSOFT_CONTAINER: {{ $storage.azure.container | quote }}
-  AZURE_STORAGE_ACCOUNT: {{ $storage.azure.accountname | quote }}
-  STORAGE_MICROSOFT_PREFIX: {{ $storage.azure.storagePrefix | quote }}
-  AZURE_BASE_URL: {{ $storage.azure.realm | quote }}
-  {{- else if eq $storageType "gcs" }}
+  STORAGE_MICROSOFT_CONTAINER: {{ .Values.persistence.imageChartStorage.azure.container | quote }}
+  AZURE_STORAGE_ACCOUNT: {{ .Values.persistence.imageChartStorage.azure.accountname | quote }}
+  STORAGE_MICROSOFT_PREFIX: {{ .Values.persistence.imageChartStorage.azure.storagePrefix | quote }}
+  AZURE_BASE_URL: {{ .Values.persistence.imageChartStorage.azure.realm | quote }}
+  {{- else if eq .Values.persistence.imageChartStorage.type "gcs" }}
   STORAGE: "google"
-  STORAGE_GOOGLE_BUCKET: {{ $storage.gcs.bucket }}
+  STORAGE_GOOGLE_BUCKET: {{ .Values.persistence.imageChartStorage.gcs.bucket }}
   GOOGLE_APPLICATION_CREDENTIALS: /etc/chartmuseum/gcs-key.json
-  {{- if $storage.gcs.rootdirectory }}
-  STORAGE_GOOGLE_PREFIX: {{ $storage.gcs.rootdirectory | quote }}
+  {{- if .Values.persistence.imageChartStorage.gcs.rootdirectory }}
+  STORAGE_GOOGLE_PREFIX: {{ .Values.persistence.imageChartStorage.gcs.rootdirectory | quote }}
   {{- end }}
-  {{- else if eq $storageType "s3" }}
+  {{- else if eq .Values.persistence.imageChartStorage.type "s3" }}
   STORAGE: "amazon"
-  STORAGE_AMAZON_BUCKET: {{ $storage.s3.bucket | quote }}
-  {{- if $storage.s3.rootdirectory }}
-  STORAGE_AMAZON_PREFIX: {{ $storage.s3.rootdirectory | quote }}
+  STORAGE_AMAZON_BUCKET: {{ .Values.persistence.imageChartStorage.s3.bucket | quote }}
+  {{- if .Values.persistence.imageChartStorage.s3.rootdirectory }}
+  STORAGE_AMAZON_PREFIX: {{ .Values.persistence.imageChartStorage.s3.rootdirectory | quote }}
   {{- end }}
-  STORAGE_AMAZON_REGION: {{ $storage.s3.region | quote }}
-  {{- if $storage.s3.regionendpoint }}
-  STORAGE_AMAZON_ENDPOINT: {{ $storage.s3.regionendpoint | quote }}
+  STORAGE_AMAZON_REGION: {{ .Values.persistence.imageChartStorage.s3.region | quote }}
+  {{- if .Values.persistence.imageChartStorage.s3.regionendpoint }}
+  STORAGE_AMAZON_ENDPOINT: {{ .Values.persistence.imageChartStorage.s3.regionendpoint | quote }}
   {{- end }}
-  {{- if $storage.s3.accesskey }}
-  AWS_ACCESS_KEY_ID: {{ $storage.s3.accesskey | quote }}
+  {{- if .Values.persistence.imageChartStorage.s3.accesskey }}
+  AWS_ACCESS_KEY_ID: {{ .Values.persistence.imageChartStorage.s3.accesskey | quote }}
   {{- end }}
-  {{- if $storage.s3.keyid }}
-  STORAGE_AMAZON_SSE: {{ $storage.s3.sse | quote }}
+  {{- if .Values.persistence.imageChartStorage.s3.keyid }}
+  STORAGE_AMAZON_SSE: {{ .Values.persistence.imageChartStorage.s3.sse | quote }}
   {{- end }}
-  {{- else if eq $storageType "swift" }}
+  {{- else if eq .Values.persistence.imageChartStorage.type "swift" }}
   STORAGE: "openstack"
-  STORAGE_OPENSTACK_CONTAINER: {{ $storage.swift.container | quote }}
-  {{- if $storage.swift.secretkey }}
-  STORAGE_OPENSTACK_PREFIX: {{ $storage.swift.prefix | quote }}
+  STORAGE_OPENSTACK_CONTAINER: {{ .Values.persistence.imageChartStorage.swift.container | quote }}
+  {{- if .Values.persistence.imageChartStorage.swift.secretkey }}
+  STORAGE_OPENSTACK_PREFIX: {{ .Values.persistence.imageChartStorage.swift.prefix | quote }}
   {{- end }}
-  {{- if $storage.swift.secretkey }}
-  STORAGE_OPENSTACK_REGION: {{ $storage.swift.region | quote }}
+  {{- if .Values.persistence.imageChartStorage.swift.secretkey }}
+  STORAGE_OPENSTACK_REGION: {{ .Values.persistence.imageChartStorage.swift.region | quote }}
   {{- end }}
-  OS_AUTH_URL: {{ $storage.swift.authurl | quote }}
-  OS_USERNAME: {{ $storage.swift.username | quote }}
-  {{- if $storage.swift.secretkey }}
-  OS_PROJECT_ID: {{ $storage.swift.tenantid | quote }}
+  OS_AUTH_URL: {{ .Values.persistence.imageChartStorage.swift.authurl | quote }}
+  OS_USERNAME: {{ .Values.persistence.imageChartStorage.swift.username | quote }}
+  {{- if .Values.persistence.imageChartStorage.swift.secretkey }}
+  OS_PROJECT_ID: {{ .Values.persistence.imageChartStorage.swift.tenantid | quote }}
   {{- end }}
-  {{- if $storage.swift.secretkey }}
-  OS_PROJECT_NAME: {{ $storage.swift.tenant | quote }}
+  {{- if .Values.persistence.imageChartStorage.swift.secretkey }}
+  OS_PROJECT_NAME: {{ .Values.persistence.imageChartStorage.swift.tenant | quote }}
   {{- end }}
-  {{- if $storage.swift.secretkey }}
-  OS_DOMAIN_ID: {{ $storage.swift.domainid | quote }}
+  {{- if .Values.persistence.imageChartStorage.swift.secretkey }}
+  OS_DOMAIN_ID: {{ .Values.persistence.imageChartStorage.swift.domainid | quote }}
   {{- end }}
-  {{- if $storage.swift.secretkey }}
-  OS_DOMAIN_NAME: {{ $storage.swift.domain | quote }}
+  {{- if .Values.persistence.imageChartStorage.swift.secretkey }}
+  OS_DOMAIN_NAME: {{ .Values.persistence.imageChartStorage.swift.domain | quote }}
   {{- end }}
-  {{- else if eq $storageType "oss" }}
+  {{- else if eq .Values.persistence.imageChartStorage.type "oss" }}
   STORAGE: "alibaba"
-  STORAGE_ALIBABA_BUCKET: {{ $storage.oss.bucket | quote }}
-  {{- if $storage.oss.secretkey }}
-  STORAGE_ALIBABA_PREFIX: {{ $storage.oss.rootdirectory | quote }}
+  STORAGE_ALIBABA_BUCKET: {{ .Values.persistence.imageChartStorage.oss.bucket | quote }}
+  {{- if .Values.persistence.imageChartStorage.oss.secretkey }}
+  STORAGE_ALIBABA_PREFIX: {{ .Values.persistence.imageChartStorage.oss.rootdirectory | quote }}
   {{- end }}
-  {{- if $storage.oss.secretkey }}
-  STORAGE_ALIBABA_ENDPOINT: {{ $storage.oss.endpoint | quote }}
+  {{- if .Values.persistence.imageChartStorage.oss.secretkey }}
+  STORAGE_ALIBABA_ENDPOINT: {{ .Values.persistence.imageChartStorage.oss.endpoint | quote }}
   {{- end }}
-  ALIBABA_CLOUD_ACCESS_KEY_ID: {{ $storage.oss.accesskeyid | quote }}
+  ALIBABA_CLOUD_ACCESS_KEY_ID: {{ .Values.persistence.imageChartStorage.oss.accesskeyid | quote }}
   {{- end }}
 {{- end }}

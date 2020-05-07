@@ -3,102 +3,99 @@ apiVersion: v1
 kind: Service
 metadata:
 {{- if eq .Values.service.type "ClusterIP" }}
-{{- $clusterIP := .Values.service.clusterIP }}
-  name: {{ $clusterIP.name }}
+  name: {{ .Values.service.clusterIP.name }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: nginx
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
   ports:
     - name: http
-      port: {{ $clusterIP.ports.httpPort }}
+      port: {{ .Values.service.clusterIP.ports.httpPort }}
       targetPort: 8080
     {{- if .Values.service.tls.enabled }}
     - name: https
-      port: {{ $clusterIP.ports.httpsPort }}
+      port: {{ .Values.service.clusterIP.ports.httpsPort }}
       targetPort: 8443
     {{- end }}
     {{- if .Values.notary.enabled }}
     - name: notary
-      port: {{ $clusterIP.ports.notaryPort }}
+      port: {{ .Values.service.clusterIP.ports.notaryPort }}
       targetPort: 4443
     {{- end }}
 {{- else if eq .Values.service.type "NodePort" }}
-{{- $nodePort := .Values.service.nodePort }}
-  name: {{ $nodePort.name }}
+  name: {{ .Values.service.nodePort.name }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   type: NodePort
   ports:
     - name: http
-      port: {{ $nodePort.ports.http.port }}
+      port: {{ .Values.service.nodePort.ports.http.port }}
       targetPort: 8080
-      {{- if $nodePort.ports.http.nodePort }}
-      nodePort: {{ $nodePort.ports.http.nodePort }}
+      {{- if .Values.service.nodePort.ports.http.nodePort }}
+      nodePort: {{ .Values.service.nodePort.ports.http.nodePort }}
       {{- end }}
     {{- if .Values.service.tls.enabled }}
     - name: https
-      port: {{ $nodePort.ports.https.port }}
+      port: {{ .Values.service.nodePort.ports.https.port }}
       targetPort: 8443
-      {{- if $nodePort.ports.https.nodePort }}
-      nodePort: {{ $nodePort.ports.https.nodePort }}
+      {{- if .Values.service.nodePort.ports.https.nodePort }}
+      nodePort: {{ .Values.service.nodePort.ports.https.nodePort }}
       {{- end }}
     {{- end }}
     {{- if .Values.notary.enabled }}
     - name: notary
-      port: {{ $nodePort.ports.notary.port }}
+      port: {{ .Values.service.nodePort.ports.notary.port }}
       targetPort: 4443
-      {{- if $nodePort.ports.notary.nodePort }}
-      nodePort: {{ $nodePort.ports.notary.nodePort }}
+      {{- if .Values.service.nodePort.ports.notary.nodePort }}
+      nodePort: {{ .Values.service.nodePort.ports.notary.nodePort }}
       {{- end }}
     {{- end }}
 {{- else if eq .Values.service.type "LoadBalancer" }}
-{{- $loadBalancer := .Values.service.loadBalancer }}
-  name: {{ $loadBalancer.name }}
+  name: {{ .Values.service.loadBalancer.name }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "harbor.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- with $loadBalancer.annotations }}
+  {{- with .Values.service.loadBalancer.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "harbor.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   type: LoadBalancer
-  {{- with $loadBalancer.sourceRanges }}
+  {{- with .Values.service.loadBalancer.sourceRanges }}
     loadBalancerSourceRanges:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if $loadBalancer.IP }}
-  loadBalancerIP: {{ $loadBalancer.IP }}
+  {{- if .Values.service.loadBalancer.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancer.loadBalancerIP }}
   {{- end }}
   ports:
     - name: http
-      port: {{ $loadBalancer.ports.httpPort }}
+      port: {{ .Values.service.loadBalancer.ports.httpPort }}
       targetPort: 8080
     {{- if .Values.service.tls.enabled }}
     - name: https
-      port: {{ $loadBalancer.ports.httpsPort }}
+      port: {{ .Values.service.loadBalancer.ports.httpsPort }}
       targetPort: 8443
     {{- end }}
     {{- if .Values.notary.enabled }}
     - name: notary
-      port: {{ $loadBalancer.ports.notaryPort }}
+      port: {{ .Values.service.loadBalancer.ports.notaryPort }}
       targetPort: 4443
     {{- end }}
 {{- end }}

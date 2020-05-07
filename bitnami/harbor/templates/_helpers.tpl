@@ -192,7 +192,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.redis.enabled true -}}
     {{- printf "%s" "4" }}
   {{- else -}}
-    {{- .Values.externalRedis.clairAdapterIndex -}}
+    {{- .Values.externalRedis.clairAdapterDatabaseIndex -}}
   {{- end -}}
 {{- end -}}
 
@@ -209,7 +209,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if .Values.redis.enabled -}}
     {{- printf "%s" "5" }}
   {{- else -}}
-    {{- .Values.externalRedis.trivyAdapterIndex -}}
+    {{- .Values.externalRedis.trivyAdapterDatabaseIndex -}}
   {{- end -}}
 {{- end -}}
 
@@ -331,84 +331,84 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the proper Harbor Core image name
 */}}
 {{- define "harbor.coreImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.coreImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.coreImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Portal image name
 */}}
 {{- define "harbor.portalImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.portalImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.portalImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Trivy Adapter image name
 */}}
 {{- define "harbor.trivyImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.trivyImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.trivyImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Job Service image name
 */}}
 {{- define "harbor.jobserviceImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.jobserviceImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.jobserviceImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper ChartMuseum image name
 */}}
 {{- define "harbor.chartMuseumImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.chartMuseumImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.chartMuseumImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Notary Server image name
 */}}
 {{- define "harbor.notaryServerImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.notaryServerImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.notaryServerImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Notary Signer image name
 */}}
 {{- define "harbor.notarySignerImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.notarySignerImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.notarySignerImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Registry image name
 */}}
 {{- define "harbor.registryImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.registryImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.registryImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Registryctl image name
 */}}
 {{- define "harbor.registryctlImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.registryctlImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.registryctlImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Clair image name
 */}}
 {{- define "harbor.clairImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.clairImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.clairImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Clair image name
 */}}
 {{- define "harbor.clairAdapterImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.clairAdapterImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.clairAdapterImage "global" $) -}}
 {{- end -}}
 
 {{/*
 Return the proper Nginx image name
 */}}
 {{- define "harbor.nginxImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.nginxImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.nginxImage "global" $) -}}
 {{- end -}}
 
 {{/*
@@ -425,7 +425,6 @@ Return the proper Docker Image Registry Secret Names
 {{- include "common.warnings.rollingTag" .Values.jobserviceImage -}}
 {{- include "common.warnings.rollingTag" .Values.registryImage -}}
 {{- include "common.warnings.rollingTag" .Values.registryctlImage -}}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
 {{- include "common.warnings.rollingTag" .Values.clairImage -}}
 {{- include "common.warnings.rollingTag" .Values.clairAdapterImage -}}
 {{- include "common.warnings.rollingTag" .Values.trivyImage -}}
@@ -445,7 +444,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Harbor - must provide a password for PostgreSQL */}}
+{{/* Validate .Values of Harbor - must provide a password for PostgreSQL */}}
 {{- define "harbor.validateValues.postgresqlPassword" -}}
 {{- if eq .Values.postgresql.enabled true -}}
   {{- if not .Values.postgresql.postgresqlPassword -}}
@@ -466,7 +465,7 @@ harbor: External PostgreSQL password
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "harbor.volumePermissions.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" Values.volumePermissions.image "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" $) -}}
 {{- end -}}
 
 {{/*
@@ -506,19 +505,6 @@ Return the appropriate apiVersion for deployment.
 {{- else -}}
 {{- print "apps/v1" -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "harbor.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "harbor.tplValue" -}}
-    {{- if typeIs "string" .value -}}
-        {{- tpl .value .context -}}
-    {{- else -}}
-        {{- tpl (.value | toYaml) .context -}}
-    {{- end -}}
 {{- end -}}
 
 {{/*

@@ -490,21 +490,15 @@ service:
 ##
 externalURL: https://core.harbor.domain
 
-## UAA Authentication Options
-## If you're using UAA for authentication behind a self-signed
-## certificate you will need to provide the CA Cert.
-## Set uaaSecretName below to provide a pre-created secret that
-## contains a base64 encoded CA Certificate named `ca.crt`.
+## SecurityContext configuration
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-uaaSecretName:
-
-## Kubernetes Security Context
-## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-securityContext:
-  enabled: true
-  fsGroup: 1001
+containerSecurityContext:
   runAsUser: 1001
+  runAsNonRoot: true
+
+podSecurityContext:
+  fsGroup: 1001
 
 ## The persistence is enabled by default and a default StorageClass
 ## is needed in the k8s cluster to provision volumes dynamicly.
@@ -558,9 +552,7 @@ persistence:
       accessMode: ReadWriteOnce
       size: 5Gi
     trivy:
-      existingClaim: ""
       storageClass: ""
-      subPath: ""
       accessMode: ReadWriteOnce
       size: 5Gi
 
@@ -669,11 +661,6 @@ forcePassword: false
 ## The initial password of Harbor admin. Change it from portal after launching Harbor
 ##
 harborAdminPassword:
-
-## The secret key used for encryption. Must be a string of 16 chars.
-##
-# secretKey: "not-a-secure-string"
-secretKey:
 
 ## If expose the service via Ingress, the NGINX server will not be used
 ##
@@ -934,6 +921,19 @@ core:
   ##
   args:
 
+  ## UAA Authentication Options
+  ## If you're using UAA for authentication behind a self-signed
+  ## certificate you will need to provide the CA Cert.
+  ## Set uaaSecretName below to provide a pre-created secret that
+  ## contains a base64 encoded CA Certificate named `ca.crt`.
+  ##
+  uaaSecretName:
+
+  ## The secret key used for encryption. Must be a string of 16 chars.
+  ##
+  # secretKey: "not-a-secure-string"
+  secretKey:
+
   ## Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -943,10 +943,6 @@ core:
     type: RollingUpdate
 
   replicas: 1
-
-  ## CSRF key
-  ##
-  csrfKey:
 
   ## Custom Liveness probe
   ##
@@ -1940,21 +1936,10 @@ notary:
     ##
     extraEnvVarsSecret:
 
-    ## Extra volumes to add to the deployment
-    ##
-    extraVolumes: []
-
     ## Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
 
-    ## Extra init containers to add to the deployment
-    ##
-    initContainers: []
-
-    ## Extra sidecar containers to add to the deployment
-    ##
-    sidecars: []
     resources:
       ## We usually recommend not to specify default resources and to leave this as a conscious
       ## choice for the user. This also increases chances charts run on environments with little
@@ -2055,21 +2040,9 @@ notary:
     ##
     extraEnvVarsSecret:
 
-    ## Extra volumes to add to the deployment
-    ##
-    extraVolumes: []
-
     ## Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
-
-    ## Extra init containers to add to the deployment
-    ##
-    initContainers: []
-
-    ## Extra sidecar containers to add to the deployment
-    ##
-    sidecars: []
 
     ## Notary signer containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -2207,8 +2180,8 @@ externalRedis:
   jobserviceDatabaseIndex: "1"
   registryDatabaseIndex: "2"
   chartmuseumDatabaseIndex: "3"
-  clairAdapterIndex: "4"
-  trivyAdapterIndex: "5"
+  clairAdapterDatabaseIndex: "4"
+  trivyAdapterDatabaseIndex: "5"
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -2253,9 +2226,6 @@ externalDatabase:
   ## Database password
   ##
   password: ""
-  ## Database name
-  ##
-  database: bitnami_harbor
   ## Database port number
   ##
   port: 5432
