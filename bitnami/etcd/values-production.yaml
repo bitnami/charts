@@ -218,7 +218,7 @@ persistence:
 ## Define a disruption budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ##
-podDisruptionBudget:
+pdb:
   enabled: false
   # minAvailable: 1
   # maxUnavailable: 1
