@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: {{ template "magento.fullname" . }}
   labels:
-    app: {{ template "magento.fullname" . }}
-    chart: {{ template "magento.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "magento.fullname" . }}
+    helm.sh/chart: {{ template "magento.chart" . }}
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   type: {{ .Values.service.type }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
@@ -23,4 +23,4 @@ spec:
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- end }}
   selector:
-    app: {{ template "magento.fullname" . }}
+    app.kubernetes.io/name: {{ template "magento.fullname" . }}
