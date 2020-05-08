@@ -800,6 +800,16 @@ alertmanager:
     receivers:
       - name: 'null'
 
+  ## Alertmanager configuration is created externally
+  ## If true, `alertmanager.config` is ignored, and a secret will not be created.
+  ##
+  ## Alertmanager requires a secret named `alertmanager-{{ template "prometheus-operator.alertmanager.fullname" . }}`
+  ## It must contain:
+  ##     alertmanager.yaml: <config>
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/alerting.md#alerting
+  ##
+  externalConfig: false
+
   ## Desired number of Alertmanager nodes
   ##
   replicaCount: 3
