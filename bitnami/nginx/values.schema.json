@@ -18,11 +18,8 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "conditions": [{
-              "reference": false,
-              "value": "ingress/enabled"
-            }],
-            "operator": "and"
+            "condition": false,
+            "value": "ingress.enabled"
           }
         }
       }
@@ -59,27 +56,8 @@
               "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
               "form": true,
               "hidden": {
-                "conditions": [{
-                  "reference": false,
-                  "value": "metrics/enabled"
-                }],
-                "operator": "and"
-              }
-            },
-            "namespace": {
-              "type": "string",
-              "form": true,
-              "title": "Prometheus namespace",
-              "description": "Namespace in which Prometheus is running",
-              "hidden": {
-                "conditions": [{
-                  "reference": false,
-                  "value": "metrics/enabled"
-                },{
-                  "reference": false,
-                  "value": "metrics/serviceMonitor/enabled"
-                }],
-                "operator": "or"
+                "condition": false,
+                "value": "metrics.enabled"
               }
             }
           }
