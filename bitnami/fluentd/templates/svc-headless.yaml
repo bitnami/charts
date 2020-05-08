@@ -5,6 +5,7 @@ metadata:
   name: {{ include "fluentd.fullname" . }}-headless
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
+    app: aggregator
 spec:
   type: ClusterIP
   clusterIP: None
