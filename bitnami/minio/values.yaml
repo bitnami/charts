@@ -141,6 +141,11 @@ statefulset:
 ## Mount MinIO secret as a file instead of passing environment variable
 ##
 useCredentialsFile: false
+
+## Force reconfiguring new keys whenever the credentials change
+##
+forceNewKeys: false
+
 ## MinIO credentials
 ##
 accessKey:
