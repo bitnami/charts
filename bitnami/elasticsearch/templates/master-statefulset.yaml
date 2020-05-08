@@ -162,9 +162,17 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
-            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.sh") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+            {{- if .Values.initScripts }}
             - name: custom-init-scripts
-              mountPath: /docker-entrypoint-initdb.d
+              mountPath: /docker-entrypoint-initdb.d/init-scripts
+            {{- end }}
+            {{- if .Values.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-cm
+            {{- end }}
+            {{- if .Values.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
       volumes:
         {{- if .Values.sysctlImage.enabled }}
@@ -181,10 +189,21 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
-        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.sh") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+        {{- if .Values.initScripts }}
         - name: custom-init-scripts
           configMap:
-            name: {{ template "elasticsearch.initdbScriptsCM" . }}
+            name: {{ template "elasticsearch.initScripts" . }}
+        {{- end }}
+        {{- if .Values.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ template "elasticsearch.initScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template "elasticsearch.initScriptsSecret" . }}
+            defaultMode: 0755
         {{- end }}
 {{- if not .Values.master.persistence.enabled }}
         - name: "data"

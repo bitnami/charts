@@ -1,4 +1,4 @@
-{{- if and (or (.Files.Glob "files/docker-entrypoint-initdb.d/*.sh") .Values.initdbScripts) (not .Values.initdbScriptsConfigMap) }}
+{{- if .Values.initScripts }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,10 +6,7 @@ metadata:
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
     component: master
 data:
-{{- if and (.Files.Glob "files/docker-entrypoint-initdb.d/*.sh") (not .Values.initdbScriptsConfigMap) }}
-{{ (.Files.Glob "files/docker-entrypoint-initdb.d/*.sh").AsConfig | indent 2 }}
-{{- end }}
-{{- with .Values.initdbScripts }}
+{{- with .Values.initScripts }}
 {{ toYaml . | indent 2 }}
 {{- end }}
 {{ end }}

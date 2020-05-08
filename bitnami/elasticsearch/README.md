@@ -70,8 +70,9 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `config`                                          | Elasticsearch node custom configuration                                                                                                                   | ``                                                           |
 | `extraVolumes`                                    | Extra volumes                                                                                                                                             |                                                              |
 | `extraVolumeMounts`                               | Mount extra volume(s),                                                                                                                                    |                                                              |
-| `initdbScripts`                                   | Dictionary of initdb scripts                                                                                                                              | `nil`                                                        |
-| `initdbScriptsConfigMap`                          | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                       | `nil`                                                        |
+| `initScripts`                                     | Dictionary of init scripts. Evaluated as a template.                                                                                                      | `nil`                                                        |
+| `initScriptsCM`                                   | ConfigMap with the init scripts. Evaluated as a template.                                                                                                 | `nil`                                                        |
+| `initScriptsSecret`                               | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                                                                                                                                                    | `nil`                                                        |
 | `extraEnvVars`                                    | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                         | `[]`                                                         |
 | `extraEnvVarsConfigMap`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                                     | `nil`                                                        |
 | `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                        | `nil`                                                        |
@@ -478,6 +479,15 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsConfigMap` or the `extraEnvVarsSecret` values.
+
+### Using custom init scripts
+
+For advanced operations, the Bitnami Elasticsearch charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml` with `initScripts`, or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `initScriptsCM` and `initScriptsSecret` values.
+
+```console
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
+```
 
 ## Persistence
 

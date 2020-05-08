@@ -133,15 +133,20 @@ discovery:
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
-##
-# initdbScripts:
-#   my_init_script.sh: |
-#      #!/bin/sh
-#      echo "Do something."
-#
+## For example:
+## initScripts:
+##   my_init_script.sh: |
+##      #!/bin/sh
+##      echo "Do something."
+initScripts:
+
 ## ConfigMap with scripts to be run at first boot
-## Note: This will override initdbScripts
-# initdbScriptsConfigMap:
+## Note: This will override initScripts
+initScriptsCM:
+
+## Secret with init scripts to execute (for sensitive data)
+##
+initScriptsSecret:
 
 ## An array to add extra env vars
 ## For example:
