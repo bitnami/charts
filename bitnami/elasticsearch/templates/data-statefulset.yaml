@@ -27,6 +27,9 @@ spec:
         app.kubernetes.io/component: data
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: data
+        {{- if .Values.data.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.data.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- with .Values.data.podAnnotations }}
       annotations: {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -109,6 +112,8 @@ spec:
             - name: ELASTICSEARCH_NODE_TYPE
               value: "data"
           ports:
+            - name: http
+              containerPort: 9200
             - name: transport
               containerPort: 9300
           {{- if .Values.data.livenessProbe.enabled }}

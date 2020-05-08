@@ -24,6 +24,9 @@ spec:
         app.kubernetes.io/component: master
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: master
+        {{- if .Values.master.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.master.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- with .Values.master.podAnnotations }}
       annotations: {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -112,6 +115,8 @@ spec:
             - name: ELASTICSEARCH_NODE_TYPE
               value: "master"
           ports:
+            - name: http
+              containerPort: 9200
             - name: transport
               containerPort: 9300
           {{- if .Values.master.livenessProbe.enabled }}

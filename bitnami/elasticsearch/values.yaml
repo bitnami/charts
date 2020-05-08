@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.6.2-debian-10-r41
+  tag: 7.6.2-debian-10-r43
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -148,6 +148,10 @@ master:
   ## Provide annotations for master-eligible pods.
   ##
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}
+  
   ## Pod Security Context for master-eligible pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -272,6 +276,10 @@ coordinating:
   ## Provide annotations for the coordinating-only pods.
   ##
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}
+  
   ## Pod Security Context for coordinating-only pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -371,6 +379,10 @@ data:
   ## Provide annotations for the data pods.
   ##
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}
+  
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -468,6 +480,10 @@ ingest:
   ## Provide annotations for the ingest pods.
   ##
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}
+  
   ## Pod Security Context for ingest pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -567,6 +583,9 @@ curator:
     jobRestartPolicy: Never
 
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}  
 
   rbac:
     # Specifies whether RBAC should be enabled
@@ -752,6 +771,9 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
+    
+  ## Extra labels to add to Pod
+  podLabels: {}
 
   ## Prometheus Operator ServiceMonitor configuration
   ##

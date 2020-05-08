@@ -18,6 +18,9 @@ spec:
         app.kubernetes.io/component: ingest
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: ingest
+        {{- if .Values.ingest.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.ingest.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- with .Values.ingest.podAnnotations }}
       annotations: {{- toYaml . | nindent 10 }}
       {{- end }}
@@ -79,6 +82,8 @@ spec:
             - name: ELASTICSEARCH_NODE_TYPE
               value: "ingest"
           ports:
+            - name: http
+              containerPort: 9200
             - name: transport
               containerPort: 9300
           {{- if .Values.ingest.livenessProbe.enabled }}
