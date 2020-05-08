@@ -210,6 +210,12 @@ The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image s
 
 ## Notable changes
 
+### 13.0.0
+
+Several changes were introduced that can break backwards compatibilty:
+- This version includes a new major version of the ElasticSearch chart bundled as dependency. You can find the release notes of the new ElasticSearch major version in [this section](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#1200) of the ES README.
+- Labels are adapted to follow the Helm charts best practices.
+
 ### 9.0.0
 
 This version enabled by default an initContainer that modify some kernel settings to meet the Elasticsearch requirements.
