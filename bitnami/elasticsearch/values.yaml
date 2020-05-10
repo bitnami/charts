@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.6.2-debian-10-r45
+  tag: 7.6.2-debian-10-r47
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -129,6 +129,40 @@ discovery:
 #   - name: es-certs
 #     mountPath: /certs
 #     readOnly: true
+
+## initdb scripts
+## Specify dictionary of scripts to be run at first boot
+## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+## For example:
+## initScripts:
+##   my_init_script.sh: |
+##      #!/bin/sh
+##      echo "Do something."
+initScripts:
+
+## ConfigMap with scripts to be run at first boot
+## Note: This will override initScripts
+initScriptsCM:
+
+## Secret with init scripts to execute (for sensitive data)
+##
+initScriptsSecret:
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: MY_ENV_VAR
+##    value: env_var_value
+##
+extraEnvVars: []
+
+## Name of a ConfigMap containing extra env vars
+##
+extraEnvVarsConfigMap:
+
+## Name of a Secret containing extra env vars
+##
+extraEnvVarsSecret:
 
 ## Elasticsearch master-eligible node parameters
 ##
