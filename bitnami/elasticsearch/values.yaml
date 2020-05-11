@@ -103,15 +103,15 @@ clusterDomain: cluster.local
 ##
 name: elastic
 
-## Elasticsearch discovery node parameters
-##
-discovery:
-  name: discovery
-
 ## Comma, semi-colon or space separated list of plugins to install at initialization
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
 # plugins:
+
+## File System snapshot repository path
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+# snapshotRepoPath:
 
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
