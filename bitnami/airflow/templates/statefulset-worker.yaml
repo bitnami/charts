@@ -9,6 +9,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: worker
 spec:
+  {{- if .Values.airflow.worker.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.airflow.worker.podManagementPolicy | quote }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "airflow.name" . }}

@@ -27,6 +27,9 @@ spec:
         app.kubernetes.io/component: curator
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: curator
+        {{- if .Values.curator.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       template:
         metadata:

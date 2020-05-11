@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.10.2-debian-10-r14
+  tag: 1.10.3-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -208,6 +208,9 @@ forwarder:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}
 
 ## Agregator parameters
 ##
@@ -274,10 +277,10 @@ aggregator:
     ## Service ports
     ##
     ports:
-      # http:
-      #   port: 9880
-      #   targetPort: http
-      #   protocol: TCP
+      http:
+        port: 9880
+        targetPort: http
+        protocol: TCP
       tcp:
         port: 24224
         targetPort: tcp
@@ -366,6 +369,9 @@ aggregator:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  
+  ## Extra labels to add to Pod
+  podLabels: {}
 
   ## Persist data to a persistent volume
   persistence:

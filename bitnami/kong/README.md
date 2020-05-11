@@ -101,6 +101,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `ingressController.extraVolumeMounts` | Array of extra volume mounts to be added to the Kong Ingress Controller container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                   |
 | `migration.resources`                 | Configure resource requests and limits  (migration container)                                                                                 | `nil`                                                   |
 | `migration.extraVolumeMounts`         | Array of extra volume mounts to be added to the Kong Container (evaluated as template). Normally used with `extraVolumes`.                    | `nil`                                                   |
+| `extraDeploy`                         | Array of extra objects to deploy with the release (evaluated as a template).                                                                  | `nil`                                                   |
 
 ### Traffic Exposure Parameters
 
@@ -367,6 +368,25 @@ elasticsearch.hosts[0]=elasticsearch-host
 elasticsearch.port=9200
 initScriptsCM=special-scripts
 initScriptsSecret=special-scripts-sensitive
+```
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such as KongPlugins, KongConsumers, amongst others. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would activate a plugin at deployment time.
+
+```yaml
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: |-
+  - apiVersion: configuration.konghq.com/v1
+    kind: KongPlugin
+    metadata:
+      name: {{ include "kong.fullname" . }}-plugin-correlation
+      namespace: {{ .Release.Namespace }}
+      labels: {{- include "kong.labels" . | nindent 6 }}
+    config:
+      header_name: my-request-id
+    plugin: correlation-id
 ```
 
 ## Upgrade

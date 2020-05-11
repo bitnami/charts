@@ -261,6 +261,53 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
     {{- end -}}
 {{- end -}}
 {{- end -}}
+{{- define "mongodb.storageClassSecondary" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if (or .Values.persistence.storageClass .Values.persistence.storageClassSecondary) -}}
+            {{- if .Values.persistence.storageClassSecondary -}}
+                {{- if (eq "-" .Values.persistence.storageClassSecondary) -}}
+                    {{- printf "storageClassName: \"\"" -}}
+                {{- else }}
+                    {{- printf "storageClassName: %s" .Values.persistence.storageClassSecondary -}}
+                {{- end -}}
+            {{- else }}
+                {{- if (eq "-" .Values.persistence.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+                {{- else }}
+                    {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if (or .Values.persistence.storageClass .Values.persistence.storageClassSecondary) -}}
+        {{- if .Values.persistence.storageClassSecondary -}}
+            {{- if (eq "-" .Values.persistence.storageClassSecondary) -}}
+                {{- printf "storageClassName: \"\"" -}}
+            {{- else }}
+                {{- printf "storageClassName: %s" .Values.persistence.storageClassSecondary -}}
+            {{- end -}}
+        {{- else }}
+            {{- if (eq "-" .Values.persistence.storageClass) -}}
+                {{- printf "storageClassName: \"\"" -}}
+            {{- else }}
+                {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Returns the proper Service name depending if an explicit service name is set
