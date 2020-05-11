@@ -8,6 +8,9 @@ spec:
   type: ClusterIP
   publishNotReadyAddresses: true
   ports:
+    - name: http
+      port: 9200
+      targetPort: http
     - name: tcp-transport
       port: 9300
       targetPort: transport
