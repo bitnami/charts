@@ -1,3 +1,3 @@
 *.tgz
-.idea/*
+/.idea/*
 .vscode
