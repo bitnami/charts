@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 5.0.9-debian-10-r10
+  tag: 5.0.9-debian-10-r17
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -177,6 +177,13 @@ password: ""
 
 ## Mount secrets as files instead of environment variables
 usePasswordFile: false
+
+# Whether to use AOF Persistence mode or not
+# It is strongly recommended to use this type when dealing with clusters
+#
+# ref: https://redis.io/topics/persistence#append-only-file
+# ref: https://redis.io/topics/cluster-tutorial#creating-and-using-a-redis-cluster
+useAOFPersistence: "yes"
 
 # Redis port
 redisPort: 6379
