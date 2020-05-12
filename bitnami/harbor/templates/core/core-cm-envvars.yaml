@@ -22,7 +22,7 @@ data:
   WITH_CLAIR: "{{ .Values.clair.enabled }}"
   CLAIR_DB_HOST: "{{ template "harbor.database.host" . }}"
   CLAIR_DB_PORT: "{{ template "harbor.database.port" . }}"
-  CLAIR_DB_USERNAME: "{{ template "harbor.database.username" . }}"
+  CLAIR_DB_USERNAME: "{{ template "harbor.database.clairUsername" . }}"
   CLAIR_DB: "{{ template "harbor.database.clairDatabase" . }}"
   CLAIR_DB_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
   CLAIR_URL: "http://{{ template "harbor.clair" . }}:6060"
