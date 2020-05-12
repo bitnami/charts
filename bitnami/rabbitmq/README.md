@@ -62,7 +62,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `fullnameOverride`                           | String to fully override rabbitmq.fullname template with a string                                     | `nil` |
 | `serviceAccount.create`                      | Enable creation of ServiceAccount for RabbitMQ pods | `true`                                        |
 | `serviceAccount.name`                        | Name of the created serviceAccount               | Generated using the `kafka.fullname` template |
-| `rbac.create`                                | Weather to create & use RBAC resources or not    | `false`                                       |
+| `rbacEnabled`                                | Weather to create & use RBAC resources or not    | `false`                                       |
 | `podManagementPolicy`                        | Pod management policy                            | `OrderedReady`                                          |
 | `rabbitmq.username`                          | RabbitMQ application username                    | `user`                                                  |
 | `rabbitmq.password`                          | RabbitMQ application password                    | _random 10 character long alphanumeric string_          |
