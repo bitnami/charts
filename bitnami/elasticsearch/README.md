@@ -67,6 +67,7 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `fullnameOverride`                                | String to fully override elasticsearch.fullname template with a string                                                                                    | `nil`                                                        |
 | `name`                                            | Elasticsearch cluster name                                                                                                                                | `elastic`                                                    |
 | `plugins`                                         | Comma, semi-colon or space separated list of plugins to install at initialization                                                                         | `nil`                                                        |
+| `snapshotRepoPath`                                | File System snapshot repository path                                                                                                                      | `nil`                                                        |
 | `config`                                          | Elasticsearch node custom configuration                                                                                                                   | ``                                                           |
 | `extraVolumes`                                    | Extra volumes                                                                                                                                             |                                                              |
 | `extraVolumeMounts`                               | Mount extra volume(s),                                                                                                                                    |                                                              |
@@ -110,7 +111,6 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.serviceAccount.create`                    | Enable creation of ServiceAccount for the master node                                                                                                     | `false`                                                      |
 | `master.serviceAccount.name`                      | Name of the created serviceAccount                                                                                                                        | Generated using the `elasticsearch.master.fullname` template |
 | `clusterDomain`                                   | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                              |
-| `discovery.name`                                  | Discover node pod name                                                                                                                                    | `discovery`                                                  |
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                                                   | `2`                                                          |
 | `coordinating.updateStrategy.type`                | Update strategy for Coordinating Deployment                                                                                                               | `RollingUpdate`                                              |
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                                                          | `128m`                                                       |
@@ -487,6 +487,24 @@ For advanced operations, the Bitnami Elasticsearch charts allows using custom in
 ```console
 initScriptsCM=special-scripts
 initScriptsSecret=special-scripts-sensitive
+```
+
+### Snapshot and restore operations
+
+As it's described in the [official documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
+
+This chart allows you to configure Elasticsearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every Elasticsearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Perstitent Volume:
+
+```yaml
+extraVolumes:
+  - name: snapshot-repository
+    nfs:
+      server: nfs.example.com # Please change this to your NFS server
+      path: /share1
+extraVolumeMounts:
+  - name: snapshot-repository
+    mountPath: /snapshots
+snapshotRepoPath: "/snapshots"
 ```
 
 ## Persistence

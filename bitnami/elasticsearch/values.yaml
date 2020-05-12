@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.6.2-debian-10-r49
+  tag: 7.6.2-debian-10-r51
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -103,15 +103,15 @@ clusterDomain: cluster.local
 ##
 name: elastic
 
-## Elasticsearch discovery node parameters
-##
-discovery:
-  name: discovery
-
 ## Comma, semi-colon or space separated list of plugins to install at initialization
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
 # plugins:
+
+## File System snapshot repository path
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+# snapshotRepoPath:
 
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
@@ -598,7 +598,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.1-debian-10-r107
+    tag: 5.8.1-debian-10-r109
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -766,7 +766,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r106
+    tag: 1.1.0-debian-10-r108
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
