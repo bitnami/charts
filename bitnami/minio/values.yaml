@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2020.5.8-debian-10-r0
+  tag: 2020.5.8-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -62,7 +62,7 @@ clusterDomain: cluster.local
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2020.5.6-debian-10-r1
+  tag: 2020.5.6-debian-10-r5
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -141,6 +141,11 @@ statefulset:
 ## Mount MinIO secret as a file instead of passing environment variable
 ##
 useCredentialsFile: false
+
+## Force reconfiguring new keys whenever the credentials change
+##
+forceNewKeys: false
+
 ## MinIO credentials
 ##
 accessKey:
