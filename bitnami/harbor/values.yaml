@@ -164,8 +164,8 @@ registryctlImage:
 ##
 trivyImage:
   registry: docker.io
-  repository: goharbor/trivy-adapter-photon
-  tag: dev
+  repository: bitnami/harbor-adapter-trivy
+  tag: 1-debian-10-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1846,7 +1846,7 @@ trivy:
   ## `/home/scanner/.cache/trivy/db/trivy.db` path.
   ##
   skipUpdate: false
-  cacheDir: "/home/scanner/.cache"
+  cacheDir: "/bitnami/harbor-adapter-trivy/.cache"
   resources:
     requests:
       cpu: 200m

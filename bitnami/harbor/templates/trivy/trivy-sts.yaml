@@ -44,15 +44,9 @@ spec:
       {{- if .Values.trivy.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 10000
-        fsGroup: 10000
-      {{/* TODO restore the proper security context
       {{- if .Values.podSecurityContext }}
       securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-       */}}
       automountServiceAccountToken: {{ .Values.trivy.automountServiceAccountToken }}
       initContainers:
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -84,11 +78,9 @@ spec:
         - name: trivy
           image: {{ include "harbor.trivyImage" . }}
           imagePullPolicy: {{ .Values.trivyImage.pullPolicy | quote }}
-          {{/* TODO restore the proper security context
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
-           */}}
           {{- if .Values.trivy.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.command "context" $) | nindent 12 }}
           {{- end }}
