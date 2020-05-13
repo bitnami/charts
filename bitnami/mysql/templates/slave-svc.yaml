@@ -26,7 +26,7 @@ spec:
       port: {{ .Values.service.port }}
       targetPort: mysql
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
-      nodePort: {{ .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort.slave }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

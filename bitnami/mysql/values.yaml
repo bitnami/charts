@@ -119,6 +119,7 @@ db:
 replication:
   ## Enable replication. This enables the creation of replicas of MySQL. If false, only a
   ## master deployment would be created
+  ##
   enabled: true
   ##
   ## MySQL replication user
@@ -496,7 +497,9 @@ service:
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  # nodePort:
+  nodePort:
+    master:
+    slave:
 
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
