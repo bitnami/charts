@@ -67,6 +67,10 @@ The following table lists the configurable parameters of the external-dns chart 
 | `publishInternalServices`           | Whether to publish DNS records for ClusterIP services or not                                             | `false`                                                     |
 | `publishHostIP`                     | Allow external-dns to publish host-ip for headless services                                              | `false`                                                     |
 | `serviceTypeFilter`                 | The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)   | `[]`                                                 |
+| `alibabacloud.accessKeyId`          | When using the Alibaba Cloud provider, set `accessKeyId` in the Alibaba Cloud configuration file (optional)     | `""`                                                 |
+| `alibabacloud.accessKeySecret`      | When using the Alibaba Cloud provider, set `accessKeySecret` in the Alibaba Cloud configuration file (optional) | `""`                                                 |
+| `alibabacloud.regionId`             | When using the Alibaba Cloud provider, set `regionId` in the Alibaba Cloud configuration file (optional)        | `""`                                                 |
+| `alibabacloud.zoneType`             | When using the Alibaba Cloud provider, filter for zones of this type (optional, options: public, private)       | `""`                                                 |
 | `aws.credentials.accessKey`         | When using the AWS provider, set `aws_access_key_id` in the AWS credentials (optional)                   | `""`                                                        |
 | `aws.credentials.secretKey`         | When using the AWS provider, set `aws_secret_access_key` in the AWS credentials (optional)               | `""`                                                        |
 | `aws.credentials.mountPath`         | When using the AWS provider, determine `mountPath` for `credentials` secret                              | `"/.aws"`                                                   |

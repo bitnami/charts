@@ -109,6 +109,15 @@ spec:
             {{- range .Values.sources }}
             - --source={{ . }}
             {{- end }}
+            {{- if eq .Values.provider "alibabacloud" }}
+            # Alibaba Cloud arguments
+            {{- if or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName }}
+            - --alibaba-cloud-config-file=/etc/kubernetes/alibaba-cloud.json
+            {{- end }}
+            {{- if .Values.alibabacloud.zoneType }}
+            - --alibaba-cloud-zone-type={{ .Values.alibabacloud.zoneType }}
+            {{- end }}
+            {{- end }}
             {{- if or (eq .Values.provider "aws") (eq .Values.provider "aws-sd") }}
             # AWS arguments
             {{- if .Values.aws.zoneType }}
@@ -433,6 +442,12 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
+            # Alibaba Cloud mountPath(s)
+            - name: alibabacloud-config-file
+              mountPath: /etc/kubernetes/
+              readOnly: true
+            {{- end }}
             {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) }}
             # AWS mountPath(s)
             - name: aws-credentials
@@ -485,6 +500,12 @@ spec:
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
       volumes:
+        {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
+        # Alibaba Cloud volume(s)
+        - name: alibabacloud-config-file
+          secret:
+            secretName: {{ template "external-dns.secretName" . }}
+        {{- end }}
         {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) }}
         # AWS volume(s)
         - name: aws-credentials
