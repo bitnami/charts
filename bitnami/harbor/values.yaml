@@ -165,7 +165,7 @@ registryctlImage:
 trivyImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-trivy
-  tag: 1-debian-10-r1
+  tag: 1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -357,9 +357,9 @@ volumePermissions:
 ##
 service:
   ## K8s service type
-  ## Allowed values are "Ingress", "ClusterIP", "NodePort" or "LoadBalancer"
+  ## Allowed values are "ClusterIP", "NodePort" or "LoadBalancer"
   ##
-  type: ClusterIP
+  type: LoadBalancer
   ## TLS parameters
   ##
   tls:
@@ -386,94 +386,54 @@ service:
     ## Mandatory when "secretName" is not provided or type is not "Ingress".
     ##
     commonName: "core.harbor.domain"
-  ## Ingress parameters
-  ##
-  ingress:
-    ## The list of hostnames to be covered with this ingress record
-    ##
-    hosts:
-      core: core.harbor.domain
-      notary: notary.harbor.domain
-    ## Set to the type of ingress controller if it has specific requirements.
-    ## leave as `default` for most ingress controllers.
-    ## set to `gce` if using the GCE ingress controller
-    ## set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
-    ##
-    controller: default
-    ## Ingress annotations done as key:value pairs
-    ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-    ##
-    annotations:
-      ingress.kubernetes.io/ssl-redirect: "true"
-      ingress.kubernetes.io/proxy-body-size: "0"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/proxy-body-size: "0"
   ## Service parameters when type is "clusterIP"
   ##
-  clusterIP:
-    name: harbor
-    ports:
-      ## The service port Harbor listens on when serving with HTTP
-      ##
-      httpPort: 80
-      ## The service port Harbor listens on when serving with HTTPS
-      ##
-      httpsPort: 443
-      ## The service port Notary listens on. Only needed when notary.enabled
-      ## is set to true
-      ##
-      notaryPort: 4443
+  ports:
+    ## The service port Harbor listens on when serving with HTTP
+    ##
+    http: 80
+    ## The service port Harbor listens on when serving with HTTPS
+    ##
+    https: 443
+    ## The service port Notary listens on. Only needed when notary.enabled
+    ## is set to true
+    ##
+    notary: 4443
   ## Service parameters when type is "nodePort"
   ##
-  nodePort:
-    name: harbor
-    ports:
-      http:
-        ## The service port Harbor listens on when serving with HTTP
-        ##
-        port: 80
-        ## The node port Harbor listens on when serving with HTTP
-        ##
-        nodePort: 30002
-      https:
-        ## The service port Harbor listens on when serving with HTTPS
-        ##
-        port: 443
-        ## The node port Harbor listens on when serving with HTTPS
-        ##
-        nodePort: 30003
-      notary:
-        ## The service port Notary listens on
-        ##
-        port: 4443
-        ## The node port Notary listens on
-        ##
-        nodePort: 30004
-  ## Service parameters when type is "loadBalancer"
+  nodePorts:
+    http:
+    https:
+    notary:
+  loadBalancerIP:
+  annotations: {}
+  loadBalancerSourceRanges: []
+  externalTrafficPolicy:
+
+## Ingress parameters
+##
+ingress:
+  enabled: false
+  ## The list of hostnames to be covered with this ingress record
   ##
-  loadBalancer:
-    name: harbor
-    ports:
-      ## The service port Harbor listens on when serving with HTTP
-      ##
-      httpPort: 80
-      ## The service port Harbor listens on when serving with HTTPS
-      ##
-      httpsPort: 443
-      ## The service port Notary listens on
-      ##
-      notaryPort: 4443
-    ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-    ##
-    loadBalancerIP:
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    annotations: {}
-    sourceRanges: []
+  hosts:
+    core: core.harbor.domain
+    notary: notary.harbor.domain
+  ## Set to the type of ingress controller if it has specific requirements.
+  ## leave as `default` for most ingress controllers.
+  ## set to `gce` if using the GCE ingress controller
+  ## set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
+  ##
+  controller: default
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
 
 ## The external URL for Harbor core service. It is used to
 ## 1) populate the docker/helm commands showed on portal
@@ -481,7 +441,7 @@ service:
 ##
 ## Format: protocol://domain[:port]. Usually:
 ## 1) if "service.type" is "ingress", the "domain" should be
-## the value of "service.ingress.hosts.core"
+## the value of "ingress.hosts.core"
 ## 2) if "service.type" is "clusterIP", the "domain" should be
 ## the value of "service.clusterIP.name"
 ## 3) if "service.type" is "nodePort", the "domain" should be
@@ -577,7 +537,7 @@ persistence:
     ##
     filesystem:
       rootdirectory: /storage
-      # maxthreads: 100
+      maxthreads:
     ## Images/charts storage parameters when type is "azure"
     ##
     azure:
@@ -585,9 +545,9 @@ persistence:
       accountkey: base64encodedaccountkey
       container: containername
       storagePrefix: /azure/harbor/charts
-      realm:
       ## Example realm
       # realm: core.windows.net
+      realm:
     ## Images/charts storage parameters when type is "gcs"
     ##
     gcs:
@@ -595,59 +555,60 @@ persistence:
       ## The base64 encoded json file which contains the gcs key (file's content)
       ##
       encodedkey: base64-encoded-json-key-file
-      # rootdirectory: /gcs/object/name/prefix
-      # chunksize: "5242880"
+      rootdirectory:
+      chunksize:
     ## Images/charts storage parameters when type is "s3"
     ##
     s3:
       region: us-west-1
       bucket: bucketname
-      ## accesskey: awsaccesskey
-      ## secretkey: awssecretkey
-      ## regionendpoint: http://myobjects.local
-      ## encrypt: false
-      ## keyid: mykeyid
-      ## secure: true
-      ## v4auth: true
-      ## chunksize: "5242880"
-      ## rootdirectory: /s3/object/name/prefix
-      ## storageclass: STANDARD
+      accesskey:
+      secretkey:
+      regionendpoint:
+      encrypt:
+      keyid:
+      secure:
+      v4auth:
+      chunksize:
+      rootdirectory:
+      storageclass:
+      sse:
     ## Images/charts storage parameters when type is "swift"
     ##
     swift:
       authurl: https://storage.myprovider.com/v3/auth
-      username: username
-      password: password
-      container: containername
-      ## region: fr
-      ## tenant: tenantname
-      ## tenantid: tenantid
-      ## domain: domainname
-      ## domainid: domainid
-      ## trustid: trustid
-      ## insecureskipverify: false
-      ## chunksize: 5M
-      ## prefix:
-      ## secretkey: secretkey
-      ## accesskey: accesskey
-      ## authversion: 3
-      ## endpointtype: public
-      ## tempurlcontainerkey: false
-      ## tempurlmethods:
+      username:
+      password:
+      container:
+      region:
+      tenant:
+      tenantid:
+      domain:
+      domainid:
+      trustid:
+      insecureskipverify:
+      chunksize:
+      prefix:
+      secretkey:
+      accesskey:
+      authversion:
+      endpointtype:
+      tempurlcontainerkey:
+      tempurlmethods:
     ## Images/charts storage parameters when type is "oss"
     ##
     oss:
-      accesskeyid: accesskeyid
-      accesskeysecret: accesskeysecret
-      region: regionname
-      bucket: bucketname
-      ## endpoint: endpoint
-      ## internal: false
-      ## encrypt: false
-      ## secure: true
-      ## chunksize: 10M
-      ## rootdirectory: rootdirectory
-      ##
+      accesskeyid:
+      accesskeysecret:
+      region:
+      bucket:
+      endpoint:
+      internal:
+      encrypt:
+      secure:
+      chunksize:
+      rootdirectory:
+      secretkey:
 
 ## The log level used for Harbor services. Allowed values are [ fatal | error | warn | info | debug | trace ]
 ##
@@ -1047,21 +1008,7 @@ core:
   ## The CSRF key. Will be generated automatically if it isn't specified
   ##
   csrfKey: ""
-  ## lifecycleHooks for the container to automate configuration before or after startup,
-  ## i.e. to set LDAP settings through REST API calls
-  ## lifecycleHooks: |
-  ##    postStart:
-  ##      exec:
-  ##        command: ["/bin/bash", "-c", "echo lifecycleHook"]
-  ## Other option: Insert scrip file via "helm install --set-file=postStartHookScript=${pwd()}/postStartHook.sh"
-  ##  lifecycleHooks: |-
-  ##    postStart:
-  ##      exec:
-  ##        command:
-  ##          - "/bin/bash"
-  ##          - "-c"
-  ##          - >
-  ##    {{  tpl (required ".Values.postStartHookScript required!" .Values.postStartHookScript) . | indent 8  }}
+  ## lifecycleHooks for the container to automate configuration before or after startup.
   ##
   lifecycleHooks:
 
@@ -1104,6 +1051,10 @@ jobservice:
   ## The logger for jobs: "file", "database" or "stdout"
   ##
   jobLogger: file
+
+  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks:
 
   ## Custom Liveness probe
   ##
@@ -1245,6 +1196,10 @@ registry:
     ##
     extraVolumeMounts: []
 
+    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ##
+    lifecycleHooks:
+
     ## Harbor Registry containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -1311,6 +1266,10 @@ registry:
     ## Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
+
+    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ##
+    lifecycleHooks:
 
     ## Harbor Registryctl containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -1981,6 +1940,10 @@ notary:
     ##
     extraVolumeMounts: []
 
+    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ##
+    lifecycleHooks:
+
     resources:
       ## We usually recommend not to specify default resources and to leave this as a conscious
       ## choice for the user. This also increases chances charts run on environments with little
@@ -2011,10 +1974,6 @@ notary:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
-
-    ## lifecycleHooks for the container to automate configuration before or after startup.
-    ##
-    lifecycleHooks:
 
     ## Custom Liveness probe
     ##
@@ -2055,6 +2014,11 @@ notary:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
+
+    ## Pod annotations. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
 
   signer:
     ## Notary signer container command (using container default if not set)

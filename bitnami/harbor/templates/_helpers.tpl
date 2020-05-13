@@ -16,7 +16,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.autoGenCertForIngress" -}}
-  {{- if and (eq (include "harbor.autoGenCert" .) "true") (eq .Values.service.type "Ingress") -}}
+  {{- if and (eq (include "harbor.autoGenCert" .) "true") .Values.ingress.enabled -}}
     {{- printf "true" -}}
   {{- else -}}
     {{- printf "false" -}}
@@ -24,7 +24,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.autoGenCertForNginx" -}}
-  {{- if and (eq (include "harbor.autoGenCert" .) "true") (ne .Values.service.type "Ingress") -}}
+  {{- if and (eq (include "harbor.autoGenCert" .) "true") (not .Values.ingress.enabled) -}}
     {{- printf "true" -}}
   {{- else -}}
     {{- printf "false" -}}
@@ -190,7 +190,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.redis.clairAdapterDatabaseIndex" -}}
   {{- if eq .Values.redis.enabled true -}}
-    {{- printf "%s" "4" }}
+    {{- printf "%s" "4" -}}
   {{- else -}}
     {{- .Values.externalRedis.clairAdapterDatabaseIndex -}}
   {{- end -}}
@@ -207,7 +207,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.redis.trivyAdapterDatabaseIndex" -}}
   {{- if .Values.redis.enabled -}}
-    {{- printf "%s" "5" }}
+    {{- printf "%s" "5" -}}
   {{- else -}}
     {{- .Values.externalRedis.trivyAdapterDatabaseIndex -}}
   {{- end -}}
@@ -222,17 +222,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*the username redis is used for a placeholder as no username needed in redis*/}}
 {{- define "harbor.redisForJobservice" -}}
   {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) }}
-  {{- else }}
-    {{- template "harbor.redis.host" . }}:{{ template "harbor.redis.port" . }}/{{ template "harbor.redis.jobserviceDatabaseIndex" . }}
+    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
+  {{- else -}}
+    {{- template "harbor.redis.host" . -}}:{{ template "harbor.redis.port" . -}}/{{ template "harbor.redis.jobserviceDatabaseIndex" . -}}
   {{- end -}}
 {{- end -}}
 
 {{/*the username redis is used for a placeholder as no username needed in redis*/}}
 {{- define "harbor.redisForGC" -}}
   {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) }}
-  {{- else }}
+    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+  {{- else -}}
     {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
   {{- end -}}
 {{- end -}}
@@ -240,16 +240,16 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*the username redis is used for a placeholder as no username needed in redis*/}}
 {{- define "harbor.redisForClairAdapter" -}}
   {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) }}
-  {{- else }}
+    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+  {{- else -}}
     {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "harbor.redisForTrivyAdapter" -}}
   {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) }}
-  {{- else }}
+    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
+  {{- else -}}
     {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
   {{- end -}}
 {{- end -}}
@@ -331,91 +331,91 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the proper Harbor Core image name
 */}}
 {{- define "harbor.coreImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.coreImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.coreImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Portal image name
 */}}
 {{- define "harbor.portalImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.portalImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.portalImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Trivy Adapter image name
 */}}
 {{- define "harbor.trivyImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.trivyImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.trivyImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Job Service image name
 */}}
 {{- define "harbor.jobserviceImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.jobserviceImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.jobserviceImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper ChartMuseum image name
 */}}
 {{- define "harbor.chartMuseumImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.chartMuseumImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.chartMuseumImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Notary Server image name
 */}}
 {{- define "harbor.notaryServerImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.notaryServerImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.notaryServerImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Notary Signer image name
 */}}
 {{- define "harbor.notarySignerImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.notarySignerImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.notarySignerImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Registry image name
 */}}
 {{- define "harbor.registryImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.registryImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.registryImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Registryctl image name
 */}}
 {{- define "harbor.registryctlImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.registryctlImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.registryctlImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Clair image name
 */}}
 {{- define "harbor.clairImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.clairImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.clairImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Harbor Clair image name
 */}}
 {{- define "harbor.clairAdapterImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.clairAdapterImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.clairAdapterImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Nginx image name
 */}}
 {{- define "harbor.nginxImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.nginxImage "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.nginxImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "harbor.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.clairImage .Values.clairAdapterImage .Values.trivyImage .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets) "global" $) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.clairImage .Values.clairAdapterImage .Values.trivyImage .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets) "global" .Values.global ) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
@@ -465,35 +465,35 @@ harbor: External PostgreSQL password
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "harbor.volumePermissions.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" $) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Storage Class for chartmuseum
 */}}
 {{- define "harbor.chartmuseum.storageClass" -}}
-{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.chartmuseum "global" $) -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.chartmuseum "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Storage Class for jobservice
 */}}
 {{- define "harbor.jobservice.storageClass" -}}
-{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.jobservice "global" $) -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.jobservice "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Storage Class for registry
 */}}
 {{- define "harbor.registry.storageClass" -}}
-{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.registry "global" $) -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.registry "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Storage Class for trivy
 */}}
 {{- define "harbor.trivy.storageClass" -}}
-{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.trivy "global" $) -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.trivy "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*

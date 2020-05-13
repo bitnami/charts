@@ -1,12 +1,12 @@
-{{- if eq .Values.service.type "Ingress" }}
-{{- if eq .Values.service.ingress.controller "gce" }}
+{{- if .Values.ingress.enabled }}
+{{- if eq .Values.ingress.controller "gce" }}
   {{- $_ := set . "portal_path" "/*" -}}
   {{- $_ := set . "api_path" "/api/*" -}}
   {{- $_ := set . "service_path" "/service/*" -}}
   {{- $_ := set . "v2_path" "/v2/*" -}}
   {{- $_ := set . "chartrepo_path" "/chartrepo/*" -}}
   {{- $_ := set . "controller_path" "/c/*" -}}
-{{- else if eq .Values.service.ingress.controller "ncp" }}
+{{- else if eq .Values.ingress.controller "ncp" }}
   {{- $_ := set . "portal_path" "/" -}}
   {{- $_ := set . "api_path" "/api/.*" -}}
   {{- $_ := set . "service_path" "/service/.*" -}}
@@ -30,8 +30,8 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-  {{- if .Values.service.ingress.annotations }}
-   {{- toYaml .Values.service.ingress.annotations | nindent 4 }}
+  {{- if .Values.ingress.annotations }}
+   {{- toYaml .Values.ingress.annotations | nindent 4 }}
   {{- end }}
   {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -44,9 +44,9 @@ spec:
     {{- else }}
     - secretName: {{ include "harbor.ingress" . }}
     {{- end }}
-      {{- if .Values.service.ingress.hosts.core }}
+      {{- if .Values.ingress.hosts.core }}
       hosts:
-        - {{ .Values.service.ingress.hosts.core }}
+        - {{ .Values.ingress.hosts.core }}
       {{- end }}
     {{- if .Values.notary.enabled }}
     {{- if .Values.service.tls.notarySecretName }}
@@ -56,13 +56,13 @@ spec:
     {{- else }}
     - secretName: {{ include "harbor.ingress" . | quote }}
     {{- end }}
-      {{- if .Values.service.ingress.hosts.notary }}
+      {{- if .Values.ingress.hosts.notary }}
       hosts:
-        - {{ .Values.service.ingress.hosts.notary }}
+        - {{ .Values.ingress.hosts.notary }}
       {{- end }}
     {{- end }}
   {{- end }}
-  {{- if eq .Values.service.ingress.controller "ncp" }}
+  {{- if eq .Values.ingress.controller "ncp" }}
   backend:
     serviceName: {{ include "harbor.portal" . }}
     servicePort: http
@@ -94,8 +94,8 @@ spec:
             backend:
               serviceName: {{ include "harbor.core" . }}
               servicePort: http
-      {{- if .Values.service.ingress.hosts.core }}
-      host: {{ .Values.service.ingress.hosts.core }}
+      {{- if .Values.ingress.hosts.core }}
+      host: {{ .Values.ingress.hosts.core }}
       {{- end }}
     {{- if .Values.notary.enabled }}
     - http:
@@ -104,8 +104,8 @@ spec:
             backend:
               serviceName: {{ include "harbor.notary-server" . }}
               servicePort: notary-server
-      {{- if .Values.service.ingress.hosts.notary }}
-      host: {{ .Values.service.ingress.hosts.notary }}
+      {{- if .Values.ingress.hosts.notary }}
+      host: {{ .Values.ingress.hosts.notary }}
       {{- end }}
     {{- end }}
 {{- end }}

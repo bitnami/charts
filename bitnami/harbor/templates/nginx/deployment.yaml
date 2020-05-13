@@ -1,4 +1,4 @@
-{{- if ne .Values.service.type "Ingress" }}
+{{- if not .Values.ingress.enabled }}
 apiVersion: {{ template "deployment.apiVersion" . }}
 kind: Deployment
 metadata:

@@ -1,104 +1,60 @@
-{{- if ne .Values.service.type "Ingress" }}
+{{- if not .Values.ingress.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-{{- if eq .Values.service.type "ClusterIP" }}
-  name: {{ .Values.service.clusterIP.name }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: nginx
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-spec:
-  type: ClusterIP
-  ports:
-    - name: http
-      port: {{ .Values.service.clusterIP.ports.httpPort }}
-      targetPort: 8080
-    {{- if .Values.service.tls.enabled }}
-    - name: https
-      port: {{ .Values.service.clusterIP.ports.httpsPort }}
-      targetPort: 8443
-    {{- end }}
-    {{- if .Values.notary.enabled }}
-    - name: notary
-      port: {{ .Values.service.clusterIP.ports.notaryPort }}
-      targetPort: 4443
-    {{- end }}
-{{- else if eq .Values.service.type "NodePort" }}
-  name: {{ .Values.service.nodePort.name }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-spec:
-  type: NodePort
-  ports:
-    - name: http
-      port: {{ .Values.service.nodePort.ports.http.port }}
-      targetPort: 8080
-      {{- if .Values.service.nodePort.ports.http.nodePort }}
-      nodePort: {{ .Values.service.nodePort.ports.http.nodePort }}
-      {{- end }}
-    {{- if .Values.service.tls.enabled }}
-    - name: https
-      port: {{ .Values.service.nodePort.ports.https.port }}
-      targetPort: 8443
-      {{- if .Values.service.nodePort.ports.https.nodePort }}
-      nodePort: {{ .Values.service.nodePort.ports.https.nodePort }}
-      {{- end }}
-    {{- end }}
-    {{- if .Values.notary.enabled }}
-    - name: notary
-      port: {{ .Values.service.nodePort.ports.notary.port }}
-      targetPort: 4443
-      {{- if .Values.service.nodePort.ports.notary.nodePort }}
-      nodePort: {{ .Values.service.nodePort.ports.notary.nodePort }}
-      {{- end }}
-    {{- end }}
-{{- else if eq .Values.service.type "LoadBalancer" }}
-  name: {{ .Values.service.loadBalancer.name }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- with .Values.service.loadBalancer.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
-  type: LoadBalancer
-  {{- with .Values.service.loadBalancer.sourceRanges }}
-    loadBalancerSourceRanges:
-    {{- toYaml . | nindent 4 }}
+  type: {{ .Values.service.type }}
+  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if .Values.service.loadBalancer.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.service.loadBalancer.loadBalancerIP }}
+  {{- if (and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges) }}
+  loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if (and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerIP) }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.service.loadBalancer.ports.httpPort }}
-      targetPort: 8080
+      port: {{ .Values.service.ports.http }}
+      targetPort: http
+      {{- if and .Values.service.nodePorts.http }}
+      nodePort: {{ .Values.service.nodePorts.http }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- if .Values.service.tls.enabled }}
     - name: https
-      port: {{ .Values.service.loadBalancer.ports.httpsPort }}
-      targetPort: 8443
+      port: {{ .Values.service.ports.https }}
+      targetPort: https
+      {{- if and .Values.service.nodePorts.https }}
+      nodePort: {{ .Values.service.nodePorts.https }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- end }}
     {{- if .Values.notary.enabled }}
     - name: notary
-      port: {{ .Values.service.loadBalancer.ports.notaryPort }}
-      targetPort: 4443
+      port: {{ .Values.service.ports.notary }}
+      targetPort: notary
+      {{- if and .Values.service.nodePorts.notary }}
+      nodePort: {{ .Values.service.nodePorts.notary }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- end }}
-{{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: nginx
 {{- end }}

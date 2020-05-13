@@ -11,7 +11,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if  (eq .Values.service.ingress.controller "gce") }}
+  {{- if  (eq .Values.ingress.controller "gce") }}
   type: NodePort
   {{- end }}
   ports:

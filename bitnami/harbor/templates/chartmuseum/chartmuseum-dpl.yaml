@@ -31,6 +31,7 @@ spec:
         app.kubernetes.io/component: chartmuseum
       annotations:
         checksum/configmap-envvars: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-cm-envvars.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-secret.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if .Values.chartmuseum.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.podAnnotations "context" $) | nindent 8 }}
