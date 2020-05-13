@@ -76,7 +76,7 @@ sentinel:
   initialCheckTimeout: 5
   quorum: 2
   downAfterMilliseconds: 60000
-  failoverTimeout: 18000
+  failoverTimeout: 180000
   parallelSyncs: 1
   port: 26379
   ## Additional Redis configuration for the sentinel nodes
