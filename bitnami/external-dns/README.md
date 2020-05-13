@@ -67,6 +67,10 @@ The following table lists the configurable parameters of the external-dns chart 
 | `publishInternalServices`           | Whether to publish DNS records for ClusterIP services or not                                             | `false`                                                     |
 | `publishHostIP`                     | Allow external-dns to publish host-ip for headless services                                              | `false`                                                     |
 | `serviceTypeFilter`                 | The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)   | `[]`                                                 |
+| `alibabacloud.accessKeyId`          | When using the Alibaba Cloud provider, set `accessKeyId` in the Alibaba Cloud configuration file (optional)     | `""`                                                 |
+| `alibabacloud.accessKeySecret`      | When using the Alibaba Cloud provider, set `accessKeySecret` in the Alibaba Cloud configuration file (optional) | `""`                                                 |
+| `alibabacloud.regionId`             | When using the Alibaba Cloud provider, set `regionId` in the Alibaba Cloud configuration file (optional)        | `""`                                                 |
+| `alibabacloud.zoneType`             | When using the Alibaba Cloud provider, filter for zones of this type (optional, options: public, private)       | `""`                                                 |
 | `aws.credentials.accessKey`         | When using the AWS provider, set `aws_access_key_id` in the AWS credentials (optional)                   | `""`                                                        |
 | `aws.credentials.secretKey`         | When using the AWS provider, set `aws_secret_access_key` in the AWS credentials (optional)               | `""`                                                        |
 | `aws.credentials.mountPath`         | When using the AWS provider, determine `mountPath` for `credentials` secret                              | `"/.aws"`                                                   |
@@ -87,8 +91,9 @@ The following table lists the configurable parameters of the external-dns chart 
 | `azure.useManagedIdentityExtension` | When using the Azure provider, set if you use Azure MSI                                                  | `""`                                                        |
 | `cloudflare.apiToken`               | When using the Cloudflare provider, `CF_API_TOKEN` to set (optional)                                     | `""`                                                        |
 | `cloudflare.apiKey`                 | When using the Cloudflare provider, `CF_API_KEY` to set (optional)                                       | `""`                                                        |
-| `cloudflare.email`                  | When using the Cloudflare provider, `CF_API_EMAIL` to set (optional)                                     | `""`                                                        |
+| `cloudflare.email`                  | When using the Cloudflare provider, `CF_API_EMAIL` to set (optional). Needed when using CF_API_KEY        | `""`                                                        |
 | `cloudflare.proxied`                | When using the Cloudflare provider, enable the proxy feature (DDOS protection, CDN...) (optional)        | `true`                                                      |
+| `cloudflare.secretName`             | When using the Cloudflare provider, it's the name of the secret containing cloudflare_api_token or cloudflare_api_key. | `""`                                          |
 | `coredns.etcdEndpoints`             | When using the CoreDNS provider, set etcd backend endpoints (comma-separated list)                       | `"http://etcd-extdns:2379"`                                 |
 | `coredns.etcdTLS.enabled`           | When using the CoreDNS provider, enable secure communication with etcd                                   | `false`                                                     |
 | `coredns.etcdTLS.secretName`        | When using the CoreDNS provider, specify a name of existing Secret with etcd certs and keys              | `"etcd-client-certs"`                                       |
@@ -103,8 +108,8 @@ The following table lists the configurable parameters of the external-dns chart 
 | `designate.customCA.filename`       | When using the Designate provider, set the custom CA configuration filename                              | "designate-ca.pem"                                          |
 | `designate.customCAHostPath`        | When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled` | `none`            |
 | `designate.password`                | When using the Designate provider, specify the OpenStack authentication password. (optional)             | `none`                                                      |
-| `designate.projectName`              | When using the Designate provider, specify the OpenStack project name. (optional)                        | `none`                                                      |
-| `designate.regionName`               | When using the Designate provider, specify the OpenStack region name. (optional)                         | `none`                                                      |
+| `designate.projectName`             | When using the Designate provider, specify the OpenStack project name. (optional)                        | `none`                                                      |
+| `designate.regionName`              | When using the Designate provider, specify the OpenStack region name. (optional)                         | `none`                                                      |
 | `designate.userDomainName`          | When using the Designate provider, specify the OpenStack user domain name. (optional)                    | `none`                                                      |
 | `designate.username`                | When using the Designate provider, specify the OpenStack authentication username. (optional)             | `none`                                                      |
 | `digitalocean.apiToken`             | When using the DigitalOcean provider, `DO_TOKEN` to set (optional)                                       | `""`                                                        |
@@ -136,6 +141,9 @@ The following table lists the configurable parameters of the external-dns chart 
 | `pdns.apiKey`                       | When using the PowerDNS provider, specify the API key of the server.                                     | `""`                                                        |
 | `transip.account`                   | When using the TransIP provider, specify the account name.                                               | `""`                                                        |
 | `transip.apiKey`                    | When using the TransIP provider, specify the API key to use.                                             | `""`                                                        |
+| `vinyldns.host`                     | When using the VinylDNS provider, specify the VinylDNS API host.                                         | `""`                                                        |
+| `vinyldns.accessKey`                | When using the VinylDNS provider, specify the Access Key to use.                                         | `""`                                                        |
+| `vinyldns.secretKey`                | When using the VinylDNS provider, specify the Secret key to use.                                         | `""`                                                        |
 | `annotationFilter`                  | Filter sources managed by external-dns via annotation using label selector (optional)                    | `""`                                                        |
 | `domainFilters`                     | Limit possible target zones by domain suffixes (optional)                                                | `[]`                                                        |
 | `zoneIdFilters`                     | Limit possible target zones by zone id (optional)                                                        | `[]`                                                        |

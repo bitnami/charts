@@ -9,6 +9,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: worker
 spec:
+  {{- if .Values.airflow.worker.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.airflow.worker.podManagementPolicy | quote }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "airflow.name" . }}
@@ -173,6 +176,8 @@ spec:
                   key: airflow-fernetKey
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ template "airflow.fullname" . }}
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
             {{- if .Values.airflow.extraEnvVars }}
               {{ toYaml .Values.airflow.extraEnvVars | nindent 12 }}
             {{- end }}
