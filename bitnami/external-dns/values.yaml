@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.1-debian-10-r51
+  tag: 0.7.1-debian-10-r53
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -40,7 +40,7 @@ sources:
   - ingress
 
 ## DNS provider where the DNS records will be created. Available providers are:
-## - aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, infoblox, rfc2136, transip
+## - alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, infoblox, rfc2136, transip
 ##
 provider: aws
 
@@ -68,6 +68,23 @@ publishHostIP: false
 ## The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)
 ##
 serviceTypeFilter: []
+
+## Alibaba cloud configuration to be set via arguments/env. variables
+##
+alibabacloud:
+  ## These will be added to /etc/kubernetes/alibaba-cloud.json via secret
+  accessKeyId: ""
+  accessKeySecret: ""
+  regionId: ""
+
+  ## Use an existing secret with key "alibaba-cloud.json" defined.
+  ## This ignores alibabacloud.accessKeyId, and alibabacloud.accessKeySecret
+  ##
+  # secretName:
+
+  ## Zone Filter. Available values are: public, private, or no value for both
+  ##
+  zoneType: ""
 
 ## AWS configuration to be set via arguments/env. variables
 ##
