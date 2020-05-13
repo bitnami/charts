@@ -19,7 +19,8 @@ image:
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: IfNotPresent
+#  pullPolicy: IfNotPresent
+  pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -174,6 +175,10 @@ galera:
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
   bootstrap:
     ## Node to bootstrap from, you will need to change this parameter incase you want to bootstrap from other node
+    ## Force bootstraping
+    ##
+    forceBootstrap: false
+    ## Node to bootstrap from
     ##
     bootstrapFromNode: 0
     ## Force bootstrap

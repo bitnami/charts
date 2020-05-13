@@ -95,6 +95,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `db.name`                            | Name for new database to create                                                                                                                             | `my_database`                                                     |
 | `db.forcePassword`                   | Force users to specify a password                                                                                                                           | `false`                                                           |
 | `galera.name`                        | Galera cluster name                                                                                                                                         | `galera`                                                          |
+| `galera.bootstrap.forceBootstrap`       | Force bootstraping                                                                                                                                       | `false`                                                           |
 | `galera.bootstrap.bootstrapFromNode`    | Node number to bootstrap first                                                                                                                           | `0`                                                               |
 | `galera.bootstrap.forceSafeToBootstrap` | Force `safe_to_bootstrap: 1` in `grastate.dat`                                                                                                           | `false`                                                           |
 | `galera.mariabackup.user`            | Galera mariabackup user                                                                                                                                     | `mariabackup`                                                     |
@@ -430,7 +431,7 @@ helm install my-release bitnami/mariadb-galera \
 
 #### All the nodes with `safe_to_bootstrap: 0`
 
-In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
+In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the field `seqno` higher in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```bash
 helm install my-release bitnami/mariadb-galera \

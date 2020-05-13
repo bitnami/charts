@@ -50,6 +50,7 @@ spec:
         - name: "mariadb-galera"
           image: {{ template "mariadb-galera.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.galera.bootstrap.forceBootstrap }}
           command:
             - bash
             - -ec
