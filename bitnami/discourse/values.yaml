@@ -8,103 +8,264 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-# Default values for discourse.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+## Number of Discourse replicas
+## (Note that you will need ReadWriteMany PVCs for this to work properly)
+##
+replicaCount:
+  discourse: 1
+  sidekiq: 1
 
-replicaCount: 1
-
+## Bitnami Discourse image version
+## ref: https://hub.docker.com/r/bitnami/discourse/tags/
+##
 image:
   repository: bitnami/discourse
   tag: latest
   pullPolicy: Always
 
 imagePullSecrets: []
+
+## String to partially override discourse.fullname template (will maintain the release name)
+##
 nameOverride: ""
+
+## String to fully override discourse.fullname template
+##
 fullnameOverride: ""
 
-hostname: localhost
-sitename: community chest
-admin:
-  username: admin
-  password: this-is-a-bad-admin-password
-  email: user@example.com
+## Discourse host to create application URLs
+## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
+##
+# discourseHost:
+
+## Discourse site name
+## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
+##
+discourseSitename: "My Site!"
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
+##
+discourseUsername: user
+
+## Application password
+## Defaults to a random 10-character alphanumeric string if not set
+## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
+##
+# discoursePassword:
+
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
+##
+discourseEmail: user@example.com
+
+## Add sidecars to the pod.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## Add init containers to the pod
+##
+## e.g.
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##       containerPort: 1234
+initContainers: []
 
 serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
+  ## Specifies whether a service account should be created
+  create: false
+  ## Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
+  ## The name of the service account to use.
+  ## If not set and create is true, a name is generated using the fullname template
   name:
 
 podSecurityContext: {}
-  # fsGroup: 2000
+  ## fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+containerSecurityContext: {}
+  ## capabilities:
+  ##   drop:
+  ##   - ALL
+  ## readOnlyRootFilesystem: true
+  ## runAsNonRoot: true
+  ## runAsUser: 1000
 
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
+##
 service:
-  type: ClusterIP
-  port: 3000
-
-ingress:
-  enabled: false
+  type: LoadBalancer
+  ## HTTP Port
+  ##
+  port: 80
+  ## Node Ports to expose
+  # nodePort:
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  ## Limits which cidr blocks can connect to service's load balancer
+  ## Only valid if service.type: LoadBalancer
+  loadBalancerSourceRanges: []
+  ## Extra ports to expose (normally used with the `sidecar` value)
+  # extraPorts:
 
+## Ingress paramaters
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  ##
+  enabled: false
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
+  certManager: false
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: discourse.local
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
+  annotations: {}
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: discourse.local
+  ##   path: /
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - discourse.local
+  ##   secretName: discourse.local-tls
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ##
+  secrets: []
+  ## - name: discourse.local-tls
+  ##   key:
+  ##   certificate:
+
+## Discourse containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## limits:
+  ##   cpu: 100m
+  ##   memory: 128Mi
+  ## requests:
+  ##   cpu: 100m
+  ##   memory: 128Mi
 
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
 nodeSelector: {}
 
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
 tolerations: []
 
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
 affinity: {}
 
+## Discourse pod extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##   discourse:
+##   - name: DISCOURSE_ELASTICSEARCH_URL
+##     value: test
+##   sidekiq: []
+##
+extraEnvVars:
+  discourse: []
+  sidekiq: []
+
+## Array to add extra configmaps:
+##
+extraEnvVarsCM:
+  discourse: []
+  sidekiq: []
+
+## Array to add extra environment
+## variables from a secret:
+##
+extraEnvVarsSecret:
+  discourse: ""
+  sidekiq: ""
+
+##
+## PostgreSQL chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+##
 postgresql:
   enabled: true
-  postgresqlPostgresPassword: this-is-a-bad-default-root-password
-  postgresqlUsername: discourse
-  postgresqlPassword: this-is-a-bad-password
-  postgresqlDatabase: discourse
+  postgresqlUsername: bn_discourse
+  postgresqlPostgresPassword:
+  postgresqlPassword:
+  postgresqlDatabase: bitnami_discourse
   persistence:
     enabled: false
 
+## Redis chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
+##
 redis:
   ## use redis helm chart dependency
   enabled: true
-  ## If redis.enabled is false then provide a host name here
-  host:
-  usePassword: true
-  password: this-is-a-bad-password
-  # TODO: change from master/slave
-  # Sorry for the master/slave terminology,
-  # its an upstream chart. Will look for
-  # ways to change it.
+  password:
+  ## TODO: change from master/slave
+  ## Sorry for the master/slave terminology,
+  ## its an upstream chart. Will look for
+  ## ways to change it.
   cluster:
     enabled: false
   master:

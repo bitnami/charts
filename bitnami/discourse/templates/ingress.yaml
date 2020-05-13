@@ -9,8 +9,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
-  labels:
-    {{- include "discourse.labels" . | nindent 4 }}
+  labels: {{- include "discourse.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
