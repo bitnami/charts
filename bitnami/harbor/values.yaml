@@ -2188,10 +2188,6 @@ externalRedis:
   ## Redis password
   ##
   password: ""
-  ## The "coreDatabaseIndex" must be "0" as the library Harbor
-  ## used doesn't support configuring it
-  ##
-  coreDatabaseIndex: "0"
   jobserviceDatabaseIndex: "1"
   registryDatabaseIndex: "2"
   chartmuseumDatabaseIndex: "3"

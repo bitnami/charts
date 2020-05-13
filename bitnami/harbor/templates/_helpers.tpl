@@ -237,14 +237,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
-{{- define "harbor.redis.coreDatabaseIndex" -}}
-  {{- if eq .Values.redis.enabled true -}}
-    {{- printf "%s" "0" }}
-  {{- else -}}
-    {{- .Values.externalRedis.coreDatabaseIndex -}}
-  {{- end -}}
-{{- end -}}
-
 {{- define "harbor.redis.jobserviceDatabaseIndex" -}}
   {{- if eq .Values.redis.enabled true -}}
     {{- printf "%s" "1" }}
@@ -340,7 +332,7 @@ host:port,pool_size,password
 100 is the default value of pool size
 */}}
 {{- define "harbor.redisForCore" -}}
-  {{- printf "%s:%s,100,%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.rawPassword" . )  (include "harbor.redis.coreDatabaseIndex" . ) -}}
+  {{- printf "%s:%s,100,%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.rawPassword" . ) -}}
 {{- end -}}
 
 {{- define "harbor.portal" -}}
