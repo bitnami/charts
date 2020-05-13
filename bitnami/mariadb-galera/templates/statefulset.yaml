@@ -4,6 +4,7 @@ metadata:
   name: {{ template "mariadb-galera.fullname" . }}
   labels: {{- include "mariadb-galera.labels" . | nindent 4 }}
 spec:
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "mariadb-galera.matchLabels" . | nindent 6 }}
@@ -49,6 +50,25 @@ spec:
         - name: "mariadb-galera"
           image: {{ template "mariadb-galera.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.galera.bootstrap.forceBootstrap }}
+          command:
+            - bash
+            - -ec
+            - |
+                # Bootstrap from the indicated node
+                HOSTNAME=`hostname -s`
+                if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
+                  NODE=${BASH_REMATCH[2]}
+                  if (( NODE == {{ .Values.galera.bootstrap.bootstrapFromNode }} )); then
+                    export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
+                    export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
+                  fi
+                else
+                  echo "Failed to get index from hostname $HOST"
+                  exit 1
+                fi
+                exec /opt/bitnami/scripts/mariadb-galera/entrypoint.sh /opt/bitnami/scripts/mariadb-galera/run.sh
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
