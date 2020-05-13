@@ -29,7 +29,7 @@ data:
   WITH_CLAIR: {{ .Values.clair.enabled | quote }}
   CLAIR_DB_HOST: {{ include "harbor.database.host" . | quote }}
   CLAIR_DB_PORT: {{ include "harbor.database.port" . | quote }}
-  CLAIR_DB_USERNAME: {{ include "harbor.database.username" . | quote }}
+  CLAIR_DB_USERNAME: {{ include "harbor.database.clairUsername" . | quote }}
   CLAIR_DB: {{ include "harbor.database.clairDatabase" . | quote }}
   CLAIR_DB_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
   CLAIR_URL: {{ printf "http://%s:6060" (include "harbor.clair" .) | quote }}

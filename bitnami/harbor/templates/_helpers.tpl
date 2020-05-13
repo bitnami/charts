@@ -3,9 +3,6 @@
 Expand the name of the chart.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "harbor.name" -}}
-{{- default "harbor" .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 
 {{- define "harbor.autoGenCert" -}}
   {{- if and .Values.service.tls.enabled (not .Values.service.tls.secretName) -}}
@@ -64,6 +61,42 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{- define "harbor.database.clairUsername" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.clairUsername -}}
+        {{- .Values.externalDatabase.clairUsername -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.user -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.notaryServerUsername" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.notaryServerUsername -}}
+        {{- .Values.externalDatabase.notaryServerUsername -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.user -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.notarySignerUsername" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.notarySignerUsername -}}
+        {{- .Values.externalDatabase.notarySignerUsername -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.user -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "harbor.database.rawPassword" -}}
   {{- if eq .Values.postgresql.enabled true -}}
       {{- .Values.postgresql.postgresqlPassword -}}
@@ -72,12 +105,60 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
-{{- define "harbor.database.escapedRawPassword" -}}
-  {{- include "harbor.database.rawPassword" . | urlquery | replace "+" "%20" -}}
+{{- define "harbor.database.clairRawPassword" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlPassword -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.clairPassword -}}
+        {{- .Values.externalDatabase.clairPassword -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.password -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.notaryServerRawPassword" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlPassword -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.notaryServerPassword -}}
+        {{- .Values.externalDatabase.notaryServerPassword -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.password -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.notarySignerRawPassword" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlPassword -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.notarySignerPassword -}}
+        {{- .Values.externalDatabase.notarySignerPassword -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.password -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.escapedClairRawPassword" -}}
+  {{- include "harbor.database.clairRawPassword" . | urlquery | replace "+" "%20" -}}
+{{- end -}}
+
+{{ define "harbor.database.escapedNotaryServerRawPassword" -}}
+  {{- include "harbor.database.notaryServerRawPassword" . | urlquery | replace "+" "%20" -}}
+{{- end -}}
+
+{{- define "harbor.database.escapedNotarySignerRawPassword" -}}
+  {{- include "harbor.database.notarySignerRawPassword" . | urlquery | replace "+" "%20" -}}
 {{- end -}}
 
 {{- define "harbor.database.encryptedPassword" -}}
   {{- include "harbor.database.rawPassword" . | b64enc | quote -}}
+{{- end -}}
+
+{{- define "harbor.database.encryptedClairPassword" -}}
+  {{- include "harbor.database.clairRawPassword" . | b64enc | quote -}}
 {{- end -}}
 
 {{- define "harbor.database.coreDatabase" -}}
@@ -121,15 +202,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.database.clair" -}}
-postgres://{{ template "harbor.database.username" . }}:{{ template "harbor.database.escapedRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.clairDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
+postgres://{{ template "harbor.database.clairUsername" . }}:{{ template "harbor.database.escapedClairRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.clairDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
 {{- end -}}
 
 {{- define "harbor.database.notaryServer" -}}
-postgres://{{ template "harbor.database.username" . }}:{{ template "harbor.database.escapedRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notaryServerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
+postgres://{{ template "harbor.database.notaryServerUsername" . }}:{{ template "harbor.database.escapedNotaryServerRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notaryServerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
 {{- end -}}
 
 {{- define "harbor.database.notarySigner" -}}
-postgres://{{ template "harbor.database.username" . }}:{{ template "harbor.database.escapedRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notarySignerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
+postgres://{{ template "harbor.database.notarySignerUsername" . }}:{{ template "harbor.database.escapedNotarySignerRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notarySignerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
 {{- end -}}
 
 Create a default fully qualified redis name.
@@ -259,7 +340,7 @@ host:port,pool_size,password
 100 is the default value of pool size
 */}}
 {{- define "harbor.redisForCore" -}}
-  {{- template "harbor.redis.host" . }}:{{ template "harbor.redis.port" . }},100,{{ template "harbor.redis.rawPassword" . }}
+  {{- printf "%s:%s,100,%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.rawPassword" . )  (include "harbor.redis.coreDatabaseIndex" . ) -}}
 {{- end -}}
 
 {{- define "harbor.portal" -}}
@@ -316,15 +397,6 @@ host:port,pool_size,password
 
 {{- define "harbor.noProxy" -}}
   {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.chartmuseum" .) (include "harbor.clair" .) (include "harbor.notary-server" .) (include "harbor.notary-signer" .) (include "harbor.registry" .) (include "harbor.portal" .) .Values.proxy.noProxy -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified nginx name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "harbor.nginx.fullname" -}}
-{{- $name := default "nginx" .Values.nginx.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -415,7 +487,7 @@ Return the proper Nginx image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "harbor.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.coreImage.pullSecrets .Values.portalImage.pullSecrets .Values.jobserviceImage.pullSecrets .Values.clairImage .Values.clairAdapterImage .Values.trivyImage .Values.notaryServerImage.pullSecrets .Values.notarySignerImage.pullSecrets .Values.registryImage.pullSecrets .Values.registryctlImage.pullSecrets .Values.nginxImage.pullSecrets .Values.volumePermissions.image.pullSecrets) "global" .Values.global ) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.coreImage .Values.portalImage .Values.jobserviceImage .Values.clairImage .Values.clairAdapterImage .Values.trivyImage .Values.notaryServerImage .Values.notarySignerImage .Values.registryImage .Values.registryctlImage .Values.nginxImage .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}

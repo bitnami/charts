@@ -13,6 +13,9 @@ spec:
   {{- end }}
   publishNotReadyAddresses: true
   ports:
+    - name: http
+      port: 9200
+      targetPort: http
     - name: tcp-transport
       port: {{ .Values.ingest.service.port }}
       targetPort: transport
