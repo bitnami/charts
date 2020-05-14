@@ -353,7 +353,6 @@ extraContainers:
       memory: 10Mi
 ```
 
-<<<<<<< HEAD
 ### Bootstraping a node other than 0
 
 > Note: Some of these procedures can lead to data loss, always make a backup beforehand.
@@ -415,63 +414,40 @@ uuid:    6f2cbfcd-951b-11ea-a116-5f407049e57d
 seqno:   25
 safe_to_bootstrap: 1
 ```
-=======
+
 ### Forcing Bootstraping
 
-> Some of this procedures can lead to data loss, always make a backup beforehand.
+> Note: Some of these procedures can lead to data loss, always make a backup beforehand.
 
-To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. 
-You need to check the value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`.
->>>>>>> 7701758b... [bitnami/mariadb-galera] Force bootstrap
+To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it safe to bootstrap form that node. In the case there is not nodes safe to bootstrap from, it is needed to choose one and force the bootstraping.
 
 Several cases can happen:
 
 #### Only one node with `safe_to_bootstrap: 1`
 
-<<<<<<< HEAD
 In this case you will need the node number `N` and run:
-=======
-In this case you can run 
->>>>>>> 7701758b... [bitnami/mariadb-galera] Force bootstrap
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
 --set image.pullPolicy=Always \
 --set rootUser.password=XXXX \
-<<<<<<< HEAD
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.bootstrapFromNode=N
-=======
---set galera.mariabackup.password=YYYY
->>>>>>> 7701758b... [bitnami/mariadb-galera] Force bootstrap
 ```
 
 #### All the nodes with `safe_to_bootstrap: 0`
 
-<<<<<<< HEAD
 In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
-=======
-In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the field `seqno` higher in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
->>>>>>> 7701758b... [bitnami/mariadb-galera] Force bootstrap
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
 --set image.pullPolicy=Always \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY
-<<<<<<< HEAD
 --set galera.bootstrap.bootstrapFromNode=3 \
 --set galera.bootstrap.forceSafeToBootstrap=true
 ```
 
-=======
---set galera.bootstrap.forceBootstrap=true \
---set galera.bootstrap.bootstrapFromNode=3 \
---set galera.bootstrap.forceSafeToBootstrap=true 
-```
-
-
->>>>>>> 7701758b... [bitnami/mariadb-galera] Force bootstrap
 ## Persistence
 
 The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
