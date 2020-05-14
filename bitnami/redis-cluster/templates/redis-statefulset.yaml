@@ -121,6 +121,8 @@ spec:
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
             {{- end }}
+            - name: REDIS_AOF_ENABLED
+              value: {{ .Values.useAOFPersistence | quote }}
             - name: REDIS_PORT
               value: {{ .Values.redisPort | quote }}
             {{- if .Values.extraEnvVars }}
