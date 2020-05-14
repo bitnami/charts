@@ -139,6 +139,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `pdns.apiUrl`                       | When using the PowerDNS provider, specify the API URL of the server.                                     | `""`                                                        |
 | `pdns.apiPort`                      | When using the PowerDNS provider, specify the API port of the server.                                    | `8081`                                                      |
 | `pdns.apiKey`                       | When using the PowerDNS provider, specify the API key of the server.                                     | `""`                                                        |
+| `pdns.secretName`                   | When using the PowerDNS provider, specify as secret name containing the API Key                          | `""`                                                        |
 | `transip.account`                   | When using the TransIP provider, specify the account name.                                               | `""`                                                        |
 | `transip.apiKey`                    | When using the TransIP provider, specify the API key to use.                                             | `""`                                                        |
 | `vinyldns.host`                     | When using the VinylDNS provider, specify the VinylDNS API host.                                         | `""`                                                        |
