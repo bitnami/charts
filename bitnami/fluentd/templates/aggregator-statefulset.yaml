@@ -5,6 +5,8 @@ metadata:
   name: {{ include "fluentd.fullname" . }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: aggregator
 spec:
   selector:
     matchLabels: {{- include "fluentd.matchLabels" . | nindent 6 }}
@@ -16,6 +18,10 @@ spec:
     metadata:
       labels: {{- include "fluentd.labels" . | nindent 8 }}
         app.kubernetes.io/component: aggregator
+        app: aggregator
+        {{- if .Values.aggregator.podLabels }}
+        {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/aggregator-configmap.yaml") . | sha256sum }}
         {{- if .Values.aggregator.podAnnotations }}
@@ -59,7 +65,7 @@ spec:
             {{- toYaml .Values.aggregator.containerPorts | nindent 12 }}
             {{- end }}
             {{- if .Values.metrics.enabled }}
-            - name: metrics
+            - name: tcp-metrics
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}

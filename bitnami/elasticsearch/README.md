@@ -67,9 +67,16 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `fullnameOverride`                                | String to fully override elasticsearch.fullname template with a string                                                                                    | `nil`                                                        |
 | `name`                                            | Elasticsearch cluster name                                                                                                                                | `elastic`                                                    |
 | `plugins`                                         | Comma, semi-colon or space separated list of plugins to install at initialization                                                                         | `nil`                                                        |
+| `snapshotRepoPath`                                | File System snapshot repository path                                                                                                                      | `nil`                                                        |
 | `config`                                          | Elasticsearch node custom configuration                                                                                                                   | ``                                                           |
 | `extraVolumes`                                    | Extra volumes                                                                                                                                             |                                                              |
 | `extraVolumeMounts`                               | Mount extra volume(s),                                                                                                                                    |                                                              |
+| `initScripts`                                     | Dictionary of init scripts. Evaluated as a template.                                                                                                      | `nil`                                                        |
+| `initScriptsCM`                                   | ConfigMap with the init scripts. Evaluated as a template.                                                                                                 | `nil`                                                        |
+| `initScriptsSecret`                               | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                                                                                                                                                    | `nil`                                                        |
+| `extraEnvVars`                                    | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                         | `[]`                                                         |
+| `extraEnvVarsConfigMap`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                                     | `nil`                                                        |
+| `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                        | `nil`                                                        |
 | `master.name`                                     | Master-eligible node pod name                                                                                                                             | `master`                                                     |
 | `master.replicas`                                 | Desired number of Elasticsearch master-eligible nodes                                                                                                     | `2`                                                          |
 | `master.updateStrategy.type`                      | Update strategy for Master statefulset                                                                                                                    | `RollingUpdate`                                              |
@@ -104,7 +111,6 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.serviceAccount.create`                    | Enable creation of ServiceAccount for the master node                                                                                                     | `false`                                                      |
 | `master.serviceAccount.name`                      | Name of the created serviceAccount                                                                                                                        | Generated using the `elasticsearch.master.fullname` template |
 | `clusterDomain`                                   | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                              |
-| `discovery.name`                                  | Discover node pod name                                                                                                                                    | `discovery`                                                  |
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                                                   | `2`                                                          |
 | `coordinating.updateStrategy.type`                | Update strategy for Coordinating Deployment                                                                                                               | `RollingUpdate`                                              |
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                                                          | `128m`                                                       |
@@ -461,6 +467,45 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 
 This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter. It is enabled by default using the `values-production.yaml` file.
 To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: ELASTICSEARCH_VERSION
+    value: 7.0
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsConfigMap` or the `extraEnvVarsSecret` values.
+
+### Using custom init scripts
+
+For advanced operations, the Bitnami Elasticsearch charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml` with `initScripts`, or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `initScriptsCM` and `initScriptsSecret` values.
+
+```console
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
+```
+
+### Snapshot and restore operations
+
+As it's described in the [official documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
+
+This chart allows you to configure Elasticsearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every Elasticsearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Perstitent Volume:
+
+```yaml
+extraVolumes:
+  - name: snapshot-repository
+    nfs:
+      server: nfs.example.com # Please change this to your NFS server
+      path: /share1
+extraVolumeMounts:
+  - name: snapshot-repository
+    mountPath: /snapshots
+snapshotRepoPath: "/snapshots"
+```
 
 ## Persistence
 
