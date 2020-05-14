@@ -357,11 +357,11 @@ extraContainers:
 
 > Note: Some of these procedures can lead to data loss, always make a backup beforehand.
 
-To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it.
+To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it safe to bootstrap form that node. In the case there is not nodes safe to bootstrap from, it is needed to choose one and force the bootstraping from it.
 
 #### Checking `safe_to_boostrap`
 
-First you need to get the name of the persistent volume claims (pvc), for example:
+First you need to get the name of the persisten volume claims (pvc), for example:
 
 ```bash
 $ kubectl get pvc
