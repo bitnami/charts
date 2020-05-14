@@ -190,6 +190,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `metrics.readinessProbe.timeoutSeconds`            | Timeout for Readiness Check of Prometheus metrics exporter                                                                                                | `1`                                                      |
 | `metrics.readinessProbe.failureThreshold`          | Failure Threshold for Readiness Check of Prometheus metrics exporter                                                                                      | `3`                                                      |
 | `metrics.readinessProbe.successThreshold`          | Success Threshold for Readiness Check of Prometheus metrics exporter                                                                                      | `1`                                                      |
+| `networkPolicy.enabled`              | Enable NetworkPolicy                                                                                                                                      | `false`                                                      |
+| `networkPolicy.allowExternal`        | Don't require client label for connections                                                                                                                | `true`                                                       |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
