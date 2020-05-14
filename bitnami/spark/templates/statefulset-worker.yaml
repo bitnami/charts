@@ -16,6 +16,9 @@ spec:
         app.kubernetes.io/component: worker
     spec:
 {{- include "spark.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.worker.podAnnotations }}
+      annotations: {{- include "spark.tplValue" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.worker.affinity }}
       affinity: {{- include "spark.tplValue" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
       {{- end }}

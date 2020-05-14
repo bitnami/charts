@@ -16,6 +16,9 @@ spec:
         app.kubernetes.io/component: master
     spec:
 {{- include "spark.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.master.podAnnotations }}
+      annotations: {{- include "spark.tplValue" (dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.master.affinity }}
       affinity: {{- include "spark.tplValue" (dict "value" .Values.master.affinity "context" $) | nindent 8 }}
       {{- end }}

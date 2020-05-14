@@ -73,6 +73,11 @@ master:
     fsGroup: 1001
     runAsUser: 1001
 
+  ## Annotations to add to the statefulset
+  ## 
+  ##
+  podAnnotations: {}
+
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -175,6 +180,11 @@ worker:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## Annotations to add to the statefulset
+  ## 
+  ##
+  podAnnotations: {}
 
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
