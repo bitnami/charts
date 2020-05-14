@@ -67,6 +67,10 @@ The following table lists the configurable parameters of the external-dns chart 
 | `publishInternalServices`           | Whether to publish DNS records for ClusterIP services or not                                             | `false`                                                     |
 | `publishHostIP`                     | Allow external-dns to publish host-ip for headless services                                              | `false`                                                     |
 | `serviceTypeFilter`                 | The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)   | `[]`                                                 |
+| `alibabacloud.accessKeyId`          | When using the Alibaba Cloud provider, set `accessKeyId` in the Alibaba Cloud configuration file (optional)     | `""`                                                 |
+| `alibabacloud.accessKeySecret`      | When using the Alibaba Cloud provider, set `accessKeySecret` in the Alibaba Cloud configuration file (optional) | `""`                                                 |
+| `alibabacloud.regionId`             | When using the Alibaba Cloud provider, set `regionId` in the Alibaba Cloud configuration file (optional)        | `""`                                                 |
+| `alibabacloud.zoneType`             | When using the Alibaba Cloud provider, filter for zones of this type (optional, options: public, private)       | `""`                                                 |
 | `aws.credentials.accessKey`         | When using the AWS provider, set `aws_access_key_id` in the AWS credentials (optional)                   | `""`                                                        |
 | `aws.credentials.secretKey`         | When using the AWS provider, set `aws_secret_access_key` in the AWS credentials (optional)               | `""`                                                        |
 | `aws.credentials.mountPath`         | When using the AWS provider, determine `mountPath` for `credentials` secret                              | `"/.aws"`                                                   |
@@ -135,6 +139,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `pdns.apiUrl`                       | When using the PowerDNS provider, specify the API URL of the server.                                     | `""`                                                        |
 | `pdns.apiPort`                      | When using the PowerDNS provider, specify the API port of the server.                                    | `8081`                                                      |
 | `pdns.apiKey`                       | When using the PowerDNS provider, specify the API key of the server.                                     | `""`                                                        |
+| `pdns.secretName`                   | When using the PowerDNS provider, specify as secret name containing the API Key                          | `""`                                                        |
 | `transip.account`                   | When using the TransIP provider, specify the account name.                                               | `""`                                                        |
 | `transip.apiKey`                    | When using the TransIP provider, specify the API key to use.                                             | `""`                                                        |
 | `vinyldns.host`                     | When using the VinylDNS provider, specify the VinylDNS API host.                                         | `""`                                                        |

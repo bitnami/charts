@@ -68,28 +68,6 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-Create the name for the admin secret.
-*/}}
-{{- define "mongodb.adminSecret" -}}
-    {{- if .Values.auth.existingAdminSecret -}}
-        {{- .Values.auth.existingAdminSecret -}}
-    {{- else -}}
-        {{- template "mongodb.fullname" . -}}-admin
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Create the name for the key secret.
-*/}}
-{{- define "mongodb.keySecret" -}}
-    {{- if .Values.auth.existingKeySecret -}}
-        {{- .Values.auth.existingKeySecret -}}
-    {{- else -}}
-        {{- template "mongodb.fullname" . -}}-keyfile
-    {{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper MongoDB image name
 */}}
 {{- define "mongodb.image" -}}
@@ -134,7 +112,6 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
-
 
 {{/*
 Return the proper Docker Image Registry Secret Names
