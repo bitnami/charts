@@ -56,16 +56,16 @@ spec:
             - -ec
             - |
                 # Bootstrap from the indicated node
-                HOSTNAME=`hostname -s`
+                HOSTNAME=$(hostname -s)
                 if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
-                  NODE=${BASH_REMATCH[2]}
-                  if (( NODE == {{ .Values.galera.bootstrap.bootstrapFromNode }} )); then
-                    export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
-                    export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
-                  fi
+                    NODE=${BASH_REMATCH[2]}
+                    if (( "$NODE" -eq "{{ int .Values.galera.bootstrap.bootstrapFromNode }}" )); then
+                        export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
+                        export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
+                    fi
                 else
-                  echo "Failed to get index from hostname $HOST"
-                  exit 1
+                    echo "Failed to get index from hostname $HOST"
+                    exit 1
                 fi
                 exec /opt/bitnami/scripts/mariadb-galera/entrypoint.sh /opt/bitnami/scripts/mariadb-galera/run.sh
           {{- end }}

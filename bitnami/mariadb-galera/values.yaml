@@ -186,7 +186,6 @@ galera:
     ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
     forceSafeToBootstrap: false
 
-
   ## Credentials to perform backups
   ##
   mariabackup:

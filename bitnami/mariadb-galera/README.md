@@ -354,10 +354,9 @@ extraContainers:
 
 ### Forcing Bootstraping
 
-> Some of this procedures can lead to data loss, always make a backup beforehand.
+> Note: Some of these procedures can lead to data loss, always make a backup beforehand.
 
-To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. 
-You need to check the value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`.
+To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it safe to bootstrap form that node. In the case there is not nodes safe to bootstrap from, it is needed to choose one and force the bootstraping.
 
 Several cases can happen:
 
