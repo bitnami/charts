@@ -365,7 +365,7 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_application_secret
             {{- end }}
-            {{- end }}            
+            {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox environment variables
             {{- if .Values.infoblox.wapiConnectionPoolSize }}
@@ -397,7 +397,7 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: rfc2136_tsig_secret
             {{- end }}
-            {{- if and (eq .Values.provider "pdns") .Values.pdns.apiKey }}
+            {{- if and (eq .Values.provider "pdns") (or .Values.pdns.apiKey .Values.pdns.secretName) }}
             # PowerDNS environment variables
             - name: PDNS_API_KEY
               valueFrom:
@@ -541,7 +541,7 @@ spec:
             - key: {{ .Values.google.serviceAccountSecretKey | quote }}
               path: credentials.json
             {{- end }}
-        {{- end }}     
+        {{- end }}
         {{- if eq .Values.provider "designate" }}
         # Designate volume(s)
         {{- if .Values.designate.customCA.enabled }}

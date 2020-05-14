@@ -134,7 +134,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey -}}
+{{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey (not .Values.pdns.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "transip") .Values.transip.apiKey -}}
     {{- true -}}
@@ -162,6 +162,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.digitalocean.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
+{{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
+{{- .Values.pdns.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
@@ -339,7 +341,7 @@ Validate values of External DNS:
 - must provide the PowerDNS API key when provider is "pdns"
 */}}
 {{- define "external-dns.validateValues.pdns.apiKey" -}}
-{{- if and (eq .Values.provider "pdns") (not .Values.pdns.apiKey) -}}
+{{- if and (eq .Values.provider "pdns") (not .Values.pdns.apiKey) (not .Values.pdns.secretName) -}}
 external-dns: pdns.apiKey
     You must provide the the PowerDNS API key when provider="pdns".
     Please set the apiKey parameter (--set pdns.apiKey="xxxx")
