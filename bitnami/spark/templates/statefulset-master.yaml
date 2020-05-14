@@ -14,11 +14,11 @@ spec:
     metadata:
       labels: {{- include "spark.labels" . | nindent 8 }}
         app.kubernetes.io/component: master
-    spec:
-{{- include "spark.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.master.podAnnotations }}
       annotations: {{- include "spark.tplValue" (dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      {{- end }}        
+    spec:
+{{- include "spark.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.master.affinity }}
       affinity: {{- include "spark.tplValue" (dict "value" .Values.master.affinity "context" $) | nindent 8 }}
       {{- end }}
