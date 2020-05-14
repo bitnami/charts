@@ -267,6 +267,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `metrics.serviceMonitor.namespace`            | Namespace which Prometheus is running in                                                                                                                  | `monitoring`                                             |
 | `metrics.serviceMonitor.interval`             | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                    | `nil`                                                    |
 | `metrics.serviceMonitor.selector`             | Default to kube-prometheus install (CoreOS recommended), but should be set according to Prometheus install                                                | `{ prometheus: kube-prometheus }`                        |
+| `networkPolicy.enabled`              | Enable NetworkPolicy                                                                                                                                      | `false`                                                      |
+| `networkPolicy.allowExternal`        | Don't require client label for connections                                                                                                                | `true`                                                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
