@@ -76,6 +76,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `defaultSiteSetting`                       | ConfigMap with default site settings contains key value pairs for site configuration        | `[]`                                                         |
 | `defaultSiteSettingVolumeMountPath`        | Default site settings volume mount path                                                     | `/app`                                                       |
 | `replicaCount`                             | Number of replicas to deploy                                                                | `1`                                                          |
+| `containerPort`                            | Deployment Container Port                                                                   | `8080`                                                       |
 | `podAnnotations`                           | Pod annotations                                                                             | `{}`                                                         |
 | `affinity`                                 | Map of node/pod affinities                                                                  | `{}` (The value is evaluated as a template)                  |
 | `nodeSelector`                             | Node labels for pod assignment                                                              | `{}` (The value is evaluated as a template)                  |
@@ -102,6 +103,17 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `ingress.secrets[0].name`                  | TLS Secret Name                                                                             | `nil`                                                        |
 | `ingress.secrets[0].certificate`           | TLS Secret Certificate                                                                      | `nil`                                                        |
 | `ingress.secrets[0].key`                   | TLS Secret Key                                                                              | `nil`                                                        |
+| `healthIngress.enabled`                    | Enable health ingress controller resource                                                   | `false`                                                      |
+| `healthIngress.certManager`                | Add annotations for cert-manager                                                            | `false`                                                      |
+| `healthIngress.selectors`                  | Health Ingress selectors for labelSelector option                                           | `[]`                                                         |
+| `healthIngress.annotations`                | Health Ingress annotations                                                                  | `[]`                                                         |
+| `healthIngress.hosts[0].name`              | Hostname to your NGINX installation                                                         | `nginx.local`                                                |
+| `healthIngress.hosts[0].path`              | Path within the url structure                                                               | `/`                                                          |
+| `healthIngress.tls[0].hosts[0]`            | TLS hosts                                                                                   | `nginx.local`                                                |
+| `healthIngress.tls[0].secretName`          | TLS Secret (certificates)                                                                   | `nginx.local-tls`                                            |
+| `healthIngress.secrets[0].name`            | TLS Secret Name                                                                             | `nil`                                                        |
+| `healthIngress.secrets[0].certificate`     | TLS Secret Certificate                                                                      | `nil`                                                        |
+| `healthIngress.secrets[0].key`             | TLS Secret Key                                                                              | `nil`                                                        |
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                        | `false`                                                      |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                    | `docker.io`                                                  |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image name                                                        | `bitnami/nginx-exporter`                                     |

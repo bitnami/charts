@@ -68,28 +68,6 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-Create the name for the admin secret.
-*/}}
-{{- define "mongodb.adminSecret" -}}
-    {{- if .Values.auth.existingAdminSecret -}}
-        {{- .Values.auth.existingAdminSecret -}}
-    {{- else -}}
-        {{- template "mongodb.fullname" . -}}-admin
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Create the name for the key secret.
-*/}}
-{{- define "mongodb.keySecret" -}}
-    {{- if .Values.auth.existingKeySecret -}}
-        {{- .Values.auth.existingKeySecret -}}
-    {{- else -}}
-        {{- template "mongodb.fullname" . -}}-keyfile
-    {{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper MongoDB image name
 */}}
 {{- define "mongodb.image" -}}
@@ -134,7 +112,6 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
-
 
 {{/*
 Return the proper Docker Image Registry Secret Names
@@ -257,6 +234,53 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
             {{- printf "storageClassName: \"\"" -}}
         {{- else }}
             {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- define "mongodb.storageClassSecondary" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if (or .Values.persistence.storageClass .Values.persistence.storageClassSecondary) -}}
+            {{- if .Values.persistence.storageClassSecondary -}}
+                {{- if (eq "-" .Values.persistence.storageClassSecondary) -}}
+                    {{- printf "storageClassName: \"\"" -}}
+                {{- else }}
+                    {{- printf "storageClassName: %s" .Values.persistence.storageClassSecondary -}}
+                {{- end -}}
+            {{- else }}
+                {{- if (eq "-" .Values.persistence.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+                {{- else }}
+                    {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if (or .Values.persistence.storageClass .Values.persistence.storageClassSecondary) -}}
+        {{- if .Values.persistence.storageClassSecondary -}}
+            {{- if (eq "-" .Values.persistence.storageClassSecondary) -}}
+                {{- printf "storageClassName: \"\"" -}}
+            {{- else }}
+                {{- printf "storageClassName: %s" .Values.persistence.storageClassSecondary -}}
+            {{- end -}}
+        {{- else }}
+            {{- if (eq "-" .Values.persistence.storageClass) -}}
+                {{- printf "storageClassName: \"\"" -}}
+            {{- else }}
+                {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+            {{- end -}}
         {{- end -}}
     {{- end -}}
 {{- end -}}

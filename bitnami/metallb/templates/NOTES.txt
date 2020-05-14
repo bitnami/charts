@@ -1,0 +1,39 @@
+MetalLB is now running in the cluster
+
+LoadBalancer Services in your cluster are now available on the IPs you
+defined in MetalLB's configuration. To see IP assignments,
+
+    kubectl get services -o wide --all-namespaces | grep --color=never -E 'LoadBalancer|NAMESPACE'
+
+should be executed.
+
+To see the currently configured configuration for metallb run
+
+    kubectl get configmaps --namespace {{ .Release.Namespace }} {{ include "metallb.configMapName" . }} -o yaml
+
+in your preferred shell.
+
+{{- if .Values.existingConfigMap }}
+WARNING: you specified a ConfigMap that isn't managed by
+Helm. LoadBalancer services will not function until you add that
+ConfigMap to your cluster yourself.
+
+Ensure you put the configmap in place
+
+    kubectl get configmaps --namespace {{ .Release.Namespace }} | grep --color=never -E "{{ include "metallb.configMapName" . }}|NAME"
+
+If it is missing create it with:
+
+    kubectl create configmap {{ include "metallb.configMapName" . }} --namespace {{ .Release.Namespace }} --from-file=config
+{{- end }}
+
+{{- if .Values.speaker.secretName }}
+WARNING: you specified a secretName that isn't managed by
+Helm. The MetalLB speakers will not join without the secret in place.
+
+    kubectl get secrets --namespace {{ .Release.Namespace }} | grep --color=never -E "{{ include "metallb.secretName" .}}|NAME"
+
+If it is missing create it with:
+
+    kubectl create secret {{ include "metallb.secretName" .}} --from-file={{ include "metallb.secretKey" . }}
+{{- end }}

@@ -375,7 +375,7 @@ If you enabled the authentication for Kafka, the SASL_SSL listener will be confi
 - interBrokerUser/interBrokerPassword: To authenticate kafka brokers between them.
 - zookeeperUser/zookeeperPassword: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
-In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.trustore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
+In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.truststore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
 
 You can create the secret and deploy the chart with authentication using the following parameters:
 

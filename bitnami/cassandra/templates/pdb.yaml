@@ -7,9 +7,10 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "cassandra.matchLabels" . | nindent 6 }}
-  {{- if .Values.minAvailable }}
-  minAvailable: {{ .Values.cluster.minimumAvailable }}
-  {{- else }}
-  maxUnavailable: 1
+  {{- if .Values.cluster.minAvailable }}
+  minAvailable: {{ .Values.cluster.minAvailable }}
+  {{- end }}
+  {{- if .Values.cluster.maxUnavailable }}
+  maxUnavailable: {{ .Values.cluster.maxUnavailable }}
   {{- end }}
 {{- end }}

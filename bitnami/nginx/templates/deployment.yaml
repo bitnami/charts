@@ -69,7 +69,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.containerPort }}
           {{- if .Values.livenessProbe }}
           livenessProbe: {{- toYaml .Values.livenessProbe | nindent 12 }}
           {{- end }}

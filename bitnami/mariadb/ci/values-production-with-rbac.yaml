@@ -1,0 +1,31 @@
+# Test values file for generating all of the yaml and check that
+# the rendering is correct
+
+metrics:
+  enabled: true
+
+podDisruptionBudget:
+  create: true
+
+master:
+  extraEnvVars:
+    - name: TEST
+      value: "3"
+
+  extraEnvVarsSecret: example-secret
+  extraEnvVarsCM: example-cm
+
+slave:
+  extraEnvVars:
+    - name: TEST
+      value: "2"
+
+  extraEnvVarsSecret: example-secret-2
+  extraEnvVarsCM: example-cm-2
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name: mariadb-galera-service-account
