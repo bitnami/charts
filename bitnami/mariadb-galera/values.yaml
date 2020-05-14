@@ -13,16 +13,13 @@
 ##
 image:
   registry: docker.io
-  #repository: bitnami/mariadb-galera
-  repository: rafaelriossaavedra/mariadb-galera
-  #tag: 10.4.12-debian-10-r104
-  tag: 10.4.1
+  repository: bitnami/mariadb-galera
+  tag: 10.4.12-debian-10-r104
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-#  pullPolicy: IfNotPresent
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
