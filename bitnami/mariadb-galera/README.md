@@ -373,7 +373,7 @@ data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909
 The following command will output the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This need to be run for each of the pvc. You will need to change this name accodinly with yours.
 
 ```bash
-kubectl run --generator=run-pod/v1 -i --rm --tty ubuntu --overrides='
+kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
 {
     "apiVersion": "v1",
     "kind": "Pod",
@@ -441,7 +441,6 @@ helm install my-release bitnami/mariadb-galera \
 --set galera.bootstrap.forceSafeToBootstrap=true 
 ```
 
-
 ## Persistence
 
 The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
@@ -460,6 +459,10 @@ $ helm upgrade my-release bitnami/mariadb-galera \
 ```
 
 | Note: you need to substitute the placeholders _[ROOT_PASSWORD]_, _[MARIADB_PASSWORD]_ and _[MARIABACKUP_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 2.0.0
+
+In this version was improved the bootstraping. Nnow it is possible to indicate a node where to bootstrap from, and force the parameter `safe_to_bootstrap`. This allows to handle situations where the cluster was not cleanly stopped. It should be safe to upgrade from v1 of the chart, but it is wise to create always a backup before performing operations where there is a risk of data loss.
 
 ### To 1.0.0
 

@@ -56,10 +56,10 @@ spec:
             - -ec
             - |
                 # Bootstrap from the indicated node
-                HOSTNAME=$(hostname -s)
-                if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
-                    NODE=${BASH_REMATCH[2]}
-                    if (( "$NODE" -eq "{{ int .Values.galera.bootstrap.bootstrapFromNode }}" )); then
+                HOSTNAME="$(hostname -s)"
+                if [[ "$HOSTNAME" =~ (.*)-([0-9]+)$ ]]; then
+                    NODE="${BASH_REMATCH[2]}"
+                    if [[ "$NODE" -eq "{{ int .Values.galera.bootstrap.bootstrapFromNode }}" ]]; then
                         export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
                         export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
                     fi
