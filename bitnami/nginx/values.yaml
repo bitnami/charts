@@ -99,16 +99,13 @@ cloneStaticSiteFromGit:
 ##
 # existingServerBlockConfigmap:
 
-## ConfigMap with default site settings contains key value pairs for site configuration
-## 
-defaultSiteSetting: {}
-#  key1: value1
-#  key2: value2
-
-## Default site settings volume mount path. 
-## If this is not set, by default it will take as /app.
+## Array to add extra volumes
 ##
-# defaultSiteSettingVolumeMountPath:
+## extraVolumes:
+
+## Array to add extra mounts (normally used with extraVolumes)
+##
+## extraVolumeMounts: {}
 
 ## Number of replicas to deploy
 ##

@@ -79,7 +79,7 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.defaultSiteSetting (include "nginx.useStaticSite" .) }}
+          {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumeMounts (include "nginx.useStaticSite" .) }}
           volumeMounts:
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
@@ -89,9 +89,8 @@ spec:
             - name: staticsite
               mountPath: /app
             {{- end }}
-            {{- if .Values.defaultSiteSetting }}
-            - name: nginx-site-setting
-              mountPath: {{ .Values.defaultSiteSettingVolumeMountPath | default "/app" }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- tpl (toYaml .Values.extraVolumeMounts) $ | nindent 12 }}
             {{- end }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
@@ -118,7 +117,7 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.defaultSiteSetting (include "nginx.useStaticSite" .) }}
+      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumes (include "nginx.useStaticSite" .) }}
       volumes:
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
@@ -129,9 +128,7 @@ spec:
         - name: staticsite
           {{- include "nginx.staticSiteVolume" . | nindent 10 }}
         {{- end }}
-        {{- if .Values.defaultSiteSetting }}
-        - name: nginx-site-setting
-          configMap:
-            name: {{ template "nginx.fullname" . }}-site-setting
-        {{- end }}
+      {{- if .Values.extraVolumes }}
+      {{- tpl (toYaml .Values.extraVolumes) $ | nindent 8 }}
+      {{- end }}
       {{- end }}
