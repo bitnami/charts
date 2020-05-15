@@ -436,7 +436,7 @@ data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909
 The following command will output the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This need to be run for each of the pvc. You will need to change this name accodinly with yours.
 
 ```bash
-kubectl run --generator=run-pod/v1 -i --rm --tty ubuntu --overrides='
+kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
 {
     "apiVersion": "v1",
     "kind": "Pod",

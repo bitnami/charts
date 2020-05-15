@@ -57,23 +57,10 @@ spec:
                 {{- $fullname := include "mariadb-galera.fullname" . }}
                 {{- $bootstrapFromNode := int .Values.galera.bootstrap.bootstrapFromNode }}
                 # Bootstrap from the indicated node
-<<<<<<< HEAD
                 NODE_ID="${MY_POD_NAME#"{{ $fullname }}-"}"
                 if [[ "$NODE_ID" -eq "{{ $bootstrapFromNode }}" ]]; then
                     export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
                     export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
-=======
-                HOSTNAME=$(hostname -s)
-                if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
-                    NODE=${BASH_REMATCH[2]}
-                    if (( "$NODE" -eq "{{ int .Values.galera.bootstrap.bootstrapFromNode }}" )); then
-                        export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
-                        export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
-                    fi
-                else
-                    echo "Failed to get index from hostname $HOST"
-                    exit 1
->>>>>>> 4f312e63... Fix suggested changes
                 fi
                 exec /opt/bitnami/scripts/mariadb-galera/entrypoint.sh /opt/bitnami/scripts/mariadb-galera/run.sh
           env:
