@@ -180,10 +180,10 @@ The following table lists the configurable parameters of the external-dns chart 
 | `service.loadBalancerIP`            | IP address to assign to load balancer (if supported)                                                     | `""`                                                        |
 | `service.loadBalancerSourceRanges`  | List of IP CIDRs allowed access to load balancer (if supported)                                          | `[]`                                                        |
 | `service.annotations`               | Annotations to add to service                                                                            | `{}`                                                        |
+| `serviceAccount.create`             | Determine whether a Service Account should be created or it should reuse a exiting one.                  | `true`                                                      |
+| `serviceAccount.name`               | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set     | `nil`                                                       |
+| `serviceAccount.annotations`        | Additional Service Account annotations                                                                   | `{}`                                                        |
 | `rbac.create`                       | Weather to create & use RBAC resources or not                                                            | `true`                                                      |
-| `rbac.serviceAccountCreate`         | Determine whether a Service Account should be created or it should reuse a exiting one.                  | `true`                                                      |
-| `rbac.serviceAccountName`           | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set     | `nil`                                                       |
-| `rbac.serviceAccountAnnotations`    | Additional Service Account annotations                                                                   | `{}`                                                        |
 | `rbac.apiVersion`                   | Version of the RBAC API                                                                                  | `v1beta1`                                                   |
 | `rbac.pspEnabled`                   | PodSecurityPolicy                                                                                        | `false`                                                     |
 | `resources`                         | CPU/Memory resource requests/limits.                                                                     | `{}`                                                        |
@@ -261,6 +261,14 @@ $ helm install my-release \
 ```
 
 ## Upgrading
+
+### To 3.0.0
+
+- The parameters below are renamed:
+  - `rbac.serviceAccountCreate` -> `serviceAccount.create`
+  - `rbac.serviceAccountName` -> `serviceAccount.name`
+  - `rbac.serviceAccountAnnotations` -> `serviceAccount.annotation`
+- It is now possible to create serviceAccount, clusterRole and clusterRoleBinding manually and give the serviceAccount to the chart.
 
 ### To 2.0.0
 

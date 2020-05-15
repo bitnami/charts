@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.1-debian-10-r54
+  tag: 0.7.1-debian-10-r56
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -448,24 +448,23 @@ service:
   ##
   annotations: {}
 
-## RBAC parameteres
+## ServiceAccount parameters
+## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  create: true
+  ## Service Account for pods
+  ##
+  name:
+  ## Annotations for the Service Account
+  ##
+  annotations: {}
+
+## RBAC parameteres (clusterRole and clusterRoleBinding)
 ## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 ##
 rbac:
   create: true
-  ## Determine whether a Service Account should be created
-  ## or reuse a exiting one
-  ##
-  serviceAccountCreate: true
-
-  ## Service Account for pods
-  ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccountName:
-
-  ## Annotations for the Service Account
-  ##
-  serviceAccountAnnotations: {}
   ## RBAC API version
   ##
   apiVersion: v1beta1
