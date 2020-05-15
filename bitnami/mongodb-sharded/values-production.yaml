@@ -734,6 +734,8 @@ readinessProbe:
 metrics:
   enabled: true
 
+  port: 9216
+
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
