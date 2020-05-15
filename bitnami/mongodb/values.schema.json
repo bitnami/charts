@@ -142,6 +142,23 @@
           }
         }
       }
+    },
+    "networkPolicy": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Network Policy",
+          "description": "Create a Network Policy to control the access to the Mongo Service",
+          "form": true
+        },
+        "allowExternal": {
+          "type": "boolean",
+          "title": "Don't require client label for connections",
+          "description": "Whether external services can access the Mongo Service on it's exposed ports",
+          "form": true
+        }
+      }
     }
   }
 }

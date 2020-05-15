@@ -168,6 +168,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `metrics.image.tag`                                | MongoDB exporter image tag                                                                                                                                | `{TAG_NAME}`                                             |
 | `metrics.image.pullPolicy`                         | Image pull policy                                                                                                                                         | `Always`                                                 |
 | `metrics.image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)  |
+| `metrics.port`                                    | The port the metrics are listening on | `9216` |
 | `metrics.podAnnotations.prometheus.io/scrape`      | Additional annotations for Metrics exporter pod                                                                                                           | `true`                                                   |
 | `metrics.podAnnotations.prometheus.io/port`        | Additional annotations for Metrics exporter pod                                                                                                           | `"9216"`                                                 |
 | `metrics.extraArgs`                                | String with extra arguments for the MongoDB Exporter                                                                                                      | ``                                                       |
@@ -190,6 +191,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `metrics.readinessProbe.timeoutSeconds`            | Timeout for Readiness Check of Prometheus metrics exporter                                                                                                | `1`                                                      |
 | `metrics.readinessProbe.failureThreshold`          | Failure Threshold for Readiness Check of Prometheus metrics exporter                                                                                      | `3`                                                      |
 | `metrics.readinessProbe.successThreshold`          | Success Threshold for Readiness Check of Prometheus metrics exporter                                                                                      | `1`                                                      |
+| `networkPolicy.enabled`              | Enable NetworkPolicy                                                                                                                                      | `false`                                                      |
+| `networkPolicy.allowExternal`        | Don't require client label for connections                                                                                                                | `true`                                                       |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

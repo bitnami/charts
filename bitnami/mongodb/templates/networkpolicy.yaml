@@ -1,0 +1,44 @@
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+{{- if .Values.global.networkPolicy }}
+apiVersion: {{ .Values.global.networkPolicy.apiVersion . | default "networking.k8s.io/v1" }}
+{{- else }}
+apiVersion: networking.k8s.io/v1
+{{- end }}
+metadata:
+  name: {{ template "mongodb.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "mongodb.name" . }}
+    chart: {{ template "mongodb.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ template "mongodb.name" . }}
+      release: {{ .Release.Name | quote }}
+  ingress:
+    # Allow inbound connections
+    - ports:
+      - port: {{ .Values.service.port }}
+      {{- if not .Values.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels:
+              {{ template "mongodb.fullname" . }}-client: "true"
+      {{- end }}
+    - from:
+      - podSelector:
+          matchLabels:
+            app: "{{ template "mongodb.name" . }}"
+    {{- if .Values.metrics.enabled }}
+    # Allow prometheus scrapes for metrics
+    - ports:
+      - port: {{ .Values.metrics.port }}
+      from:
+      - podSelector:
+          matchLabels:
+            app: "{{ template "mongodb.fullname" . }}"
+    {{- end }}
+{{- end }}
