@@ -9,15 +9,15 @@ metadata:
   name: {{ template "mongodb-sharded.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "mongodb-sharded.name" . }}
-    chart: {{ template "mongodb-sharded.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ template "mongodb-sharded.name" . }}
+    helm.sh/chart: {{ template "mongodb-sharded.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   podSelector:
     matchLabels:
-      app: {{ template "mongodb-sharded.name" . }}
-      release: {{ .Release.Name | quote }}
+      app.kubernetes.io/name: {{ template "mongodb-sharded.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   ingress:
     # Allow inbound connections
     - ports:
@@ -31,7 +31,7 @@ spec:
     - from:
       - podSelector:
           matchLabels:
-            app: "{{ template "mongodb-sharded.name" . }}"
+            app.kubernetes.io/name: "{{ template "mongodb-sharded.name" . }}"
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
@@ -39,6 +39,6 @@ spec:
       from:
       - podSelector:
           matchLabels:
-            app: "{{ template "mongodb-sharded.fullname" . }}"
+            app.kubernetes.io/name: "{{ template "mongodb-sharded.fullname" . }}"
     {{- end }}
 {{- end }}

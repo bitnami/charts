@@ -293,7 +293,7 @@ shardsvr:
     ##
     # storageClass: "-"
     accessModes:
-      - ReadWriteOnce
+    - ReadWriteOnce
     ## PersistentVolumeClaim size
     ##
     size: 8Gi
@@ -423,7 +423,7 @@ configsvr:
     ##
     # storageClass: "-"
     accessModes:
-      - ReadWriteOnce
+    - ReadWriteOnce
     ## PersistentVolumeClaim size
     ##
     size: 8Gi
