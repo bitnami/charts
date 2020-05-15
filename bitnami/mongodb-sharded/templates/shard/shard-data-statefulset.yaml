@@ -112,6 +112,17 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb-sharded.secret" $ }}
                   key: mongodb-root-password
+            {{- if and $.Values.mongodbUsername $.Values.mongodbDatabase }}
+            - name: MONGODB_DATABASE
+              value: {{ $.Values.mongodbDatabase | quote }}
+            - name: MONGODB_USERNAME
+              value: {{ $.Values.mongodbUsername | quote }}
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" $ }}
+                  key: mongodb-password
+            {{- end }}
             - name: MONGODB_REPLICA_SET_KEY
               valueFrom:
                 secretKeyRef:
