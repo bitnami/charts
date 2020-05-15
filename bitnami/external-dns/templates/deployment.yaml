@@ -268,9 +268,9 @@ spec:
             - name: CF_API_KEY
               value: {{ .Values.cloudflare.apiKey | quote }}
             {{- end }}
+            {{- end }}
             - name: CF_API_EMAIL
               value: {{ .Values.cloudflare.email | quote }}
-            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "coredns" }}
             # CoreDNS environment variables
