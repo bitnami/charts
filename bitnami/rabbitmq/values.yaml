@@ -236,7 +236,7 @@ service:
   ## Service annotations
   ## Example:
   ## annotations:
-  ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0  
+  ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
   ##
   annotations: {}
 
@@ -355,7 +355,7 @@ tolerations: {}
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## Example:
-## podDisruptionBudget:   
+## podDisruptionBudget:
 ##    maxUnavailable: 1
 ##    minAvailable: 1
 ##
