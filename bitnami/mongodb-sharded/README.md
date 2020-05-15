@@ -265,8 +265,11 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `metrics.readinessProbe.successThreshold`     | Success Threshold for Readiness Check of Prometheus metrics exporter                                                                                      | `1`                                                      |
 | `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`)                     | `false`                                                  |
 | `metrics.serviceMonitor.namespace`            | Namespace which Prometheus is running in                                                                                                                  | `monitoring`                                             |
+| `metrics.port`                                    | The port the metrics are listening on | `9216` |
 | `metrics.serviceMonitor.interval`             | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                    | `nil`                                                    |
 | `metrics.serviceMonitor.selector`             | Default to kube-prometheus install (CoreOS recommended), but should be set according to Prometheus install                                                | `{ prometheus: kube-prometheus }`                        |
+| `networkPolicy.enabled`              | Enable NetworkPolicy                                                                                                                                      | `false`                                                      |
+| `networkPolicy.allowExternal`        | Don't require client label for connections                                                                                                                | `true`                                                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

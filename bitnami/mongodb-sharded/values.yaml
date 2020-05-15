@@ -293,7 +293,7 @@ shardsvr:
     ##
     # storageClass: "-"
     accessModes:
-      - ReadWriteOnce
+    - ReadWriteOnce
     ## PersistentVolumeClaim size
     ##
     size: 8Gi
@@ -423,7 +423,7 @@ configsvr:
     ##
     # storageClass: "-"
     accessModes:
-      - ReadWriteOnce
+    - ReadWriteOnce
     ## PersistentVolumeClaim size
     ##
     size: 8Gi
@@ -718,6 +718,8 @@ readinessProbe:
 metrics:
   enabled: false
 
+  port: 9216
+
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
@@ -772,3 +774,18 @@ metrics:
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     selector:
       prometheus: kube-prometheus
+
+## Network policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: false
+
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to the port Mongo is listening
+  ## on. When true, Mongo will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
