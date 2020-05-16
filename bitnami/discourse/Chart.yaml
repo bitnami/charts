@@ -14,4 +14,6 @@ maintainers:
   - name: Bitnami
     email: containers@bitnami.com
   - name: paulczar
-  email: username.taken@gmail.com
+    email: username.taken@gmail.com
+  - name: lucaprete
+    email: preteluca@gmail.com
