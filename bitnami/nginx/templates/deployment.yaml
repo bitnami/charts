@@ -90,7 +90,7 @@ spec:
               mountPath: /app
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- tpl (toYaml .Values.extraVolumeMounts) $ | nindent 12 }}
+            {{- include "nginx.tplValue" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
@@ -129,6 +129,6 @@ spec:
           {{- include "nginx.staticSiteVolume" . | nindent 10 }}
         {{- end }}
       {{- if .Values.extraVolumes }}
-      {{- tpl (toYaml .Values.extraVolumes) $ | nindent 8 }}
+      {{- include "nginx.tplValue" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
       {{- end }}
