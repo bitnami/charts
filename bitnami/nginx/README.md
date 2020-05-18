@@ -90,6 +90,23 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `service.externalTrafficPolicy`            | Enable client source IP preservation                                                        | `Cluster`                                                    |
 | `service.loadBalancerIP`                   | LoadBalancer service IP address                                                             | `""`                                                         |
 | `service.annotations`                      | Service annotations                                                                         | `{}`                                                         |
+| `ldapDaemon.enabled`                       | Enable LDAP Auth Daemon proxy                                                               | `false`                                                      |
+| `ldapDaemon.image.registry`                | LDAP AUth Daemon Image registry                                                             | `docker.io`                                                  |
+| `ldapDaemon.image.repository`              | LDAP Auth Daemon Image name                                                                 | `bitnami/nginx-ldap-auth-daemon`                             |
+| `ldapDaemon.image.tag`                     | LDAP Auth Daemon Image tag                                                                  | `{TAG_NAME}`                                                 |
+| `ldapDaemon.image.pullPolicy`              | LDAP Auth Daemon Image pull policy                                                          | `IfNotPresent`                                               |
+| `ldapDaemon.port`                          | LDAP Auth Daemon port                                                                       | `8888`                                                       |
+| `ldapDaemon.ldapConfig.uri`                | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                               | `""`                                                         |
+| `ldapDaemon.ldapConfig.baseDN`             | LDAP root DN to begin the search for the user                                               | `""`                                                         |
+| `ldapDaemon.ldapConfig.bindDN`             | DN of user to bind to LDAP                                                                  | `""`                                                         |
+| `ldapDaemon.ldapConfig.bindPassword`       | Password for the user to bind to LDAP                                                       | `""`                                                         |
+| `ldapDaemon.ldapConfig.filter`             | LDAP search filter for search+bind authentication                                           | `""`                                                         |
+| `ldapDaemon.ldapConfig.httpRealm`          | LDAP HTTP auth realm                                                                        | `""`                                                         |
+| `ldapDaemon.ldapConfig.httpCookieName`     | HTTP cookie name to be used in LDAP Auth                                                    | `""`                                                         |
+| `ldapDaemon.nginxServerBlock`              | NGINX server block that configures LDAP communication. Overrides `ldapDaemon.ldapConfig`    | See `values.yaml`                                            |
+| `ldapDaemon.existingNginxServerBlockSecret`| Name of existing Secret with a NGINX server block to use for LDAP communication             | `nil`                                                        |
+| `ldapDaemon.livenessProbe`                 | LDAP Auth Daemon Liveness Probe                                                             | See `values.yaml`                                            |
+| `ldapDaemon.readinessProbe`                | LDAP Auth Daemon Readiness Probe                                                            | See `values.yaml`                                            |
 | `ingress.enabled`                          | Enable ingress controller resource                                                          | `false`                                                      |
 | `ingress.certManager`                      | Add annotations for cert-manager                                                            | `false`                                                      |
 | `ingress.selectors`                        | Ingress selectors for labelSelector option                                                  | `[]`                                                         |
@@ -189,6 +206,9 @@ serverBlock: |-
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingServerBlockConfigmap` parameter. Note that this will override the previous option.
 
 ## Upgrading
+
+### 5.4.0
+Added support for the use of LDAP.
 
 ### 5.0.0
 
