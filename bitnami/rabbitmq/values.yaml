@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.3-debian-10-r79
+  tag: 3.8.3-debian-10-r84
 
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
@@ -236,7 +236,7 @@ service:
   ## Service annotations
   ## Example:
   ## annotations:
-  ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0  
+  ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
   ##
   annotations: {}
 
@@ -355,7 +355,7 @@ tolerations: {}
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## Example:
-## podDisruptionBudget:   
+## podDisruptionBudget:
 ##    maxUnavailable: 1
 ##    minAvailable: 1
 ##
