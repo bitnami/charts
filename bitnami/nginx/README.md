@@ -127,7 +127,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                         | `nil`                                                        |
 | `autoscaling.enabled`                      | Enable autoscaling for NGINX deployment                                                     | `false`                                                      |
 | `autoscaling.minReplicas`                  | Minimum number of replicas to scale back                                                    | `nil`                                                        |
-| `autoscaling.maxReplicas`                  | Maximum number of replicas to sacle out                                                     | `nil`                                                        |
+| `autoscaling.maxReplicas`                  | Maximum number of replicas to scale out                                                     | `nil`                                                        |
 | `autoscaling.targetCPU`                    | Target CPU utilization percentage                                                           | `nil`                                                        |
 | `autoscaling.targetMemory`                 | Target Memory utilization percentage                                                        | `nil`                                                        |
 
