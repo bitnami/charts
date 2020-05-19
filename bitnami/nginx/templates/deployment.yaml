@@ -86,7 +86,7 @@ spec:
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks/common
             {{- end }}
-            {{- if or .Values.ldapDaemon.nginxServerBlock .Values.ldapDaemon.existingNginxServerBlockSecret }}
+            {{- if .Values.ldapDaemon.enabled }}
             - name: nginx-server-block-ldap
               mountPath: /opt/bitnami/nginx/conf/server_blocks/ldap
             {{- end }}
@@ -175,7 +175,7 @@ spec:
           {{- include "nginx.staticSiteVolume" . | nindent 10 }}
         {{- end }}
       {{- end }}
-      {{- if or .Values.ldapDaemon.nginxServerBlock .Values.ldapDaemon.existingNginxServerBlockSecret }}
+      {{- if .Values.ldapDaemon.enabled }}
         - name: nginx-server-block-ldap
           secret:
             secretName: {{ include "ldap.nginxServerBlockSecret" . }}
