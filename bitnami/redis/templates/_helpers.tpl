@@ -370,9 +370,9 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of Redis - spreadConstrainsts K8s version */}}
 {{- define "redis.validateValues.spreadConstraints" -}}
-{{- if and (semverCompare "<1.18-0" .Capabilities.KubeVersion.GitVersion) redis.validateValues.spreadConstraints -}}
+{{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.slave.spreadConstraints -}}
 redis: spreadConstraints
-    Pod Topology Spread Constraints are only available on K8s  >= 1.8
+    Pod Topology Spread Constraints are only available on K8s  >= 1.16
     Find more information at https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 {{- end -}}
 {{- end -}}
