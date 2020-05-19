@@ -26,18 +26,18 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 You can choose any of the two Redis Helm charts for deploying a Redis cluster.
 While [Redis Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis Sentinel, the [Redis Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis Cluster topology with sharding.
-The main features of each chart are the following:  
+The main features of each chart are the following:
 
-| Redis                                     | Redis Cluster                                               |
-| ----------------------------------------- | ----------------------------------------------------------- |
-| Supports multiple databases               | Supports only one database. Better if you have a big dataset |
-| Single write point (single master)        | Multiple write points (multiple masters)                    |
-| ![Redis Topology](img/redis-topology.png) | ![Redis Cluster Topology](img/redis-cluster-topology.png)   |
+| Redis                                         | Redis Cluster                                                                                                                                       |
+|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supports multiple databases                   | Supports only one database. Better if you have a big dataset                                                                                        |
+| Single write point (single master)            | Multiple write points (multiple masters)                                                                                                            |
+| ![Redis Topology](img/redis-topology.png)     | ![Redis Cluster Topology](img/redis-cluster-topology.png)                                                                                           |
 
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -67,10 +67,10 @@ The command removes all the Kubernetes components associated with the chart and 
 The following table lists the configurable parameters of the Redis chart and their default values.
 
 | Parameter                                     | Description                                                                                                                                         | Default                                                 |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                        | Global Docker image registry                                                                                                                        | `nil`                                                   |
 | `global.imagePullSecrets`                     | Global Docker registry secret names as an array                                                                                                     | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                         | Global storage class for dynamic provisioning                                                                                                       | `nil`                                                        |
+| `global.storageClass`                         | Global storage class for dynamic provisioning                                                                                                       | `nil`                                                   |
 | `global.redis.password`                       | Redis password (overrides `password`)                                                                                                               | `nil`                                                   |
 | `image.registry`                              | Redis Image registry                                                                                                                                | `docker.io`                                             |
 | `image.repository`                            | Redis Image name                                                                                                                                    | `bitnami/redis`                                         |
@@ -90,8 +90,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `clusterDomain`                               | Kubernetes DNS Domain name to use                                                                                                                   | `cluster.local`                                         |
 | `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                                | `false`                                                 |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                          | `true`                                                  |
-| `networkPolicy.ingressNSMatchLabels`          | Allow connections from other namespaces                                                                                                            | `{}`                                                    |
-| `networkPolicy.ingressNSPodMatchLabels`       | For other namespaces match by pod labels and namespace labels                                                                                      | `{}`                                                    |
+| `networkPolicy.ingressNSMatchLabels`          | Allow connections from other namespaces                                                                                                             | `{}`                                                    |
+| `networkPolicy.ingressNSPodMatchLabels`       | For other namespaces match by pod labels and namespace labels                                                                                       | `{}`                                                    |
 | `securityContext.enabled`                     | Enable security context (both redis master and slave pods)                                                                                          | `true`                                                  |
 | `securityContext.fsGroup`                     | Group ID for the container (both redis master and slave pods)                                                                                       | `1001`                                                  |
 | `securityContext.runAsUser`                   | User ID for the container (both redis master and slave pods)                                                                                        | `1001`                                                  |
@@ -222,7 +222,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `sentinel.parallelSyncs`                      | Number of parallel syncs in the cluster                                                                                                             | `1`                                                     |
 | `sentinel.port`                               | Redis Sentinel port                                                                                                                                 | `26379`                                                 |
 | `sentinel.configmap`                          | Additional Redis configuration for the sentinel nodes (this value is evaluated as a template)                                                       | `nil`                                                   |
-| `sentinel.staticID`                           | Enable static IDs for sentinel replicas (If disabled IDs will be randomly generated on startup)                                                 | `false`                                                 |
+| `sentinel.staticID`                           | Enable static IDs for sentinel replicas (If disabled IDs will be randomly generated on startup)                                                     | `false`                                                 |
 | `sentinel.service.type`                       | Kubernetes Service type (redis sentinel)                                                                                                            | `ClusterIP`                                             |
 | `sentinel.service.nodePort`                   | Kubernetes Service nodePort (redis sentinel)                                                                                                        | `nil`                                                   |
 | `sentinel.service.annotations`                | annotations for redis sentinel service                                                                                                              | {}                                                      |
