@@ -172,6 +172,7 @@ spec:
         - --prometheus.url=http://localhost:9090
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:10902
+        - --tsdb.path=/prometheus/
         {{- if .Values.prometheus.thanos.objectStorageConfig }}
         - --objstore.config=$(OBJSTORE_CONFIG)
         {{- end }}
