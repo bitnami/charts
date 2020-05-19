@@ -28,7 +28,7 @@ imagePullSecrets: {{ .global.imagePullSecrets | toYaml | nindent 2 }}
 {{- $pullSecrets := list }}
 {{- range .images }}
   {{- if .pullSecrets }}
-    {{- $pullSecrets = concat $pullSecrets .pullSecrets }}
+    {{- $pullSecrets = append $pullSecrets .pullSecrets }}
   {{- end }}
 {{- end }}
 {{- if $pullSecrets }}
