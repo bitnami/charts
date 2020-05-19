@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.39.0-debian-10-r3
+    tag: 0.39.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -208,7 +208,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.3.0-debian-10-r110
+      tag: 0.3.0-debian-10-r113
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -239,7 +239,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.18.1-debian-10-r4
+    tag: 2.18.1-debian-10-r8
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -633,7 +633,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.20.0-debian-10-r110
+    tag: 0.20.0-debian-10-r115
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

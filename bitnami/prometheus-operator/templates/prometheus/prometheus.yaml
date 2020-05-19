@@ -102,8 +102,7 @@ spec:
   {{- end }}
   {{- if .Values.prometheus.storageSpec }}
   storage: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.storageSpec "context" $) | nindent 4 }}
-  {{- else }}
-  {{- if .Values.prometheus.persistence.enabled }}
+  {{- else if .Values.prometheus.persistence.enabled }}
   storage:
     volumeClaimTemplate:
       spec:
@@ -115,7 +114,6 @@ spec:
           requests:
             storage: {{ .Values.prometheus.persistence.size | quote }}
         {{- include "prometheus-operator.prometheus.storageClass" . | nindent 8 }}
-  {{- end }}
   {{- end }}
   {{- if .Values.prometheus.podMetadata }}
   podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata "context" $) | nindent 4 }}
@@ -174,6 +172,7 @@ spec:
         - --prometheus.url=http://localhost:9090
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:10902
+        - --tsdb.path=/prometheus/
         {{- if .Values.prometheus.thanos.objectStorageConfig }}
         - --objstore.config=$(OBJSTORE_CONFIG)
         {{- end }}
@@ -195,6 +194,10 @@ spec:
         - name: http
           containerPort: 10902
           protocol: TCP
+      volumeMounts:
+        - mountPath: /prometheus
+          name: prometheus-{{ template "prometheus-operator.prometheus.fullname" . }}-db
+          subPath: prometheus-db
     {{- end }}
     {{- if .Values.prometheus.containers }}
     {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}
