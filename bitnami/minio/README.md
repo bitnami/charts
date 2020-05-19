@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -50,7 +50,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following table lists the configurable parameters of the MinIO chart and their default values.
 
 | Parameter                            | Description                                                                                                                                               | Default                                                 |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
@@ -124,7 +124,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `service.nodePort`                   | Port to bind to for NodePort service type                                                                                                                 | `nil`                                                   |
 | `service.loadBalancerIP`             | Static IP Address to use for LoadBalancer service type                                                                                                    | `nil`                                                   |
 | `service.annotations`                | Kubernetes service annotations                                                                                                                            | `{}`                                                    |
-| `ingress.enabled`                    | Enable/disable ingress                                                                                                                                   | `false`                                                 |
+| `ingress.enabled`                    | Enable/disable ingress                                                                                                                                    | `false`                                                 |
 | `ingress.certManager`                | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
 | `ingress.annotations`                | Ingress annotations                                                                                                                                       | `[]`                                                    |
 | `ingress.hosts[0].name`              | Hostname to your MinIO installation                                                                                                                       | `minio.local`                                           |

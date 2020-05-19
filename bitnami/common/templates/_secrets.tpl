@@ -39,8 +39,10 @@ Params:
 {{- define "common.secrets.key" -}}
 {{- $key := .key -}}
 
-{{- with .existingSecret -}}
-{{- $key = get .keyMapping $.key -}}
+{{- if .existingSecret -}}
+  {{- if .existingSecret.keyMapping -}}
+    {{- $key = index .existingSecret.keyMapping $.key -}}
+  {{- end -}}
 {{- end -}}
 
 {{- printf "%s" $key -}}

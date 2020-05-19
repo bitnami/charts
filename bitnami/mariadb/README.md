@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -149,7 +149,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `slave.extraInitContainers`                  | Additional init containers as a string to be passed to the `tpl` function (slave)                                                                                                                                                                                        | `nil`                                                             |
 | `slave.extraEnvVars`                         | Array containing extra env vars to configure MariaDB slave replicas                                                                                                                                                                                                      | `nil`                                                             |
 | `slave.extraEnvVarsCM`                       | ConfigMap containing extra env vars to configure MariaDB slave replicas                                                                                                                                                                                                  | `nil`                                                             |
-| `slave.extraEnvVarsSecret`                   | Secret containing extra env vars to configure MariaDB slave replicas                                                                                                                                                                                              | `nil`                                                             |
+| `slave.extraEnvVarsSecret`                   | Secret containing extra env vars to configure MariaDB slave replicas                                                                                                                                                                                                     | `nil`                                                             |
 | `slave.config`                               | Config file for the MariaDB Slave replicas                                                                                                                                                                                                                               | `_default values in the values.yaml file_`                        |
 | `slave.resources`                            | CPU/Memory resource requests/limits for slave node                                                                                                                                                                                                                       | `{}`                                                              |
 | `slave.livenessProbe.enabled`                | Turn on and off liveness probe (slave)                                                                                                                                                                                                                                   | `true`                                                            |

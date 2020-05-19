@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -53,7 +53,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `global.imageRegistry`                             | Global Docker image registry                                                                                                                              | `nil`                                                    |
 | `global.imagePullSecrets`                          | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)  |
 | `global.storageClass`                              | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                    |
-| `global.namespaceOverride`                              | String to override the release namespace.                                                       | `nil`                                                    |
+| `global.namespaceOverride`                         | String to override the release namespace.                                                                                                                 | `nil`                                                    |
 | `image.registry`                                   | MongoDB image registry                                                                                                                                    | `docker.io`                                              |
 | `image.repository`                                 | MongoDB Image name                                                                                                                                        | `bitnami/mongodb`                                        |
 | `image.tag`                                        | MongoDB Image tag                                                                                                                                         | `{TAG_NAME}`                                             |
@@ -70,7 +70,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `volumePermissions.image.tag`                      | Init container volume-permissions image tag                                                                                                               | `buster`                                                 |
 | `volumePermissions.image.pullPolicy`               | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                 |
 | `volumePermissions.resources`                      | Init container resource requests/limit                                                                                                                    | `nil`                                                    |
-| `clusterDomain`                                    | Kubernetes cluster domain                                                                                                                         | `cluster.local`                                          |
+| `clusterDomain`                                    | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                          |
 | `usePassword`                                      | Enable password authentication                                                                                                                            | `true`                                                   |
 | `existingSecret`                                   | Existing secret with MongoDB credentials                                                                                                                  | `nil`                                                    |
 | `mongodbRootPassword`                              | MongoDB admin password                                                                                                                                    | `random alphanumeric string (10)`                        |

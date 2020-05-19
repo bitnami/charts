@@ -19,7 +19,7 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](http
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 
 ## Installing the Chart
 

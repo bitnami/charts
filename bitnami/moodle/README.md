@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -107,7 +107,7 @@ The following table lists the configurable parameters of the Moodle chart and th
 | `mariadb.rootUser.password`                | MariaDB admin password                                                                              | `nil`                                                        |
 | `mariadb.master.persistence.enabled`       | Enable MariaDB persistence using PVC                                                                | `true`                                                       |
 | `mariadb.master.persistence.storageClass`  | PVC Storage Class for MariaDB volume                                                                | `generic`                                                    |
-| `mariadb.master.persistence.accessModes`    | PVC Access Mode for MariaDB volume                                                                 | [`ReadWriteOnce`]                                            |
+| `mariadb.master.persistence.accessModes`   | PVC Access Mode for MariaDB volume                                                                  | [`ReadWriteOnce`]                                            |
 | `mariadb.master.persistence.size`          | PVC Storage Request for MariaDB volume                                                              | `8Gi`                                                        |
 | `mariadb.master.persistence.existingClaim` | If PVC exists&bounded for MariaDB                                                                   | `nil` (when nil, new one is requested)                       |
 | `mariadb.affinity`                         | Set affinity for the MariaDB pods                                                                   | `nil`                                                        |

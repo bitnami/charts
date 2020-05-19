@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.16+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 
 ## Parameters
 
@@ -89,7 +89,7 @@ The following table lists the helpers available in the library which are scoped 
 ### ImageRoot
 
 ```yaml
-registry: 
+registry:
   type: string
   description: Docker registry where the image is located
   example: docker.io
@@ -139,7 +139,7 @@ storageClass:
   type: string
   description: Ghost data Persistent Volume Storage Class, If set to "-", storageClassName: "" which disables dynamic provisioning.
   example: "-"
- 
+
 accessMode:
   type: string
   description: Access mode for the Persistent Volume Storage.

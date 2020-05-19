@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -137,7 +137,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | `persistence.magento.storageClass`      | PVC Storage Class for Magento volume                                                                 | `nil`  (uses alpha storage annotation)                       |
 | `persistence.magento.accessMode`        | PVC Access Mode for Magento volume                                                                   | `ReadWriteOnce`                                              |
 | `persistence.magento.size`              | PVC Storage Request for Magento volume                                                               | `8Gi`                                                        |
-| `updateStrategy`                         | Set to Recreate if you use persistent volume that cannot be mounted by more than one pods                                                                 | `RollingUpdate`                                              |
+| `updateStrategy`                        | Set to Recreate if you use persistent volume that cannot be mounted by more than one pods            | `RollingUpdate`                                              |
 | `resources`                             | CPU/Memory resource requests/limits                                                                  | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                        | Pod annotations                                                                                      | `{}`                                                         |
 | `affinity`                              | Map of node/pod affinities                                                                           | `{}`                                                         |

@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -49,93 +49,93 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the grafana chart and their default values.
 
-| Parameter                              | Description                                                                                            | Default                                                 |
-|----------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                 | Global Docker image registry                                                                           | `nil`                                                   |
-| `global.imagePullSecrets`              | Global Docker registry secret names as an array                                                        | `[]` (does not add image pull secrets to deployed pods) |
-| `image.registry`                       | Grafana image registry                                                                                 | `docker.io`                                             |
-| `image.repository`                     | Grafana image name                                                                                     | `bitnami/grafana`                                       |
-| `image.tag`                            | Grafana image tag                                                                                      | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                     | Grafana image pull policy                                                                              | `IfNotPresent`                                          |
-| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`                         | String to partially override grafana.fullname template with a string (will prepend the release name)   | `nil`                                                   |
-| `fullnameOverride`                     | String to fully override grafana.fullname template with a string                                       | `nil`                                                   |
-| `replicaCount`                         | Number of replicas of the Grafana Pod                                                                  | `1`                                                     |
-| `updateStrategy`                       | Update strategy for deployment                                                                         | `{type: "RollingUpdate"}`                               |
-| `schedulerName`                        | Alternative scheduler                                                                                  | `nil`                                                   |
-| `serviceAccount.create`                | Specifies whether a ServiceAccount should be created                                                   | `true`                                                  |
-| `serviceAccount.name`                  | If serviceAccount.create is enabled, what should the serviceAccount name be - otherwise defaults to the fullname    | `nil`                                      |
-| `admin.user`                           | Grafana admin username                                                                                 | `admin`                                                 |
-| `admin.password`                       | Grafana admin password                                                                                 | Randomly generated                                      |
-| `admin.existingSecret`                 | Name of the existing secret containing admin password                                                  | `nil`                                                   |
-| `admin.existingSecretPasswordKey`      | Password key on the existing secret                                                                    | `password`                                              |
-| `smtp.enabled`                         | Enable SMTP configuration                                                                              | `false`                                                 |
-| `smtp.existingSecret`                  | Name of the existing secret with SMTP credentials                                                      | `nil`                                                   |
-| `smtp.existingSecretUserKey`           | User key on the existing secret                                                                        | `user`                                                  |
-| `smtp.existingSecretPasswordKey`       | Password key on the existing secret                                                                    | `password`                                              |
-| `plugins`                              | Grafana plugins to be installed in deployment time separated by commas                                 | `nil`                                                   |
-| `ldap.enabled`                         | Enable LDAP for Grafana                                                                                | `false`                                                 |
-| `ldap.allowSignUp`                     | Allows LDAP sign up for Grafana                                                                        | `false`                                                 |
-| `ldap.configMapName`                   | Name of the ConfigMap with the LDAP configuration file for Grafana                                     | `nil`                                                   |
-| `extraEnvVars`                         | Array containing extra env vars to configure Grafana                                                   | `{}`                                                    |
-| `extraConfigmaps`                      | Array to mount extra ConfigMaps to configure Grafana                                                   | `{}`                                                    |
-| `config.useGrafanaIniFile`             | Allows to load a `grafana.ini` file                                                                    | `false`                                                 |
-| `config.grafanaIniConfigMap`           | Name of the ConfigMap containing the `grafana.ini` file                                                | `nil`                                                   |
-| `config.grafanaIniSecret`              | Name of the Secret containing the `grafana.ini` file                                                   | `nil`                                                   |
-| `config.useCustomIniFile`              | Allows to load a `custom.ini` file                                                                     | `false`                                                 |
-| `config.customIniConfigMap`            | Name of the ConfigMap containing the `custom.ini` file                                                 | `nil`                                                   |
-| `config.customIniSecret`               | Name of the Secret containing the `custom.ini` file                                                    | `nil`                                                   |
-| `dashboardsProvider.enabled`           | Enable the use of a Grafana dashboard provider                                                         | `false`                                                 |
-| `dashboardsProvider.configMapName`     | Name of a ConfigMap containing a custom dashboard provider                                             | `nil` (evaluated as a template)                         |
-| `dashboardsConfigMaps`                 | Array with the names of a series of ConfigMaps containing dashboards files                             | `nil`                                                   |
-| `datasources.secretName`               | Secret name containing custom datasource files                                                         | `nil`                                                   |
-| `persistence.enabled`                  | Enable persistence                                                                                     | `true`                                                  |
-| `presistence.storageClass`             | Storage class to use with the PVC                                                                      | `nil`                                                   |
-| `persistence.accessMode`               | Access mode to the PV                                                                                  | `ReadWriteOnce`                                         |
-| `persistence.size`                     | Size for the PV                                                                                        | `10Gi`                                                  |
-| `livenessProbe.enabled`                | Enable/disable the Liveness probe                                                                      | `true`                                                  |
-| `livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated                                                               | `60`                                                    |
-| `livenessProbe.periodSeconds`          | How often to perform the probe                                                                         | `10`                                                    |
-| `livenessProbe.timeoutSeconds`         | When the probe times out                                                                               | `5`                                                     |
-| `livenessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed.           | `1`                                                     |
-| `livenessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded.             | `6`                                                     |
-| `readinessProbe.enabled`               | Enable/disable the Readiness probe                                                                     | `true`                                                  |
-| `readinessProbe.initialDelaySeconds`   | Delay before readiness probe is initiated                                                              | `5`                                                     |
-| `readinessProbe.periodSeconds`         | How often to perform the probe                                                                         | `10`                                                    |
-| `readinessProbe.timeoutSeconds`        | When the probe times out                                                                               | `5`                                                     |
-| `readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.             | `6`                                                     |
-| `readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed.           | `1`                                                     |
-| `service.type`                         | Kubernetes Service type                                                                                | `ClusterIP`                                             |
-| `service.webPort`                      | Grafana client port                                                                                    | `80`                                                    |
-| `service.clusterPort`                  | Grafana cluster port                                                                                   | `7077`                                                  |
-| `service.nodePort`                     | Port to bind to for NodePort service type (client port)                                                | `nil`                                                   |
-| `service.annotations`                  | Annotations for Grafana service                                                                        | `{}`                                                    |
-| `service.loadBalancerIP`               | loadBalancerIP if Grafana service type is `LoadBalancer`                                               | `nil`                                                   |
-| `service.loadBalancerSourceRanges`     | loadBalancerSourceRanges if Grafana service type is `LoadBalancer`                                     | `nil`                                                   |
-| `ingress.enabled`                      | Enable the use of the ingress controller to access the web UI                                          | `false`                                                 |
-| `ingress.certManager`                  | Add annotations for cert-manager                                                                       | `false`                                                 |
-| `ingress.annotations`                  | Annotations for the Grafana Ingress                                                                    | `{}`                                                    |
-| `ingress.hosts[0].name`                | Hostname to your Grafana installation                                                                  | `grafana.local`                                         |
-| `ingress.hosts[0].paths`               | Path within the url structure                                                                          | `["/"]`                                                 |
-| `ingress.hosts[0].tls`                 | Utilize TLS backend in ingress                                                                         | `false`                                                 |
-| `ingress.hosts[0].tlsHosts`            | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                   | `nil`                                                   |
-| `ingress.hosts[0].tlsSecret`           | TLS Secret (certificates)                                                                              | `grafana.local-tls`                                     |
-| `securityContext.enabled`              | Enable securityContext on for Granafa deployment                                                       | `true`                                                  |
-| `securityContext.runAsUser`            | User for the security context                                                                          | `1001`                                                  |
-| `securityContext.fsGroup`              | Group to configure permissions for volumes                                                             | `1001`                                                  |
-| `securityContext.runAsNonRoot`         | Run containers as non-root users                                                                       | `true`                                                  |
-| `resources`                            | Configure resource requests and limits                                                                 | `nil`                                                   |
-| `nodeSelector`                         | Node labels for pod assignment                                                                         | `{}`                                                    |
-| `tolerations`                          | Tolerations for pod assignment                                                                         | `[]`                                                    |
-| `affinity`                             | Affinity for pod assignment                                                                            | `{}`                                                    |
-| `podAnnotations`                       | Pod annotations                                                                                        | `{}`                                                    |
-| `metrics.enabled`                      | Enable the export of Prometheus metrics                                                                | `false`                                                 |
-| `metrics.service.annotations`          | Annotations for Prometheus metrics service                                                             | `Check values.yaml file`                                |
-| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                                 |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `nil`                                                   |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `nil` (Prometheus Operator default value)               |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `nil` (Prometheus Operator default value)               |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                    | `nil`                                                   |
+| Parameter                              | Description                                                                                                      | Default                                                 |
+|----------------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`                 | Global Docker image registry                                                                                     | `nil`                                                   |
+| `global.imagePullSecrets`              | Global Docker registry secret names as an array                                                                  | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`                       | Grafana image registry                                                                                           | `docker.io`                                             |
+| `image.repository`                     | Grafana image name                                                                                               | `bitnami/grafana`                                       |
+| `image.tag`                            | Grafana image tag                                                                                                | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                     | Grafana image pull policy                                                                                        | `IfNotPresent`                                          |
+| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                 | `[]` (does not add image pull secrets to deployed pods) |
+| `nameOverride`                         | String to partially override grafana.fullname template with a string (will prepend the release name)             | `nil`                                                   |
+| `fullnameOverride`                     | String to fully override grafana.fullname template with a string                                                 | `nil`                                                   |
+| `replicaCount`                         | Number of replicas of the Grafana Pod                                                                            | `1`                                                     |
+| `updateStrategy`                       | Update strategy for deployment                                                                                   | `{type: "RollingUpdate"}`                               |
+| `schedulerName`                        | Alternative scheduler                                                                                            | `nil`                                                   |
+| `serviceAccount.create`                | Specifies whether a ServiceAccount should be created                                                             | `true`                                                  |
+| `serviceAccount.name`                  | If serviceAccount.create is enabled, what should the serviceAccount name be - otherwise defaults to the fullname | `nil`                                                   |
+| `admin.user`                           | Grafana admin username                                                                                           | `admin`                                                 |
+| `admin.password`                       | Grafana admin password                                                                                           | Randomly generated                                      |
+| `admin.existingSecret`                 | Name of the existing secret containing admin password                                                            | `nil`                                                   |
+| `admin.existingSecretPasswordKey`      | Password key on the existing secret                                                                              | `password`                                              |
+| `smtp.enabled`                         | Enable SMTP configuration                                                                                        | `false`                                                 |
+| `smtp.existingSecret`                  | Name of the existing secret with SMTP credentials                                                                | `nil`                                                   |
+| `smtp.existingSecretUserKey`           | User key on the existing secret                                                                                  | `user`                                                  |
+| `smtp.existingSecretPasswordKey`       | Password key on the existing secret                                                                              | `password`                                              |
+| `plugins`                              | Grafana plugins to be installed in deployment time separated by commas                                           | `nil`                                                   |
+| `ldap.enabled`                         | Enable LDAP for Grafana                                                                                          | `false`                                                 |
+| `ldap.allowSignUp`                     | Allows LDAP sign up for Grafana                                                                                  | `false`                                                 |
+| `ldap.configMapName`                   | Name of the ConfigMap with the LDAP configuration file for Grafana                                               | `nil`                                                   |
+| `extraEnvVars`                         | Array containing extra env vars to configure Grafana                                                             | `{}`                                                    |
+| `extraConfigmaps`                      | Array to mount extra ConfigMaps to configure Grafana                                                             | `{}`                                                    |
+| `config.useGrafanaIniFile`             | Allows to load a `grafana.ini` file                                                                              | `false`                                                 |
+| `config.grafanaIniConfigMap`           | Name of the ConfigMap containing the `grafana.ini` file                                                          | `nil`                                                   |
+| `config.grafanaIniSecret`              | Name of the Secret containing the `grafana.ini` file                                                             | `nil`                                                   |
+| `config.useCustomIniFile`              | Allows to load a `custom.ini` file                                                                               | `false`                                                 |
+| `config.customIniConfigMap`            | Name of the ConfigMap containing the `custom.ini` file                                                           | `nil`                                                   |
+| `config.customIniSecret`               | Name of the Secret containing the `custom.ini` file                                                              | `nil`                                                   |
+| `dashboardsProvider.enabled`           | Enable the use of a Grafana dashboard provider                                                                   | `false`                                                 |
+| `dashboardsProvider.configMapName`     | Name of a ConfigMap containing a custom dashboard provider                                                       | `nil` (evaluated as a template)                         |
+| `dashboardsConfigMaps`                 | Array with the names of a series of ConfigMaps containing dashboards files                                       | `nil`                                                   |
+| `datasources.secretName`               | Secret name containing custom datasource files                                                                   | `nil`                                                   |
+| `persistence.enabled`                  | Enable persistence                                                                                               | `true`                                                  |
+| `presistence.storageClass`             | Storage class to use with the PVC                                                                                | `nil`                                                   |
+| `persistence.accessMode`               | Access mode to the PV                                                                                            | `ReadWriteOnce`                                         |
+| `persistence.size`                     | Size for the PV                                                                                                  | `10Gi`                                                  |
+| `livenessProbe.enabled`                | Enable/disable the Liveness probe                                                                                | `true`                                                  |
+| `livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated                                                                         | `60`                                                    |
+| `livenessProbe.periodSeconds`          | How often to perform the probe                                                                                   | `10`                                                    |
+| `livenessProbe.timeoutSeconds`         | When the probe times out                                                                                         | `5`                                                     |
+| `livenessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed.                     | `1`                                                     |
+| `livenessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded.                       | `6`                                                     |
+| `readinessProbe.enabled`               | Enable/disable the Readiness probe                                                                               | `true`                                                  |
+| `readinessProbe.initialDelaySeconds`   | Delay before readiness probe is initiated                                                                        | `5`                                                     |
+| `readinessProbe.periodSeconds`         | How often to perform the probe                                                                                   | `10`                                                    |
+| `readinessProbe.timeoutSeconds`        | When the probe times out                                                                                         | `5`                                                     |
+| `readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                       | `6`                                                     |
+| `readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed.                     | `1`                                                     |
+| `service.type`                         | Kubernetes Service type                                                                                          | `ClusterIP`                                             |
+| `service.webPort`                      | Grafana client port                                                                                              | `80`                                                    |
+| `service.clusterPort`                  | Grafana cluster port                                                                                             | `7077`                                                  |
+| `service.nodePort`                     | Port to bind to for NodePort service type (client port)                                                          | `nil`                                                   |
+| `service.annotations`                  | Annotations for Grafana service                                                                                  | `{}`                                                    |
+| `service.loadBalancerIP`               | loadBalancerIP if Grafana service type is `LoadBalancer`                                                         | `nil`                                                   |
+| `service.loadBalancerSourceRanges`     | loadBalancerSourceRanges if Grafana service type is `LoadBalancer`                                               | `nil`                                                   |
+| `ingress.enabled`                      | Enable the use of the ingress controller to access the web UI                                                    | `false`                                                 |
+| `ingress.certManager`                  | Add annotations for cert-manager                                                                                 | `false`                                                 |
+| `ingress.annotations`                  | Annotations for the Grafana Ingress                                                                              | `{}`                                                    |
+| `ingress.hosts[0].name`                | Hostname to your Grafana installation                                                                            | `grafana.local`                                         |
+| `ingress.hosts[0].paths`               | Path within the url structure                                                                                    | `["/"]`                                                 |
+| `ingress.hosts[0].tls`                 | Utilize TLS backend in ingress                                                                                   | `false`                                                 |
+| `ingress.hosts[0].tlsHosts`            | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                             | `nil`                                                   |
+| `ingress.hosts[0].tlsSecret`           | TLS Secret (certificates)                                                                                        | `grafana.local-tls`                                     |
+| `securityContext.enabled`              | Enable securityContext on for Granafa deployment                                                                 | `true`                                                  |
+| `securityContext.runAsUser`            | User for the security context                                                                                    | `1001`                                                  |
+| `securityContext.fsGroup`              | Group to configure permissions for volumes                                                                       | `1001`                                                  |
+| `securityContext.runAsNonRoot`         | Run containers as non-root users                                                                                 | `true`                                                  |
+| `resources`                            | Configure resource requests and limits                                                                           | `nil`                                                   |
+| `nodeSelector`                         | Node labels for pod assignment                                                                                   | `{}`                                                    |
+| `tolerations`                          | Tolerations for pod assignment                                                                                   | `[]`                                                    |
+| `affinity`                             | Affinity for pod assignment                                                                                      | `{}`                                                    |
+| `podAnnotations`                       | Pod annotations                                                                                                  | `{}`                                                    |
+| `metrics.enabled`                      | Enable the export of Prometheus metrics                                                                          | `false`                                                 |
+| `metrics.service.annotations`          | Annotations for Prometheus metrics service                                                                       | `Check values.yaml file`                                |
+| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)           | `false`                                                 |
+| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                                         | `nil`                                                   |
+| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                     | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                          | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                              | `nil`                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
