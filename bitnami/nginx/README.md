@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 
 ## Installing the Chart
 
@@ -50,7 +50,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the NGINX Open Source chart and their default values.
 
 | Parameter                                  | Description                                                                                  | Default                                                      |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+|--------------------------------------------|----------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `global.imageRegistry`                     | Global Docker image registry                                                                 | `nil`                                                        |
 | `global.imagePullSecrets`                  | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.registry`                           | NGINX image registry                                                                         | `docker.io`                                                  |
@@ -74,7 +74,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `serverBlock`                              | Custom NGINX server block                                                                    | `nil`                                                        |
 | `existingServerBlockConfigmap`             | Name of existing PVC with custom NGINX server block                                          | `nil`                                                        |
 | `extraVolumes`                             | Array of extra volumes to be added to the deployment. Requires setting `extraVolumeMounts`   | `nil`                                                        |
-| `extraVolumeMounts`                        | Array of extra volume mounts to be added to the deployment. Normally used with `extraVolumes`| `nil`                                                        |                                                            
+| `extraVolumeMounts`                        | Array of extra volume mounts to be added to the deployment. Normally used with `extraVolumes`| `nil`                                                        |  
 | `replicaCount`                             | Number of replicas to deploy                                                                 | `1`                                                          |
 | `containerPort`                            | Deployment Container Port                                                                    | `8080`                                                       |
 | `podAnnotations`                           | Pod annotations                                                                              | `{}`                                                         |
@@ -127,6 +127,11 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                 | `nil` (Prometheus Operator default value)                    |
 | `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                      | `nil` (Prometheus Operator default value)                    |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                          | `nil`                                                        |
+| `autoscaling.enabled`                      | Enable autoscaling for NGINX deployment                                                      | `false`                                                      |
+| `autoscaling.minReplicas`                  | Minimum number of replicas to scale back                                                     | `nil`                                                        |
+| `autoscaling.maxReplicas`                  | Maximum number of replicas to scale out                                                      | `nil`                                                        |
+| `autoscaling.targetCPU`                    | Target CPU utilization percentage                                                            | `nil`                                                        |
+| `autoscaling.targetMemory`                 | Target Memory utilization percentage                                                         | `nil`                                                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
