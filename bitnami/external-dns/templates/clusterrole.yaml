@@ -33,6 +33,14 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - zalando.org
+    resources:
+      - routegroups
+    verbs:
+      - get
+      - list
+      - watch
   {{- if or .Values.crd.create .Values.crd.apiversion }}
   - apiGroups:
       {{- if .Values.crd.create }}
