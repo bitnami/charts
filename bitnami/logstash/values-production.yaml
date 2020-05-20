@@ -104,21 +104,18 @@ output: |-
 
 ## Array to add extra volumes (evaluated as a template)
 ## extraVolumes: 
-##   - name: myconfigmap
+##   - name: myvolume
 ##     configMap:
 ##       name: myconfigmap
-
 extraVolumes: []
 
 ## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
 ##
 ## extraVolumeMounts: 
 ##   - mountPath: /opt/bitnami/desired-path
-##     name: myconfigmap
+##     name: myvolume
 ##     readOnly: true
 extraVolumeMounts: []
-
-
 
 containerPorts:
   # - name: syslog-udp
