@@ -94,7 +94,6 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `db.name`                            | Name for new database to create                                                                                                                             | `my_database`                                                     |
 | `db.forcePassword`                   | Force users to specify a password                                                                                                                           | `false`                                                           |
 | `galera.name`                        | Galera cluster name                                                                                                                                         | `galera`                                                          |
-| `galera.bootstrap.forceBootstrap`       | Force bootstraping                                                                                                                                       | `false`                                                           |
 | `galera.bootstrap.bootstrapFromNode`    | Node number to bootstrap first                                                                                                                           | `0`                                                               |
 | `galera.bootstrap.forceSafeToBootstrap` | Force `safe_to_bootstrap: 1` in `grastate.dat`                                                                                                           | `false`                                                           |
 | `galera.mariabackup.user`            | Galera mariabackup user                                                                                                                                     | `mariabackup`                                                     |
@@ -352,11 +351,11 @@ extraContainers:
       memory: 10Mi
 ```
 
-### Forcing Bootstraping
+### Bootstraping a node other than 0
 
 > Note: Some of these procedures can lead to data loss, always make a backup beforehand.
 
-To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it safe to bootstrap form that node. In the case there is not nodes safe to bootstrap from, it is needed to choose one and force the bootstraping from it.
+To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it.
 
 #### Checking `safe_to_boostrap`
 
@@ -418,13 +417,14 @@ Several cases can happen:
 
 #### Only one node with `safe_to_bootstrap: 1`
 
-In this case you can run 
+In this case you will need the node number `N` and run:
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
 --set image.pullPolicy=Always \
 --set rootUser.password=XXXX \
---set galera.mariabackup.password=YYYY
+--set galera.mariabackup.password=YYYY \
+--set galera.bootstrap.bootstrapFromNode=N
 ```
 
 #### All the nodes with `safe_to_bootstrap: 0`
@@ -436,9 +436,8 @@ helm install my-release bitnami/mariadb-galera \
 --set image.pullPolicy=Always \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY
---set galera.bootstrap.forceBootstrap=true \
 --set galera.bootstrap.bootstrapFromNode=3 \
---set galera.bootstrap.forceSafeToBootstrap=true 
+--set galera.bootstrap.forceSafeToBootstrap=true
 ```
 
 ## Persistence

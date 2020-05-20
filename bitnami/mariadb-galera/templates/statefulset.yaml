@@ -50,7 +50,6 @@ spec:
         - name: "mariadb-galera"
           image: {{ template "mariadb-galera.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.galera.bootstrap.forceBootstrap }}
           command:
             - bash
             - -ec
@@ -68,7 +67,6 @@ spec:
                     exit 1
                 fi
                 exec /opt/bitnami/scripts/mariadb-galera/entrypoint.sh /opt/bitnami/scripts/mariadb-galera/run.sh
-          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
@@ -213,6 +211,8 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: previousi-boot
+              mountPath: /opt/bitnami/mariadb/previous
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
               {{- if .Values.persistence.subPath }}
@@ -277,6 +277,8 @@ spec:
         {{- include "mariadb-galera.tplValue" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: previous-boot
+          emptyDir: {}
         {{- if .Values.tls.enabled }}
         - name: mariadb-galera-certificates
           secret:
