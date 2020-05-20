@@ -578,9 +578,9 @@ external-dns: ovh.applicationSecret
 Return the ExternalDNS service account name
 */}}
 {{- define "external-dns.serviceAccountName" -}}
-{{- if .Values.rbac.serviceAccountName -}}
-    {{- printf "%s" (tpl .Values.rbac.serviceAccountName . ) -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "external-dns.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
-    {{- printf "%s" (include "external-dns.fullname" . ) -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}

@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0+
+- Helm 2.12+ or Helm 3.0+
 
 ## Installing the Chart
 
@@ -50,7 +50,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the kube-state-metrics chart and their default values.
 
-|                Parameter                |                                                  Description                                                  |                          Default                           |
+| Parameter                               | Description                                                                                                   | Default                                                    |
 |-----------------------------------------|---------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                                                                                  | `nil`                                                      |
 | `global.imagePullSecrets`               | Global Docker registry secret names as an array                                                               | `[]` (does not add image pull secrets to deployed pods)    |
@@ -133,7 +133,7 @@ The following table lists the configurable parameters of the kube-state-metrics 
 | `serviceMonitor.interval`               | Scrape interval (use by default, falling back to Prometheus' default)                                         | `nil`                                                      |
 | `serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                             | `nil`                                                      |
 | `serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                | `[]`                                                       |
-| `serviceMonitor.honorLabels`            | Honor metrics labels                                                                                          | `false`                                                       |
+| `serviceMonitor.honorLabels`            | Honor metrics labels                                                                                          | `false`                                                    |
 | `serviceMonitor.relabelings`            | ServiceMonitor relabelings                                                                                    | `[]`                                                       |
 | `serviceMonitor.metricRelabelings`      | ServiceMonitor metricRelabelings                                                                              | `[]`                                                       |
 
