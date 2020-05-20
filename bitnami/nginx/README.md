@@ -130,6 +130,8 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `autoscaling.maxReplicas`                  | Maximum number of replicas to scale out                                                     | `nil`                                                        |
 | `autoscaling.targetCPU`                    | Target CPU utilization percentage                                                           | `nil`                                                        |
 | `autoscaling.targetMemory`                 | Target Memory utilization percentage                                                        | `nil`                                                        |
+| `extraVolumes`                             | Array to add extra volumes (evaluated as a template)                                        | `[]`                                                         |
+| `extraVolumeMounts`                        | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)        | `[]`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

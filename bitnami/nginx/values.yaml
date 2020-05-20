@@ -69,7 +69,7 @@ cloneStaticSiteFromGit:
   ## Repository to clone static content from
   ##
   # repository:
-  ## Branch inside the git repository	 
+  ## Branch inside the git repository
   ##
   # branch:
   ## Interval for sidecar container pull from the repository
@@ -104,7 +104,7 @@ cloneStaticSiteFromGit:
 replicaCount: 1
 
 ## Deployment Container Port
-## 
+##
 containerPort: 8080
 
 ## Pod annotations
@@ -373,3 +373,11 @@ autoscaling:
   # maxReplicas: 10
   # targetCPU: 50
   # targetMemory: 50
+
+## Array to add extra volumes (evaluated as a template)
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+extraVolumeMounts: []

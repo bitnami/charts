@@ -79,8 +79,11 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
           volumeMounts:
+          {{- if .Values.extraVolumeMounts }}
+            {{- include "nginx.tplValue" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks
@@ -114,8 +117,11 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
       volumes:
+      {{- if .Values.extraVolumes }}
+        {{- include "nginx.tplValue" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
           configMap:
