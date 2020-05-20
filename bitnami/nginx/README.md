@@ -49,87 +49,89 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the NGINX Open Source chart and their default values.
 
-| Parameter                                  | Description                                                                                 | Default                                                      |
-|--------------------------------------------|---------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                     | Global Docker image registry                                                                | `nil`                                                        |
-| `global.imagePullSecrets`                  | Global Docker registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.registry`                           | NGINX image registry                                                                        | `docker.io`                                                  |
-| `image.repository`                         | NGINX Image name                                                                            | `bitnami/nginx`                                              |
-| `image.tag`                                | NGINX Image tag                                                                             | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                         | NGINX image pull policy                                                                     | `IfNotPresent`                                               |
-| `image.pullSecrets`                        | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                             | String to partially override nginx.fullname template                                        | `nil`                                                        |
-| `fullnameOverride`                         | String to fully override nginx.fullname template                                            | `nil`                                                        |
-| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static content                                   | `nil`                                                        |
-| `staticSitePVC`                            | Name of existing PVC with the server static content                                         | `nil`                                                        |
-| `cloneStaticSiteFromGit.enabled`           | Get the server static content from a git repository                                         | `false`                                                      |
-| `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                          | `docker.io`                                                  |
-| `cloneStaticSiteFromGit.image.repository`  | Git image name                                                                              | `bitnami/git`                                                |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag                                                                               | `{TAG_NAME}`                                                 |
-| `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                       | `Always`                                                     |
-| `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
-| `cloneStaticSiteFromGit.repository`        | Repository to clone static content from                                                     | `nil`                                                        |
-| `cloneStaticSiteFromGit.branch`            | Branch inside the git repository                                                            | `nil`                                                        |
-| `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the repository                                     | `60`                                                         |
-| `serverBlock`                              | Custom NGINX server block                                                                   | `nil`                                                        |
-| `existingServerBlockConfigmap`             | Name of existing PVC with custom NGINX server block                                         | `nil`                                                        |
-| `replicaCount`                             | Number of replicas to deploy                                                                | `1`                                                          |
-| `containerPort`                            | Deployment Container Port                                                                   | `8080`                                                       |
-| `podAnnotations`                           | Pod annotations                                                                             | `{}`                                                         |
-| `affinity`                                 | Map of node/pod affinities                                                                  | `{}` (The value is evaluated as a template)                  |
-| `nodeSelector`                             | Node labels for pod assignment                                                              | `{}` (The value is evaluated as a template)                  |
-| `tolerations`                              | Tolerations for pod assignment                                                              | `[]` (The value is evaluated as a template)                  |
-| `resources`                                | Resource requests/limit                                                                     | `{}`                                                         |
-| `livenessProbe`                            | Deployment Liveness Probe                                                                   | See `values.yaml`                                            |
-| `readinessProbe`                           | Deployment Readiness Probe                                                                  | See `values.yaml`                                            |
-| `service.type`                             | Kubernetes Service type                                                                     | `LoadBalancer`                                               |
-| `service.port`                             | Service HTTP port                                                                           | `80`                                                         |
-| `service.httpsPort`                        | Service HTTPS port                                                                          | `443`                                                        |
-| `service.nodePorts.http`                   | Kubernetes http node port                                                                   | `""`                                                         |
-| `service.nodePorts.https`                  | Kubernetes https node port                                                                  | `""`                                                         |
-| `service.externalTrafficPolicy`            | Enable client source IP preservation                                                        | `Cluster`                                                    |
-| `service.loadBalancerIP`                   | LoadBalancer service IP address                                                             | `""`                                                         |
-| `service.annotations`                      | Service annotations                                                                         | `{}`                                                         |
-| `ingress.enabled`                          | Enable ingress controller resource                                                          | `false`                                                      |
-| `ingress.certManager`                      | Add annotations for cert-manager                                                            | `false`                                                      |
-| `ingress.selectors`                        | Ingress selectors for labelSelector option                                                  | `[]`                                                         |
-| `ingress.annotations`                      | Ingress annotations                                                                         | `[]`                                                         |
-| `ingress.hosts[0].name`                    | Hostname to your NGINX installation                                                         | `nginx.local`                                                |
-| `ingress.hosts[0].path`                    | Path within the url structure                                                               | `/`                                                          |
-| `ingress.tls[0].hosts[0]`                  | TLS hosts                                                                                   | `nginx.local`                                                |
-| `ingress.tls[0].secretName`                | TLS Secret (certificates)                                                                   | `nginx.local-tls`                                            |
-| `ingress.secrets[0].name`                  | TLS Secret Name                                                                             | `nil`                                                        |
-| `ingress.secrets[0].certificate`           | TLS Secret Certificate                                                                      | `nil`                                                        |
-| `ingress.secrets[0].key`                   | TLS Secret Key                                                                              | `nil`                                                        |
-| `healthIngress.enabled`                    | Enable health ingress controller resource                                                   | `false`                                                      |
-| `healthIngress.certManager`                | Add annotations for cert-manager                                                            | `false`                                                      |
-| `healthIngress.selectors`                  | Health Ingress selectors for labelSelector option                                           | `[]`                                                         |
-| `healthIngress.annotations`                | Health Ingress annotations                                                                  | `[]`                                                         |
-| `healthIngress.hosts[0].name`              | Hostname to your NGINX installation                                                         | `nginx.local`                                                |
-| `healthIngress.hosts[0].path`              | Path within the url structure                                                               | `/`                                                          |
-| `healthIngress.tls[0].hosts[0]`            | TLS hosts                                                                                   | `nginx.local`                                                |
-| `healthIngress.tls[0].secretName`          | TLS Secret (certificates)                                                                   | `nginx.local-tls`                                            |
-| `healthIngress.secrets[0].name`            | TLS Secret Name                                                                             | `nil`                                                        |
-| `healthIngress.secrets[0].certificate`     | TLS Secret Certificate                                                                      | `nil`                                                        |
-| `healthIngress.secrets[0].key`             | TLS Secret Key                                                                              | `nil`                                                        |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                        | `false`                                                      |
-| `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                    | `docker.io`                                                  |
-| `metrics.image.repository`                 | NGINX Prometheus exporter image name                                                        | `bitnami/nginx-exporter`                                     |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag                                                         | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                 | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                 | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}` |
-| `metrics.resources`                        | NGINX Prometheus exporter resource requests/limit                                           | `{}`                                                         |
-| `metrics.serviceMonitor.enabled`           | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                                      |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                    | `nil`                                                        |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                | `nil` (Prometheus Operator default value)                    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                     | `nil` (Prometheus Operator default value)                    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                         | `nil`                                                        |
-| `autoscaling.enabled`                      | Enable autoscaling for NGINX deployment                                                     | `false`                                                      |
-| `autoscaling.minReplicas`                  | Minimum number of replicas to scale back                                                    | `nil`                                                        |
-| `autoscaling.maxReplicas`                  | Maximum number of replicas to scale out                                                     | `nil`                                                        |
-| `autoscaling.targetCPU`                    | Target CPU utilization percentage                                                           | `nil`                                                        |
-| `autoscaling.targetMemory`                 | Target Memory utilization percentage                                                        | `nil`                                                        |
+| Parameter                                  | Description                                                                                  | Default                                                      |
+|--------------------------------------------|----------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `global.imageRegistry`                     | Global Docker image registry                                                                 | `nil`                                                        |
+| `global.imagePullSecrets`                  | Global Docker registry secret names as an array                                              | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.registry`                           | NGINX image registry                                                                         | `docker.io`                                                  |
+| `image.repository`                         | NGINX Image name                                                                             | `bitnami/nginx`                                              |
+| `image.tag`                                | NGINX Image tag                                                                              | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                         | NGINX image pull policy                                                                      | `IfNotPresent`                                               |
+| `image.pullSecrets`                        | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                             | String to partially override nginx.fullname template                                         | `nil`                                                        |
+| `fullnameOverride`                         | String to fully override nginx.fullname template                                             | `nil`                                                        |
+| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static content                                    | `nil`                                                        |
+| `staticSitePVC`                            | Name of existing PVC with the server static content                                          | `nil`                                                        |
+| `cloneStaticSiteFromGit.enabled`           | Get the server static content from a git repository                                          | `false`                                                      |
+| `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                           | `docker.io`                                                  |
+| `cloneStaticSiteFromGit.image.repository`  | Git image name                                                                               | `bitnami/git`                                                |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag                                                                                | `{TAG_NAME}`                                                 |
+| `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                        | `Always`                                                     |
+| `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods)      |
+| `cloneStaticSiteFromGit.repository`        | Repository to clone static content from                                                      | `nil`                                                        |
+| `cloneStaticSiteFromGit.branch`            | Branch inside the git repository                                                             | `nil`                                                        |
+| `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the repository                                      | `60`                                                         |
+| `serverBlock`                              | Custom NGINX server block                                                                    | `nil`                                                        |
+| `existingServerBlockConfigmap`             | Name of existing PVC with custom NGINX server block                                          | `nil`                                                        |
+| `extraVolumes`                             | Array of extra volumes to be added to the deployment. Requires setting `extraVolumeMounts`   | `nil`                                                        |
+| `extraVolumeMounts`                        | Array of extra volume mounts to be added to the deployment. Normally used with `extraVolumes`| `nil`                                                        |  
+| `replicaCount`                             | Number of replicas to deploy                                                                 | `1`                                                          |
+| `containerPort`                            | Deployment Container Port                                                                    | `8080`                                                       |
+| `podAnnotations`                           | Pod annotations                                                                              | `{}`                                                         |
+| `affinity`                                 | Map of node/pod affinities                                                                   | `{}` (The value is evaluated as a template)                  |
+| `nodeSelector`                             | Node labels for pod assignment                                                               | `{}` (The value is evaluated as a template)                  |
+| `tolerations`                              | Tolerations for pod assignment                                                               | `[]` (The value is evaluated as a template)                  |
+| `resources`                                | Resource requests/limit                                                                      | `{}`                                                         |
+| `livenessProbe`                            | Deployment Liveness Probe                                                                    | See `values.yaml`                                            |
+| `readinessProbe`                           | Deployment Readiness Probe                                                                   | See `values.yaml`                                            |
+| `service.type`                             | Kubernetes Service type                                                                      | `LoadBalancer`                                               |
+| `service.port`                             | Service HTTP port                                                                            | `80`                                                         |
+| `service.httpsPort`                        | Service HTTPS port                                                                           | `443`                                                        |
+| `service.nodePorts.http`                   | Kubernetes http node port                                                                    | `""`                                                         |
+| `service.nodePorts.https`                  | Kubernetes https node port                                                                   | `""`                                                         |
+| `service.externalTrafficPolicy`            | Enable client source IP preservation                                                         | `Cluster`                                                    |
+| `service.loadBalancerIP`                   | LoadBalancer service IP address                                                              | `""`                                                         |
+| `service.annotations`                      | Service annotations                                                                          | `{}`                                                         |
+| `ingress.enabled`                          | Enable ingress controller resource                                                           | `false`                                                      |
+| `ingress.certManager`                      | Add annotations for cert-manager                                                             | `false`                                                      |
+| `ingress.selectors`                        | Ingress selectors for labelSelector option                                                   | `[]`                                                         |
+| `ingress.annotations`                      | Ingress annotations                                                                          | `[]`                                                         |
+| `ingress.hosts[0].name`                    | Hostname to your NGINX installation                                                          | `nginx.local`                                                |
+| `ingress.hosts[0].path`                    | Path within the url structure                                                                | `/`                                                          |
+| `ingress.tls[0].hosts[0]`                  | TLS hosts                                                                                    | `nginx.local`                                                |
+| `ingress.tls[0].secretName`                | TLS Secret (certificates)                                                                    | `nginx.local-tls`                                            |
+| `ingress.secrets[0].name`                  | TLS Secret Name                                                                              | `nil`                                                        |
+| `ingress.secrets[0].certificate`           | TLS Secret Certificate                                                                       | `nil`                                                        |
+| `ingress.secrets[0].key`                   | TLS Secret Key                                                                               | `nil`                                                        |
+| `healthIngress.enabled`                    | Enable health ingress controller resource                                                    | `false`                                                      |
+| `healthIngress.certManager`                | Add annotations for cert-manager                                                             | `false`                                                      |
+| `healthIngress.selectors`                  | Health Ingress selectors for labelSelector option                                            | `[]`                                                         |
+| `healthIngress.annotations`                | Health Ingress annotations                                                                   | `[]`                                                         |
+| `healthIngress.hosts[0].name`              | Hostname to your NGINX installation                                                          | `nginx.local`                                                |
+| `healthIngress.hosts[0].path`              | Path within the url structure                                                                | `/`                                                          |
+| `healthIngress.tls[0].hosts[0]`            | TLS hosts                                                                                    | `nginx.local`                                                |
+| `healthIngress.tls[0].secretName`          | TLS Secret (certificates)                                                                    | `nginx.local-tls`                                            |
+| `healthIngress.secrets[0].name`            | TLS Secret Name                                                                              | `nil`                                                        |
+| `healthIngress.secrets[0].certificate`     | TLS Secret Certificate                                                                       | `nil`                                                        |
+| `healthIngress.secrets[0].key`             | TLS Secret Key                                                                               | `nil`                                                        |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                                         | `false`                                                      |
+| `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                     | `docker.io`                                                  |
+| `metrics.image.repository`                 | NGINX Prometheus exporter image name                                                         | `bitnami/nginx-exporter`                                     |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag                                                          | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                  | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                  | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}` |
+| `metrics.resources`                        | NGINX Prometheus exporter resource requests/limit                                            | `{}`                                                         |
+| `metrics.serviceMonitor.enabled`           | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)  | `false`                                                      |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                     | `nil`                                                        |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                 | `nil` (Prometheus Operator default value)                    |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                      | `nil` (Prometheus Operator default value)                    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                          | `nil`                                                        |
+| `autoscaling.enabled`                      | Enable autoscaling for NGINX deployment                                                      | `false`                                                      |
+| `autoscaling.minReplicas`                  | Minimum number of replicas to scale back                                                     | `nil`                                                        |
+| `autoscaling.maxReplicas`                  | Maximum number of replicas to scale out                                                      | `nil`                                                        |
+| `autoscaling.targetCPU`                    | Target CPU utilization percentage                                                            | `nil`                                                        |
+| `autoscaling.targetMemory`                 | Target Memory utilization percentage                                                         | `nil`                                                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

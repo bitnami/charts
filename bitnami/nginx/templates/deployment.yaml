@@ -79,7 +79,7 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
+          {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumeMounts (include "nginx.useStaticSite" .) }}
           volumeMounts:
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
@@ -88,6 +88,9 @@ spec:
             {{- if (include "nginx.useStaticSite" .) }}
             - name: staticsite
               mountPath: /app
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "nginx.tplValue" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
@@ -114,7 +117,7 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
+      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumes (include "nginx.useStaticSite" .) }}
       volumes:
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
@@ -125,4 +128,7 @@ spec:
         - name: staticsite
           {{- include "nginx.staticSiteVolume" . | nindent 10 }}
         {{- end }}
+      {{- if .Values.extraVolumes }}
+      {{- include "nginx.tplValue" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
