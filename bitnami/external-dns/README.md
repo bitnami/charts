@@ -267,7 +267,7 @@ $ helm install my-release \
 - The parameters below are renamed:
   - `rbac.serviceAccountCreate` -> `serviceAccount.create`
   - `rbac.serviceAccountName` -> `serviceAccount.name`
-  - `rbac.serviceAccountAnnotations` -> `serviceAccount.annotation`
+  - `rbac.serviceAccountAnnotations` -> `serviceAccount.annotations`
 - It is now possible to create serviceAccount, clusterRole and clusterRoleBinding manually and give the serviceAccount to the chart.
 
 ### To 2.0.0
