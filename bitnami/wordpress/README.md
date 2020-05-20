@@ -119,6 +119,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `livenessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                            | `6`                                                          |
 | `livenessProbe.successThreshold`          | Minimum consecutive successes for the probe                                           | `1`                                                          |
 | `livenessProbeHeaders`                    | Headers to use for livenessProbe                                                      | `{}`                                                         |
+| `customLivenessProbe`                    | Override default liveness probe (evaluated as a template)                                                     | `{}`                                                         |
 | `readinessProbe.enabled`                  | Enable/disable readinessProbe                                                         | `true`                                                       |
 | `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `30`                                                         |
 | `readinessProbe.periodSeconds`            | How often to perform the probe                                                        | `10`                                                         |
@@ -126,6 +127,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `readinessProbe.failureThreshold`         | Minimum consecutive failures for the probe                                            | `6`                                                          |
 | `readinessProbe.successThreshold`         | Minimum consecutive successes for the probe                                           | `1`                                                          |
 | `readinessProbeHeaders`                   | Headers to use for readinessProbe                                                     | `{}`                                                         |
+| `customReadinessProbe`                    | Override default readiness probe (evaluated as a template)                                                     | `{}`                                                         |
 | `service.annotations`                     | Service annotations                                                                   | `{}` (evaluated as a template)                               |
 | `service.type`                            | Kubernetes Service type                                                               | `LoadBalancer`                                               |
 | `service.port`                            | Service HTTP port                                                                     | `80`                                                         |
