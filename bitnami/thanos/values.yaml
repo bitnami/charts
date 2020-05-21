@@ -706,6 +706,15 @@ storegateway:
     ##
     size: 8Gi
 
+  ## Autoscaling parameters
+  ##
+  autoscaling:
+    enabled: false
+    #  minReplicas: 1
+    #  maxReplicas: 11
+    #  targetCPU: 50
+    #  targetMemory: 50
+
   ## Store Gateway Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
