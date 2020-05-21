@@ -142,7 +142,7 @@
           }
         },
         "tls": {
-          "type": "string",
+          "type": "boolean",
           "form": true,
           "title": "Create a TLS secret",
           "hidden": {
