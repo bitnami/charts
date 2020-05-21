@@ -123,20 +123,20 @@ ingress:
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
-  # initialDelaySeconds: 30
-  # timeoutSeconds: 30
-  # periodSeconds: 10
-  # successThreshold: 1
-  # failureThreshold: 6
+  initialDelaySeconds: 30
+  timeoutSeconds: 30
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 6
   httpGet:
     path: /
     port: http
 readinessProbe:
-  # initialDelaySeconds: 30
-  # timeoutSeconds: 30
-  # periodSeconds: 10
-  # successThreshold: 1
-  # failureThreshold: 6
+  initialDelaySeconds: 30
+  timeoutSeconds: 30
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 6
   httpGet:
     path: /
     port: http
