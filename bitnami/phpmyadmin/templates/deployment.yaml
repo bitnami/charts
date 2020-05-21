@@ -96,10 +96,10 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
             - name: https
-              containerPort: 443
+              containerPort: 8443
               protocol: TCP
           {{- if .Values.livenessProbe }}
           livenessProbe: {{- include "phpmyadmin.tplValue" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
