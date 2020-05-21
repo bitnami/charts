@@ -414,68 +414,6 @@ seqno:   25
 safe_to_bootstrap: 1
 ```
 
-### Forcing Bootstraping
-
-> Note: Some of these procedures can lead to data loss, always make a backup beforehand.
-
-To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it.
-
-#### Checking `safe_to_boostrap`
-
-First you need to get the name of the persisten volume claims (pvc), for example:
-
-```bash
-$ kubectl get pvc
-NAME                              STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-data-my-galera-mariadb-galera-0   Bound    pvc-a496aded-f604-4a2d-b934-174907c4d235   8Gi        RWO            gp2            25h
-data-my-galera-mariadb-galera-1   Bound    pvc-00ba6121-9042-4760-af14-3b8a40de936c   8Gi        RWO            gp2            25h
-data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909b05   8Gi        RWO            gp2            25h
-```
-
-The following command will output the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This need to be run for each of the pvc. You will need to change this name accodinly with yours.
-
-```bash
-kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
-{
-    "apiVersion": "v1",
-    "kind": "Pod",
-    "metadata": {
-        "name": "volpod"
-    },
-    "spec": {
-        "containers": [{
-            "command": [
-                "cat",
-                "/mnt/data/grastate.dat"
-            ],
-            "image": "bitnami/minideb",
-            "name": "mycontainer",
-            "volumeMounts": [{
-                "mountPath": "/mnt",
-                "name": "galeradata"
-            }]
-        }],
-        "restartPolicy": "Never",
-        "volumes": [{
-            "name": "galeradata",
-            "persistentVolumeClaim": {
-                "claimName": "data-my-galera-mariadb-galera-2"
-            }
-        }]
-    }
-}' --image="bitnami/minideb"
-```
-
-The output should be similar to this:
-
-```
-# GALERA saved state
-version: 2.1
-uuid:    6f2cbfcd-951b-11ea-a116-5f407049e57d
-seqno:   25
-safe_to_bootstrap: 1
-```
-
 Several cases can happen:
 
 #### Only one node with `safe_to_bootstrap: 1`
