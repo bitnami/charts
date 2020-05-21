@@ -1,0 +1,56 @@
+{{- if .Values.imageRenderer.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grafana.fullname" . }}-image-renderer
+  labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: image-renderer
+spec:
+  replicas: {{ .Values.imageRenderer.replicaCount }}
+  selector:
+    matchLabels: {{- include "grafana.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: image-renderer
+  template:
+    metadata:
+      labels: {{- include "grafana.labels" . | nindent 8 }}
+        app.kubernetes.io/component: image-renderer
+      {{- if .Values.imageRenderer.podAnnotations }}
+      annotations: {{- toYaml .Values.imageRenderer.podAnnotations | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "grafana.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "grafana.serviceAccountName" . }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.imageRenderer.affinity }}
+      affinity: {{- include "grafana.tplValue" (dict "value" .Values.imageRenderer.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageRenderer.nodeSelector }}
+      nodeSelector: {{- include "grafana.tplValue" (dict "value" .Values.imageRenderer.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageRenderer.tolerations }}
+      tolerations: {{- include "grafana.tplValue" (dict "value" .Values.imageRenderer.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageRenderer.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.imageRenderer.securityContext.runAsUser }}
+        fsGroup: {{ .Values.imageRenderer.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.imageRenderer.securityContext.runAsNonRoot }}
+      {{- end }}
+      containers:
+        - name: grafana-image-renderer
+          image: {{ template "grafana.imageRenderer.image" . }}
+          imagePullPolicy: {{ .Values.imageRenderer.image.pullPolicy }}
+          env:
+            - name: HTTP_PORT
+              value: "8080"
+            - name: HTTP_HOST
+              value: "0.0.0.0"
+            - name: ENABLE_METRICS
+              value: {{ ternary "true" "false" .Values.imageRenderer.metrics.enabled | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+{{- end }}

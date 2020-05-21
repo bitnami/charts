@@ -1,0 +1,30 @@
+{{- if and .Values.imageRenderer.metrics.enabled .Values.imageRenderer.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "grafana.fullname" . }}-image-renderer
+  {{- if .Values.imageRenderer.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.imageRenderer.metrics.serviceMonitor.namespace }}
+  {{- end }}
+  labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: image-renderer
+    {{- range $key, $value := .Values.imageRenderer.metrics.serviceMonitor.selector }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels: {{ include "grafana.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: image-renderer
+  endpoints:
+    - port: http
+      path: "/metrics"
+      {{- if .Values.imageRenderer.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.imageRenderer.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.imageRenderer.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.imageRenderer.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}
