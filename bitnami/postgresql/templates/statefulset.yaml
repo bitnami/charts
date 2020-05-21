@@ -346,6 +346,9 @@ spec:
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ template "postgresql.username" . }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "postgresql.tplValue" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
