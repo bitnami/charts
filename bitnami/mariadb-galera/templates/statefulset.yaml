@@ -211,7 +211,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: previousi-boot
+            - name: previous-boot
               mountPath: /opt/bitnami/mariadb/previous
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}

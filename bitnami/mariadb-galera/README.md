@@ -359,7 +359,7 @@ To restart the cluster you need to check state in which it is after being stoppe
 
 #### Checking `safe_to_boostrap`
 
-First you need to get the name of the persisten volume claims (pvc), for example:
+First you need to get the name of the persistent volume claims (pvc), for example:
 
 ```bash
 $ kubectl get pvc
@@ -369,7 +369,7 @@ data-my-galera-mariadb-galera-1   Bound    pvc-00ba6121-9042-4760-af14-3b8a40de9
 data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909b05   8Gi        RWO            gp2            25h
 ```
 
-The following command will output the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This need to be run for each of the pvc. You will need to change this name accodinly with yours.
+The following command will print the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This needs to be run for each of the pvc. You will need to change this name accordinly with yours for each PVC.
 
 ```bash
 kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
@@ -429,7 +429,7 @@ helm install my-release bitnami/mariadb-galera \
 
 #### All the nodes with `safe_to_bootstrap: 0`
 
-In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the field `seqno` higher in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
+In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
@@ -461,7 +461,7 @@ $ helm upgrade my-release bitnami/mariadb-galera \
 
 ### To 2.0.0
 
-In this version was improved the bootstraping. Nnow it is possible to indicate a node where to bootstrap from, and force the parameter `safe_to_bootstrap`. This allows to handle situations where the cluster was not cleanly stopped. It should be safe to upgrade from v1 of the chart, but it is wise to create always a backup before performing operations where there is a risk of data loss.
+In this version the bootstraping was improved. Nnow it is possible to indicate a node where to bootstrap from, and force the parameter `safe_to_bootstrap`. This allows to handle situations where the cluster was not cleanly stopped. It should be safe to upgrade from v1 of the chart, but it is wise to create always a backup before performing operations where there is a risk of data loss.
 
 ### To 1.0.0
 
