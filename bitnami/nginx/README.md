@@ -205,6 +205,16 @@ serverBlock: |-
 
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingServerBlockConfigmap` parameter. Note that this will override the previous option.
 
+### Enabling LDAP
+
+In some scenarios, you may require users to authenticate in order to gain access to protected resources. By enabling LDAP, NGINX will make use of an Authorization Daemon to proxy those identification requests against a given LDAP Server.
+
+In order to enable LDAP authentication you can set the `ldapDaemon.enabled` property and follow these steps:
+
+1. Use the `ldapDaemon.nginxServerBlock` property to provide with an additional server block that will make NGINX such a proxy (see `values.yaml`). Alternatively, you can provide this configuration using an external Secret and the property `ldapDaemon.existingNginxServerBlockSecret`.
+
+2. Complete the aforementioned server block by specifying your LDAP Server connection details (see `values.yaml`). Alternatively, you can declare them using the property `ldapDaemon.ldapConfig`.
+
 ## Upgrading
 
 ### 5.4.0
