@@ -15,7 +15,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.8.0-debian-10-r4
+  tag: 11.8.0-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -537,6 +537,15 @@ metrics:
   #       - size_bytes:
   #           usage: "GAUGE"
   #           description: "Size of the database in bytes"
+  #
+  ## An array to add extra env vars to configure postgres-exporter
+  ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
+  ## For example:
+  #  extraEnvVars:
+  #  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
+  #    value: "true"
+  extraEnvVars: {}
+
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
