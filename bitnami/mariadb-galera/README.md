@@ -360,7 +360,7 @@ To restart the cluster you need to check state in which it is after being stoppe
 
 #### Checking `safe_to_boostrap`
 
-First you need to get the name of the persisten volume claims (pvc), for example:
+First you need to get the name of the persistent volume claims (pvc), for example:
 
 ```bash
 $ kubectl get pvc
@@ -430,7 +430,7 @@ helm install my-release bitnami/mariadb-galera \
 
 #### All the nodes with `safe_to_bootstrap: 0`
 
-In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the field `seqno` higher in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
+In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
