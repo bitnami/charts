@@ -387,7 +387,8 @@ As the images run as non-root by default, it is necessary to adjust the ownershi
 By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`. For OpenShift, one may either define the runAsUser and fsGroup accordingly, or try this more dynamic option: volumePermissions.securityContext.runAsUser="auto",securityContext.enabled=false,shmVolume.chmod.enabled=false.
+You can enable this **initContainer** by setting `volumePermissions.enabled` to `true`.
+There are K8s distribution, such as OpenShift, where you can dynamically define the UID to run this **initContainer**. To do so, set the `volumePermissions.securityContext.runAsUser` to `auto`.
 
 ## Upgrade
 

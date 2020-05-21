@@ -65,17 +65,14 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - /bin/bash
-            - -cx
+            - -c
             - |
-              {{- if .Values.persistence.enabled }}
               mkdir -p /bitnami/influxdb/{data,meta,wal}
               chmod 700 /bitnami/influxdb/{data,meta,wal}
-              find /bitnami/influxdb/{data,meta,wal} -mindepth 1 -maxdepth 1 | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
+                chown -R `id -u`:`id -G` /bitnami/influxdb/{data,meta,wal}
               {{- else }}
-                xargs chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }}
-              {{- end }}
+                chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }} /bitnami/influxdb/{data,meta,wal}
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:
