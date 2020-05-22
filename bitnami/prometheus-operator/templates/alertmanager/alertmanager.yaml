@@ -65,7 +65,9 @@ spec:
     {{- if .Values.alertmanager.nodeAffinity }}
     nodeAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.nodeAffinity "context" $) | nindent 6 }}
     {{- end }}
-    {{- if eq .Values.alertmanager.podAntiAffinity "hard" }}
+    {{- if index .Values.alertmanager "podAntiAffinitySpec" }}
+    podAntiAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podAntiAffinitySpec "context" $) | nindent 6 }}
+    {{- else if eq .Values.alertmanager.podAntiAffinity "hard" }}
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: "kubernetes.io/hostname"

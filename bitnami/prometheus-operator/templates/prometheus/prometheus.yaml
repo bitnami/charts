@@ -133,7 +133,9 @@ spec:
     {{- if .Values.prometheus.nodeAffinity }}
     nodeAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.nodeAffinity "context" $) | nindent 6 }}
     {{- end }}
-    {{- if eq .Values.prometheus.podAntiAffinity "hard" }}
+    {{- if index .Values.prometheus "podAntiAffinitySpec" }}
+    podAntiAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podAntiAffinitySpec "context" $) | nindent 6 }}
+    {{- else if eq .Values.prometheus.podAntiAffinity "hard" }}
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: "kubernetes.io/hostname"
