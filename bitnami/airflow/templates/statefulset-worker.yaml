@@ -9,6 +9,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: worker
 spec:
+  {{- if .Values.airflow.worker.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.airflow.worker.podManagementPolicy | quote }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "airflow.name" . }}
@@ -31,7 +34,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: worker
     spec:
-{{- include "airflow.imagePullSecrets" . | indent 6 }}
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -49,8 +52,11 @@ spec:
       {{- if or .Values.airflow.cloneDagFilesFromGit.enabled .Values.airflow.clonePluginsFromGit.enabled }}
       initContainers:
         - name: git-clone-repository
-          image: "{{ template "git.image" . }}"
+          image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          {{- if .Values.airflow.gitCloneContainer.command }}
+          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -61,6 +67,10 @@ spec:
               {{- if .Values.airflow.clonePluginsFromGit.enabled }}
                 git clone {{ .Values.airflow.clonePluginsFromGit.repository }} --branch {{ .Values.airflow.clonePluginsFromGit.branch }} /plugins
               {{- end }}
+          {{- end }}
+          {{- if .Values.airflow.gitCloneContainer.args }}
+          args: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.args "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - name: git-cloned-dag-files
@@ -70,10 +80,30 @@ spec:
             - name: git-cloned-plugins
               mountPath: /plugins
             {{- end }}
+            {{- if .Values.airflow.gitCloneContainer.extraVolumeMounts }}
+            {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.airflow.gitCloneContainer.extraEnvVars }}
+          env: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.airflow.gitCloneContainer.extraEnvVarsCM .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.airflow.gitCloneContainer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.gitCloneContainer.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
       containers:
         - name: git-repo-syncer
           image: "{{ template "git.image" . }}"
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          {{- if .Values.airflow.gitSyncContainer.command }}
+          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -87,6 +117,10 @@ spec:
                   {{- end }}
                   sleep {{ default "60" .Values.airflow.gitSyncInterval }}
               done
+          {{- end }}
+          {{- if .Values.airflow.gitSyncContainer.args }}
+          args: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.args "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - name: git-cloned-dag-files
@@ -96,12 +130,35 @@ spec:
             - name: git-cloned-plugins
               mountPath: /plugins
             {{- end }}
+            {{- if .Values.airflow.gitSyncContainer.extraVolumeMounts }}
+            {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.airflow.gitSyncContainer.extraEnvVars }}
+          env: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.airflow.gitSyncContainer.extraEnvVarsCM .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.airflow.gitSyncContainer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.gitSyncContainer.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
       {{- else }}
       containers:
       {{- end }}
         - name: airflow-worker
-          image: "{{ template "airflow.workerImage" . }}"
-          imagePullPolicy: "{{ .Values.workerImage.pullPolicy }}"
+          image: {{ include "airflow.workerImage" . }}
+          imagePullPolicy: {{ .Values.workerImage.pullPolicy | quote }}
+          {{- if .Values.airflow.worker.command }}
+          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.worker.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.airflow.worker.args }}
+          args: {{- include "airflow.tplValue" (dict "value" .Values.airflow.worker.args "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.airflow.worker.resources }}
           resources: {{- toYaml .Values.airflow.worker.resources | nindent 12 }}
           {{- end }}
@@ -173,8 +230,30 @@ spec:
                   key: airflow-fernetKey
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ template "airflow.fullname" . }}
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
             {{- if .Values.airflow.extraEnvVars }}
               {{ toYaml .Values.airflow.extraEnvVars | nindent 12 }}
+            {{- end }}
+            {{- if .Values.airflow.worker.extraEnvVars }}
+              {{- include "airflow.tplValue" (dict "value" .Values.airflow.worker.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.airflow.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.airflow.worker.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.worker.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.worker.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.worker.extraEnvVarsSecret }}
             {{- end }}
           ports:
             - name: worker
@@ -227,6 +306,9 @@ spec:
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
             {{- end }}
+          {{- if .Values.airflow.worker.extraVolumeMounts }}
+            {{- include "airflow.tplValue" (dict "value" .Values.airflow.worker.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
       volumes:
       {{- if .Files.Glob "files/dags/*.py" }}
       - name: local-dag-files
@@ -250,4 +332,7 @@ spec:
       - name: custom-configuration-file
         configMap:
           name: {{ .Values.airflow.configurationConfigMap }}
+      {{- end }}
+      {{- if .Values.airflow.worker.extraVolumes }}
+      {{- include "airflow.tplValue" (dict "value" .Values.airflow.worker.extraVolumes "context" $) | nindent 6 }}
       {{- end }}

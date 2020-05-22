@@ -3,13 +3,14 @@ kind: Service
 metadata:
   name: {{ include "elasticsearch.coordinating.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: coordinating-only
+    app.kubernetes.io/component: coordinating-only
   annotations: {{ include "elasticsearch.tplValue" ( dict "value" .Values.coordinating.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.coordinating.service.type | quote }}
   {{- if and (eq .Values.coordinating.service.type "LoadBalancer") (not (empty .Values.coordinating.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.coordinating.service.loadBalancerIP }}
   {{- end }}
+  publishNotReadyAddresses: true
   ports:
     - name: http
       port: {{ .Values.coordinating.service.port }}
@@ -19,5 +20,7 @@ spec:
       {{- else if eq .Values.coordinating.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    - name: tcp-transport
+      port: 9300
   selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
-    role: coordinating-only
+    app.kubernetes.io/component: coordinating-only

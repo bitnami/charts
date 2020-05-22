@@ -234,9 +234,9 @@ Return podAnnotations
 */}}
 {{- define "rabbitmq.podAnnotations" -}}
 {{- if .Values.podAnnotations }}
-{{- toYaml .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations }}
 {{- end }}
 {{- if .Values.metrics.enabled }}
-{{- include "rabbitmq.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) }}
+{{ include "rabbitmq.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) }}
 {{- end }}
 {{- end -}}

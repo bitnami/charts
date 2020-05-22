@@ -1,0 +1,74 @@
+{{- if .Values.rbac.create -}}
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "metallb.fullname" . }}-controller
+  labels: {{- include "metallb.labels" . | nindent 4}}
+spec:
+  allowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
+  allowedCapabilities: []
+  allowedHostPaths: []
+  defaultAddCapabilities: []
+  defaultAllowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
+  fsGroup:
+    ranges:
+    - max: {{ .Values.controller.securityContext.fsGroup }}
+      min: {{ .Values.controller.securityContext.fsGroup }}
+    rule: MustRunAs
+  hostIPC: false
+  hostNetwork: false
+  hostPID: false
+  privileged: false
+  readOnlyRootFilesystem: {{ .Values.controller.securityContext.readOnlyRootFilesystem }}
+  requiredDropCapabilities: {{- toYaml .Values.controller.securityContext.capabilities.drop | nindent 2 }}
+  runAsUser:
+    ranges:
+    - max: {{ .Values.controller.securityContext.runAsUser }}
+      min: {{ .Values.controller.securityContext.runAsUser }}
+    rule: MustRunAs
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    ranges:
+    - max: {{ .Values.controller.securityContext.runAsUser }}
+      min: {{ .Values.controller.securityContext.runAsUser }}
+    rule: MustRunAs
+  volumes:
+  - configMap
+  - secret
+  - emptyDir
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "metallb.fullname" . }}-speaker
+  labels: {{- include "metallb.labels" . | nindent 4}}
+spec:
+  allowPrivilegeEscalation: {{ .Values.speaker.securityContext.allowPrivilegeEscalation }}
+  allowedCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 2 }}
+  allowedHostPaths: []
+  defaultAddCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 2 }}
+  defaultAllowPrivilegeEscalation: {{ .Values.speaker.securityContext.allowPrivilegeEscalation }}
+  fsGroup:
+    rule: RunAsAny
+  hostIPC: false
+  hostNetwork: true
+  hostPID: false
+  hostPorts:
+  - max: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+    min: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+  privileged: true
+  readOnlyRootFilesystem: {{ .Values.speaker.securityContext.readOnlyRootFilesystem }}
+  requiredDropCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.drop | nindent 2 }}
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - configMap
+  - secret
+  - emptyDir
+{{- end -}}

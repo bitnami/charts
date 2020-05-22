@@ -20,7 +20,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: 8080
+      port: {{ .Values.service.port }}
       {{- if and .Values.service.nodePort (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}

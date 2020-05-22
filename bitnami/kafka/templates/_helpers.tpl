@@ -335,7 +335,7 @@ Return true if a configmap object should be created
 Return the Kafka log4j ConfigMap name.
 */}}
 {{- define "kafka.log4j.configMapName" -}}
-{{- if .Values.existingConfigmap -}}
+{{- if .Values.existingLog4jConfigMap -}}
     {{- printf "%s" (tpl .Values.existingLog4jConfigMap $) -}}
 {{- else -}}
     {{- printf "%s-log4j-configuration" (include "kafka.fullname" .) -}}

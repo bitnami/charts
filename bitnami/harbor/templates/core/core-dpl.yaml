@@ -42,6 +42,10 @@ spec:
         - name: core
           image: {{ include "harbor.coreImage" . }}
           imagePullPolicy: {{ .Values.coreImage.pullPolicy | quote }}
+         {{- if .Values.lifecycleHooks }}
+          lifecycle:
+{{ tpl .Values.lifecycleHooks . | indent 12 }}
+          {{- end }}
           {{- if .Values.core.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
