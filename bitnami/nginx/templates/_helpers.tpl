@@ -264,6 +264,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "nginx.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "nginx.validateValues.cloneStaticSiteFromGit" .) -}}
+{{- $messages := append $messages (include "nginx.validateValues.extraVolumes" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -278,5 +279,14 @@ Compile all warnings into a single message, and call fail.
 nginx: cloneStaticSiteFromGit
     When enabling cloing a static site from a Git repository, both the Git repository and the Git branch must be provided.
     Please provide them by setting the `cloneStaticSiteFromGit.repository` and `cloneStaticSiteFromGit.branch` parameters.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of NGINX - Incorrect extra volume settings */}}
+{{- define "nginx.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not .Values.extraVolumeMounts) -}}
+nginx: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
 {{- end -}}
 {{- end -}}

@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -205,6 +205,7 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `metrics.image.pullPolicy`                    | PostgreSQL Exporter Image pull policy                                                                                                                                    | `IfNotPresent`                                                |
 | `metrics.image.pullSecrets`                   | Specify Image pull secrets                                                                                                                                                | `nil` (does not add image pull secrets to deployed pods)      |
 | `metrics.customMetrics`                       | Additional custom metrics                                                                                                                                                 | `nil`                                                         |
+| `metrics.extraEnvVars`                        | Extra environment variables to add to exporter  | `{}` (evaluated as a template)   |
 | `metrics.securityContext.enabled`             | Enable security context for metrics                                                                                                                                       | `false`                                                       |
 | `metrics.securityContext.runAsUser`           | User ID for the container for metrics                                                                                                                                     | `1001`                                                        |
 | `metrics.livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                                                                                                                  | 30                                                            |

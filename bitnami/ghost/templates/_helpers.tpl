@@ -84,7 +84,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 */}}
 {{- define "ghost.endpoint" -}}
 {{- $host := include "ghost.host" . -}}
-{{- $path := trimSuffix "/" (trimPrefix "/" .Values.ghostPath)  -}}
+{{- $path := trimSuffix "/" (trimPrefix "/" .Values.ghostPath) -}}
 
 {{- printf "%s/%s" $host $path -}}
 {{- end -}}

@@ -32,6 +32,19 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Renders a value that contains template.
+Usage:
+{{ include "airflow.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "airflow.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}
+
+{{/*
 Full path to CA Cert file
 */}}
 {{- define "airflow.ldapCAFilename"}}
@@ -307,7 +320,7 @@ Get the Postgresql credentials secret.
         {{ printf "%s-%s" .Release.Name "externaldb" }}
     {{- end -}}
 {{- end -}}
-{{- end -}}    
+{{- end -}}
 
 {{/*
 Get the secret name

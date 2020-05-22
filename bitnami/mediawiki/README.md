@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -50,83 +50,83 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the MediaWiki chart and their default values.
 
-|              Parameter               |               Description                                   |                         Default                         |
-|--------------------------------------|-------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`               | Global Docker image registry                                | `nil`                                                   |
-| `global.imagePullSecrets`            | Global Docker registry secret names as an array             | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
-| `image.registry`                     | MediaWiki image registry                                    | `docker.io`                                             |
-| `image.repository`                   | MediaWiki Image name                                        | `bitnami/mediawiki`                                     |
-| `image.tag`                          | MediaWiki Image tag                                         | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                   | Image pull policy                                           | `IfNotPresent`                                          |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`                       | String to partially override mediawiki.fullname template with a string (will prepend the release name)    | `nil`     |
-| `fullnameOverride`                   | String to fully override mediawiki.fullname template with a string                                        | `nil`     |
-| `mediawikiUser`                      | User of the application                                     | `user`                                                  |
-| `mediawikiPassword`                  | Application password                                        | _random 10 character long alphanumeric string_          |
-| `mediawikiEmail`                     | Admin email                                                 | `user@example.com`                                      |
-| `mediawikiName`                      | Name for the wiki                                           | `My Wiki`                                               |
-| `mediawikiHost`                      | Mediawiki host to create application URLs                   | `nil`                                                   |
-| `allowEmptyPassword`                 | Allow DB blank passwords                                    | `yes`                                                   |
-| `smtpHost`                           | SMTP host                                                   | `nil`                                                   |
-| `smtpPort`                           | SMTP port                                                   | `nil`                                                   |
-| `smtpHostID`                         | SMTP host ID                                                | `nil`                                                   |
-| `smtpUser`                           | SMTP user                                                   | `nil`                                                   |
-| `smtpPassword`                       | SMTP password                                               | `nil`                                                   |
-| `externalDatabase.host`              | Host of the external database                               | `nil`                                                   |
-| `externalDatabase.user`              | Existing username in the external db                        | `bn_mediawiki`                                          |
-| `externalDatabase.password`          | Password for the above username                             | `nil`                                                   |
-| `externalDatabase.database`          | Name of the existing database                               | `bitnami_mediawiki`                                     |
-| `mariadb.enabled`                    | Use or not the mariadb chart                                | `true`                                                  |
-| `mariadb.rootUser.password`          | MariaDB admin password                                      | `nil`                                                   |
-| `mariadb.db.name`                    | Database name to create                                     | `bitnami_mediawiki`                                     |
-| `mariadb.db.user`                    | Database user to create                                     | `bn_mediawiki`                                          |
-| `mariadb.db.password`                | Password for the database                                   | _random 10 character long alphanumeric string_          |
-| `service.type`                       | Kubernetes Service type                                     | `LoadBalancer`                                          |
-| `service.loadBalancer`               | Kubernetes LoadBalancerIP to request                        | `nil`                                                   |
-| `service.port`                       | Service HTTP port                                           | `80`                                                    |
-| `service.httpsPort`                  | Service HTTPS port                                          | `""`                                                    |
-| `service.externalTrafficPolicy`      | Enable client source IP preservation                        | `Cluster`                                               |
-| `service.nodePorts.http`             | Kubernetes http node port                                   | `""`                                                    |
-| `service.nodePorts.https`            | Kubernetes https node port                                  | `""`                                                    |
-| `ingress.enabled`                    | Enable ingress controller resource                          | `false`                                                 |
-| `ingress.hosts[0].name`              | Hostname to your Mediawiki installation                     | `mediawiki.local`                                       |
-| `ingress.hosts[0].path`              | Path within the url structure                               | `/`                                                     |
-| `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                              | `false`                                                 |
-| `ingress.hosts[0].certManager`       | Add annotations for cert-manager                            | `false`                                                 |
-| `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                   | `mediawiki.local-tls-secret`                            |
-| `ingress.hosts[0].annotations`       | Annotations for this host's ingress record                  | `[]`                                                    |
-| `ingress.secrets[0].name`            | TLS Secret Name                                             | `nil`                                                   |
-| `ingress.secrets[0].certificate`     | TLS Secret Certificate                                      | `nil`                                                   |
-| `ingress.secrets[0].key`             | TLS Secret Key                                              | `nil`                                                   |
-| `persistence.enabled`                | Enable persistence using PVC                                | `true`                                                  |
-| `persistence.storageClass`           | PVC Storage Class for MediaWiki volume                      | `nil` (uses alpha storage class annotation)             |
-| `persistence.existingClaim`          | An Existing PVC name for MediaWiki volume                   | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`             | PVC Access Mode for MediaWiki volume                        | `ReadWriteOnce`                                         |
-| `persistence.size`                   | PVC Storage Request for MediaWiki volume                    | `8Gi`                                                   |
-| `resources`                          | CPU/Memory resource requests/limits                         | Memory: `512Mi`, CPU: `300m`                            |
-| `livenessProbe.enabled`              | Enable/disable the liveness probe (ingest nodes pod)        | `true`                                                  |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (ingest nodes pod) | 120                                                     |
-| `livenessProbe.periodSeconds`        | How often to perform the probe (ingest nodes pod)           | 10                                                      |
-| `livenessProbe.timeoutSeconds`       | When the probe times out (ingest nodes pod)                 | 5                                                       |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures to be considered failed        | 6                                                       |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes to be considered successful   | 1                                                       |
-| `readinessProbe.enabled`             | would you like a readinessProbe to be enabled               | `true`                                                  |
-| `readinessProbe.initialDelaySeconds` | Delay before readinessProbe is initiated (ingest nodes pod) | 30                                                      |
-| `readinessProbe.periodSeconds   `    | How often to perform the probe (ingest nodes pod)           | 10                                                      |
-| `readinessProbe.timeoutSeconds`      | When the probe times out (ingest nodes pod)                 | 5                                                       |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures to be considered failed        | 6                                                       |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes to be considered successful   | 1                                                       |
-| `podAnnotations`                     | Pod annotations                                             | `{}`                                                    |
-| `affinity`                           | Map of node/pod affinities                                  | `{}`                                                    |
-| `metrics.enabled`                    | Start a side-car prometheus exporter                        | `false`                                                 |
-| `metrics.image.registry`             | Apache exporter image registry                              | `docker.io`                                             |
-| `metrics.image.repository`           | Apache exporter image name                                  | `bitnami/apache-exporter`                               |
-| `metrics.image.tag`                  | Apache exporter image tag                                   | `{TAG_NAME}`                                            |
-| `metrics.image.pullPolicy`           | Image pull policy                                           | `IfNotPresent`                                          |
-| `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods) |
-| `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod             | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`                  | Exporter resource requests/limit                            | {}                                                      |
+| Parameter                            | Description                                                                                            | Default                                                      |
+|--------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `global.imageRegistry`               | Global Docker image registry                                                                           | `nil`                                                        |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                        | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                          | `nil`                                                        |
+| `image.registry`                     | MediaWiki image registry                                                                               | `docker.io`                                                  |
+| `image.repository`                   | MediaWiki Image name                                                                                   | `bitnami/mediawiki`                                          |
+| `image.tag`                          | MediaWiki Image tag                                                                                    | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                   | Image pull policy                                                                                      | `IfNotPresent`                                               |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                       | String to partially override mediawiki.fullname template with a string (will prepend the release name) | `nil`                                                        |
+| `fullnameOverride`                   | String to fully override mediawiki.fullname template with a string                                     | `nil`                                                        |
+| `mediawikiUser`                      | User of the application                                                                                | `user`                                                       |
+| `mediawikiPassword`                  | Application password                                                                                   | _random 10 character long alphanumeric string_               |
+| `mediawikiEmail`                     | Admin email                                                                                            | `user@example.com`                                           |
+| `mediawikiName`                      | Name for the wiki                                                                                      | `My Wiki`                                                    |
+| `mediawikiHost`                      | Mediawiki host to create application URLs                                                              | `nil`                                                        |
+| `allowEmptyPassword`                 | Allow DB blank passwords                                                                               | `yes`                                                        |
+| `smtpHost`                           | SMTP host                                                                                              | `nil`                                                        |
+| `smtpPort`                           | SMTP port                                                                                              | `nil`                                                        |
+| `smtpHostID`                         | SMTP host ID                                                                                           | `nil`                                                        |
+| `smtpUser`                           | SMTP user                                                                                              | `nil`                                                        |
+| `smtpPassword`                       | SMTP password                                                                                          | `nil`                                                        |
+| `externalDatabase.host`              | Host of the external database                                                                          | `nil`                                                        |
+| `externalDatabase.user`              | Existing username in the external db                                                                   | `bn_mediawiki`                                               |
+| `externalDatabase.password`          | Password for the above username                                                                        | `nil`                                                        |
+| `externalDatabase.database`          | Name of the existing database                                                                          | `bitnami_mediawiki`                                          |
+| `mariadb.enabled`                    | Use or not the mariadb chart                                                                           | `true`                                                       |
+| `mariadb.rootUser.password`          | MariaDB admin password                                                                                 | `nil`                                                        |
+| `mariadb.db.name`                    | Database name to create                                                                                | `bitnami_mediawiki`                                          |
+| `mariadb.db.user`                    | Database user to create                                                                                | `bn_mediawiki`                                               |
+| `mariadb.db.password`                | Password for the database                                                                              | _random 10 character long alphanumeric string_               |
+| `service.type`                       | Kubernetes Service type                                                                                | `LoadBalancer`                                               |
+| `service.loadBalancer`               | Kubernetes LoadBalancerIP to request                                                                   | `nil`                                                        |
+| `service.port`                       | Service HTTP port                                                                                      | `80`                                                         |
+| `service.httpsPort`                  | Service HTTPS port                                                                                     | `""`                                                         |
+| `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                   | `Cluster`                                                    |
+| `service.nodePorts.http`             | Kubernetes http node port                                                                              | `""`                                                         |
+| `service.nodePorts.https`            | Kubernetes https node port                                                                             | `""`                                                         |
+| `ingress.enabled`                    | Enable ingress controller resource                                                                     | `false`                                                      |
+| `ingress.hosts[0].name`              | Hostname to your Mediawiki installation                                                                | `mediawiki.local`                                            |
+| `ingress.hosts[0].path`              | Path within the url structure                                                                          | `/`                                                          |
+| `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                                         | `false`                                                      |
+| `ingress.hosts[0].certManager`       | Add annotations for cert-manager                                                                       | `false`                                                      |
+| `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                                              | `mediawiki.local-tls-secret`                                 |
+| `ingress.hosts[0].annotations`       | Annotations for this host's ingress record                                                             | `[]`                                                         |
+| `ingress.secrets[0].name`            | TLS Secret Name                                                                                        | `nil`                                                        |
+| `ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                                 | `nil`                                                        |
+| `ingress.secrets[0].key`             | TLS Secret Key                                                                                         | `nil`                                                        |
+| `persistence.enabled`                | Enable persistence using PVC                                                                           | `true`                                                       |
+| `persistence.storageClass`           | PVC Storage Class for MediaWiki volume                                                                 | `nil` (uses alpha storage class annotation)                  |
+| `persistence.existingClaim`          | An Existing PVC name for MediaWiki volume                                                              | `nil` (uses alpha storage class annotation)                  |
+| `persistence.accessMode`             | PVC Access Mode for MediaWiki volume                                                                   | `ReadWriteOnce`                                              |
+| `persistence.size`                   | PVC Storage Request for MediaWiki volume                                                               | `8Gi`                                                        |
+| `resources`                          | CPU/Memory resource requests/limits                                                                    | Memory: `512Mi`, CPU: `300m`                                 |
+| `livenessProbe.enabled`              | Enable/disable the liveness probe (ingest nodes pod)                                                   | `true`                                                       |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (ingest nodes pod)                                            | 120                                                          |
+| `livenessProbe.periodSeconds`        | How often to perform the probe (ingest nodes pod)                                                      | 10                                                           |
+| `livenessProbe.timeoutSeconds`       | When the probe times out (ingest nodes pod)                                                            | 5                                                            |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures to be considered failed                                                   | 6                                                            |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes to be considered successful                                              | 1                                                            |
+| `readinessProbe.enabled`             | would you like a readinessProbe to be enabled                                                          | `true`                                                       |
+| `readinessProbe.initialDelaySeconds` | Delay before readinessProbe is initiated (ingest nodes pod)                                            | 30                                                           |
+| `readinessProbe.periodSeconds   `    | How often to perform the probe (ingest nodes pod)                                                      | 10                                                           |
+| `readinessProbe.timeoutSeconds`      | When the probe times out (ingest nodes pod)                                                            | 5                                                            |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures to be considered failed                                                   | 6                                                            |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes to be considered successful                                              | 1                                                            |
+| `podAnnotations`                     | Pod annotations                                                                                        | `{}`                                                         |
+| `affinity`                           | Map of node/pod affinities                                                                             | `{}`                                                         |
+| `metrics.enabled`                    | Start a side-car prometheus exporter                                                                   | `false`                                                      |
+| `metrics.image.registry`             | Apache exporter image registry                                                                         | `docker.io`                                                  |
+| `metrics.image.repository`           | Apache exporter image name                                                                             | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`                  | Apache exporter image tag                                                                              | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`           | Image pull policy                                                                                      | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod                                                        | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`                  | Exporter resource requests/limit                                                                       | {}                                                           |
 
 The above parameters map to the env variables defined in [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki) image documentation.
 
