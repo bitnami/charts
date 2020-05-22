@@ -9,6 +9,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.alertmanager.service.type }}
+  {{- if index .Values.alertmanager "stickySessions" }}
+  sessionAffinity: ClientIP
+  {{- end }}
   {{- if and .Values.alertmanager.service.loadBalancerIP (eq .Values.alertmanager.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
   {{- end }}

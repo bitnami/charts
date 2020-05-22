@@ -9,6 +9,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.prometheus.service.type }}
+  {{- if index .Values.prometheus "stickySessions" }}
+  sessionAffinity: ClientIP
+  {{- end }}
   {{- if and .Values.prometheus.service.loadBalancerIP (eq .Values.prometheus.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.prometheus.service.loadBalancerIP }}
   {{- end }}
