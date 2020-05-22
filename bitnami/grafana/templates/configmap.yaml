@@ -5,8 +5,16 @@ metadata:
   labels: {{- include "grafana.labels" . | nindent 4 }}
 data:
   GF_SECURITY_ADMIN_USER: {{ .Values.admin.user | quote }}
+  {{- if .Values.imageRenderer.enabled }}
+  {{- $domain := .Values.clusterDomain }}
+  {{- $namespace := .Release.Namespace }}
+  GF_RENDERING_SERVER_URL: "http://{{ include "grafana.fullname" . }}-image-renderer.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.imageRenderer.service.port }}/render"
+  GF_RENDERING_CALLBACK_URL: "http://{{ include "grafana.fullname" . }}.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.service.port }}/"
+  {{- end }}
   {{- if .Values.plugins }}
   GF_INSTALL_PLUGINS: {{ .Values.plugins | quote }}
+  {{- else }}
+  GF_INSTALL_PLUGINS: ""
   {{- end }}
   GF_PATHS_PLUGINS: "/opt/bitnami/grafana/data/plugins"
   GF_AUTH_LDAP_ENABLED: {{ .Values.ldap.enabled | quote }}

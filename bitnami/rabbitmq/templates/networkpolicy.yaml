@@ -27,6 +27,10 @@ spec:
         - podSelector:
             matchLabels:
               {{ template "rabbitmq.fullname" . }}-client: "true"
+        - podSelector:
+            matchLabels:
+              app: {{ template "rabbitmq.name" . }}
+              release: {{ .Release.Name }}
         {{- with .Values.networkPolicy.additionalRules }}
 {{ toYaml . | indent 8 }}
         {{- end }}
