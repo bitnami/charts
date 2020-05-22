@@ -79,6 +79,8 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `admin.existingSecret`                 | Name of the existing secret containing admin password                       | `nil`                                                   |
 | `admin.existingSecretPasswordKey`      | Password key on the existing secret                                         | `password`                                              |
 | `smtp.enabled`                         | Enable SMTP configuration                                                   | `false`                                                 |
+| `smtp.user`                            | SMTP user                                                                   | `user`                                                  |
+| `smtp.password`                        | SMTP password                                                               | `password`                                              |
 | `smtp.existingSecret`                  | Name of the existing secret with SMTP credentials                           | `nil`                                                   |
 | `smtp.existingSecretUserKey`           | User key on the existing secret                                             | `user`                                                  |
 | `smtp.existingSecretPasswordKey`       | Password key on the existing secret                                         | `password`                                              |
@@ -189,7 +191,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `imageRenderer.securityContext.runAsNonRoot`         | Run containers as non-root users                                                                       | `true`                                                  |
 | `imageRenderer.service.port`                         | Grafana Image Renderer service port                                                                    | `8080`                                                  |
 | `imageRenderer.metrics.enabled`                      | Enable the export of Prometheus metrics                                                                | `false`                                                 |
-| `imageRenderer.metrics.service.annotations`          | Annotations for Prometheus metrics service                                                             | `Check values.yaml file`                                |
+| `imageRenderer.metrics.annotations`                  | Annotations for Prometheus metrics service                                                             | `Check values.yaml file`                                |
 | `imageRenderer.metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                                 |
 | `imageRenderer.metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `nil`                                                   |
 | `imageRenderer.metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `nil` (Prometheus Operator default value)               |
