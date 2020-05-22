@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.17.10-debian-10-r44
+  tag: 1.17.10-debian-10-r46
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -54,7 +54,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.26.2-debian-10-r28
+    tag: 2.26.2-debian-10-r30
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -69,7 +69,7 @@ cloneStaticSiteFromGit:
   ## Repository to clone static content from
   ##
   # repository:
-  ## Branch inside the git repository	 
+  ## Branch inside the git repository
   ##
   # branch:
   ## Interval for sidecar container pull from the repository
@@ -112,7 +112,7 @@ cloneStaticSiteFromGit:
 replicaCount: 1
 
 ## Deployment Container Port
-## 
+##
 containerPort: 8080
 
 ## Pod annotations
@@ -154,15 +154,13 @@ resources:
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
-  httpGet:
-    path: /
+  tcpSocket:
     port: http
   initialDelaySeconds: 30
   timeoutSeconds: 5
   failureThreshold: 6
 readinessProbe:
-  httpGet:
-    path: /
+  tcpSocket:
     port: http
   initialDelaySeconds: 5
   timeoutSeconds: 3
@@ -205,6 +203,130 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+
+
+## LDAP Auth Daemon Properties
+##
+## Daemon that will proxy LDAP requests
+## between NGINX and a given LDAP Server
+##
+ldapDaemon:
+
+  enabled: false
+
+  ## Bitnami NGINX LDAP Auth Daemon image
+  ## ref: https://hub.docker.com/r/bitnami/nginx-ldap-auth-daemon/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/nginx-ldap-auth-daemon
+    tag: 0.20200116.0-debian-10-r7
+    pullPolicy: IfNotPresent
+
+  ## LDAP Daemon port
+  ##
+  port: 8888
+
+  ## LDAP Auth Daemon Configuration
+  ##
+  ## These different properties define the form of requests performed
+  ## against the given LDAP server
+  ##
+  ## BEWARE THAT THESE VALUES WILL BE IGNORED IF A CUSTOM LDAP SERVER BLOCK
+  ## ALREADY SPECIFIES THEM.
+  ##
+  ##
+  ldapConfig:
+
+    ## LDAP URI where to query the server
+    ## Must follow the pattern -> ldap[s]:/<hostname>:<port>
+    uri: ""
+
+    ## LDAP search base DN
+    baseDN: ""
+
+    ## LDAP bind DN
+    bindDN: ""
+
+    ## LDAP bind Password
+    bindPassword: ""
+
+    ## LDAP search filter
+    filter: ""
+
+    ## LDAP auth realm
+    httpRealm: ""
+
+    ## LDAP cookie name
+    httpCookieName: ""
+
+  ## NGINX Configuration File containing the directives (that define
+  ## how LDAP requests are performed) and tells NGINX to use the LDAP Daemon
+  ## as proxy. Besides, it defines the routes that will require of LDAP auth
+  ## in order to be accessed.
+  ##
+  ## If LDAP directives are provided, they will take precedence over
+  ## the ones specified in ldapConfig.
+  ##
+  ## This will be evaluated as a template.
+  ##
+  ##
+
+  nginxServerBlock: |-
+    server {
+    listen 0.0.0.0:{{ .Values.containerPort }};
+
+    # You can provide a special subPath or the root
+    location = / {
+        auth_request /auth-proxy;
+    }
+
+    location = /auth-proxy {
+        internal;
+
+        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
+
+        ###############################################################
+        # YOU SHOULD CHANGE THE FOLLOWING TO YOUR LDAP CONFIGURATION  #
+        ###############################################################
+
+        # URL and port for connecting to the LDAP server
+        proxy_set_header X-Ldap-URL "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT";
+
+        # Base DN
+        proxy_set_header X-Ldap-BaseDN "dc=example,dc=org";
+
+        # Bind DN
+        proxy_set_header X-Ldap-BindDN "cn=admin,dc=example,dc=org";
+
+        # Bind password
+        proxy_set_header X-Ldap-BindPass "adminpassword";
+    }
+    }
+
+  ## Use an existing Secret holding an NGINX Configuration file that
+  ## configures LDAP requests. (will be evaluated as a template)
+  ##
+  ## If provided, both nginxServerBlock and ldapConfig properties are ignored.
+  ##
+  existingNginxServerBlockSecret:
+
+  ## LDAP Auth Daemon's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    tcpSocket:
+      port: ldap-daemon
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 6
+
+  readinessProbe:
+    tcpSocket:
+      port: ldap-daemon
+    initialDelaySeconds: 5
+    timeoutSeconds: 3
+    periodSeconds: 5
 
 ## Ingress paramaters
 ##
@@ -306,7 +428,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.7.0-debian-10-r30
+    tag: 0.7.0-debian-10-r32
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

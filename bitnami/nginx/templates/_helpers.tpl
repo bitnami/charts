@@ -95,6 +95,29 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Return the proper image name (for the LDAP Auth Daemon image)
+*/}}
+{{- define "nginx.ldapDaemon.image" -}}
+{{- $registryName := .Values.ldapDaemon.image.registry -}}
+{{- $repositoryName := .Values.ldapDaemon.image.repository -}}
+{{- $tag := .Values.ldapDaemon.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "nginx.metrics.image" -}}
@@ -208,6 +231,17 @@ Return the custom NGINX server block configmap.
     {{- printf "%s" (tpl .Values.existingServerBlockConfigmap $) -}}
 {{- else -}}
     {{- printf "%s-server-block" (include "nginx.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the custom NGINX server block secret for LDAP.
+*/}}
+{{- define "ldap.nginxServerBlockSecret" -}}
+{{- if .Values.ldapDaemon.existingNginxServerBlockSecret -}}
+    {{- printf "%s" (tpl .Values.ldapDaemon.existingNginxServerBlockSecret $) -}}
+{{- else -}}
+    {{- printf "%s-ldap-daemon" (include "nginx.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
