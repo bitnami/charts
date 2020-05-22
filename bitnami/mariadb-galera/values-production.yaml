@@ -95,7 +95,8 @@ serviceAccount:
   create: false
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
-  # name:
+  ##
+  name: ""
 
 ## An array to add extra environment variables
 ## For example:

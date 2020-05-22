@@ -44,6 +44,7 @@
     },
     "db": {
       "type": "object",
+      "title": "Custom database & users",
       "properties": {
         "name": {
           "type": "string",
@@ -149,8 +150,32 @@
         }
       }
     },
+    "serviceAccount": {
+      "type": "object",
+      "title": "ServiceAccount configuration",
+      "form": true,
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "form": true,
+          "title": "Create a ServiceAcccount",
+          "description": "Specify whether a ServiceAcccount for MariaDB Galera pods should be created"
+        },
+        "name": {
+          "type": "string",
+          "form": true,
+          "title": "ServiceAcccount name",
+          "description": "ServiceAcccount name to use. Auto-generated if not specified",
+          "hidden": {
+            "condition": false,
+            "value": "serviceAccount/create"
+          }
+        }
+      }
+    },
     "rbac": {
       "type": "object",
+      "title": "RBAC rules configuration",
       "form": true,
       "properties": {
         "create": {
