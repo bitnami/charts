@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: {{ include "fluentd.fullname" . }}-metrics
   labels: {{- include "fluentd.labels" . | nindent 4 }}
+    app: metrics
   annotations: {{- include "fluentd.tplValue" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.metrics.service.type }}
@@ -11,8 +12,7 @@ spec:
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: metrics
+    - name: tcp-metrics
       port: {{ .Values.metrics.service.port }}
-      targetPort: metrics
   selector: {{- include "fluentd.matchLabels" . | nindent 4 }}
 {{- end }}

@@ -18,6 +18,9 @@ spec:
         app.kubernetes.io/component: metrics
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: metrics
+        {{- if .Values.metrics.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.metrics.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- with .Values.metrics.podAnnotations }}
       annotations: {{ toYaml . | nindent 8 }}
       {{- end }}
