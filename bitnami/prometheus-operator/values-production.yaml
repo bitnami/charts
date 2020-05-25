@@ -258,6 +258,10 @@ prometheus:
     ## If not set and create is true, a name is generated using the prometheus-operator.prometheus.fullname template
     # name:
 
+    ## Annotations to add to the ServiceAccount (evaluated as a template)
+    # annotations:
+    #   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/prometheus
+
   ## SecurityContext configuration
   ##
   securityContext:
@@ -297,6 +301,10 @@ prometheus:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+
+    ## Session Affinity
+    ## Set stickySessions to true to enable Session Affinity
+    # stickySessions: true
 
     ## Provide any additional annotations which may be required.
     ##
@@ -354,6 +362,11 @@ prometheus:
     ##     - prometheus.local
     ##   secretName: prometheus.local-tls
     tls: {}
+
+  ## If not creating an ingress but still exposing the service some other way (like a proxy)
+  ## let Prometheus know what its external URL is so that it can properly create links
+  #
+  # externalUrl: https://prometheus.example.com
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -652,6 +665,10 @@ alertmanager:
     ## If not set and create is true, a name is generated using the prometheus-operator.alertmanager.fullname template
     # name:
 
+    ## Annotations to add to the ServiceAccount (evaluated as a template)
+    # annotations:
+    #   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/alertmanager
+
   ## SecurityContext configuration
   ##
   securityContext:
@@ -691,6 +708,10 @@ alertmanager:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+
+    ## Session Affinity
+    ## Set stickySessions to true to enable Session Affinity
+    # stickySessions: true
 
     ## Provide any additional annotations which may be required.
     ##
@@ -750,6 +771,11 @@ alertmanager:
     ##     - alertmanager.local
     ##   secretName: alertmanager.local-tls
     tls: {}
+
+  ## If not creating an ingress but still exposing the service some other way (like a proxy)
+  ## let Alertmanager know what its external URL is so that it can properly create links
+  #
+  # externalUrl: https://alertmanager.example.com
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

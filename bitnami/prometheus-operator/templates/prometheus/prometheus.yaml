@@ -40,7 +40,7 @@ spec:
   {{- else if .Values.prometheus.replicaExternalLabelName }}
   replicaExternalLabelName: "{{ .Values.prometheus.replicaExternalLabelName }}"
   {{- end }}
-  {{- if .Values.prometheus.externalUrl }}
+  {{- if index .Values.prometheus "externalUrl" }}
   externalUrl: "{{ .Values.prometheus.externalUrl }}"
   {{- else if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
   externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}/
