@@ -299,6 +299,7 @@ rfc2136:
   tsigSecretAlg: hmac-sha256
   tsigKeyname: externaldns-key
   tsigAxfr: true
+  minTTL: "0s"
 
 ## PowerDNS configuration to be set via arguments/env. variables
 ##
