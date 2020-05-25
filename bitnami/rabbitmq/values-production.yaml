@@ -121,6 +121,8 @@ rabbitmq:
 
   loadDefinition:
     enabled: false
+    ## Can be templated if needed, e.g.
+    # secretName: "{{ .Release.Name }}-load-definition"
     secretName: load-definition
 
   ## environment variables to configure rabbitmq
