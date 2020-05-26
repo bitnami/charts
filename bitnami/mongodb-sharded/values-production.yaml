@@ -189,6 +189,16 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName:
+    ## Pod disruption budget
+    ##
+    pdb:
+      enabled: true
+      ## Use 0 to disable
+      ##
+      minAvailable: 0
+      ## Use 0 to disable
+      ##
+      maxUnavailable: 1
 
   ## Properties for arbiter nodes
   ## ref: https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
@@ -417,6 +427,16 @@ configsvr:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
+  ## Pod disruption budget
+  ##
+  pdb:
+    enabled: true
+    ## Use 0 to disable
+    ##
+    minAvailable: 0
+    ## Use 0 to disable
+    ##
+    maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -547,6 +567,16 @@ mongos:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
+  ## Pod disruption budget
+  ##
+  pdb:
+    enabled: true
+    ## Use 0 to disable
+    ##
+    minAvailable: 0
+    ## Use 0 to disable
+    ##
+    maxUnavailable: 1
 
 ## Properties for all of the pods in the cluster (shards, config servers and mongos)
 ##
