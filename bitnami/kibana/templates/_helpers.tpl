@@ -160,6 +160,7 @@ Common labels
 */}}
 {{- define "kibana.labels" -}}
 app.kubernetes.io/name: {{ include "kibana.name" . }}
+app: {{ include "kibana.name" . }}
 helm.sh/chart: {{ include "kibana.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
