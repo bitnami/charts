@@ -175,14 +175,14 @@ spec:
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:
-      {{- tpl (toYaml .Values.nodeSelector) $ | nindent 6 }}
+      {{- tpl (toYaml .Values.nodeSelector) $ | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity:
-      {{- tpl (toYaml .Values.affinity) $ | nindent 6 }}
+      {{- tpl (toYaml .Values.affinity) $ | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations:
-      {{- tpl (toYaml .Values.tolerations) $ | nindent 6 }}
+      {{- tpl (toYaml .Values.tolerations) $ | nindent 8 }}
       {{- end }}
 {{- end }}
