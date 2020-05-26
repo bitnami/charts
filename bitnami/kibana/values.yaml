@@ -279,6 +279,9 @@ affinity: {}
 ##
 podAnnotations: {}
 
+## Extra labels to add to Pod
+podLabels: {}
+
 ## Add sidecars to the pod
 ##
 sidecars:
