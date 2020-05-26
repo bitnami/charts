@@ -160,7 +160,6 @@ Common labels
 */}}
 {{- define "kibana.labels" -}}
 app.kubernetes.io/name: {{ include "kibana.name" . }}
-app: {{ include "kibana.name" . }}
 helm.sh/chart: {{ include "kibana.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
@@ -272,4 +271,17 @@ Return the appropriate apiVersion for deployment.
 {{- else -}}
 {{- print "apps/v1" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "kibana.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "kibana.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}
