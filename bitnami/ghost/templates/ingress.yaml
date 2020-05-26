@@ -5,8 +5,8 @@ metadata:
   name: {{ include "ghost.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
-  {{- if .Values.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | indent 4 }}
+  {{- if .Values.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $) | indent 4 }}
   {{- end }}
   {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
