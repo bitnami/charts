@@ -15,7 +15,7 @@ icon: https://metallb.universe.tf/images/logo.png
 sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
-version: 0.1.12
+version: 0.1.13
 maintainers:
   - name: cellebyte
     email: cellebyte@gmail.com
