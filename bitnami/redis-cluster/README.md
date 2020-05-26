@@ -372,10 +372,10 @@ sidecars:
        containerPort: 1234
 ```
 
-Similarly, you can add extra init containers using the `initContainers` parameter.
+Similarly, you can add extra init containers using the `extraInitContainers` parameter.
 
 ```yaml
-initContainers:
+extraInitContainers:
   - name: your-image-name
     image: your-image
     imagePullPolicy: Always
