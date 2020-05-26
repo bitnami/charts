@@ -184,6 +184,17 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.pdb.create`                          | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
 | `bucketweb.pdb.minAvailable`                    | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
 | `bucketweb.pdb.maxUnavailable`                  | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
+| `bucketweb.ingress.enabled`                     | Enable ingress controller resource                                                                     | `false`                                                 |
+| `bucketweb.ingress.certManager`                 | Add annotations for cert-manager                                                                       | `false`                                                 |
+| `bucketweb.ingress.hostname`                    | Default host for the ingress resource                                                                  | `thanos-bucketweb.local`                                |
+| `bucketweb.ingress.annotations`                 | Ingress annotations                                                                                    | `[]`                                                    |
+| `bucketweb.ingress.extraHosts[0].name`          | Additional hostnames to be covered                                                                     | `nil`                                                   |
+| `bucketweb.ingress.extraHosts[0].path`          | Additional hostnames to be covered                                                                     | `nil`                                                   |
+| `bucketweb.ingress.extraTls[0].hosts[0]`        | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
+| `bucketweb.ingress.extraTls[0].secretName`      | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
+| `bucketweb.ingress.secrets[0].name`             | TLS Secret Name                                                                                        | `nil`                                                   |
+| `bucketweb.ingress.secrets[0].certificate`      | TLS Secret Certificate                                                                                 | `nil`                                                   |
+| `bucketweb.ingress.secrets[0].key`              | TLS Secret Key                                                                                         | `nil`                                                   |
 
 ### Thanos Compactor parameters
 
