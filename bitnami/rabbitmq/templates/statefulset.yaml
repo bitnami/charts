@@ -305,7 +305,7 @@ spec:
         {{- if .Values.rabbitmq.loadDefinition.enabled }}
         - name: load-definition-volume
           secret:
-            secretName: {{ .Values.rabbitmq.loadDefinition.secretName | quote }}
+            secretName: {{ tpl .Values.rabbitmq.loadDefinition.secretName . | quote }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
