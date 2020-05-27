@@ -15,7 +15,7 @@ spec:
     matchLabels: {{- include "kibana.matchLabels" . | nindent 6 }}
   endpoints:
   - port: http
-    path: "_prometheus/metrics"
+    path: "/_prometheus/metrics"
     {{- if .Values.metrics.serviceMonitor.interval }}
     interval: {{ .Values.metrics.serviceMonitor.interval }}
     {{- end }}
