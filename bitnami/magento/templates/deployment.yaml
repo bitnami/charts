@@ -119,6 +119,8 @@ spec:
               value: {{ .Values.magentoMode | quote }}
             - name: MAGENTO_USE_SECURE_ADMIN
               value: {{ ternary "yes" "no" .Values.magentoUseSecureAdmin | quote }}
+            - name: MAGENTO_SKIP_REINDEX
+              value: {{ ternary "yes" "no" .Values.magentoSkipReindex | quote }}
           ports:
             - name: http
               containerPort: 80

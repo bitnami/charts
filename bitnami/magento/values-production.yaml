@@ -91,6 +91,10 @@ magentoMode: developer
 ##
 magentoUseSecureAdmin: false
 
+## Skip Magento Indexer reindex step during the initialization. Valid values: `true`, `false`
+##
+magentoSkipReindex: false
+
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-magento#environment-variables
 allowEmptyPassword: "yes"
