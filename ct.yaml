@@ -1,0 +1,7 @@
+chart-dirs:
+  - bitnami
+remote: origin
+validate-chart-schema: true
+validate-maintainers: true
+validate-yaml: true
+check-version-increment: true
