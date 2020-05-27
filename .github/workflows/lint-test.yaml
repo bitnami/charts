@@ -17,10 +17,12 @@ jobs:
         uses: helm/chart-testing-action@v1.0.0-rc.2
         with:
           command: lint
-          
-      - name: Run chart-testing (template)
-        uses: stefanprodan/kube-tools@v1
+
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.0.0-rc.1
+        if: steps.lint.outputs.changed == 'true'
+
+      - name: Run chart-testing (install)
+        uses: helm/chart-testing-action@v1.0.0-rc.2
         with:
-          command: |
-            ls -la
-            helmv3 template . | kubeval --ignore-missing-schemas
+          command: install
