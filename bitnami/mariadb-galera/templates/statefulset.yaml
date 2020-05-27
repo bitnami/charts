@@ -212,7 +212,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: previous-boot
-              mountPath: /opt/bitnami/mariadb/previous
+              mountPath: /opt/bitnami/mariadb/.bootstrap
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
               {{- if .Values.persistence.subPath }}
