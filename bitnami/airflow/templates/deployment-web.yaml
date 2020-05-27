@@ -400,5 +400,5 @@ spec:
             defaultMode: 256
         {{- end }}
       {{- if .Values.airflow.web.extraVolumes }}
-      {{- include "airflow.tplValue" (dict "value" .Values.airflow.web.extraVolumes "context" $) | nindent 6 }}
+      {{- include "airflow.tplValue" (dict "value" .Values.airflow.web.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
