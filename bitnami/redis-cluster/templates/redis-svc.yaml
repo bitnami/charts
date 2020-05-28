@@ -10,7 +10,10 @@ metadata:
   annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $ ) | nindent 4 }}
 {{- end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
+  {{- if and (eq "LoadBalancer" .Values.service.type) .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end}}
   ports:
     - name: tcp-redis
       port: {{ .Values.service.port }}
