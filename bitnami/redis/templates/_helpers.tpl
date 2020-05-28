@@ -353,3 +353,26 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
     {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "redis.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "redis.validateValues.spreadConstraints" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Redis - spreadConstrainsts K8s version */}}
+{{- define "redis.validateValues.spreadConstraints" -}}
+{{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.slave.spreadConstraints -}}
+redis: spreadConstraints
+    Pod Topology Spread Constraints are only available on K8s  >= 1.16
+    Find more information at https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+{{- end -}}
+{{- end -}}

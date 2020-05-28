@@ -4,15 +4,19 @@ kind: Service
 metadata:
   name: {{ include "elasticsearch.ingest.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: ingest
+    app.kubernetes.io/component: ingest
   annotations: {{ include "elasticsearch.tplValue" ( dict "value" .Values.ingest.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.ingest.service.type | quote }}
   {{- if and (eq .Values.ingest.service.type "LoadBalancer") (not (empty .Values.ingest.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.ingest.service.loadBalancerIP }}
   {{- end }}
+  publishNotReadyAddresses: true
   ports:
-    - name: transport
+    - name: http
+      port: 9200
+      targetPort: http
+    - name: tcp-transport
       port: {{ .Values.ingest.service.port }}
       targetPort: transport
       {{- if and (or (eq .Values.ingest.service.type "NodePort") (eq .Values.ingest.service.type "LoadBalancer")) (not (empty .Values.ingest.service.nodePort)) }}
@@ -21,5 +25,5 @@ spec:
       nodePort: null
       {{- end }}
   selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
-    role: ingest
+    app.kubernetes.io/component: ingest
 {{- end }}

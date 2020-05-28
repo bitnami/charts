@@ -18,7 +18,7 @@ spec:
     {{- end }}
   selector:
     matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 6 }}
-    app.kubernetes.io/component: "metrics"
+      app.kubernetes.io/component: "metrics"
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

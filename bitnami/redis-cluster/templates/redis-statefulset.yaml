@@ -121,6 +121,8 @@ spec:
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
             {{- end }}
+            - name: REDIS_AOF_ENABLED
+              value: {{ .Values.useAOFPersistence | quote }}
             - name: REDIS_PORT
               value: {{ .Values.redisPort | quote }}
             {{- if .Values.extraEnvVars }}
@@ -219,7 +221,7 @@ spec:
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
-              mountPath: /secrets/
+              mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
           ports:
             - name: http-metrics
@@ -262,10 +264,7 @@ spec:
             runAsUser: 0
         {{- end }}
         {{- if .Values.extraInitContainers }}
-        {{- range $key, $value := .Values.extraInitContainers }}
-        - name: "{{ $key }}"
-        {{- toYaml $value | nindent 12 }}
-        {{- end }}
+        {{- toYaml .Values.extraInitContainers | nindent 10 }}
         {{- end }}
       {{- end }}
       {{- if .Values.sidecars }}

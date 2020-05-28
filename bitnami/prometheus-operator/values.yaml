@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.38.1-debian-10-r7
+    tag: 0.39.0-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -208,7 +208,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.3.0-debian-10-r85
+      tag: 0.3.0-debian-10-r120
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -239,7 +239,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.17.2-debian-10-r1
+    tag: 2.18.1-debian-10-r15
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -551,8 +551,16 @@ prometheus:
   ##
   containers: []
 
-  ## Enable additional scrape configs that are managed externally to this chart
-  ##
+  ## Volumes allows configuration of additonal volumes
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  volumes: []
+
+  ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  volumeMounts: []
+
+  ## Enable additional scrape configs that are managed externally to this chart. Evaluated as a template
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   additionalScrapeConfigsExternal: false
 
   ## Thanos sidecar container configuration
@@ -567,7 +575,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.12.1-scratch-r4
+      tag: 0.12.2-scratch-r11
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -631,7 +639,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.20.0-debian-10-r84
+    tag: 0.20.0-debian-10-r122
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -797,6 +805,16 @@ alertmanager:
           receiver: 'null'
     receivers:
       - name: 'null'
+  
+  ## Alertmanager configuration is created externally
+  ## If true, `alertmanager.config` is ignored, and a secret will not be created.
+  ##
+  ## Alertmanager requires a secret named `alertmanager-{{ template "prometheus-operator.alertmanager.fullname" . }}`
+  ## It must contain:
+  ##     alertmanager.yaml: <config>
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/alerting.md#alerting
+  ##
+  externalConfig: false
 
   ## Desired number of Alertmanager nodes
   ##
@@ -865,6 +883,14 @@ alertmanager:
   ## Containers allows injecting additional containers
   ##
   containers: []
+
+  ## Volumes allows configuration of additonal volumes. Evaluated as a template
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+  volumes: []
+
+  ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
+  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+  volumeMounts: []
 
   ## Priority class assigned to the Pods
   ##
