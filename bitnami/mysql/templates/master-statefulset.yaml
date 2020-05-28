@@ -75,7 +75,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
             {{- if .Values.db.user }}
@@ -88,7 +88,7 @@ spec:
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-password
             {{- end }}
             {{- end }}
@@ -106,7 +106,7 @@ spec:
             - name: MYSQL_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-replication-password
             {{- end }}
             {{- end }}
@@ -194,7 +194,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
           command:
