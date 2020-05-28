@@ -95,6 +95,29 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Return the proper image name (for the LDAP Auth Daemon image)
+*/}}
+{{- define "nginx.ldapDaemon.image" -}}
+{{- $registryName := .Values.ldapDaemon.image.registry -}}
+{{- $repositoryName := .Values.ldapDaemon.image.repository -}}
+{{- $tag := .Values.ldapDaemon.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "nginx.metrics.image" -}}
@@ -212,6 +235,17 @@ Return the custom NGINX server block configmap.
 {{- end -}}
 
 {{/*
+Return the custom NGINX server block secret for LDAP.
+*/}}
+{{- define "ldap.nginxServerBlockSecret" -}}
+{{- if .Values.ldapDaemon.existingNginxServerBlockSecret -}}
+    {{- printf "%s" (tpl .Values.ldapDaemon.existingNginxServerBlockSecret $) -}}
+{{- else -}}
+    {{- printf "%s-ldap-daemon" (include "nginx.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Renders a value that contains template.
 Usage:
 {{ include "nginx.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
@@ -230,6 +264,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "nginx.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "nginx.validateValues.cloneStaticSiteFromGit" .) -}}
+{{- $messages := append $messages (include "nginx.validateValues.extraVolumes" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -244,5 +279,14 @@ Compile all warnings into a single message, and call fail.
 nginx: cloneStaticSiteFromGit
     When enabling cloing a static site from a Git repository, both the Git repository and the Git branch must be provided.
     Please provide them by setting the `cloneStaticSiteFromGit.repository` and `cloneStaticSiteFromGit.branch` parameters.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of NGINX - Incorrect extra volume settings */}}
+{{- define "nginx.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not .Values.extraVolumeMounts) -}}
+nginx: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
 {{- end -}}
 {{- end -}}

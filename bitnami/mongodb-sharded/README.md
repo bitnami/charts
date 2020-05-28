@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -101,6 +101,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `service.loadBalancerIP`                      | Static IP Address to use for LoadBalancer service type                                                                                                    | `nil`                                                    |
 | `service.externalIPs`                         | External IP list to use with ClusterIP service type                                                                                                       | `[]`                                                     |
 | `service.loadBalancerSourceRanges`            | List of IP ranges allowed access to load balancer (if supported)                                                                                          | `[]` (does not add IP range restrictions to the service) |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                                                   |
 | `replicaSetKey`                               | Key used for authentication in the replica sets                                                                                                           | `random alphanumeric string (10)`                        |
 | `usePasswordFile`                             | Have the secrets mounted as a file instead of env vars                                                                                                    | `false`                                                  |
 | `securityContext.enabled`                     | Enable security context                                                                                                                                   | `true`                                                   |

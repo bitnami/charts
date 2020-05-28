@@ -47,8 +47,11 @@ spec:
       {{- if or .Values.airflow.cloneDagFilesFromGit.enabled .Values.airflow.clonePluginsFromGit.enabled }}
       initContainers:
         - name: git-clone-repository
-          image: "{{ template "git.image" . }}"
+          image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          {{- if .Values.airflow.gitCloneContainer.command }}
+          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -59,6 +62,10 @@ spec:
               {{- if .Values.airflow.clonePluginsFromGit.enabled }}
                 git clone {{ .Values.airflow.clonePluginsFromGit.repository }} --branch {{ .Values.airflow.clonePluginsFromGit.branch }} /plugins
               {{- end }}
+          {{- end }}
+          {{- if .Values.airflow.gitCloneContainer.args }}
+          args: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.args "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - name: git-cloned-dag-files
@@ -68,10 +75,30 @@ spec:
             - name: git-cloned-plugins
               mountPath: /plugins
             {{- end }}
+            {{- if .Values.airflow.gitCloneContainer.extraVolumeMounts }}
+            {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.airflow.gitCloneContainer.extraEnvVars }}
+          env: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.airflow.gitCloneContainer.extraEnvVarsCM .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.airflow.gitCloneContainer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.gitCloneContainer.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
       containers:
         - name: git-repo-syncer
           image: "{{ template "git.image" . }}"
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
+          {{- if .Values.airflow.gitSyncContainer.command }}
+          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -85,6 +112,7 @@ spec:
                   {{- end }}
                   sleep {{ default "60" .Values.airflow.gitSyncInterval }}
               done
+          {{- end }}
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             - name: git-cloned-dag-files
@@ -94,12 +122,35 @@ spec:
             - name: git-cloned-plugins
               mountPath: /plugins
             {{- end }}
+            {{- if .Values.airflow.gitSyncContainer.extraVolumeMounts }}
+            {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.airflow.gitSyncContainer.extraEnvVars }}
+          env: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.airflow.gitSyncContainer.extraEnvVarsCM .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.airflow.gitSyncContainer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.gitSyncContainer.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
       {{- else }}
       containers:
       {{- end }}
         - name: airflow-scheduler
-          image: {{ template "airflow.schedulerImage" . }}
+          image: {{ include "airflow.schedulerImage" . }}
           imagePullPolicy: {{ .Values.schedulerImage.pullPolicy | quote }}
+          {{- if .Values.airflow.scheduler.command }}
+          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.scheduler.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.airflow.scheduler.args }}
+          args: {{- include "airflow.tplValue" (dict "value" .Values.airflow.scheduler.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
           {{- if .Values.schedulerImage.debug }}
             - name: BASH_DEBUG
@@ -177,7 +228,27 @@ spec:
               value: "no"
               {{- end }}
             {{- if .Values.airflow.extraEnvVars }}
-              {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
+              {{- include "airflow.tplValue" (dict "value" .Values.airflow.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.airflow.scheduler.extraEnvVars }}
+              {{- include "airflow.tplValue" (dict "value" .Values.airflow.scheduler.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.airflow.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.airflow.scheduler.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.scheduler.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.scheduler.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.scheduler.extraEnvVarsSecret }}
             {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
@@ -213,6 +284,9 @@ spec:
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
           {{- end }}
+          {{- if .Values.airflow.scheduler.extraVolumeMounts }}
+            {{- include "airflow.tplValue" (dict "value" .Values.airflow.scheduler.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.airflow.scheduler.resources }}
           resources: {{- toYaml .Values.airflow.scheduler.resources | nindent 12 }}
           {{- end }}
@@ -239,4 +313,7 @@ spec:
         - name: custom-configuration-file
           configMap:
             name: {{ .Values.airflow.configurationConfigMap }}
+      {{- end }}
+      {{- if .Values.airflow.scheduler.extraVolumes }}
+      {{- include "airflow.tplValue" (dict "value" .Values.airflow.scheduler.extraVolumes "context" $) | nindent 6 }}
       {{- end }}

@@ -18,7 +18,7 @@ spec:
     matchLabels: {{- include "zookeeper.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: zookeeper
   endpoints:
-    - port: metrics
+    - port: tcp-metrics
       path: "/metrics"
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}

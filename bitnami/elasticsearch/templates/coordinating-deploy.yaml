@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: {{ include "elasticsearch.coordinating.fullname" . }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: coordinating-only
+    app.kubernetes.io/component: coordinating-only
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: coordinating-only
 spec:
   strategy:
     type: {{ .Values.coordinating.updateStrategy.type }}
@@ -12,12 +14,17 @@ spec:
     {{- end }}
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
-      role: coordinating-only
+      app.kubernetes.io/component: coordinating-only
   replicas: {{ .Values.coordinating.replicas }}
   template:
     metadata:
       labels: {{- include "elasticsearch.labels" . | nindent 8 }}
-        role: coordinating-only
+        app.kubernetes.io/component: coordinating-only
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: coordinating-only
+        {{- if .Values.coordinating.podLabels }}
+        {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- with .Values.coordinating.podAnnotations }}
       annotations: {{- toYaml . | nindent 10 }}
       {{- end }}
@@ -66,7 +73,9 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.name | quote }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
-              value: {{ template "elasticsearch.discovery.fullname" . }}
+              value: {{ include "elasticsearch.hosts" . | quote }}
+            - name: ELASTICSEARCH_TOTAL_NODES
+              value: {{ add .Values.master.replicas .Values.data.replicas | quote }}
             {{- if .Values.plugins }}
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}
@@ -77,6 +86,20 @@ spec:
               value: "yes"
             - name: ELASTICSEARCH_NODE_TYPE
               value: "coordinating"
+            {{- if .Values.extraEnvVars }}
+            {{- include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsConfigMap .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsConfigMap }}
+            - configMapRef:
+                name: {{ include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVarsConfigMap "context" $ ) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 9200
@@ -118,6 +141,18 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
+            {{- if .Values.initScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/init-scripts
+            {{- end }}
+            {{- if .Values.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-cm
+            {{- end }}
+            {{- if .Values.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
+            {{- end }}
       volumes:
         {{- if .Values.sysctlImage.enabled }}
         - name: initcontainer-script
@@ -134,4 +169,20 @@ spec:
           emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "elasticsearch.initScripts" . }}
+        {{- end }}
+        {{- if .Values.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ template "elasticsearch.initScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template "elasticsearch.initScriptsSecret" . }}
+            defaultMode: 0755
         {{- end }}

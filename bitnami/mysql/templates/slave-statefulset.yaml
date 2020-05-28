@@ -82,7 +82,7 @@ spec:
             - name: MYSQL_MASTER_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
             - name: MYSQL_REPLICATION_USER
@@ -94,9 +94,23 @@ spec:
             - name: MYSQL_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-replication-password
             {{- end }}
+            {{- if .Values.slave.extraEnvVars }}
+            {{- include "mysql.tplValue" (dict "value" .Values.slave.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.slave.extraEnvVarsCM .Values.slave.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.slave.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.slave.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.slave.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.slave.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -163,7 +177,7 @@ spec:
             - name: MYSQL_MASTER_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
           command:

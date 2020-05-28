@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 > Note: Please, note that the forwarder runs the container as root by default setting the `forwarder.securityContext.runAsUser` to `0` (_root_ user)
@@ -97,6 +97,8 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `forwarder.tolerations`                         | Tolerations for pod assignment                                                                                 | `[]`                                                                                                    |
 | `forwarder.affinity`                            | Affinity for pod assignment                                                                                    | `{}`                                                                                                    |
 | `forwarder.podAnnotations`                      | Pod annotations                                                                                                | `{}`                                                                                                    |
+| `forwarder.extraVolumes`                        | Extra volumes                                                                                                  | `nil`                                                                                                   |
+| `forwarder.extraVolumeMounts`                   | Mount extra volume(s),                                                                                         | `nil`                                                                                                   |
 | `aggregator.enabled`                            | Enable Fluentd aggregator                                                                                      | `true`                                                                                                  |
 | `aggregator.replicaCount`                       | Number of aggregator pods to deploy in the Stateful Set                                                        | `2`                                                                                                     |
 | `aggregator.securityContext.enabled`            | Enable security context for aggregator pods                                                                    | `true`                                                                                                  |
@@ -214,7 +216,7 @@ data:
     # input plugin that exports metrics
     <source>
       @type prometheus
-      port {{ .Values.metrics.service.port }}
+      port 24231
     </source>
 
     # input plugin that collects metrics from MonitorAgent
@@ -232,7 +234,6 @@ data:
         host ${hostname}
       </labels>
     </source>
-    {{- end }}
 
     # Ignore fluentd own events
     <match fluent.**>
@@ -243,7 +244,7 @@ data:
     <source>
       @type forward
       bind 0.0.0.0
-      port {{ .Values.aggregator.port }}
+      port 24224
     </source>
 
     # HTTP input for the liveness and readiness probes

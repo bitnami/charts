@@ -27,13 +27,13 @@ Thanos Querier can be accessed through following DNS name from within your clust
 
 To access Thanos Querier from outside the cluster execute the following commands:
 
-{{- if .Values.ingress.enabled }}
+{{- if .Values.querier.ingress.enabled }}
 
 1. Get the Thanos Querier URL and associate Thanos Querier hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "Thanos Querier URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
-   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+   echo "Thanos Querier URL: http{{ if .Values.querier.ingress.tls }}s{{ end }}://{{ .Values.querier.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ .Values.querier.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 {{- else }}
 

@@ -18,6 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.10+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -58,7 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the MariaDB Galera chart and their default values.
 
-|              Parameter               |                                                                         Description                                                                         |                              Default                              |
+| Parameter                            | Description                                                                                                                                                 | Default                                                           |
 |--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                                | `nil`                                                             |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                             | `[]` (does not add image pull secrets to deployed pods)           |
@@ -116,6 +117,9 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                | `nil`                                                             |
 | `initdbScriptsConfigMap`             | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                         | `nil`                                                             |
 | `extraFlags`                         | MariaDB additional command line flags                                                                                                                       | `nil`                                                             |
+| `extraEnvVars`                       | Array containing extra env vars to configure MariaDB Galera replicas                                                                                        | `nil`                                                             |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars to configure MariaDB Galera replicas                                                                                    | `nil`                                                             |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars to configure MariaDB Galera replicas                                                                                       | `nil`                                                             |
 | `annotations[].key`                  | key for the the annotation list item                                                                                                                        | `nil`                                                             |
 | `annotations[].value`                | value for the the annotation list item                                                                                                                      | `nil`                                                             |
 | `replicaCount`                       | Desired number of cluster nodes                                                                                                                             | `3`                                                               |
