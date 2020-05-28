@@ -149,6 +149,17 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
 | `querier.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
 | `querier.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
+| `querier.ingress.enabled`                       | Enable ingress controller resource                                                                     | `false`                                                 |
+| `querier.ingress.certManager`                   | Add annotations for cert-manager                                                                       | `false`                                                 |
+| `querier.ingress.hostname`                      | Default host for the ingress resource                                                                  | `thanos.local`                                          |
+| `querier.ingress.annotations`                   | Ingress annotations                                                                                    | `[]`                                                    |
+| `querier.ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                                     | `nil`                                                   |
+| `querier.ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                                     | `nil`                                                   |
+| `querier.ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
+| `querier.ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
+| `querier.ingress.secrets[0].name`               | TLS Secret Name                                                                                        | `nil`                                                   |
+| `querier.ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                                 | `nil`                                                   |
+| `querier.ingress.secrets[0].key`                | TLS Secret Key                                                                                         | `nil`                                                   |
 
 ### Thanos Bucket Web parameters
 
@@ -326,22 +337,6 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.pdb.create`                              | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
 | `ruler.pdb.minAvailable`                        | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
 | `ruler.pdb.maxUnavailable`                      | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
-
-### Ingress parameters
-
-| Parameter                                       | Description                                                                                            | Default                                                 |
-|-------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `ingress.enabled`                               | Enable ingress controller resource                                                                     | `false`                                                 |
-| `ingress.certManager`                           | Add annotations for cert-manager                                                                       | `false`                                                 |
-| `ingress.hostname`                              | Default host for the ingress resource                                                                  | `thanos.local`                                          |
-| `ingress.annotations`                           | Ingress annotations                                                                                    | `[]`                                                    |
-| `ingress.extraHosts[0].name`                    | Additional hostnames to be covered                                                                     | `nil`                                                   |
-| `ingress.extraHosts[0].path`                    | Additional hostnames to be covered                                                                     | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`                  | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
-| `ingress.extraTls[0].secretName`                | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
-| `ingress.secrets[0].name`                       | TLS Secret Name                                                                                        | `nil`                                                   |
-| `ingress.secrets[0].certificate`                | TLS Secret Certificate                                                                                 | `nil`                                                   |
-| `ingress.secrets[0].key`                        | TLS Secret Key                                                                                         | `nil`                                                   |
 
 ### Metrics parameters
 
@@ -546,3 +541,20 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volumes before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Upgrading
+
+### To 1.0.0
+If you are upgrading from a `<1.0.0` release you need to move your Querier Ingress information to the new values settings:
+```
+ingress.enabled -> querier.ingress.enabled
+ingress.certManager -> querier.ingress.certManager
+ingress.hostname -> querier.ingress.hostname
+ingress.annotations -> querier.ingress.annotations
+ingress.extraHosts[0].name -> querier.ingress.extraHosts[0].name
+ingress.extraHosts[0].path -> querier.ingress.extraHosts[0].path
+ingress.extraHosts[0].hosts[0] -> querier.ingress.extraHosts[0].hosts[0]
+ingress.extraHosts[0].secretName -> querier.ingress.extraHosts[0].secretName
+ingress.secrets[0].name -> querier.ingress.secrets[0].name
+ingress.secrets[0].certificate -> querier.ingress.secrets[0].certificate
+ingress.secrets[0].key -> querier.ingress.secrets[0].key
