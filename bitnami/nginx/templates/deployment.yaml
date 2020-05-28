@@ -162,7 +162,7 @@ spec:
             items:
               - key: server-blocks-paths.conf
                 path: server-blocks-paths.conf
-      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
+      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumes (include "nginx.useStaticSite" .) }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
           configMap:
