@@ -1,7 +1,10 @@
-{{- $replicaCount := int .Values.replicaCount }}
-{{- $releaseNamespace := .Release.Namespace }}
-{{- $fullName := include "kafka.fullname" . }}
-{{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
+{{- $replicaCount := int .Values.replicaCount -}}
+{{- $releaseNamespace := .Release.Namespace -}}
+{{- $clusterDomain := .Values.clusterDomain -}}
+{{- $fullname := include "kafka.fullname" . -}}
+{{- $clientProtocol := include "kafka.listenerType" ( dict "protocol" .Values.auth.clientProtocol ) -}}
+{{- $servicePort := int .Values.service.port -}}
+{{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs -}}
 {{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
 
 ###############################################################################
@@ -19,7 +22,7 @@ IPs for Kafka brokers. To complete your deployment follow the steps below:
 2. Obtain the load balancer IPs and upgrade your chart:
 .
     {{- range $i, $e := until $replicaCount }}
-    LOAD_BALANCER_IP_{{ add $i 1 }}="$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullName }}-{{ $i }}-external -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+    LOAD_BALANCER_IP_{{ add $i 1 }}="$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }}-{{ $i }}-external -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
     {{- end }}
 .
 3. Upgrade you chart:
@@ -34,7 +37,7 @@ IPs for Kafka brokers. To complete your deployment follow the steps below:
 .
 {{- else }}
 
-{{- if and (or (eq .Values.service.type "LoadBalancer") .Values.externalAccess.enabled) (not .Values.auth.enabled) }}
+{{- if and (or (eq .Values.service.type "LoadBalancer") .Values.externalAccess.enabled) (eq .Values.auth.clientProtocol "plaintext") }}
 ---------------------------------------------------------------------------------------------
  WARNING
 
@@ -50,13 +53,67 @@ IPs for Kafka brokers. To complete your deployment follow the steps below:
 
 ** Please be patient while the chart is being deployed **
 
-Kafka can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
+Kafka can be accessed by consumers via port {{ $servicePort }} on the following DNS name from within your cluster:
 
-    {{ template "kafka.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+    {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}
 
-To create a a pod that you can use as a Kafka client run the following command:
+Each Kafka broker can be accessed by producers via port {{ $servicePort }} on the following DNS name(s) from within your cluster:
 
-    kubectl run {{ template "kafka.fullname" . }}-client --rm --tty -i --restart='Never' --image {{ template "kafka.image" . }} --namespace {{ .Release.Namespace }} --command -- bash
+    {{- range $i, $e := until $replicaCount }}
+    {{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}
+    {{- end }}
+
+{{- if (include "kafka.client.saslAuthentication" .) }}
+
+You need to configure your Kafka client to access using SASL authentication. You can generate the 'kafka_jaas.conf' and 'client.properties' files using the commands below:
+
+    cat > /tmp/kafka_jaas.conf << EOF
+    KafkaClient {
+        org.apache.kafka.common.security.plain.PlainLoginModule required
+        username="{{ .Values.auth.jaas.clientUser }}"
+        password="$(kubectl get secret {{ $fullname }}-jaas -n {{ $releaseNamespace }} -o jsonpath='{.data.client-password}' | base64 --decode)";
+    };
+    EOF
+    cat > /tmp/client.properties << EOF
+    {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
+    ssl.truststore.location=/tmp/kafka.truststore.jks
+    {{- if .Values.auth.jksPassword }}
+    ssl.truststore.password={{ .Values.auth.jksPassword }}
+    {{- end }}
+    {{- end }}
+    security.protocol={{ $clientProtocol }}
+    sasl.mechanism=PLAIN
+    EOF
+
+{{- end }}
+
+To create a pod that you can use as a Kafka client run the following commands:
+
+    kubectl run {{ $fullname }}-client --restart='Never' --image {{ template "kafka.image" . }} --namespace {{ $releaseNamespace }} --command -- sleep infinity
+    {{- if (include "kafka.client.saslAuthentication" .) }}
+    kubectl cp --namespace {{ $releaseNamespace }} /tmp/client.properties {{ $fullname }}-client:/tmp/client.properties
+    kubectl cp --namespace {{ $releaseNamespace }} /tmp/kafka_jaas.conf {{ $fullname }}-client:/tmp/kafka_jaas.conf
+    {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
+    kubectl cp --namespace {{ $releaseNamespace }} ./kafka.truststore.jks kafka-client:/tmp/kafka.truststore.jks
+    {{- end }}
+    {{- end }}
+    kubectl exec --tty -i {{ $fullname }}-client --namespace {{ $releaseNamespace }} -- bash
+    {{- if (include "kafka.client.saslAuthentication" .) }}
+    export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/kafka_jaas.conf"
+    {{- end }}
+
+    PRODUCER:
+        kafka-console-producer.sh \
+            {{ if (include "kafka.client.saslAuthentication" .) }}--producer.config /tmp/client.properties \{{ end }}
+            --broker-list {{ range $i, $e := until $replicaCount }}{{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }},{{ end }} \
+            --topic test
+
+    CONSUMER:
+        kafka-console-consumer.sh \
+            {{ if (include "kafka.client.saslAuthentication" .) }}--consumer.config /tmp/client.properties \{{ end }}
+            --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }} \
+            --topic test \
+            --from-beginning
 
 {{- if .Values.externalAccess.enabled }}
 
@@ -97,28 +154,6 @@ To connect to your Kafka server from outside the cluster, follow the instruction
     Kafka Brokers port: {{ .Values.externalAccess.service.port }}
 
 {{- end }}
-
-{{- end }}
-{{- if .Values.auth.enabled }}
-    PRODUCER:
-        kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/config/producer.properties
-    CONSUMER:
-        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning --consumer.config /opt/bitnami/kafka/config/consumer.properties
-
-  NOTE: In order to connect to the cluster with an external client you need to properly specify the credentials stored in the JAAS file generated in the Kafka image.
-        You should get the content of that file and write it in your host machine:
-
-        export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
-        kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- cat /opt/bitnami/kafka/config/kafka_jaas.conf >> kafka_jaas.conf
-
-        Finally, before using your client you need to export the following env var:
-
-        export KAFKA_OPTS="-Djava.security.auth.login.config=/path/to/kafka_jaas.conf"
-{{- else }}
-    PRODUCER:
-        kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test
-    CONSUMER:
-        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning
 {{- end }}
 {{- end }}
 
