@@ -265,13 +265,16 @@ service:
   ##
   annotations: {}
   labels: {}
+
   ## Set the service type.
   ## Setting this to LoadBalancer may require corresponding service annotations for loadbalancer creation to succeed.
   ## Currently supported types are ClusterIP (default) and LoadBalancer
   type: ClusterIP
+
   ## If service.type is LoadBalancer, request a specific static IP address if supported by the cloud provider.
   ## otherwise leave blank
   # loadBalancerIP:
+
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
