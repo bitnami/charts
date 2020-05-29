@@ -827,7 +827,7 @@ alertmanager:
           receiver: 'null'
     receivers:
       - name: 'null'
-  
+
   ## Alertmanager configuration is created externally
   ## If true, `alertmanager.config` is ignored, and a secret will not be created.
   ##
