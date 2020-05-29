@@ -185,7 +185,7 @@ spec:
               mountPath: /opt/bitnami/pgpool/secrets/
             {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration }}
+        {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration .Values.pgpool.configurationCM }}
         - name: pgpool-config
           configMap:
             name: {{ include "postgresql-ha.pgpoolConfigurationCM" . }}
