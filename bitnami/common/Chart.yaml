@@ -10,6 +10,7 @@ keywords:
   - template
   - function
   - bitnami
+home: http://www.bitnami.com/
 icon: https://bitnami.com/downloads/logos/bitnami-mark.png
 sources:
   - https://github.com/bitnami/charts
