@@ -322,3 +322,10 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
         {{ default "default" .Values.serviceAccount.name }}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Returns chart secret name. If existingSecret is not set it will default to mysql.fullname
+*/}}
+{{- define "mysql.secretName" -}}
+{{ default (include "mysql.fullname" .) .Values.existingSecret }}
+{{- end -}}
