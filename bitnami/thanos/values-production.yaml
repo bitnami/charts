@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.12.2-scratch-r12
+  tag: 0.12.2-scratch-r13
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -120,7 +120,7 @@ querier:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for querier pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -336,7 +336,7 @@ bucketweb:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for bucketweb pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -534,7 +534,7 @@ compactor:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for compactor pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -686,7 +686,7 @@ storegateway:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for storegateway pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -897,7 +897,7 @@ ruler:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for ruler pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
