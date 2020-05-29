@@ -39,7 +39,7 @@ The command deploys PostgreSQL on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+$ helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.

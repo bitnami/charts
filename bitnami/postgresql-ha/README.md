@@ -35,7 +35,7 @@ $ helm install my-release bitnami/postgresql-ha
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete --purge my-release
+$ helm uninstall my-release
 ```
 
 Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
