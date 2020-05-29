@@ -182,10 +182,10 @@ master:
   ## Provide annotations for master-eligible pods.
   ##
   podAnnotations: {}
-  
+
   ## Extra labels to add to Pod
   podLabels: {}
-  
+
   ## Pod Security Context for master-eligible pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -310,10 +310,10 @@ coordinating:
   ## Provide annotations for the coordinating-only pods.
   ##
   podAnnotations: {}
-  
+
   ## Extra labels to add to Pod
   podLabels: {}
-  
+
   ## Pod Security Context for coordinating-only pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -413,10 +413,10 @@ data:
   ## Provide annotations for the data pods.
   ##
   podAnnotations: {}
-  
+
   ## Extra labels to add to Pod
   podLabels: {}
-  
+
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -514,10 +514,10 @@ ingest:
   ## Provide annotations for the ingest pods.
   ##
   podAnnotations: {}
-  
+
   ## Extra labels to add to Pod
   podLabels: {}
-  
+
   ## Pod Security Context for ingest pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -617,7 +617,7 @@ curator:
     jobRestartPolicy: Never
 
   podAnnotations: {}
-  
+
   ## Extra labels to add to Pod
   podLabels: {}
 
@@ -805,7 +805,7 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
-    
+
   ## Extra labels to add to Pod
   podLabels: {}
 
