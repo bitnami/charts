@@ -2,7 +2,7 @@
 
 [phpBB](https://www.phpbb.com/) is an Internet forum package written in the PHP scripting language. The name "phpBB" is an abbreviation of PHP Bulletin Board.
 
-## TL;DR;
+## TESTL;DR;
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
