@@ -2,7 +2,7 @@
 
 [Logstash](https://www.elastic.co/products/logstash) is an open source, server-side data processing pipeline that ingests data from a multitude of sources simultaneously, transforms it, and then sends it to your favorite "stash".
 
-## TL;DR;
+## TESTL;DR;
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
