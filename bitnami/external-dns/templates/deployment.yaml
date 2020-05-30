@@ -390,7 +390,15 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: rfc2136_tsig_secret
             {{- end }}
-            {{- if and (eq .Values.provider "pdns") (or .Values.pdns.apiKey .Values.pdns.secretName) }}
+            {{- if and (eq .Values.provider "pdns") .Values.pdns.apiKey }}
+            # PowerDNS environment variables
+            - name: PDNS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: pdns_api_key
+            {{- end }}
+            {{- if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
             # PowerDNS environment variables
             - name: PDNS_API_KEY
               valueFrom:
