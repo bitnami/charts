@@ -1026,6 +1026,49 @@ kubeApiServer:
     ##
     relabelings: []
 
+## Component scraping the kube-proxy
+kubeProxy:
+  ## Create a ServiceMonitor to scrape kube-proxy service
+  enabled: true
+
+  ## If your kube-proxy is not deployed as a pod, specify IPs it can be found on
+  endpoints: []
+  # - 10.141.4.22
+  # - 10.141.4.23
+  # - 10.141.4.24
+
+  ## Namespace where kube-proxy service is deployed
+  namespace: kube-system
+
+  ## Service ports and selector information
+  service:
+    enabled: true
+    port: 10249
+    targetPort: 10249
+    # selector:
+    #   k8s-app: kube-proxy
+
+  serviceMonitor:
+    ## Enable scraping kube-proxy over https.
+    ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
+    ##
+    https: false
+
+    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+
+    ## Metric relabeling
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    metricRelabelings: []
+
+    ## Relabel configs
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    ##
+    relabelings: []
+
 # Component scraping for kubelet and kubelet hosted cAdvisor
 kubelet:
   ## Create a ServiceMonitor to scrape kubelet service
