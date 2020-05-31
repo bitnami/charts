@@ -72,13 +72,13 @@ allowEmptyPassword: "yes"
 ##
 externalDatabase:
 
-  ##If set to 'true' db and db user will be created as specified
+  ## If set to 'true' db and db user will be created as specified
   create: false
-  
+
   ## Database user privileges
   # privileges: ALL
 
-  ##admin user to create db and user.
+  ## admin user to create db and user.
   # rootUser:
   # rootPassword:
 
