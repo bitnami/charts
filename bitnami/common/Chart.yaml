@@ -1,8 +1,8 @@
 apiVersion: v1
 name: common
 # Please make sure that version and appVersion are always the same.
-version: 0.2.3
-appVersion: 0.2.3
+version: 0.2.4
+appVersion: 0.2.4
 description: A Library Helm Chart for grouping common logic between bitnami charts. This chart is not deployable by itself.
 keywords:
   - common
@@ -10,6 +10,7 @@ keywords:
   - template
   - function
   - bitnami
+home: http://www.bitnami.com/
 icon: https://bitnami.com/downloads/logos/bitnami-mark.png
 sources:
   - https://github.com/bitnami/charts

@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.7.0-debian-10-r13
+  tag: 7.7.0-debian-10-r15
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -178,7 +178,7 @@ forceInitScripts: false
 ## Service configuration
 ##
 service:
-  port: 80
+  port: 5601
   type: ClusterIP
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
@@ -278,6 +278,9 @@ affinity: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Extra labels to add to Pod
+podLabels: {}
 
 ## Add sidecars to the pod
 ##

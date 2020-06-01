@@ -5,5 +5,6 @@ chart-repos:
 remote: origin
 validate-chart-schema: true
 validate-maintainers: true
+debug: true
 validate-yaml: true
 check-version-increment: true

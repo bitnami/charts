@@ -19,7 +19,6 @@ image:
   registry: docker.io
   repository: bitnami/influxdb
   tag: 1.8.0-debian-10-r48
-  
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -585,7 +584,7 @@ backup:
   ## Directory where backups are stored
   ##
   directory: "/backups"
-  ## Retention time in days for backups 
+  ## Retention time in days for backups
   ##
   retentionDays: 10
   ## Cronjob configuration
@@ -613,9 +612,9 @@ backup:
   ## Storage providers where to upload backups
   ##
   uploadProviders:
-    ## Google Storage Bucket configuration 
+    ## Google Storage Bucket configuration
     ##
-    google: 
+    google:
       enabled: false
       secret: ""
       secretKey: "key.json"
@@ -638,7 +637,7 @@ backup:
         ##
         # pullSecrets:
         #   - myRegistryKeySecretName
-    ## Azure Storage Container configuration 
+    ## Azure Storage Container configuration
     ##
     azure:
       enabled: false
