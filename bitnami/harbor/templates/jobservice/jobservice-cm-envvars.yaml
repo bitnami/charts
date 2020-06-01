@@ -11,9 +11,10 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  CORE_URL: {{ printf "http://%s" (include "harbor.core" .) | quote }}
-  REGISTRY_URL: {{ printf "http://%s:5000" (include "harbor.registry" .) | quote }}
-  REGISTRY_CONTROLLER_URL: {{ printf "http://%s:8080" (include "harbor.registry" .) | quote }}
+  CORE_URL: {{ include "harbor.core.url" . | quote }}
+  TOKEN_SERVICE_URL: {{ include "harbor.tokenService.url" . | quote }}
+  REGISTRY_URL: {{ include "harbor.registry.url" . | quote }}
+  REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
   {{- if has "jobservice" .Values.proxy.components }}
   HTTP_PROXY: {{ .Values.proxy.httpProxy | quote }}

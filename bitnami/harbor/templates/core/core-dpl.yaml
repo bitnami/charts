@@ -34,6 +34,9 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         checksum/secret-envvars: {{ include (print $.Template.BasePath "/core/core-secret-envvars.yaml") . | sha256sum }}
         checksum/secret-jobservice: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
+        {{- if and .Values.internalTLS.enabled (not .Values.core.tls.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.core.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.core.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -73,7 +76,8 @@ spec:
           {{- if .Values.core.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /api/ping
+              path: /api/v2.0/ping
+              scheme: {{ include "harbor.component.scheme" . | upper }}
               port: http
             initialDelaySeconds: {{ .Values.core.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.core.livenessProbe.periodSeconds }}
@@ -86,7 +90,8 @@ spec:
           {{- if .Values.core.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /api/ping
+              path: /api/v2.0/ping
+              scheme: {{ include "harbor.component.scheme" . | upper }}
               port: http
             initialDelaySeconds: {{ .Values.core.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.core.readinessProbe.periodSeconds }}
@@ -122,11 +127,21 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+            {{- if .Values.internalTLS.enabled }}
+            - name: INTERNAL_TLS_ENABLED
+              value: "true"
+            - name: INTERNAL_TLS_KEY_PATH
+              value: /bitnami/certs/tls.key
+            - name: INTERNAL_TLS_CERT_PATH
+              value: /bitnami/certs/tls.crt
+            - name: INTERNAL_TLS_TRUST_CA_PATH
+              value: /bitnami/certs/ca.crt
+            {{- end }}
             {{- if .Values.core.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           ports:
-            - containerPort: 8080
+            - containerPort: {{ include "harbor.core.containerPort" . }}
               name: http
           volumeMounts:
             - name: config
@@ -138,6 +153,10 @@ spec:
             - name: token-service-private-key
               mountPath: /etc/core/private_key.pem
               subPath: tls.key
+            {{- if .Values.internalTLS.enabled }}
+            - name: core-internal-certs
+              mountPath: /bitnami/certs/
+            {{- end }}
             {{- if .Values.service.tls.enabled }}
             - name: ca-download
               mountPath: /etc/core/ca
@@ -176,8 +195,13 @@ spec:
             {{- if .Values.core.secretName }}
             secretName: {{ .Values.core.secretName }}
             {{- else }}
-            secretName: {{ template "harbor.core" . }}
+            secretName: {{ include "harbor.core" . }}
             {{- end }}
+        {{- if .Values.internalTLS.enabled }}
+        - name: core-internal-certs
+          secret:
+            secretName: {{ include "harbor.core.tls.secretName" . }}
+        {{- end }}
         {{- if .Values.service.tls.enabled }}
         - name: ca-download
           secret:
@@ -186,7 +210,7 @@ spec:
           {{- else if eq (include "harbor.autoGenCertForNginx" .) "true" }}
             secretName: {{ include "harbor.nginx" . }}
           {{- else }}
-            secretName: {{ .Values.service.tls.secretName }}
+            secretName: {{ .Values.service.tls.existingSecret }}
           {{- end }}
         {{- end }}
         {{- if .Values.core.uaaSecretName }}

@@ -31,6 +31,9 @@ spec:
         app.kubernetes.io/component: clair
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/clair/clair-secret.yaml") . | sha256sum }}
+        {{- if and .Values.internalTLS.enabled (not .Values.clair.tls.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.clair.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.clair.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -107,6 +110,14 @@ spec:
             - name: NO_PROXY
               value: {{ include "harbor.noProxy" . | quote }}
             {{- end }}
+            {{- if .Values.internalTLS.enabled }}
+            - name: INTERNAL_TLS_KEY_PATH
+              value: /bitnami/certs/tls.key
+            - name: INTERNAL_TLS_CERT_PATH
+              value: /bitnami/certs/tls.crt
+            - name: INTERNAL_TLS_TRUST_CA_PATH
+              value: /bitnami/certs/ca.crt
+            {{- end }}
             {{- if .Values.clair.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -150,7 +161,8 @@ spec:
           livenessProbe:
             httpGet:
               path: /probe/healthy
-              port: 8080
+              port: {{ include "harbor.clairAdapter.containerPort" . }}
+              scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.clair.adapter.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.clair.adapter.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.clair.adapter.livenessProbe.timeoutSeconds }}
@@ -163,7 +175,8 @@ spec:
           readinessProbe:
             httpGet:
               path: /probe/ready
-              port: 8080
+              port: {{ include "harbor.clairAdapter.containerPort" . }}
+              scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.clair.adapter.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.clair.adapter.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.clair.adapter.readinessProbe.timeoutSeconds }}
@@ -182,6 +195,16 @@ spec:
               value: {{ include "harbor.redisForClairAdapter" . }}
             - name: SCANNER_CLAIR_DATABASE_URL
               value: {{ include "harbor.database.clair" . }}
+            {{- if .Values.internalTLS.enabled }}
+            - name: INTERNAL_TLS_ENABLED
+              value: "true"
+            - name: SCANNER_API_SERVER_ADDR
+              value: {{ printf ":%s" ( include "harbor.clairAdapter.containerPort" . ) | quote }}
+            - name: SCANNER_API_SERVER_TLS_KEY
+              value: /bitnami/certs/tls.key
+            - name: SCANNER_API_SERVER_TLS_CERTIFICATE
+              value: /bitnami/certs/tls.crt
+            {{- end }}
             {{- if .Values.clair.adapter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -200,6 +223,10 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
+            {{- if .Values.internalTLS.enabled }}
+            - name: clair-internal-certs
+              mountPath: /bitnami/certs
+            {{- end }}
             {{- if .Values.clair.adapter.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -210,6 +237,11 @@ spec:
         - name: config
           secret:
             secretName: {{ include "harbor.clair" . | quote }}
+        {{- if .Values.internalTLS.enabled }}
+        - name: clair-internal-certs
+          secret:
+            secretName: {{ template "harbor.clair.tls.secretName" . }}
+        {{- end }}
       {{- if .Values.clair.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.clair.extraVolumes "context" $) | nindent 6 }}
       {{- end }}

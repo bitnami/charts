@@ -15,7 +15,7 @@ spec:
   ports:
     - name: api-server
       protocol: TCP
-      port: 8080
+      port: {{ include "harbor.trivy.servicePort" . }}
       targetPort: api-server
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: trivy

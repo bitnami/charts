@@ -1,10 +1,13 @@
 # Test values file for generating all of the yaml and check that
 # the rendering is correct
 
-service:
-  type: Ingress
+ingress:
+  enabled: true
 
 volumePermissions:
+  enabled: true
+
+internalTLS:
   enabled: true
 
 redis:

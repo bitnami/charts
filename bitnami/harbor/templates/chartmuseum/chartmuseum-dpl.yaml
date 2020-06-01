@@ -33,6 +33,9 @@ spec:
         checksum/configmap-envvars: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-cm-envvars.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/chartmuseum/chartmuseum-secret.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
+        {{- if and .Values.internalTLS.enabled (not .Values.chartmuseum.tls.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.chartmuseum.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -77,9 +80,7 @@ spec:
             httpGet:
               path: /health
               port: http
-              {{- if .Values.chartmuseum.enableTLS }}
-              scheme: "HTTPS"
-              {{- end }}
+              scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.chartmuseum.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.chartmuseum.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.chartmuseum.livenessProbe.timeoutSeconds }}
@@ -93,9 +94,7 @@ spec:
             httpGet:
               path: /health
               port: http
-              {{- if .Values.chartmuseum.enableTLS }}
-              scheme: "HTTPS"
-              {{- end }}
+              scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.chartmuseum.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.chartmuseum.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.chartmuseum.readinessProbe.timeoutSeconds }}
@@ -138,7 +137,7 @@ spec:
                   name: {{ include "harbor.core" . }}
                   key: secret
           ports:
-            - containerPort: {{ .Values.chartmuseum.port }}
+            - containerPort: {{ include "harbor.chartmuseum.containerPort" .  }}
               name: http
           volumeMounts:
             - name: chartmuseum-data
@@ -149,7 +148,7 @@ spec:
               mountPath: /etc/chartmuseum/gcs-key.json
               subPath: gcs-key.json
             {{- end }}
-            {{- if .Values.chartmuseum.enableTLS }}
+            {{- if .Values.internalTLS.enabled }}
             - name: tls-certs
               mountPath: /bitnami/certs
             {{- end }}
@@ -185,15 +184,10 @@ spec:
           secret:
             secretName: {{ .Values.persistence.imageChartStorage.caBundleSecretName }}
         {{- end }}
-        {{- if .Values.chartmuseum.enableTLS }}
+        {{- if .Values.internalTLS.enabled }}
         - name: tls-certs
           secret:
-            secretName: {{ include "harbor.chartmuseum" . }}-secret
-            items:
-              - key: TLS_CERT
-                path: server.crt
-              - key: TLS_KEY
-                path: server.key
+            secretName: {{ include "harbor.chartmuseum.tls.secretName" . }}
         {{- end }}
       {{- if .Values.chartmuseum.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraVolumes "context" $) | nindent 6 }}

@@ -150,7 +150,13 @@ data:
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
     http:
       relativeurls: {{ .Values.registry.relativeurls }}
-      addr: :5000
+      addr: :{{ include "harbor.registry.containerPort" . }}
+      {{- if .Values.internalTLS.enabled }}
+      tls:
+        certificate: /bitnami/certs/tls.crt
+        key: /bitnami/certs/tls.key
+        minimumtls: tls1.2
+      {{- end }}
       # set via environment variable
       # secret: placeholder
       debug:
@@ -185,6 +191,14 @@ data:
           backoff: 1s
   ctl-config.yml: |+
     ---
+    {{- if .Values.internalTLS.enabled }}
+    protocol: "https"
+    port: 8443
+    https_config:
+      cert: "/bitnami/certs/tls.crt"
+      key: "/bitnami/certs/tls.key"
+    {{- else }}
     protocol: "http"
     port: 8080
+    {{- end }}
     log_level: {{ .Values.logLevel }}

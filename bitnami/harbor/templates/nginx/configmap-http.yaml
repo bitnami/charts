@@ -1,4 +1,5 @@
 {{- if and (not .Values.ingress.enabled) (not .Values.service.tls.enabled) }}
+{{- $scheme := include "harbor.component.scheme" . -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -34,11 +35,11 @@ data:
       proxy_http_version 1.1;
 
       upstream core {
-        server {{ template "harbor.core" . }};
+        server {{ template "harbor.core" . }}:{{ template "harbor.core.servicePort" . }};
       }
 
       upstream portal {
-        server {{ template "harbor.portal" . }};
+        server {{ template "harbor.portal" . }}:{{ template "harbor.portal.servicePort" . }};
       }
 
       log_format timed_combined '[$time_local]:$remote_addr - '
@@ -59,7 +60,7 @@ data:
         add_header Content-Security-Policy "frame-ancestors 'none'";
 
         location / {
-          proxy_pass http://portal/;
+          proxy_pass {{ $scheme }}://portal/;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -73,7 +74,11 @@ data:
         }
 
         location /api/ {
-          proxy_pass http://core/api/;
+          proxy_pass {{ $scheme }}://core/api/;
+          {{- if and .Values.internalTLS.enabled }}
+          proxy_ssl_verify        off;
+          proxy_ssl_session_reuse on;
+          {{- end }}
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -87,7 +92,11 @@ data:
         }
 
         location /chartrepo/ {
-          proxy_pass http://core/chartrepo/;
+          proxy_pass {{ $scheme }}://core/chartrepo/;
+          {{- if and .Values.internalTLS.enabled }}
+          proxy_ssl_verify        off;
+          proxy_ssl_session_reuse on;
+          {{- end }}
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -101,7 +110,7 @@ data:
         }
 
         location /c/ {
-          proxy_pass http://core/c/;
+          proxy_pass {{ $scheme }}://core/c/;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -119,7 +128,7 @@ data:
         }
 
         location /v2/ {
-          proxy_pass http://core/v2/;
+          proxy_pass {{ $scheme }}://core/v2/;
           proxy_set_header Host $http_host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -133,7 +142,7 @@ data:
         }
 
         location /service/ {
-          proxy_pass http://core/service/;
+          proxy_pass {{ $scheme }}://core/service/;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

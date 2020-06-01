@@ -353,6 +353,12 @@ volumePermissions:
     ##   memory: 128Mi
     ##
 
+## The internal TLS used for harbor components secure communicating. In order to enable https
+## in each components tls cert files need to provided in advance.
+##
+internalTLS:
+  enabled: false
+
 ## Service parameters
 ##
 service:
@@ -363,7 +369,7 @@ service:
   ## TLS parameters
   ##
   tls:
-    ## Enable TLS
+    ## Enable TLS for external access
     ## Note: When type is "Ingress" and TLS is disabled, the port must be included
     ## in the command when pulling/pushing images.
     ## ref: https://github.com/goharbor/harbor/issues/5291
@@ -377,11 +383,11 @@ service:
     ## link on portal to download the certificate of CA
     ## These files will be generated automatically if the "secretName" is not set
     ##
-    secretName: ""
-    ## By default, the Notary service will use the same certificat described above.
+    existingSecret: ""
+    ## By default, the Notary service will use the same certificate described above.
     ## Fill the name of secret if you want to use a separated on for Notary.
     ##
-    notarySecretName: ""
+    notaryExistingSecret: ""
     ## The common name used to automatically generate the certificates.
     ## Mandatory when "secretName" is not provided or type is not "Ingress".
     ##
@@ -646,7 +652,6 @@ nginx:
   ##
   args:
   replicas: 1
-  nameOverride:
   ## Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -774,6 +779,14 @@ portal:
   ##
   updateStrategy:
     type: RollingUpdate
+
+  ## Use TLS in the container
+  ##
+  tls:
+    ## Name of a secret containing the certificates
+    ## Otherwise, it will generate a cert automatically
+    ##
+    existingSecret:
 
   ## lifecycleHooks for the container to automate configuration before or after startup.
   ##
@@ -912,6 +925,14 @@ core:
 
   replicas: 1
 
+  ## Use TLS in the container
+  ##
+  tls:
+    ## Name of a secret containing the certificates
+    ## Otherwise, it will generate a cert automatically
+    ##
+    existingSecret:
+
   ## Custom Liveness probe
   ##
   customLivenessProbe: {}
@@ -1047,10 +1068,19 @@ jobservice:
   ##
   updateStrategy:
     type: RollingUpdate
+
   maxJobWorkers: 10
   ## The logger for jobs: "file", "database" or "stdout"
   ##
   jobLogger: file
+
+  ## Use TLS in the container
+  ##
+  tls:
+    ## Name of a secret containing the certificates
+    ## Otherwise, it will generate a cert automatically
+    ##
+    existingSecret:
 
   ## lifecycleHooks for the container to automate configuration before or after startup.
   ##
@@ -1171,6 +1201,15 @@ registry:
   ##
   updateStrategy:
     type: RollingUpdate
+
+  ## Use TLS in the containers
+  ##
+  tls:
+    ## Name of a secret containing the certificates
+    ## Otherwise, it will generate a cert automatically
+    ##
+    existingSecret:
+
   ## Harbor Registry main container parameters
   ##
   server:
@@ -1400,8 +1439,6 @@ chartmuseum:
   updateStrategy:
     type: RollingUpdate
 
-  port: 8080
-
   ## Set the use of the Redis cache.
   ##
   useRedisCache: true
@@ -1420,6 +1457,14 @@ chartmuseum:
   allowOverwrite: true
   anonymousGet: false
 
+  ## Use TLS in the container
+  ##
+  tls:
+    ## Name of a secret containing the certificates
+    ## Otherwise, it will generate a cert automatically
+    ##
+    existingSecret:
+
   ## Optional parameters for ChartMuseum not used by default.
   ## ref: https://chartmuseum.com/docs/#other-cli-options
   ##
@@ -1429,10 +1474,6 @@ chartmuseum:
   provPostFormFieldName:
   maxStorageObjects:
   maxUploadSize:
-
-  ## Enable the TLS access to the ChartMuseum server.
-  ##
-  enableTLS: false
 
   ## lifecycleHooks for the container to automate configuration before or after startup.
   ##
@@ -1542,6 +1583,14 @@ clair:
   enabled: true
 
   replicas: 1
+
+  ## Use TLS in the container
+  ##
+  tls:
+    ## Name of a secret containing the certificates
+    ## Otherwise, it will generate a cert automatically
+    ##
+    existingSecret:
 
   ## Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
@@ -1759,6 +1808,14 @@ trivy:
   ## Harbor Trivy container args (using container default if ot set)
   ##
   args:
+
+  ## Use TLS in the container
+  ##
+  tls:
+    ## Name of a secret containing the certificates
+    ## Otherwise, it will generate a cert automatically
+    ##
+    existingSecret:
 
   ## Update strategy
   ##

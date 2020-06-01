@@ -33,6 +33,9 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/registry/registry-secret.yaml") . | sha256sum }}
         checksum/secret-jobservice: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
+        {{- if and .Values.internalTLS.enabled (not .Values.registry.tls.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.registry.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.registry.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -91,6 +94,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /
+              scheme: {{ include "harbor.component.scheme" . | upper }}
               port: registry
             initialDelaySeconds: {{ .Values.registry.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.registry.server.livenessProbe.periodSeconds }}
@@ -104,6 +108,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
+              scheme: {{ include "harbor.component.scheme" . | upper }}
               port: registry
             initialDelaySeconds: {{ .Values.registry.server.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.registry.server.readinessProbe.periodSeconds }}
@@ -122,6 +127,24 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.registryImage.debug | quote }}
+            {{- if .Values.internalTLS.enabled }}
+            - name: INTERNAL_TLS_ENABLED
+              value: "true"
+            - name: INTERNAL_TLS_KEY_PATH
+              value: /bitnami/certs/tls.key
+            - name: INTERNAL_TLS_CERT_PATH
+              value: /bitnami/certs/tls.crt
+            - name: INTERNAL_TLS_TRUST_CA_PATH
+              value: /bitnami/certs/ca.crt
+            {{- end }}
+            {{- if has "chartmuseum" .Values.proxy.components }}
+            - name: HTTP_PROXY
+              value: {{ .Values.proxy.httpProxy | quote  }}
+            - name: HTTPS_PROXY
+              value: {{ .Values.proxy.httpsProxy | quote }}
+            - name: NO_PROXY
+              value: {{ include "harbor.noProxy" . | quote }}
+            {{- end }}
             {{- if .Values.registry.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -137,7 +160,7 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: 5000
+            - containerPort: {{ include "harbor.registry.containerPort" . }}
               name: registry
             - containerPort: 5001
               name: debug
@@ -154,6 +177,10 @@ spec:
             - name: registry-config
               mountPath: /etc/registry/config.yml
               subPath: config.yml
+            {{- if .Values.internalTLS.enabled }}
+            - name: registry-internal-certs
+              mountPath: /bitnami/certs/
+            {{- end }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
             - name: gcs-key
               mountPath: /etc/registry/gcs-key.json
@@ -193,6 +220,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
+              scheme: {{ include "harbor.component.scheme" . | upper }}
               port: registryctl
             initialDelaySeconds: {{ .Values.registry.controller.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.registry.controller.livenessProbe.periodSeconds }}
@@ -206,6 +234,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /api/health
+              scheme: {{ include "harbor.component.scheme" . | upper }}
               port: registryctl
             initialDelaySeconds: {{ .Values.registry.controller.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.registry.controller.readinessProbe.periodSeconds }}
@@ -242,16 +271,30 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+            {{- if .Values.internalTLS.enabled }}
+            - name: INTERNAL_TLS_ENABLED
+              value: "true"
+            - name: INTERNAL_TLS_KEY_PATH
+              value: /bitnami/certs/tls.key
+            - name: INTERNAL_TLS_CERT_PATH
+              value: /bitnami/certs/tls.crt
+            - name: INTERNAL_TLS_TRUST_CA_PATH
+              value: /bitnami/certs/ca.crt
+            {{- end }}
             {{- if .Values.registry.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           ports:
-            - containerPort: 8080
+            - containerPort: {{ include "harbor.registryCtl.containerPort" . }}
               name: registryctl
           volumeMounts:
             - name: registry-data
               mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
               subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
+            {{- if .Values.internalTLS.enabled }}
+            - name: registry-internal-certs
+              mountPath: /bitnami/certs/
+            {{- end }}
             - name: registry-config
               mountPath: /etc/registry/config.yml
               subPath: config.yml
@@ -288,6 +331,11 @@ spec:
             {{- else }}
             secretName: {{ include "harbor.core" . }}
             {{- end }}
+        {{- if .Values.internalTLS.enabled }}
+        - name: registry-internal-certs
+          secret:
+            secretName: {{ include "harbor.registry.tls.secretName" . }}
+        {{- end }}
         - name: registry-config
           configMap:
             name: {{ include "harbor.registry" . }}

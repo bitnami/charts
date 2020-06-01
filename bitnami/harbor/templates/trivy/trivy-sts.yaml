@@ -31,6 +31,9 @@ spec:
       annotations:
         checksum/configmap-env: {{ include (print $.Template.BasePath "/trivy/trivy-cm-envvars.yaml") . | sha256sum }}
         checksum/secret-env: {{ include (print $.Template.BasePath "/trivy/trivy-secret-envvars.yaml") . | sha256sum }}
+        {{- if and .Values.internalTLS.enabled (not .Values.trivy.tls.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.trivy.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.trivy.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -108,11 +111,15 @@ spec:
             {{- end }}
           ports:
             - name: api-server
-              containerPort: 8080
+              containerPort: {{ template "harbor.trivy.containerPort" . }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.trivy.cacheDir }}
               readOnly: false
+            {{- if .Values.internalTLS.enabled }}
+            - name: trivy-internal-certs
+              mountPath: /bitnami/certs/
+            {{- end }}
             {{- if .Values.trivy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.trivy.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -151,6 +158,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.trivy.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+      {{- if .Values.internalTLS.enabled }}
+        - name: trivy-internal-certs
+          secret:
+            secretName: {{ include "harbor.trivy.tls.secretName" . }}
+      {{- end }}
       {{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}

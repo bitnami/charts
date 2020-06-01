@@ -34,11 +34,14 @@ spec:
         checksum/secret-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-secret-envvars.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
+        {{- if and .Values.internalTLS.enabled (not .Values.core.tls.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.jobservice.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.jobservice.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -93,6 +96,7 @@ spec:
             httpGet:
               path: /api/v1/stats
               port: http
+              scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.jobservice.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jobservice.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.jobservice.livenessProbe.timeoutSeconds }}
@@ -106,6 +110,7 @@ spec:
             httpGet:
               path: /api/v1/stats
               port: http
+              scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.jobservice.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jobservice.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.jobservice.readinessProbe.timeoutSeconds }}
@@ -133,6 +138,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+            {{- if .Values.internalTLS.enabled }}
+            - name: INTERNAL_TLS_ENABLED
+              value: "true"
+            - name: INTERNAL_TLS_KEY_PATH
+              value: /bitnami/certs/tls.key
+            - name: INTERNAL_TLS_CERT_PATH
+              value: /bitnami/certs/tls.crt
+            - name: INTERNAL_TLS_TRUST_CA_PATH
+              value: /bitnami/certs/ca.crt
+            {{- end }}
             {{- if .Values.jobservice.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -150,7 +165,7 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.jobservice.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: 8080
+            - containerPort: {{ include "harbor.jobservice.containerPort" . }}
               name: http
           volumeMounts:
             - name: jobservice-config
@@ -159,6 +174,10 @@ spec:
             - name: job-logs
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+            {{- if .Values.internalTLS.enabled }}
+            - name: jobservice-internal-certs
+              mountPath: /bitnami/certs/
+            {{- end }}
             {{- if .Values.jobservice.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -176,6 +195,11 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.internalTLS.enabled }}
+        - name: jobservice-internal-certs
+          secret:
+            secretName: {{ include "harbor.jobservice.tls.secretName" . }}
+        {{- end }}
       {{- if .Values.jobservice.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraVolumes "context" $) | nindent 6 }}
       {{- end }}

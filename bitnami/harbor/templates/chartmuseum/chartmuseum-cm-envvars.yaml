@@ -12,7 +12,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  PORT: {{ .Values.chartmuseum.port | quote }}
+  PORT: {{ include "harbor.chartmuseum.containerPort" .  | quote }}
+  {{- if .Values.internalTLS.enabled }}
+  TLS_CERT: "/bitnami/certs/tls.crt"
+  TLS_KEY: "/bitnami/certs/tls.key"
+  {{- end }}
   {{- if .Values.chartmuseum.useRedisCache }}
   CACHE: "redis"
   CACHE_REDIS_ADDR: {{ printf "%s:%s" ( include "harbor.redis.host" . ) ( include "harbor.redis.port" . ) | quote }}

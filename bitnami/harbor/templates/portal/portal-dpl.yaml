@@ -28,9 +28,13 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.portal.podLabels "context" $) | nindent 8 }}
         {{- end }}
         app.kubernetes.io/component: portal
-      {{- if .Values.portal.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.portal.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if and .Values.internalTLS.enabled (not .Values.portal.tls.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.portal.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.portal.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.portal.affinity }}
@@ -72,6 +76,7 @@ spec:
             httpGet:
               path: /
               port: http
+              scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.portal.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.portal.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.portal.livenessProbe.timeoutSeconds }}
@@ -85,6 +90,7 @@ spec:
             httpGet:
               path: /
               port: http
+              scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.portal.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.portal.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.portal.readinessProbe.timeoutSeconds }}
@@ -109,10 +115,17 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.portal.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: 8080
+            - containerPort: {{ include "harbor.portal.containerPort" . }}
               name: http
           {{- if .Values.portal.extraVolumeMounts }}
           volumeMounts:
+            - name: portal-config
+              mountPath: /opt/bitnami/nginx/conf/nginx.conf
+              subPath: nginx.conf
+            {{- if .Values.internalTLS.enabled }}
+            - name: portal-internal-certs
+              mountPath: /bitnami/certs/
+            {{- end }}
             {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.portal.sidecars }}
@@ -120,6 +133,13 @@ spec:
         {{- end }}
       {{- if .Values.portal.extraVolumes }}
       volumes:
+        - name: portal-config
+          configMap:
+            name: {{ include "harbor.portal" . }}
+        {{- if .Values.internalTLS.enabled }}
+        - name: portal-internal-certs
+          secret:
+            secretName: {{ include "harbor.portal.tls.secretName" . }}
+        {{- end }}
       {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
-

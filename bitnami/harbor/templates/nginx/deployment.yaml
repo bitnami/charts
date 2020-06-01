@@ -152,8 +152,8 @@ spec:
         {{- if .Values.service.tls.enabled }}
         - name: certificate
           secret:
-            {{- if .Values.service.tls.secretName }}
-            secretName: {{ .Values.service.tls.secretName }}
+            {{- if .Values.service.tls.existingSecret }}
+            secretName: {{ .Values.service.tls.existingSecret }}
             {{- else }}
             secretName: {{ include "harbor.nginx" . }}
             {{- end }}

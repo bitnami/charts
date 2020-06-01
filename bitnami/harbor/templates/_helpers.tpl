@@ -5,7 +5,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 
 {{- define "harbor.autoGenCert" -}}
-  {{- if and .Values.service.tls.enabled (not .Values.service.tls.secretName) -}}
+  {{- if and .Values.service.tls.enabled (not .Values.service.tls.existingSecret) -}}
     {{- printf "true" -}}
   {{- else -}}
     {{- printf "false" -}}
@@ -26,6 +26,231 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- else -}}
     {{- printf "false" -}}
   {{- end -}}
+{{- end -}}
+
+{{/* Scheme for all components except notary because it only support http mode */}}
+{{- define "harbor.component.scheme" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "https" -}}
+  {{- else -}}
+    {{- printf "http" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Chartmuseum component container port */}}
+{{- define "harbor.chartmuseum.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "9443" -}}
+  {{- else -}}
+    {{- printf "9999" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Chartmuseum component service port */}}
+{{- define "harbor.chartmuseum.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "443" -}}
+  {{- else -}}
+    {{- printf "80" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Clair Adapter component container port */}}
+{{- define "harbor.clairAdapter.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Clair Adapter component service port */}}
+{{- define "harbor.clairAdapter.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Core component container port */}}
+{{- define "harbor.core.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Core component service port */}}
+{{- define "harbor.core.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "443" -}}
+  {{- else -}}
+    {{- printf "80" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Jobservice component container port */}}
+{{- define "harbor.jobservice.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Jobservice component service port */}}
+{{- define "harbor.jobservice.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "443" -}}
+  {{- else -}}
+    {{- printf "80" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Portal component container port */}}
+{{- define "harbor.portal.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Portal component service port */}}
+{{- define "harbor.portal.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "443" -}}
+  {{- else -}}
+    {{- printf "80" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Registry server component container port */}}
+{{- define "harbor.registry.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "5443" -}}
+  {{- else -}}
+    {{- printf "5000" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Registry server component service port */}}
+{{- define "harbor.registry.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "5443" -}}
+  {{- else -}}
+    {{- printf "5000" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* RegistryCtl component container port */}}
+{{- define "harbor.registryCtl.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* RegistryCtl component service port */}}
+{{- define "harbor.registryctl.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Trivy component container port */}}
+{{- define "harbor.trivy.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Trivy component service port */}}
+{{- define "harbor.trivy.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Clair Adadpter URL */}}
+{{- define "harbor.clairAdapter.url" -}}
+  {{- printf "%s://%s:%s" (include "harbor.component.scheme" .) (include "harbor.clair" .) (include "harbor.clairAdapter.servicePort" .) -}}
+{{- end -}}
+
+{{/* port is included in this url as a workaround for issue https://github.com/aquasecurity/harbor-scanner-trivy/issues/108 */}}
+{{- define "harbor.core.url" -}}
+  {{- printf "%s://%s:%s" (include "harbor.component.scheme" .) (include "harbor.core" .) (include "harbor.core.servicePort" .) -}}
+{{- end -}}
+
+{{- define "harbor.jobservice.url" -}}
+  {{- printf "%s://%s-jobservice" (include "harbor.component.scheme" .)  (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{- define "harbor.portal.url" -}}
+  {{- printf "%s://%s" (include "harbor.component.scheme" .) (include "harbor.portal" .) -}}
+{{- end -}}
+
+{{- define "harbor.chartmuseum.url" -}}
+  {{- printf "%s://%s" (include "harbor.component.scheme" .) (include "harbor.chartmuseum" .) -}}
+{{- end -}}
+
+{{- define "harbor.registry.url" -}}
+  {{- printf "%s://%s:%s" (include "harbor.component.scheme" .) (include "harbor.registry" .) (include "harbor.registry.servicePort" .) -}}
+{{- end -}}
+
+{{- define "harbor.registryCtl.url" -}}
+  {{- printf "%s://%s:%s" (include "harbor.component.scheme" .) (include "harbor.registry" .) (include "harbor.registryctl.servicePort" .) -}}
+{{- end -}}
+
+{{- define "harbor.tokenService.url" -}}
+  {{- printf "%s/service/token" (include "harbor.core.url" .) -}}
+{{- end -}}
+
+{{- define "harbor.trivy.url" -}}
+  {{- printf "%s://%s:%s" (include "harbor.component.scheme" .) (include "harbor.trivy" .) (include "harbor.trivy.servicePort" .) -}}
+{{- end -}}
+
+{{- define "harbor.core.tls.secretName" -}}
+{{- printf "%s" (coalesce .Values.core.tls.existingSecret (printf "%s-crt" (include "harbor.core" .))) -}}
+{{- end -}}
+
+{{/* Chartmuseum TLS secret name */}}
+{{- define "harbor.chartmuseum.tls.secretName" -}}
+{{- printf "%s" (coalesce .Values.chartmuseum.tls.existingSecret (printf "%s-crt" (include "harbor.chartmuseum" .))) -}}
+{{- end -}}
+
+{{/* Chartmuseum TLS secret name */}}
+{{- define "harbor.clair.tls.secretName" -}}
+{{- printf "%s" (coalesce .Values.clair.tls.existingSecret (printf "%s-crt" (include "harbor.clair" .))) -}}
+{{- end -}}
+
+{{/* Chartmuseum TLS secret name */}}
+{{- define "harbor.jobservice.tls.secretName" -}}
+{{- printf "%s" (coalesce .Values.jobservice.tls.existingSecret (printf "%s-crt" (include "harbor.jobservice" .))) -}}
+{{- end -}}
+
+{{/* Chartmuseum TLS secret name */}}
+{{- define "harbor.portal.tls.secretName" -}}
+{{- printf "%s" (coalesce .Values.portal.tls.existingSecret (printf "%s-crt" (include "harbor.portal" .))) -}}
+{{- end -}}
+
+{{/* Chartmuseum TLS secret name */}}
+{{- define "harbor.registry.tls.secretName" -}}
+{{- printf "%s" (coalesce .Values.registry.tls.existingSecret (printf "%s-crt" (include "harbor.registry" .))) -}}
+{{- end -}}
+
+{{/* Chartmuseum TLS secret name */}}
+{{- define "harbor.trivy.tls.secretName" -}}
+{{- printf "%s" (coalesce .Values.trivy.tls.existingSecret (printf "%s-crt" (include "harbor.trivy" .))) -}}
 {{- end -}}
 
 {{/*
@@ -385,6 +610,10 @@ host:port,pool_size,password
 
 {{- define "harbor.ingress" -}}
   {{- printf "%s-ingress" (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{- define "harbor.ingress-notary" -}}
+  {{- printf "%s-ingress-notary" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{- define "harbor.noProxy" -}}

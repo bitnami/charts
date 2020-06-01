@@ -18,10 +18,10 @@ data:
   POSTGRESQL_DATABASE: {{ include "harbor.database.coreDatabase" . | quote }}
   POSTGRESQL_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
   EXT_ENDPOINT: {{ include "harbor.externalUrl" . | quote }}
-  CORE_URL: {{ printf "http://%s" (include "harbor.core" .) | quote }}
-  JOBSERVICE_URL: {{ printf "http://%s-jobservice" (include "common.names.fullname" .) | quote }}
-  REGISTRY_URL: {{ printf "http://%s:5000" (include "harbor.registry" .) | quote }}
-  TOKEN_SERVICE_URL: {{ printf "http://%s/service/token" (include "harbor.core" .) | quote }}
+  CORE_URL: {{ include "harbor.core.url" . | quote }}
+  JOBSERVICE_URL: {{ include "harbor.jobservice.url" . | quote }}
+  REGISTRY_URL: {{ include "harbor.registry.url" . | quote }}
+  TOKEN_SERVICE_URL: {{ include "harbor.tokenService.url" . | quote }}
   WITH_NOTARY: {{ .Values.notary.enabled | quote }}
   NOTARY_URL: {{ printf "http://%s:4443" (include "harbor.notary-server" .) | quote }}
   CFG_EXPIRATION: "5"
@@ -33,19 +33,18 @@ data:
   CLAIR_DB: {{ include "harbor.database.clairDatabase" . | quote }}
   CLAIR_DB_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
   CLAIR_URL: {{ printf "http://%s:6060" (include "harbor.clair" .) | quote }}
-  CLAIR_ADAPTER_URL: {{ printf "http://%s:8080" (include "harbor.clair" .) | quote }}
+  CLAIR_ADAPTER_URL: {{ include "harbor.clairAdapter.url" . | quote }}
   WITH_TRIVY: {{ .Values.trivy.enabled | quote }}
-  TRIVY_ADAPTER_URL: {{ printf "http://%s:8080" (include "harbor.trivy" .) | quote }}
+  TRIVY_ADAPTER_URL: {{ include "harbor.trivy.url" . | quote }}
   REGISTRY_STORAGE_PROVIDER_NAME: {{ .Values.persistence.imageChartStorage.type | quote }}
   WITH_CHARTMUSEUM: {{ .Values.chartmuseum.enabled | quote }}
-  CHART_REPOSITORY_URL: {{ printf "http://%s" (include "harbor.chartmuseum" .) | quote }}
+  CHART_REPOSITORY_URL: {{ include "harbor.chartmuseum.url" . | quote }}
   LOG_LEVEL: {{ .Values.logLevel | quote }}
   CONFIG_PATH: "/etc/core/app.conf"
   SYNC_REGISTRY: "false"
   CHART_CACHE_DRIVER: "redis"
-  PORTAL_URL: {{ printf "http://%s" (include "harbor.portal" .) | quote }}
-  REGISTRY_CONTROLLER_URL: {{ printf "http://%s:8080" (include "harbor.core" .) | quote }}
-  CLAIR_HEALTH_CHECK_SERVER_URL: {{ printf "http://%s:6061" (include "harbor.clair" .) | quote }}
+  PORTAL_URL: {{ include "harbor.portal.url" . | quote }}
+  REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
   {{- if .Values.core.uaaSecretName }}
   UAA_CA_ROOT: "/etc/core/ca/auth-ca.crt"
