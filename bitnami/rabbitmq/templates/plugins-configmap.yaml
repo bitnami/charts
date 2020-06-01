@@ -9,12 +9,18 @@ data:
     #!/bin/bash
     echo "==> Plugin installation"
     echo $RABBITMQ_PLUGINS_DIR
-    path=/opt/bitnami/rabbitmq/plugins
+    pluginPath=/opt/bitnami/rabbitmq/plugins
+    downloadPath=/tmp/rabbitmq-plugins
+    mkdir $downloadPath
     {{- $totalPlugins := len .Values.communityPlugins }}
     echo "Total plugins defined in chart installation: {{ $totalPlugins }}"
     {{- range $i, $plugin := .Values.communityPlugins }}
-    echo "Installing plugin {{ add $i 1 }} out of {{ $totalPlugins }}: {{ $plugin.name }}".ez
-    curl "{{ $plugin.url }}" --output $path/{{ $plugin.name }}.ez 
+    echo "Installing plugin {{ add $i 1 }} out of {{ $totalPlugins }}: {{ $plugin.name }}"
+    curl -X GET "{{ $plugin.url }}" -L -o $downloadPath/{{ $plugin.name }}.zip
+    unzip $downloadPath/{{ $plugin.name }}.zip -d $downloadPath
+    ls $downloadPath
+    mv $downloadPath/*.ez $pluginPath/
+    rm $downloadPath/*
     rabbitmq-plugins enable "{{ $plugin.name }}"
     {{- end }}
     echo "==> End of Plugin installation"
