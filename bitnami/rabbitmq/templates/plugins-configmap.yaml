@@ -8,12 +8,13 @@ data:
   install-plugins.sh: |
     #!/bin/bash
     echo "==> Plugin installation"
+    echo $RABBITMQ_PLUGINS_DIR
+    path=/opt/bitnami/rabbitmq/plugins
     {{- $totalPlugins := len .Values.communityPlugins }}
     echo "Total plugins defined in chart installation: {{ $totalPlugins }}"
     {{- range $i, $plugin := .Values.communityPlugins }}
-    echo "Installing plugin {{ add $i 1 }} out of {{ $totalPlugins }}: {{ $plugin }}"
-    curl "{{ $plugin.url }}" > "{{ $plugin.name }}".ez 
-    mv "{{ $plugin.name }}" plugins/
+    echo "Installing plugin {{ add $i 1 }} out of {{ $totalPlugins }}: {{ $plugin.name }}".ez
+    curl "{{ $plugin.url }}" --output $path/{{ $plugin.name }}.ez 
     rabbitmq-plugins enable "{{ $plugin.name }}"
     {{- end }}
     echo "==> End of Plugin installation"

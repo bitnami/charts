@@ -569,3 +569,5 @@ extraVolumeMounts: []
 extraVolumes: []
   # - name: extras
   #   emptyDir: {}
+
+communityPlugins: {}
