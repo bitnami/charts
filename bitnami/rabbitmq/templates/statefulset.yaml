@@ -293,12 +293,6 @@ spec:
             name: {{ template "rabbitmq.fullname" . }}-plugins
             defaultMode: 0777
         {{- end }}
-        {{- if .Values.rabbitmq.communityPlugins }}
-        - name: {{ template "rabbitmq.fullname" . }}-plugins
-          configMap:
-            name: {{ template "rabbitmq.fullname" . }}-plugins
-            defaultMode: 0777
-        {{- end }}
         - name: config-volume
           configMap:
             name: {{ template "rabbitmq.fullname" . }}-config
