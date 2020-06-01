@@ -100,7 +100,7 @@ spec:
             {{- if and .Values.persistence.enabled .Values.forceBoot.enabled }}
             if [ -d "{{ .Values.persistence.path }}/mnesia/${RABBITMQ_NODENAME}" ]; then rabbitmqctl force_boot; fi
             {{- end }}
-            {{- if .Values.communityPlugins }}
+            {{- if .Values.rabbitmq.communityPlugins }}
             ./opt/scripts/install-plugins.sh
             {{- end }}
             exec rabbitmq-server
@@ -112,7 +112,7 @@ spec:
           {{- if .Values.extraVolumeMounts }}
 {{ toYaml .Values.extraVolumeMounts | indent 10 }}
           {{- end }}
-          {{- if .Values.communityPlugins }}
+          {{- if .Values.rabbitmq.communityPlugins }}
           - name: {{ template "rabbitmq.fullname" . }}-plugins
             mountPath: /opt/scripts
           {{- end }}
@@ -328,7 +328,7 @@ spec:
             - key: tls.key
               path: server_key.pem
         {{- end }}
-        {{- if .Values.communityPlugins }}
+        {{- if .Values.rabbitmq.communityPlugins }}
         - name: {{ template "rabbitmq.fullname" . }}-plugins
           configMap:
             name: {{ template "rabbitmq.fullname" . }}-plugins

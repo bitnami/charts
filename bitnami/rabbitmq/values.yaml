@@ -106,6 +106,10 @@ rabbitmq:
   ## Plugins to enable
   plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 
+
+  ## Community plugins to install and enable
+  communityPlugins: {}
+
   ## Extra plugins to enable
   ## Use this instead of `plugins` to add new plugins
   extraPlugins: "rabbitmq_auth_backend_ldap"
@@ -569,5 +573,3 @@ extraVolumeMounts: []
 extraVolumes: []
   # - name: extras
   #   emptyDir: {}
-
-communityPlugins: {}

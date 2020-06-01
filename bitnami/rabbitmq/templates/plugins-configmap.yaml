@@ -1,4 +1,4 @@
-{{- if .Values.communityPlugins -}}
+{{- if .Values.rabbitmq.communityPlugins -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,9 +12,9 @@ data:
     pluginPath=/opt/bitnami/rabbitmq/plugins
     downloadPath=/tmp/rabbitmq-plugins
     mkdir $downloadPath
-    {{- $totalPlugins := len .Values.communityPlugins }}
+    {{- $totalPlugins := len .Values.rabbitmq.communityPlugins }}
     echo "Total plugins defined in chart installation: {{ $totalPlugins }}"
-    {{- range $i, $plugin := .Values.communityPlugins }}
+    {{- range $i, $plugin := .Values.rabbitmq.communityPlugins }}
     echo "Installing plugin {{ add $i 1 }} out of {{ $totalPlugins }}: {{ $plugin.name }}"
     curl -X GET "{{ $plugin.url }}" -L -o $downloadPath/{{ $plugin.name }}.zip
     unzip $downloadPath/{{ $plugin.name }}.zip -d $downloadPath
