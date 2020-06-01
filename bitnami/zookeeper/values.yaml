@@ -14,8 +14,8 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.1-debian-10-r26
-  
+  tag: 3.6.1-debian-10-r27
+
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -234,7 +234,7 @@ persistence:
   ## The value is evaluated as a template
   ##
   # existingClaim:
-  
+
   enabled: true
   # storageClass: "-"
   accessModes:

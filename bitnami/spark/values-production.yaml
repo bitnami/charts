@@ -74,7 +74,7 @@ master:
     runAsUser: 1001
 
   ## Annotations to add to the statefulset
-  ## 
+  ##
   ##
   podAnnotations: {}
 
@@ -182,7 +182,7 @@ worker:
     runAsUser: 1001
 
   ## Annotations to add to the statefulset
-  ## 
+  ##
   ##
   podAnnotations: {}
 
