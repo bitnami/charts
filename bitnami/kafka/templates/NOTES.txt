@@ -1,6 +1,41 @@
-{{- if contains .Values.service.type "LoadBalancer" }}
-{{- if not .Values.kafkaPassword }}
--------------------------------------------------------------------------------
+{{- $replicaCount := int .Values.replicaCount }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $fullName := include "kafka.fullname" . }}
+{{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
+{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
+
+###############################################################################
+### ERROR: You enabled external access to Kafka brokers without specifying  ###
+###   the array of load balancer IPs for Kafka brokers.                     ###
+###############################################################################
+
+This deployment will be incomplete until you configure the array of load balancer
+IPs for Kafka brokers. To complete your deployment follow the steps below:
+
+1. Wait for the load balancer IPs (it may take a few minutes for them to be available):
+.
+    kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w
+.
+2. Obtain the load balancer IPs and upgrade your chart:
+.
+    {{- range $i, $e := until $replicaCount }}
+    LOAD_BALANCER_IP_{{ add $i 1 }}="$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullName }}-{{ $i }}-external -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+    {{- end }}
+.
+3. Upgrade you chart:
+.
+    helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+      --set replicaCount={{ $replicaCount }} \
+      --set externalAccess.enabled=true \
+      {{- range $i, $e := until $replicaCount }}
+      --set externalAccess.service.loadBalancerIPs[{{ $i }}]=$LOAD_BALANCER_IP_{{ add $i 1 }} \
+      {{- end }}
+      --set externalAccess.service.type=LoadBalancer
+.
+{{- else }}
+
+{{- if and (or (eq .Values.service.type "LoadBalancer") .Values.externalAccess.enabled) (not .Values.auth.enabled) }}
+---------------------------------------------------------------------------------------------
  WARNING
 
     By specifying "serviceType=LoadBalancer" and not configuring the authentication
@@ -10,50 +45,24 @@
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
     "NodePort". As alternative, you can also configure the Kafka authentication.
 
--------------------------------------------------------------------------------
-{{- end }}
+---------------------------------------------------------------------------------------------
 {{- end }}
 
 ** Please be patient while the chart is being deployed **
 
-Kafka can be accessed via port 9092 on the following DNS name from within your cluster:
+Kafka can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
     {{ template "kafka.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
-To create a topic run the following command:
+To create a a pod that you can use as a Kafka client run the following command:
 
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
-    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-topics.sh --create --zookeeper {{  template "kafka.zookeeper.fullname" . }}:2181 --replication-factor 1 --partitions 1 --topic test
-
-To list all the topics run the following command:
-
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
-    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-topics.sh --list --zookeeper {{  template "kafka.zookeeper.fullname" . }}:2181
-
-To start a kafka producer run the following command:
-
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
-    {{- if .Values.auth.enabled }}
-    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/conf/producer.properties
-    {{- else }}
-    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-producer.sh --broker-list localhost:9092 --topic test
-    {{- end }}
-
-To start a kafka consumer run the following command:
-
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
-    {{- if .Values.auth.enabled }}
-    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --consumer.config /opt/bitnami/kafka/conf/consumer.properties
-    {{- else }}
-    kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
-    {{- end }}
+    kubectl run {{ template "kafka.fullname" . }}-client --rm --tty -i --restart='Never' --image {{ template "kafka.image" . }} --namespace {{ .Release.Namespace }} --command -- bash
 
 {{- if .Values.externalAccess.enabled }}
 
-To connect to your Kafka server from outside the cluster check the following information:
+To connect to your Kafka server from outside the cluster, follow the instructions below:
 
-{{- if contains "NodePort" .Values.externalAccess.service.type }}
-
+{{- if eq "NodePort" .Values.externalAccess.service.type }}
 {{- if .Values.externalAccess.service.domain }}
 
     Kafka brokers domain: Use your provided hostname to reach Kafka brokers, {{ .Values.externalAccess.service.domain }}
@@ -63,53 +72,55 @@ To connect to your Kafka server from outside the cluster check the following inf
     Kafka brokers domain: You can get the external node IP from the Kafka configuration file with the following commands (Check the EXTERNAL listener)
 
         1. Obtain the pod name:
+
         kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
 
         2. Obtain pod configuration:
-        kubectl exec -it KAFKA_POD -- cat /opt/bitnami/kafka/conf/server.properties | grep advertised.listeners
+
+        kubectl exec -it KAFKA_POD -- cat /opt/bitnami/kafka/config/server.properties | grep advertised.listeners
 
 {{- end }}
 
-    Kafka brokers port: You should have a different node port for each Kafka broker. The list of configured node ports is {{ .Values.externalAccess.service.nodePort }}
+    Kafka brokers port: You will have a different node port for each Kafka broker. You can get the list of configured node ports using the command below:
+
+        echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
 
 {{- else if contains "LoadBalancer" .Values.externalAccess.service.type }}
 
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "kafka.fullname" . }}'
+  NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
 
-    Kafka Brokers domain: You will have a different external IP for each Kafka broker. Get the external ip from `-external` suffixed services: `kubectl get svc`.
+    Kafka Brokers domain: You will have a different external IP for each Kafka broker. You can get the list of external IPs using the command below:
+
+        echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+
     Kafka Brokers port: {{ .Values.externalAccess.service.port }}
 
 {{- end }}
 
 {{- end }}
-{{ if .Values.auth.enabled }}
+{{- if .Values.auth.enabled }}
     PRODUCER:
-        kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/conf/producer.properties
+        kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test --producer.config /opt/bitnami/kafka/config/producer.properties
     CONSUMER:
-        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning --consumer.config /opt/bitnami/kafka/conf/consumer.properties
+        kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning --consumer.config /opt/bitnami/kafka/config/consumer.properties
 
   NOTE: In order to connect to the cluster with an external client you need to properly specify the credentials stored in the JAAS file generated in the Kafka image.
         You should get the content of that file and write it in your host machine:
 
         export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka" -o jsonpath="{.items[0].metadata.name}")
-        kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- cat /opt/bitnami/kafka/conf/kafka_jaas.conf >> kafka_jaas.conf
+        kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- cat /opt/bitnami/kafka/config/kafka_jaas.conf >> kafka_jaas.conf
 
         Finally, before using your client you need to export the following env var:
 
         export KAFKA_OPTS="-Djava.security.auth.login.config=/path/to/kafka_jaas.conf"
-{{ else }}
+{{- else }}
     PRODUCER:
         kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test
     CONSUMER:
         kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test --from-beginning
-{{ end }}
-
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
+{{- end }}
 {{- end }}
 
-{{ include "kafka.validateValues" . }}
+{{- include "kafka.checkRollingTags" . }}
+{{- include "kafka.validateValues" . }}

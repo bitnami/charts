@@ -4,6 +4,9 @@ metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
   labels: {{ include "postgresql-ha.labels" . | nindent 4 }}
     app.kubernetes.io/component: pgpool
+    {{- if .Values.pgpool.labels }}
+    {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.labels "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.pgpool.replicaCount }}
   selector:
@@ -13,6 +16,9 @@ spec:
     metadata:
       labels: {{ include "postgresql-ha.labels" . | nindent 8 }}
         app.kubernetes.io/component: pgpool
+        {{- if .Values.pgpool.podLabels }}
+        {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.pgpool.podAnnotations }}
       annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -24,6 +30,7 @@ spec:
       {{- if .Values.pgpool.nodeSelector }}
       nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      priorityClassName: {{ .Values.pgpool.priorityClassName }}
       {{- if .Values.pgpool.tolerations }}
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -67,30 +74,30 @@ spec:
             - name: PGPOOL_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
-            - name: PGPOOL_LDAP_URI
+            - name: LDAP_URI
               value: {{ .Values.ldap.uri | quote }}
-            - name: PGPOOL_LDAP_BASE
+            - name: LDAP_BASE
               value: {{ .Values.ldap.base | quote }}
-            - name: PGPOOL_LDAP_BIND_DN
+            - name: LDAP_BIND_DN
               value: {{ .Values.ldap.binddn | quote }}
-            - name: PGPOOL_LDAP_BIND_PASSWORD
+            - name: LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql-ha.ldapSecretName" . }}
                   key: bind-password
             {{- if .Values.ldap.bslookup }}
-            - name: PGPOOL_LDAP_BASE_LOOKUP
+            - name: LDAP_BASE_LOOKUP
               value: {{ .Values.ldap.bslookup | quote }}
             {{- end }}
             {{- if .Values.ldap.scope }}
-            - name: PGPOOL_LDAP_SCOPE
+            - name: LDAP_SCOPE
               value: {{ .Values.ldap.scope | quote }}
             {{- end }}
             {{- if .Values.ldap.tlsReqcert }}
-            - name: PGPOOL_LDAP_TLS_REQCERT
+            - name: LDAP_TLS_REQCERT
               value: {{ .Values.ldap.tlsReqcert | quote }}
             {{- end }}
-            - name: PGPOOL_LDAP_NSS_INITGROUPS_IGNOREUSERS
+            - name: LDAP_NSS_INITGROUPS_IGNOREUSERS
               value: {{ .Values.ldap.nssInitgroupsIgnoreusers | quote }}
             {{- end }}
             - name: PGPOOL_POSTGRES_USERNAME
@@ -117,6 +124,14 @@ spec:
                   name: {{ include "postgresql-ha.pgpoolSecretName" . }}
                   key: admin-password
             {{- end }}
+            {{- if .Values.pgpool.maxPool }}
+            - name: PGPOOL_MAX_POOL
+              value: {{ .Values.pgpool.maxPool | quote }}
+            {{- end }}
+            {{- if .Values.pgpool.numInitChildren }}
+            - name: PGPOOL_NUM_INIT_CHILDREN
+              value: {{ .Values.pgpool.numInitChildren | quote }}
+            {{- end }}
           ports:
             - name: postgresql
               containerPort: 5432
@@ -125,7 +140,7 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /healthcheck.sh
+                - /opt/bitnami/scripts/pgpool/healthcheck.sh
             initialDelaySeconds: {{ .Values.pgpool.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.pgpool.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.pgpool.livenessProbe.timeoutSeconds }}
@@ -149,13 +164,17 @@ spec:
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if or (.Files.Glob "files/pgool.conf") .Values.pgpool.configuration }}
+            {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration }}
             - name: pgpool-config
               mountPath: /opt/bitnami/pgpool/conf/
             {{- end }}
             {{- if or (.Files.Glob "files/pgpool-entrypoint-initdb.d/*.sh") .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM  }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
+            {{- end }}
+            {{- if .Values.pgpool.initdbScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: postgresql-password
@@ -166,7 +185,7 @@ spec:
               mountPath: /opt/bitnami/pgpool/secrets/
             {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/pgool.conf") .Values.pgpool.configuration }}
+        {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration }}
         - name: pgpool-config
           configMap:
             name: {{ include "postgresql-ha.pgpoolConfigurationCM" . }}
@@ -175,6 +194,11 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ template "postgresql-ha.pgpoolInitdbScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.pgpool.initdbScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template "postgresql-ha.pgpoolInitdbScriptsSecret" . }}
         {{- end }}
         {{- if .Values.postgresql.usePasswordFile }}
         - name: postgresql-password

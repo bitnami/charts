@@ -1,0 +1,62 @@
+{{- if and .Values.cluster.update.addNodes ( or (and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP) ( not .Values.cluster.externalAccess.enabled )) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "redis-cluster.fullname" . }}-cluster-update
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-upgrade
+spec:
+  activeDeadlineSeconds: {{ .Values.cluster.initTimeout }}
+  template:
+    spec:
+      containers:
+        - name: trigger
+          image: "{{ template "redis-cluster.image" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          {{- end }}
+          command: ['/bin/bash', '-c']
+          args:
+            - |
+              . /opt/bitnami/scripts/libnet.sh
+              . /opt/bitnami/scripts/libos.sh
+              {{- if .Values.cluster.externalAccess.enabled }}
+              for nodeIp in $(echo "{{ .Values.cluster.update.newExternalIPs }}" | cut -d [ -f2 | cut -d ] -f 1 ); do
+                while [[ $(redis-cli -h "$nodeIp" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
+                  echo "Node $nodeIp not ready, waiting for all the nodes to be ready..."
+                  sleep 5
+                done
+                redis-cli --cluster add-node "${nodeIp}:${REDIS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}"
+              done
+              {{- else }}
+              for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
+                new_node_index="$(($node - 1))"
+                new_node_ip=$(wait_for_dns_lookup {{ template "redis-cluster.fullname" . }}-"$new_node_index".{{ template "redis-cluster.fullname" . }}-headless 120 5)
+                while [[ $(redis-cli -h "$new_node_ip" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
+                  echo "Node $new_node_ip not ready, waiting for all the nodes to be ready..."
+                  sleep 5
+                done
+                firstNodeIp=$(wait_for_dns_lookup {{ template "redis-cluster.fullname" . }}-0.{{ template "redis-cluster.fullname" . }}-headless 120 5)
+                redis-cli --cluster add-node "${new_node_ip}:${REDIS_PORT}" "${firstNodeIp}:${REDIS_PORT}"
+              done
+              {{- end }}
+          env:
+            {{- if .Values.cluster.externalAccess.enabled }}
+            - name: REDIS_PORT
+              value: {{ .Values.cluster.externalAccess.service.port | quote }}
+            {{- else }}
+            - name: REDIS_PORT
+              value: {{ .Values.redisPort | quote }}
+            {{- end }}
+            {{- if .Values.usePassword }}
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "redis-cluster.secretName" . }}
+                  key: {{ template "redis-cluster.secretPasswordKey" . }}
+            {{- end }}
+      restartPolicy: OnFailure
+{{- end }}

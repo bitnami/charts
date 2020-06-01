@@ -101,6 +101,42 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{- define "harbor.database.clairUsername" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.clairUsername -}}
+        {{- .Values.externalDatabase.clairUsername -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.user -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.notaryServerUsername" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.notaryServerUsername -}}
+        {{- .Values.externalDatabase.notaryServerUsername -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.user -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.notarySignerUsername" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.notarySignerUsername -}}
+        {{- .Values.externalDatabase.notarySignerUsername -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.user -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "harbor.database.rawPassword" -}}
   {{- if eq .Values.postgresql.enabled true -}}
       {{- .Values.postgresql.postgresqlPassword -}}
@@ -109,12 +145,72 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{- define "harbor.database.clairRawPassword" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlPassword -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.clairPassword -}}
+        {{- .Values.externalDatabase.clairPassword -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.password -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.notaryServerRawPassword" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlPassword -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.notaryServerPassword -}}
+        {{- .Values.externalDatabase.notaryServerPassword -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.password -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "harbor.database.notarySignerRawPassword" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
+    {{- .Values.postgresql.postgresqlPassword -}}
+  {{- else -}}
+    {{- if .Values.externalDatabase.notarySignerPassword -}}
+        {{- .Values.externalDatabase.notarySignerPassword -}}
+    {{- else -}}
+        {{- .Values.externalDatabase.password -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "harbor.database.escapedRawPassword" -}}
   {{- include "harbor.database.rawPassword" . | urlquery | replace "+" "%20" -}}
 {{- end -}}
 
+{{- define "harbor.database.escapedClairRawPassword" -}}
+  {{- include "harbor.database.clairRawPassword" . | urlquery | replace "+" "%20" -}}
+{{- end -}}
+
+{{ define "harbor.database.escapedNotaryServerRawPassword" -}}
+  {{- include "harbor.database.notaryServerRawPassword" . | urlquery | replace "+" "%20" -}}
+{{- end -}}
+
+{{- define "harbor.database.escapedNotarySignerRawPassword" -}}
+  {{- include "harbor.database.notarySignerRawPassword" . | urlquery | replace "+" "%20" -}}
+{{- end -}}
+
 {{- define "harbor.database.encryptedPassword" -}}
   {{- include "harbor.database.rawPassword" . | b64enc | quote -}}
+{{- end -}}
+
+{{- define "harbor.database.encryptedClairPassword" -}}
+  {{- include "harbor.database.clairRawPassword" . | b64enc | quote -}}
+{{- end -}}
+
+{{- define "harbor.database.encryptedNotaryServerPassword" -}}
+  {{- include "harbor.database.notaryServerRawPassword" . | b64enc | quote -}}
+{{- end -}}
+
+{{- define "harbor.database.encryptedNotarySignerPassword" -}}
+  {{- include "harbor.database.notarySignerRawPassword" . | b64enc | quote -}}
 {{- end -}}
 
 {{- define "harbor.database.coreDatabase" -}}
@@ -158,15 +254,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.database.clair" -}}
-postgres://{{ template "harbor.database.username" . }}:{{ template "harbor.database.escapedRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.clairDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
+postgres://{{ template "harbor.database.clairUsername" . }}:{{ template "harbor.database.escapedClairRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.clairDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
 {{- end -}}
 
 {{- define "harbor.database.notaryServer" -}}
-postgres://{{ template "harbor.database.username" . }}:{{ template "harbor.database.escapedRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notaryServerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
+postgres://{{ template "harbor.database.notaryServerUsername" . }}:{{ template "harbor.database.escapedNotaryServerRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notaryServerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
 {{- end -}}
 
 {{- define "harbor.database.notarySigner" -}}
-postgres://{{ template "harbor.database.username" . }}:{{ template "harbor.database.escapedRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notarySignerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
+postgres://{{ template "harbor.database.notarySignerUsername" . }}:{{ template "harbor.database.escapedNotarySignerRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notarySignerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
 {{- end -}}
 
 Create a default fully qualified redis name.

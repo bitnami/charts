@@ -1,9 +1,0 @@
-{{- if and (.Files.Glob "files/docker-entrypoint-initdb.d/*") (not .Values.initDBConfigMap) }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "cassandra.fullname" . }}-init-scripts
-  labels: {{- include "cassandra.labels" . | nindent 4 }}
-data:
-{{ (.Files.Glob "files/docker-entrypoint-initdb.d/*").AsConfig | indent 2 }}
-{{- end }}

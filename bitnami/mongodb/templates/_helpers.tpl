@@ -7,6 +7,29 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
+Allow the release namespace to be overridden for multi-namespace deployments in combined charts.
+*/}}
+{{- define "mongodb.namespace" -}}
+    {{- if .Values.global -}}
+        {{- if .Values.global.namespaceOverride }}
+            {{- .Values.global.namespaceOverride -}}
+        {{- else -}}
+            {{- .Release.Namespace -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Release.Namespace -}}
+    {{- end }}
+{{- end -}}
+
+{{- define "mongodb.serviceMonitor.namespace" -}}
+    {{- if .Values.metrics.serviceMonitor.namespace -}}
+        {{- .Values.metrics.serviceMonitor.namespace -}}
+    {{- else -}}
+        {{- template "mongodb.namespace" . -}}
+    {{- end }}
+{{- end -}}
+
+{{/*
 Renders a value that contains template.
 Usage:
 {{ include "mongodb.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
@@ -42,28 +65,6 @@ Create chart name and version as used by the chart label.
 */}}
 {{- define "mongodb.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create the name for the admin secret.
-*/}}
-{{- define "mongodb.adminSecret" -}}
-    {{- if .Values.auth.existingAdminSecret -}}
-        {{- .Values.auth.existingAdminSecret -}}
-    {{- else -}}
-        {{- template "mongodb.fullname" . -}}-admin
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Create the name for the key secret.
-*/}}
-{{- define "mongodb.keySecret" -}}
-    {{- if .Values.auth.existingKeySecret -}}
-        {{- .Values.auth.existingKeySecret -}}
-    {{- else -}}
-        {{- template "mongodb.fullname" . -}}-keyfile
-    {{- end -}}
 {{- end -}}
 
 {{/*
@@ -111,7 +112,6 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
-
 
 {{/*
 Return the proper Docker Image Registry Secret Names
@@ -238,6 +238,53 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
     {{- end -}}
 {{- end -}}
 {{- end -}}
+{{- define "mongodb.storageClassSecondary" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if (or .Values.persistence.storageClass .Values.persistence.storageClassSecondary) -}}
+            {{- if .Values.persistence.storageClassSecondary -}}
+                {{- if (eq "-" .Values.persistence.storageClassSecondary) -}}
+                    {{- printf "storageClassName: \"\"" -}}
+                {{- else }}
+                    {{- printf "storageClassName: %s" .Values.persistence.storageClassSecondary -}}
+                {{- end -}}
+            {{- else }}
+                {{- if (eq "-" .Values.persistence.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+                {{- else }}
+                    {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if (or .Values.persistence.storageClass .Values.persistence.storageClassSecondary) -}}
+        {{- if .Values.persistence.storageClassSecondary -}}
+            {{- if (eq "-" .Values.persistence.storageClassSecondary) -}}
+                {{- printf "storageClassName: \"\"" -}}
+            {{- else }}
+                {{- printf "storageClassName: %s" .Values.persistence.storageClassSecondary -}}
+            {{- end -}}
+        {{- else }}
+            {{- if (eq "-" .Values.persistence.storageClass) -}}
+                {{- printf "storageClassName: \"\"" -}}
+            {{- else }}
+                {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Returns the proper Service name depending if an explicit service name is set
@@ -249,4 +296,17 @@ in the values file. If the name is not explicitly set it will take the "mongodb.
   {{- else -}}
     {{ template "mongodb.fullname" .}}
   {{- end -}}
+{{- end -}}
+
+{{/*
+Returns the proper service account name depending if an explicit service account name is set
+in the values file. If the name is not set it will default to either mongodb.fullname if serviceAccount.create
+is true or default otherwise.
+*/}}
+{{- define "mongodb.serviceAccountName" -}}
+    {{- if .Values.serviceAccount.create -}}
+        {{ default (include "mongodb.fullname" .) .Values.serviceAccount.name }}
+    {{- else -}}
+        {{ default "default" .Values.serviceAccount.name }}
+    {{- end -}}
 {{- end -}}

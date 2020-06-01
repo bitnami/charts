@@ -308,3 +308,24 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 {{- end -}}
 {{- end -}}
+
+
+{{/*
+ Returns the proper service account name depending if an explicit service account name is set
+ in the values file. If the name is not set it will default to either mysql.fullname if serviceAccount.create
+ is true or default otherwise.
+*/}}
+{{- define "mysql.serviceAccountName" -}}
+    {{- if .Values.serviceAccount.create -}}
+        {{ default (include "mysql.fullname" .) .Values.serviceAccount.name }}
+    {{- else -}}
+        {{ default "default" .Values.serviceAccount.name }}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Returns chart secret name. If existingSecret is not set it will default to mysql.fullname
+*/}}
+{{- define "mysql.secretName" -}}
+{{ default (include "mysql.fullname" .) .Values.existingSecret }}
+{{- end -}}

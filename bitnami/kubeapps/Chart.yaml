@@ -1,7 +1,7 @@
 apiVersion: v1
 name: kubeapps
-version: 3.4.6
-appVersion: v1.8.2
+version: 3.6.0
+appVersion: v1.10.0
 description: Kubeapps is a dashboard for your Kubernetes cluster that makes it easy to deploy and manage applications in your cluster using Helm
 icon: https://raw.githubusercontent.com/kubeapps/kubeapps/master/docs/img/logo.png
 keywords:
@@ -15,7 +15,5 @@ sources:
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com
-  - name: prydonius
-    email: adnan@bitnami.com
-# 2.10+ required because we need the install-crd hook type
-tillerVersion: ">=2.10.0"
+# 2.14+ required https://github.com/kubeapps/kubeapps/issues/1185
+tillerVersion: ">=2.14.0"

@@ -45,6 +45,9 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- include "wordpress.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: wordpress
           image: {{ template "wordpress.image" . }}
@@ -84,6 +87,8 @@ spec:
               value: {{ .Values.wordpressLastName | quote }}
             - name: WORDPRESS_HTACCESS_OVERRIDE_NONE
               value: {{ ternary "yes" "no" .Values.allowOverrideNone | quote }}
+            - name: WORDPRESS_HTACCESS_PERSISTENCE_ENABLED
+              value: {{ ternary "yes" "no" .Values.htaccessPersistenceEnabled | quote }}
             - name: WORDPRESS_BLOG_NAME
               value: {{ .Values.wordpressBlogName | quote }}
             - name: WORDPRESS_SKIP_INSTALL
@@ -143,6 +148,8 @@ spec:
               {{- if .Values.livenessProbeHeaders }}
               httpHeaders: {{- toYaml .Values.livenessProbeHeaders | nindent 16 }}
               {{- end }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "wordpress.tplValue" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
@@ -160,6 +167,8 @@ spec:
               {{- if .Values.readinessProbeHeaders }}
               httpHeaders: {{- toYaml .Values.readinessProbeHeaders | nindent 16 }}
               {{- end }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "wordpress.tplValue" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /bitnami/wordpress
@@ -181,7 +190,7 @@ spec:
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           command:
             - /bin/apache_exporter
-            - -scrape_uri
+            - --scrape_uri
             - http://status.localhost:8080/server-status/?auto
           ports:
             - name: metrics

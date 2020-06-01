@@ -3,6 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "minio.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "minio.labels" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}

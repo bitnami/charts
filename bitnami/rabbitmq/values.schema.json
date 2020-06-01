@@ -75,8 +75,8 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "title": "Create Prometheus metrics exporter",
-          "description": "Create a side-car container to expose Prometheus metrics",
+          "title": "Enable Prometheus metrics for RabbitMQ",
+          "description": "Install Prometheus plugin in the RabbitMQ container",
           "form": true
         },
         "serviceMonitor": {

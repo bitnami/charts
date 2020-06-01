@@ -6,6 +6,7 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+#   storageClass: myStorageClass
 
 ## Bitnami Thanos image
 ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
@@ -13,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.11.0-scratch-r6
+  tag: 0.12.2-scratch-r14
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -41,10 +42,12 @@ clusterDomain: cluster.local
 ##
 # objstoreConfig:
 
-## ConfigMap with Objstore Configuration
-## NOTE: This will override objstoreConfig
+## Secret with Objstore Configuration
+## Note: This will override objstoreConfig
 ##
-# existingObjstoreConfigmap:
+# existingObjstoreSecret:
+##  optional item list for specifying a custom Secret key. If so, path should be objstore.yml
+# existingObjstoreSecretItems: []
 
 ## Thanos Querier parameters
 ##
@@ -57,6 +60,11 @@ querier:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Labels to treat as a replica indicator along which data is deduplicated
   ##
   replicaLabel: replica
@@ -65,14 +73,14 @@ querier:
   ##
   dnsDiscovery:
     enabled: true
-    ## Sidecars service name to discover them using DNS discovery 
+    ## Sidecars service name to discover them using DNS discovery
     ## Evaluated as a template.
     # sidecarsService: "{{ .Release.Name }}-prometheus-thanos"
     ##
     ## Sidecars namespace to discover them using DNS discovery
     ## Evaluated as a template.
     # sidecarsNamespace: "{{ .Release.Namespace }}"
-  
+
   ## Statically configure store APIs to connect with Thanos Querier
   ##
   stores: []
@@ -112,7 +120,12 @@ querier:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
+
+  ## Annotations for querier pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -126,7 +139,7 @@ querier:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Querier containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -141,7 +154,7 @@ querier:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
+
   ## Thanos Querier pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -170,6 +183,9 @@ querier:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Querier service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -220,6 +236,57 @@ querier:
     ##
     # maxUnavailable: 1
 
+  ## Configure the ingress resource that allows you to access Thanos Querier
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## Set to true to enable ingress record generation
+    ##
+    enabled: false
+
+    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ##
+    certManager: false
+
+    ## When the ingress is enabled, a host pointing to this will be created
+    ##
+    hostname: thanos.local
+
+    ## Ingress annotations done as key:value pairs
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ##
+    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ##
+    annotations: {}
+
+    ## The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: thanos.local
+    ##   path: /
+
+    ## The tls configuration for additional hostnames to be covered with this ingress record.
+    ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## extraTls:
+    ## - hosts:
+    ##     - thanos.local
+    ##   secretName: thanos.local-tls
+
+    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+    ## -----BEGIN RSA PRIVATE KEY-----
+    ##
+    ## name should line up with a tlsSecret set further up
+    ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+    ##
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ##
+    secrets: []
+    ## - name: thanos.local-tls
+    ##   key:
+
 ## Thanos Bucket Web parameters
 ##
 bucketweb:
@@ -230,6 +297,11 @@ bucketweb:
   ## Log level
   ##
   logLevel: info
+
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
 
   ## Refresh interval to download metadata from remote storage
   ##
@@ -264,7 +336,12 @@ bucketweb:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
+
+  ## Annotations for bucketweb pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -278,7 +355,7 @@ bucketweb:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -322,6 +399,9 @@ bucketweb:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Bucket Web service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -355,6 +435,57 @@ bucketweb:
     ##
     # maxUnavailable: 1
 
+  ## Configure the ingress resource that allows you to access Thanos Bucketweb
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## Set to true to enable ingress record generation
+    ##
+    enabled: false
+
+    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ##
+    certManager: false
+
+    ## When the ingress is enabled, a host pointing to this will be created
+    ##
+    hostname: thanos-bucketweb.local
+
+    ## Ingress annotations done as key:value pairs
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ##
+    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ##
+    annotations: {}
+
+    ## The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: thanos-bucketweb.local
+    ##   path: /
+
+    ## The tls configuration for additional hostnames to be covered with this ingress record.
+    ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## extraTls:
+    ## - hosts:
+    ##     - thanos-bucketweb.local
+    ##   secretName: thanos-bucketweb.local-tls
+
+    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+    ## -----BEGIN RSA PRIVATE KEY-----
+    ##
+    ## name should line up with a tlsSecret set further up
+    ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+    ##
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ##
+    secrets: []
+    ## - name: thanos-bucketweb.local-tls
+    ##   key:
+
 ## Thanos Compactor parameters
 ##
 compactor:
@@ -366,12 +497,17 @@ compactor:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Resolution and Retention flags
   ##
   retentionResolutionRaw: 30d
   retentionResolution5m: 30d
   retentionResolution1h: 10y
-  
+
   ## Minimum age of fresh (non-compacted) blocks
   ## before they are being processed
   ##
@@ -398,7 +534,12 @@ compactor:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
+
+  ## Annotations for compactor pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -412,7 +553,7 @@ compactor:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Compactor containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -427,7 +568,7 @@ compactor:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
+
   ## Thanos Compactor pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -456,6 +597,9 @@ compactor:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Compactor service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -512,6 +656,11 @@ storegateway:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Extra Flags to passed to Thanos Store Gateway
   ##
   extraFlags: {}
@@ -537,7 +686,12 @@ storegateway:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
+
+  ## Annotations for storegateway pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -551,7 +705,7 @@ storegateway:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -566,7 +720,7 @@ storegateway:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
+
   ## Thanos Store Gateway pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -595,6 +749,9 @@ storegateway:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Store Gateway service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -623,6 +780,9 @@ storegateway:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Persistence paramaters
   ##
@@ -648,6 +808,15 @@ storegateway:
     ##
     size: 8Gi
 
+  ## Autoscaling parameters
+  ##
+  autoscaling:
+    enabled: false
+    #  minReplicas: 1
+    #  maxReplicas: 11
+    #  targetCPU: 50
+    #  targetMemory: 50
+
   ## Store Gateway Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -671,6 +840,11 @@ ruler:
   ##
   logLevel: info
 
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+
   ## Dinamically configure Querier APIs using DNS discovery
   ##
   dnsDiscovery:
@@ -679,24 +853,24 @@ ruler:
   ## Alermanager URLs array
   ##
   alertmanagers: []
-  
+
   ## The default evaluation interval to use
   ##
   evalInterval: 1m
 
   ## Used to set the 'ruler_cluster' label
   ##
-  # clusterName: 
+  # clusterName:
 
   ## Extra Flags to passed to Thanos Ruler
   ##
   extraFlags: {}
-  
+
   ## Ruler Configuration
   ## Specify content for ruler.yml
   ##
   # config:
-  
+
   ## ConfigMap with Ruler Configuration
   ## NOTE: This will override ruler.config
   ##
@@ -723,7 +897,12 @@ ruler:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
+
+  ## Annotations for ruler pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
   ## Pod priority
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -737,7 +916,7 @@ ruler:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
+
   ## Thanos Ruler containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -752,7 +931,7 @@ ruler:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
-  
+
   ## Thanos Ruler pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -781,6 +960,9 @@ ruler:
     ## Service type
     ##
     type: ClusterIP
+    ## Thanos Ruler service clusterIP IP
+    ##
+    # clusterIP: None
     ## HTTP Port
     ##
     http:
@@ -809,6 +991,9 @@ ruler:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Persistence paramaters
   ##
@@ -850,7 +1035,7 @@ ruler:
 ##
 metrics:
   enabled: true
-  
+
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -858,68 +1043,14 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
-## Configure the ingress resource that allows you to access Thanos Querier
-## ref: http://kubernetes.io/docs/user-guide/ingress/
-##
-ingress:
-  ## Set to true to enable ingress record generation
-  ##
-  enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
-  ##
-  certManager: false
-
-  ## When the ingress is enabled, a host pointing to this will be created
-  ##
-  hostname: thanos.local
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ##
-  annotations: {}
-
-  ## The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## extraHosts:
-  ## - name: thanos.local
-  ##   path: /
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## extraTls:
-  ## - hosts:
-  ##     - thanos.local
-  ##   secretName: thanos.local-tls
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ##
-  secrets: []
-  ## - name: thanos.local-tls
-  ##   key:
-  ##   certificate:
 
 ## Init Container paramaters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component

@@ -60,7 +60,7 @@ To Access the RabbitMQ Management interface:
 
 {{- if .Values.metrics.enabled }}
 
-To access the RabbitMQ Prometheus metrics, get the RabbitMQ Prometheus exporter URL by running:
+To access the RabbitMQ Prometheus metrics, get the RabbitMQ Prometheus URL by running:
 
     echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.port }}/metrics"
     kubectl port-forward --namespace {{ .Release.Namespace }} {{ template "rabbitmq.fullname" . }}-0 {{ .Values.metrics.port }}:{{ .Values.metrics.port }}

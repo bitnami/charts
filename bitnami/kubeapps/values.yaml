@@ -12,9 +12,9 @@
 ## If you set it to true, Kubeapps will not work with releases installed with Helm 2.
 useHelm3: false
 
-## Enable this feature flag to allow users to discover available namespaces (only the ones they have access).
-## If you set it to true, Kubeapps creates a ClusterRole to be able to list namespaces.
-allowNamespaceDiscovery: false
+## Disable this feature flag to disallow users to discover available namespaces (only the ones they have access).
+## When set to true, Kubeapps creates a ClusterRole to be able to list namespaces.
+allowNamespaceDiscovery: true
 
 ## The frontend service is the main reverse proxy used to access the Kubeapps UI
 ## To expose Kubeapps externally either configure the ingress object below or
@@ -105,7 +105,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.16.1-debian-10-r42
+    tag: 1.17.10-debian-10-r10
   ## Frontend service parameters
   ##
   service:
@@ -119,6 +119,9 @@ frontend:
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     # loadBalancerIP:
+    ## Set a specific NodePort (only when frontend.service.type="NodePort")
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#nodeport
+    # nodePort:
     ## Provide any additional annotations which may be required. This can be used to
     ## set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -185,7 +188,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.8.2-scratch-r0
+    tag: 1.10.0-scratch-r0
   ## Kubeapps assets synchronization tool
   ## Image used to perform chart repository syncs
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-asset-syncer/tags/
@@ -193,7 +196,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 1.8.2-scratch-r0
+    tag: 1.10.0-scratch-r0
   ## Initial charts repo proxies to configure
   ##
   initialReposProxy:
@@ -260,7 +263,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.16.3-debian-10-r40
+    tag: 1.16.3-debian-10-r85
   ## Affinity for hooks' pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -281,7 +284,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 1.8.2-scratch-r0
+    tag: 1.10.0-scratch-r0
   service:
     port: 8080
   resources:
@@ -323,7 +326,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.8.2-scratch-r0
+    tag: 1.10.0-scratch-r0
 
   ## Tiller Proxy service parameters
   ##
@@ -397,7 +400,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 1.8.2-scratch-r0
+    tag: 1.10.0-scratch-r0
   ## Assetsvc service parameters
   ##
   service:
@@ -457,7 +460,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.8.2-debian-10-r26
+    tag: 1.10.0-debian-10-r0
   ## Dashboard service parameters
   ##
   service:
@@ -590,7 +593,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.16.1-debian-10-r42
+  tag: 1.17.10-debian-10-r10
 
 # Auth Proxy for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -603,7 +606,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 5.0.0-debian-10-r19
+    tag: 5.1.0-debian-10-r24
   ## Mandatory parameters
   ##
   provider: ""
@@ -627,6 +630,11 @@ authProxy:
   ## OAuth2 Proxy containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
+  ## Overridable flags for OAuth URIs that Kubeapps uses, useful when serving
+  ## Kubeapps under a sub path
+  oauthLoginURI: /oauth2/start
+  oauthLogoutURI: /oauth2/sign_out
+  ##
   resources:
     ## Default values set based on usage data from running Kubeapps instances
     ## ref: https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
@@ -638,9 +646,8 @@ authProxy:
       cpu: 25m
       memory: 32Mi
 ## Feature flags
-## These are used to switch on in development features or new features not yet released.
+## These are used to switch on in development features or new features which are ready to be released.
 featureFlags:
-  reposPerNamespace: false
-  # The invalidateCache flag must be set to default to true when we next release the Kubeapps app.
-  invalidateCache: false
+  reposPerNamespace: true
+  invalidateCache: true
   operators: false

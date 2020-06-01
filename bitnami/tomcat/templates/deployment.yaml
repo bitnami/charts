@@ -93,7 +93,7 @@ spec:
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "tomcat.fullname" . }}
+            claimName: {{ template "tomcat.pvc" . }}
           {{- else }}
           emptyDir: {}
           {{- end -}}

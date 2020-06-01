@@ -85,7 +85,7 @@ spec:
 {{- include "mariadb.imagePullSecrets" . | indent 6 }}
       initContainers:
         {{- if .Values.master.extraInitContainers }}
-{{ tpl .Values.master.extraInitContainers . | indent 6}}
+        {{- tpl .Values.master.extraInitContainers . | nindent 8 }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.slave.persistence.enabled }}
         - name: volume-permissions
@@ -145,6 +145,17 @@ spec:
             {{- if .Values.slave.extraEnvVars }}
             {{- tpl (toYaml .Values.slave.extraEnvVars) $ | nindent 12 }}
             {{- end }}
+          {{- if or .Values.slave.extraEnvVarsCM .Values.slave.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.slave.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.slave.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.slave.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.slave.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -222,10 +233,7 @@ spec:
               if [ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]; then
                   password_aux=$(cat $MARIADB_ROOT_PASSWORD_FILE)
               fi
-              DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter
-              {{- range .Values.metrics.extraArgs.slave }}
-              {{ . }}
-              {{- end }}
+              DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter {{- range .Values.metrics.extraArgs.slave }} {{ . }} {{- end }}
           ports:
             - name: metrics
               containerPort: 9104

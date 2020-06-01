@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "redis-cluster.fullname" . }}-headless
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp-redis
+      port: {{ .Values.redisPort }}
+      targetPort: tcp-redis
+    - name: tcp-redis-bus
+      port: {{ .Values.cluster.busPort }}
+      targetPort: tcp-redis-bus
+  selector: {{- include "redis-cluster.matchLabels" . | nindent 4 }}
+

@@ -1,19 +1,79 @@
-{{- if .Values.externalAccess.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kafka.fullname" . }}-scripts
   labels: {{- include "kafka.labels" . | nindent 4 }}
 data:
+  {{- $fullname := include "kafka.fullname" . }}
+  {{- $releaseNamespace := .Release.Namespace }}
+  {{- if .Values.externalAccess.autoDiscovery.enabled }}
+  auto-discovery.sh: |-
+    #!/bin/bash
+
+    SVC_NAME="${MY_POD_NAME}-external"
+
+    {{- if eq .Values.externalAccess.service.type "LoadBalancer" }}
+    # Auxiliar functions
+    retry_while() {
+        local -r cmd="${1:?cmd is missing}"
+        local -r retries="${2:-12}"
+        local -r sleep_time="${3:-5}"
+        local return_value=1
+
+        read -r -a command <<< "$cmd"
+        for ((i = 1 ; i <= retries ; i+=1 )); do
+            "${command[@]}" && return_value=0 && break
+            sleep "$sleep_time"
+        done
+        return $return_value
+    }
+    k8s_svc_lb_ip() {
+        local namespace=${1:?namespace is missing}
+        local service=${2:?service is missing}
+        local service_ip=$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+        local service_hostname=$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+
+        if [[ -n ${service_ip} ]]; then
+            echo "${service_ip}"
+        else
+            echo "${service_hostname}"
+        fi
+    }
+    k8s_svc_lb_ip_ready() {
+        local namespace=${1:?namespace is missing}
+        local service=${2:?service is missing}
+        [[ -n "$(k8s_svc_lb_ip "$namespace" "$service")" ]]
+    }
+    # Wait until LoadBalancer IP is ready
+    retry_while "k8s_svc_lb_ip_ready {{ $releaseNamespace }} $SVC_NAME" || exit 1
+    # Obtain LoadBalancer external IP
+    k8s_svc_lb_ip "{{ $releaseNamespace }}" "$SVC_NAME" | tee "$SHARED_FILE"
+    {{- else if eq .Values.externalAccess.service.type "NodePort" }}
+    k8s_svc_node_port() {
+        local namespace=${1:?namespace is missing}
+        local service=${2:?service is missing}
+        local index=${3:-0}
+        local node_port="$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.spec.ports[$index].nodePort}")"
+        kubectl patch svc "$service" -n "$namespace" --type='json' -p="[{\"op\": \"replace\", \"path\": \"/spec/ports/0/targetPort\", \"value\": $node_port}]" >/dev/null 2>&1
+        echo "$node_port"
+    }
+    k8s_svc_node_port "{{ $releaseNamespace }}" "$SVC_NAME" | tee "$SHARED_FILE"
+    {{- end }}
+  {{- end }}
   setup.sh: |-
     #!/bin/bash
 
-    HOSTNAME=$(hostname -s)
-    ID=${HOSTNAME:(-1)}
+    ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+    export KAFKA_CFG_BROKER_ID="$ID"
 
+    {{- if .Values.externalAccess.enabled }}
     # Configure external ip and port
     {{- if eq .Values.externalAccess.service.type "LoadBalancer" }}
-    export EXTERNAL_ACCESS_IP=$(echo '{{ .Values.externalAccess.service.loadBalancerIP }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    {{- if .Values.externalAccess.autoDiscovery.enabled }}
+    export EXTERNAL_ACCESS_IP="$(<${SHARED_FILE})"
+    {{- else }}
+    export EXTERNAL_ACCESS_IP=$(echo '{{ .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    {{- end }}
     export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.port }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
     {{- if .Values.externalAccess.service.domain }}
@@ -21,19 +81,20 @@ data:
     {{- else }}
     export EXTERNAL_ACCESS_IP=$(curl -s https://ipinfo.io/ip)
     {{- end }}
-    export EXTERNAL_ACCESS_PORT=$(echo '{{ .Values.externalAccess.service.nodePort }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    {{- if .Values.externalAccess.autoDiscovery.enabled }}
+    export EXTERNAL_ACCESS_PORT="$(<${SHARED_FILE})"
+    {{- else }}
+    export EXTERNAL_ACCESS_PORT=$(echo '{{ .Values.externalAccess.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    {{- end }}
     {{- end }}
 
     # Configure Kafka internal and external listeners
-    export KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
     export KAFKA_CFG_LISTENERS=INTERNAL://:{{ .Values.service.port }},EXTERNAL://:${EXTERNAL_ACCESS_PORT}
-    export KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
     {{- if .Values.advertisedListeners }}
     export KAFKA_CFG_ADVERTISED_LISTENERS={{ .Values.advertisedListeners }}
     {{- else }}
     export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
     {{- end }}
+    {{- end }}
 
     exec /entrypoint.sh /run.sh
-
-{{- end }}

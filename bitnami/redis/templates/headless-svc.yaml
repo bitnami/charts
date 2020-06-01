@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "redis.fullname" . }}-headless
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
@@ -11,14 +12,14 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-  - name: redis
-    port: {{ .Values.redisPort }}
-    targetPort: redis
-{{- if .Values.sentinel.enabled }}
-  - name: redis-sentinel
-    port: {{ .Values.sentinel.port }}
-    targetPort: redis-sentinel
-{{- end }}
+    - name: redis
+      port: {{ .Values.redisPort }}
+      targetPort: redis
+  {{- if .Values.sentinel.enabled }}
+    - name: redis-sentinel
+      port: {{ .Values.sentinel.port }}
+      targetPort: redis-sentinel
+  {{- end }}
   selector:
     app: {{ template "redis.name" . }}
     release: {{ .Release.Name }}

@@ -26,7 +26,8 @@ spec:
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
     spec:
-{{- include "grafana.imagePullSecrets" . | nindent 6 }}
+      {{- include "grafana.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "grafana.serviceAccountName" . }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
@@ -46,7 +47,7 @@ spec:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: grafana
           image: {{ template "grafana.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
@@ -139,6 +140,9 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "grafana.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: data
         {{- if .Values.persistence.enabled }}
