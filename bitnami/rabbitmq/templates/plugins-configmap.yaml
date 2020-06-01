@@ -1,0 +1,20 @@
+{{- if .Values.communityPlugins -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rabbitmq.fullname" . }}-plugins
+  labels: {{- include "rabbitmq.labels" . | nindent 4 }}
+data:
+  install-plugins.sh: |
+    #!/bin/bash
+    echo "==> Plugin installation"
+    {{- $totalPlugins := len .Values.communityPlugins }}
+    echo "Total plugins defined in chart installation: {{ $totalPlugins }}"
+    {{- range $i, $plugin := .Values.communityPlugins }}
+    echo "Installing plugin {{ add $i 1 }} out of {{ $totalPlugins }}: {{ $plugin }}"
+    curl "{{ $plugin.url }}" > "{{ $plugin.name }}".ez 
+    mv "{{ $plugin.name }}" plugins/
+    rabbitmq-plugins enable "{{ $plugin.name }}"
+    {{- end }}
+    echo "==> End of Plugin installation"
+{{- end -}}
