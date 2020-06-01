@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "mongodb.fullname" . }}-primary
+  namespace: {{ template "mongodb.namespace" . }}
   labels:
     app: {{ template "mongodb.name" . }}
     chart: {{ template "mongodb.chart" . }}
@@ -48,6 +49,7 @@ spec:
 {{- end }}
       {{- end }}
     spec:
+      serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
       {{- if .Values.schedulerName }}
       schedulerName: "{{ .Values.schedulerName }}"
       {{- end }}
@@ -122,7 +124,11 @@ spec:
             value: {{ .Values.replicaSet.name | quote }}
             {{- if .Values.replicaSet.useHostnames }}
           - name: MONGODB_ADVERTISED_HOSTNAME
-            value: "$(MONGODB_POD_NAME).{{ template "mongodb.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+            {{- if .Values.clusterDomain }}
+            value: "$(MONGODB_POD_NAME).{{ template "mongodb.fullname" . }}-headless.{{ template "mongodb.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+            {{- else }}
+            value: "$(MONGODB_POD_NAME).{{ template "mongodb.fullname" . }}-headless.{{ template "mongodb.namespace" . }}"
+            {{- end }}          
             {{- end }}
           {{- if .Values.mongodbUsername }}
           - name: MONGODB_USERNAME
@@ -150,6 +156,9 @@ spec:
               secretKeyRef:
                 name: {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{- else }}{{ template "mongodb.fullname" . }}{{- end }}
                 key: mongodb-replica-set-key
+            {{- else }}
+          - name: ALLOW_EMPTY_PASSWORD
+            value: "yes"
             {{- end }}
           - name: MONGODB_ENABLE_IPV6
           {{- if .Values.mongodbEnableIPv6 }}
@@ -229,7 +238,7 @@ spec:
               secretKeyRef:
                 name: {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{- else }}{{ template "mongodb.fullname" . }}{{- end }}
                 key: mongodb-root-password
-          command: [ 'sh', '-c', '/bin/mongodb_exporter --mongodb.uri mongodb://root:${MONGODB_ROOT_PASSWORD}@localhost:{{ .Values.service.port }}/admin {{ .Values.metrics.extraArgs }}' ]
+          command: [ 'sh', '-c', '/bin/mongodb_exporter --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ .Values.service.port }}/admin {{ .Values.metrics.extraArgs }}' ]
           {{- else }}
           command: [ 'sh', '-c', '/bin/mongodb_exporter --mongodb.uri mongodb://localhost:{{ .Values.service.port }} {{ .Values.metrics.extraArgs }}' ]
           {{- end }}
@@ -284,6 +293,11 @@ spec:
 {{ toYaml .Values.extraVolumes | indent 8}}
         {{- end }}
 {{- if .Values.persistence.enabled }}
+  {{- if.Values.persistence.existingClaim }}
+        - name: datadir
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
+  {{- else }}
   volumeClaimTemplates:
     - metadata:
         name: datadir
@@ -300,6 +314,7 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{ include "mongodb.storageClass" . }}
+  {{- end }}
 {{- else }}
         - name: datadir
           emptyDir: {}

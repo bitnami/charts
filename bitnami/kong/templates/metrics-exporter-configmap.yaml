@@ -1,0 +1,23 @@
+{{- if .Values.metrics.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kong.fullname" . }}-metrics-exporter
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kong.labels" . | nindent 4 }}
+data:
+  exporter.conf: |-
+    # Prometheus metrics
+    server {
+        server_name kong_prometheus_exporter;
+        listen 0.0.0.0:{{ .Values.metrics.service.port }};
+        access_log off;
+        location /metrics {
+            default_type text/plain;
+            content_by_lua_block {
+                 local prometheus = require "kong.plugins.prometheus.exporter"
+                 prometheus:collect()
+            }
+        }
+    }
+{{- end }}

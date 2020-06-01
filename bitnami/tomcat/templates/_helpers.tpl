@@ -31,6 +31,13 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Expand the name of the chart.
+*/}}
+{{- define "tomcat.pvc" -}}
+{{- coalesce .Values.persistence.existingClaim (include "tomcat.fullname" .) -}}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "tomcat.labels" -}}

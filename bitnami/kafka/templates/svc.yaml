@@ -4,25 +4,39 @@ metadata:
   name: {{ template "kafka.fullname" . }}
   labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: kafka
-  annotations: {{ include "kafka.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- if .Values.service.annotations }}
+  annotations: {{- include "kafka.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if eq .Values.service.type "LoadBalancer" }}
   {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
+  {{- if .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
   {{- end }}
   ports:
-    - name: kafka
+    - name: tcp-kafka
       port: {{ .Values.service.port }}
-      {{- if and .Values.service.nodePort (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
-      nodePort: {{ .Values.service.nodePort }}
-      {{- end }}
+      protocol: TCP
       targetPort: kafka
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.kafka)) }}
+      nodePort: {{ .Values.service.nodePorts.kafka }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- if .Values.auth.ssl }}
-    - name: kafka-ssl
-      port: 9093
+    - name: tls-kafka
+      port: {{ .Values.service.sslPort }}
+      protocol: TCP
       targetPort: kafka-ssl
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.ssl)) }}
+      nodePort: {{ .Values.service.nodePorts.ssl }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- end }}
   selector: {{- include "kafka.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka

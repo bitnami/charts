@@ -154,6 +154,17 @@ spec:
             {{- if .Values.master.extraEnvVars }}
             {{- tpl (toYaml .Values.master.extraEnvVars) $ | nindent 12 }}
             {{- end }}
+          {{- if or .Values.master.extraEnvVarsCM .Values.master.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.master.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.master.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.master.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.master.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -238,10 +249,7 @@ spec:
               if [ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]; then
                   password_aux=$(cat $MARIADB_ROOT_PASSWORD_FILE)
               fi
-              DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter
-              {{- range .Values.metrics.extraArgs.master }}
-              {{ . }}
-              {{- end }}
+              DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter {{- range .Values.metrics.extraArgs.master }} {{ . }} {{- end }}
           ports:
             - name: metrics
               containerPort: 9104

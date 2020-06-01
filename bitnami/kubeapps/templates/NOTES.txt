@@ -50,8 +50,7 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 
 {{- $portNumber := include "kubeapps.frontend-port-number" . }}
    echo "Kubeapps URL: http://127.0.0.1:{{ $portNumber }}"
-   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kubeapps.fullname" . }}" -o jsonpath="{.items[0].metadata.name}")
-   kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME {{ $portNumber }}:{{ $portNumber }}
+   kubectl port-forward --namespace {{ .Release.Namespace }} service/{{ template "kubeapps.fullname" . }} {{ $portNumber }}:{{ .Values.frontend.service.port }}
 
 {{- end }}
 {{- end }}

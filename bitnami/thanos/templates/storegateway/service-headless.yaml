@@ -1,4 +1,4 @@
-{{- if .Values.storegateway.enabled -}}
+{{- if and (.Values.storegateway.enabled) (.Values.storegateway.service.additionalHeadless) -}}
 apiVersion: v1
 kind: Service
 metadata:

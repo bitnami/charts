@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "mongodb.fullname" . }}-arbiter
+  namespace: {{ template "mongodb.namespace" . }}
   labels:
     app: {{ template "mongodb.name" . }}
     chart: {{ template "mongodb.chart" . }}
@@ -43,6 +44,7 @@ spec:
 {{ toYaml .Values.podAnnotations | indent 8 }}
       {{- end }}
     spec:
+      serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
       {{- if .Values.schedulerName }}
       schedulerName: "{{ .Values.schedulerName }}"
       {{- end }}
@@ -57,9 +59,8 @@ spec:
       affinity:
 {{ toYaml .Values.affinityArbiter | indent 8 }}
       {{- end -}}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- if (or .Values.nodeSelector .Values.nodeSelectorArbiter) }}
+      nodeSelector: {{ toYaml (default .Values.nodeSelector .Values.nodeSelectorArbiter) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations:
@@ -102,12 +103,16 @@ spec:
           - name: MONGODB_REPLICA_SET_MODE
             value: "arbiter"
           - name: MONGODB_PRIMARY_HOST
-            value: {{ template "mongodb.fullname" . }}
+            value: {{ template "mongodb.serviceName" . }}
           - name: MONGODB_REPLICA_SET_NAME
             value: {{ .Values.replicaSet.name | quote }}
             {{- if .Values.replicaSet.useHostnames }}
           - name: MONGODB_ADVERTISED_HOSTNAME
-            value: "$(MONGODB_POD_NAME).{{ template "mongodb.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+            {{- if .Values.clusterDomain }}
+            value: "$(MONGODB_POD_NAME).{{ template "mongodb.fullname" . }}-headless.{{ template "mongodb.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+            {{- else }}
+            value: "$(MONGODB_POD_NAME).{{ template "mongodb.fullname" . }}-headless.{{ template "mongodb.namespace" . }}"
+            {{- end }}
             {{- end }}
             {{- if .Values.usePassword }}
           - name: MONGODB_PRIMARY_ROOT_PASSWORD
@@ -120,6 +125,9 @@ spec:
               secretKeyRef:
                 name: {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{- else }}{{ template "mongodb.fullname" . }}{{- end }}
                 key: mongodb-replica-set-key
+            {{- else }}
+          - name: ALLOW_EMPTY_PASSWORD
+            value: "yes"
             {{- end }}
           - name: MONGODB_ENABLE_IPV6
           {{- if .Values.mongodbEnableIPv6 }}

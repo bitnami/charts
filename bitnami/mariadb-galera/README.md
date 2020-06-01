@@ -18,9 +18,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.10+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
-
-> Note: Please, note that mariadb-galera container runs as root by default in order to enable LDAP support for now.
 
 ## Installing the Chart
 
@@ -60,7 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the MariaDB Galera chart and their default values.
 
-|              Parameter               |                                                                         Description                                                                         |                              Default                              |
+| Parameter                            | Description                                                                                                                                                 | Default                                                           |
 |--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                                | `nil`                                                             |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                             | `[]` (does not add image pull secrets to deployed pods)           |
@@ -85,7 +84,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `serviceAccount.create`              | Specify whether a ServiceAccount should be created                                                                                                          | `false`                                                           |
 | `serviceAccount.name`                | The name of the ServiceAccount to create                                                                                                                    | Generated using the mariadb-galera.fullname template              |
 | `rbac.create`                        | Specify whether RBAC resources should be created and used                                                                                                   | `false`                                                           |
-| `securityContext.enabled`            | Enable security context                                                                                                                                     | `false`                                                           |
+| `securityContext.enabled`            | Enable security context                                                                                                                                     | `true`                                                            |
 | `securityContext.fsGroup`            | Group ID for the container filesystem                                                                                                                       | `1001`                                                            |
 | `securityContext.runAsUser`          | User ID for the container                                                                                                                                   | `1001`                                                            |
 | `existingSecret`                     | Use existing secret for password details (`rootUser.password`, `db.password`, `galera.mariabackup.password` will be ignored and picked up from this secret) | `nil`                                                             |
@@ -108,11 +107,19 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `ldap.nss_initgroups_ignoreusers`    | LDAP ignored users                                                                                                                                          | `root,nslcd`                                                      |
 | `ldap.scope`                         | LDAP search scope                                                                                                                                           | `nil`                                                             |
 | `ldap.tls_reqcert`                   | LDAP TLS check on server certificates                                                                                                                       | `nil`                                                             |
+| `tls.enabled`                        | Enable TLS support for replication traffic                                                                                                                  | `false`                                                           |
+| `tls.certificatesSecret`             | Name of the secret that contains the certificates                                                                                                           | `nil`                                                             |
+| `tls.certFilename`                   | Certificate filename                                                                                                                                        | `nil`                                                             |
+| `tls.certKeyFilename`                | Certificate key filename                                                                                                                                    | `nil`                                                             |
+| `tls.certCAFilename`                 | CA Certificate filename                                                                                                                                     | `nil`                                                             |
 | `mariadbConfiguration`               | Configuration for the MariaDB server                                                                                                                        | `_default values in the values.yaml file_`                        |
 | `configurationConfigMap`             | ConfigMap with the MariaDB configuration files (Note: Overrides `mariadbConfiguration`). The value is evaluated as a template.                              | `nil`                                                             |
 | `initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                | `nil`                                                             |
 | `initdbScriptsConfigMap`             | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                         | `nil`                                                             |
 | `extraFlags`                         | MariaDB additional command line flags                                                                                                                       | `nil`                                                             |
+| `extraEnvVars`                       | Array containing extra env vars to configure MariaDB Galera replicas                                                                                        | `nil`                                                             |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars to configure MariaDB Galera replicas                                                                                    | `nil`                                                             |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars to configure MariaDB Galera replicas                                                                                       | `nil`                                                             |
 | `annotations[].key`                  | key for the the annotation list item                                                                                                                        | `nil`                                                             |
 | `annotations[].value`                | value for the the annotation list item                                                                                                                      | `nil`                                                             |
 | `replicaCount`                       | Desired number of cluster nodes                                                                                                                             | `3`                                                               |
@@ -263,6 +270,34 @@ CREATE USER 'bitnami'@'localhost' IDENTIFIED VIA pam USING 'mariadb';
 
 With the above example, when the `bitnami` user attempts to login to the MariaDB server, he/she will be authenticated against the LDAP server.
 
+### Securing traffic using TLS
+
+TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+
+- `tls.enabled`: Enable TLS support. Defaults to `false`
+- `tls.certificatesSecret`: Name of the secret that contains the certificates. No defaults.
+- `tls.certFilename`: Certificate filename. No defaults.
+- `tls.certKeyFilename`: Certificate key filename. No defaults.
+- `tls.certCAFilename`: CA Certificate filename. No defaults.
+
+For example:
+
+First, create the secret with the cetificates files:
+
+```console
+kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+```
+
+Then, use the following parameters:
+
+```console
+tls.enabled="true"
+tls.certificatesSecret="certificates-tls-secret"
+tls.certFilename="cert.pem"
+tls.certKeyFilename="cert.key"
+tls.certCAFilename="ca.pem"
+```
+
 ### Initialize a fresh instance
 
 The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
@@ -333,3 +368,16 @@ $ helm upgrade my-release bitnami/mariadb-galera \
 ```
 
 | Note: you need to substitute the placeholders _[ROOT_PASSWORD]_, _[MARIADB_PASSWORD]_ and _[MARIABACKUP_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 1.0.0
+
+The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the MySQL daemon was started as the `mysql` user. From now on, both the container and the MySQL daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
+
+Consequences:
+
+- Backwards compatibility is not guaranteed.
+- Environment variables related to LDAP configuration were renamed removing the `MARIADB_` prefix. For instance, to indicate the LDAP URI to use, you must set `LDAP_URI` instead of `MARIADB_LDAP_URI`
+
+To upgrade to `1.0.0`, install a new release of the MariaDB Galera chart, and migrate your data by creating a backup of the database, and restoring it on the new release. In the link below you can find a guide that explain the whole process:
+
+- [Create And Restore MySQL/MariaDB Backups](https://docs.bitnami.com/general/infrastructure/mariadb/administration/backup-restore-mysql-mariadb/)

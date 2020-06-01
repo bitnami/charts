@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.0-debian-10-r2
+  tag: 0.7.1-debian-10-r68
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -35,12 +35,12 @@ image:
 ## K8s resources type to be observed for new DNS entries by ExternalDNS
 ##
 sources:
-- service
-- ingress
-# - crd
+  # - crd
+  - service
+  - ingress
 
 ## DNS provider where the DNS records will be created. Available providers are:
-## - aws, azure, cloudflare, coredns, designate, digitalocoean, google, infoblox, rfc2136, transip
+## - alibabacloud, aws, azure, cloudflare, coredns, designate, digitalocoean, google, infoblox, rfc2136, transip
 ##
 provider: aws
 
@@ -68,6 +68,23 @@ publishHostIP: false
 ## The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)
 ##
 serviceTypeFilter: []
+
+## Alibaba cloud configuration to be set via arguments/env. variables
+##
+alibabacloud:
+  ## These will be added to /etc/kubernetes/alibaba-cloud.json via secret
+  accessKeyId: ""
+  accessKeySecret: ""
+  regionId: ""
+
+  ## Use an existing secret with key "alibaba-cloud.json" defined.
+  ## This ignores alibabacloud.accessKeyId, and alibabacloud.accessKeySecret
+  ##
+  # secretName:
+
+  ## Zone Filter. Available values are: public, private, or no value for both
+  ##
+  zoneType: ""
 
 ## AWS configuration to be set via arguments/env. variables
 ##
@@ -197,6 +214,21 @@ coredns:
 ## OpenStack Designate provider configuration to be set via arguments/env. variables
 ##
 designate:
+  ## Set Openstack environment variables (optional). Username and password will be saved in a kubernetes secret
+  ## The alternative to this is to export the necessary Openstack environment variables in the extraEnv argument
+  ##
+  # username: "someuser"
+  # password: "p@55w0rd"
+  # authUrl: "https://mykeystone.example.net:5000/v3/"
+  # regionName: "dev"
+  # userDomainName: "development"
+  # projectName: "myteamname"
+
+  ## Use a host path custom CA (optional)
+  ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
+  ##
+  # customCAHostPath: /path/to/cafile
+
   ## Use a custom CA (optional)
   ##
   customCA:
@@ -234,6 +266,13 @@ google:
   serviceAccountSecretKey: "credentials.json"
   serviceAccountKey: ""
 
+## OVH configuration to be set via arguments/env. variables
+##
+ovh:
+  consumerKey: ""
+  applicationKey: ""
+  applicationSecret: ""
+
 ## Infoblox configuration to be set via arguments/env. variables
 ##
 infoblox:
@@ -261,6 +300,8 @@ rfc2136:
   tsigSecretAlg: hmac-sha256
   tsigKeyname: externaldns-key
   tsigAxfr: true
+  ## Possible units [ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
+  minTTL: "0s"
 
 ## PowerDNS configuration to be set via arguments/env. variables
 ##
@@ -268,6 +309,9 @@ pdns:
   apiUrl: ""
   apiPort: "8081"
   apiKey: ""
+  ## Use an external secret where pdns_api_key is defined
+  ##
+  # secretName: ""
 
 ## TransIP configuration to be set via arguments/env. variables
 ##
@@ -278,6 +322,13 @@ transip:
   ##
   ## API key that is authorised for the account
   apiKey: ""
+
+## VinylDNS configuration to be set via arguments/env. variables
+##
+vinyldns:
+  host: ""
+  accessKey: ""
+  secretKey: ""
 
 ## Limit possible target zones by domain suffixes (optional)
 ##
@@ -318,10 +369,6 @@ txtOwnerId: ""
 ## Prefix to create a TXT record with a name following the pattern prefix.<CNAME record>
 ##
 # txtPrefix: ""
-## Load balancer service to be used; ie: custom-istio-namespace/custom-istio-ingressgateway.
-## Omit to use the default (istio-system/istio-ingressgateway)
-##
-istioIngressGateways: []
 
 ## Extra Arguments to passed to external-dns
 ##
@@ -403,18 +450,23 @@ service:
   ##
   annotations: {}
 
-## RBAC parameteres
+## ServiceAccount parameters
+## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  create: true
+  ## Service Account for pods
+  ##
+  name:
+  ## Annotations for the Service Account
+  ##
+  annotations: {}
+
+## RBAC parameteres (clusterRole and clusterRoleBinding)
 ## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 ##
 rbac:
   create: true
-  ## Service Account for pods
-  ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccountName: default
-  ## Annotations for the Service Account
-  ##
-  serviceAccountAnnotations: {}
   ## RBAC API version
   ##
   apiVersion: v1beta1

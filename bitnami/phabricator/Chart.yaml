@@ -1,27 +1,27 @@
 apiVersion: v1
 name: phabricator
-version: 9.0.13
-appVersion: 2020.7.0
+version: 9.1.6
+appVersion: 2020.21.0
 description: Collection of open source web applications that help software companies build better software.
 keywords:
-- phabricator
-- http
-- https
-- web
-- application
-- collaboration
-- project management
-- bug tracking
-- code review
-- wiki
-- git
-- mercurial
-- subversion
+  - phabricator
+  - http
+  - https
+  - web
+  - application
+  - collaboration
+  - project management
+  - bug tracking
+  - code review
+  - wiki
+  - git
+  - mercurial
+  - subversion
 home: https://www.phacility.com/phabricator/
 sources:
-- https://github.com/bitnami/bitnami-docker-phabricator
+  - https://github.com/bitnami/bitnami-docker-phabricator
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/phabricator/img/phabricator-stack-110x117.png

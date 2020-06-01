@@ -38,6 +38,7 @@ spec:
         fsGroup: {{ .Values.master.securityContext.fsGroup }}
         runAsUser: {{ .Values.master.securityContext.runAsUser }}
       {{- end }}
+      serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled }}
       initContainers:
         - name: volume-permissions
@@ -74,7 +75,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
             {{- if .Values.db.user }}
@@ -87,7 +88,7 @@ spec:
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-password
             {{- end }}
             {{- end }}
@@ -105,10 +106,24 @@ spec:
             - name: MYSQL_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-replication-password
             {{- end }}
             {{- end }}
+            {{- if .Values.master.extraEnvVars }}
+            {{- include "mysql.tplValue" (dict "value" .Values.master.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.master.extraEnvVarsCM .Values.master.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.master.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.master.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.master.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.master.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -179,7 +194,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
           command:

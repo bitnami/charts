@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.3-debian-10-r2
+  tag: 3.8.3-debian-10-r92
 
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
@@ -97,11 +97,12 @@ rabbitmq:
   setUlimitNofiles: true
   ulimitNofiles: '65536'
 
-  ## RabbitMQ maximum available scheduler threads and online scheduler threads
+  ## RabbitMQ maximum available scheduler threads and online scheduler threads. By default it will create a thread per CPU detected, with the following parameters you can tune it manually.
   ## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
+  ## ref: https://github.com/bitnami/charts/issues/2189
   ##
-  maxAvailableSchedulers: 2
-  onlineSchedulers: 1
+  # maxAvailableSchedulers: 2
+  # onlineSchedulers: 1
 
   ## Plugins to enable
   plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
@@ -120,6 +121,8 @@ rabbitmq:
 
   loadDefinition:
     enabled: false
+    ## Can be templated if needed, e.g.
+    # secretName: "{{ .Release.Name }}-load-definition"
     secretName: load-definition
 
   ## environment variables to configure rabbitmq
@@ -197,6 +200,10 @@ service:
   ##
   # nodePort: 30672
 
+  ## Set the ExternalIP
+  ##
+  # externalIPs:
+
   ## Set the LoadBalancerIP
   ##
   # loadBalancerIP:
@@ -224,9 +231,16 @@ service:
   ##
   managerPort: 15672
 
+  ## Service labels
+  ##
+  labels: {}
+
   ## Service annotations
+  ## Example:
+  ## annotations:
+  ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+  ##
   annotations: {}
-    # service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
 
   ## Load Balancer sources
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
@@ -270,6 +284,10 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
+  ## selector can be used to match an existing PersistentVolume
+  # selector:
+  #   matchLabels:
+  #     app: my-app
   accessMode: ReadWriteOnce
 
   ## Existing PersistentVolumeClaims
@@ -324,16 +342,28 @@ replicas: 1
 updateStrategy:
   type: RollingUpdate
 
-## Node labels and tolerations for pod assignment
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
-nodeSelector: {}
-tolerations: []
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
 affinity: {}
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: {}
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## Example:
+## podDisruptionBudget:
+##    maxUnavailable: 1
+##    minAvailable: 1
+##
 podDisruptionBudget: {}
-  # maxUnavailable: 1
-  # minAvailable: 1
-## annotations for rabbitmq pods
+## Annotations for Rabbitmq pods
+##
 podAnnotations: {}
 
 ## Configure the ingress resource that allows you to access the
@@ -376,6 +406,7 @@ livenessProbe:
   periodSeconds: 30
   failureThreshold: 6
   successThreshold: 1
+  commandOverride: []
 
 readinessProbe:
   enabled: true
@@ -384,52 +415,20 @@ readinessProbe:
   periodSeconds: 30
   failureThreshold: 3
   successThreshold: 1
+  commandOverride: []
 
+## Prometheus Metrics
+##
 metrics:
   enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/rabbitmq-exporter
-    tag: 0.29.0-debian-10-r43
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## environment variables to configure rabbitmq_exporter
-  ## ref: https://github.com/kbudde/rabbitmq_exporter#configuration
-  env: {}
-  ## Metrics exporter port
   port: 9419
-  ## RabbitMQ address to connect to (from the same Pod, usually the local loopback address).
-  ## If your Kubernetes cluster does not support IPv6, you can change to `127.0.0.1` in order to force IPv4.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/#networking
-  rabbitmqAddress: localhost
-  ## Comma-separated list of extended scraping capabilities supported by the target RabbitMQ server
-  ## ref: https://github.com/kbudde/rabbitmq_exporter#extended-rabbitmq-capabilities
-  capabilities: "bert,no_sort"
-  resources: {}
-  annotations:
+  plugins: "rabbitmq_prometheus"
+  ## Prometheus pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9419"
-
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 15
-    timeoutSeconds: 5
-    periodSeconds: 30
-    failureThreshold: 6
-    successThreshold: 1
-
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    timeoutSeconds: 5
-    periodSeconds: 30
-    failureThreshold: 3
-    successThreshold: 1
+    prometheus.io/port: "{{ .Values.metrics.port }}"
 
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
@@ -460,69 +459,63 @@ metrics:
     enabled: false
     additionalLabels: {}
     namespace: ""
+    ## List of rules, used as template by Helm.
+    ## These are just examples rules inspired from https://awesome-prometheus-alerts.grep.to/rules.html
+    # rules:
+    #   - alert: RabbitmqDown
+    #     expr: rabbitmq_up{service="{{ template "rabbitmq.fullname" . }}"} == 0
+    #     for: 5m
+    #     labels:
+    #       severity: error
+    #     annotations:
+    #       summary: Rabbitmq down (instance {{ "{{ $labels.instance }}" }})
+    #       description: RabbitMQ node down
+    #   - alert: ClusterDown
+    #     expr: |
+    #       sum(rabbitmq_running{service="{{ template "rabbitmq.fullname" . }}"})
+    #       < {{ .Values.replicas }}
+    #     for: 5m
+    #     labels:
+    #       severity: error
+    #     annotations:
+    #       summary: Cluster down (instance {{ "{{ $labels.instance }}" }})
+    #       description: |
+    #           Less than {{ .Values.replicas }} nodes running in RabbitMQ cluster
+    #           VALUE = {{ "{{ $value }}" }}
+    #   - alert: ClusterPartition
+    #     expr: rabbitmq_partitions{service="{{ template "rabbitmq.fullname" . }}"} > 0
+    #     for: 5m
+    #     labels:
+    #       severity: error
+    #     annotations:
+    #       summary: Cluster partition (instance {{ "{{ $labels.instance }}" }})
+    #       description: |
+    #           Cluster partition
+    #           VALUE = {{ "{{ $value }}" }}
+    #   - alert: OutOfMemory
+    #     expr: |
+    #       rabbitmq_node_mem_used{service="{{ template "rabbitmq.fullname" . }}"}
+    #       / rabbitmq_node_mem_limit{service="{{ template "rabbitmq.fullname" . }}"}
+    #       * 100 > 90
+    #     for: 5m
+    #     labels:
+    #       severity: warning
+    #     annotations:
+    #       summary: Out of memory (instance {{ "{{ $labels.instance }}" }})
+    #       description: |
+    #           Memory available for RabbmitMQ is low (< 10%)\n  VALUE = {{ "{{ $value }}" }}
+    #           LABELS: {{ "{{ $labels }}" }}
+    #   - alert: TooManyConnections
+    #     expr: rabbitmq_connectionsTotal{service="{{ template "rabbitmq.fullname" . }}"} > 1000
+    #     for: 5m
+    #     labels:
+    #       severity: warning
+    #     annotations:
+    #       summary: Too many connections (instance {{ "{{ $labels.instance }}" }})
+    #       description: |
+    #           RabbitMQ instance has too many connections (> 1000)
+    #           VALUE = {{ "{{ $value }}" }}\n  LABELS: {{ "{{ $labels }}" }}
     rules: []
-      ## List of reules, used as template by Helm.
-      ## These are just examples rules inspired from https://awesome-prometheus-alerts.grep.to/rules.html
-      ## Please adapt them to your needs.
-      ## Make sure to constraint the rules to the current rabbitmq service.
-      ## Also make sure to escape what looks like helm template.
-      # - alert: RabbitmqDown
-      #   expr: rabbitmq_up{service="{{ template "rabbitmq.fullname" . }}"} == 0
-      #   for: 5m
-      #   labels:
-      #     severity: error
-      #   annotations:
-      #     summary: Rabbitmq down (instance {{ "{{ $labels.instance }}" }})
-      #     description: RabbitMQ node down
-
-      # - alert: ClusterDown
-      #   expr: |
-      #     sum(rabbitmq_running{service="{{ template "rabbitmq.fullname" . }}"})
-      #     < {{ .Values.replicas }}
-      #   for: 5m
-      #   labels:
-      #     severity: error
-      #   annotations:
-      #     summary: Cluster down (instance {{ "{{ $labels.instance }}" }})
-      #     description: |
-      #         Less than {{ .Values.replicas }} nodes running in RabbitMQ cluster
-      #         VALUE = {{ "{{ $value }}" }}
-
-      # - alert: ClusterPartition
-      #   expr: rabbitmq_partitions{service="{{ template "rabbitmq.fullname" . }}"} > 0
-      #   for: 5m
-      #   labels:
-      #     severity: error
-      #   annotations:
-      #     summary: Cluster partition (instance {{ "{{ $labels.instance }}" }})
-      #     description: |
-      #         Cluster partition
-      #         VALUE = {{ "{{ $value }}" }}
-
-      # - alert: OutOfMemory
-      #   expr: |
-      #     rabbitmq_node_mem_used{service="{{ template "rabbitmq.fullname" . }}"}
-      #     / rabbitmq_node_mem_limit{service="{{ template "rabbitmq.fullname" . }}"}
-      #     * 100 > 90
-      #   for: 5m
-      #   labels:
-      #     severity: warning
-      #   annotations:
-      #     summary: Out of memory (instance {{ "{{ $labels.instance }}" }})
-      #     description: |
-      #         Memory available for RabbmitMQ is low (< 10%)\n  VALUE = {{ "{{ $value }}" }}
-      #         LABELS: {{ "{{ $labels }}" }}
-
-      # - alert: TooManyConnections
-      #   expr: rabbitmq_connectionsTotal{service="{{ template "rabbitmq.fullname" . }}"} > 1000
-      #   for: 5m
-      #   labels:
-      #     severity: warning
-      #   annotations:
-      #     summary: Too many connections (instance {{ "{{ $labels.instance }}" }})
-      #     description: |
-      #         RabbitMQ instance has too many connections (> 1000)
-      #         VALUE = {{ "{{ $value }}" }}\n  LABELS: {{ "{{ $labels }}" }}
 
 ##
 ## Init containers parameters:
@@ -552,20 +545,24 @@ forceBoot:
 
 ## Optionally specify extra secrets to be created by the chart.
 ## This can be useful when combined with load_definitions to automatically create the secret containing the definitions to be loaded.
+## Example:
+## extraSecrets:
+##   load-definition:
+##     load_definition.json: |
+##       {
+##         ...
+##       }
 ##
 extraSecrets: {}
-  # load-definition:
-  #   load_definition.json: |
-  #     {
-  #       ...
-  #     }
 
-## Adding optionals volumeMount
+## extraVolumes and extraVolumeMounts allows you to mount other volumes
+## Examples:
+## extraVolumeMounts:
+##   - name: extras
+##     mountPath: /usr/share/extras
+##     readOnly: true
+## extraVolumes:
+##   - name: extras
+##     emptyDir: {}
 extraVolumeMounts: []
-  # - name: extras
-  #   mountPath: /usr/share/extras
-  #   readOnly: true
-
 extraVolumes: []
-  # - name: extras
-  #   emptyDir: {}

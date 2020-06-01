@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "zookeeper.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     role: zookeeper
@@ -25,6 +26,12 @@ spec:
       name: {{ template "zookeeper.fullname" . }}
       labels: {{- include "zookeeper.labels" . | nindent 8 }}
         app.kubernetes.io/component: zookeeper
+        {{- if .Values.podLabels }}
+        {{- include "zookeeper.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      annotations: {{- include "zookeeper.podAnnotations" . | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.serviceAccount.create }}
@@ -42,6 +49,9 @@ spec:
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "zookeeper.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
@@ -139,17 +149,69 @@ spec:
             - name: JVMFLAGS
               value: {{ .Values.jvmFlags | quote }}
             {{- end }}
+            {{- if .Values.metrics.enabled }}
+            - name: ZOO_ENABLE_PROMETHEUS_METRICS
+              value: "yes"
+            - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
+              value: {{ .Values.metrics.port | quote }}
+            {{- end }}
+            {{- if .Values.service.tls.client_enable }}
+            - name: ZOO_TLS_CLIENT_ENABLE
+              value: {{ .Values.service.tls.client_enable | quote }}
+            - name: ZOO_TLS_CLIENT_KEYSTORE_FILE
+              value: {{ .Values.service.tls.client_keystore_path | quote }}
+            - name: ZOO_TLS_CLIENT_KEYSTORE_PASSWORD
+              value: {{ .Values.service.tls.client_keystore_password | quote }}
+            - name: ZOO_TLS_CLIENT_TRUSTSTORE_FILE
+              value: {{ .Values.service.tls.client_truststore_path | quote }}
+            - name: ZOO_TLS_CLIENT_TRUSTSTORE_PASSWORD
+              value: {{ .Values.service.tls.client_truststore_password | quote }}
+            {{ end }}
+            {{- if .Values.service.tls.quorum_enable }}
+            - name: ZOO_TLS_QUORUM_ENABLE
+              value: {{ .Values.service.tls.quorum_enable | quote }}
+            - name: ZOO_TLS_QUORUM_KEYSTORE_FILE
+              value: {{ .Values.service.tls.quorum_keystore_path | quote }}
+            - name: ZOO_TLS_QUORUM_KEYSTORE_PASSWORD
+              value: {{ .Values.service.tls.quorum_keystore_password | quote }}
+            - name: ZOO_TLS_QUORUM_TRUSTSTORE_FILE
+              value: {{ .Values.service.tls.quorum_truststore_path | quote }}
+            - name: ZOO_TLS_QUORUM_TRUSTSTORE_PASSWORD
+              value: {{ .Values.service.tls.quorum_truststore_password | quote }}
+            {{ end }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            {{- if .Values.extraEnvVars }}
+            {{- toYaml .Values.extraEnvVars | nindent 12 }}
+            {{- end }}
           ports:
+            {{ if not .Values.service.tls.disable_base_client_port }}
             - name: client
               containerPort: {{ .Values.service.port }}
+            {{ end }}
+            {{ if .Values.service.tls.client_enable }}
+            - name: client-tls
+              containerPort: {{ .Values.service.tls.client_port }}
+            {{ end }}
             - name: follower
               containerPort: {{ .Values.service.followerPort }}
             - name: election
               containerPort: {{ .Values.service.electionPort }}
+            {{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.metrics.port }}
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
+              {{ if not .Values.service.tls.disable_base_client_port }}
               port: client
+              {{ else }}
+              port: client-tls
+              {{ end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -159,7 +221,11 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
+              {{ if not .Values.service.tls.disable_base_client_port }}
               port: client
+              {{ else }}
+              port: client-tls
+              {{ end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -174,17 +240,27 @@ spec:
               mountPath: /opt/bitnami/zookeeper/conf/zoo.cfg
               subPath: zoo.cfg
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
         {{- if .Values.config }}
         - name: config
           configMap:
             name: {{ template "zookeeper.fullname" . }}
         {{- end }}
-        {{- if not .Values.persistence.enabled }}
+        {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ printf "%s" (tpl .Values.persistence.existingClaim .) }}
+        {{- else if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
         {{- end }}
-  {{- if .Values.persistence.enabled }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+  {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim )}}
   volumeClaimTemplates:
     - metadata:
         name: data

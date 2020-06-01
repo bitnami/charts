@@ -14,7 +14,8 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.4.12-debian-10-r42
+  tag: 10.4.13-debian-10-r8
+
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -91,6 +92,22 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
   # name:
 
+## An array to add extra environment variables
+## For example:
+## extraEnvVars:
+##  - name: TZ
+##    value: "Europe/Paris"
+##
+extraEnvVars:
+
+## ConfigMap with extra env vars:
+##
+extraEnvVarsCM:
+
+## Secret with extra env vars:
+##
+extraEnvVarsSecret:
+
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -103,7 +120,7 @@ rbac:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 securityContext:
-  enabled: false
+  enabled: true
   fsGroup: 1001
   runAsUser: 1001
 
@@ -177,6 +194,25 @@ ldap:
   nss_initgroups_ignoreusers: root,nslcd
   scope:
   tls_reqcert:
+
+## TLS configuration
+##
+tls:
+  ## Enable TLS
+  ##
+  enabled: false
+  ## Name of the secret that contains the certificates
+  ##
+  # certificatesSecret:
+  ## Certificate filename
+  ##
+  # certFilename:
+  ## Certificate Key filename
+  ##
+  # certKeyFilename:
+  ## CA Certificate filename
+  ##
+  # certCAFilename:
 
 ## Configure MariaDB with a custom my.cnf file
 ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
@@ -482,7 +518,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r45
+    tag: 0.12.1-debian-10-r121
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

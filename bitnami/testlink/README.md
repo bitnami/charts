@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -83,11 +83,15 @@ The following table lists the configurable parameters of the TestLink chart and 
 | `ingress.secrets[0].name`           | TLS Secret Name                                                                                       | `nil`                                                        |
 | `ingress.secrets[0].certificate`    | TLS Secret Certificate                                                                                | `nil`                                                        |
 | `ingress.secrets[0].key`            | TLS Secret Key                                                                                        | `nil`                                                        |
+| `externalDatabase.create`           | Create user and db on external instance                                                               | `false`                                                      |
+| `externalDatabase.privileges`       | Privileges granted to db user                                                                         | `nil`                                                        |
+| `externalDatabase.rootUser`         | DB admin username                                                                                     | `nil`                                                        |
+| `externalDatabase.rootPassword`     | DB admin password                                                                                     | `nil`                                                        |
 | `externalDatabase.host`             | Host of the external database                                                                         | `nil`                                                        |
 | `externalDatabase.port`             | Port of the external database                                                                         | `3306`                                                       |
-| `externalDatabase.user`             | Existing username in the external db                                                                  | `bn_testlink`                                                |
+| `externalDatabase.user`             | Existing or to be created username in the external db                                                 | `bn_testlink`                                                |
 | `externalDatabase.password`         | Password for the above username                                                                       | `nil`                                                        |
-| `externalDatabase.database`         | Name of the existing database                                                                         | `bitnami_testlink`                                           |
+| `externalDatabase.database`         | Name of the existing or to be created database                                                        | `bitnami_testlink`                                           |
 | `mariadb.enabled`                   | Whether to use the MariaDB chart                                                                      | `true`                                                       |
 | `mariadb.db.name`                   | Database name to create                                                                               | `bitnami_testlink`                                           |
 | `mariadb.db.user`                   | Database user to create                                                                               | `bn_testlink`                                                |

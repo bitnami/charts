@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -51,10 +51,10 @@ The command removes all the Kubernetes components associated with the chart and 
 The following table lists the configurable parameters of the PrestaShop chart and their default values.
 
 | Parameter                            | Description                                                                                             | Default                                                      |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+|--------------------------------------|---------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                            | `nil`                                                        |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                         | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                           | `nil`                                                        |
 | `image.registry`                     | PrestaShop image registry                                                                               | `docker.io`                                                  |
 | `image.repository`                   | PrestaShop image name                                                                                   | `bitnami/prestashop`                                         |
 | `image.tag`                          | PrestaShop image tag                                                                                    | `{TAG_NAME}`                                                 |
@@ -114,13 +114,15 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `persistence.accessMode`             | PVC Access Mode for PrestaShop volume                                                                   | `ReadWriteOnce`                                              |
 | `persistence.size`                   | PVC Storage Request for PrestaShop volume                                                               | `8Gi`                                                        |
 | `resources`                          | CPU/Memory resource requests/limits                                                                     | Memory: `512Mi`, CPU: `300m`                                 |
-| `livenessProbe.enabled`              | Would you like a livenessProbe to be enabled                                                                                                               | `true`                                                       |
+| `livenessProbe.enabled`              | Would you like a livenessProbe to be enabled                                                            | `true`                                                       |
+| `livenessProbe.path`                 | Path to perform the liveness probe                                                                      | `/login`                                                     |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                | 600                                                          |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                                          | 3                                                            |
 | `livenessProbe.timeoutSeconds`       | When the probe times out                                                                                | 5                                                            |
 | `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.              | 6                                                            |
 | `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.            | 1                                                            |
-| `readinessProbe.enabled`             | Would you like a readinessProbe to be enabled                                                                                                               | `true`                                                       |
+| `readinessProbe.enabled`             | Would you like a readinessProbe to be enabled                                                           | `true`                                                       |
+| `readinessProbe.path`                | Path to perform the readiness probe                                                                     | `/login`                                                     |
 | `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                               | 30                                                           |
 | `readinessProbe.periodSeconds`       | How often to perform the probe                                                                          | 3                                                            |
 | `readinessProbe.timeoutSeconds`      | When the probe times out                                                                                | 5                                                            |

@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.2.4-debian-10-r2
+  tag: 4.2.7-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -688,6 +688,11 @@ service:
   ## Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
+  ## Specify the sessionAffinity setting for the service. Can be "None" or "ClientIP".
+  ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
 
 ## Configure extra options for liveness and readiness probes
 ## This applies to all the MongoDB in the sharded cluster
@@ -716,7 +721,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.10.0-debian-10-r42
+    tag: 0.11.0-debian-10-r32
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

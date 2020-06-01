@@ -3,6 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ template "redis.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
@@ -16,6 +17,6 @@ rules:
     resourceNames: [{{ template "redis.fullname" . }}]
 {{- end -}}
 {{- if .Values.rbac.role.rules }}
-{{ toYaml .Values.rbac.role.rules | indent 2 }}
+{{- toYaml .Values.rbac.role.rules | nindent 2 }}
 {{- end -}}
 {{- end -}}
