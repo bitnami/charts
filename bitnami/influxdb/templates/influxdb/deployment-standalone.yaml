@@ -66,7 +66,6 @@ spec:
             - /bin/bash
             - -c
             - |
-              {{- if .Values.persistence.enabled }}
               mkdir -p /bitnami/influxdb/{data,meta,wal}
               chmod 700 /bitnami/influxdb/{data,meta,wal}
               find /bitnami/influxdb/{data,meta,wal} -mindepth 1 -maxdepth 1 | \
@@ -74,7 +73,6 @@ spec:
                 xargs chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
                 xargs chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }}
-              {{- end }}
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:
