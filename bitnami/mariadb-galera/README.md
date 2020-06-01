@@ -356,7 +356,7 @@ extraContainers:
 
 > Note: Some of these procedures can lead to data loss, always make a backup beforehand.
 
-To restart the cluster you need to check state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it.
+To restart the cluster you need to check the state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it is safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it.
 
 #### Checking `safe_to_boostrap`
 
@@ -414,7 +414,7 @@ seqno:   25
 safe_to_bootstrap: 1
 ```
 
-Several cases can happen:
+There are two possible scenarios:
 
 #### Only one node with `safe_to_bootstrap: 1`
 
@@ -462,7 +462,7 @@ $ helm upgrade my-release bitnami/mariadb-galera \
 
 ### To 2.0.0
 
-In this version the bootstraping was improved. Nnow it is possible to indicate a node where to bootstrap from, and force the parameter `safe_to_bootstrap`. This allows to handle situations where the cluster was not cleanly stopped. It should be safe to upgrade from v1 of the chart, but it is wise to create always a backup before performing operations where there is a risk of data loss.
+In this version the bootstraping was improved. Now it is possible to indicate a node where to bootstrap from, and force the parameter `safe_to_bootstrap`. This allows to handle situations where the cluster was not cleanly stopped. It should be safe to upgrade from v1 of the chart, but it is wise to create always a backup before performing operations where there is a risk of data loss.
 
 ### To 1.0.0
 
