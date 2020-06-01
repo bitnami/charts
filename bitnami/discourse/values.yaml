@@ -249,7 +249,7 @@ postgresql:
   enabled: true
   postgresqlUsername: bn_discourse
   postgresqlPostgresPassword:
-  postgresqlPassword:
+  postgresqlPassword: ""
   postgresqlDatabase: bitnami_discourse
   persistence:
     enabled: false
