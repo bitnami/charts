@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.12.2-scratch-r12
+  tag: 0.12.2-scratch-r15
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -120,7 +120,7 @@ querier:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for querier pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -288,6 +288,39 @@ querier:
     ##   key:
     ##   certificate:
 
+    ## Create an ingress object for the GRPC service. This requires an HTTP/2
+    ## capable Ingress controller (eg. traefik using AWS NLB). Example annotations
+    ## - ingress.kubernetes.io/protocol: h2c
+    ## - service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    ## - service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    ## For more information see https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/
+    ## and also the documentation for your ingress controller.
+    ##
+    ## The options that are accepted are identical to the HTTP one listed above
+    grpc:
+      enabled: false
+      certManager: false
+      hostname: thanos-grpc.local
+      annotations: {}
+
+      ## - hosts:
+      ##     - thanos.local
+      ##   secretName: thanos-grpc.local-tls
+
+      ## extraHosts:
+      ## - name: thanos-grpc.local
+      ##   path: /
+
+      ## extraTls:
+      ## - hosts:
+      ##     - thanos-grpc.local
+      ##   secretName: thanos-grpc.local-tls
+
+      secrets: []
+      ## - name: thanos-grpc.local-tls
+      ##   key:
+      ##   certificate:
+
 ## Thanos Bucket Web parameters
 ##
 bucketweb:
@@ -337,7 +370,7 @@ bucketweb:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for bucketweb pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -536,7 +569,7 @@ compactor:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for compactor pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -688,7 +721,7 @@ storegateway:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for storegateway pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -899,7 +932,7 @@ ruler:
   ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## Annotations for ruler pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/

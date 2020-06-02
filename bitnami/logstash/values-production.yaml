@@ -103,7 +103,7 @@ output: |-
 # existingConfiguration:
 
 ## Array to add extra volumes (evaluated as a template)
-## extraVolumes: 
+## extraVolumes:
 ##   - name: myvolume
 ##     configMap:
 ##       name: myconfigmap
@@ -111,7 +111,7 @@ extraVolumes: []
 
 ## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
 ##
-## extraVolumeMounts: 
+## extraVolumeMounts:
 ##   - mountPath: /opt/bitnami/desired-path
 ##     name: myvolume
 ##     readOnly: true

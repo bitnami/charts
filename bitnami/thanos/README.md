@@ -160,6 +160,17 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.ingress.secrets[0].name`               | TLS Secret Name                                                                                        | `nil`                                                   |
 | `querier.ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                                 | `nil`                                                   |
 | `querier.ingress.secrets[0].key`                | TLS Secret Key                                                                                         | `nil`                                                   |
+| `querier.ingress.grpc.enabled`                  | Enable ingress controller resource (GRPC)                                                              | `false`                                                 |
+| `querier.ingress.grpc.certManager`              | Add annotations for cert-manager (GRPC)                                                                | `false`                                                 |
+| `querier.ingress.grpc.hostname`                 | Default host for the ingress resource (GRPC)                                                           | `thanos.local`                                          |
+| `querier.ingress.grpc.annotations`              | Ingress annotations (GRPC)                                                                             | `[]`                                                    |
+| `querier.ingress.grpc.extraHosts[0].name`       | Additional hostnames to be covered (GRPC)                                                              | `nil`                                                   |
+| `querier.ingress.grpc.extraHosts[0].path`       | Additional hostnames to be covered (GRPC)                                                              | `nil`                                                   |
+| `querier.ingress.grpc.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered (GRPC)                                        | `nil`                                                   |
+| `querier.ingress.grpc.extraTls[0].secretName`   | TLS configuration for additional hostnames to be covered (GRPC)                                        | `nil`                                                   |
+| `querier.ingress.grpc.secrets[0].name`          | TLS Secret Name (GRPC)                                                                                 | `nil`                                                   |
+| `querier.ingress.grpc.secrets[0].certificate`   | TLS Secret Certificate (GRPC)                                                                          | `nil`                                                   |
+| `querier.ingress.grpc.secrets[0].key`           | TLS Secret Key (GRPC)                                                                                  | `nil`                                                   |
 
 ### Thanos Bucket Web parameters
 
