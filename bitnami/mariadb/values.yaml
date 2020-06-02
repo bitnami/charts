@@ -45,6 +45,11 @@ image:
 ##
 # fullnameOverride:
 
+## Additional pod labels
+##
+# podLabels:
+#   extraLabel: extraValue
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##

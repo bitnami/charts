@@ -3,11 +3,9 @@ kind: StatefulSet
 metadata:
   name: {{ template "master.fullname" . }}
   labels:
-    app: {{ template "mariadb.name" . }}
-    chart: {{ template "mariadb.chart" . }}
-    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     component: master
+    {{- include "mariadb.common.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
@@ -28,10 +26,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ template "mariadb.name" . }}
-        chart: {{ template "mariadb.chart" . }}
-        release: {{ .Release.Name }}
         component: master
+        {{- include "mariadb.common.labels" . | nindent 8 }}
     spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
