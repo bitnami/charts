@@ -130,7 +130,7 @@ spec:
             {{- end }}
             {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration .Values.pgpool.configurationCM }}
             - name: PGPOOL_USER_CONF_FILE
-              value: "/opt/bitnami/pgpool/user_config/"
+              value: "/opt/bitnami/pgpool/user_config/pgpool.conf"
             {{- end }}
             {{- if .Values.pgpool.numInitChildren }}
             - name: PGPOOL_NUM_INIT_CHILDREN
