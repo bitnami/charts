@@ -82,7 +82,7 @@ spec:
             - name: MYSQL_MASTER_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
             - name: MYSQL_REPLICATION_USER
@@ -94,7 +94,7 @@ spec:
             - name: MYSQL_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-replication-password
             {{- end }}
             {{- if .Values.slave.extraEnvVars }}
@@ -177,7 +177,7 @@ spec:
             - name: MYSQL_MASTER_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.fullname" . }}
+                  name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
           command:

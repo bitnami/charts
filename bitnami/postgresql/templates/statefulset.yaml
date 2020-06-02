@@ -113,7 +113,7 @@ spec:
             {{- end }}
       {{- end }}
       {{- if .Values.master.extraInitContainers }}
-      {{- tpl .Values.master.extraInitContainers . | nindent 8 }}
+      {{- include "postgresql.tplValue" ( dict "value" .Values.master.extraInitContainers "context" $ ) | nindent 8 }}
       {{- end }}
       {{- end }}
       {{- if .Values.master.priorityClassName }}
