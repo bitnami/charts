@@ -1,28 +1,33 @@
-{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- if and (.Values.metrics.enabled) (.Values.metrics.serviceMonitor.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "kibana.fullname" . }}
+  name: {{ template "nats.fullname" . }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
   {{- end }}
-  labels: {{- include "kibana.labels" . | nindent 4 }}
+  labels:
+    app: {{ template "nats.name" . }}
+    chart: {{ template "nats.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
     {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
-  selector:
-    matchLabels: {{- include "kibana.matchLabels" . | nindent 6 }}
   endpoints:
-  - port: http
-    path: "/_prometheus/metrics"
+  - port: metrics
     {{- if .Values.metrics.serviceMonitor.interval }}
     interval: {{ .Values.metrics.serviceMonitor.interval }}
     {{- end }}
-    {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
-    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
-    {{- end }}
+  selector:
+    matchLabels:
+      app: {{ template "nats.name" . }}
+      release: {{ .Release.Name }}
+      app.kubernetes.io/component: "metrics"
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
-{{- end }}
+{{- end -}}
