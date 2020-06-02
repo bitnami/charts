@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.1-debian-10-r27
+  tag: 3.6.1-debian-10-r34
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -203,6 +203,9 @@ service:
     quorum_keystore_password: ""
     quorum_truststore_path: /tls_trust_store/trust_store_file
     quorum_truststore_password: ""
+  annotations: {}
+  headless:
+    annotations: {}
 
 ## Service account for Zookeeper to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
