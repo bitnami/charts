@@ -72,6 +72,7 @@ The following table lists the helpers available in the library which are scoped 
 | Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
 |---------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `common.capabilities.deployment.apiVersion` | Return the appropriate apiVersion for deployment.          | `.` Chart context                                                                                                                                              |
+| `common.capabilities.ingress.apiVersion`    | Return the appropriate apiVersion for ingress.             | `.` Chart context                                                                                                                                              |
 
 **Warnings**
 | Helper identifier                           | Description                                                | Expected Input                                                                                                                                                 |
