@@ -52,12 +52,9 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
-Create common labels for mariadb
+Create pod labels for mariadb
 */}}
-{{- define "mariadb.common.labels" -}}
-app: {{ template "mariadb.name" . }}
-chart: {{ template "mariadb.chart" . }}
-release: {{ .Release.Name }}
+{{- define "mariadb.podLabels" -}}
 {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels }}
 {{- end -}}
