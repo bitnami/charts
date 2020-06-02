@@ -58,7 +58,9 @@ Create common labels for mariadb
 app: {{ template "mariadb.name" . }}
 chart: {{ template "mariadb.chart" . }}
 release: {{ .Release.Name }}
+{{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels }}
+{{- end -}}
 {{- end -}}
 
 {{/*
