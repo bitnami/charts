@@ -3,11 +3,11 @@ kind: StatefulSet
 metadata:
   name: {{ template "master.fullname" . }}
   labels:
-    heritage: {{ .Release.Service }}
-    component: master
     app: {{ template "mariadb.name" . }}
     chart: {{ template "mariadb.chart" . }}
     release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: master
     {{- include "mariadb.podLabels" . | nindent 4 }}
 spec:
   selector:
