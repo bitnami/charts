@@ -67,13 +67,23 @@ spec:
             - -c
             - |
               mkdir -p /bitnami/influxdb/{data,meta,wal}
-              chown -R "{{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }}" /bitnami/influxdb/{data,meta,wal}
+              chmod 700 /bitnami/influxdb/{data,meta,wal}
+              find /bitnami/influxdb/{data,meta,wal} -mindepth 1 -maxdepth 1 | \
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
+              {{- else }}
+                xargs chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }}
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:
-            runAsUser: 0
+          {{- else }}
+          securityContext:
+            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: /bitnami/influxdb
-        {{- end }}
+      {{- end }}
       containers:
         - name: influxdb
           image: {{ include "influxdb.image" . }}
