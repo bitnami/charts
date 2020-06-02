@@ -76,7 +76,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `image.pullPolicy`                        | WordPress image pull policy                                                           | `IfNotPresent`                                               |
 | `image.pullSecrets`                       | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.debug`                             | Specify if debug logs should be enabled                                               | `false`                                                      |
-| `wordpressSkipInstall`                    | Skip wizard installation                                                              | `false`                                                      |
+| `wordpressSkipInstall`                    | Skip wizard installation when the external db already contains data from a previous WordPress installation [see](https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database) | `false`                                                      |
 | `wordpressUsername`                       | User of the application                                                               | `user`                                                       |
 | `wordpressPassword`                       | Application password                                                                  | _random 10 character long alphanumeric string_               |
 | `wordpressEmail`                          | Admin email                                                                           | `user@example.com`                                           |
@@ -325,6 +325,8 @@ externalDatabase.port=3306
 ```
 
 Note also if you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
+
+In case the database already contains data from a previous WordPress installation, you need to set the `wordpressSkipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the WordPress installation wizard. This is necessary in case you use a database that already has WordPress data [+info](https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database).
 
 ### Ingress
 

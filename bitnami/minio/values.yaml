@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2020.5.28-debian-10-r0
+  tag: 2020.6.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -62,7 +62,7 @@ clusterDomain: cluster.local
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2020.5.16-debian-10-r10
+  tag: 2020.5.28-debian-10-r3
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -376,4 +376,3 @@ networkPolicy:
 ## MinIO supports two authentication modes for Prometheus either jwt or public, by default MinIO runs in jwt mode.
 ## To allow public access without authentication for prometheus metrics set environment as follows.
 prometheusAuthType: public
-
