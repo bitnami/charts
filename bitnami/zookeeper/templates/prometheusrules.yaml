@@ -16,7 +16,6 @@ metadata:
 spec:
   groups:
   - name: {{ include "zookeeper.fullname" . }}
-    rules:
-    {{- toYaml .Values.metrics.prometheusRule.rules | nindent 6 }}
+    rules: {{- toYaml .Values.metrics.prometheusRule.rules | nindent 6 }}
 {{- end }}
 
