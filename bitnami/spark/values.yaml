@@ -74,7 +74,7 @@ master:
     runAsUser: 1001
 
   ## Annotations to add to the statefulset
-  ## 
+  ##
   ##
   podAnnotations: {}
 
@@ -182,7 +182,7 @@ worker:
     runAsUser: 1001
 
   ## Annotations to add to the statefulset
-  ## 
+  ##
   ##
   podAnnotations: {}
 
@@ -233,7 +233,7 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-    
+
   ## Array to add extra volumes
   ##
   ## extraVolumes:
