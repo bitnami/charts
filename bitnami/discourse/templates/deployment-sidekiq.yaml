@@ -1,4 +1,4 @@
-{{- if and (include "discourse.host" .) (.Values.postgresql.enabled) -}}
+{{- if and (include "discourse.host" .) (or .Values.postgresql.enabled .Values.externalDatabase.host) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,23 +9,19 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount.sidekiq }}
   selector:
-    matchLabels:
-      {{- include "discourse.selectorLabels" . | nindent 6 }}
+    matchLabels: {{- include "discourse.selectorLabels" . | nindent 6 }}
       component: sidekiq
   template:
     metadata:
-      labels:
-        {{- include "discourse.selectorLabels" . | nindent 8 }}
+      labels: {{- include "discourse.selectorLabels" . | nindent 8 }}
         component: sidekiq
     spec:
-      {{- include "discourse.imagePullSecrets" . | nindent 6 }}
+      {{- include "discourse.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "discourse.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: sidekiq
-          securityContext:
-            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
           image: {{ template "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command: ["/app-entrypoint.sh"]
@@ -49,11 +45,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.fullname" . }}
                   key: discourse-postgresql-password
+            {{- if .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "discourse.fullname" . }}
                   key: postgresql-client-create-database-password
+            {{- end }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -62,7 +60,7 @@ spec:
             - configMapRef:
                 name: {{ include "discourse.fullname" . }}
             {{- if .Values.extraEnvVars.discourse }}
-            {{- tpl (toYaml .Values.extraEnvVars.discourse) $ | nindent 12 }}
+            {{- tpl (toYaml .Values.extraEnvVars.discourse) $ | indent 12 }}
             {{- end }}
             {{- if or .Values.extraEnvVarsCM.discourse .Values.extraEnvVarsSecret.discourse }}
             envFrom:
@@ -86,15 +84,12 @@ spec:
             periodSeconds: 60
           resources: {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
       {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
 {{- end -}}
