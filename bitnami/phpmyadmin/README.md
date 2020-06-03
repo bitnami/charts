@@ -129,7 +129,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### To 6.0.0
 
-The [Bitnami phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `root`.
+The [Bitnami phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 Chart labels and Ingress configuration were also adapted to follow the Helm charts best practices.
 
 Consequences:
