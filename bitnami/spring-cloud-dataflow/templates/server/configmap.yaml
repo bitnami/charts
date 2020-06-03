@@ -1,0 +1,64 @@
+{{- if (include "scdf.server.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "scdf.fullname" . }}-server
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+data:
+  application.yaml: |-
+    spring:
+      cloud:
+        dataflow:    
+          {{- if .Values.server.configuration.batchEnabled }}
+          task:
+            platform:
+              kubernetes:
+                accounts:
+                  {{ .Values.server.configuration.accountName }}:
+                    {{- if .Values.deployer.resources.limits }}
+                    limits: {{- toYaml .Values.deployer.resources.limits | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.resources.requests }}
+                    requests: {{- toYaml .Values.deployer.resources.requests | nindent 22 }}
+                    {{- end }}
+          {{- if .Values.server.configuration.containerRegistries }}
+          container:
+            registry-configurations: {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration.containerRegistries "context" $) | nindent 14 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.metrics.enabled }}
+          applicationProperties:
+            {{- if .Values.server.configuration.streamingEnabled }}
+            stream:
+              management:
+                metrics:
+                  export:
+                    prometheus:
+                      enabled: true
+            {{- end }}
+            {{- if .Values.server.configuration.batchEnabled }}
+            task:
+              management:
+                metrics:
+                  export:
+                    prometheus:
+                      enabled: true
+            {{- end }}
+          {{- end }}
+      jpa:
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.MariaDB102Dialect
+      datasource:
+        {{- $databaseScheme := include "scdf.database.scheme" .  }}
+        {{- $databaseHost := include "scdf.database.host" .  }}
+        {{- $databasePort := include "scdf.database.port" .  }}
+        {{- $databaseName := include "scdf.database.server.name" .  }}
+        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}?useMysqlMetadata=true'
+        driverClassName: {{ include "scdf.database.driver" . }}
+        username: {{ include "scdf.database.server.user" . }}
+        password: ${mariadb-password}
+        testOnBorrow: true
+        validationQuery: "SELECT 1"
+{{ end }}
