@@ -119,12 +119,16 @@ ingress:
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       tlsSecret: phpmyadmin.local-tls
 
-## K8s Security Context for phpMyAdmin pods
-## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## phpMyAdmin pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
-securityContext:
-  enabled: true
+podSecurityContext:
   fsGroup: 1001
+
+## phpMyAdmin containers' Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
   runAsUser: 1001
 
 ## PhpMyAdmin containers' liveness and readiness probes. Evaluated as a template.

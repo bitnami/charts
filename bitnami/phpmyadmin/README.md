@@ -78,9 +78,8 @@ The following table lists the configurable parameters of the phpMyAdmin chart an
 | `ingress.hosts[0].tls`       | Utilize TLS backend in ingress                                                                          | `false`                                                      |
 | `ingress.hosts[0].tlsHosts`  | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                    | `nil`                                                        |
 | `ingress.hosts[0].tlsSecret` | TLS Secret (certificates)                                                                               | `phpmyadmin.local-tls-secret`                                |
-| `securityContext.enabled`    | Enable security context for phpMyAdmin pods                                                             | `true`                                                       |
-| `securityContext.fsGroup`    | Group ID for the phpMyAdmin filesystem                                                                  | `1001`                                                       |
-| `securityContext.runAsUser`  | User ID for the phpMyAdmin container                                                                    | `1001`                                                       |
+| `podSecurityContext`         | phpMyAdmin pods' Security Context                                                                       | `{ fsGroup: "1001" }`                                        |
+| `containerSecurityContext`   | phpMyAdmin containers' Security Context                                                                 | `{ runAsUser: "1001" }`                                      |
 | `resources.limits`           | The resources limits for the PhpMyAdmin container                                                       | `{}`                                                         |
 | `resources.requests`         | The requested resources for the PhpMyAdmin container                                                    | `{}`                                                         |
 | `livenessProbe`              | Liveness probe configuration for PhpMyAdmin                                                             | `Check values.yaml file`                                     |
