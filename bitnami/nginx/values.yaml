@@ -115,6 +115,11 @@ replicaCount: 1
 ##
 containerPort: 8080
 
+## If you would like to serve tls in the cluster set containerTlsPort
+##   This is required for extra serverBlocks that serve https.
+##
+## containerTlsPort: 8443
+
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##

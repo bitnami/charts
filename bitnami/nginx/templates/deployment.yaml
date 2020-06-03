@@ -70,6 +70,10 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.containerPort }}
+            {{ if .Values.containerTlsPort }}
+            - name: https
+              containerPort: {{ .Values.containerTlsPort }}
+            {{ end }}
           {{- if .Values.livenessProbe }}
           livenessProbe: {{- toYaml .Values.livenessProbe | nindent 12 }}
           {{- end }}
