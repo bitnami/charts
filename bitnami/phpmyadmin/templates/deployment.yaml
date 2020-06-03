@@ -42,6 +42,9 @@ spec:
       {{- with .Values.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
       hostAliases:
         - ip: "127.0.0.1"
           hostnames:
@@ -50,6 +53,9 @@ spec:
         - name: {{ .Chart.Name }}
           image: {{ template "phpmyadmin.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          {{- end }}
           env:
             - name: DATABASE_PORT_NUMBER
               value: {{ .Values.db.port | quote }}
