@@ -78,6 +78,9 @@ The following table lists the configurable parameters of the phpMyAdmin chart an
 | `ingress.hosts[0].tls`       | Utilize TLS backend in ingress                                                                          | `false`                                                      |
 | `ingress.hosts[0].tlsHosts`  | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                    | `nil`                                                        |
 | `ingress.hosts[0].tlsSecret` | TLS Secret (certificates)                                                                               | `phpmyadmin.local-tls-secret`                                |
+| `securityContext.enabled`    | Enable security context for phpMyAdmin pods                                                             | `true`                                                       |
+| `securityContext.fsGroup`    | Group ID for the phpMyAdmin filesystem                                                                  | `1001`                                                       |
+| `securityContext.runAsUser`  | User ID for the phpMyAdmin container                                                                    | `1001`                                                       |
 | `resources.limits`           | The resources limits for the PhpMyAdmin container                                                       | `{}`                                                         |
 | `resources.requests`         | The requested resources for the PhpMyAdmin container                                                    | `{}`                                                         |
 | `livenessProbe`              | Liveness probe configuration for PhpMyAdmin                                                             | `Check values.yaml file`                                     |
@@ -124,6 +127,19 @@ It is strongly recommended to use immutable tags in a production environment. Th
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ## Upgrading
+
+### To 6.0.0
+
+The [Bitnami phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `root`.
+Chart labels and Ingress configuration were also adapted to follow the Helm charts best practices.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- No writing permissions will be granted on `config.inc.php` by default.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `6.0.0`, backup your previous MariaDB databases, install a new phpMyAdmin chart and import the MariaDB backups.
 
 ### To 1.0.0
 
