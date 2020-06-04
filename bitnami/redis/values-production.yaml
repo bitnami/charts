@@ -221,6 +221,31 @@ persistence:
 redisPort: 6379
 
 ##
+## TLS configuration
+##
+tls:
+  # Enable TLS traffic
+  enabled: false
+  #
+  # Whether to require clients to authenticate or not.
+  authClients: true
+  #
+  # Name of the Secret that contains the certificates
+  certificatesSecret:
+  #
+  # Certificate filename
+  certFilename:
+  #
+  # Certificate Key filename
+  certKeyFilename:
+  #
+  # CA Certificate filename
+  certCAFilename:
+  #
+  # File containing DH params (in order to support DH based ciphers)
+  #dhParamsFilename:
+
+##
 ## Redis Master parameters
 ##
 master:
