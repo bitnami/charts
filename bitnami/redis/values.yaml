@@ -243,7 +243,7 @@ tls:
   certCAFilename:
   #
   # File containing DH params (in order to support DH based ciphers)
-  #dhParamsFilename:
+  # dhParamsFilename:
 
 ##
 ## Redis Master parameters
