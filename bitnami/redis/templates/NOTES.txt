@@ -55,11 +55,17 @@ To connect to your Redis server:
 {{- if .Values.tls.enabled }}
    kubectl run --namespace {{ .Release.Namespace }} {{ template "redis.fullname" . }}-client --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image {{ template "redis.image" . }} --command -- sleep infinity
 
+   Copy your TLS certificates to the pod:
+
    kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.cert {{ template "redis.fullname" . }}-client:/tmp/client.cert
    kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.key {{ template "redis.fullname" . }}-client:/tmp/client.key
    kubectl cp --namespace {{ .Release.Namespace }} /path/to/CA.cert {{ template "redis.fullname" . }}-client:/tmp/CA.cert
 
-   kubectl exec --tty -i {{ template "redis.fullname" . }}-client --namespace {{ .Release.Namespace }} -- bash
+   Use the following command to attach to the pod:
+
+   kubectl exec --tty -i {{ template "redis.fullname" . }}-client \
+   {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "redis.fullname" . }}-client=true" \{{- end }}
+   --namespace {{ .Release.Namespace }} -- bash
 {{- else }}
    kubectl run --namespace {{ .Release.Namespace }} {{ template "redis.fullname" . }}-client --rm --tty -i --restart='Never' \
    {{ if .Values.usePassword }} --env REDIS_PASSWORD=$REDIS_PASSWORD \{{ end }}
