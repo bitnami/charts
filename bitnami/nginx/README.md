@@ -77,6 +77,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `extraVolumeMounts`                        | Array of extra volume mounts to be added to the deployment. Normally used with `extraVolumes`| `nil`                                                        |
 | `replicaCount`                             | Number of replicas to deploy                                                                 | `1`                                                          |
 | `containerPort`                            | Deployment Container Port                                                                    | `8080`                                                       |
+| `containerTlsPort`                         | Deployment Container Tls Port                                                                | `nil`                                                        |
 | `podAnnotations`                           | Pod annotations                                                                              | `{}`                                                         |
 | `affinity`                                 | Map of node/pod affinities                                                                   | `{}` (The value is evaluated as a template)                  |
 | `nodeSelector`                             | Node labels for pod assignment                                                               | `{}` (The value is evaluated as a template)                  |
