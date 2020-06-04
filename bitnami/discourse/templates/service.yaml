@@ -11,7 +11,7 @@ spec:
   {{- if (and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges) }}
   loadBalancerSourceRanges:
   {{- with .Values.service.loadBalancerSourceRanges }}
-{{ toYaml . | indent 4 }}
+    {{ toYaml . | indent 4 }}
   {{- end }}
   {{- end }}
   ports:
@@ -24,6 +24,6 @@ spec:
       nodePort: null
       {{- end }}
     {{- if .Values.service.extraPorts }}
-    {{- include "discourse.tplValue" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- include "discourse.tplValue" (dict "value" .Values.service.extraPorts "context" $) | indent 4 }}
     {{- end }}
   selector: {{- include "discourse.matchLabels" . | nindent 4 }}

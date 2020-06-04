@@ -1,38 +1,31 @@
-{{- if and (include "discourse.host" .) (.Values.postgresql.enabled) -}}
+{{- if and (include "discourse.host" .) (or .Values.postgresql.enabled .Values.externalDatabase.host) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "discourse.fullname" . }}
-  labels:
-    {{- include "discourse.labels" . | nindent 4 }}
+  labels: {{- include "discourse.labels" . | nindent 4 }}
     component: discourse
 spec:
   replicas: {{ .Values.replicaCount.discourse }}
   selector:
-    matchLabels:
-      {{- include "discourse.selectorLabels" . | nindent 6 }}
+    matchLabels: {{- include "discourse.selectorLabels" . | nindent 6 }}
       component: discourse
   template:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap-envs.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret-envs.yaml") . | sha256sum }}
-      labels:
-        {{- include "discourse.selectorLabels" . | nindent 8 }}
+      labels: {{- include "discourse.selectorLabels" . | nindent 8 }}
         component: discourse
-    spec:
-      {{- include "discourse.imagePullSecrets" . | nindent 6 }}
+    spec: {{- include "discourse.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "discourse.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if .Values.initContainers }}
-      initContainers:
-      {{- tpl (toYaml .Values.initContainers) $ | nindent 8 }}
+      initContainers: {{- tpl (toYaml .Values.initContainers) $ | nindent 8 }}
       {{- end }}
       containers:
         - name: discourse
-          securityContext:
-            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
           image: {{ template "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           env:
@@ -46,11 +39,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.fullname" . }}
                   key: discourse-postgresql-password
+            {{- if .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "discourse.fullname" . }}
                   key: postgresql-client-create-database-password
+            {{- end }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -59,7 +54,7 @@ spec:
             - configMapRef:
                 name: {{ include "discourse.fullname" . }}
             {{- if .Values.extraEnvVars.discourse }}
-            {{- tpl (toYaml .Values.extraEnvVars.discourse) $ | nindent 12 }}
+            {{- tpl (toYaml .Values.extraEnvVars.discourse) $ | indent 12 }}
             {{- end }}
             {{- if or .Values.extraEnvVarsCM.discourse .Values.extraEnvVarsSecret.discourse }}
             envFrom:
@@ -86,7 +81,7 @@ spec:
               port: http
           resources: {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.sidecars }}
-        {{- tpl (toYaml .Values.sidecars) $ | nindent 8 }}
+        {{- tpl (toYaml .Values.sidecars) $ | indent 8 }}
         {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "discourse.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -97,5 +92,4 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "discourse.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- with .Values.nodeSelector }}
-{{- end -}}
+{{- end }}

@@ -122,6 +122,10 @@ service:
   loadBalancerSourceRanges: []
   ## Extra ports to expose (normally used with the `sidecar` value)
   # extraPorts:
+  nodePorts:
+    http: ""
+    https: ""
+    metrics: ""
 
 ## Ingress paramaters
 ##
@@ -248,11 +252,26 @@ extraEnvVarsSecret:
 postgresql:
   enabled: true
   postgresqlUsername: bn_discourse
-  postgresqlPostgresPassword:
+  postgresqlPostgresPassword: ""
   postgresqlPassword: ""
   postgresqlDatabase: bitnami_discourse
   persistence:
     enabled: false
+
+##
+## External database configuration
+##
+externalDatabase:
+  ## Database host
+  host: ""
+  ## Database port
+  port: 3306
+  ## Database user
+  user: bn_discourse
+  ## Database password
+  password:
+  ## Database name
+  database: bitnami_discourse
 
 ## Redis chart configuration
 ##
