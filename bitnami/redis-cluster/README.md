@@ -129,6 +129,13 @@ The following table lists the configurable parameters of the Redis chart and the
 | `podLabels`                                     | Additional labels for Redis pod                                | {}                |
 | `podAnnotations`                                | Additional annotations for Redis pod                           | {}                |
 | `redisPort`                                     | Redis port.                                                    | `6379`            |
+| `tls.enabled`                                   | Enable TLS support for replication traffic                     | `false`           |
+| `tls.authClients`                               | Require clients to authenticate or not                         | `true`            |
+| `tls.certificatesSecret`                        | Name of the secret that contains the certificates              | `nil`             |
+| `tls.certFilename`                              | Certificate filename                                           | `nil`             |
+| `tls.certKeyFilename`                           | Certificate key filename                                       | `nil`             |
+| `tls.certCAFilename`                            | CA Certificate filename                                        | `nil`             |
+| `tls.dhParamsFilename`                          | DH params (in order to support DH based ciphers)               | `nil`             |
 | `command`                                       | Redis entrypoint string. The command `redis-server` is executed if this is not provided. | `nil`             |
 | `args`                                          | Arguments for the provided command if needed                   | `nil`             |
 | `configmap`                                     | Additional Redis configuration for the nodes (this value is evaluated as a template) | `nil`             |
@@ -359,6 +366,36 @@ usePasswordFile=true
 existingSecret=redis-password-secret
 metrics.enabled=true
 ```
+
+### Securing traffic using TLS
+
+TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the cluster:
+
+- `tls.enabled`: Enable TLS support. Defaults to `false`
+- `tls.certificatesSecret`: Name of the secret that contains the certificates. No defaults.
+- `tls.certFilename`: Certificate filename. No defaults.
+- `tls.certKeyFilename`: Certificate key filename. No defaults.
+- `tls.certCAFilename`: CA Certificate filename. No defaults.
+
+For example:
+
+First, create the secret with the cetificates files:
+
+```console
+kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+```
+
+Then, use the following parameters:
+
+```console
+tls.enabled="true"
+tls.certificatesSecret="certificates-tls-secret"
+tls.certFilename="cert.pem"
+tls.certKeyFilename="cert.key"
+tls.certCAFilename="ca.pem"
+```
+
+> **Note TLS and Prometheus Metrics**: Current version of Redis Metrics Exporter (v1.6.1 at the time of writing) does not fully support the use of TLS. By enabling both features, the metric reporting pod may not work as expected. See Redis Metrics Exporter issue [387](https://github.com/oliver006/redis_exporter/issues/387) for more information.
 
 ### Sidecars and Init Containers
 
