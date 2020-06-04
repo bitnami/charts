@@ -259,6 +259,18 @@ server:
   ##
   sidecars: {}
 
+  ## Dataflow Server Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
   ## Dataflow Server Autoscaling parameters.
   ##
   autoscaling:
@@ -446,6 +458,18 @@ skipper:
   ##         containerPort: 1234
   ##
   sidecars: {}
+
+  ## Skipper Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
 
   ## Skipper Autoscaling parameters.
   ##

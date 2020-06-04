@@ -1,4 +1,4 @@
-{{- if .Values.skipper.autoscaling.enabled }}
+{{- if and (or .Values.skipper.enabled .Values.server.configuration.streamingEnabled) .Values.skipper.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:

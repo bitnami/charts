@@ -115,6 +115,9 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.ingress.secrets[0].certificate`        | TLS Secret Certificate                                              | `nil`                                                   |
 | `server.ingress.secrets[0].key`                | TLS Secret Key                                                      | `nil`                                                   |
 | `server.sidecars`                              | Attach additional sidecar containers to the Dataflow server pods    | `{}`                                                    |
+| `server.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                     | `false`                                                 |
+| `server.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled      | `1`                                                     |
+| `server.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable      | `nil`                                                   |
 | `server.autoscaling.enabled`                   | Enable autoscaling for Dataflow server                              | `false`                                                 |
 | `server.autoscaling.minReplicas`               | Minimum number of Dataflow server replicas                          | `nil`                                                   |
 | `server.autoscaling.maxReplicas`               | Maximum number of Dataflow server replicas                          | `nil`                                                   |
@@ -125,6 +128,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 
 | Parameter                                  | Description                                                         | Default                                                 |
 |--------------------------------------------|---------------------------------------------------------------------|---------------------------------------------------------|
+| `skipper.enabled`                          | Enable Spring Cloud Skipper component                               | `true`                                                  |
 | `skipper.image.registry`                   | Spring Cloud Skipper image registry                                 | `docker.io`                                             |
 | `skipper.image.repository`                 | Spring Cloud Skipper image name                                     | `bitnami/spring-cloud-dataflow`                         |
 | `skipper.image.tag`                        | Spring Cloud Skipper image tag                                      | `{TAG_NAME}`                                            |
@@ -156,6 +160,9 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer               | `[]`                                                    |
 | `skipper.service.annotations`              | Annotations for Skipper server service                              | `{}`                                                    |
 | `skipper.sidecars`                         | Attach additional sidecar containers to the Skipper pods            | `{}`                                                    |
+| `skipper.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                     | `false`                                                 |
+| `skipper.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled      | `1`                                                     |
+| `skipper.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable      | `nil`                                                   |
 | `skipper.autoscaling.enabled`              | Enable autoscaling for Skipper server                               | `false`                                                 |
 | `skipper.autoscaling.minReplicas`          | Minimum number of Skipper server replicas                           | `nil`                                                   |
 | `skipper.autoscaling.maxReplicas`          | Maximum number of Skipper server replicas                           | `nil`                                                   |
