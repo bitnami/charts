@@ -39,6 +39,7 @@ spec:
       containers:
         - name: dashboard
           image: {{ template "kubeapps.image" (list .Values.dashboard.image .Values.global) }}
+          imagePullPolicy: {{ .Values.dashboard.image.pullPolicy | quote }}
           {{- if .Values.dashboard.livenessProbe }}
           livenessProbe: {{- toYaml .Values.dashboard.livenessProbe | nindent 12 }}
           {{- end }}
