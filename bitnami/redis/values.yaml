@@ -261,7 +261,6 @@ master:
   ## Redis additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
-  ##
   ## extraFlags:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
