@@ -69,7 +69,8 @@ spec:
               readOnly: true
       volumes:
         - name: kafka-exporter-certificates
-          secretName: {{ .Values.metrics.kafka.certificatesSecret }}
-          defaultMode: 256
+          secret:
+            secretName: {{ .Values.metrics.kafka.certificatesSecret }}
+            defaultMode: 256
       {{- end }}
 {{- end }}
