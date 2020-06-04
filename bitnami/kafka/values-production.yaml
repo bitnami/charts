@@ -336,6 +336,10 @@ podLabels: {}
 ##
 podAnnotations: {}
 
+## Name of the priority class to be used by kafka pods, priority class needs to be created beforehand
+## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+priorityClassName: ""
+
 ## Affinity for pod assignment. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##

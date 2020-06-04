@@ -65,6 +65,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "kafka.tplValue" ( dict "value" .Values.tolerations "context" $ ) | nindent 8 }}
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       {{- if .Values.podSecurityContext }}
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
