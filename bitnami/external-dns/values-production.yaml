@@ -333,6 +333,9 @@ vinyldns:
 ## Limit possible target zones by domain suffixes (optional)
 ##
 domainFilters: []
+## Exclude subdomains (optional)
+##
+excludeDomains: []
 ## Limit possible target zones by zone id (optional)
 ##
 zoneIdFilters: []

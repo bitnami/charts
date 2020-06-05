@@ -80,6 +80,9 @@ spec:
             {{- range .Values.domainFilters }}
             - --domain-filter={{ . }}
             {{- end }}
+            {{- range .Values.excludeDomains }}
+            - --exclude-domains={{ . }}
+            {{- end }}
             {{- range .Values.zoneIdFilters }}
             - --zone-id-filter={{ . }}
             {{- end }}
