@@ -149,6 +149,17 @@ podSecurityContext:
   # - name: net.core.somaxconn
   #   value: "10000"
 
+## Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
+##
+podDisruptionBudget: {}
+  ## Min number of pods that must still be available after the eviction
+  ##
+  # minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
+
 ## Containers Security Context
 containerSecurityContext:
   enabled: true
