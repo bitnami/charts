@@ -264,10 +264,7 @@ spec:
             runAsUser: 0
         {{- end }}
         {{- if .Values.extraInitContainers }}
-        {{- range $key, $value := .Values.extraInitContainers }}
-        - name: "{{ $key }}"
-        {{- toYaml $value | nindent 12 }}
-        {{- end }}
+        {{- toYaml .Values.extraInitContainers | nindent 10 }}
         {{- end }}
       {{- end }}
       {{- if .Values.sidecars }}

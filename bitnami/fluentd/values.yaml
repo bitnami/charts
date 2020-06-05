@@ -208,10 +208,10 @@ forwarder:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  
+
   ## Extra labels to add to Pod
   podLabels: {}
-  
+
   ## Extra volumes to mount
   ## Example Use Case: mount systemd journal volume
   # extraVolumes:
@@ -380,7 +380,7 @@ aggregator:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  
+
   ## Extra labels to add to Pod
   podLabels: {}
 

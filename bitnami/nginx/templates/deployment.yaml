@@ -70,6 +70,10 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.containerPort }}
+            {{ if .Values.containerTlsPort }}
+            - name: https
+              containerPort: {{ .Values.containerTlsPort }}
+            {{ end }}
           {{- if .Values.livenessProbe }}
           livenessProbe: {{- toYaml .Values.livenessProbe | nindent 12 }}
           {{- end }}
@@ -162,7 +166,7 @@ spec:
             items:
               - key: server-blocks-paths.conf
                 path: server-blocks-paths.conf
-      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap (include "nginx.useStaticSite" .) }}
+      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumes (include "nginx.useStaticSite" .) }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
           configMap:

@@ -18,25 +18,14 @@ spec:
   {{- end }}
   {{- end }}
   ports:
-    - name: tcp-kafka
+    - name: tcp-client
       port: {{ .Values.service.port }}
       protocol: TCP
-      targetPort: kafka
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.kafka)) }}
-      nodePort: {{ .Values.service.nodePorts.kafka }}
+      targetPort: kafka-client
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
+      nodePort: {{ .Values.service.nodePort }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.auth.ssl }}
-    - name: tls-kafka
-      port: {{ .Values.service.sslPort }}
-      protocol: TCP
-      targetPort: kafka-ssl
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.ssl)) }}
-      nodePort: {{ .Values.service.nodePorts.ssl }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    {{- end }}
   selector: {{- include "kafka.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka

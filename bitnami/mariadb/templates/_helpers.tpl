@@ -52,6 +52,15 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Create pod labels for mariadb
+*/}}
+{{- define "mariadb.podLabels" -}}
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper MariaDB image name
 */}}
 {{- define "mariadb.image" -}}
