@@ -3,7 +3,9 @@ kind: Service
 metadata:
   name: {{ template "kube-state-metrics.fullname" . }}
   annotations:
+    {{- if not .Values.serviceMonitor.enabled }}
     prometheus.io/scrape: "true"
+    {{- end }}
     {{- with .Values.service.annotations }}
     {{- include "kube-state-metrics.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
