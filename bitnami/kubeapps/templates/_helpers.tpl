@@ -100,8 +100,8 @@ Create name for the apprepository-controller based on the fullname
 {{/*
 Create name for the apprepository pre-upgrade job
 */}}
-{{- define "kubeapps.apprepository-jobs-preupgrade.fullname" -}}
-{{ template "kubeapps.fullname" . }}-internal-apprepository-jobs-preupgrade
+{{- define "kubeapps.apprepository-job-postupgrade.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-apprepository-job-postupgrade
 {{- end -}}
 
 {{/*
