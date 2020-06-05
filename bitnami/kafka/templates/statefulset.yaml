@@ -1,4 +1,11 @@
 {{- $replicaCount := int .Values.replicaCount }}
+{{- $fullname := include "kafka.fullname" . }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $interBrokerPort := .Values.service.internalPort }}
+{{- $clientPort := .Values.service.port }}
+{{- $interBrokerProtocol := include "kafka.listenerType" ( dict "protocol" .Values.auth.interBrokerProtocol ) -}}
+{{- $clientProtocol := include "kafka.listenerType" ( dict "protocol" .Values.auth.clientProtocol ) -}}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
 {{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer")) }}
 apiVersion: apps/v1
@@ -29,13 +36,13 @@ spec:
         {{- if .Values.podLabels }}
         {{- include "kafka.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or (include "kafka.createConfigmap" .) (include "kafka.createSecret" .) .Values.externalAccess.enabled (include "kafka.metrics.jmx.createConfigmap" .) .Values.podAnnotations }}
+      {{- if or (include "kafka.createConfigmap" .) (include "kafka.createJaasSecret" .) .Values.externalAccess.enabled (include "kafka.metrics.jmx.createConfigmap" .) .Values.podAnnotations }}
       annotations:
         {{- if (include "kafka.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if (include "kafka.createSecret" .) }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- if (include "kafka.createJaasSecret" .) }}
+        checksum/secret: {{ include (print $.Template.BasePath "/jaas-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.externalAccess.enabled }}
         checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
@@ -133,100 +140,84 @@ spec:
               {{- else }}
               value: {{ .Values.externalZookeeper.servers | quote }}
               {{- end }}
-            - name: KAFKA_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
-            {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
-            - name: SHARED_FILE
-              value: "/shared/info.txt"
-            {{- end }}
-            {{- if .Values.externalAccess.enabled }}
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
-              value: "INTERNAL"
+              value: {{ .Values.interBrokerListenerName | quote }}
             - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
-              {{- if and .Values.auth.enabled .Values.auth.ssl }}
-              value: "INTERNAL:SASL_SSL,EXTERNAL:SASL_SSL"
-              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
-              value: "INTERNAL:SSL,EXTERNAL:SSL"
-              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
-              value: "INTERNAL:SASL_PLAINTEXT,EXTERNAL:SASL_PLAINTEXT"
+              {{- if .Values.listenerSecurityProtocolMap }}
+              value: {{ .Values.listenerSecurityProtocolMap | quote }}
+              {{- else if .Values.externalAccess.enabled }}
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $clientProtocol }}"
               {{- else }}
-              value: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
               {{- end }}
-            {{- else }}
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
               value: {{ .Values.listeners }}
-              {{- else if and .Values.auth.ssl .Values.auth.enabled }}
-              value: "SASL_SSL://:$(KAFKA_PORT_NUMBER),SSL://:9093"
-              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
-              value: "SSL://:9093"
-              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
-              value: "SASL_PLAINTEXT://:$(KAFKA_PORT_NUMBER)"
+              {{- else if .Values.externalAccess.enabled }}
+              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092,EXTERNAL://:9094"
               {{- else }}
-              value: "PLAINTEXT://:$(KAFKA_PORT_NUMBER)"
+              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092"
               {{- end }}
+            {{- if .Values.externalAccess.enabled }}
+            {{- if .Values.externalAccess.autoDiscovery.enabled }}
+            - name: SHARED_FILE
+              value: "/shared/info.txt"
+            {{- end }}
+            {{- else }}
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
               {{- if .Values.advertisedListeners }}
               value: {{ .Values.advertisedListeners }}
-              {{- else if and .Values.auth.ssl .Values.auth.enabled }}
-              value: "SASL_SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER),SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:9093"
-              {{- else if and .Values.auth.ssl (not .Values.auth.enabled) }}
-              value: "SSL://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:9093"
-              {{- else if and .Values.auth.enabled (not .Values.auth.ssl) }}
-              value: "SASL_PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)"
               {{- else }}
-              value: "PLAINTEXT://$(MY_POD_NAME).{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:$(KAFKA_PORT_NUMBER)"
+              value: "INTERNAL://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }}"
               {{- end }}
-            {{- end }}
-            {{- if .Values.listenerSecurityProtocolMap }}
-            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
-              value: {{ .Values.listenerSecurityProtocolMap }}
-            {{- end }}
-            {{- if .Values.interBrokerListenerName }}
-            - name: KAFKA_INTER_BROKER_LISTENER_NAME
-              value: {{ .Values.interBrokerListenerName }}
-            {{- end }}
-            {{- if .Values.metrics.jmx.enabled }}
-            - name: JMX_PORT
-              value: "5555"
-            {{- end }}
-            {{- if .Values.auth.enabled }}
-            - name: KAFKA_OPTS
-              value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/conf/kafka_jaas.conf"
-            - name: KAFKA_BROKER_USER
-              value: {{ .Values.auth.brokerUser | quote }}
-            - name: KAFKA_BROKER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.secretName" . }}
-                  key: kafka-broker-password
-            - name: KAFKA_INTER_BROKER_USER
-              value: {{ .Values.auth.interBrokerUser | quote }}
-            - name: KAFKA_INTER_BROKER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.secretName" . }}
-                  key: kafka-inter-broker-password
-            {{- if .Values.auth.zookeeperUser }}
-            - name: KAFKA_ZOOKEEPER_USER
-              value: {{ .Values.auth.zookeeperUser | quote }}
-            {{- end }}
-            {{- if .Values.auth.zookeeperPassword }}
-            - name: KAFKA_ZOOKEEPER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.secretName" . }}
-                  key: kafka-zookeeper-password
-            {{- end }}
-            {{- end }}
-            {{- if .Values.auth.certificatesPassword }}
-            - name: KAFKA_CERTIFICATE_PASSWORD
-              value: {{ .Values.auth.certificatesPassword | quote }}
             {{- end }}
             - name: ALLOW_PLAINTEXT_LISTENER
               value: {{ ternary "yes" "no" (or .Values.auth.enabled .Values.allowPlaintextListener) | quote }}
             - name: KAFKA_CFG_BROKER_ID
               value: {{ .Values.brokerId | quote }}
+            {{- if or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) }}
+            - name: KAFKA_OPTS
+              value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/conf/kafka_jaas.conf"
+            {{- if (include "kafka.client.saslAuthentication" .) }}
+            - name: KAFKA_CLIENT_USER
+              value: {{ .Values.auth.jaas.clientUser | quote }}
+            - name: KAFKA_CLIENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.jaasSecretName" . }}
+                  key: client-password
+            {{- end }}
+            {{- if .Values.auth.jaas.zookeeperUser }}
+            - name: KAFKA_ZOOKEEPER_USER
+              value: {{ .Values.auth.jaas.zookeeperUser | quote }}
+            - name: KAFKA_ZOOKEEPER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.jaasSecretName" . }}
+                  key: zookeeper-password
+            {{- end }}
+            {{- if (include "kafka.interBroker.saslAuthentication" .) }}
+            - name: KAFKA_INTER_BROKER_USER
+              value: {{ .Values.auth.jaas.interBrokerUser | quote }}
+            - name: KAFKA_INTER_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.jaasSecretName" . }}
+                  key: inter-broker-password
+            {{- end }}
+            {{- end }}
+            {{- if (include "kafka.tlsEncryption" .) }}
+            - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
+              value: {{ .Values.auth.tlsEndpointIdentificationAlgorithm | quote }}
+            {{- if .Values.auth.jksPassword }}
+            - name: KAFKA_CERTIFICATE_PASSWORD
+              value: {{ .Values.auth.jksPassword | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.metrics.jmx.enabled }}
+            - name: JMX_PORT
+              value: "5555"
+            {{- end }}
             - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
               value: {{ .Values.deleteTopicEnable | quote }}
             - name: KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE
@@ -255,8 +246,6 @@ spec:
               value: {{ .Values.offsetsTopicReplicationFactor | quote }}
             - name: KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
               value: {{ .Values.transactionStateLogReplicationFactor | quote }}
-            - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
-              value: {{ .Values.sslEndpointIdentificationAlgorithm | quote }}
             - name: KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR
               value: {{ .Values.transactionStateLogMinIsr | quote }}
             - name: KAFKA_CFG_NUM_IO_THREADS
@@ -279,15 +268,13 @@ spec:
             {{ include "kafka.tplValue" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           ports:
-            - name: kafka
+            - name: kafka-client
               containerPort: 9092
-            {{- if .Values.auth.ssl }}
-            - name: kafka-ssl
-              containerPort: 9093
-            {{- end }}
-            {{- if and .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
+            - name: kafka-internal
+              containerPort: {{ $interBrokerPort }}
+            {{- if .Values.externalAccess.enabled }}
             - name: kafka-external
-              containerPort: 19092
+              containerPort: 9094
             {{- end }}
           {{- if .Values.livenessProbe }}
           livenessProbe: {{- include "kafka.tplValue" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
@@ -318,9 +305,9 @@ spec:
             - name: shared
               mountPath: /shared
             {{- end }}
-            {{- if .Values.auth.ssl }}
+            {{- if (include "kafka.tlsEncryption" .) }}
             - name: kafka-certificates
-              mountPath: /opt/bitnami/kafka/conf/certs/
+              mountPath: /certs
               readOnly: true
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
@@ -377,10 +364,10 @@ spec:
           configMap:
             name: {{ include "kafka.metrics.jmx.configmapName" . }}
         {{- end }}
-        {{- if .Values.auth.ssl }}
+        {{- if (include "kafka.tlsEncryption" .) }}
         - name: kafka-certificates
           secret:
-            secretName: {{ required "A secret containing the Kafka JKS certificates is required when SSL in enabled" .Values.auth.certificatesSecret }}
+            secretName: {{ required "A secret containing the Kafka JKS files is required when TLS encryption in enabled" .Values.auth.jksSecret }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}

@@ -277,21 +277,68 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 
 {{/*
-Return the Kafka auth credentials secret
+Return true if authentication via SASL should be configured for client communications
 */}}
-{{- define "kafka.secretName" -}}
-{{- if .Values.auth.existingSecret -}}
-    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
-{{- else -}}
-    {{- printf "%s" (include "kafka.fullname" .) -}}
+{{- define "kafka.client.saslAuthentication" -}}
+{{- $saslProtocols := list "sasl" "sasl_tls" -}}
+{{- if has .Values.auth.clientProtocol $saslProtocols -}}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return true if a secret object should be created
+Return true if authentication via SASL should be configured for inter-broker communications
 */}}
-{{- define "kafka.createSecret" -}}
-{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) }}
+{{- define "kafka.interBroker.saslAuthentication" -}}
+{{- $saslProtocols := list "sasl" "sasl_tls" -}}
+{{- if has .Values.auth.interBrokerProtocol $saslProtocols -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if encryption via TLS should be configured
+*/}}
+{{- define "kafka.tlsEncryption" -}}
+{{- $tlsProtocols := list "tls" "mtls" "sasl_tls" -}}
+{{- if or (has .Values.auth.clientProtocol $tlsProtocols) (has .Values.auth.interBrokerProtocol $tlsProtocols) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the type of listener
+Usage:
+{{ include "kafka.listenerType" ( dict "protocol" .Values.path.to.the.Value ) }}
+*/}}
+{{- define "kafka.listenerType" -}}
+{{- if eq .protocol "plaintext" -}}
+PLAINTEXT
+{{- else if or (eq .protocol "tls") (eq .protocol "mtls") -}}
+SSL
+{{- else if eq .protocol "sasl_tls" -}}
+SASL_SSL
+{{- else if eq .protocol "sasl" -}}
+SASL_PLAINTEXT
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Kafka JAAS credentials secret
+*/}}
+{{- define "kafka.jaasSecretName" -}}
+{{- if .Values.auth.jaas.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.jaas.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-jaas" (include "kafka.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a JAAS credentials secret object should be created
+*/}}
+{{- define "kafka.createJaasSecret" -}}
+{{- if and (or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) .Values.auth.jaas.zookeeperUser) (not .Values.auth.jaas.existingSecret) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -396,6 +443,7 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "kafka.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "kafka.validateValues.authProtocols" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
@@ -404,6 +452,15 @@ Compile all warnings into a single message, and call fail.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - Authentication protocols for Kafka */}}
+{{- define "kafka.validateValues.authProtocols" -}}
+{{- $authProtocols := list "plaintext" "tls" "mtls" "sasl" "sasl_tls" -}}
+{{- if or (not (has .Values.auth.clientProtocol $authProtocols)) (not (has .Values.auth.interBrokerProtocol $authProtocols)) -}}
+kafka: auth.clientProtocol auth.interBrokerProtocol
+    Available authentication protocols are "plaintext", "tls", "mtls", "sasl" and "sasl_tls"
 {{- end -}}
 {{- end -}}
 

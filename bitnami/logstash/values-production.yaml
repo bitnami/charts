@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 7.7.0-debian-10-r0
+  tag: 7.7.1-debian-10-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -101,6 +101,21 @@ output: |-
 ## NOTE: This will override input, filter, and output parameters
 ##
 # existingConfiguration:
+
+## Array to add extra volumes (evaluated as a template)
+## extraVolumes:
+##   - name: myvolume
+##     configMap:
+##       name: myconfigmap
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+## extraVolumeMounts:
+##   - mountPath: /opt/bitnami/desired-path
+##     name: myvolume
+##     readOnly: true
+extraVolumeMounts: []
 
 containerPorts:
   # - name: syslog-udp
@@ -290,7 +305,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/logstash-exporter
-    tag: 0.1.2-debian-10-r111
+    tag: 0.1.2-debian-10-r132
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##

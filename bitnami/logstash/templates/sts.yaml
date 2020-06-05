@@ -76,6 +76,9 @@ spec:
             - name: configurations
               mountPath: /bitnami/logstash/config
           {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+            {{- include "logstash.tplValue" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+          {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "logstash.metrics.image" . }}
@@ -106,3 +109,6 @@ spec:
           configMap:
             name: {{ include "logstash.configmapName" . }}
         {{- end }}
+      {{- if .Values.extraVolumes }}
+        {{- include "logstash.tplValue" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+      {{- end }}

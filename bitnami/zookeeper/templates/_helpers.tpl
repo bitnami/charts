@@ -216,9 +216,9 @@ Return podAnnotations
 */}}
 {{- define "zookeeper.podAnnotations" -}}
 {{- if .Values.podAnnotations }}
-{{- toYaml .Values.podAnnotations }}
+{{- toYaml .Values.podAnnotations | nindent 0 }}
 {{- end }}
 {{- if .Values.metrics.podAnnotations }}
-{{- include "zookeeper.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) }}
+{{- include "zookeeper.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 0 }}
 {{- end }}
 {{- end -}}

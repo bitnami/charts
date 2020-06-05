@@ -140,6 +140,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `service.port`                                  | Kubernetes Service port.                                       | `6379`            |
 | `service.annotations`                           | annotations for redis service                                  | {}                |
 | `service.labels`                                | Additional labels for redis service                            | {}                |
+| `service.type`                                  | Service type for default redis service                         | `ClusterIP`       |
+| `service.loadBalancerIP                         | loadBalancerIP if service.type is `LoadBalancer`               | `nil`             |
 | `resources`                                     | Redis CPU/Memory resource requests/limits                      | Memory: `256Mi`, CPU: `100m` |
 | `livenessProbe.enabled`                         | Turn on and off liveness probe.                                | `true`            |
 | `livenessProbe.initialDelaySeconds`             | Delay before liveness probe is initiated.                      | `30`              |
@@ -372,10 +374,10 @@ sidecars:
        containerPort: 1234
 ```
 
-Similarly, you can add extra init containers using the `initContainers` parameter.
+Similarly, you can add extra init containers using the `extraInitContainers` parameter.
 
 ```yaml
-initContainers:
+extraInitContainers:
   - name: your-image-name
     image: your-image
     imagePullPolicy: Always
