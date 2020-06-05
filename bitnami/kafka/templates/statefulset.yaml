@@ -157,9 +157,9 @@ spec:
               {{- if .Values.listeners }}
               value: {{ .Values.listeners }}
               {{- else if .Values.externalAccess.enabled }}
-              value: "INTERNAL://:9093,CLIENT://:9092,EXTERNAL://:9094"
+              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092,EXTERNAL://:9094"
               {{- else }}
-              value: "INTERNAL://:9093,CLIENT://:9092"
+              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092"
               {{- end }}
             {{- if .Values.externalAccess.enabled }}
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
@@ -274,7 +274,7 @@ spec:
             - name: kafka-client
               containerPort: 9092
             - name: kafka-internal
-              containerPort: 9093
+              containerPort: {{ $interBrokerPort }}
             {{- if .Values.externalAccess.enabled }}
             - name: kafka-external
               containerPort: 9094
