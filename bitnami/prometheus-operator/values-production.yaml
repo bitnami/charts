@@ -583,8 +583,7 @@ prometheus:
   ## PrometheusRule defines recording and alerting rules for a Prometheus instance.
   ##
   additionalPrometheusRules: []
-    ## Recording Prometheus rules
-    #- name: custom-recording-rules
+    # - name: custom-recording-rules
     #  groups:
     #    - name: sum_node_by_job
     #      rules:
@@ -594,8 +593,7 @@ prometheus:
     #      rules:
     #        - record: job:prometheus_config_last_reload_successful:sum
     #          expr: sum(prometheus_config_last_reload_successful) by (pod)
-    ## Alerting Prometheus rules
-    #- name: custom-alerting-rules
+    # - name: custom-alerting-rules
     #  groups:
     #    - name: prometheus-config
     #      rules:
