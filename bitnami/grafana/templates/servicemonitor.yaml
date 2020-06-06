@@ -7,12 +7,14 @@ metadata:
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
     {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   selector:
     matchLabels: {{ include "grafana.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: grafana
   endpoints:
     - port: http
       path: "/metrics"
