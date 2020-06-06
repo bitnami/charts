@@ -624,8 +624,8 @@ prometheus:
     #             summary: "Node overtemperature alarm (instance {{ $labels.instance }})"
     #             description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
-  ## Enable additional scrape configs that are managed externally to this chart. Evaluated as a template
-  ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ## Enable additional scrape configs that are managed externally to this chart
+  ##
   additionalScrapeConfigsExternal: false
 
   ## Thanos sidecar container configuration
