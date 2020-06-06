@@ -169,6 +169,13 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `mailReceiver.priority`              | Defines a new task priority                                                                                                                                                                                                                                                                                                                                                                          | `""`                                                    |
 | `mailReceiver.assignedTo`            | Defines a new task priority                                                                                                                                                                                                                                                                                                                                                                          | `""`                                                    |
 | `mailReceiver.allowOverride`         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to alllow all attributes                                                                                                                                                                                                                                                       | `""`                                                    |
+| `certificates.customCA`              | Defines a list of secrets to import into the container trust store                                                                                                                                                                                                                                                                                                                                   | `[]`                                                    |
+| `certificates.image.repository`      | Container sidecar image                                                                                                                                                                                                                                                                                                                                                                              | `alpine`                                                |
+| `certificates.image.tag`             | Container sidecar image tag                                                                                                                                                                                                                                                                                                                                                                          | `latest`                                                |
+| `certificates.image.pullPolicy`      | Container sidecar image pull policy                                                                                                                                                                                                                                                                                                                                                                  | `image.pullPolicy`                                      |
+| `certificates.image.pullSecrets`     | Container sidecar image pull secrets                                                                                                                                                                                                                                                                                                                                                                 | `image.pullSecrets`                                     |
+| `certificates.extraEnvVars`          | Container sidecar extra environment variables (eg proxy)                                                                                                                                                                                                                                                                                                                                             | `[]`                                                    |
+
 
 The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
@@ -221,6 +228,26 @@ The following example includes two PVCs, one for Redmine and another for MariaDB
 
 ```bash
 $ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB bitnami/redmine
+```
+
+## CA Certificates
+
+Custom CA certificates not included in the base docker image can be added with
+the following configuration. The secret must exist in the same namespace as the
+deployment. Will load all certificates files it finds in the secret.
+
+```yaml
+certificates:
+  customCAs:
+  - secret: my-ca-1
+  - secret: my-ca-2
+```
+
+###Secret
+Secret can be created with:
+
+```bash
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ## Upgrading

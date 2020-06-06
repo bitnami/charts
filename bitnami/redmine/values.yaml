@@ -470,3 +470,17 @@ mailReceiver:
   ## Defines a list of attributes which can be overrided by received email body
   ## "all" means that all attributes can be overrided
   allowOverride: ""
+
+# Add custom certificate authorities to redmine container
+certificates:
+  customCA: []
+  # - secret: custom-CA
+  # - secret: more-custom-CAs
+  image:
+    repository: alpine
+    # pullPolicy:
+    # pullSecrets
+    #   - myRegistryKeySecretName
+  extraEnvVars: []
+  # - name: myvar
+  #   value: myval
