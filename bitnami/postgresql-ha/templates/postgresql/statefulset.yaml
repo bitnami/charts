@@ -68,6 +68,11 @@ spec:
       {{- end }}
       containers:
         - name: postgresql
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /pre-stop.sh
           image: {{ include "postgresql-ha.postgresqlImage" . }}
           imagePullPolicy: {{ .Values.postgresqlImage.pullPolicy | quote }}
           {{- if .Values.postgresql.securityContext.enabled }}
@@ -88,6 +93,18 @@ spec:
               value: {{ .Values.persistence.mountPath | quote }}
             - name: PGDATA
               value: {{ printf "%s/%s" .Values.persistence.mountPath "data" | quote }}
+            {{- if and .Values.postgresql.postgresPassword (not (eq .Values.postgresql.username "postgres")) }}
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: POSTGRES_POSTGRES_PASSWORD_FILE
+              value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
+            {{- else }}
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "postgresql-ha.postgresqlSecretName" . }}
+                  key: postgresql-postgres-password
+            {{- end }}
+            {{- end }}
             - name: POSTGRES_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
@@ -205,6 +222,9 @@ spec:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
             {{- end }}
+            - name: hooks-scripts
+              mountPath: /pre-stop.sh
+              subPath: pre-stop.sh
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "postgresql-ha.metricsImage" . }}
@@ -264,6 +284,10 @@ spec:
             {{- end }}
         {{- end }}
       volumes:
+        - name: hooks-scripts
+          configMap:
+            name: {{ printf "%s-hooks-scripts" (include "postgresql-ha.postgresql" .) }}
+            defaultMode: 0755
         {{- if or (.Files.Glob "files/repmgr.conf") (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
         - name: postgresql-config
           configMap:

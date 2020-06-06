@@ -24,11 +24,75 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "phabricator.labels" -}}
+app.kubernetes.io/name: {{ include "phabricator.name" . }}
+helm.sh/chart: {{ include "phabricator.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Match labels
+*/}}
+{{- define "phabricator.matchLabels" -}}
+app.kubernetes.io/name: {{ include "phabricator.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
+Return the MariaDB Hostname
+*/}}
+{{- define "phabricator.databaseHost" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" (include "phabricator.mariadb.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB root user
+*/}}
+{{- define "phabricator.databaseUser" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "root" -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.rootUser -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB Port
+*/}}
+{{- define "phabricator.databasePort" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "3306" -}}
+{{- else -}}
+    {{- printf "%d" (.Values.externalDatabase.port | int ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB User
+*/}}
+{{- define "phabricator.databaseSecretName" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" (include "phabricator.mariadb.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "phabricator.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+
 
 {{/*
 Create a default fully qualified app name.

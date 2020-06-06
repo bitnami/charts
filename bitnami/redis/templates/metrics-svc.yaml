@@ -11,10 +11,10 @@ metadata:
     heritage: {{ .Release.Service }}
     app.kubernetes.io/component: "metrics"
     {{- if .Values.metrics.service.labels -}}
-    {{ toYaml .Values.metrics.service.labels | nindent 4 }}
+    {{- toYaml .Values.metrics.service.labels | nindent 4 }}
     {{- end -}}
   {{- if .Values.metrics.service.annotations }}
-  annotations: {{ toYaml .Values.metrics.service.annotations | nindent 4 }}
+  annotations: {{- toYaml .Values.metrics.service.annotations | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
@@ -22,9 +22,9 @@ spec:
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
   {{- end }}
   ports:
-  - name: metrics
-    port: 9121
-    targetPort: metrics
+    - name: metrics
+      port: 9121
+      targetPort: metrics
   selector:
     app: {{ template "redis.name" . }}
     release: {{ .Release.Name }}

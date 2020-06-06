@@ -21,8 +21,14 @@ spec:
   template:
     metadata:
       labels: {{- include "minio.labels" . | nindent 8 }}
-      {{- if or .Values.podAnnotations }}
-      annotations: {{- include "minio.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- if or .Values.podAnnotations (include "minio.createSecret" .) }}
+      annotations:
+        {{- if (include "minio.createSecret" .) }}
+        checksum/credentials-secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- include "minio.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
     spec:
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
@@ -79,6 +85,8 @@ spec:
               {{- $minioHeadlessServiceName := printf "%s-%s" $minioFullname "headless" | trunc 63  }}
               {{- $releaseNamespace := .Release.Namespace }}
               value: {{range $i, $e := until $replicaCount }}{{ $minioFullname }}-{{ $e }}.{{ $minioHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $.Values.clusterDomain }},{{ end }}
+            - name: MINIO_FORCE_NEW_KEYS
+              value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
             {{- if .Values.useCredentialsFile }}
             - name: MINIO_ACCESS_KEY_FILE
               value: "/opt/bitnami/minio/secrets/access-key"

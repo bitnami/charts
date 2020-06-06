@@ -6,6 +6,9 @@ metadata:
     app.kubernetes.io/component: jobservice
 spec:
   replicas: {{ .Values.jobservice.replicas }}
+  {{- if .Values.jobservice.strategy }}
+  strategy: {{- toYaml .Values.jobservice.strategy | nindent 4 }}
+  {{- end }}  
   selector:
     matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: jobservice

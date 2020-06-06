@@ -4,12 +4,12 @@ kind: Service
 metadata:
   name: {{ template "redis-cluster.fullname" . }}-metrics
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
-    {{- if .Values.metrics.service.labels -}}
-    {{- toYaml .Values.metrics.service.labels | nindent 4 }}
-    {{- end -}}
+    {{- if .Values.metrics.service.labels }}
+    {{ include "common.tplvalues.render" ( dict "value" .Values.metrics.service.labels "context" $ ) | indent 4 }}
+    {{- end }}
     app.kubernetes.io/component: "metrics"
   {{- if .Values.metrics.service.annotations }}
-  annotations: {{- toYaml .Values.metrics.service.annotations | nindent 4 }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}

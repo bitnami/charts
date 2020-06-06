@@ -254,6 +254,15 @@ Get the extended configuration ConfigMap name.
 {{- end -}}
 
 {{/*
+Return true if a configmap should be mounted with PostgreSQL configuration
+*/}}
+{{- define "postgresql.mountConfigurationCM" -}}
+{{- if or (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresqlConfiguration .Values.pgHbaConfiguration .Values.configurationConfigMap }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the initialization scripts ConfigMap name.
 */}}
 {{- define "postgresql.initdbScriptsCM" -}}

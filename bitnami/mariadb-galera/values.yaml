@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.4.12-debian-10-r87
+  tag: 10.4.13-debian-10-r18
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -48,6 +48,11 @@ image:
 ## Specifies the Kubernetes Cluster's Domain Name.
 ##
 clusterDomain: cluster.local
+
+## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: OrderedReady
 
 ## MariaDB Gallera K8s svc properties
 ##
@@ -90,6 +95,22 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
   # name:
+
+## An array to add extra environment variables
+## For example:
+## extraEnvVars:
+##  - name: TZ
+##    value: "Europe/Paris"
+##
+extraEnvVars:
+
+## ConfigMap with extra env vars:
+##
+extraEnvVarsCM:
+
+## Secret with extra env vars:
+##
+extraEnvVarsSecret:
 
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -148,6 +169,16 @@ galera:
   ## Galera cluster name
   ##
   name: galera
+
+  ## Bootstraping options
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
+  bootstrap:
+    ## Node to bootstrap from, you will need to change this parameter incase you want to bootstrap from other node
+    ##
+    bootstrapFromNode: 0
+    ## Force bootstrap
+    ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
+    forceSafeToBootstrap: false
 
   ## Credentials to perform backups
   ##
@@ -501,7 +532,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r85
+    tag: 0.12.1-debian-10-r130
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

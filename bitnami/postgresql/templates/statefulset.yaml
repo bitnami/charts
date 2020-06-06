@@ -40,7 +40,7 @@ spec:
         heritage: {{ .Release.Service | quote }}
         role: master
       {{- with .Values.master.podLabels }}
-      {{- toYaml . | indent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.master.podAnnotations }}
       annotations: {{- toYaml . | nindent 8 }}
@@ -83,9 +83,9 @@ spec:
             - -cx
             - |
               {{- if .Values.persistence.enabled }}
-              mkdir -p {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
-              chmod 700 {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
-              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              mkdir -p {{ .Values.persistence.mountPath }}/data {{- if (include "postgresql.mountConfigurationCM" .) }} {{ .Values.persistence.mountPath }}/conf {{- end }}
+              chmod 700 {{ .Values.persistence.mountPath }}/data {{- if (include "postgresql.mountConfigurationCM" .) }} {{ .Values.persistence.mountPath }}/conf {{- end }}
+              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 {{- if not (include "postgresql.mountConfigurationCM" .) }} -not -name "conf" {{- end }} -not -name ".snapshot" -not -name "lost+found" | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
                 xargs chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
@@ -113,7 +113,7 @@ spec:
             {{- end }}
       {{- end }}
       {{- if .Values.master.extraInitContainers }}
-      {{- tpl .Values.master.extraInitContainers . | nindent 8 }}
+      {{- include "postgresql.tplValue" ( dict "value" .Values.master.extraInitContainers "context" $ ) | nindent 8 }}
       {{- end }}
       {{- end }}
       {{- if .Values.master.priorityClassName }}
@@ -346,6 +346,9 @@ spec:
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ template "postgresql.username" . }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "postgresql.tplValue" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

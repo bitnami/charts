@@ -18,6 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.10+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -58,7 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the MariaDB Galera chart and their default values.
 
-|              Parameter               |                                                                         Description                                                                         |                              Default                              |
+| Parameter                            | Description                                                                                                                                                 | Default                                                           |
 |--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                                | `nil`                                                             |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                             | `[]` (does not add image pull secrets to deployed pods)           |
@@ -94,6 +95,8 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `db.name`                            | Name for new database to create                                                                                                                             | `my_database`                                                     |
 | `db.forcePassword`                   | Force users to specify a password                                                                                                                           | `false`                                                           |
 | `galera.name`                        | Galera cluster name                                                                                                                                         | `galera`                                                          |
+| `galera.bootstrap.bootstrapFromNode`    | Node number to bootstrap first                                                                                                                           | `0`                                                               |
+| `galera.bootstrap.forceSafeToBootstrap` | Force `safe_to_bootstrap: 1` in `grastate.dat`                                                                                                           | `false`                                                           |
 | `galera.mariabackup.user`            | Galera mariabackup user                                                                                                                                     | `mariabackup`                                                     |
 | `galera.mariabackup.password`        | Galera mariabackup password                                                                                                                                 | _random 10 character alphanumeric string_                         |
 | `galera.mariabackup.forcePassword`   | Force users to specify a password                                                                                                                           | `false`                                                           |
@@ -116,6 +119,9 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                | `nil`                                                             |
 | `initdbScriptsConfigMap`             | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                         | `nil`                                                             |
 | `extraFlags`                         | MariaDB additional command line flags                                                                                                                       | `nil`                                                             |
+| `extraEnvVars`                       | Array containing extra env vars to configure MariaDB Galera replicas                                                                                        | `nil`                                                             |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars to configure MariaDB Galera replicas                                                                                    | `nil`                                                             |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars to configure MariaDB Galera replicas                                                                                       | `nil`                                                             |
 | `annotations[].key`                  | key for the the annotation list item                                                                                                                        | `nil`                                                             |
 | `annotations[].value`                | value for the the annotation list item                                                                                                                      | `nil`                                                             |
 | `replicaCount`                       | Desired number of cluster nodes                                                                                                                             | `3`                                                               |
@@ -346,6 +352,95 @@ extraContainers:
       memory: 10Mi
 ```
 
+### Bootstraping a node other than 0
+
+> Note: Some of these procedures can lead to data loss, always make a backup beforehand.
+
+To restart the cluster you need to check the state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it is safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it.
+
+#### Checking `safe_to_boostrap`
+
+First you need to get the name of the persistent volume claims (pvc), for example:
+
+```bash
+$ kubectl get pvc
+NAME                              STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+data-my-galera-mariadb-galera-0   Bound    pvc-a496aded-f604-4a2d-b934-174907c4d235   8Gi        RWO            gp2            25h
+data-my-galera-mariadb-galera-1   Bound    pvc-00ba6121-9042-4760-af14-3b8a40de936c   8Gi        RWO            gp2            25h
+data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909b05   8Gi        RWO            gp2            25h
+```
+
+The following command will print the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This needs to be run for each of the pvc. You will need to change this name accordinly with yours for each PVC.
+
+```bash
+kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "volpod"
+    },
+    "spec": {
+        "containers": [{
+            "command": [
+                "cat",
+                "/mnt/data/grastate.dat"
+            ],
+            "image": "bitnami/minideb",
+            "name": "mycontainer",
+            "volumeMounts": [{
+                "mountPath": "/mnt",
+                "name": "galeradata"
+            }]
+        }],
+        "restartPolicy": "Never",
+        "volumes": [{
+            "name": "galeradata",
+            "persistentVolumeClaim": {
+                "claimName": "data-my-galera-mariadb-galera-2"
+            }
+        }]
+    }
+}' --image="bitnami/minideb"
+```
+
+The output should be similar to this:
+
+```
+# GALERA saved state
+version: 2.1
+uuid:    6f2cbfcd-951b-11ea-a116-5f407049e57d
+seqno:   25
+safe_to_bootstrap: 1
+```
+
+There are two possible scenarios:
+
+#### Only one node with `safe_to_bootstrap: 1`
+
+In this case you will need the node number `N` and run:
+
+```bash
+helm install my-release bitnami/mariadb-galera \
+--set image.pullPolicy=Always \
+--set rootUser.password=XXXX \
+--set galera.mariabackup.password=YYYY \
+--set galera.bootstrap.bootstrapFromNode=N
+```
+
+#### All the nodes with `safe_to_bootstrap: 0`
+
+In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
+
+```bash
+helm install my-release bitnami/mariadb-galera \
+--set image.pullPolicy=Always \
+--set rootUser.password=XXXX \
+--set galera.mariabackup.password=YYYY
+--set galera.bootstrap.bootstrapFromNode=3 \
+--set galera.bootstrap.forceSafeToBootstrap=true
+```
+
 ## Persistence
 
 The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
@@ -364,6 +459,10 @@ $ helm upgrade my-release bitnami/mariadb-galera \
 ```
 
 | Note: you need to substitute the placeholders _[ROOT_PASSWORD]_, _[MARIADB_PASSWORD]_ and _[MARIABACKUP_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 2.0.0
+
+In this version the bootstraping was improved. Now it is possible to indicate a node where to bootstrap from, and force the parameter `safe_to_bootstrap`. This allows to handle situations where the cluster was not cleanly stopped. It should be safe to upgrade from v1 of the chart, but it is wise to create always a backup before performing operations where there is a risk of data loss.
 
 ### To 1.0.0
 

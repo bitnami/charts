@@ -1,0 +1,10 @@
+{{- if not .Values.existingConfigMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "metallb.configMapName" . }}
+  labels: {{- include "metallb.labels" . | nindent 4}}
+data:
+  config: |
+{{ include "metallb.tplValue" ( dict "value" .Values.configInline "context" $) | indent 4 }}
+{{- end }}

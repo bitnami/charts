@@ -1,4 +1,9 @@
 {{- if .Values.metrics.kafka.enabled }}
+{{- $replicaCount := int .Values.replicaCount -}}
+{{- $releaseNamespace := .Release.Namespace -}}
+{{- $clusterDomain := .Values.clusterDomain -}}
+{{- $fullname := include "kafka.fullname" . -}}
+{{- $servicePort := int .Values.service.port -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,13 +25,52 @@ spec:
         - name: kafka-exporter
           image: {{ include  "kafka.metrics.kafka.image" . }}
           imagePullPolicy: {{ .Values.metrics.kafka.image.pullPolicy | quote }}
-          args:
-            - --kafka.server={{ template "kafka.fullname" . }}:{{ .Values.service.port }}
-            - --web.listen-address=:9308
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              kafka_exporter \
+              {{- range $i, $e := until $replicaCount }}
+              --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
+              {{- end }}
+              {{- if (include "kafka.client.saslAuthentication" .) }}
+              --sasl.enabled \
+              --sasl.username={{ .Values.auth.jaas.clientUser | quote }} \
+              --sasl.password="$SASL_USER_PASSWORD" \
+              {{- end }}
+              {{- if (include "kafka.tlsEncryption" .) }}
+              --tls.enabled \
+              {{- if .Values.metrics.kafka.certificatesSecret }}
+              --tls.ca-file="/opt/bitnami/kafka-exporter/certs/ca-file" \
+              --tls.cert-file="/opt/bitnami/kafka-exporter/certs/cert-file" \
+              --tls.key-file="/opt/bitnami/kafka-exporter/certs/key-file" \
+              {{- end }}
+              {{- end }}
+              {{- range $key, $value := .Values.metrics.kafka.extraFlags }}
+              --{{ $key }}{{ if $value }}={{ $value }}{{ end }} \
+              {{- end }}
+              --web.listen-address=:9308
+          env:
+            - name: SASL_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.jaasSecretName" . }}
+                  key: client-password
           ports:
             - name: metrics
               containerPort: 9308
           {{- if .Values.metrics.kafka.resources }}
           resources: {{ toYaml .Values.metrics.kafka.resources | nindent 12 }}
           {{- end }}
+      {{- if and (include "kafka.tlsEncryption" .) .Values.metrics.kafka.certificatesSecret }}
+          volumeMounts:
+            - name: kafka-exporter-certificates
+              mountPath: /opt/bitnami/kafka-exporter/certs/
+              readOnly: true
+      volumes:
+        - name: kafka-exporter-certificates
+          secret:
+            secretName: {{ .Values.metrics.kafka.certificatesSecret }}
+            defaultMode: 256
+      {{- end }}
 {{- end }}

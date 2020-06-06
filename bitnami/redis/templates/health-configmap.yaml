@@ -19,7 +19,7 @@ data:
     no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
 {{- end }}
     response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
         -a $REDIS_PASSWORD $no_auth_warning \
@@ -42,7 +42,7 @@ data:
     no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
 {{- end }}
     response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
         -a $REDIS_PASSWORD $no_auth_warning \
@@ -66,7 +66,7 @@ data:
     no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
 {{- end }}
      response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
         -a $REDIS_PASSWORD $no_auth_warning \
@@ -105,7 +105,7 @@ data:
     no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
 {{- end }}
      response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
         -a $REDIS_MASTER_PASSWORD $no_auth_warning \
@@ -128,7 +128,7 @@ data:
     no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
 {{- end }}
     response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
 {{- if .Values.usePassword }}
         -a $REDIS_MASTER_PASSWORD $no_auth_warning \

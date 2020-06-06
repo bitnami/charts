@@ -14,8 +14,8 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.0-debian-10-r58
-  
+  tag: 3.6.1-debian-10-r37
+
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -180,6 +180,25 @@ service:
   followerPort: 2888
   electionPort: 3888
   publishNotReadyAddresses: true
+  tls:
+    client_enable: true
+    quorum_enable: true
+    disable_base_client_port: true
+
+    client_port: 3181
+
+    client_keystore_path: /tls_key_store/key_store_file
+    client_keystore_password: ""
+    client_truststore_path: /tls_trust_store/trust_store_file
+    client_truststore_password: ""
+
+    quorum_keystore_path: /tls_key_store/key_store_file
+    quorum_keystore_password: ""
+    quorum_truststore_path: /tls_trust_store/trust_store_file
+    quorum_truststore_password: ""
+  annotations: {}
+  headless:
+    annotations: {}
 
 ## Service account for Zookeeper to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -304,7 +323,7 @@ metrics:
   ##
   serviceMonitor:
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
     ##
     namespace:
 
@@ -323,3 +342,35 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    enabled: false
+    ## Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace:
+
+    ## PrometheusRule selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # selector:
+    #   prometheus: my-prometheus
+
+    ## Some example rules.
+    rules: []
+    #  - alert: ZookeeperSyncedFollowers
+    #    annotations:
+    #      message: The number of synced followers for the leader node in Zookeeper deployment my-release is less than 2. This usually means that some of the Zookeeper nodes aren't communicating properly. If it doesn't resolve itself you can try killing the pods (one by one).
+    #    expr: max(synced_followers{service="my-release-metrics"}) < 2
+    #    for: 5m
+    #    labels:
+    #      severity: critical
+    #  - alert: ZookeeperOutstandingRequests
+    #    annotations:
+    #      message: The number of outstanding requests for Zookeeper pod {{ $labels.pod }} is greater than 10. This can indicate a performance issue with the Pod or cluster a whole.
+    #    expr: outstanding_requests{service="my-release-metrics"} > 10
+    #    for: 5m
+    #    labels:
+    #      severity: critical
+

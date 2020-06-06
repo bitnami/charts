@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.1-debian-10-r27
+  tag: 0.7.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -40,7 +40,7 @@ sources:
   - ingress
 
 ## DNS provider where the DNS records will be created. Available providers are:
-## - aws, azure, cloudflare, coredns, designate, digitalocoean, google, infoblox, rfc2136, transip
+## - alibabacloud, aws, azure, cloudflare, coredns, designate, digitalocoean, google, infoblox, rfc2136, transip
 ##
 provider: aws
 
@@ -68,6 +68,23 @@ publishHostIP: false
 ## The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)
 ##
 serviceTypeFilter: []
+
+## Alibaba cloud configuration to be set via arguments/env. variables
+##
+alibabacloud:
+  ## These will be added to /etc/kubernetes/alibaba-cloud.json via secret
+  accessKeyId: ""
+  accessKeySecret: ""
+  regionId: ""
+
+  ## Use an existing secret with key "alibaba-cloud.json" defined.
+  ## This ignores alibabacloud.accessKeyId, and alibabacloud.accessKeySecret
+  ##
+  # secretName:
+
+  ## Zone Filter. Available values are: public, private, or no value for both
+  ##
+  zoneType: ""
 
 ## AWS configuration to be set via arguments/env. variables
 ##
@@ -283,6 +300,8 @@ rfc2136:
   tsigSecretAlg: hmac-sha256
   tsigKeyname: externaldns-key
   tsigAxfr: true
+  ## Possible units [ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
+  minTTL: "0s"
 
 ## PowerDNS configuration to be set via arguments/env. variables
 ##
@@ -290,6 +309,9 @@ pdns:
   apiUrl: ""
   apiPort: "8081"
   apiKey: ""
+  ## Use an external secret where pdns_api_key is defined
+  ##
+  # secretName: ""
 
 ## TransIP configuration to be set via arguments/env. variables
 ##
@@ -300,6 +322,13 @@ transip:
   ##
   ## API key that is authorised for the account
   apiKey: ""
+
+## VinylDNS configuration to be set via arguments/env. variables
+##
+vinyldns:
+  host: ""
+  accessKey: ""
+  secretKey: ""
 
 ## Limit possible target zones by domain suffixes (optional)
 ##
@@ -421,24 +450,23 @@ service:
   ##
   annotations: {}
 
-## RBAC parameteres
+## ServiceAccount parameters
+## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  create: true
+  ## Service Account for pods
+  ##
+  name:
+  ## Annotations for the Service Account
+  ##
+  annotations: {}
+
+## RBAC parameteres (clusterRole and clusterRoleBinding)
 ## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 ##
 rbac:
   create: true
-  ## Determine whether a Service Account should be created
-  ## or reuse a exiting one
-  ##
-  serviceAccountCreate: true
-
-  ## Service Account for pods
-  ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccountName:
-
-  ## Annotations for the Service Account
-  ##
-  serviceAccountAnnotations: {}
   ## RBAC API version
   ##
   apiVersion: v1beta1

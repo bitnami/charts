@@ -4,13 +4,16 @@ metadata:
   name: {{ template "redis-cluster.fullname" . }}
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
     {{- if .Values.service.labels -}}
-    {{ toYaml .Values.service.labels | nindent 4 }}
+    {{ include "common.tplvalues.render" ( dict "value" .Values.service.labels "context" $ ) | indent 4 }}
     {{- end -}}
 {{- if .Values.service.annotations }}
-  annotations: {{ toYaml .Values.service.annotations | nindent 4 }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $ ) | nindent 4 }}
 {{- end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
+  {{- if and (eq "LoadBalancer" .Values.service.type) .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end}}
   ports:
     - name: tcp-redis
       port: {{ .Values.service.port }}

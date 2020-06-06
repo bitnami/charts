@@ -42,7 +42,7 @@ data:
       "namespace": "{{ .Release.Namespace }}",
       "appVersion": "{{ .Chart.AppVersion }}",
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
-      "oauthLoginURI": "/oauth2/start",
-      "oauthLogoutURI": "/oauth2/sign_out",
+      "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
+      "oauthLogoutURI": {{ .Values.authProxy.oauthLogoutURI | quote }},
       "featureFlags": {{ .Values.featureFlags | toJson }}
     }

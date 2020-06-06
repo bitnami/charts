@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: {{ include "cassandra.fullname" . }}-headless
   labels: {{- include "cassandra.labels" . | nindent 4 }}
+  annotations: {{ include "cassandra.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
 spec:
   clusterIP: None
   publishNotReadyAddresses: true
