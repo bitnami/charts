@@ -31,7 +31,7 @@ spec:
       {{- if .Values.envoy.tolerations}}
       tolerations: {{- include "contour.tplValue" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 300
+      terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}
       containers:
       - command:
         - /bin/contour
@@ -65,7 +65,7 @@ spec:
         - /config/envoy.json
         - --service-cluster $(CONTOUR_NAMESPACE)
         - --service-node $(ENVOY_POD_NAME)
-        - --log-level info
+        - --log-level {{ .Value.envoy.logLevel }}
         image: {{ include "envoy.image" . }}
         imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
         name: envoy
@@ -135,7 +135,7 @@ spec:
         - /config/envoy.json
         - --xds-address=contour
         - --xds-port=8001
-        - --envoy-cafile=/ca/cacert.pem
+        - --envoy-cafile=/certs/ca.crt
         - --envoy-cert-file=/certs/tls.crt
         - --envoy-key-file=/certs/tls.key
         command:
@@ -151,23 +151,17 @@ spec:
         - name: envoycert
           mountPath: /certs
           readOnly: true
-        - name: cacert
-          mountPath: /ca
-          readOnly: true
         env:
         - name: CONTOUR_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-      automountServiceAccountToken: false
+      serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
       - name: envoy-config
         emptyDir: {}
       - name: envoycert
         secret:
           secretName: envoycert
-      - name: cacert
-        secret:
-          secretName: cacert
       restartPolicy: Always
 {{- end -}}

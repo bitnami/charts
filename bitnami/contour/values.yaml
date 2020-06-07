@@ -274,7 +274,10 @@ envoy:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  
+  terminationGracePeriodSeconds: 300
 
+  logLevel: info
 prometheus:
   # Prometheus Operator service monitors
   serviceMonitor:

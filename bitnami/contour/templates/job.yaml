@@ -33,8 +33,11 @@ spec:
         command:
         - contour
         - certgen
-        - --incluster
         - --kube
+        - --incluster
+        - --overwrite
+        - --secrets-format=compact
+        - --namespace=$(CONTOUR_NAMESPACE)
         env:
         - name: CONTOUR_NAMESPACE
           valueFrom:

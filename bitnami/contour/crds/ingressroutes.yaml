@@ -1,9 +1,8 @@
----
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.2.4
+    controller-gen.kubebuilder.io/version: v0.2.9
   name: ingressroutes.contour.heptio.com
 spec:
   additionalPrinterColumns:
@@ -333,6 +332,29 @@ spec:
               type: string
             description:
               type: string
+            loadBalancer:
+              description: LoadBalancer contains the current status of the load balancer.
+              properties:
+                ingress:
+                  description: Ingress is a list containing ingress points for the
+                    load-balancer. Traffic intended for the service should be sent
+                    to these ingress points.
+                  items:
+                    description: 'LoadBalancerIngress represents the status of a load-balancer
+                      ingress point: traffic intended for the service should be sent
+                      to an ingress point.'
+                    properties:
+                      hostname:
+                        description: Hostname is set for load-balancer ingress points
+                          that are DNS based (typically AWS load-balancers)
+                        type: string
+                      ip:
+                        description: IP is set for load-balancer ingress points that
+                          are IP based (typically GCE or OpenStack load-balancers)
+                        type: string
+                    type: object
+                  type: array
+              type: object
           type: object
       required:
       - metadata

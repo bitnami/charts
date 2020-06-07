@@ -56,7 +56,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 Common labels
 */}}
 {{- define "contour.labels" -}}
-app: {{ include "contour.name" . }}
 app.kubernetes.io/name: {{ include "contour.name" . }}
 helm.sh/chart: {{ include "contour.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
@@ -152,6 +151,18 @@ imagePullSecrets:
 {{- range .Values.envoy.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
+{{- end -}}
+{{- end -}}
+
+
+{{/*
+Create the name of the envoy service account to use
+*/}}
+{{- define "envoy.envoyServiceAccountName" -}}
+{{- if .Values.contour.serviceAccount.create -}}
+    {{ default (printf "%s-envoy" (include "contour.fullname" .)) .Values.envoy.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.envoy.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.2.4
+    controller-gen.kubebuilder.io/version: v0.2.9
   name: tlscertificatedelegations.contour.heptio.com
 spec:
   group: contour.heptio.com
@@ -78,8 +78,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.2.4
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.2.9
   name: tlscertificatedelegations.projectcontour.io
 spec:
   group: projectcontour.io

@@ -44,18 +44,19 @@ spec:
       tolerations: {{- include "contour.tplValue" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
       containers:
-      - args:
+      - command:
+        - contour
+        args:
         - serve
         - --incluster
         - --xds-address=0.0.0.0
         - --xds-port=8001
         - --envoy-service-http-port=80
         - --envoy-service-https-port=443
-        - --contour-cafile=/ca/cacert.pem
+        - --contour-cafile=/certs/ca.crt
         - --contour-cert-file=/certs/tls.crt
         - --contour-key-file=/certs/tls.key
         - --config-path=/config/contour.yaml
-        command: ["contour"]
         image: {{ include "contour.image" . }}
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
         name: contour
@@ -93,9 +94,6 @@ spec:
         - name: contourcert
           mountPath: /certs
           readOnly: true
-        - name: cacert
-          mountPath: /ca
-          readOnly: true
         - name: contour-config
           mountPath: /config
           readOnly: true
@@ -118,9 +116,6 @@ spec:
       - name: contourcert
         secret:
           secretName: contourcert
-      - name: cacert
-        secret:
-          secretName: cacert
       - name: contour-config
         configMap:
           name: {{ include "contour.configMapName" . }}
