@@ -8,11 +8,12 @@ spec:
   replicas: {{ .Values.alertmanager.replicaCount }}
   serviceAccountName: {{ template "prometheus-operator.alertmanager.serviceAccountName" . }}
   {{- if .Values.alertmanager.image }}
-  baseImage: {{ template "prometheus-operator.alertmanager.baseImage" . }}
-  version: {{ .Values.alertmanager.image.tag }}
+  image: {{ template "prometheus-operator.alertmanager.image" . }}
   {{- end }}
   listenLocal: {{ .Values.alertmanager.listenLocal }}
-  {{- if and .Values.alertmanager.ingress.enabled .Values.alertmanager.ingress.hosts }}
+  {{- if index .Values.alertmanager "externalUrl" }}
+  externalUrl: "{{ .Values.alertmanager.externalUrl }}"
+  {{- else if and .Values.alertmanager.ingress.enabled .Values.alertmanager.ingress.hosts }}
   externalUrl: {{ if .Values.alertmanager.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.alertmanager.ingress.hosts 0).name }}/
   {{- else }}
   externalUrl: http://{{ template "prometheus-operator.alertmanager.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.alertmanager.service.port }}
@@ -36,6 +37,20 @@ spec:
   {{- end }}
   {{- if .Values.alertmanager.storageSpec }}
   storage: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.storageSpec "context" $) | nindent 4 }}
+  {{- else }}
+  {{- if .Values.alertmanager.persistence.enabled }}
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          {{- range .Values.alertmanager.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.alertmanager.persistence.size | quote }}
+        {{- include "prometheus-operator.alertmanager.storageClass" . }}
+  {{- end }}
   {{- end }}
   {{- if .Values.alertmanager.podMetadata }}
   podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podMetadata "context" $) | nindent 4 }}
@@ -50,7 +65,9 @@ spec:
     {{- if .Values.alertmanager.nodeAffinity }}
     nodeAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.nodeAffinity "context" $) | nindent 6 }}
     {{- end }}
-    {{- if eq .Values.alertmanager.podAntiAffinity "hard" }}
+    {{- if index .Values.alertmanager "podAntiAffinitySpec" }}
+    podAntiAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podAntiAffinitySpec "context" $) | nindent 6 }}
+    {{- else if eq .Values.alertmanager.podAntiAffinity "hard" }}
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: "kubernetes.io/hostname"
@@ -68,6 +85,12 @@ spec:
     {{- if .Values.alertmanager.podAffinity }}
     podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podAffinity "context" $) | nindent 6 }}
     {{- end }}
+  {{- if .Values.alertmanager.volumes }}
+  volumes: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.volumes "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.alertmanager.volumeMounts }}
+  volumeMounts: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
+  {{- end }}
 {{- include "prometheus-operator.alertmanager.imagePullSecrets" . | indent 2 }}
   {{- if .Values.alertmanager.containers }}
   containers: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.containers "context" $) | nindent 4 }}

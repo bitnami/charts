@@ -3,9 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "mongodb.fullname" . }}
-  {{- if .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
-  {{- end }}
+  namespace: {{ template "mongodb.serviceMonitor.namespace" . }}
   labels:
     app: {{ template "mongodb.name" . }}
     chart: {{ template "mongodb.chart" . }}
@@ -25,11 +23,11 @@ spec:
   jobLabel: {{ template "mongodb.fullname" . }}
   namespaceSelector:
     matchNames:
-    - "{{ $.Release.Namespace }}"
+    - "{{ template "mongodb.namespace" . }}"
   selector:
     matchLabels:
       app: {{ template "mongodb.name" . }}
       chart: {{ template "mongodb.chart" . }}
       release: "{{ .Release.Name }}"
       heritage: "{{ .Release.Service }}"
-{{- end }}      
+{{- end }}

@@ -20,7 +20,7 @@ spec:
       labels: {{- include "thanos.labels" . | nindent 8 }}
         app.kubernetes.io/component: compactor
       annotations:
-        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-configmap.yaml") . | sha256sum }}
+        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if .Values.compactor.podAnnotations }}
         {{- include "thanos.tplValue" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -97,14 +97,21 @@ spec:
           {{- end }}
           volumeMounts:
             - name: objstore-config
+              {{- if .Values.existingObjstoreSecretItems }}
+              mountPath: /conf
+              {{- else }}
               mountPath: /conf/objstore.yml
               subPath: objstore.yml
+              {{- end }}
             - name: data
               mountPath: /data
       volumes:
         - name: objstore-config
-          configMap:
-            name: {{ include "thanos.objstoreConfigmapName" . }}
+          secret:
+            secretName: {{ include "thanos.objstoreSecretName" . }}
+            {{- if .Values.existingObjstoreSecretItems }}
+            items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
+            {{- end }}
         - name: data
           {{- if .Values.compactor.persistence.enabled }}
           persistentVolumeClaim:

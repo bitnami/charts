@@ -4,6 +4,7 @@ metadata:
   name: {{ template "mariadb-galera.fullname" . }}
   labels: {{- include "mariadb-galera.labels" . | nindent 4 }}
 spec:
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "mariadb-galera.matchLabels" . | nindent 6 }}
@@ -49,7 +50,24 @@ spec:
         - name: "mariadb-galera"
           image: {{ template "mariadb-galera.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - bash
+            - -ec
+            - |
+                {{- $fullname := include "mariadb-galera.fullname" . }}
+                {{- $bootstrapFromNode := int .Values.galera.bootstrap.bootstrapFromNode }}
+                # Bootstrap from the indicated node
+                NODE_ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+                if [[ "$NODE_ID" -eq "{{ $bootstrapFromNode }}" ]]; then
+                    export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
+                    export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
+                fi
+                exec /opt/bitnami/scripts/mariadb-galera/entrypoint.sh /opt/bitnami/scripts/mariadb-galera/run.sh
           env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: MARIADB_GALERA_CLUSTER_NAME
@@ -91,14 +109,16 @@ spec:
                   name: {{ template "mariadb-galera.fullname" . }}
                   {{- end }}
                   key: mariadb-galera-mariabackup-password
+            - name: MARIADB_ENABLE_LDAP
+              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
-            - name: MARIADB_LDAP_URI
+            - name: LDAP_URI
               value: {{ .Values.ldap.uri }}
-            - name: MARIADB_LDAP_BASE
+            - name: LDAP_BASE
               value: {{ .Values.ldap.base }}
-            - name: MARIADB_LDAP_BIND_DN
+            - name: LDAP_BIND_DN
               value: {{ .Values.ldap.binddn }}
-            - name: MARIADB_LDAP_BIND_PASSWORD
+            - name: LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
                   {{- if .Values.existingSecret }}
@@ -107,18 +127,18 @@ spec:
                   name: {{ template "mariadb-galera.fullname" . }}
                   {{- end }}
                   key: ldap-bindpw
-            - name: MARIADB_LDAP_NSS_INITGROUPS_IGNOREUSERS
+            - name: LDAP_NSS_INITGROUPS_IGNOREUSERS
               value: {{ .Values.ldap.nss_initgroups_ignoreusers | quote }}
             {{- if .Values.ldap.bslookup }}
-            - name: MARIADB_LDAP_BASE_LOOKUP
+            - name: LDAP_BASE_LOOKUP
               value: {{ .Values.ldap.bslookup }}
             {{- end }}
             {{- if .Values.ldap.scope }}
-            - name: MARIADB_LDAP_SCOPE
+            - name: LDAP_SCOPE
               value: {{ .Values.ldap.scope }}
             {{- end }}
             {{- if .Values.ldap.tls_reqcert }}
-            - name: MARIADB_LDAP_TLS_REQCERT
+            - name: LDAP_TLS_REQCERT
               value: {{ .Values.ldap.tls_reqcert }}
             {{- end }}
             {{- end }}
@@ -126,6 +146,30 @@ spec:
             - name: MARIADB_EXTRA_FLAGS
               value: {{ .Values.extraFlags | quote }}
             {{- end }}
+            - name: MARIADB_ENABLE_TLS
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name:  MARIADB_TLS_CERT_FILE
+              value: {{ template "mariadb-galera.tlsCert" . }}
+            - name:  MARIADB_TLS_KEY_FILE
+              value: {{ template "mariadb-galera.tlsCertKey" . }}
+            - name:  MARIADB_TLS_CA_FILE
+              value: {{ template "mariadb-galera.tlsCACert" . }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "mariadb-galera.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -167,6 +211,8 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: previous-boot
+              mountPath: /opt/bitnami/mariadb/.bootstrap
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
               {{- if .Values.persistence.subPath }}
@@ -183,6 +229,11 @@ spec:
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: mariadb-galera-certificates
+              mountPath: /bitnami/mariadb/certs/
+              readOnly: true
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -226,6 +277,14 @@ spec:
         {{- include "mariadb-galera.tplValue" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: previous-boot
+          emptyDir: {}
+        {{- if .Values.tls.enabled }}
+        - name: mariadb-galera-certificates
+          secret:
+            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
+            defaultMode: 256
+        {{- end }}
         {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
         - name: mariadb-galera-config
           configMap:

@@ -57,18 +57,18 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "elasticsearch.labels" -}}
-app: {{ include "elasticsearch.name" . }}
-chart: {{ include "elasticsearch.chart" . }}
-release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
+app.kubernetes.io/name: {{ include "elasticsearch.name" . }}
+helm.sh/chart: {{ include "elasticsearch.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
 Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
 */}}
 {{- define "elasticsearch.matchLabels" -}}
-app: {{ include "elasticsearch.name" . }}
-release: {{ .Release.Name }}
+app.kubernetes.io/name: {{ include "elasticsearch.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
@@ -113,15 +113,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a default fully qualified discovery name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "elasticsearch.discovery.fullname" -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.discovery.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
 Create a default fully qualified coordinating name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -135,12 +126,54 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Return the hostname of every ElasticSearch seed node
+*/}}
+{{- define "elasticsearch.hosts" -}}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $masterFullname := include "elasticsearch.master.fullname" . }}
+{{- $coordinatingFullname := include "elasticsearch.coordinating.fullname" . }}
+{{- $dataFullname := include "elasticsearch.data.fullname" . }}
+{{- $ingestFullname := include "elasticsearch.ingest.fullname" . }}
+{{- $masterFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- $coordinatingFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- $dataFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- if .Values.ingest.enabled }}
+{{- $ingestFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified data name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "elasticsearch.data.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s-%s" .Release.Name $name .Values.data.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{ template "elasticsearch.initScriptsSecret" . }}
+{{/*
+Get the initialization scripts volume name.
+*/}}
+{{- define "elasticsearch.initScripts" -}}
+{{- printf "%s-init-scripts" (include "elasticsearch.fullname" .) -}}
+{{- end -}}
+
+{{ template "elasticsearch.initScriptsCM" . }}
+{{/*
+Get the initialization scripts ConfigMap name.
+*/}}
+{{- define "elasticsearch.initScriptsCM" -}}
+{{- printf "%s" .Values.initScriptsCM -}}
+{{- end -}}
+
+{{ template "elasticsearch.initScriptsSecret" . }}
+{{/*
+Get the initialization scripts Secret name.
+*/}}
+{{- define "elasticsearch.initScriptsSecret" -}}
+{{- printf "%s" .Values.initScriptsSecret -}}
 {{- end -}}
 
 {{/*

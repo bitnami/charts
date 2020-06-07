@@ -14,7 +14,8 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.0-debian-10-r2
+  tag: 3.6.1-debian-10-r37
+
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,6 +56,26 @@ volumePermissions:
     # pullSecrets:
     #   - myRegistryKeySecretName
   resources: {}
+
+## extraVolumes and extraVolumeMounts allows you to mount other volumes
+## Example Use Cases:
+##  mount certificates to enable tls
+# extraVolumes:
+# - name: zookeeper-keystore
+#   secret:
+#     defaultMode: 288
+#     secretName: zookeeper-keystore
+# - name: zookeeper-trustsore
+#   secret:
+#     defaultMode: 288
+#     secretName: zookeeper-truststore
+# extraVolumeMounts:
+# - name: zookeeper-keystore
+#   mountPath: /certs/keystore
+#   readOnly: true
+# - name: zookeeper-truststore
+#   mountPath: /certs/truststore
+#   readOnly: true
 
 ## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -166,6 +187,25 @@ service:
   followerPort: 2888
   electionPort: 3888
   publishNotReadyAddresses: true
+  tls:
+    client_enable: false
+    quorum_enable: false
+    disable_base_client_port: false
+
+    client_port: 3181
+
+    client_keystore_path: /tls_key_store/key_store_file
+    client_keystore_password: ""
+    client_truststore_path: /tls_trust_store/trust_store_file
+    client_truststore_password: ""
+
+    quorum_keystore_path: /tls_key_store/key_store_file
+    quorum_keystore_password: ""
+    quorum_truststore_path: /tls_trust_store/trust_store_file
+    quorum_truststore_password: ""
+  annotations: {}
+  headless:
+    annotations: {}
 
 ## Service account for Zookeeper to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -192,6 +232,12 @@ securityContext:
 ##   GKE, AWS & OpenStack)
 ##
 persistence:
+  ## A manually managed Persistent Volume and Claim
+  ## If defined, PVC must be created manually before volume will be bound
+  ## The value is evaluated as a template
+  ##
+  # existingClaim:
+
   enabled: true
   # storageClass: "-"
   accessModes:
@@ -208,6 +254,18 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+
+## Labels
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
+## Annotations
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+
+## Name of the priority class to be used by zookeeper pods, priority class needs to be created beforehand
+## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+priorityClassName: ""
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -256,56 +314,23 @@ networkPolicy:
   ##
   # allowExternal: true
 
-## Prometheus Exporter / Metrics
+## Prometheus Metrics
 ##
 metrics:
   enabled: false
-
-  image:
-    registry: docker.io
-    repository: bitnami/zookeeper-exporter
-    tag: 0.1.3-debian-10-r43
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## Metrics exporter pod Annotation and Labels
+  port: 9141
+  ## Prometheus pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9141"
-  podLabels: {}
-
-  timeoutSeconds: 3
-
-  ## Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
-
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
+    prometheus.io/port: "{{ .Values.metrics.port }}"
 
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
     ##
     namespace:
 
@@ -324,3 +349,34 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    enabled: false
+    ## Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace:
+
+    ## PrometheusRule selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # selector:
+    #   prometheus: my-prometheus
+
+    ## Some example rules.
+    rules: []
+    #  - alert: ZookeeperSyncedFollowers
+    #    annotations:
+    #      message: The number of synced followers for the leader node in Zookeeper deployment my-release is less than 2. This usually means that some of the Zookeeper nodes aren't communicating properly. If it doesn't resolve itself you can try killing the pods (one by one).
+    #    expr: max(synced_followers{service="my-release-metrics"}) < 2
+    #    for: 5m
+    #    labels:
+    #      severity: critical
+    #  - alert: ZookeeperOutstandingRequests
+    #    annotations:
+    #      message: The number of outstanding requests for Zookeeper pod {{ $labels.pod }} is greater than 10. This can indicate a performance issue with the Pod or cluster a whole.
+    #    expr: outstanding_requests{service="my-release-metrics"} > 10
+    #    for: 5m
+    #    labels:
+    #      severity: critical

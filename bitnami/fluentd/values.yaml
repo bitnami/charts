@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.9.3-debian-10-r1
+  tag: 1.11.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -44,6 +44,11 @@ forwarder:
   ## Enable forwarder daemonset
   ##
   enabled: true
+
+  ## Forwarder daemon user and group (set to root by default because it reads from host paths)
+  ##
+  daemonUser: root
+  daemonGroup: root
 
   ## K8s Security Context for forwarder pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -204,6 +209,20 @@ forwarder:
   ##
   podAnnotations: {}
 
+  ## Extra labels to add to Pod
+  podLabels: {}
+
+  ## Extra volumes to mount
+  ## Example Use Case: mount systemd journal volume
+  # extraVolumes:
+  #   - name: systemd
+  #       hostPath:
+  #         path: /run/log/journal/
+  #
+  # extraVolumeMounts:
+  #   - name: systemd
+  #     mountPath: /run/log/journal/
+
 ## Agregator parameters
 ##
 aggregator:
@@ -269,10 +288,10 @@ aggregator:
     ## Service ports
     ##
     ports:
-      # http:
-      #   port: 9880
-      #   targetPort: http
-      #   protocol: TCP
+      http:
+        port: 9880
+        targetPort: http
+        protocol: TCP
       tcp:
         port: 24224
         targetPort: tcp
@@ -361,6 +380,22 @@ aggregator:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+
+  ## Extra labels to add to Pod
+  podLabels: {}
+
+  ## Persist data to a persistent volume
+  persistence:
+    enabled: false
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 10Gi
 
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/

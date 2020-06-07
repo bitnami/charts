@@ -11,9 +11,12 @@ metadata:
     chart: {{ template "postgresql.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
-{{- with .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml . | indent 4 }}
-{{- end }}
+  {{- with .Values.metrics.prometheusRule.additionalLabels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
 {{- with .Values.metrics.prometheusRule.rules }}
   groups:

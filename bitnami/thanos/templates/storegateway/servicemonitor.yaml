@@ -12,6 +12,7 @@ spec:
   selector:
     matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: storegateway
+      prometheus-operator/monitor: 'true'
   endpoints:
     - port: http
       {{- if .Values.metrics.serviceMonitor.interval }}

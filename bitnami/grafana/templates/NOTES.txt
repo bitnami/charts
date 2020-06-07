@@ -25,13 +25,7 @@
 2. Get the admin credentials:
 
     echo "User: {{ .Values.admin.user }}"
-    echo "Password: $(kubectl get secret {{ include "grafana.fullname" . }}-secret --namespace {{ .Release.Namespace }} -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)"
+    echo "Password: $(kubectl get secret {{ include "grafana.fullname" . }}-admin --namespace {{ .Release.Namespace }} -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)"
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
-
+{{ include "grafana.checkRollingTags" . }}
 {{ include "grafana.validateValues" . }}

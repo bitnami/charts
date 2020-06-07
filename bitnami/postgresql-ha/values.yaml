@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.7.0-debian-10-r30
+  tag: 11.8.0-debian-10-r21
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.1-debian-10-r20
+  tag: 4.1.2-debian-10-r15
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r43
+  tag: 0.8.0-debian-10-r132
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -121,6 +121,14 @@ clusterDomain: cluster.local
 ## PostgreSQL parameters
 ##
 postgresql:
+  ## Labels to add to the StatefulSet. Evaluated as template
+  ##
+  labels: {}
+
+  ## Labels to add to the StatefulSet pods. Evaluated as template
+  ##
+  podLabels: {}
+
   ## Number of replicas to deploy
   ##
   replicaCount: 2
@@ -144,6 +152,11 @@ postgresql:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
+
+  ## Pod priority class
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
 
   ## Tolerations for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -205,6 +218,13 @@ postgresql:
   username: postgres
   # password:
   # database:
+
+  ## PostgreSQL admin password (used when `postgresql.username` is not `postgres`)
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
+  # postgresPassword:
+
+  ## Mount PostgreSQL secret as a file instead of passing environment variable
+  # usePasswordFile: false
 
   ## Upgrade repmgr extension in the database
   ##
@@ -282,9 +302,22 @@ postgresql:
   ##
   # initdbScriptsCM:
 
+  ## Secret with scripts to be run at first boot
+  ## Note: can be used with initdbScriptsCM or initdbScripts
+  ##
+  # initdbScriptsSecret:
+
 ## Pgpool parameters
 ##
 pgpool:
+  ## Labels to add to the Deployment. Evaluated as template
+  ##
+  labels: {}
+
+  ## Labels to add to the pods. Evaluated as template
+  ##
+  podLabels: {}
+
   ## Number of replicas to deploy
   ##
   replicaCount: 1
@@ -304,6 +337,11 @@ pgpool:
   ##
   nodeSelector: {}
 
+  ## Pod priority class
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
   ## Tolerations for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -314,8 +352,8 @@ pgpool:
   ##
   securityContext:
     enabled: true
-    fsGroup: 0
-    runAsUser: 0
+    fsGroup: 1001
+    runAsUser: 1001
 
   ## Pgpool containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -364,6 +402,15 @@ pgpool:
   adminUsername: admin
   # adminPassword:
 
+  ## The number of preforked Pgpool-II server processes.  It is also the concurrent
+  ## connections limit to Pgpool-II from clients. Must be a positive integer. (PGPOOL_NUM_INIT_CHILDREN)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  # numInitChildren:
+
+  ## The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  # maxPools:
+
   ## Pgpool configuration
   ## Specify content for pgpool.conf
   ## Alternatively, you can put your pgpool.conf under the files/ directory
@@ -389,6 +436,11 @@ pgpool:
   ## NOTE: This will override pgpool.initdbScripts
   ##
   # initdbScriptsCM:
+
+  ## Secret with scripts to be run everytime Pgpool container is initialized
+  ## Note: can be used with initdbScriptsCM or initdbScripts
+  ##
+  # initdbScriptsSecret:
 
   ## Use Pgpool Load-Balancing
   ##
@@ -488,16 +540,30 @@ metrics:
   ##
   serviceMonitor:
     enabled: false
+
     ## Specify a namespace if needed
     # namespace: monitoring
     # fallback to the prometheus default unless specified
     # interval: 10s
     # scrapeTimeout: 10s
+
     ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     selector:
       prometheus: kube-prometheus
+
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    relabelings: []
+
+    ## MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    metricRelabelings: []
 
 ## Persistence paramaters
 ##

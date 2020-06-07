@@ -1,4 +1,4 @@
-{{- if .Values.ruler.enabled -}}
+{{- if and (.Values.ruler.enabled) (.Values.ruler.service.additionalHeadless) -}}
 apiVersion: v1
 kind: Service
 metadata:

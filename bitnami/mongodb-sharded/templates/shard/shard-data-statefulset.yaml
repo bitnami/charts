@@ -20,6 +20,7 @@ spec:
         {{- if $.Values.shardsvr.dataNode.podLabels }}
           {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
+        shard: {{ $i | quote }}
       {{- if or $.Values.common.podAnnotations $.Values.shardsvr.dataNode.podAnnotations $.Values.metrics.enabled }}
       annotations:
         {{- if $.Values.common.podAnnotations }}
@@ -37,7 +38,7 @@ spec:
       schedulerName: {{ $.Values.common.schedulerName | quote }}
       {{- end }}
       nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.nodeSelector "context" $ ) | nindent 8 }}
-      affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.affinity "context" $ ) | nindent 8 }}
+      affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.affinity "context" (set $ "dataNodeLoopId" $i) ) | nindent 8 }}
       tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.tolerations "context" $ ) | nindent 8 }}
       {{- if $.Values.securityContext.enabled }}
       securityContext:
@@ -217,7 +218,7 @@ spec:
               {{- if $.Values.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(< "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --mongodb.uri mongodb://root:${MONGODB_ROOT_PASSWORD}@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
           {{- if $.Values.usePasswordFile }}
           volumeMounts:
             - name: secrets
@@ -249,6 +250,12 @@ spec:
             successThreshold: {{ $.Values.metrics.readinessProbe.successThreshold }}
           {{- end }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        {{- with $.Values.shardsvr.dataNode.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       volumes:
         - name: replicaset-entrypoint-configmap

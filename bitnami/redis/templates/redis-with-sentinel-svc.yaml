@@ -3,17 +3,17 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "redis.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{- if .Values.sentinel.service.labels }}
-    {{ toYaml .Values.sentinel.service.labels | nindent 4 }}
+    {{- toYaml .Values.sentinel.service.labels | nindent 4 }}
     {{- end }}
 {{- if .Values.sentinel.service.annotations }}
-  annotations:
-{{ toYaml .Values.sentinel.service.annotations | indent 4 }}
+  annotations: {{- toYaml .Values.sentinel.service.annotations | nindent 4 }}
 {{- end }}
 spec:
   type: {{ .Values.sentinel.service.type }}
@@ -22,18 +22,18 @@ spec:
   {{ end -}}
   {{- end -}}
   ports:
-  - name: redis
-    port: {{ .Values.sentinel.service.redisPort }}
-    targetPort: redis
-    {{- if .Values.sentinel.service.redisNodePort }}
-    nodePort: {{ .Values.sentinel.service.redisNodePort }}
-    {{- end }}
-  - name: redis-sentinel
-    port: {{ .Values.sentinel.service.sentinelPort }}
-    targetPort: redis-sentinel
-    {{- if .Values.sentinel.service.sentinelNodePort }}
-    nodePort: {{ .Values.sentinel.service.sentinelNodePort }}
-    {{- end }}
+    - name: redis
+      port: {{ .Values.sentinel.service.redisPort }}
+      targetPort: redis
+      {{- if .Values.sentinel.service.redisNodePort }}
+      nodePort: {{ .Values.sentinel.service.redisNodePort }}
+      {{- end }}
+    - name: redis-sentinel
+      port: {{ .Values.sentinel.service.sentinelPort }}
+      targetPort: redis-sentinel
+      {{- if .Values.sentinel.service.sentinelNodePort }}
+      nodePort: {{ .Values.sentinel.service.sentinelNodePort }}
+      {{- end }}
   selector:
     app: {{ template "redis.name" . }}
     release: {{ .Release.Name }}

@@ -5,20 +5,28 @@ metadata:
   name: {{ template "kafka.fullname" . }}-metrics
   labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: metrics
+  {{- if .Values.metrics.kafka.service.annotations }}
   annotations: {{ include "kafka.tplValue" ( dict "value" .Values.metrics.kafka.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.metrics.kafka.service.type }}
-  {{- if and .Values.metrics.kafka.service.loadBalancerIP (eq .Values.metrics.kafka.service.type "LoadBalancer") }}
+  {{- if eq .Values.metrics.kafka.service.type "LoadBalancer" }}
+  {{- if .Values.metrics.kafka.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.metrics.kafka.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.metrics.kafka.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.metrics.kafka.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
   {{- end }}
   {{- if and (eq .Values.metrics.kafka.service.type "ClusterIP") .Values.metrics.kafka.service.clusterIP }}
   clusterIP: {{ .Values.metrics.kafka.service.clusterIP }}
   {{- end }}
   ports:
-    - name: metrics
+    - name: http-metrics
       port: {{ .Values.metrics.kafka.service.port }}
+      protocol: TCP
       targetPort: metrics
-      {{- if (and (or (eq .Values.metrics.kafka.service.type "NodePort") (eq .Values.metrics.kafka.service.type "LoadBalancer")) (not (empty .Values.metrics.kafka.service.nodePort)))}}
+      {{- if and (or (eq .Values.metrics.kafka.service.type "NodePort") (eq .Values.metrics.kafka.service.type "LoadBalancer")) (not (empty .Values.metrics.kafka.service.nodePort)) }}
       nodePort: {{ .Values.metrics.kafka.service.nodePort }}
       {{- else if eq .Values.metrics.kafka.service.type "ClusterIP" }}
       nodePort: null

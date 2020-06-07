@@ -22,7 +22,7 @@ render_and_yaml_lint() {
     fi
 
     if ! echo "$rendered_template" | yamllint -s -d "$lint_rules" -; then
-        printf '\033[0;31m\U0001F6AB (helm template --values %s %s -x %s | yamllint -s -d "%s" -) failed\n\033[0m' "$display_values" "$display_chart_path" "$basename_template_path" "$lint_rules"
+        printf '\033[0;31m\U0001F6AB (helm template --values %s %s -s %s | yamllint -s -d "%s" -) failed\n\033[0m' "$display_values" "$display_chart_path" "$basename_template_path" "$lint_rules"
         false
     else
         true

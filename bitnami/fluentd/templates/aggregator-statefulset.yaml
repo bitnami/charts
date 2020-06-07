@@ -5,6 +5,8 @@ metadata:
   name: {{ include "fluentd.fullname" . }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: aggregator
 spec:
   selector:
     matchLabels: {{- include "fluentd.matchLabels" . | nindent 6 }}
@@ -16,6 +18,10 @@ spec:
     metadata:
       labels: {{- include "fluentd.labels" . | nindent 8 }}
         app.kubernetes.io/component: aggregator
+        app: aggregator
+        {{- if .Values.aggregator.podLabels }}
+        {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/aggregator-configmap.yaml") . | sha256sum }}
         {{- if .Values.aggregator.podAnnotations }}
@@ -59,7 +65,7 @@ spec:
             {{- toYaml .Values.aggregator.containerPorts | nindent 12 }}
             {{- end }}
             {{- if .Values.metrics.enabled }}
-            - name: metrics
+            - name: tcp-metrics
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
@@ -91,8 +97,13 @@ spec:
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
+            {{- if .Values.aggregator.persistence.enabled }}
+            - name: {{ include "fluentd.fullname" . }}-buffer
+              mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- else }}
             - name: buffer
               mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: certs
               mountPath: /opt/bitnami/fluentd/certs
@@ -111,6 +122,20 @@ spec:
         - name: fluentd-config
           configMap:
             name: {{ template "fluentd.aggregator.configMap" . }}
+        {{- if not .Values.aggregator.persistence.enabled }}
         - name: buffer
           emptyDir: {}
+        {{- end }}
+
+  {{- if .Values.aggregator.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "fluentd.fullname" . }}-buffer
+      spec:
+        accessModes: [{{ .Values.aggregator.persistence.accessMode }}]
+        storageClassName: {{ .Values.aggregator.persistence.storageClass }}
+        resources:
+          requests:
+            storage: {{ .Values.aggregator.persistence.size }}
+  {{- end }}
 {{- end -}}

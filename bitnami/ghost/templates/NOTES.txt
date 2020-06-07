@@ -1,3 +1,4 @@
+{{- $ghostPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password") ) -}}
 {{- if empty (include "ghost.host" .) -}}
 ###############################################################################
 ### ERROR: You did not provide an external host in your 'helm install' call ###
@@ -18,10 +19,12 @@ host. To configure Ghost with the URL of your service:
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "ghost.fullname" . }}'
 
   export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "ghost.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ghost.fullname" . }} -o jsonpath="{.data.ghost-password}" | base64 --decode)
+
+  {{- end }}
+
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ghost.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 --decode)
   {{- if .Values.mariadb.mariadbRootPassword }}
   export DATABASE_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ghost.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-  {{- end }}
   {{- end }}
   export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ghost.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
 
@@ -35,7 +38,7 @@ host. To configure Ghost with the URL of your service:
 {{- if eq .Values.service.type "ClusterIP" }}
 
   echo Blog URL  : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ .Values.ghostPath }}
-  echo Admin URL : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ .Values.ghostPath }}ghost
+  echo Admin URL : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ default "/" .Values.ghostPath }}ghost
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "ghost.fullname" . }} {{ default "80" .Values.service.port }}:{{ default "80" .Values.service.port }}
 
 {{- else if eq .Values.service.type "NodePort" }}
@@ -43,23 +46,18 @@ host. To configure Ghost with the URL of your service:
   export APP_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "ghost.fullname" . }})
 
   echo Blog URL  : http://$APP_HOST:$APP_PORT{{ .Values.ghostPath }}
-  echo Admin URL : http://$APP_HOST:$APP_PORT{{ .Values.ghostPath }}ghost
+  echo Admin URL : http://$APP_HOST:$APP_PORT{{ default "/" .Values.ghostPath }}ghost
 
 {{- else }}
 
-  echo Blog URL  : http://{{ include "ghost.host" . }}
-  echo Admin URL : http://{{ include "ghost.host" . }}ghost
+  echo Blog URL  : http://{{ include "ghost.endpoint" . }}
+  echo Admin URL : http://{{ include "ghost.endpoint" . }}ghost
 {{- end }}
 
 2. Get your Ghost login credentials by running:
 
   echo Email:    {{ .Values.ghostEmail }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ghost.fullname" . }} -o jsonpath="{.data.ghost-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ghost.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 --decode)
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{ include "common.warnings.rollingTag" .Values.image }}

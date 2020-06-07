@@ -37,3 +37,4 @@ spec:
     {{- end }}
   selector: {{ include "mongodb-sharded.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: mongos
+  sessionAffinity: {{ default "None" .Values.service.sessionAffinity }}

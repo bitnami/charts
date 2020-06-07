@@ -37,6 +37,7 @@ spec:
       containers:
         - name: assetsvc
           image: {{ template "kubeapps.image" (list .Values.assetsvc.image .Values.global) }}
+          imagePullPolicy: {{ .Values.assetsvc.image.pullPolicy | quote }}
           command:
             - /assetsvc
           {{- if .Values.mongodb.enabled }}
@@ -51,6 +52,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.mongodb.existingSecret }}
                   key: mongodb-root-password
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           {{- end }}
           {{- if .Values.postgresql.enabled }}
           args:
@@ -64,6 +69,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.postgresql.existingSecret }}
                   key: postgresql-password
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           {{- end }}
           ports:
             - name: http
