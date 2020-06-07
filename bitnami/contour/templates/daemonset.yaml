@@ -65,7 +65,7 @@ spec:
         - /config/envoy.json
         - --service-cluster $(CONTOUR_NAMESPACE)
         - --service-node $(ENVOY_POD_NAME)
-        - --log-level {{ .Value.envoy.logLevel }}
+        - --log-level {{ .Values.envoy.logLevel }}
         image: {{ include "envoy.image" . }}
         imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
         name: envoy
@@ -121,8 +121,6 @@ spec:
           mountPath: /config
         - name: envoycert
           mountPath: /certs
-        - name: cacert
-          mountPath: /ca
         lifecycle:
           preStop:
             httpGet:
