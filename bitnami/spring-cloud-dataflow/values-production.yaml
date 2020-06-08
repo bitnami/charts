@@ -47,7 +47,7 @@ server:
   ##
   configuration:
     ## Enables or disables streams
-    ## 
+    ##
     streamingEnabled: true
     ## Enables or disables tasks and schedules
     ##
@@ -56,7 +56,7 @@ server:
     ##
     accountName: default
     ## Trust K8s certificates when querying the Kubernetes API.
-    ## 
+    ##
     trustK8sCerts: false
     ## Container registries configuration parameters
     ## Example:
@@ -321,7 +321,7 @@ skipper:
     ##
     accountName: default
     ## Trust K8s certificates when querying the Kubernetes API.
-    ## 
+    ##
     trustK8sCerts: false
 
   ## ConfigMap with Spring Cloud Dataflow Server Configuration
