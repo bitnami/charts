@@ -71,6 +71,6 @@ spec:
         - name: kafka-exporter-certificates
           secret:
             secretName: {{ .Values.metrics.kafka.certificatesSecret }}
-            defaultMode: 0444
+            defaultMode: 0440
       {{- end }}
 {{- end }}
