@@ -50,7 +50,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 0.18.1-debian-10-r45
+  tag: 0.18.1-debian-10-r120
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -111,6 +111,9 @@ service:
   ##
   # loadBalancerSourceRanges:
   # - 10.10.10.0/24
+
+  # Add the `prometheus.io/scrape: "true"` annotation to the service
+  addPrometheusScrapeAnnotation: true
 
   ## Provide any additional service annotations
   ##
@@ -222,7 +225,12 @@ serviceMonitor:
   # selector:
   #   prometheus: my-prometheus
 
-  ## Metric relabeling
+  ## RelabelConfigs to apply to samples before scraping
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+  ##
+  # relabelings: []
+
+  ## MetricRelabelConfigs to apply to samples before ingestion
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
   # metricRelabelings: []

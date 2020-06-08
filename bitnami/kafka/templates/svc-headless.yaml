@@ -8,13 +8,13 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: kafka
+    - name: tcp-client
       port: {{ .Values.service.port }}
-      targetPort: kafka
-    {{- if .Values.auth.ssl }}
-    - name: kafka-ssl
-      port: 9093
-      targetPort: kafka-ssl
-    {{- end }}
+      protocol: TCP
+      targetPort: kafka-client
+    - name: tcp-internal
+      port: {{ .Values.service.internalPort }}
+      protocol: TCP
+      targetPort: kafka-internal
   selector: {{- include "kafka.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka

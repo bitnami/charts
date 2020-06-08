@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 3.11.0-debian-10-r1
+  tag: 3.16.1-debian-10-r13
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -80,9 +80,9 @@ ghostEmail: user@example.com
 ##
 ghostBlogTitle: User's Blog
 
-## Set to `yes` to allow the container to be started with blank passwords
+## Set to `true` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
-allowEmptyPassword: "yes"
+allowEmptyPassword: true
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
@@ -93,6 +93,19 @@ allowEmptyPassword: "yes"
 # smtpPassword:
 # smtpFromAddress
 # smtpService:
+
+## Use an existing secrets which already store your password data
+##
+# existingSecret:
+#   ## Name of the existing secret
+#   ##
+#   name: mySecret
+#   ## Key mapping where <key> is the value which the deployment is expecting and
+#   ## <value> is the name of the key in the existing secret.
+#   ##
+#   keyMapping:
+#     ghost-password: myGhostPasswordKey
+#     smtp-password: mySmtpPasswordKey
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -182,20 +195,33 @@ mariadb:
 ##
 service:
   type: LoadBalancer
-  # HTTP Port
+
+  ## HTTP Port
   port: 80
-  ## loadBalancerIP:
+
+  ## Extra ports to expose (normally used with the `sidecar` value)
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
   ##
+  extraPorts: []
+
+  ## Specify the loadBalancerIP value for LoadBalancer service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
+  ##
+  loadBalancerIP:
+
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   nodePorts:
     http: ""
+
   ## Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## Service annotations done as key:value pairs
-  annotations:
+
+  ## Service annotations. Evaluated as a template
+  ##
+  annotations: {}
 
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -241,33 +267,33 @@ ingress:
   ## Set this to true in order to add the corresponding annotations for cert-manager
   certManager: false
 
-  ## Ingress annotations done as key:value pairs
+  ## Ingress annotations. Evaluated as a template.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations:
+  annotations: {}
   #  kubernetes.io/ingress.class: nginx
 
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
-  - name: ghost.local
-    path: /
+    - name: ghost.local
+      path: /
 
-    ## Set this to true in order to enable TLS on the ingress record
-    tls: false
+      ## Set this to true in order to enable TLS on the ingress record
+      tls: false
 
-    ## Optionally specify the TLS hosts for the ingress record
-    ## Useful when the Ingress controller supports www-redirection
-    ## If not specified, the above host name will be used
-    # tlsHosts:
-    # - www.ghost.local
-    # - ghost.local
+      ## Optionally specify the TLS hosts for the ingress record
+      ## Useful when the Ingress controller supports www-redirection
+      ## If not specified, the above host name will be used
+      # tlsHosts:
+      # - www.ghost.local
+      # - ghost.local
 
-    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-    tlsSecret: ghost.local-tls
+      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+      tlsSecret: ghost.local-tls
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -288,7 +314,56 @@ ingress:
 ##
 nodeSelector: {}
 
-## Affinity for pod assignment
+## Affinity for pod assignment (evaluated as a template)
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
+
+## Additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Add sidecars to the pod
+## For example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+sidecars: []
+
+## Add init containers to the pod
+## For example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##
+initContainers: []
+
+## Array to add extra volumes
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes)
+##
+extraVolumeMounts: []
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: MY_ENV_VAR
+##    value: env_var_value
+##
+extraEnvVars: []
+
+## Name of a ConfigMap containing extra env vars
+##
+extraEnvVarsConfigMap:
+
+## Name of a Secret containing extra env vars
+##
+extraEnvVarsSecret:

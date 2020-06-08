@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kong.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kong.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server
+  {{- if .Values.service.annotations }}
+  annotations:
+    {{- include "kong.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.service.proxyHttpPort }}
+      targetPort: http-proxy
+      protocol: TCP
+      name: http-proxy
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.proxyHttpNodePort)) }}
+      nodePort: {{ .Values.service.proxyHttpNodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.service.proxyHttpsPort }}
+      targetPort: https-proxy
+      protocol: TCP
+      name: https-proxy
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.proxyHttpsNodePort)) }}
+      nodePort: {{ .Values.service.proxyHttpsNodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.service.exposeAdmin }}
+    - port: {{ .Values.service.adminHttpPort }}
+      targetPort: http-admin
+      protocol: TCP
+      name: http-admin
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.adminHttpNodePort)) }}
+      nodePort: {{ .Values.service.adminHttpNodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.service.adminHttpsPort }}
+      targetPort: https-admin
+      protocol: TCP
+      name: https-admin
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.adminHttpsNodePort)) }}
+      nodePort: {{ .Values.service.adminHttpsNodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    {{- if .Values.service.extraPorts }}
+    {{- include "kong.tplValue" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "kong.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: server

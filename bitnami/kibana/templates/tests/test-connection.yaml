@@ -3,6 +3,7 @@ kind: Pod
 metadata:
   name: "{{ include "kibana.fullname" . }}-test-connection"
   labels: {{- include "kibana.labels" . | nindent 4 }}
+    app: test-connection
   annotations:
     "helm.sh/hook": test-success
 spec:

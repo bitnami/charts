@@ -1,0 +1,37 @@
+{{- if .Values.healthIngress.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "nginx.fullname" . }}-health
+  labels: {{- include "nginx.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.healthIngress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.healthIngress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.healthIngress.hostname }}
+    - host: {{ .Values.healthIngress.hostname }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: "{{ template "nginx.fullname" $ }}"
+              servicePort: http
+    {{- end }}
+    {{- range .Values.healthIngress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: "{{ template "nginx.fullname" $ }}"
+              servicePort: http
+    {{- end }}
+  {{- if .Values.healthIngress.tls }}
+  tls: {{- toYaml .Values.healthIngress.tls | nindent 4 }}
+  {{- end }}
+{{- end }}

@@ -3,7 +3,9 @@ kind: Service
 metadata:
   name: {{ template "node-exporter.fullname" . }}
   annotations:
+    {{- if .Values.service.addPrometheusScrapeAnnotation }}
     prometheus.io/scrape: "true"
+    {{- end }}
     {{- with .Values.service.annotations }}
     {{- toYaml . | indent 4 }}
     {{- end }}

@@ -7,6 +7,8 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
+## Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
+#   namespaceOverride: my-global-namespace
 
 image:
   ## Bitnami MongoDB registry
@@ -18,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.2.4-debian-10-r3
+  tag: 4.2.7-debian-10-r14
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -42,6 +44,13 @@ image:
 ## String to fully override mongodb.fullname template
 ##
 # fullnameOverride:
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
 
 # Add custom extra environment variables to all the MongoDB containers
 # extraEnvVars:
@@ -132,16 +141,13 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   # nodePort:
-
   ## Specify the externalIP value ClusterIP service type.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   # externalIPs: []
-
   ## Specify the loadBalancerIP value for LoadBalancer service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
   # loadBalancerIP:
-
   ## Specify the loadBalancerSourceRanges value for LoadBalancer service types.
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -179,7 +185,7 @@ replicaSet:
     minAvailable:
       secondary: 1
       arbiter: 1
-    # maxUnavailable:
+      # maxUnavailable:
       # secondary: 1
       # arbiter: 1
 
@@ -221,6 +227,14 @@ resourcesArbiter: {}
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
+
+## Define Separate nodeSelector for secondaries
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+nodeSelectorSecondary: {}
+
+## Define Separate nodeSelector for arbiter
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+nodeSelectorArbiter: {}
 
 ## Affinity
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -305,6 +319,7 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
+  # storageClassSecondary: "-"
   accessModes:
     - ReadWriteOnce
   size: 8Gi
@@ -333,15 +348,15 @@ ingress:
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
-  - name: mongodb.local
-    path: /
+    - name: mongodb.local
+      path: /
 
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   tls:
-  - hosts:
-      - mongodb.local
-    secretName: mongodb.local-tls
+    - hosts:
+        - mongodb.local
+      secretName: mongodb.local-tls
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -437,7 +452,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.10.0-debian-10-r42
+    tag: 0.11.0-debian-10-r45
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

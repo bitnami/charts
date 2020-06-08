@@ -7,6 +7,9 @@ metadata:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
   ports:
+    - name: http
+      protocol: "TCP"
+      port: {{ .Values.service.port }}
     - name: rpc
       port: {{ .Values.service.rpcPort }}
     - name: serflan-tcp

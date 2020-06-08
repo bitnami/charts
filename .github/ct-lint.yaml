@@ -1,0 +1,10 @@
+chart-dirs:
+  - bitnami
+chart-repos:
+  - bitnami=https://charts.bitnami.com/bitnami
+check-version-increment: true
+debug: true
+remote: origin
+validate-chart-schema: true
+validate-maintainers: true
+validate-yaml: true

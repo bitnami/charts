@@ -1,0 +1,17 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "kafka.fullname" . }}
+  labels: {{- include "kafka.labels" . | nindent 4 }}
+    app.kubernetes.io/component: kafka
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+{{- end -}}
