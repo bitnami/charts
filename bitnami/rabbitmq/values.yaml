@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.3-debian-10-r84
+  tag: 3.8.3-debian-10-r100
 
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
@@ -121,6 +121,8 @@ rabbitmq:
 
   loadDefinition:
     enabled: false
+    ## Can be templated if needed, e.g.
+    # secretName: "{{ .Release.Name }}-load-definition"
     secretName: load-definition
 
   ## environment variables to configure rabbitmq

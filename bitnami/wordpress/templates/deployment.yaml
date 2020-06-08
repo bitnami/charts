@@ -148,6 +148,8 @@ spec:
               {{- if .Values.livenessProbeHeaders }}
               httpHeaders: {{- toYaml .Values.livenessProbeHeaders | nindent 16 }}
               {{- end }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "wordpress.tplValue" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
@@ -165,6 +167,8 @@ spec:
               {{- if .Values.readinessProbeHeaders }}
               httpHeaders: {{- toYaml .Values.readinessProbeHeaders | nindent 16 }}
               {{- end }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "wordpress.tplValue" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /bitnami/wordpress

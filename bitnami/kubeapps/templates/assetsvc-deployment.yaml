@@ -37,6 +37,7 @@ spec:
       containers:
         - name: assetsvc
           image: {{ template "kubeapps.image" (list .Values.assetsvc.image .Values.global) }}
+          imagePullPolicy: {{ .Values.assetsvc.image.pullPolicy | quote }}
           command:
             - /assetsvc
           {{- if .Values.mongodb.enabled }}

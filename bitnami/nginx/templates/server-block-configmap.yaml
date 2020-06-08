@@ -1,10 +1,13 @@
-{{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "nginx.fullname" . }}-server-block
   labels: {{- include "nginx.labels" . | nindent 4 }}
 data:
+  server-blocks-paths.conf: |-
+    include  "/opt/bitnami/nginx/conf/server_blocks/ldap/*.conf";
+    include  "/opt/bitnami/nginx/conf/server_blocks/common/*.conf";
+{{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
   server-block.conf: |-
 {{ .Values.serverBlock | indent 4 }}
 {{- end }}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.5.0-debian-10-r29
+  tag: 2.5.0-debian-10-r59
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -81,27 +81,18 @@ clusterDomain: cluster.local
 ##
 # existingConfigmap:
 
-## Allow to use the PLAINTEXT listener.
+## Kafka Log4J Configuration
+## An optional log4j.properties file to overwrite the default of the Kafka brokers.
+## See an example log4j.properties at:
+## https://github.com/apache/kafka/blob/trunk/config/log4j.properties
 ##
-allowPlaintextListener: true
+# log4j:
 
-## The address(es) the socket server listens on.
+## Kafka Log4j ConfigMap
+## The name of an existing ConfigMap containing a log4j.properties file.
+## NOTE: this will override log4j.
 ##
-listeners: []
-
-## The address(es) (hostname:port) the broker will advertise to producers and consumers.
-##
-advertisedListeners: []
-
-## The protocol->listener mapping
-## Example:
-## listenerSecurityProtocolMap: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-##
-# listenerSecurityProtocolMap:
-
-## Name of listener used for communication between brokers.
-##
-# interBrokerListenerName:
+# existingLog4jConfigMap:
 
 ## Kafka broker ID.
 ## If unset, a unique broker id will be generated.
@@ -201,12 +192,6 @@ socketSendBufferBytes: 102400
 ##
 zookeeperConnectionTimeoutMs: 6000
 
-## The endpoint identification algorithm to validate server hostname using server certificate.
-## Disable server host name verification by setting it to an empty string
-## See: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
-##
-sslEndpointIdentificationAlgorithm: https
-
 ## All the parameters from the configuration file can be overwritten by using environment variables with this format: KAFKA_CFG_{KEY}
 ## ref: https://github.com/bitnami/bitnami-docker-kafka#configuration
 ## Example:
@@ -233,48 +218,100 @@ extraVolumeMounts: []
 ## https://github.com/bitnami/bitnami-docker-kafka#security
 ##
 auth:
-  ## Switch to enable the kafka authentication.
-  enabled: false
-
-  ## Enable SSL to be used with brokers and consumers
+  ## Authentication protocol for client and inter-broker communications
+  ## Supported values: 'plaintext', 'tls', 'mtls', 'sasl' and 'sasl_tls'
+  ## This table shows the security provided on each protocol:
+  ## | Method    | Authentication                | Encryption via TLS |
+  ## | plaintext | None                          | No                 |
+  ## | tls       | None                          | Yes                |
+  ## | mtls      | Yes (two-way authentication)  | Yes                |
+  ## | sasl      | Yes (via SASL)                | No                 |
+  ## | sasl_tls  | Yes (via SASL)                | Yes                |
   ##
-  # ssl: false
+  clientProtocol: plaintext
+  interBrokerProtocol: plaintext
 
-  ## Name of the existing secret containing the certificate files that will be used by Kafka.
+  ## Name of the existing secret containing the truststore and
+  ## one keystore per Kafka broker you have in the Kafka cluster.
+  ## MANDATORY when 'tls', 'mtls', or 'sasl_tls' authentication protocols are used.
+  ## Create this secret following the steps below:
+  ## 1) Generate your trustore and keystore files. Helpful script: https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh
+  ## 2) Rename your truststore to `kafka.truststore.jks`.
+  ## 3) Rename your keystores to `kafka-X.keystore.jks` where X is the ID of each Kafka broker.
+  ## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:
+  ##       kubectl create secret generic SECRET_NAME --from-file=./kafka.truststore.jks --from-file=./kafka-0.keystore.jks --from-file=./kafka-1.keystore.jks ...
   ##
-  # certificatesSecret:
+  # jksSecret:
 
-  ## Password for the above certificates if they are password protected.
+  ## Password to access the JKS files when they are password-protected.
   ##
-  # certificatesPassword:
+  # jksPassword:
 
-  ## Kafka client user.
+  ## The endpoint identification algorithm used by clients to validate server host name.
+  ## Disable server host name verification by setting it to an empty string
+  ## See: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
   ##
-  brokerUser: user
+  tlsEndpointIdentificationAlgorithm: https
 
-  ## Kafka client password
+  ## JAAS configuration for SASL authentication
+  ## MANDATORY when method is 'sasl', or 'sasl_tls'
   ##
-  # brokerPassword:
+  jaas:
+    ## Kafka client user
+    ##
+    clientUser: user
 
-  ## Kafka inter broker communication user
-  ##
-  interBrokerUser: admin
+    ## Kafka client password
+    ##
+    clientPassword: ""
 
-  ## Kafka inter broker communication password
-  ##
-  # interBrokerPassword:
+    ## Kafka inter broker communication user
+    ##
+    interBrokerUser: admin
 
-  ## Kafka Zookeeper user.
-  ##
-  # zookeeperUser:
+    ## Kafka inter broker communication password
+    ##
+    interBrokerPassword: ""
 
-  ## Kafka Zookeeper password.
-  ##
-  # zookeeperPassword:
+    ## Kafka Zookeeper user
+    ##
+    # zookeeperUser:
 
-  ## Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser.
-  ##
-  # existingSecret:
+    ## Kafka Zookeeper password
+    ##
+    # zookeeperPassword:
+
+    ## Name of the existing secret containing credentials for clientUser, interBrokerUser and zookeeperUser.
+    ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
+    ##       kubectl create secret generic SECRET_NAME --from-literal=client-password=CLIENT_PASSWORD --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
+    ##
+    # existingSecret:
+
+## The address(es) the socket server listens on.
+## When it's set to an empty array, the listeners will be configured
+## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+##
+listeners: []
+
+## The address(es) (hostname:port) the brokers will advertise to producers and consumers.
+## When it's set to an empty array, the advertised listeners will be configured
+## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+##
+advertisedListeners: []
+
+## The listener->protocol mapping
+## When it's nil, the listeners will be configured
+## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+##
+# listenerSecurityProtocolMap:
+
+## Allow to use the PLAINTEXT listener.
+##
+allowPlaintextListener: true
+
+## Name of listener used for communication between brokers.
+##
+interBrokerListenerName: INTERNAL
 
 ## Number of Kafka brokers to deploy
 ##
@@ -298,6 +335,10 @@ podLabels: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Name of the priority class to be used by kafka pods, priority class needs to be created beforehand
+## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+priorityClassName: ""
 
 ## Affinity for pod assignment. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -351,7 +392,7 @@ resources:
 ##
 livenessProbe:
   tcpSocket:
-    port: kafka
+    port: kafka-client
   initialDelaySeconds: 10
   timeoutSeconds: 5
   # failureThreshold: 3
@@ -359,7 +400,7 @@ livenessProbe:
   # successThreshold: 1
 readinessProbe:
   tcpSocket:
-    port: kafka
+    port: kafka-client
   initialDelaySeconds: 5
   failureThreshold: 6
   timeoutSeconds: 5
@@ -397,18 +438,16 @@ service:
   ## Service type
   ##
   type: ClusterIP
-  ## Kafka port
+  ## Kafka port for client connections
   ##
   port: 9092
-  ## Kafka SSL port
+  ## Kafka port for inter-broker connections
   ##
-  sslPort: 9093
-  ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
+  internalPort: 9093
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePorts:
-    kafka: ""
-    ssl: ""
+  nodePort: ""
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
@@ -445,7 +484,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.4-debian-10-r41
+      tag: 1.17.4-debian-10-r85
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -482,7 +521,7 @@ externalAccess:
     type: LoadBalancer
     ## Port used when service type is LoadBalancer
     ##
-    port: 19092
+    port: 9094
     ## Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount
     ## Example:
     ## loadBalancerIPs:
@@ -615,7 +654,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r109
+      tag: 1.2.0-debian-10-r134
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -628,6 +667,19 @@ metrics:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
+
+    ## Extra flags to be passed to Kafka exporter
+    ## Example:
+    ## extraFlags:
+    ##   tls.insecure-skip-tls-verify: ""
+    ##   web.telemetry-path: "/metrics"
+    ##
+    extraFlags: {}
+
+    ## Name of the existing secret containing the optional certificate and key files
+    ## for Kafka Exporter client authentication
+    ##
+    # certificatesSecret:
 
     ## Prometheus Kafka Exporter' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -690,7 +742,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.12.0-debian-10-r108
+      tag: 0.13.0-debian-10-r23
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -817,6 +869,22 @@ metrics:
 ##
 zookeeper:
   enabled: true
+  auth:
+    ## Enable Zookeeper auth
+    ##
+    enabled: false
+    ## User that will use Zookeeper clients to auth
+    ##
+    # clientUser:
+    ## Password that will use Zookeeper clients to auth
+    ##
+    # clientPassword:
+    ## Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"
+    ##
+    # serverUsers:
+    ## Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
+    ##
+    # serverPasswords:
 
 ## This value is only used when zookeeper.enabled is set to false
 ##
@@ -824,16 +892,3 @@ externalZookeeper:
   ## Server or list of external zookeeper servers to use.
   ##
   servers: []
-
-## Kafka Log4J Configuration
-## An optional log4j.properties file to overwrite the default of the Kafka brokers.
-## See an example log4j.properties at:
-## https://github.com/apache/kafka/blob/trunk/config/log4j.properties
-##
-# log4j:
-
-## Kafka Log4j ConfigMap
-## The name of an existing ConfigMap containing a log4j.properties file.
-## NOTE: this will override log4j.
-##
-# existingLog4jConfigMap:

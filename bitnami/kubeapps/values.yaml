@@ -106,6 +106,11 @@ frontend:
     registry: docker.io
     repository: bitnami/nginx
     tag: 1.17.10-debian-10-r10
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+
   ## Frontend service parameters
   ##
   service:
@@ -188,7 +193,11 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.10.0-scratch-r0
+    tag: 1.10.1-scratch-r0
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
   ## Kubeapps assets synchronization tool
   ## Image used to perform chart repository syncs
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-asset-syncer/tags/
@@ -196,7 +205,12 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 1.10.0-scratch-r0
+    tag: 1.10.1-scratch-r0
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+
   ## Initial charts repo proxies to configure
   ##
   initialReposProxy:
@@ -264,6 +278,11 @@ hooks:
     registry: docker.io
     repository: bitnami/kubectl
     tag: 1.16.3-debian-10-r85
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+
   ## Affinity for hooks' pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -284,7 +303,12 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 1.10.0-scratch-r0
+    tag: 1.10.1-scratch-r0
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+
   service:
     port: 8080
   resources:
@@ -326,7 +350,11 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.10.0-scratch-r0
+    tag: 1.10.1-scratch-r0
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
 
   ## Tiller Proxy service parameters
   ##
@@ -400,7 +428,12 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 1.10.0-scratch-r0
+    tag: 1.10.1-scratch-r0
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+
   ## Assetsvc service parameters
   ##
   service:
@@ -460,7 +493,12 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.10.0-debian-10-r0
+    tag: 1.10.1-debian-10-r0
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+
   ## Dashboard service parameters
   ##
   service:
@@ -513,7 +551,7 @@ dashboard:
 ##
 mongodb:
   ## Whether to deploy a mongodb server to satisfy the applications database requirements.
-  enabled: true
+  enabled: false
   ## Kubeapps uses MongoDB as a cache and persistence is not required
   ##
   persistence:
@@ -546,7 +584,7 @@ mongodb:
 ##
 postgresql:
   ## Whether to deploy a postgresql server to satisfy the applications database requirements.
-  enabled: false
+  enabled: true
   ## Enable replication for high availability
   replication:
     enabled: true
@@ -607,6 +645,11 @@ authProxy:
     registry: docker.io
     repository: bitnami/oauth2-proxy
     tag: 5.1.0-debian-10-r24
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+
   ## Mandatory parameters
   ##
   provider: ""
@@ -651,3 +694,9 @@ featureFlags:
   reposPerNamespace: true
   invalidateCache: true
   operators: false
+  # additionalClusters is a WIP feature for multi-cluster support.
+  additionalClusters: []
+  # additionalClusters:
+  # - name: second-cluster
+  #   apiServiceURL: https://second-cluster:6443
+  #   certificateAuthorityData: LS0tLS1CRUdJ...

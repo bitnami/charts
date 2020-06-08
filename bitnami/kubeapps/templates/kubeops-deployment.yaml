@@ -42,6 +42,7 @@ spec:
       containers:
         - name: kubeops
           image: {{ template "kubeapps.image" (list .Values.kubeops.image .Values.global) }}
+          imagePullPolicy: {{ .Values.kubeops.image.pullPolicy | quote }}
           command:
             - /kubeops
           args:

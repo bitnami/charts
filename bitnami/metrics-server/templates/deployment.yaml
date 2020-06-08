@@ -14,6 +14,9 @@ spec:
       {{- end }}
     spec:
 {{- include "metrics-server.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
       serviceAccountName: {{ template "metrics-server.serviceAccountName" . }}
       {{- if .Values.affinity }}
       affinity: {{- include "metrics-server.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}

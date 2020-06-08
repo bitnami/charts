@@ -38,6 +38,7 @@ spec:
       containers:
         - name: controller
           image: {{ template "kubeapps.image" (list .Values.apprepository.image .Values.global) }}
+          imagePullPolicy: {{ .Values.apprepository.image.pullPolicy | quote }}
           command:
             - /apprepository-controller
           args:

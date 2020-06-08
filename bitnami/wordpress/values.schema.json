@@ -130,6 +130,25 @@
             "condition": false,
             "value": "ingress.enabled"
           }
+        },
+        "certManager": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable CertManager",
+          "description": "This will add the required annotation for CertManager to add certificates.",
+          "hidden": {
+            "condition": false,
+            "value": "ingress.enabled"
+          }
+        },
+        "tls": {
+          "type": "boolean",
+          "form": true,
+          "title": "Create a TLS secret",
+          "hidden": {
+            "condition": false,
+            "value": "ingress.enabled"
+          }
         }
       }
     },
