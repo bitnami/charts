@@ -99,14 +99,6 @@ cloneStaticSiteFromGit:
 ##
 # existingServerBlockConfigmap:
 
-## Array to add extra volumes
-##
-## extraVolumes:
-
-## Array to add extra mounts (normally used with extraVolumes)
-##
-## extraVolumeMounts: {}
-
 ## Number of replicas to deploy
 ##
 replicaCount: 1
