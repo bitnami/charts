@@ -83,7 +83,9 @@ collectors:
   ingresses: true
   jobs: true
   limitranges: true
+  mutatingwebhookconfigurations: true
   namespaces: true
+  networkpolicies: true
   nodes: true
   persistentvolumeclaims: true
   persistentvolumes: true
@@ -97,6 +99,7 @@ collectors:
   statefulsets: true
   storageclasses: true
   verticalpodautoscalers: false
+  volumeattachments: true
 
 ## SecurityContext configuration
 ##
