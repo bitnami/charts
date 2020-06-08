@@ -225,7 +225,7 @@ envoy:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    
+
     limits: {}
       # cpu: 400m
       # memory: 250Mi
@@ -274,7 +274,7 @@ envoy:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
-  
+
   terminationGracePeriodSeconds: 300
 
   logLevel: info
