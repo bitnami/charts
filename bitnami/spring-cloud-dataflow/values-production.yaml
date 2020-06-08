@@ -269,7 +269,7 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    create: false
+    create: true
     ## Min number of pods that must still be available after the eviction
     ##
     minAvailable: 1
@@ -469,7 +469,7 @@ skipper:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    create: false
+    create: true
     ## Min number of pods that must still be available after the eviction
     ##
     minAvailable: 1

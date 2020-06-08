@@ -173,9 +173,9 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 
 | Parameter                | Description                                                                          | Default                                       |
 |------------------------- |--------------------------------------------------------------------------------------|---------------------------------------------- |
-| `serviceAccount.create`  | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods  | `false`                                       |
+| `serviceAccount.create`  | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods  | `true`                                        |
 | `serviceAccount.name`    | Name of the created serviceAccount                                                   | Generated using the `scdf.fullname` template  |
-| `rbac.create`            | Weather to create & use RBAC resources or not                                        | `false`                                       |
+| `rbac.create`            | Weather to create & use RBAC resources or not                                        | `true`                                        |
 
 ### Metrics parameters
 
@@ -272,16 +272,16 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
-- Enable RBAC and Service Account creation:
+- Enable Pod Disruption Budget for Server and Skipper:
 
 ```diff
-- serviceAccount.create: false
-+ serviceAccount.create: true
-- rbac.create: false
-+ rbac.encreateabled: true
+- server.pdb.create: false
++ server.pdb.create: true
+- skipper.pdb.create: false
++ skipper.pdb.create: true
 ```
 
-- Enable Prometheus Metrics:
+- Enable exposing Prometheus Metrics via Prometheus Rsocket Proxy:
 
 ```diff
 - metrics.enabled: false
