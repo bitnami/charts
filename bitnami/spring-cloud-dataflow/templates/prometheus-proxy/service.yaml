@@ -9,7 +9,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  type: clusterIP
+  type: ClusterIP
   ports:
     - name: http
       port: {{ .Values.metrics.service.httpPort }}

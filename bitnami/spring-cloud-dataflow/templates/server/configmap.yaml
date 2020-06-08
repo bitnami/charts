@@ -28,6 +28,8 @@ data:
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.enabled }}
+          {{- $fullname := include "scdf.fullname" . }}
+          {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}
           applicationProperties:
             {{- if .Values.server.configuration.streamingEnabled }}
             stream:
@@ -36,6 +38,8 @@ data:
                   export:
                     prometheus:
                       enabled: true
+                      host: {{ $fullname }}-prometheus-proxy
+                      port: {{ $rsocketPort }}
             {{- end }}
             {{- if .Values.server.configuration.batchEnabled }}
             task:
@@ -44,6 +48,8 @@ data:
                   export:
                     prometheus:
                       enabled: true
+                      host: {{ $fullname }}-prometheus-proxy
+                      port: {{ $rsocketPort }}
             {{- end }}
           {{- end }}
       jpa:

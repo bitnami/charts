@@ -14,7 +14,15 @@ spec:
       app.kubernetes.io/component: prometheus-proxy
   endpoints:
     - port: http
-      path: "/metrics"
+      path: "/metrics/connected"
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+    - port: http
+      path: "/metrics/proxy"
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
