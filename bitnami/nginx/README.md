@@ -73,8 +73,6 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the repository                                      | `60`                                                         |
 | `serverBlock`                              | Custom NGINX server block                                                                    | `nil`                                                        |
 | `existingServerBlockConfigmap`             | Name of existing PVC with custom NGINX server block                                          | `nil`                                                        |
-| `extraVolumes`                             | Array of extra volumes to be added to the deployment. Requires setting `extraVolumeMounts`   | `nil`                                                        |
-| `extraVolumeMounts`                        | Array of extra volume mounts to be added to the deployment. Normally used with `extraVolumes`| `nil`                                                        |
 | `replicaCount`                             | Number of replicas to deploy                                                                 | `1`                                                          |
 | `containerPort`                            | Deployment Container Port                                                                    | `8080`                                                       |
 | `containerTlsPort`                         | Deployment Container Tls Port                                                                | `nil`                                                        |
