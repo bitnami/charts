@@ -48,6 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ## Parameters
 
 The following table lists the configurable parameters of the MariaDB chart and their default values.
+
 | Parameter                                    | Description                                                                                                                                                                                                                                                              | Default                                                           |
 |----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`                       | Global Docker image registry                                                                                                                                                                                                                                             | `nil`                                                             |

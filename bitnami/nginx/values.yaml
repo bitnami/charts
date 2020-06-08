@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.17.10-debian-10-r59
+  tag: 1.17.10-debian-10-r63
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -54,7 +54,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.27.0-debian-10-r2
+    tag: 2.27.0-debian-10-r6
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -98,14 +98,6 @@ cloneStaticSiteFromGit:
 ## NOTE: This will override serverBlock
 ##
 # existingServerBlockConfigmap:
-
-## Array to add extra volumes
-##
-## extraVolumes:
-
-## Array to add extra mounts (normally used with extraVolumes)
-##
-## extraVolumeMounts: {}
 
 ## Number of replicas to deploy
 ##
@@ -225,7 +217,7 @@ ldapDaemon:
   image:
     registry: docker.io
     repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r27
+    tag: 0.20200116.0-debian-10-r31
     pullPolicy: IfNotPresent
 
   ## LDAP Daemon port
@@ -433,7 +425,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.7.0-debian-10-r44
+    tag: 0.7.0-debian-10-r48
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -508,3 +500,11 @@ autoscaling:
   # maxReplicas: 10
   # targetCPU: 50
   # targetMemory: 50
+
+## Array to add extra volumes (evaluated as a template)
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+extraVolumeMounts: []
