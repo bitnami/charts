@@ -15,7 +15,5 @@ subjects:
   - namespace: {{ .Release.Namespace }}
   {{- end }}        
   kind: ServiceAccount
-  {{- if .Values.metrics.serviceMonitor.rbac.create }}
   name: {{ required "A valid .Values.metrics.serviceMonitor.serviceAccount entry required!" .Values.metrics.serviceMonitor.serviceAccount }}
-  {{- end }}
 {{- end }}
