@@ -65,6 +65,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "kafka.tplValue" ( dict "value" .Values.tolerations "context" $ ) | nindent 8 }}
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       {{- if .Values.podSecurityContext }}
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
@@ -154,9 +157,9 @@ spec:
               {{- if .Values.listeners }}
               value: {{ .Values.listeners }}
               {{- else if .Values.externalAccess.enabled }}
-              value: "INTERNAL://:9093,CLIENT://:9092,EXTERNAL://:9094"
+              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092,EXTERNAL://:9094"
               {{- else }}
-              value: "INTERNAL://:9093,CLIENT://:9092"
+              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092"
               {{- end }}
             {{- if .Values.externalAccess.enabled }}
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
@@ -271,7 +274,7 @@ spec:
             - name: kafka-client
               containerPort: 9092
             - name: kafka-internal
-              containerPort: 9093
+              containerPort: {{ $interBrokerPort }}
             {{- if .Values.externalAccess.enabled }}
             - name: kafka-external
               containerPort: 9094
