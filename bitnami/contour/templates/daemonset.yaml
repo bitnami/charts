@@ -34,7 +34,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}
       containers:
       - command:
-        - /bin/contour
+        - contour
         args:
           - envoy
           - shutdown-manager
@@ -128,7 +128,9 @@ spec:
               port: 8090
               scheme: HTTP
       initContainers:
-      - args:
+      - command:
+        - contour
+        args:
         - bootstrap
         - /config/envoy.json
         - --xds-address=contour
@@ -136,8 +138,6 @@ spec:
         - --envoy-cafile=/certs/ca.crt
         - --envoy-cert-file=/certs/tls.crt
         - --envoy-key-file=/certs/tls.key
-        command:
-        - contour
         image: {{ include "contour.image" . }}
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
         name: envoy-initconfig
