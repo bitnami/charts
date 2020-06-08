@@ -285,6 +285,7 @@ envoy:
     ## Service type
     ##
     type: LoadBalancer
+    externalTrafficPolicy: Local
 
     ports:
       ## HTTP Port
