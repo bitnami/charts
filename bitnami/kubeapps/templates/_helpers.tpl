@@ -39,6 +39,8 @@ app: {{ include "kubeapps.name" . }}
 chart: {{ include "kubeapps.chart" . }}
 release: {{ .Release.Name }}
 heritage: {{ .Release.Service }}
+helm.sh/chart: {{ template "kubeapps.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
@@ -47,6 +49,7 @@ Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
 {{- define "kubeapps.matchLabels" -}}
 app: {{ include "kubeapps.name" . }}
 release: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*

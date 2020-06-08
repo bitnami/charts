@@ -8,6 +8,8 @@ metadata:
     chart: {{ template "kubeapps.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    helm.sh/chart: {{ template "kubeapps.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 rules:
   - apiGroups:
       - ""
@@ -52,6 +54,8 @@ metadata:
     chart: {{ template "kubeapps.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    helm.sh/chart: {{ template "kubeapps.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

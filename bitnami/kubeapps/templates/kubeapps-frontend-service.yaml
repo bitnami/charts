@@ -7,6 +7,8 @@ metadata:
     chart: {{ template "kubeapps.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    helm.sh/chart: {{ template "kubeapps.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
   {{- if .Values.frontend.service.annotations }}
   annotations: {{- include "kubeapps.tplValue" (dict "value" .Values.frontend.service.annotations "context" $) | nindent 4 }}
   {{- end }}

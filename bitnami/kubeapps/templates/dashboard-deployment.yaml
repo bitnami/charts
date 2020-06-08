@@ -7,6 +7,8 @@ metadata:
     chart: {{ template "kubeapps.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    helm.sh/chart: {{ template "kubeapps.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.dashboard.replicaCount }}
   selector:
@@ -20,6 +22,9 @@ spec:
       labels:
         app: {{ template "kubeapps.dashboard.fullname" . }}
         release: {{ .Release.Name }}
+        chart: {{ template "kubeapps.chart" . }}
+        helm.sh/chart: {{ template "kubeapps.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.dashboard.affinity }}
