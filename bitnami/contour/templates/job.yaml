@@ -32,6 +32,7 @@ spec:
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
         command:
         - contour
+        args:
         - certgen
         - --kube
         - --incluster
