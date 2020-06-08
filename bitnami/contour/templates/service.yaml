@@ -5,7 +5,7 @@ kind: Service
 metadata:
   name: {{ include "contour.fullname" . }}
   labels: {{- include "contour.labels" . | nindent 4 }}
-    component: contour
+    app.kubernetes.io/component: contour
 spec:
   ports:
     - port: 8001
@@ -13,7 +13,7 @@ spec:
       protocol: TCP
       targetPort: 8001
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
-    component: contour
+    app.kubernetes.io/component: contour
   type: ClusterIP
 {{- end -}}
 {{- if .Values.envoy.enabled -}}
@@ -23,7 +23,7 @@ kind: Service
 metadata:
   name: {{ include "contour.fullname" . }}-envoy
   labels: {{- include "contour.labels" . | nindent 4 }}
-    component: envoy
+    app.kubernetes.io/component: envoy
   annotations:
     # This annotation puts the AWS ELB into "TCP" mode so that it does not
     # do HTTP negotiation for HTTPS connections at the ELB edge.
@@ -42,6 +42,6 @@ spec:
       name: https
       protocol: TCP
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
-    component: envoy
+    app.kubernetes.io/component: envoy
   type: LoadBalancer
 {{- end -}}

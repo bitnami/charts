@@ -5,7 +5,7 @@ kind: DaemonSet
 metadata:
   name: {{ include "contour.fullname" . }}-envoy
   labels: {{- include "contour.labels" . | nindent 4 }}
-    component: envoy
+    app.kubernetes.io/component: envoy
 spec:
   updateStrategy:
     type: RollingUpdate
@@ -13,11 +13,11 @@ spec:
       maxUnavailable: 10%
   selector:
     matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
-      component: envoy
+      app.kubernetes.io/component: envoy
   template:
     metadata:
       labels: {{- include "contour.labels" . | nindent 8 }}
-        component: envoy
+        app.kubernetes.io/component: envoy
     spec: {{- include "envoy.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.envoy.affinity }}
       affinity: {{- include "contour.tplValue" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}

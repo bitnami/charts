@@ -5,7 +5,7 @@ kind: Deployment
 metadata:
   name: {{ include "contour.fullname" . }}-contour
   labels: {{- include "contour.labels" . | nindent 4 }}
-    component: contour
+    app.kubernetes.io/component: contour
 spec:
   replicas: {{ .Values.replicaCount }}
   strategy:
@@ -16,11 +16,11 @@ spec:
       maxSurge: 50%
   selector:
     matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
-      component: contour
+      app.kubernetes.io/component: contour
   template:
     metadata:
       labels: {{- include "contour.labels" . | nindent 8 }}
-        component: contour
+        app.kubernetes.io/component: contour
     spec: {{- include "contour.imagePullSecrets" . | nindent 6 }}
       affinity:
         podAntiAffinity:
@@ -28,7 +28,7 @@ spec:
           - podAffinityTerm:
               labelSelector:
                 matchLabels: {{- include "contour.matchLabels" . | nindent 18 }}
-                  component: contour
+                  app.kubernetes.io/component: contour
               topologyKey: kubernetes.io/hostname
             weight: 100
       {{- if .Values.contour.affinity }}

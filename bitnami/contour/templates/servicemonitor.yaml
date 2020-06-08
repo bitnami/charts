@@ -6,12 +6,11 @@ kind: Service
 metadata:
   name: {{ include "contour.fullname" . }}-contour-metrics
   labels: {{- include "contour.labels" . | nindent 4 }}
-    jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel }}
-    component: contour
+    app.kubernetes.io/component: contour
 spec:
   type: ClusterIP
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
-    component: contour
+    app.kubernetes.io/component: contour
   ports:
   - name: metrics
     port: 8000
@@ -23,12 +22,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "contour.fullname" . }}-contour
   labels: {{- include "contour.labels" . | nindent 4 }}
-    component: contour
+    app.kubernetes.io/component: contour
 spec:
-  jobLabel: jobLabel
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
-      component: contour
+      app.kubernetes.io/component: contour
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
@@ -51,12 +50,11 @@ kind: Service
 metadata:
   name: {{ include "contour.fullname" . }}-envoy-metrics
   labels: {{- include "contour.labels" . | nindent 4 }}
-    jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel }}
-    component: envoy
+    app.kubernetes.io/component: envoy
 spec:
   type: ClusterIP
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
-    component: envoy
+    app.kubernetes.io/component: envoy
   ports:
   - name: metrics
     port: 8002
@@ -68,12 +66,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "contour.fullname" . }}-envoy
   labels: {{- include "contour.labels" . | nindent 4}}
-    component: envoy
+    app.kubernetes.io/component: envoy
 spec:
-  jobLabel: jobLabel
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
-      component: envoy
+      app.kubernetes.io/component: envoy
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

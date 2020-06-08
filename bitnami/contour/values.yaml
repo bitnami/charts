@@ -187,8 +187,8 @@ contour:
   securityContext:
     enabled: true
     runAsNonRoot: true
-    runAsUser: 65534
-    runAsGroup: 65534
+    runAsUser: 1001
+    runAsGroup: 1001
 
   certgen:
     serviceAccount:
@@ -278,13 +278,14 @@ envoy:
   terminationGracePeriodSeconds: 300
 
   logLevel: info
+
 prometheus:
   # Prometheus Operator service monitors
   serviceMonitor:
     # enable support for Prometheus Operator
     enabled: false
     # Job label for scrape target
-    jobLabel: contour
+    jobLabel: "app.kubernetes.io/name"
     # Scrape interval. If not set, the Prometheus default scrape interval is used.
     interval: ""
     metricRelabelings: []

@@ -5,13 +5,13 @@ kind: Job
 metadata:
   name: {{ include "contour.fullname" . }}-contour-certgen
   labels: {{- include "contour.labels" . | nindent 4 }}
-    component: contour-certgen
+    app.kubernetes.io/component: contour-certgen
 spec:
   ttlSecondsAfterFinished: 0
   template:
     metadata:
       labels: {{- include "contour.labels" . | nindent 8 }}
-        component: contour-certgen
+        app.kubernetes.io/component: contour-certgen
     spec:
 {{- include "contour.imagePullSecrets" . | nindent 6 }}
     {{- with .Values.contour.affinity }}

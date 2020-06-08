@@ -5,7 +5,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "contour.fullname" . }}
   labels: {{- include "contour.labels" . | nindent 4}}
-    component: contour
+    app.kubernetes.io/component: contour
 data:
   contour.yaml: |
 {{ include "contour.tplValue" ( dict "value" .Values.configInline "context" $) | indent 4 }}
