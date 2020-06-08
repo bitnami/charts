@@ -219,6 +219,12 @@ server:
     ##
     annotations: {}
 
+    ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+    ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+    ##
+    tls: false
+
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
@@ -560,6 +566,35 @@ rbac:
 ##
 metrics:
   enabled: true
+  ## Bitnami Prometheus Rsocket Proxy image
+  ## ref: https://hub.docker.com/r/bitnami/prometheus-rsocket-proxy/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/prometheus-rsocket-proxy
+    tag: TBD
+    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  service:
+    ## Prometheus Rsocket Proxy HTTP port
+    ##
+    httpPort: 8080
+    ## Prometheus Rsocket Proxy Rsocket port
+    ##
+    rsocketPort: 7001
+    ## Annotations for the Prometheus Rsocket Proxy service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/path: "/metrics"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:

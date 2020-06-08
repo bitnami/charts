@@ -83,10 +83,17 @@ Return the proper Spring Cloud Skipper image name
 {{- end -}}
 
 {{/*
+Return the proper Prometheus Rsocket Proxy image name
+*/}}
+{{- define "scdf.metrics.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "scdf.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.skipper.image .Values.waitForBackends.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.skipper.image .Values.waitForBackends.image .Values.metrics.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*

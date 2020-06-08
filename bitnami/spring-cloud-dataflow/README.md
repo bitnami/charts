@@ -181,7 +181,15 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 
 | Parameter                                       | Description                                                                                            | Default                                                 |
 |-------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `metrics.enabled`                               | Enable the export of Prometheus metrics                                                                | `false`                                                 |
+| `metrics.metrics`                               | Enable the export of Prometheus metrics                                                                | `false`                                                 |
+| `metrics.image.registry`                        | Prometheus Rsocket Proxy image registry                                                                | `docker.io`                                             |
+| `metrics.image.repository`                      | Prometheus Rsocket Proxy image name                                                                    | `bitnami/prometheus-rsocket-proxy`                      |
+| `metrics.image.tag`                             | Prometheus Rsocket Proxy image tag                                                                     | `{TAG_NAME}`                                            |
+| `metrics.image.pullPolicy`                      | Prometheus Rsocket Proxy image pull policy                                                             | `IfNotPresent`                                          |
+| `metrics.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
+| `metrics.kafka.service.httpPort`                | Prometheus Rsocket Proxy HTTP port                                                                     | `8080`                                                  |
+| `metrics.kafka.service.rsocketPort`             | Prometheus Rsocket Proxy Rsocket port                                                                  | `8080`                                                  |
+| `metrics.kafka.service.annotations`             | Annotations for Prometheus Rsocket Proxy service                                                       | `Check values.yaml file`                                |
 | `metrics.serviceMonitor.enabled`                | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                                 |
 | `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                               | `nil`                                                   |
 | `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped.                                                           | `nil` (Prometheus Operator default value)               |

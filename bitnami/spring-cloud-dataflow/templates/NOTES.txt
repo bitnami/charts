@@ -1,6 +1,17 @@
 
 ** Please be patient while the chart is being deployed **
 
+{{- if and .Values.waitForBackends.enabled (not .Values.rbac.create) (not .Values.serviceAccount.create) }}
+---------------------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "rbac.create=false" and "serviceAccount.create=false" it's 
+    likely your pods enter into a "Init:CrashLoopBackOff" status if your
+    K8s cluster has RBAC enabled.
+
+---------------------------------------------------------------------------------------------
+{{- end }}
+
 Spring Cloud Data Flow chart was deployed enabling the following components:
 
 - Spring Cloud Data Flow server
