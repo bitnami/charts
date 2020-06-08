@@ -279,6 +279,28 @@ envoy:
 
   logLevel: info
 
+  ## Envoy Service properties
+  ##
+  service:
+    ## Service type
+    ##
+    type: LoadBalancer
+
+    ports:
+      ## HTTP Port
+      ##
+      http: 80
+      ## HTTPS Port
+      ##
+      https: 443
+
+    ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      https: ""
+
 prometheus:
   # Prometheus Operator service monitors
   serviceMonitor:
