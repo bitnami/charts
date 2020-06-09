@@ -2217,7 +2217,6 @@ commonLabels: {}
 redis:
   enabled: true
   nameOverride:
-  password:
   ## image:
   ##   tag:
   ## password: ""
