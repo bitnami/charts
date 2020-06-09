@@ -2,13 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.assetsvc.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.assetsvc.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    helm.sh/chart: {{ template "kubeapps.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ template "kubeapps.assetsvc.fullname" . }}
 spec:
   replicas: {{ .Values.assetsvc.replicaCount }}
   selector:
@@ -19,7 +15,9 @@ spec:
     metadata:
       labels:
         app: {{ template "kubeapps.assetsvc.fullname" . }}
+        app.kubernetes.io/name: {{ template "kubeapps.assetsvc.fullname" . }}
         release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.assetsvc.affinity }}

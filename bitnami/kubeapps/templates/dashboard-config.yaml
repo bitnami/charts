@@ -2,13 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kubeapps.dashboard-config.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.dashboard-config.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    helm.sh/chart: {{ template "kubeapps.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ template "kubeapps.dashboard-config.fullname" . }}
 data:
   vhost.conf: |-
     server {

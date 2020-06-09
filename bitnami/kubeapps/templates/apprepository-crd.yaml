@@ -7,13 +7,9 @@ metadata:
   name: apprepositories.kubeapps.com
   annotations:
     "helm.sh/hook": crd-install
-  labels:
-    app: {{ template "kubeapps.apprepository.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    helm.sh/chart: {{ template "kubeapps.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  labels:{{ include "kubeapps.extraAppLabels" $ | nindent 4 }}
+    app: {{ template "kubeapps.apprepository.fullname" $ }}
+    app.kubernetes.io/name: {{ template "kubeapps.apprepository.fullname" $ }}
 spec:
   group: kubeapps.com
   scope: Namespaced
