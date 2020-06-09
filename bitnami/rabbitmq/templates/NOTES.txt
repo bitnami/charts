@@ -3,11 +3,11 @@
 
 Credentials:
 
-    echo "Username      : {{ .Values.rabbitmq.username }}"
+    echo "Username      : {{ .Values.auth.username }}"
     echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "rabbitmq.fullname" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
     echo "ErLang Cookie : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "rabbitmq.fullname" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
 
-RabbitMQ can be accessed within the cluster on port {{ .Values.service.nodePort }} at {{ template "rabbitmq.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.rabbitmq.clustering.k8s_domain }}
+RabbitMQ can be accessed within the cluster on port {{ .Values.service.nodePort }} at {{ template "rabbitmq.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clustering.k8s_domain }}
 
 To access for outside the cluster, perform the following steps:
 

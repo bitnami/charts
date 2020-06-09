@@ -42,26 +42,13 @@ image:
 ##
 # fullnameOverride:
 
-## Use an alternate scheduler, e.g. "stork".
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+## Kubernetes Cluster Domain
 ##
-# schedulerName:
+clusterDomain: cluster.local
 
-## RabbitMQ should be initialized one by one when building cluster for the first time.
-## Therefore, the default value of podManagementPolicy is 'OrderedReady'
-## Once the RabbitMQ participates in the cluster, it waits for a response from another
-## RabbitMQ in the same cluster at reboot, except the last RabbitMQ of the same cluster.
-## If the cluster exits gracefully, you do not need to change the podManagementPolicy
-## because the first RabbitMQ of the statefulset always will be last of the cluster.
-## However if the last RabbitMQ of the cluster is not the first RabbitMQ due to a failure,
-## you must change podManagementPolicy to 'Parallel'.
-## ref : https://www.rabbitmq.com/clustering.html#restarting
+## RabbitMQ Authentication parameters
 ##
-podManagementPolicy: OrderedReady
-
-## section of specific values for rabbitmq
-##
-rabbitmq:
+auth:
   ## RabbitMQ application username
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -79,107 +66,6 @@ rabbitmq:
   # erlangCookie:
   # existingErlangSecret: name-of-existing-secret
 
-  ## Node name to cluster with. e.g.: `clusternode@hostname`
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
-  ##
-  # rabbitmqClusterNodeName:
-
-  ## Value for the RABBITMQ_LOGS environment variable
-  ## ref: https://www.rabbitmq.com/logging.html#log-file-location
-  ##
-  logs: '-'
-
-  ## RabbitMQ Max File Descriptors
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
-  ## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
-  ##
-  setUlimitNofiles: true
-  ulimitNofiles: '65536'
-
-  ## RabbitMQ maximum available scheduler threads and online scheduler threads. By default it will create a thread per CPU detected, with the following parameters you can tune it manually.
-  ## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
-  ## ref: https://github.com/bitnami/charts/issues/2189
-  ##
-  # maxAvailableSchedulers: 2
-  # onlineSchedulers: 1
-
-  ## Plugins to enable
-  ##
-  plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
-
-  ## Community plugins to install and enable
-  ##
-  communityPlugins: []
-
-  ## Extra plugins to enable
-  ## Use this instead of `plugins` to add new plugins
-  ##
-  extraPlugins: "rabbitmq_auth_backend_ldap"
-
-  ## Clustering settings
-  ##
-  clustering:
-    address_type: hostname
-    k8s_domain: cluster.local
-    ## Rebalance master for queues in cluster when new replica is created
-    ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
-    ##
-    rebalance: false
-
-  loadDefinition:
-    enabled: false
-    ## Can be templated if needed, e.g.
-    # secretName: "{{ .Release.Name }}-load-definition"
-    secretName: load-definition
-
-  ## environment variables to configure rabbitmq
-  ## ref: https://www.rabbitmq.com/configure.html#customise-environment
-  ##
-  env: {}
-
-  ## Configuration file content: required cluster configuration
-  ## Do not override unless you know what you are doing. To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
-  ##
-  configuration: |-
-    ## Clustering
-    ##
-    cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
-    cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
-    cluster_formation.node_cleanup.interval = 10
-    cluster_formation.node_cleanup.only_log_warning = true
-    cluster_partition_handling = autoheal
-    # queue master locator
-    queue_master_locator=min-masters
-    # enable guest user
-    loopback_users.guest = false
-
-  ## Configuration file content: extra configuration
-  ## Use this instead of `configuration` to add more configuration
-  ##
-  extraConfiguration: |-
-    #disk_free_limit.absolute = 50MB
-    #management.load_definitions = /app/load_definition.json
-
-  ## Configuration file content: advanced configuration
-  ## Use this as additional configuraton in classic config format (Erlang term configuration format)
-  ##
-  ## If you set LDAP with TLS/SSL enabled and you are using self-signed certificates, uncomment these lines.
-  ## advancedConfiguration: |-
-  ##   [{
-  ##     rabbitmq_auth_backend_ldap,
-  ##     [{
-  ##         ssl_options,
-  ##         [{
-  ##             verify, verify_none
-  ##         }, {
-  ##             fail_if_no_peer_cert,
-  ##             false
-  ##         }]
-  ##     ]}
-  ##   }].
-  ##
-  advancedConfiguration: |-
-
   ## Enable encryption to rabbitmq
   ## ref: https://www.rabbitmq.com/ssl.html
   ##
@@ -191,6 +77,292 @@ rabbitmq:
     serverCertificate: |-
     serverKey: |-
     # existingSecret: name-of-existing-secret-to-rabbitmq
+
+## Node name to cluster with. e.g.: `clusternode@hostname`
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+##
+# rabbitmqClusterNodeName:
+
+## forceBoot: executes 'rabbitmqctl force_boot' to force boot cluster shut down unexpectedly in an
+## unknown order.
+## ref: https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot
+##
+forceBoot: false
+
+## Value for the RABBITMQ_LOGS environment variable
+## ref: https://www.rabbitmq.com/logging.html#log-file-location
+##
+logs: '-'
+
+## RabbitMQ Max File Descriptors
+## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
+##
+setUlimitNofiles: true
+ulimitNofiles: '65536'
+
+## RabbitMQ maximum available scheduler threads and online scheduler threads. By default it will create a thread per CPU detected, with the following parameters you can tune it manually.
+## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
+## ref: https://github.com/bitnami/charts/issues/2189
+##
+# maxAvailableSchedulers: 2
+# onlineSchedulers: 1
+
+## The memory threshold under which RabbitMQ will stop reading from client network sockets, in order to avoid being killed by the OS
+## ref: https://www.rabbitmq.com/alarms.html
+## ref: https://www.rabbitmq.com/memory.html#threshold
+##
+memoryThreshold:
+  ##
+  enabled: false
+  ## The relative limit of RAM
+  ## The default value of 0.4 stands for 40% of availalbe RAM
+  ## Note: the memory relative limit is applied to the resource.limits.memory to caculate the memory threshold
+  ##
+  relative: 0.4
+  ## The absolute limit of RAM (in bytes)
+  ##
+  # absolute: 1073741824
+
+## Plugins to enable
+##
+plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
+
+## Extra plugins to enable
+## Use this instead of `plugins` to add new plugins
+##
+extraPlugins: "rabbitmq_auth_backend_ldap"
+
+## Clustering settings
+##
+clustering:
+  address_type: hostname
+  ## Rebalance master for queues in cluster when new replica is created
+  ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
+  ##
+  rebalance: false
+
+loadDefinition:
+  enabled: false
+  ## Can be templated if needed, e.g.
+  # secretName: "{{ .Release.Name }}-load-definition"
+  secretName: load-definition
+
+## Additional environment variables to set
+## E.g:
+## extraEnvs:
+##   - name: FOO
+##     value: BAR
+##
+extraEnvs: []
+
+## Configuration file content: required cluster configuration
+## Do not override unless you know what you are doing.
+## To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
+##
+configuration: |-
+  ## Username and password
+  default_user = {{ .Values.auth.username }}
+  default_pass = CHANGEME
+  ## Clustering
+  cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
+  cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+  cluster_formation.node_cleanup.interval = 10
+  cluster_formation.node_cleanup.only_log_warning = true
+  cluster_partition_handling = autoheal
+  # queue master locator
+  queue_master_locator = min-masters
+  # enable guest user
+  loopback_users.guest = false
+  {{ .Values.extraConfiguration }}
+  {{- if .Values.auth.tls.enabled }}
+  ssl_options.verify = {{ .Values.auth.tls.sslOptionsVerify }}
+  listeners.ssl.default = {{ .Values.service.tlsPort }}
+  ssl_options.fail_if_no_peer_cert = {{ .Values.auth.tls.failIfNoPeerCert }}
+  ssl_options.cacertfile = /opt/bitnami/rabbitmq/certs/ca_certificate.pem
+  ssl_options.certfile = /opt/bitnami/rabbitmq/certs/server_certificate.pem
+  ssl_options.keyfile = /opt/bitnami/rabbitmq/certs/server_key.pem
+  {{- end }}
+  {{- if .Values.ldap.enabled }}
+  auth_backends.1 = rabbit_auth_backend_ldap
+  auth_backends.2 = internal
+  auth_ldap.servers.1  = {{ .Values.ldap.server }}
+  auth_ldap.port = {{ .Values.ldap.port }}
+  auth_ldap.user_dn_pattern = {{ .Values.ldap.user_dn_pattern  }}
+  {{- if .Values.ldap.tls.enabled }}
+  auth_ldap.use_ssl = true
+  {{- end }}
+  {{- end }}
+  {{- if .Values.metrics.enabled }}
+  prometheus.tcp.port = {{ .Values.metrics.port }}
+  {{- end }}
+
+## Configuration file content: extra configuration
+## Use this instead of `configuration` to add more configuration
+##
+extraConfiguration: |-
+  #disk_free_limit.absolute = 50MB
+  #management.load_definitions = /app/load_definition.json
+
+## Configuration file content: advanced configuration
+## Use this as additional configuraton in classic config format (Erlang term configuration format)
+##
+## If you set LDAP with TLS/SSL enabled and you are using self-signed certificates, uncomment these lines.
+## advancedConfiguration: |-
+##   [{
+##     rabbitmq_auth_backend_ldap,
+##     [{
+##         ssl_options,
+##         [{
+##             verify, verify_none
+##         }, {
+##             fail_if_no_peer_cert,
+##             false
+##         }]
+##     ]}
+##   }].
+##
+advancedConfiguration: |-
+
+## LDAP configuration
+##
+ldap:
+  enabled: false
+  server: ""
+  port: "389"
+  user_dn_pattern: cn=${username},dc=example,dc=org
+  tls:
+    # If you enabled TLS/SSL you can set advaced options using the advancedConfiguration parameter.
+    enabled: false
+
+## extraVolumes and extraVolumeMounts allows you to mount other volumes
+## Examples:
+## extraVolumeMounts:
+##   - name: extras
+##     mountPath: /usr/share/extras
+##     readOnly: true
+## extraVolumes:
+##   - name: extras
+##     emptyDir: {}
+extraVolumeMounts: []
+extraVolumes: []
+
+## Number of RabbitMQ replicas to deploy
+##
+replicaCount: 1
+
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName:
+
+## RabbitMQ should be initialized one by one when building cluster for the first time.
+## Therefore, the default value of podManagementPolicy is 'OrderedReady'
+## Once the RabbitMQ participates in the cluster, it waits for a response from another
+## RabbitMQ in the same cluster at reboot, except the last RabbitMQ of the same cluster.
+## If the cluster exits gracefully, you do not need to change the podManagementPolicy
+## because the first RabbitMQ of the statefulset always will be last of the cluster.
+## However if the last RabbitMQ of the cluster is not the first RabbitMQ due to a failure,
+## you must change podManagementPolicy to 'Parallel'.
+## ref : https://www.rabbitmq.com/clustering.html#restarting
+##
+podManagementPolicy: OrderedReady
+
+## Pod labels. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Pod annotations. Evaluated as a template
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## updateStrategy for RabbitMQ statefulset
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategyType: RollingUpdate
+
+## Name of the priority class to be used by RabbitMQ pods, priority class needs to be created beforehand
+## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+priorityClassName: ""
+
+## Affinity for pod assignment. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## RabbitMQ pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  fsGroup: 1001
+  runAsUser: 1001
+
+## RabbitMQ containers' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## Example:
+##   containerSecurityContext:
+##     capabilities:
+##       drop: ["NET_RAW"]
+##     readOnlyRootFilesystem: true
+##
+containerSecurityContext: {}
+
+## RabbitMQ containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 1000m
+  #   memory: 2Gi
+  requests: {}
+  #   cpu: 1000m
+  #   memory: 2Gi
+
+## Kafka containers' liveness and readiness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+livenessProbe:
+  exec:
+    command:
+      - /bin/bash
+      - -ec
+      - |
+        /opt/bitnami/scripts/rabbitmq/apicheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
+  initialDelaySeconds: 120
+  timeoutSeconds: 20
+  periodSeconds: 30
+  failureThreshold: 6
+  # failureThreshold: 3
+  # successThreshold: 1
+readinessProbe:
+  exec:
+    command:
+      - /bin/bash
+      - -ec
+      - |
+        /opt/bitnami/scripts/rabbitmq/healthcheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
+  initialDelaySeconds: 10
+  timeoutSeconds: 20
+  periodSeconds: 30
+  # failureThreshold: 3
+  # successThreshold: 1
 
 ## RabbitMQ pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -204,23 +376,93 @@ serviceAccount:
   ##
   # name:
 
-## does your cluster have rbac enabled? assume yes by default
+## Role Based Access
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
-rbacEnabled: true
+rbac:
+  ## Specifies whether RBAC rules should be created
+  ## binding Kafka ServiceAccount to a role
+  ## that allows Kafka pods querying the K8s API
+  ##
+  create: false
 
-## LDAP configuration
+persistence:
+  ## this enables PVC templates that will create one per pod
+  ##
+  enabled: true
+
+  ## rabbitmq data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ## selector can be used to match an existing PersistentVolume
+  # selector:
+  #   matchLabels:
+  #     app: my-app
+  accessMode: ReadWriteOnce
+
+  ## Existing PersistentVolumeClaims
+  ## The value is evaluated as a template
+  ## So, for example, the name can depend on .Release or .Chart
+  # existingClaim: ""
+
+  ## If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well.
+  ##
+  size: 8Gi
+
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
-ldap:
+pdb:
+  create: false
+  ## Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
+
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## Enable creation of NetworkPolicy resources
+  ##
   enabled: false
-  server: ""
-  port: "389"
-  user_dn_pattern: cn=${username},dc=example,dc=org
-  tls:
-    # If you enabled TLS/SSL you can set advaced options using the advancedConfiguration parameter.
-    enabled: false
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to the ports RabbitMQ is listening
+  ## on. When true, RabbitMQ will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.
+  ##
+  # additionalRules:
+  #  - matchLabels:
+  #    - role: frontend
+  #  - matchExpressions:
+  #    - key: role
+  #      operator: In
+  #      values:
+  #        - frontend
+
+## Optionally specify extra secrets to be created by the chart.
+## This can be useful when combined with load_definitions to automatically create the secret containing the definitions to be loaded.
+## Example:
+## extraSecrets:
+##   load-definition:
+##     load_definition.json: |
+##       {
+##         ...
+##       }
+##
+extraSecrets: {}
 
 ## Kubernetes service type
-##
 service:
   type: ClusterIP
   ## Node port
@@ -228,7 +470,7 @@ service:
   ##
   # nodePort: 30672
 
-  ## Set the ExternalIP
+  ## Set the ExternalIPs
   ##
   # externalIPs:
 
@@ -288,115 +530,6 @@ service:
   #   port: 1234
   #   targetPort: 1234
 
-# Additional pod labels to apply
-podLabels: {}
-
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
-  extra: {}
-
-persistence:
-  ## this enables PVC templates that will create one per pod
-  ##
-  enabled: true
-
-  ## rabbitmq data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ## selector can be used to match an existing PersistentVolume
-  # selector:
-  #   matchLabels:
-  #     app: my-app
-  accessMode: ReadWriteOnce
-
-  ## Existing PersistentVolumeClaims
-  ## The value is evaluated as a template
-  ## So, for example, the name can depend on .Release or .Chart
-  # existingClaim: ""
-
-  # If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well.
-  size: 8Gi
-
-  # persistence directory, maps to the rabbitmq data directory
-  path: /opt/bitnami/rabbitmq/var/lib/rabbitmq
-
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources: {}
-
-networkPolicy:
-  ## Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  enabled: false
-
-  ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the ports RabbitMQ is listening
-  ## on. When true, RabbitMQ will accept connections from any source
-  ## (with the correct destination port).
-  ##
-  allowExternal: true
-
-  ## Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.
-  ##
-  # additionalRules:
-  #  - matchLabels:
-  #    - role: frontend
-  #  - matchExpressions:
-  #    - key: role
-  #      operator: In
-  #      values:
-  #        - frontend
-
-## Replica count, set to 1 to provide a default available cluster
-##
-replicas: 1
-
-## Pod priority
-## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-# priorityClassName: ""
-
-## updateStrategy for RabbitMQ statefulset
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-##
-updateStrategy:
-  type: RollingUpdate
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
-## Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-## Tolerations for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: {}
-## Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-## Example:
-## podDisruptionBudget:
-##    maxUnavailable: 1
-##    minAvailable: 1
-##
-podDisruptionBudget: {}
-## Annotations for Rabbitmq pods
-##
-podAnnotations: {}
-
 ## Configure the ingress resource that allows you to access the
 ## Wordpress installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -433,26 +566,6 @@ ingress:
   annotations: {}
   #  kubernetes.io/ingress.class: nginx
   #  kubernetes.io/tls-acme: true
-
-## The following settings are to configure the frequency of the lifeness and readiness probes
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 120
-  timeoutSeconds: 20
-  periodSeconds: 30
-  failureThreshold: 6
-  successThreshold: 1
-  commandOverride: []
-
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 10
-  timeoutSeconds: 20
-  periodSeconds: 30
-  failureThreshold: 3
-  successThreshold: 1
-  commandOverride: []
 
 ## Prometheus Metrics
 ##
@@ -560,53 +673,42 @@ metrics:
     #           VALUE = {{ "{{ $value }}" }}\n  LABELS: {{ "{{ $labels }}" }}
     rules: []
 
-##
-## Init containers parameters:
-## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
+## Init Container paramaters
+## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
+## values from the securityContext section of the component
 ##
 volumePermissions:
   enabled: false
+  ## Bitnami Minideb image
+  ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
+  ##
   image:
     registry: docker.io
     repository: bitnami/minideb
     tag: buster
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  resources: {}
-
-## forceBoot: executes 'rabbitmqctl force_boot' to force boot cluster shut down unexpectedly in an
-## unknown order.
-## ref: https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot
-##
-forceBoot:
-  enabled: false
-
-## Optionally specify extra secrets to be created by the chart.
-## This can be useful when combined with load_definitions to automatically create the secret containing the definitions to be loaded.
-## Example:
-## extraSecrets:
-##   load-definition:
-##     load_definition.json: |
-##       {
-##         ...
-##       }
-##
-extraSecrets: {}
-
-## extraVolumes and extraVolumeMounts allows you to mount other volumes
-## Examples:
-## extraVolumeMounts:
-##   - name: extras
-##     mountPath: /usr/share/extras
-##     readOnly: true
-## extraVolumes:
-##   - name: extras
-##     emptyDir: {}
-##
-extraVolumeMounts: []
-extraVolumes: []
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init Container resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
