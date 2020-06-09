@@ -24,7 +24,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ### Choose between Redis Helm Chart and Redis Cluster Helm Chart
 
 You can choose any of the two Redis Helm charts for deploying a Redis cluster.
-While [Redis Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis Sentinel, the [Redis Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis Cluster topology with sharding.
+While [Redis Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis Sentinel, the [Redis Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis Cluster with sharding.
 The main features of each chart are the following:
 
 | Redis                                           | Redis Cluster                                                  |
@@ -108,6 +108,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `podSecurityContext.fsGroup`                    | Group ID for the pods.                                         | `1001`            |
 | `podSecurityContext.runAsUser`                  | User ID for the pods.                                          | `1001`            |
 | `podSecurityContext.sysctls`                    | Set namespaced sysctls for the pods.                           | `nil`             |
+| `podDisruptionBudget`                           | Configure podDisruptionBudget policy                           | `{}`              |
 | `containerSecurityContext.enabled`              | Enable container's security context                            | `true`            |
 | `containerSecurityContext.fsGroup`              | Group ID for the containers.                                   | `1001`            |
 | `containerSecurityContext.runAsUser`            | User ID for the containers.                                    | `1001`            |
@@ -277,15 +278,19 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+### Change Redis version
+
+To modify the Redis version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis-cluster/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
 ### Cluster topology
 
-The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default the Redis Cluster is not accessible from outside the Kubernetes cluster, to the Redis cluster to the outside set `cluster.externalAccess.enabled=true`, it will create in the first installation only 6 LoadBalancer services, one for each Redis node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
+The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default the Redis Cluster is not accessible from outside the Kubernetes cluster, to access the Redis Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Redis node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
 
-The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the master node. For example, using `redis-cli` you will need to provide the `-c` flag for `redis-cli` to follow the redirection automatically.
+The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper master node. For example, using `redis-cli` you will need to provide the `-c` flag for `redis-cli` to follow the redirection automatically.
 
 Using the external access mode, you can connect to any of the pods and the slaves will redirect the client in the same way as explained before, but the all the IPs will be public.
 
-In case the master crashes, one of the slaves will be promoted to master. The slots stored by the crashed master will be unavailable until the slave finish the promotion. If a master and all his slaves crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Redis nodes with `cluster.nodes` and the number of replicas that will be assigned to each master with `cluster.replicas`. For example:
+In case the master crashes, one of his slaves will be promoted to master. The slots stored by the crashed master will be unavailable until the slave finish the promotion. If a master and all his slaves crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Redis nodes with `cluster.nodes` and the number of replicas that will be assigned to each master with `cluster.replicas`. For example:
   - `cluster.nodes=9` ( 3 master plus 2 replicas for each master)
   - `cluster.replicas=2`
 
@@ -435,7 +440,7 @@ Note that this will not disable transparent huge tables.
 
 ## Persistence
 
-By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at the `/bitnami` path. The volume is created using dynamic volume provisioning. If a Persistent Volume Claim already exists, specify it during installation.
+By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at the `/bitnami` path. The volume is created using dynamic volume provisioning.
 
 ## NetworkPolicy
 

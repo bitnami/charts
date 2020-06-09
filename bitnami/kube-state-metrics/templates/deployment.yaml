@@ -65,8 +65,14 @@ spec:
             {{- if .Values.collectors.limitranges }}
             - --collectors=limitranges
             {{- end }}
+            {{- if .Values.collectors.mutatingwebhookconfigurations }}
+            - --collectors=mutatingwebhookconfigurations
+            {{- end }}
             {{- if .Values.collectors.namespaces }}
             - --collectors=namespaces
+            {{- end }}
+            {{- if .Values.collectors.networkpolicies }}
+            - --collectors=networkpolicies
             {{- end }}
             {{- if .Values.collectors.nodes }}
             - --collectors=nodes
@@ -106,6 +112,9 @@ spec:
             {{- end }}
             {{- if .Values.collectors.verticalpodautoscalers }}
             - --collectors=verticalpodautoscalers
+            {{- end }}
+            {{- if .Values.collectors.volumeattachments }}
+            - --collectors=volumeattachments
             {{- end }}
             {{- if .Values.namespace }}
             - --namespace={{ .Values.namespace }}
