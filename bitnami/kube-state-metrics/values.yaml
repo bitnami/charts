@@ -51,7 +51,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 1.9.7-debian-10-r0
+  tag: 1.9.7-debian-10-r5
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -83,7 +83,9 @@ collectors:
   ingresses: true
   jobs: true
   limitranges: true
+  mutatingwebhookconfigurations: true
   namespaces: true
+  networkpolicies: true
   nodes: true
   persistentvolumeclaims: true
   persistentvolumes: true
@@ -97,6 +99,7 @@ collectors:
   statefulsets: true
   storageclasses: true
   verticalpodautoscalers: false
+  volumeattachments: true
 
 ## SecurityContext configuration
 ##

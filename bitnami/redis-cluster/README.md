@@ -108,6 +108,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `podSecurityContext.fsGroup`                    | Group ID for the pods.                                         | `1001`            |
 | `podSecurityContext.runAsUser`                  | User ID for the pods.                                          | `1001`            |
 | `podSecurityContext.sysctls`                    | Set namespaced sysctls for the pods.                           | `nil`             |
+| `podDisruptionBudget`                           | Configure podDisruptionBudget policy                           | `{}`              |
 | `containerSecurityContext.enabled`              | Enable container's security context                            | `true`            |
 | `containerSecurityContext.fsGroup`              | Group ID for the containers.                                   | `1001`            |
 | `containerSecurityContext.runAsUser`            | User ID for the containers.                                    | `1001`            |
