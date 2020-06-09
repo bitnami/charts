@@ -190,7 +190,7 @@ spec:
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc/
             {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 8 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -228,6 +228,9 @@ spec:
               containerPort: 9121
           resources:
         {{- toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and  .Values.persistence.enabled .Values.containerSecurityContext.enabled) }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
@@ -267,9 +270,6 @@ spec:
         {{- toYaml .Values.extraInitContainers | nindent 10 }}
         {{- end }}
       {{- end }}
-      {{- if .Values.sidecars }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 6 }}
-      {{- end }}
       volumes:
         - name: scripts
           configMap:
@@ -298,7 +298,7 @@ spec:
         - name: redis-tmp-conf
           emptyDir: {}
         {{- if .Values.extraVolumes }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 6 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
