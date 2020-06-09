@@ -248,6 +248,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 To horizontally scale this chart, you can use the `--replicas` flag to modify the number of secondary nodes in your MongoDB replica set.
 
+### Change MongoDB version
+
+To modify the MongoDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mongodb/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
 ### Replication
 
 You can start the MongoDB chart in replica set mode with the following parameter: `replicaSet.enabled=true`
