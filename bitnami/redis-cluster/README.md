@@ -108,6 +108,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `podSecurityContext.fsGroup`                    | Group ID for the pods.                                         | `1001`            |
 | `podSecurityContext.runAsUser`                  | User ID for the pods.                                          | `1001`            |
 | `podSecurityContext.sysctls`                    | Set namespaced sysctls for the pods.                           | `nil`             |
+| `podDisruptionBudget`                           | Configure podDisruptionBudget policy                           | `{}`              |
 | `containerSecurityContext.enabled`              | Enable container's security context                            | `true`            |
 | `containerSecurityContext.fsGroup`              | Group ID for the containers.                                   | `1001`            |
 | `containerSecurityContext.runAsUser`            | User ID for the containers.                                    | `1001`            |
@@ -276,6 +277,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+### Change Redis version
+
+To modify the Redis version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis-cluster/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Cluster topology
 

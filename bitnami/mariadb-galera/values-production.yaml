@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.4.13-debian-10-r18
+  tag: 10.4.13-debian-10-r20
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -95,7 +95,8 @@ serviceAccount:
   create: false
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
-  # name:
+  ##
+  name: ""
 
 ## An array to add extra environment variables
 ## For example:
@@ -136,7 +137,7 @@ rootUser:
   ## Password is ignored if existingSecret is specified.
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-the-root-password-on-first-run
   ##
-  password:
+  password: ""
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
   ##
@@ -153,8 +154,8 @@ db:
   ## Password is ignored if existingSecret is specified.
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#creating-a-database-user-on-first-run
   ##
-  user:
-  password:
+  user: ""
+  password: ""
   ## Database to create
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#creating-a-database-on-first-run
   ##
@@ -188,7 +189,7 @@ galera:
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-up-a-multi-master-cluster
     ##
     user: mariabackup
-    password:
+    password: ""
     ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
     ## If it is not force, a random password will be generated.
     ##
@@ -200,10 +201,10 @@ ldap:
   ## Enable LDAP support
   ##
   enabled: false
-  uri:
-  base:
-  binddn:
-  bindpw:
+  uri: ""
+  base: ""
+  binddn: ""
+  bindpw: ""
   bslookup:
   nss_initgroups_ignoreusers: root,nslcd
   scope:
@@ -532,7 +533,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r130
+    tag: 0.12.1-debian-10-r133
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
