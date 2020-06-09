@@ -177,6 +177,10 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Change NGINX version
+
+To modify the NGINX version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/nginx/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
 ### Deploying your custom web application
 
 The NGINX chart allows you to deploy a custom web application using one of the following methods:
