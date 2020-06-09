@@ -144,6 +144,10 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Change Odoo version
+
+To modify the Odoo version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/odoo/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable for other images like exporters.
+
 ### Using an external database
 
 Sometimes you may want to have Odoo connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [`externalDatabase` parameter](#parameters). You should also disable the PostgreSQL installation with the `postgresql.enabled` option. For example using the following parameters:

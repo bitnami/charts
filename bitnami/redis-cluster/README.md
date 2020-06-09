@@ -278,6 +278,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+### Change Redis version
+
+To modify the Redis version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis-cluster/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable for other images like exporters.
+
 ### Cluster topology
 
 The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default the Redis Cluster is not accessible from outside the Kubernetes cluster, to access the Redis Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Redis node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.

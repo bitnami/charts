@@ -226,6 +226,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+### Change MySQL version
+
+To modify the MySQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mysql/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable for other images like exporters.
+
 ### Initialize a fresh instance
 
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
