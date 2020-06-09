@@ -142,7 +142,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Change Node version
 
-To modify the Node version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/node/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable for other images like exporters.
+To modify the Node version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/node/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Set up an Ingress controller
 
