@@ -99,6 +99,7 @@ collectors:
   statefulsets: true
   storageclasses: true
   verticalpodautoscalers: false
+  validatingwebhookconfigurations: false
   volumeattachments: true
 
 ## SecurityContext configuration

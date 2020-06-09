@@ -161,6 +161,12 @@ rules:
       - verticalpodautoscalers
     verbs: ["list", "watch"]
   {{- end }}
+  {{- if .Values.collectors.validatingwebhookconfigurations }}
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources:
+      - validatingwebhookconfigurations
+    verbs: ["list", "watch"]
+  {{- end }}
   {{- if .Values.collectors.volumeattachments }}
   - apiGroups: ["storage.k8s.io"]
     resources:
