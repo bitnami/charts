@@ -101,7 +101,7 @@ spec:
                if [ -d "{{ .Values.persistence.path }}/mnesia/${RABBITMQ_NODENAME}" ]; then rabbitmqctl force_boot; fi
                {{- end }}
                {{- if .Values.rabbitmq.communityPlugins }}
-               ./opt/scripts/install-plugins.sh
+               . /opt/scripts/install-plugins.sh
                {{- end }}
                exec rabbitmq-server
           {{- if .Values.resources }}
@@ -291,7 +291,6 @@ spec:
         - name: {{ template "rabbitmq.fullname" . }}-plugins
           configMap:
             name: {{ template "rabbitmq.fullname" . }}-plugins
-            defaultMode: 0777
         {{- end }}
         - name: config-volume
           configMap:

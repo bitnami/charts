@@ -109,7 +109,7 @@ rabbitmq:
 
 
   ## Community plugins to install and enable
-  communityPlugins: {}
+  communityPlugins: []
 
   ## Extra plugins to enable
   ## Use this instead of `plugins` to add new plugins
