@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.39.0-debian-10-r28
+    tag: 0.39.0-debian-10-r32
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -216,7 +216,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.3.0-debian-10-r130
+      tag: 0.3.0-debian-10-r133
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -247,7 +247,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.18.1-debian-10-r24
+    tag: 2.18.1-debian-10-r28
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -580,6 +580,50 @@ prometheus:
   ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   volumeMounts: []
 
+  ## PrometheusRule defines recording and alerting rules for a Prometheus instance.
+  ##
+  additionalPrometheusRules: []
+    # - name: custom-recording-rules
+    #  groups:
+    #    - name: sum_node_by_job
+    #      rules:
+    #        - record: job:kube_node_labels:sum
+    #          expr: sum(kube_node_labels) by (job)
+    #    - name: sum_prometheus_config_reload_by_pod
+    #      rules:
+    #        - record: job:prometheus_config_last_reload_successful:sum
+    #          expr: sum(prometheus_config_last_reload_successful) by (pod)
+    # - name: custom-alerting-rules
+    #  groups:
+    #    - name: prometheus-config
+    #      rules:
+    #        - alert: PrometheusConfigurationReload
+    #          expr: prometheus_config_last_reload_successful > 0
+    #          for: 1m
+    #          labels:
+    #            severity: error
+    #          annotations:
+    #            summary: "Prometheus configuration reload (instance {{ $labels.instance }})"
+    #            description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+    #    - name: custom-node-exporter-alerting-rules
+    #      rules:
+    #        - alert: PhysicalComponentTooHot
+    #          expr: node_hwmon_temp_celsius > 75
+    #          for: 5m
+    #          labels:
+    #            severity: warning
+    #          annotations:
+    #            summary: "Physical component too hot (instance {{ $labels.instance }})"
+    #            description: "Physical hardware component too hot\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+    #        - alert: NodeOvertemperatureAlarm
+    #          expr: node_hwmon_temp_alarm == 1
+    #          for: 5m
+    #          labels:
+    #            severity: critical
+    #          annotations:
+    #            summary: "Node overtemperature alarm (instance {{ $labels.instance }})"
+    #            description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
   ## Enable additional scrape configs that are managed externally to this chart
   ##
   additionalScrapeConfigsExternal: false
@@ -654,7 +698,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.20.0-debian-10-r132
+    tag: 0.20.0-debian-10-r135
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

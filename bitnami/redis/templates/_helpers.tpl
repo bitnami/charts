@@ -157,6 +157,36 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Return the path to the cert file.
+*/}}
+{{- define "redis.tlsCert" -}}
+{{- required "Certificate filename is required when TLS in enabled" .Values.tls.certFilename | printf "/opt/bitnami/redis/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "redis.tlsCertKey" -}}
+{{- required "Certificate Key filename is required when TLS in enabled" .Values.tls.certKeyFilename | printf "/opt/bitnami/redis/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "redis.tlsCACert" -}}
+{{- required "Certificate CA filename is required when TLS in enabled" .Values.tls.certCAFilename | printf "/opt/bitnami/redis/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the DH params file.
+*/}}
+{{- define "redis.tlsDHParams" -}}
+{{- if .Values.tls.dhParamsFilename -}}
+{{- printf "/opt/bitnami/redis/certs/%s" .Values.tls.dhParamsFilename -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "redis.serviceAccountName" -}}
