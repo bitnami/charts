@@ -1,15 +1,15 @@
 {{- if .Values.featureFlags.invalidateCache }}
-# Ensure db indexes are set and invalidate the chart cache during both install and upgrade.
+# Ensure db indexes are set and invalidate the chart when upgrading.
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "kubeapps.apprepository-jobs-preupgrade.fullname" . }}
+  name: {{ template "kubeapps.apprepository-job-postupgrade.fullname" . }}
   annotations:
-    helm.sh/hook: pre-upgrade,post-install
+    helm.sh/hook: post-upgrade
     helm.sh/hook-weight: "0"
     helm.sh/hook-delete-policy: hook-succeeded
   labels:
-    app: {{ template "kubeapps.apprepository-jobs-preupgrade.fullname" . }}
+    app: {{ template "kubeapps.apprepository-job-postupgrade.fullname" . }}
     chart: {{ template "kubeapps.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "kubeapps.apprepository-jobs-preupgrade.fullname" . }}
+        app: {{ template "kubeapps.apprepository-job-postupgrade.fullname" . }}
         release: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
@@ -36,9 +36,11 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
       restartPolicy: OnFailure
+      serviceAccountName: {{ template "kubeapps.apprepository-job-postupgrade.fullname" . }}
       containers:
         - name: invalidate-cache
           image: {{ template "kubeapps.image" (list .Values.apprepository.syncImage .Values.global) }}
+          imagePullPolicy: {{ .Values.apprepository.syncImage.pullPolicy | quote }}
           command:
             - /asset-syncer
           args:
@@ -67,4 +69,17 @@ spec:
                   key: postgresql-password
                   name: {{ .Values.postgresql.existingSecret }}
             {{- end }}
+      {{- if and .Values.postgresql.enabled .Values.postgresql.existingSecret }}
+      initContainers:
+        # Helm 3.1 supports a lookup template tag to create a secret if it does not exist
+        # but we can't yet restrict to helm 3.1, hence manually doing this with an initContainer.
+        - name: ensure-postgres-password
+          image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}
+          imagePullPolicy: {{ .Values.hooks.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - 'kubectl -n {{ .Release.Namespace }} get secret {{ .Values.postgresql.existingSecret }} || kubectl -n {{ .Release.Namespace }} create secret generic {{ .Values.postgresql.existingSecret }} --from-literal=postgresql-password={{ randAlphaNum 10 | quote }} --from-literal=postgresql-replication-password={{ randAlphaNum 10 | quote }}'
+      {{- end }}
 {{- end }}

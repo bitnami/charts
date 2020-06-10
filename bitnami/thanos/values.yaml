@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.12.2-scratch-r14
+  tag: 0.12.2-scratch-r15
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -287,6 +287,39 @@ querier:
     ## - name: thanos.local-tls
     ##   key:
     ##   certificate:
+
+    ## Create an ingress object for the GRPC service. This requires an HTTP/2
+    ## capable Ingress controller (eg. traefik using AWS NLB). Example annotations
+    ## - ingress.kubernetes.io/protocol: h2c
+    ## - service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    ## - service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    ## For more information see https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/
+    ## and also the documentation for your ingress controller.
+    ##
+    ## The options that are accepted are identical to the HTTP one listed above
+    grpc:
+      enabled: false
+      certManager: false
+      hostname: thanos-grpc.local
+      annotations: {}
+
+      ## - hosts:
+      ##     - thanos.local
+      ##   secretName: thanos-grpc.local-tls
+
+      ## extraHosts:
+      ## - name: thanos-grpc.local
+      ##   path: /
+
+      ## extraTls:
+      ## - hosts:
+      ##     - thanos-grpc.local
+      ##   secretName: thanos-grpc.local-tls
+
+      secrets: []
+      ## - name: thanos-grpc.local-tls
+      ##   key:
+      ##   certificate:
 
 ## Thanos Bucket Web parameters
 ##

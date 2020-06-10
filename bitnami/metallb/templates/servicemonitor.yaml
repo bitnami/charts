@@ -4,7 +4,6 @@ kind: Service
 metadata:
   name: {{ include "metallb.fullname" . }}-controller-metrics
   labels: {{- include "metallb.labels" . | nindent 4 }}
-    jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel }}
     app.kubernetes.io/component: controller
 spec:
   type: ClusterIP
@@ -21,7 +20,6 @@ kind: Service
 metadata:
   name: {{ include "metallb.fullname" . }}-speaker-metrics
   labels: {{- include "metallb.labels" . | nindent 4 }}
-    jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel }}
     app.kubernetes.io/component: speaker
 spec:
   type: ClusterIP
@@ -40,7 +38,7 @@ metadata:
   labels: {{- include "metallb.labels" . | nindent 4 }}
     app.kubernetes.io/component: controller
 spec:
-  jobLabel: jobLabel
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: controller
@@ -66,7 +64,7 @@ metadata:
   labels: {{- include "metallb.labels" . | nindent 4}}
     app.kubernetes.io/component: speaker
 spec:
-  jobLabel: jobLabel
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: speaker

@@ -13,7 +13,7 @@ MariaDB can be accessed via port "{{ .Values.service.port }}" on the following D
 
 To obtain the password for the MariaDB "root" user run the following command:
 
-  kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode
+    echo "$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)"
 
 To connect to your database run the following command:
 

@@ -145,7 +145,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `pgpool.maxPool`                               | The maximum number of cached connections in each child process                                                                                                       | `15`                                                         |
 | `pgpool.numInitChildren`                       | The number of preforked Pgpool-II server processes.                                                                                                                  | `32`                                                         |
 | `pgpool.configuration`                         | Content of pgpool.conf                                                                                                                                               | `nil`                                                        |
-| `pgpool.configurationCM`                       | ConfigMap with the Pgpool configuration file (Note: Overrides `pgpol.configuration`)                                                                                 | `nil` (The value is evaluated as a template)                 |
+| `pgpool.configurationCM`                       | ConfigMap with the Pgpool configuration file (Note: Overrides `pgpol.configuration`). The file used must be named `pgpool.conf`.                                     | `nil` (The value is evaluated as a template)                 |
 | `pgpool.useLoadBalancing`                      | If true, use Pgpool Load-Balancing                                                                                                                                   | `true`                                                       |
 | **LDAP**                                       |                                                                                                                                                                      |                                                              |
 | `ldap.enabled`                                 | Enable LDAP support                                                                                                                                                  | `false`                                                      |
@@ -265,7 +265,7 @@ To horizontally scale this chart, you can use the `--replicaCount` flag to modif
 
 ### Change PostgreSQL version
 
-To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql/tags/) using the `image.tag` parameter. For example, `image.tag=12.0.0`
+To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql-repmgr/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Configure the way how to expose PostgreSQL
 

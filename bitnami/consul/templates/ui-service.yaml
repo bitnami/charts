@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "consul.fullname" . }}-ui
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "consul.labels" . | nindent 4 }}
   annotations: {{- include "consul.tplValue" ( dict "value" .Values.ui.service.annotations "context" $) | nindent 4 }}
 spec:

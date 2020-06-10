@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.4.13-debian-10-r8
+  tag: 10.4.13-debian-10-r23
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -48,6 +48,11 @@ image:
 ## Specifies the Kubernetes Cluster's Domain Name.
 ##
 clusterDomain: cluster.local
+
+## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: OrderedReady
 
 ## MariaDB Gallera K8s svc properties
 ##
@@ -89,7 +94,8 @@ serviceAccount:
   create: false
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
-  # name:
+  ##
+  name: ""
 
 ## An array to add extra environment variables
 ## For example:
@@ -130,7 +136,7 @@ rootUser:
   ## Password is ignored if existingSecret is specified.
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-the-root-password-on-first-run
   ##
-  password:
+  password: ""
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
   ##
@@ -147,8 +153,8 @@ db:
   ## Password is ignored if existingSecret is specified.
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#creating-a-database-user-on-first-run
   ##
-  user:
-  password:
+  user: ""
+  password: ""
   ## Database to create
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#creating-a-database-on-first-run
   ##
@@ -165,6 +171,16 @@ galera:
   ##
   name: galera
 
+  ## Bootstraping options
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
+  bootstrap:
+    ## Node to bootstrap from, you will need to change this parameter incase you want to bootstrap from other node
+    ##
+    bootstrapFromNode: 0
+    ## Force bootstrap
+    ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
+    forceSafeToBootstrap: false
+
   ## Credentials to perform backups
   ##
   mariabackup:
@@ -173,7 +189,7 @@ galera:
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-up-a-multi-master-cluster
     ##
     user: mariabackup
-    password:
+    password: ""
     ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
     ## If it is not force, a random password will be generated.
     ##
@@ -185,10 +201,10 @@ ldap:
   ## Enable LDAP support
   ##
   enabled: false
-  uri:
-  base:
-  binddn:
-  bindpw:
+  uri: ""
+  base: ""
+  binddn: ""
+  bindpw: ""
   bslookup:
   nss_initgroups_ignoreusers: root,nslcd
   scope:
@@ -224,77 +240,75 @@ mariadbConfiguration: |-
   plugin_dir=/opt/bitnami/mariadb/plugin
 
   [mysqld]
-  default-storage-engine=InnoDB
+  default_storage_engine=InnoDB
   basedir=/opt/bitnami/mariadb
   datadir=/bitnami/mariadb/data
   plugin_dir=/opt/bitnami/mariadb/plugin
   tmpdir=/opt/bitnami/mariadb/tmp
   socket=/opt/bitnami/mariadb/tmp/mysql.sock
-  pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-  bind-address=0.0.0.0
+  pid_file=/opt/bitnami/mariadb/tmp/mysqld.pid
+  bind_address=0.0.0.0
 
   ## Character set
-  collation-server=utf8_unicode_ci
-  init-connect='SET NAMES utf8'
-  character-set-server=utf8
+  collation_server=utf8_unicode_ci
+  init_connect='SET NAMES utf8'
+  character_set_server=utf8
 
   ## MyISAM
-  key-buffer-size=32M
-  myisam-recover-options=FORCE,BACKUP
+  key_buffer_size=32M
+  myisam_recover_options=FORCE,BACKUP
 
-  ## safety
-  skip-host-cache
-  skip-name-resolve
-  max-allowed-packet=16M
-  max-connect-errors=1000000
-  sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY
-  sysdate-is-now=1
-  innodb=FORCE
-  innodb-strict-mode=1
-  innodb_file_per_table=1
-  # Mandatory per https://github.com/codership/documentation/issues/25
-  innodb-autoinc-lock-mode=2
-  # Per https://www.percona.com/blog/2006/08/04/innodb-double-write/
-  innodb-doublewrite=1
-  # Not fully ACID compliant, up to 1sec transaction loss in the event of total cluster failure (across both regions)
-  # Enabled for performance per https://mariadb.com/kb/en/mariadb/getting-started-with-mariadb-galera-cluster/
-  innodb_flush_log_at_trx_commit=0
+  ## Safety
+  skip_host_cache
+  skip_name_resolve
+  max_allowed_packet=16M
+  max_connect_errors=1000000
+  sql_mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY
+  sysdate_is_now=1
 
-  ## binary logging
-  log-bin=mysql-bin
-  expire-logs-days=14
+  ## Binary Logging
+  log_bin=mysql-bin
+  expire_logs_days=14
   # Disabling for performance per http://severalnines.com/blog/9-tips-going-production-galera-cluster-mysql
-  sync-binlog=0
+  sync_binlog=0
   # Required for Galera
-  binlog-format=row
-  ## Caches and limits
-  tmp-table-size=32M
-  max-heap-table-size=32M
+  binlog_format=row
+
+  ## Caches and Limits
+  tmp_table_size=32M
+  max_heap_table_size=32M
   # Re-enabling as now works with Maria 10.1.2
-  query-cache-type=1
-  query-cache-limit=4M
-  query-cache-size=256M
-  max-connections=500
-  thread-cache-size=50
-  open-files-limit=65535
-  table-definition-cache=4096
-  table-open-cache=4096
-  ## innodb
-  innodb-flush-method=O_DIRECT
-  innodb-log-files-in-group=2
-  innodb-log-file-size=128M
-  innodb-flush-log-at-trx-commit=1
-  innodb-file-per-table=1
+  query_cache_type=1
+  query_cache_limit=4M
+  query_cache_size=256M
+  max_connections=500
+  thread_cache_size=50
+  open_files_limit=65535
+  table_definition_cache=4096
+  table_open_cache=4096
+
+  ## InnoDB
+  innodb=FORCE
+  innodb_strict_mode=1
+  # Mandatory per https://github.com/codership/documentation/issues/25
+  innodb_autoinc_lock_mode=2
+  # Per https://www.percona.com/blog/2006/08/04/innodb-double-write/
+  innodb_doublewrite=1
+  innodb_flush_method=O_DIRECT
+  innodb_log_files_in_group=2
+  innodb_log_file_size=128M
+  innodb_flush_log_at_trx_commit=1
+  innodb_file_per_table=1
   # 80% Memory is default reco.
   # Need to re-evaluate when DB size grows
-  innodb-buffer-pool-size=2G
+  innodb_buffer_pool_size=2G
   innodb_file_format=Barracuda
 
-  ## logging
-  log-error=/opt/bitnami/mariadb/logs/mysqld.log
-  slow-query-log-file=/opt/bitnami/mariadb/logs/mysqld.log
-  log-queries-not-using-indexes=1
-  slow-query-log=1
+  ## Logging
+  log_error=/opt/bitnami/mariadb/logs/mysqld.log
+  slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
+  log_queries_not_using_indexes=1
+  slow_query_log=1
 
   ## SSL
   ## Use extraVolumes and extraVolumeMounts to mount /certs filesystem
@@ -310,7 +324,8 @@ mariadbConfiguration: |-
   wsrep_cluster_address=gcomm://
   wsrep_cluster_name=galera
   wsrep_sst_auth="root:"
-  innodb-flush-log-at-trx-commit=2
+  # Enabled for performance per https://mariadb.com/kb/en/innodb-system-variables/#innodb_flush_log_at_trx_commit
+  innodb_flush_log_at_trx_commit=2
   # MYISAM REPLICATION SUPPORT #
   wsrep_replicate_myisam=ON
 
@@ -517,7 +532,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r121
+    tag: 0.12.1-debian-10-r133
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

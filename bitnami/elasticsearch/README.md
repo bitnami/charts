@@ -453,6 +453,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 + global.kibanaEnabled: true
 ```
 
+### Change ElasticSearch version
+
+To modify the ElasticSearch version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/elasticsearch/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
 ### Default kernel settings
 
 Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:

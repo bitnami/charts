@@ -76,11 +76,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `image.debug`                                     | Set to true if you would like to see extra information on logs                                                                    | `false`                                                 |
 | `config`                                          | Configuration file for Kafka. Auto-generated based on other parameters when not specified                                         | `nil`                                                   |
 | `existingConfigmap`                               | Name of existing ConfigMap with Kafka configuration                                                                               | `nil`                                                   |
-| `allowPlaintextListener`                          | Allow to use the PLAINTEXT listener                                                                                               | `true`                                                  |
-| `listeners`                                       | The address(es) the socket server listens on                                                                                      | `[]`                                                    |
-| `advertisedListeners`                             | The address(es) (hostname:port) the broker will advertise to producers and consumers                                              | `[]`                                                    |
-| `listenerSecurityProtocolMap`                     | The protocol->listener mapping                                                                                                    | `nil`                                                   |
-| `interBrokerListenerName`                         | The listener that the brokers should communicate on                                                                               | `nil`                                                   |
+| `log4j`                                           | An optional log4j.properties file to overwrite the default of the Kafka brokers.                                                  | `nil`                                                   |
+| `existingLog4jConfigMap`                          | The name of an existing ConfigMap containing a log4j.properties file.                                                             | `nil`                                                   |
 | `brokerId`                                        | ID of the Kafka node                                                                                                              | `nil`                                                   |
 | `heapOpts`                                        | Kafka's Java Heap size                                                                                                            | `-Xmx1024m -Xms1024m`                                   |
 | `deleteTopicEnable`                               | Switch to enable topic deletion or not                                                                                            | `false`                                                 |
@@ -105,22 +102,26 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `socketRequestMaxBytes`                           | The maximum size of a request that the socket server will accept (protection against OOM)                                         | `_104857600`                                            |
 | `socketSendBufferBytes`                           | The send buffer (SO_SNDBUF) used by the socket server                                                                             | `102400`                                                |
 | `zookeeperConnectionTimeoutMs`                    | Timeout in ms for connecting to Zookeeper                                                                                         | `6000`                                                  |
-| `sslEndpointIdentificationAlgorithm`              | The endpoint identification algorithm to validate server hostname using server certificate                                        | `https`                                                 |
 | `extraEnvVars`                                    | Extra environment variables to add to kafka pods                                                                                  | `[]`                                                    |
 | `extraVolumes`                                    | Extra volume(s) to add to Kafka statefulset                                                                                       | `[]`                                                    |
 | `extraVolumeMounts`                               | Extra volumeMount(s) to add to Kafka containers                                                                                   | `[]`                                                    |
-| `auth.enabled`                                    | Switch to enable the kafka authentication                                                                                         | `false`                                                 |
-| `auth.certificatesSecret`                         | Name of the existing secret containing the certificate files that will be used by Kafka                                           | `nil`                                                   |
-| `auth.certificatesPassword`                       | Password for the above certificates if they are password protected                                                                | `nil`                                                   |
-| `auth.brokerUser`                                 | Kafka client user                                                                                                                 | `user`                                                  |
-| `auth.brokerPassword`                             | Kafka client password                                                                                                             | `nil`                                                   |
-| `auth.interBrokerUser`                            | Kafka inter broker communication user                                                                                             | `admin`                                                 |
-| `auth.interBrokerPassword`                        | Kafka inter broker communication password                                                                                         | `nil`                                                   |
-| `auth.zookeeperUser`                              | Kafka Zookeeper user                                                                                                              | `nil`                                                   |
-| `auth.zookeeperPassword`                          | Kafka Zookeeper password                                                                                                          | `nil`                                                   |
-| `auth.existingSecret`                             | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                              | `nil`                                                   |
-| `log4j`                                           | An optional log4j.properties file to overwrite the default of the Kafka brokers.                                                  | `nil`                                                   |
-| `existingLog4jConfigMap`                          | The name of an existing ConfigMap containing a log4j.properties file.                                                             | `nil`                                                   |
+| `auth.clientProtocol`                             | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`     | `plaintext`                                             |
+| `auth.interBrokerProtocol`                        | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`     | `plaintext`                                             |
+| `auth.jksSecret`                                  | Name of the existing secret containing the truststore and one keystore per Kafka broker you have in the cluster                   | `nil`                                                   |
+| `auth.jksPassword`                                | Password to access the JKS files when they are password-protected                                                                 | `nil`                                                   |
+| `auth.tlsEndpointIdentificationAlgorithm`         | The endpoint identification algorithm to validate server hostname using server certificate                                        | `https`                                                 |
+| `auth.jaas.brokerUser`                            | Kafka client user for SASL authentication                                                                                         | `user`                                                  |
+| `auth.jaas.brokerPassword`                        | Kafka client password for SASL authentication                                                                                     | `nil`                                                   |
+| `auth.jaas.interBrokerUser`                       | Kafka inter broker communication user for SASL authentication                                                                     | `admin`                                                 |
+| `auth.jaas.interBrokerPassword`                   | Kafka inter broker communication password for SASL authentication                                                                 | `nil`                                                   |
+| `auth.jaas.zookeeperUser`                         | Kafka Zookeeper user for SASL authentication                                                                                      | `nil`                                                   |
+| `auth.jaas.zookeeperPassword`                     | Kafka Zookeeper password for SASL authentication                                                                                  | `nil`                                                   |
+| `auth.jaas.existingSecret`                        | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                              | `nil`                                                   |
+| `listeners`                                       | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                          | `[]`                                                    |
+| `advertisedListeners`                             | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array  | `[]`                                                    |
+| `listenerSecurityProtocolMap`                     | The protocol->listener mapping. Auto-calculated it's set to nil                                                                   | `nil`                                                   |
+| `allowPlaintextListener`                          | Allow to use the PLAINTEXT listener                                                                                               | `true`                                                  |
+| `interBrokerListenerName`                         | The listener that the brokers should communicate on                                                                               | `INTERNAL`                                              |
 
 ### Statefulset parameters
 
@@ -132,6 +133,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `podLabels`                                       | Kafka pod labels                                                                                                                  | `{}` (evaluated as a template)                          |
 | `podAnnotations`                                  | Kafka Pod annotations                                                                                                             | `{}` (evaluated as a template)                          |
 | `affinity`                                        | Affinity for pod assignment                                                                                                       | `{}` (evaluated as a template)                          |
+| `priorityClassName`                               | Name of the existing priority class to be used by kafka pods                                                                      |  `""`                                                   |
 | `nodeSelector`                                    | Node labels for pod assignment                                                                                                    | `{}` (evaluated as a template)                          |
 | `tolerations`                                     | Tolerations for pod assignment                                                                                                    | `[]` (evaluated as a template)                          |
 | `podSecurityContext`                              | Kafka pods' Security Context                                                                                                      | `{}`                                                    |
@@ -150,10 +152,9 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | Parameter                                         | Description                                                                                                                       | Default                                                 |
 |---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `service.type`                                    | Kubernetes Service type                                                                                                           | `ClusterIP`                                             |
-| `service.port`                                    | Kafka port                                                                                                                        | `9092`                                                  |
-| `service.sslPort`                                 | Kafka SSL port                                                                                                                    | `9093`                                                  |
-| `service.nodePorts.kafka`                         | Kubernetes Kafka node port                                                                                                        | `""`                                                    |
-| `service.nodePorts.ssl`                           | Kubernetes Kafka SSL node port                                                                                                    | `""`                                                    |
+| `service.port`                                    | Kafka port for client connections                                                                                                 | `9092`                                                  |
+| `service.internalPort`                            | Kafka port for inter-broker connectionsKafka port for inter-broker connections                                                    | `9093`                                                  |
+| `service.nodePort`                                | Nodeport for client connections                                                                                                   | `""`                                                    |
 | `service.loadBalancerIP`                          | loadBalancerIP for Kafka Service                                                                                                  | `nil`                                                   |
 | `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                                                         | `[]`                                                    |
 | `service.annotations`                             | Service annotations                                                                                                               | `{}`(evaluated as a template)                           |
@@ -166,7 +167,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                                                     | `{}`                                                    |
 | `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                                                   | `{}`                                                    |
 | `externalAccess.service.type`                     | Kubernetes Servive type for external access. It can be NodePort or LoadBalancer                                                   | `LoadBalancer`                                          |
-| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                                                             | `19092`                                                 |
+| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                                                             | `9094`                                                  |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for Kafka brokers                                                                                      | `[]`                                                    |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                         | `[]`                                                    |
 | `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort                                     | `nil`                                                   |
@@ -215,6 +216,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.image.tag`                         | Kafka exporter image tag                                                                                                          | `{TAG_NAME}`                                            |
 | `metrics.kafka.image.pullPolicy`                  | Kafka exporter image pull policy                                                                                                  | `IfNotPresent`                                          |
 | `metrics.kafka.image.pullSecrets`                 | Specify docker-registry secret names as an array                                                                                  | `[]` (does not add image pull secrets to deployed pods) |
+| `metrics.kafka.extraFlags`                        | Extra flags to be passed to Kafka exporter                                                                                        | `{}`                                                    |
+| `metrics.kafka.certificatesSecret`                | Name of the existing secret containing the optional certificate and key files                                                     | `nil`                                                   |
 | `metrics.kafka.resources.limits`                  | Kafka Exporter container resource limits                                                                                          | `{}`                                                    |
 | `metrics.kafka.resources.requests`                | Kafka Exporter container resource requests                                                                                        | `{}`                                                    |
 | `metrics.kafka.service.type`                      | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                            | `ClusterIP`                                             |
@@ -333,69 +336,118 @@ This chart includes a `values-production.yaml` file where you can find some para
 + transactionStateLogMinIsr: 3
 ```
 
-- Switch to enable the kafka authentication:
+- Switch to enable the Kafka SASAL authentication on client and inter-broker communications:
 
 ```diff
-- auth.enabled: false
-+ auth.enabled: true
+- auth.clientProtocol: plaintext
++ auth.clientProtocol: sasl
+- auth.interBrokerProtocol: plaintext
++ auth.interBrokerProtocol: sasl
 ```
 
-- Whether or not to create a separate Kafka exporter:
+- Enable Zookeeper authentication:
+
+```diff
++ auth.jaas.zookeeperUser: zookeeperUser
++ auth.jaas.zookeeperPassword: zookeeperPassword
+- zookeeper.auth.enabled: false
++ zookeeper.auth.enabled: true
++ zookeeper.auth.clientUser: zookeeperUser
++ zookeeper.auth.clientPassword: zookeeperPassword
++ zookeeper.auth.serverUsers: zookeeperUser
++ zookeeper.auth.serverPasswords: zookeeperPassword
+```
+
+- Create a separate Kafka metrics exporter:
 
 ```diff
 - metrics.kafka.enabled: false
 + metrics.kafka.enabled: true
 ```
 
-- Whether or not to expose JMX metrics to Prometheus:
+- Expose JMX metrics to Prometheus:
 
 ```diff
 - metrics.jmx.enabled: false
 + metrics.jmx.enabled: true
 ```
 
-- Zookeeper chart metrics configuration:
+- Enable Zookeeper metrics:
 
 ```diff
 + zookeeper.metrics.enabled: true
 ```
 
-To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `replicaCount` parameter.
+To horizontally scale this chart once it has been deployed, you can upgrade the statefulset using a new value for the `replicaCount` parameter. Please note that, when enabling TLS encryption, you must update your JKS secret including the keystore for the new replicas.
 
 ### Setting custom parameters
 
-Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`.
-In order to pass custom environment variables use the `extraEnvVars` property.
+Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`. In order to pass custom environment variables use the `extraEnvVars` property.
+
+### Listeners configuration
+
+This chart allows you to automatically configure Kafka with 3 listeners:
+
+- One for inter-broker communications.
+- A second one for communications with clients within the K8s cluster.
+- (optional) a third listener for communications with clients outside the K8s cluster. Check [this section](#accessing-kafka-brokers-from-outside-the-clusters) for more information.
+
+For more complex configurations, set the `listeners`, `advertisedListeners` and `listenerSecurityProtocolMap` parameters as needed.
 
 ### Enable security for Kafka and Zookeeper
 
-If you enabled the authentication for Kafka, the SASL_SSL listener will be configured with your provided inputs. In particular you can set the following pair of credentials:
+You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use `sasl_tls` authentication for client communications, while using `tls` for inter-broker communications. This table shows the available protocols and the security they provide:
 
-- brokerUser/brokerPassword: To authenticate kafka clients against kafka brokers
-- interBrokerUser/interBrokerPassword: To authenticate kafka brokers between them.
-- zookeeperUser/zookeeperPassword: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
+| Method    | Authentication                | Encryption via TLS |
+|-----------|-------------------------------|--------------------|
+| plaintext | None                          | No                 |
+| tls       | None                          | Yes                |
+| mtls      | Yes (two-way authentication)  | Yes                |
+| sasl      | Yes (via SASL)                | No                 |
+| sasl_tls  | Yes (via SASL)                | Yes                |
 
-In order to configure the authentication, you **must** create a secret containing the *kafka.keystore.jks* and *kafka.truststore.jks* certificates and pass the secret name with the `--auth.certificatesSecret` option when deploying the chart.
+If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
+
+- `auth.jaas.clientUser`/`auth.jaas.clientPassword`: when enabling SASL authentication for communications with clients.
+- `auth.jaas.interBrokerUser`/`auth.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
+- `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
+
+In order to configure TLS authentication/encryption, you **must** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
+
+> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.jksPassword` parameter to provide your password.
+
+For instance, to configure TLS authentication on a Kafka cluster with 2 Kafka brokers use the command below to create the secret:
+
+```console
+kubectl create secret generic kafka-jks --from-file=./kafka.truststore.jks --from-file=./kafka-0.keystore.jks --from-file=./kafka-1.keystore.jks
+```
+
+> **Note**: the command above assumes you already created the trustore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
 
 You can create the secret and deploy the chart with authentication using the following parameters:
 
 ```console
-auth.enabled=true
-auth.brokerUser=brokerUser
-auth.brokerPassword=brokerPassword
-auth.interBrokerUser=interBrokerUser
-auth.interBrokerPassword=interBrokerPassword
-auth.zookeeperUser=zookeeperUser
-auth.zookeeperPassword=zookeeperPassword
+replicaCount=2
+auth.clientProtocol=sasl
+auth.interBrokerProtocol=tls
+auth.certificatesSecret=kafka-jks
+auth.certificatesPassword=jksPassword
+auth.jaas.clientUser=brokerUser
+auth.jaas.clientPassword=brokerPassword
+auth.jaas.zookeeperUser=zookeeperUser
+auth.jaas.zookeeperPassword=zookeeperPassword
 zookeeper.auth.enabled=true
 zookeeper.auth.serverUsers=zookeeperUser
 zookeeper.auth.serverPasswords=zookeeperPassword
 zookeeper.auth.clientUser=zookeeperUser
 zookeeper.auth.clientPassword=zookeeperPassword
-auth.certificatesSecret=kafka-certificates
 ```
 
-> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.certificatesPassword` option to provide your password.
+If you also enable exposing metrics using the Kafka expoter, and you are using `sasl_tls`, `tls`, or `mtls` authentication protocols, you need to mount the CA certificated used to sign the brokers certificates in the exporter so it can validate the Kafka brokers. To do so, create a secret containing the CA, and set the `metrics.certificatesSecret` parameter. As an alternative, you can skip TLS validation using extra flags:
+
+```console
+metrics.kafka.extraFlags={tls.insecure-skip-tls-verify: ""}
+```
 
 ### Accessing Kafka brokers from outside the cluster
 
@@ -412,7 +464,7 @@ You have two alternatives to use LoadBalancer services:
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
-externalAccess.service.port=19092
+externalAccess.service.port=9094
 externalAccess.autoDiscovery.enabled=true
 serviceAccount.create=true
 rbac.create=true
@@ -425,7 +477,7 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
-externalAccess.service.port=19092
+externalAccess.service.port=9094
 externalAccess.service.loadBalancerIPs[0]='external-ip-1'
 externalAccess.service.loadBalancerIPs[1]='external-ip-2'}
 ```
@@ -479,8 +531,7 @@ sidecars:
 
 The [Bitnami Kafka](https://github.com/bitnami/bitnami-docker-kafka) image stores the Kafka data at the `/bitnami/kafka` path of the container.
 
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters](#persistence-parameters) section to configure the PVC or to disable persistence.
 
 ### Adjust permissions of persistent volume mountpoint
 
@@ -493,6 +544,29 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrading
 
+### To 11.0.0
+
+The way to configure listeners and athentication on Kafka is totally refactored allowing users to configure different authentication protocols on different listeners. Please check the sections [Listeners Configuration](listeners-configuration) and [Listeners Configuration](enable-kafka-for-kafka-and-zookeeper) for more information.
+
+Backwards compatibility is not guaranteed you adapt your values.yaml to the new format. Here you can find some parameters that were renamed or dissapeared in favor of new ones on this major version:
+
+- `auth.enabled` -> deprecated in favor of `auth.clientProtocol` and `auth.interBrokerProtocol` parameters.
+- `auth.ssl` -> deprecated in favor of `auth.clientProtocol` and `auth.interBrokerProtocol` parameters.
+- `auth.certificatesSecret` -> renamed to `auth.jksSecret`.
+- `auth.certificatesPassword` -> renamed to `auth.jksPassword`.
+- `sslEndpointIdentificationAlgorithm` -> renamedo to `auth.tlsEndpointIdentificationAlgorithm`.
+- `auth.brokerUser` -> renamed to `auth.jaas.clientUser`
+- `auth.brokePassword` -> renamed to `auth.jaas.clientPassword`
+- `auth.interBrokerUser` -> renamed to `auth.jaas.interBrokerUser`
+- `auth.interBrokerPassword` -> renamed to `auth.jaas.interBrokerPassword`
+- `auth.zookeeperUser` -> renamed to `auth.jaas.zookeeperUser`
+- `auth.zookeeperPassword` -> renamed to `auth.jaas.zookeeperPassword`
+- `auth.existingSecret` -> renamed to `auth.jaas.existingSecret`
+- `service.sslPort` -> deprecated in favor of `service.internalPort`
+- `service.nodePorts.kafka` and ``service.nodePorts.ssl` -> deprecated in favor of `service.nodePort`
+- `metrics.kafka.extraFlag` -> new parameter
+- `metrics.kafka.certificatesSecret` -> new parameter
+  
 ### To 10.0.0
 
 If you are setting the `config` or `log4j` parameter, backwards compatibility is not guaranteed, because the `KAFKA_MOUNTED_CONFDIR` has moved from `/opt/bitnami/kafka/conf` to `/bitnami/kafka/config`. In order to continue using these parameters, you must also upgrade your image to `docker.io/bitnami/kafka:2.4.1-debian-10-r38` or later.

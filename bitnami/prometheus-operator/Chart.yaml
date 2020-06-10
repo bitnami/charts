@@ -2,7 +2,7 @@ apiVersion: v1
 appVersion: 0.39.0
 description: The Prometheus Operator for Kubernetes provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 name: prometheus-operator
-version: 0.18.0
+version: 0.20.0
 keywords:
   - prometheus
   - alertmanager
