@@ -48,6 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ## Parameters
 
 The following table lists the configurable parameters of the MariaDB chart and their default values.
+
 | Parameter                                    | Description                                                                                                                                                                                                                                                              | Default                                                           |
 |----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`                       | Global Docker image registry                                                                                                                                                                                                                                             | `nil`                                                             |
@@ -262,6 +263,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+### Change MariaDB version
+
+To modify the MariaDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mariadb/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Initialize a fresh instance
 

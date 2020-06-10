@@ -140,6 +140,10 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Change Node version
+
+To modify the Node version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/node/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
 ### Set up an Ingress controller
 
 First install the nginx-ingress controller and then deploy the node helm chart with the following parameters:

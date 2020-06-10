@@ -16,7 +16,7 @@ spec:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: metrics
   endpoints:
-    - port: metrics
+    - port: http-metrics
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
