@@ -520,10 +520,11 @@ prometheus:
   ## Standard object’s metadata
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##
-  podMetadata: {}
-  # labels:
-  #   app: prometheus
-  #   k8s-app: prometheus
+  podMetadata:
+    labels: {}
+    # app: prometheus
+    # k8s-app: prometheus
+    annotations: {}
 
   ## The remote_read spec configuration for Prometheus.
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#remotereadspec
@@ -903,7 +904,9 @@ alertmanager:
   ## Standard object’s metadata.
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##
-  podMetadata: {}
+  podMetadata:
+    labels: {}
+    annotations: {}
 
   ## Secrets that should be mounted into the Alertmanager Pods
   ##

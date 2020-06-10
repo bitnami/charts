@@ -117,8 +117,19 @@ spec:
             storage: {{ .Values.prometheus.persistence.size | quote }}
         {{- include "prometheus-operator.prometheus.storageClass" . | nindent 8 }}
   {{- end }}
-  {{- if .Values.prometheus.podMetadata }}
-  podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata "context" $) | nindent 4 }}
+  {{- if or .Values.prometheus.podMetadata.labels .Values.prometheus.podMetadata.annotations (eq .Values.prometheus.podAntiAffinity "soft") (eq .Values.prometheus.podAntiAffinity "hard") }}
+  podMetadata:
+    labels:
+    {{- if .Values.prometheus.podMetadata.labels }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata.labels "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if or (eq .Values.prometheus.podAntiAffinity "soft") (eq .Values.prometheus.podAntiAffinity "hard") }}
+    {{- include "prometheus-operator.prometheus.matchLabels" . | nindent 6 }}
+    {{- end }}
+    {{- if .Values.prometheus.podMetadata.annotations }}
+    annotations:
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata.annotations "context" $) | nindent 6 }}
+    {{- end }}
   {{- end }}
   {{- if .Values.prometheus.querySpec }}
   query: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.querySpec "context" $) | nindent 4 }}
