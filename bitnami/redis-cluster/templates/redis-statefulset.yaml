@@ -214,7 +214,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 8 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -264,6 +264,9 @@ spec:
           resources:
         {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and  .Values.persistence.enabled .Values.containerSecurityContext.enabled) }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
       initContainers:
@@ -302,9 +305,6 @@ spec:
         {{- toYaml .Values.extraInitContainers | nindent 10 }}
         {{- end }}
       {{- end }}
-      {{- if .Values.sidecars }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 6 }}
-      {{- end }}
       volumes:
         - name: scripts
           configMap:
@@ -333,7 +333,7 @@ spec:
         - name: redis-tmp-conf
           emptyDir: {}
         {{- if .Values.extraVolumes }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 6 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
