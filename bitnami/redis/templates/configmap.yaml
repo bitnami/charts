@@ -46,6 +46,40 @@ data:
     sentinel down-after-milliseconds {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.downAfterMilliseconds }}
     sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
+  shutdown.sh: |-
+    #!/bin/bash
+    MASTER_SET=$1
+    REDIS_COMMAND="redis-cli -p 26379"
+
+    function get_master_ip {
+      echo $($REDIS_COMMAND sentinel get-master-addr-by-name mymaster | head -n 1)
+    }
+
+    MASTER_IP=$(get_master_ip $MASTER_SET)
+    MY_IP=$(hostname -i)
+
+    echo "My ip: $MY_IP"
+    echo "Current master ip: $MASTER_IP"
+
+    if [ $MY_IP == $MASTER_IP ]; then
+      echo ""
+      echo "I'm the current master"
+      echo "Performing failover"
+
+      $REDIS_COMMAND sentinel failover $MASTER_SET
+
+      echo "Waiting until master would be switched..."
+
+      while [ $MY_IP == $(get_master_ip $MASTER_SET) ]; do
+        sleep 5
+      done
+
+      echo "Master switched to $(get_master_ip $MASTER_SET)"
+      echo ""
+    fi
+
+    echo "Killing redis process"
+    kill 1
 {{- if .Values.sentinel.configmap }}
     # User-supplied sentinel configuration:
 {{- tpl .Values.sentinel.configmap . | nindent 4 }}

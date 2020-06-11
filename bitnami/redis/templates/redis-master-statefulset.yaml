@@ -295,6 +295,10 @@ spec:
             - name: REDIS_SENTINEL_PORT
               value: {{ .Values.sentinel.port | quote }}
             {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ['/bin/sh', '-c', '/opt/bitnami/redis-sentinel/mounted-etc/shutdown.sh']
           ports:
             - name: redis-sentinel
               containerPort: {{ .Values.sentinel.port }}
