@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/testlink
-  tag: 1.9.20-debian-10-r63
+  tag: 1.9.20-debian-10-r106
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -72,13 +72,13 @@ allowEmptyPassword: "yes"
 ##
 externalDatabase:
 
-  ##If set to 'true' db and db user will be created as specified
+  ## If set to 'true' db and db user will be created as specified
   create: false
-  
+
   ## Database user privileges
   # privileges: ALL
 
-  ##admin user to create db and user.
+  ## admin user to create db and user.
   # rootUser:
   # rootPassword:
 
@@ -279,7 +279,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r3
+    tag: 0.8.0-debian-10-r51
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

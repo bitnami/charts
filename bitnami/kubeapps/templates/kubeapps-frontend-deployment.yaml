@@ -39,6 +39,7 @@ spec:
       containers:
         - name: nginx
           image: {{ template "kubeapps.image" (list .Values.frontend.image .Values.global) }}
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy | quote }}
           {{- if .Values.frontend.livenessProbe }}
           livenessProbe: {{- toYaml .Values.frontend.livenessProbe | nindent 12 }}
           {{- end }}
@@ -75,6 +76,7 @@ spec:
             - {{ . }}
             {{- end }}
           image: {{ template "kubeapps.image" (list .Values.authProxy.image .Values.global) }}
+          imagePullPolicy: {{ .Values.authProxy.image.pullPolicy | quote }}
           ports:
             - name: proxy
               containerPort: 3000

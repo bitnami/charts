@@ -10,7 +10,7 @@ Expand the name of the chart.
 Expand the chart plus release name (used by the chart label)
 */}}
 {{- define "redis-cluster.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -130,6 +130,36 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- end -}}
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "redis-cluster.tlsCert" -}}
+{{- required "Certificate filename is required when TLS in enabled" .Values.tls.certFilename | printf "/opt/bitnami/redis/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "redis-cluster.tlsCertKey" -}}
+{{- required "Certificate Key filename is required when TLS in enabled" .Values.tls.certKeyFilename | printf "/opt/bitnami/redis/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "redis-cluster.tlsCACert" -}}
+{{- required "Certificate CA filename is required when TLS in enabled" .Values.tls.certCAFilename | printf "/opt/bitnami/redis/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the DH params file.
+*/}}
+{{- define "redis-cluster.tlsDHParams" -}}
+{{- if .Values.tls.dhParamsFilename -}}
+{{- printf "/opt/bitnami/redis/certs/%s" .Values.tls.dhParamsFilename -}}
 {{- end -}}
 {{- end -}}
 

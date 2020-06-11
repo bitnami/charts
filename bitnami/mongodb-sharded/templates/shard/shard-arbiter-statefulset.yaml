@@ -185,6 +185,73 @@ spec:
               {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
           resources: {{- toYaml $.Values.shardsvr.arbiter.resources | nindent 12 }}
+        {{- if $.Values.metrics.enabled }}
+        - name: metrics
+          image: {{ include "mongodb-sharded.metrics.image" $ }}
+          imagePullPolicy: {{ $.Values.metrics.image.pullPolicy | quote }}
+          {{- if $.Values.securityContext.enabled }}
+          securityContext:
+            runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ $.Values.securityContext.runAsUser }}
+          {{- end }}
+          env:
+          {{- if $.Values.usePasswordFile }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+          {{- else }}
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" $ }}
+                  key: mongodb-root-password
+          {{- end }}
+          command:
+            - sh
+            - -ec
+            - |-
+              #!/bin/sh
+              {{- if $.Values.usePasswordFile }}
+              export MONGODB_ROOT_PASSWORD="$(< "${MONGODB_ROOT_PASSWORD_FILE}")"
+              {{- end }}
+              /bin/mongodb_exporter --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
+          {{- if $.Values.usePasswordFile }}
+          volumeMounts:
+            - name: secrets
+              mountPath: /bitnami/mongodb/secrets/
+          {{- end }}
+          ports:
+            - name: metrics
+              containerPort: 9216
+          {{- if $.Values.metrics.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: {{ $.Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.metrics.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ $.Values.metrics.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ $.Values.metrics.livenessProbe.failureThreshold }}
+            successThreshold: {{ $.Values.metrics.livenessProbe.successThreshold }}
+          {{- end }}
+          {{- if $.Values.metrics.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: {{ $.Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ $.Values.metrics.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ $.Values.metrics.readinessProbe.failureThreshold }}
+            successThreshold: {{ $.Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
+          resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        {{- with $.Values.shardsvr.arbiter.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       volumes:
         {{- if or $.Values.shardsvr.arbiter.config $.Values.shardsvr.arbiter.configCM }}
         - name: config

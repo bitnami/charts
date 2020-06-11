@@ -3,10 +3,10 @@
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+  # imageRegistry: myRegistryName
+  # imagePullSecrets:
+  #   - myRegistryKeySecretName
+  # storageClass: myStorageClass
   redis: {}
 
 ## Bitnami Redis image version
@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 5.0.8-debian-10-r36
+  tag: 6.0.5-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -60,7 +60,7 @@ sentinel:
     ## Bitnami Redis image tag
     ## ref: https://github.com/bitnami/bitnami-docker-redis-sentinel#supported-tags-and-respective-dockerfile-links
     ##
-    tag: 5.0.8-debian-10-r28
+    tag: 6.0.5-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -105,6 +105,8 @@ sentinel:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+  customLivenessProbe: {}
+  customReadinessProbe: {}
   ## Redis Sentinel resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   # resources:
@@ -209,14 +211,39 @@ password:
 usePasswordFile: false
 
 ## Persist data to a persistent volume (Redis Master)
-persistence: {}
+persistence:
   ## A manually managed Persistent Volume and Claim
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
-  # existingClaim:
+  existingClaim:
 
 # Redis port
 redisPort: 6379
+
+##
+## TLS configuration
+##
+tls:
+  # Enable TLS traffic
+  enabled: false
+  #
+  # Whether to require clients to authenticate or not.
+  authClients: true
+  #
+  # Name of the Secret that contains the certificates
+  certificatesSecret:
+  #
+  # Certificate filename
+  certFilename:
+  #
+  # Certificate Key filename
+  certKeyFilename:
+  #
+  # CA Certificate filename
+  certCAFilename:
+  #
+  # File containing DH params (in order to support DH based ciphers)
+  # dhParamsFilename:
 
 ##
 ## Redis Master parameters
@@ -234,7 +261,6 @@ master:
   ## Redis additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
-  ##
   ## extraFlags:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
@@ -246,8 +272,8 @@ master:
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
   ##
   disableCommands:
-  - FLUSHDB
-  - FLUSHALL
+    - FLUSHDB
+    - FLUSHALL
 
   ## Redis Master additional pod labels and annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -282,6 +308,28 @@ master:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+
+  ## Configure custom probes for images other images like
+  ## rhscl/redis-32-rhel7 rhscl/redis-5-rhel7
+  ## Only used if readinessProbe.enabled: false / livenessProbe.enabled: false
+  ##
+  # customLivenessProbe:
+  #  tcpSocket:
+  #    port: 6379
+  #  initialDelaySeconds: 10
+  #  periodSeconds: 5
+  # customReadinessProbe:
+  #  initialDelaySeconds: 30
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  exec:
+  #    command:
+  #    - "container-entrypoint"
+  #    - "bash"
+  #    - "-c"
+  #    - "redis-cli set liveness-probe \"`date`\" | grep OK"
+  customLivenessProbe: {}
+  customReadinessProbe: {}
 
   ## Redis Master Node selectors and tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
@@ -333,7 +381,7 @@ master:
     ##
     # storageClass: "-"
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     size: 8Gi
     ## Persistent Volume selectors
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
@@ -349,7 +397,8 @@ master:
     # rollingUpdatePartition:
 
   ## Redis Master pod priorityClassName
-  # priorityClassName: {}
+  ##
+  priorityClassName: {}
 
 ##
 ## Redis Slave properties
@@ -390,12 +439,20 @@ slave:
   extraFlags: []
   ## List of Redis commands to disable
   disableCommands:
-  - FLUSHDB
-  - FLUSHALL
+    - FLUSHDB
+    - FLUSHALL
 
   ## Redis Slave pod/node affinity/anti-affinity
   ##
   affinity: {}
+
+  ## Kubernetes Spread Constraints for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ##
+  # - maxSkew: 1
+  #   topologyKey: node
+  #   whenUnsatisfiable: DoNotSchedule
+  spreadConstraints: {}
 
   ## Configure extra options for Redis Slave liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -414,6 +471,28 @@ slave:
     timeoutSeconds: 10
     successThreshold: 1
     failureThreshold: 5
+
+  ## Configure custom probes for images other images like
+  ## rhscl/redis-32-rhel7 rhscl/redis-5-rhel7
+  ## Only used if readinessProbe.enabled: false / livenessProbe.enabled: false
+  ##
+  # customLivenessProbe:
+  #  tcpSocket:
+  #    port: 6379
+  #  initialDelaySeconds: 10
+  #  periodSeconds: 5
+  # customReadinessProbe:
+  #  initialDelaySeconds: 30
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  exec:
+  #    command:
+  #    - "container-entrypoint"
+  #    - "bash"
+  #    - "-c"
+  #    - "redis-cli set liveness-probe \"`date`\" | grep OK"
+  customLivenessProbe: {}
+  customReadinessProbe: {}
 
   ## Redis slave Resource
   # resources:
@@ -457,7 +536,7 @@ slave:
     ##
     # storageClass: "-"
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     size: 8Gi
     ## Persistent Volume selectors
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
@@ -480,7 +559,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.5.2-debian-10-r24
+    tag: 1.6.1-debian-10-r28
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -518,6 +597,50 @@ metrics:
     selector:
       prometheus: kube-prometheus
 
+  ## Custom PrometheusRule to be defined
+  ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  prometheusRule:
+    enabled: false
+    additionalLabels: {}
+    namespace: ""
+    ## Redis prometheus rules
+    ## These are just examples rules, please adapt them to your needs.
+    ## Make sure to constraint the rules to the current postgresql service.
+    # rules:
+    #   - alert: RedisDown
+    #     expr: redis_up{service="{{ template "redis.fullname" . }}-metrics"} == 0
+    #     for: 2m
+    #     labels:
+    #       severity: error
+    #     annotations:
+    #       summary: Redis instance {{ "{{ $labels.instance }}" }} down
+    #       description: Redis instance {{ "{{ $labels.instance }}" }} is down
+    #    - alert: RedisMemoryHigh
+    #      expr: >
+    #        redis_memory_used_bytes{service="{{ template "redis.fullname" . }}-metrics"} * 100
+    #        /
+    #        redis_memory_max_bytes{service="{{ template "redis.fullname" . }}-metrics"}
+    #        > 90 =< 100
+    #      for: 2m
+    #      labels:
+    #        severity: error
+    #      annotations:
+    #        summary: Redis instance {{ "{{ $labels.instance }}" }} is using too much memory
+    #        description: |
+    #          Redis instance {{ "{{ $labels.instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
+    #    - alert: RedisKeyEviction
+    #      expr: |
+    #        increase(redis_evicted_keys_total{service="{{ template "redis.fullname" . }}-metrics"}[5m]) > 0
+    #      for: 1s
+    #      labels:
+    #        severity: error
+    #      annotations:
+    #        summary: Redis instance {{ "{{ $labels.instance }}" }} has evicted keys
+    #        description: |
+    #          Redis instance {{ "{{ $labels.instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
+    rules: []
+
   ## Metrics exporter pod priorityClassName
   # priorityClassName: {}
   service:
@@ -527,48 +650,6 @@ metrics:
     # loadBalancerIP:
     annotations: {}
     labels: {}
-
-  ## Custom PrometheusRule to be defined
-  ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
-  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
-  prometheusRule:
-    enabled: false
-    additionalLabels: {}
-    namespace: ""
-    rules: []
-      ## These are just examples rules, please adapt them to your needs.
-      ## Make sure to constraint the rules to the current postgresql service.
-      #  - alert: RedisDown
-      #    expr: redis_up{service="{{ template "redis.fullname" . }}-metrics"} == 0
-      #    for: 2m
-      #    labels:
-      #      severity: error
-      #    annotations:
-      #      summary: Redis instance {{ "{{ $labels.instance }}" }} down
-      #      description: Redis instance {{ "{{ $labels.instance }}" }} is down
-      #  - alert: RedisMemoryHigh
-      #    expr: >
-      #       redis_memory_used_bytes{service="{{ template "redis.fullname" . }}-metrics"} * 100
-      #       /
-      #       redis_memory_max_bytes{service="{{ template "redis.fullname" . }}-metrics"}
-      #       > 90 =< 100
-      #    for: 2m
-      #    labels:
-      #      severity: error
-      #    annotations:
-      #      summary: Redis instance {{ "{{ $labels.instance }}" }} is using too much memory
-      #      description: |
-      #        Redis instance {{ "{{ $labels.instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
-      #  - alert: RedisKeyEviction
-      #    expr: |
-      #      increase(redis_evicted_keys_total{service="{{ template "redis.fullname" . }}-metrics"}[5m]) > 0
-      #    for: 1s
-      #    labels:
-      #      severity: error
-      #    annotations:
-      #      summary: Redis instance {{ "{{ $labels.instance }}" }} has evicted keys
-      #      description: |
-      #        Redis instance {{ "{{ $labels.instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
 
 ##
 ## Init containers parameters:

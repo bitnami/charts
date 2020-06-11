@@ -15,7 +15,7 @@ spec:
   alerting:
     alertmanagers:
     {{- if .Values.prometheus.alertingEndpoints }}
-    {{ include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | indent 6 }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | nindent 6 }}
     {{- else if .Values.alertmanager.enabled }}
       - namespace: {{ .Release.Namespace }}
         name: {{ template "prometheus-operator.alertmanager.fullname" . }}
@@ -40,7 +40,9 @@ spec:
   {{- else if .Values.prometheus.replicaExternalLabelName }}
   replicaExternalLabelName: "{{ .Values.prometheus.replicaExternalLabelName }}"
   {{- end }}
-  {{- if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
+  {{- if index .Values.prometheus "externalUrl" }}
+  externalUrl: "{{ .Values.prometheus.externalUrl }}"
+  {{- else if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
   externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}/
   {{- else }}
   externalUrl: http://{{ template "prometheus-operator.prometheus.fullname" . }}.{{ .Release.Namespace }}:9090
@@ -102,8 +104,7 @@ spec:
   {{- end }}
   {{- if .Values.prometheus.storageSpec }}
   storage: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.storageSpec "context" $) | nindent 4 }}
-  {{- else }}
-  {{- if .Values.prometheus.persistence.enabled }}
+  {{- else if .Values.prometheus.persistence.enabled }}
   storage:
     volumeClaimTemplate:
       spec:
@@ -114,8 +115,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.prometheus.persistence.size | quote }}
-        {{- include "prometheus-operator.prometheus.storageClass" . }}
-  {{- end }}
+        {{- include "prometheus-operator.prometheus.storageClass" . | nindent 8 }}
   {{- end }}
   {{- if .Values.prometheus.podMetadata }}
   podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata "context" $) | nindent 4 }}
@@ -133,7 +133,9 @@ spec:
     {{- if .Values.prometheus.nodeAffinity }}
     nodeAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.nodeAffinity "context" $) | nindent 6 }}
     {{- end }}
-    {{- if eq .Values.prometheus.podAntiAffinity "hard" }}
+    {{- if index .Values.prometheus "podAntiAffinitySpec" }}
+    podAntiAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podAntiAffinitySpec "context" $) | nindent 6 }}
+    {{- else if eq .Values.prometheus.podAntiAffinity "hard" }}
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: "kubernetes.io/hostname"
@@ -151,6 +153,12 @@ spec:
     {{- if .Values.prometheus.podAffinity }}
     podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podAffinity "context" $) | nindent 6 }}
     {{- end }}
+  {{- if .Values.prometheus.volumes }}
+  volumes: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.volumeMounts }}
+  volumeMounts: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.prometheus.additionalScrapeConfigsExternal }}
   additionalScrapeConfigs:
     name: {{ template "prometheus-operator.prometheus.fullname" . }}-scrape-config
@@ -168,6 +176,7 @@ spec:
         - --prometheus.url=http://localhost:9090
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:10902
+        - --tsdb.path=/prometheus/
         {{- if .Values.prometheus.thanos.objectStorageConfig }}
         - --objstore.config=$(OBJSTORE_CONFIG)
         {{- end }}
@@ -189,6 +198,10 @@ spec:
         - name: http
           containerPort: 10902
           protocol: TCP
+      volumeMounts:
+        - mountPath: /prometheus
+          name: prometheus-{{ template "prometheus-operator.prometheus.fullname" . }}-db
+          subPath: prometheus-db
     {{- end }}
     {{- if .Values.prometheus.containers }}
     {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}

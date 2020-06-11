@@ -8,7 +8,7 @@ metadata:
 {{- end }}
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
 {{- with .Values.metrics.prometheusRule.additionalLabels }}
-{{- toYaml . | indent 4 }}
+{{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
 {{- with .Values.metrics.prometheusRule.rules }}

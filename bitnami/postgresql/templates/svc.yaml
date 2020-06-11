@@ -13,8 +13,12 @@ metadata:
     chart: {{ template "postgresql.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if $serviceAnnotations }}
-  annotations: {{- include "postgresql.tplValue" (dict "value" $serviceAnnotations "context" $) | nindent 4 }}
+  {{- include "postgresql.tplValue" (dict "value" $serviceAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ $serviceType }}

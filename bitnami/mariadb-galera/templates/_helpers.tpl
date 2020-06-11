@@ -234,22 +234,22 @@ mariadb-galera: LDAP
 {{/*
 Return the path to the cert file.
 */}}
-{{- define "mariadb-galera.tlsRTCert" -}}
-{{- printf "/bitnami/mariadb/cert/%s" .Values.tls.rt.certFilename -}}
+{{- define "mariadb-galera.tlsCert" -}}
+{{- printf "/bitnami/mariadb/certs/%s" .Values.tls.certFilename -}}
 {{- end -}}
 
 {{/*
 Return the path to the cert key file.
 */}}
-{{- define "mariadb-galera.tlsRTCertKey" -}}
-{{- printf "/bitnami/mariadb/cert/%s" .Values.tls.rt.certKeyFilename -}}
+{{- define "mariadb-galera.tlsCertKey" -}}
+{{- printf "/bitnami/mariadb/certs/%s" .Values.tls.certKeyFilename -}}
 {{- end -}}
 
 {{/*
 Return the path to the CA cert file.
 */}}
-{{- define "mariadb-galera.tlsRTCACert" -}}
-{{- printf "/bitnami/mariadb/cert/%s" .Values.tls.rt.certCAFilename -}}
+{{- define "mariadb-galera.tlsCACert" -}}
+{{- printf "/bitnami/mariadb/certs/%s" .Values.tls.certCAFilename -}}
 {{- end -}}
 
 {{/*

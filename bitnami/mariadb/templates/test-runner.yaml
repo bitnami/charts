@@ -20,8 +20,8 @@ spec:
       resources: {{ toYaml .Values.tests.testFramework.resources | nindent 8 }}
       {{- end }}
       volumeMounts:
-      - mountPath: /tools
-        name: tools
+        - mountPath: /tools
+          name: tools
   containers:
     - name: mariadb-test
       image: {{ template "mariadb.image" . }}
@@ -37,16 +37,16 @@ spec:
       resources: {{ toYaml .Values.tests.resources | nindent 8 }}
       {{- end }}
       volumeMounts:
-      - mountPath: /tests
-        name: tests
-        readOnly: true
-      - mountPath: /tools
-        name: tools
+        - mountPath: /tests
+          name: tests
+          readOnly: true
+        - mountPath: /tools
+          name: tools
   volumes:
-  - name: tests
-    configMap:
-      name: {{ template "mariadb.fullname" . }}-tests
-  - name: tools
-    emptyDir: {}
+    - name: tests
+      configMap:
+        name: {{ template "mariadb.fullname" . }}-tests
+    - name: tools
+      emptyDir: {}
   restartPolicy: Never
 {{- end }}

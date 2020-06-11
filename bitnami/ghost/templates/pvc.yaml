@@ -2,12 +2,8 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "ghost.fullname" . }}
-  labels:
-    app: "{{ template "ghost.fullname" . }}"
-    chart: "{{ template "ghost.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ include "ghost.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}

@@ -7,7 +7,7 @@ This Helm chart has been developed based on [bitnami/postgresql](https://github.
 
 ## TL;DR;
 
-```
+```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/postgresql-ha
 ```
@@ -19,13 +19,13 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](http
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 
 ## Installing the Chart
 
 Install the PostgreSQL HA helm chart with a release name `my-release`:
 
-```bash
+```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/postgresql-ha
 ```
@@ -34,7 +34,7 @@ $ helm install my-release bitnami/postgresql-ha
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete --purge my-release
 ```
 
@@ -92,7 +92,9 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `postgresql.pdb.maxUnavailable`                | Maximum number / percentage of pods that may be made unavailable                                                                                                     | `nil`                                                        |
 | `postgresql.username`                          | PostgreSQL username                                                                                                                                                  | `postgres`                                                   |
 | `postgresql.password`                          | PostgreSQL password                                                                                                                                                  | `nil`                                                        |
+| `postgresql.postgresPassword`                  | PostgreSQL password for the `postgres` user when `username` is not `postgres`                                                                                        | `nil`                                                        |
 | `postgresql.database`                          | PostgreSQL database                                                                                                                                                  | `postgres`                                                   |
+| `postgresql.usePasswordFile`                   | Have the secrets mounted as a file instead of env vars                                                                                                               | `false`                                                      |
 | `postgresql.upgradeRepmgrExtension`            | Upgrade repmgr extension in the database                                                                                                                             | `false`                                                      |
 | `postgresql.pgHbaTrustAll`                     | Configures PostgreSQL HBA to trust every user                                                                                                                        | `false`                                                      |
 | `postgresql.repmgrUsername`                    | PostgreSQL repmgr username                                                                                                                                           | `repmgr`                                                     |
@@ -140,11 +142,11 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `pgpool.pdb.maxUnavailable`                    | Maximum number / percentage of pods that may be made unavailable                                                                                                     | `nil`                                                        |
 | `pgpool.adminUsername`                         | Pgpool Admin username                                                                                                                                                | `admin`                                                      |
 | `pgpool.adminPassword`                         | Pgpool Admin password                                                                                                                                                | `nil`                                                        |
-| `pgpool.maxPool`                               | The maximum number of cached connections in each child process                                                                                                       | `15`                                                          |
-| `pgpool.numInitChildren`                       | The number of preforked Pgpool-II server processes.                                                                                                                  | `32`                                                          |
+| `pgpool.maxPool`                               | The maximum number of cached connections in each child process                                                                                                       | `15`                                                         |
+| `pgpool.numInitChildren`                       | The number of preforked Pgpool-II server processes.                                                                                                                  | `32`                                                         |
 | `pgpool.configuration`                         | Content of pgpool.conf                                                                                                                                               | `nil`                                                        |
-| `pgpool.configurationCM`                       | ConfigMap with the Pgpool configuration file (Note: Overrides `pgpol.configuration`)                                                                                 | `nil` (The value is evaluated as a template)                 |
-| `pgpool.useLoadBalancing`                      | If true, use Pgpool Load-Balancing                                                                                                                                   | `true`                                                        |
+| `pgpool.configurationCM`                       | ConfigMap with the Pgpool configuration file (Note: Overrides `pgpol.configuration`). The file used must be named `pgpool.conf`.                                     | `nil` (The value is evaluated as a template)                 |
+| `pgpool.useLoadBalancing`                      | If true, use Pgpool Load-Balancing                                                                                                                                   | `true`                                                       |
 | **LDAP**                                       |                                                                                                                                                                      |                                                              |
 | `ldap.enabled`                                 | Enable LDAP support                                                                                                                                                  | `false`                                                      |
 | `ldap.existingSecret`                          | Name of existing secret to use for LDAP passwords                                                                                                                    | `nil`                                                        |
@@ -173,6 +175,8 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `metrics.serviceMonitor.namespace`             | Optional namespace which Prometheus is running in                                                                                                                    | `nil`                                                        |
 | `metrics.serviceMonitor.interval`              | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                               | `nil`                                                        |
 | `metrics.serviceMonitor.selector`              | Default to kube-prometheus install (CoreOS recommended), but should be set according to Prometheus install                                                           | `{prometheus: "kube-prometheus"}`                            |
+| `metrics.serviceMonitor.relabelings`           | ServiceMonitor relabelings. Value is evaluated as a template                                                                                                         | `[]`                                                         |
+| `metrics.serviceMonitor.metricRelabelings`     | ServiceMonitor metricRelabelings. Value is evaluated as a template                                                                                                   | `[]`                                                         |
 | **Init Container to adapt volume permissions** |                                                                                                                                                                      |                                                              |
 | `volumePermissionsImage.registry`              | Registry for Bitnami Minideb                                                                                                                                         | `docker.io`                                                  |
 | `volumePermissionsImage.repository`            | Repository for Bitnami Minideb                                                                                                                                       | `bitnami/minideb`                                            |
@@ -224,7 +228,9 @@ The above command sets the password for user `postgres` to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/postgresql-ha
+$ helm install my-release \
+    -f values.yaml \
+    bitnami/postgresql-ha
 ```
 
 ## Configuration and installation details
@@ -259,7 +265,7 @@ To horizontally scale this chart, you can use the `--replicaCount` flag to modif
 
 ### Change PostgreSQL version
 
-To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql/tags/) using the `image.tag` parameter. For example, `image.tag=12.0.0`
+To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql-repmgr/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Configure the way how to expose PostgreSQL
 
@@ -342,7 +348,7 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
 In more complex scenarios, we may have the following tree of dependencies
 
-```
+```bash
                      +--------------+
                      |              |
         +------------+   Chart 1    +-----------+
@@ -362,7 +368,7 @@ In more complex scenarios, we may have the following tree of dependencies
 
 The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
 
-```
+```bash
 postgresql.postgresqlPassword=testtest
 subchart1.postgresql.postgresqlPassword=testtest
 subchart2.postgresql.postgresqlPassword=testtest
@@ -373,7 +379,7 @@ subchart2.postgresql.postgresqlDatabase=db1
 
 If the number of dependent sub-charts increases, installing the chart with parameters can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
 
-```
+```bash
 global.postgresql.postgresqlPassword=testtest
 global.postgresql.postgresqlDatabase=db1
 ```
@@ -393,6 +399,31 @@ It's necessary to specify the existing passwords while performing a upgrade to e
 $ helm upgrade my-release bitnami/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
+```
+
+> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+## 3.0.0
+
+A new major version of repmgr (5.1.0) was included. To upgrade to this major version, it's necessary to upgrade the repmgr extension installed on the database. To do so, follow the steps below:
+
+- Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `3.0.0`, enabling the repmgr extension upgrade:
+
+```bash
+$ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=1 \
+    --set postgresql.upgradeRepmgrExtension=true
+```
+
+- Scale your PostgreSQL setup to the original number of replicas:
+
+```bash
+$ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.

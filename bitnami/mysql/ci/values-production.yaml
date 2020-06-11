@@ -4,7 +4,21 @@
 volumePermissions:
   enabled: true
 
+master:
+  extraEnvVars:
+    - name: TEST
+      value: "3"
+
+  extraEnvVarsSecret: example-secret
+  extraEnvVarsCM: example-cm
+
 slave:
+  extraEnvVars:
+    - name: TEST
+      value: "2"
+
+  extraEnvVarsSecret: example-secret-2
+  extraEnvVarsCM: example-cm-2
   replicas: 2
 
 metrics:
@@ -12,3 +26,4 @@ metrics:
   ## Kubeval doesn't recognise ServiceMonitor as a valid K8s object
   # serviceMonitor:
   #   enabled: true
+

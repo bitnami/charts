@@ -1,0 +1,85 @@
+{{- if .Values.prometheus.serviceMonitor.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "metallb.fullname" . }}-controller-metrics
+  labels: {{- include "metallb.labels" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+spec:
+  type: ClusterIP
+  selector: {{- include "metallb.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+  ports:
+  - name: metrics
+    port: {{ .Values.controller.containerPort.metrics }}
+    protocol: TCP
+    targetPort: {{ .Values.controller.containerPort.metrics }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "metallb.fullname" . }}-speaker-metrics
+  labels: {{- include "metallb.labels" . | nindent 4 }}
+    app.kubernetes.io/component: speaker
+spec:
+  type: ClusterIP
+  selector: {{- include "metallb.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: speaker
+  ports:
+  - name: metrics
+    port: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+    protocol: TCP
+    targetPort: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "metallb.fullname" . }}-controller
+  labels: {{- include "metallb.labels" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+spec:
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: controller
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+  - port: metrics
+    {{- if .Values.prometheus.serviceMonitor.interval }}
+    interval: {{ .Values.prometheus.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
+    metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.relabelings }}
+    relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 4 }}
+    {{- end }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "metallb.fullname" . }}-speaker
+  labels: {{- include "metallb.labels" . | nindent 4}}
+    app.kubernetes.io/component: speaker
+spec:
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: speaker
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+  - port: metrics
+    {{- if .Values.prometheus.serviceMonitor.interval }}
+    interval: {{ .Values.prometheus.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
+    metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.relabelings }}
+    relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 4 }}
+    {{- end }}
+{{- end }}

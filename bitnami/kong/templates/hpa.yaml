@@ -1,0 +1,17 @@
+{{- if .Values.autoscaling.enabled }}
+apiVersion: {{ .Values.autoscaling.apiVersion }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "kong.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kong.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "kong.fullname" . }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+    {{- include "kong.tplValue" (dict "value" .Values.autoscaling.metrics "context" $) | nindent 4 }}
+{{- end }}

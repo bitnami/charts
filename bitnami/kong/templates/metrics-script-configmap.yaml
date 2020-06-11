@@ -1,0 +1,30 @@
+{{- if .Values.metrics.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kong.fullname" . }}-metrics-scripts
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kong.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server
+data:
+  enable-metrics-plugin.sh: |-
+    #!/bin/bash
+    . /opt/bitnami/scripts/libos.sh
+    . /opt/bitnami/scripts/libkong.sh
+
+    info "Enabling prometheus plugin"
+
+    if curl --silent http://localhost:8001/ | grep -Eo '"prometheus":false' > /dev/null; then
+      if ! curl --silent http://localhost:8001/plugins -d name=prometheus; then
+         info "Issue enabling prometheus plugin, this could be due to a race condition with another kong node. Checking status"
+      fi
+      if curl http://localhost:8001/ | grep -Eo '"prometheus":true' > /dev/null; then
+         info "Prometheus metrics plugin enabled"
+      else
+         error "Error enabling Prometheus plugin"
+         exit 1
+      fi
+    else
+      info "Prometheus plugin already enabled"
+    fi
+{{- end }}

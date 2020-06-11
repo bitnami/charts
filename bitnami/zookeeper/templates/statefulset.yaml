@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "zookeeper.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     role: zookeeper
@@ -48,6 +49,9 @@ spec:
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "zookeeper.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
@@ -151,14 +155,47 @@ spec:
             - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
               value: {{ .Values.metrics.port | quote }}
             {{- end }}
+            {{- if .Values.service.tls.client_enable }}
+            - name: ZOO_TLS_CLIENT_ENABLE
+              value: {{ .Values.service.tls.client_enable | quote }}
+            - name: ZOO_TLS_CLIENT_KEYSTORE_FILE
+              value: {{ .Values.service.tls.client_keystore_path | quote }}
+            - name: ZOO_TLS_CLIENT_KEYSTORE_PASSWORD
+              value: {{ .Values.service.tls.client_keystore_password | quote }}
+            - name: ZOO_TLS_CLIENT_TRUSTSTORE_FILE
+              value: {{ .Values.service.tls.client_truststore_path | quote }}
+            - name: ZOO_TLS_CLIENT_TRUSTSTORE_PASSWORD
+              value: {{ .Values.service.tls.client_truststore_password | quote }}
+            {{ end }}
+            {{- if .Values.service.tls.quorum_enable }}
+            - name: ZOO_TLS_QUORUM_ENABLE
+              value: {{ .Values.service.tls.quorum_enable | quote }}
+            - name: ZOO_TLS_QUORUM_KEYSTORE_FILE
+              value: {{ .Values.service.tls.quorum_keystore_path | quote }}
+            - name: ZOO_TLS_QUORUM_KEYSTORE_PASSWORD
+              value: {{ .Values.service.tls.quorum_keystore_password | quote }}
+            - name: ZOO_TLS_QUORUM_TRUSTSTORE_FILE
+              value: {{ .Values.service.tls.quorum_truststore_path | quote }}
+            - name: ZOO_TLS_QUORUM_TRUSTSTORE_PASSWORD
+              value: {{ .Values.service.tls.quorum_truststore_password | quote }}
+            {{ end }}
             - name: POD_NAME
               valueFrom:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
+            {{- if .Values.extraEnvVars }}
+            {{- toYaml .Values.extraEnvVars | nindent 12 }}
+            {{- end }}
           ports:
+            {{ if not .Values.service.tls.disable_base_client_port }}
             - name: client
               containerPort: {{ .Values.service.port }}
+            {{ end }}
+            {{ if .Values.service.tls.client_enable }}
+            - name: client-tls
+              containerPort: {{ .Values.service.tls.client_port }}
+            {{ end }}
             - name: follower
               containerPort: {{ .Values.service.followerPort }}
             - name: election
@@ -170,7 +207,11 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
+              {{ if not .Values.service.tls.disable_base_client_port }}
               port: client
+              {{ else }}
+              port: client-tls
+              {{ end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -180,7 +221,11 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
+              {{ if not .Values.service.tls.disable_base_client_port }}
               port: client
+              {{ else }}
+              port: client-tls
+              {{ end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

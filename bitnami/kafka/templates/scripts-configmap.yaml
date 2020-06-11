@@ -6,6 +6,9 @@ metadata:
 data:
   {{- $fullname := include "kafka.fullname" . }}
   {{- $releaseNamespace := .Release.Namespace }}
+  {{- $clusterDomain := .Values.clusterDomain }}
+  {{- $interBrokerPort := .Values.service.internalPort }}
+  {{- $clientPort := .Values.service.port }}
   {{- if .Values.externalAccess.autoDiscovery.enabled }}
   auto-discovery.sh: |-
     #!/bin/bash
@@ -30,7 +33,14 @@ data:
     k8s_svc_lb_ip() {
         local namespace=${1:?namespace is missing}
         local service=${2:?service is missing}
-        echo "$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].ip}")"
+        local service_ip=$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+        local service_hostname=$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+
+        if [[ -n ${service_ip} ]]; then
+            echo "${service_ip}"
+        else
+            echo "${service_hostname}"
+        fi
     }
     k8s_svc_lb_ip_ready() {
         local namespace=${1:?namespace is missing}
@@ -47,7 +57,6 @@ data:
         local service=${2:?service is missing}
         local index=${3:-0}
         local node_port="$(kubectl get svc "$service" -n "$namespace" -o jsonpath="{.spec.ports[$index].nodePort}")"
-        kubectl patch svc "$service" -n "$namespace" --type='json' -p="[{\"op\": \"replace\", \"path\": \"/spec/ports/0/targetPort\", \"value\": $node_port}]" >/dev/null 2>&1
         echo "$node_port"
     }
     k8s_svc_node_port "{{ $releaseNamespace }}" "$SVC_NAME" | tee "$SHARED_FILE"
@@ -81,13 +90,24 @@ data:
     {{- end }}
     {{- end }}
 
-    # Configure Kafka internal and external listeners
-    export KAFKA_CFG_LISTENERS=INTERNAL://:{{ .Values.service.port }},EXTERNAL://:${EXTERNAL_ACCESS_PORT}
+    # Configure Kafka advertised listeners
     {{- if .Values.advertisedListeners }}
     export KAFKA_CFG_ADVERTISED_LISTENERS={{ .Values.advertisedListeners }}
     {{- else }}
-    export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ template "kafka.fullname" . }}-headless.{{.Release.Namespace}}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
+    export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
     {{- end }}
+    {{- end }}
+
+    {{- if (include "kafka.tlsEncryption" .) }}
+    if [[ -f "/certs/kafka.truststore.jks" ]] && [[ -f "/certs/kafka-${ID}.keystore.jks" ]]; then
+        mkdir -p /bitnami/kafka/config/certs
+        cp "/certs/kafka.truststore.jks" "/bitnami/kafka/config/certs/kafka.truststore.jks"
+        cp "/certs/kafka-${ID}.keystore.jks" "/bitnami/kafka/config/certs/kafka.keystore.jks"
+        ls /bitnami/kafka/config/certs/
+    else
+        echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
+        exit 1
+    fi
     {{- end }}
 
     exec /entrypoint.sh /run.sh

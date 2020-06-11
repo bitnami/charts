@@ -251,6 +251,12 @@ spec:
           {{- end }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
         {{- end }}
+        {{- with $.Values.shardsvr.dataNode.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       volumes:
         - name: replicaset-entrypoint-configmap
           configMap:

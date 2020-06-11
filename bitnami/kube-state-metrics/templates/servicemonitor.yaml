@@ -24,6 +24,12 @@ spec:
       {{- if .Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
       {{- end }}
+      {{- if hasKey .Values.serviceMonitor "honorLabels" }}
+      honorLabels: {{ .Values.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.relabelings }}
+      relabelings: {{- include "kube-state-metrics.tplValue" ( dict "value" .Values.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- include "kube-state-metrics.tplValue" ( dict "value" .Values.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}

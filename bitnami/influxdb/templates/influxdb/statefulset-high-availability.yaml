@@ -64,13 +64,22 @@ spec:
           image: {{ include "influxdb.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
-            - sh
+            - /bin/bash
             - -c
             - |
               mkdir -p /bitnami/influxdb/{data,meta,wal}
-              chown -R "{{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }}" /bitnami/influxdb/{data,meta,wal}
+              chmod 700 /bitnami/influxdb/{data,meta,wal}
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+                chown -R `id -u`:`id -G` /bitnami/influxdb/{data,meta,wal}
+              {{- else }}
+                chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }} /bitnami/influxdb/{data,meta,wal}
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:
-            runAsUser: 0
+          {{- else }}
+          securityContext:
+            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: /bitnami/influxdb

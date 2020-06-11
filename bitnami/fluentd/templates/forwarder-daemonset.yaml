@@ -5,6 +5,8 @@ metadata:
   name: {{ include "fluentd.fullname" . }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: forwarder
 spec:
   selector:
     matchLabels: {{- include "fluentd.matchLabels" . | nindent 6 }}
@@ -14,6 +16,10 @@ spec:
     metadata:
       labels: {{- include "fluentd.labels" . | nindent 8 }}
         app.kubernetes.io/component: forwarder
+        app: forwarder
+        {{- if .Values.forwarder.podLabels }}
+        {{- include "fluentd.tplValue" ( dict "value" $.Values.forwarder.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/forwarder-configmap.yaml") . | sha256sum }}
         {{- if .Values.forwarder.podAnnotations }}
@@ -45,6 +51,10 @@ spec:
               value: {{ .Values.forwarder.configFile }}
             - name: FLUENTD_OPT
               value: {{ .Values.forwarder.extraArgs | quote }}
+            - name: FLUENTD_DAEMON_USER
+              value: {{ .Values.forwarder.daemonUser | quote }}
+            - name: FLUEND_DAEMON_GROUP
+              value: {{ .Values.forwarder.daemonGroup | quote }}
             {{- if .Values.forwarder.extraEnv }}
             {{- toYaml .Values.forwarder.extraEnv | nindent 12 }}
             {{- end }}
@@ -53,7 +63,7 @@ spec:
             {{- toYaml .Values.forwarder.containerPorts | nindent 12 }}
             {{- end }}
             {{- if .Values.metrics.enabled }}
-            - name: metrics
+            - name: tcp-metrics
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
@@ -96,7 +106,13 @@ spec:
             - name: varlibdockercontainers
               mountPath: /var/lib/docker/containers
               readOnly: true
+            {{- if .Values.forwarder.extraVolumeMounts }}
+            {{- toYaml .Values.forwarder.extraVolumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
+        {{- if .Values.forwarder.extraVolumes }}
+            {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}
+        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: certs
           secret:
