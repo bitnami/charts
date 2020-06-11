@@ -73,6 +73,23 @@ data:
       echo $($REDIS_COMMAND sentinel get-master-addr-by-name mymaster | head -n 1)
     }
 
+    function check_master_election {
+      MY_IP=$1
+      MASTER_SET=$2
+
+      if [ $(get_master_ip $MASTER_SET) == $MY_IP]; then
+        echo "This instance is current master"
+      fi
+
+      if [ $(get_master_ip $MASTER_SET) == "127.0.0.1"]; then
+        echo "Current master is set to 127.0.0.1"
+      fi
+
+      if [ $(redis-cli -h 10.233.81.152 -p 6379 -a $(cat /opt/bitnami/redis/secrets/redis-password) PING) != "PONG" ]; then
+        echo "Current master is not available"
+      fi
+    }
+
     MASTER_IP=$(get_master_ip $MASTER_SET)
     MY_IP=$(hostname -i)
 
@@ -88,7 +105,8 @@ data:
 
       echo "Waiting until master would be switched..."
 
-      while [ $MY_IP == $(get_master_ip $MASTER_SET) ]; do
+      while [ -z $(check_master_election $MY_IP $MASTER_SET) ]; do
+        echo "$(check_master_election $MY_IP $MASTER_SET)"
         sleep 5
       done
 
