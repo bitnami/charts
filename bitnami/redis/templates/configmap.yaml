@@ -48,7 +48,7 @@ data:
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
   shutdown.sh: |-
     #!/bin/bash
-    MASTER_SET=$1
+    MASTER_SET={{ .Values.sentinel.masterSet }}
     REDIS_COMMAND="redis-cli -p 26379"
 
     function get_master_ip {
