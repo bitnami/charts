@@ -332,7 +332,7 @@ Return the appropriate apiVersion for deployment.
 {{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 {{- print "extensions/v1beta1" -}}
 {{- else -}}
-{{- print "apps/v1" -}}
+{{- print "networking.k8s.io/v1beta1" -}}
 {{- end -}}
 {{- end -}}
 
