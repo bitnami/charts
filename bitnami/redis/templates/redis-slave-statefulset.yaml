@@ -187,6 +187,12 @@ spec:
           ports:
             - name: redis
               containerPort: {{ .Values.redisPort }}
+          {{- if .Values.sentinel.enabled }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ['/bin/sh', '-c', '/shutdown.sh']
+          {{- end }}
           {{- if .Values.slave.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.slave.livenessProbe.initialDelaySeconds }}
@@ -243,6 +249,11 @@ spec:
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- end }}
+            {{- if .Values.sentinel.enabled }}
+            - name: shutdown-script
+              mountPath: /shutdown.sh
+              subPath: shutdown.sh
             {{- end }}
         {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
         - name: sentinel
@@ -324,10 +335,6 @@ spec:
             - name: REDIS_SENTINEL_PORT
               value: {{ .Values.sentinel.port | quote }}
             {{- end }}
-          lifecycle:
-            preStop:
-              exec:
-                command: ['/bin/sh', '-c', '/opt/bitnami/redis-sentinel/mounted-etc/shutdown.sh']
           ports:
             - name: redis-sentinel
               containerPort: {{ .Values.sentinel.port }}
@@ -491,6 +498,12 @@ spec:
           secret:
             secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
             defaultMode: 256
+    {{- end }}
+    {{- if .Values.sentinel.enabled }}
+    - name: shutdown-script
+      configMap:
+        name: {{ template "redis.fullname" . }}-shutdown-script
+        defaultMode: 0755
     {{- end }}
   volumeClaimTemplates:
     - metadata:

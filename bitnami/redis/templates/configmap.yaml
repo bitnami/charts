@@ -46,9 +46,27 @@ data:
     sentinel down-after-milliseconds {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.downAfterMilliseconds }}
     sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
+{{- if .Values.sentinel.configmap }}
+    # User-supplied sentinel configuration:
+{{- tpl .Values.sentinel.configmap . | nindent 4 }}
+{{- end }}
+{{- end }}
+---
+{{- if .Values.sentinel.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "redis.fullname" . }}-shutdown-script
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "redis.name" . }}
+    chart: {{ template "redis.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
   shutdown.sh: |-
     #!/bin/bash
-    MASTER_SET={{ .Values.sentinel.masterSet }}
+    MASTER_SET="{{ .Values.sentinel.masterSet }}"
     REDIS_COMMAND="redis-cli -p 26379"
 
     function get_master_ip {
@@ -80,8 +98,4 @@ data:
 
     echo "Killing redis process"
     kill 1
-{{- if .Values.sentinel.configmap }}
-    # User-supplied sentinel configuration:
-{{- tpl .Values.sentinel.configmap . | nindent 4 }}
-{{- end }}
 {{- end }}
