@@ -77,15 +77,15 @@ data:
       MY_IP=$1
       MASTER_SET=$2
 
-      if [ $(get_master_ip $MASTER_SET) == $MY_IP]; then
+      if [ $(get_master_ip $MASTER_SET) == $MY_IP ]; then
         echo "This instance is current master"
       fi
 
-      if [ $(get_master_ip $MASTER_SET) == "127.0.0.1"]; then
+      if [ $(get_master_ip $MASTER_SET) == "127.0.0.1" ]; then
         echo "Current master is set to 127.0.0.1"
       fi
 
-      if [ $(redis-cli -h 10.233.81.152 -p 6379 -a $(cat /opt/bitnami/redis/secrets/redis-password) PING) != "PONG" ]; then
+      if [ "$(timeout 1 redis-cli -h $(get_master_ip $MASTER_SET) -p 6379 -a $(cat /opt/bitnami/redis/secrets/redis-password) PING)" != "PONG" ]; then
         echo "Current master is not available"
       fi
     }
@@ -105,13 +105,13 @@ data:
 
       echo "Waiting until master would be switched..."
 
-      while [ -z $(check_master_election $MY_IP $MASTER_SET) ]; do
+      while [ -n "$(check_master_election $MY_IP $MASTER_SET)" ]; do
         echo "$(check_master_election $MY_IP $MASTER_SET)"
         sleep 5
       done
 
-      echo "Master switched to $(get_master_ip $MASTER_SET)"
       echo ""
+      echo "Master switched to $(get_master_ip $MASTER_SET)"
     fi
 
     echo "Killing redis process"

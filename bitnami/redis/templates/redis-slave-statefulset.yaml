@@ -500,10 +500,10 @@ spec:
             defaultMode: 256
     {{- end }}
     {{- if .Values.sentinel.enabled }}
-    - name: shutdown-script
-      configMap:
-        name: {{ template "redis.fullname" . }}-shutdown-script
-        defaultMode: 0755
+        - name: shutdown-script
+          configMap:
+            name: {{ template "redis.fullname" . }}-shutdown-script
+            defaultMode: 0755
     {{- end }}
   volumeClaimTemplates:
     - metadata:
