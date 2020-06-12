@@ -36,6 +36,8 @@ spec:
       targetPort: epmd
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodeDiscoverPort))) }}
+      nodePort: {{ .Values.service.nodeDiscoverPort }}
       {{- end }}
     - name: amqp
       port: {{ .Values.service.port }}
@@ -58,12 +60,16 @@ spec:
       targetPort: dist
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodeDistPort))) }}
+      nodePort: {{ .Values.service.nodeDistPort }}
       {{- end }}
     - name: stats
       port: {{ .Values.service.managerPort }}
       targetPort: stats
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodeStatsPort))) }}
+      nodePort: {{ .Values.service.nodeStatsPort }}
       {{- end }}
   {{- if .Values.metrics.enabled }}
     - name: metrics
@@ -71,6 +77,8 @@ spec:
       targetPort: metrics
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodeMetricsPort))) }}
+      nodePort: {{ .Values.service.nodeMetricsPort }}
       {{- end }}
   {{- end }}
 {{- if .Values.service.extraPorts }}
