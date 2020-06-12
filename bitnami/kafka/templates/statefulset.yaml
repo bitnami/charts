@@ -224,7 +224,7 @@ spec:
             - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
               value: {{ .Values.deleteTopicEnable | quote }}
             - name: KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE
-              value: {{ .Values.autoCreateTopicsEnable | quote }}              
+              value: {{ .Values.autoCreateTopicsEnable | quote }}
             - name: KAFKA_HEAP_OPTS
               value: {{ .Values.heapOpts | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES
@@ -279,11 +279,29 @@ spec:
             - name: kafka-external
               containerPort: 9094
             {{- end }}
-          {{- if .Values.livenessProbe }}
-          livenessProbe: {{- include "kafka.tplValue" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: kafka-client
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "kafka.tplValue" (dict "value" .Values.customlivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe }}
-          readinessProbe: {{- include "kafka.tplValue" (dict "value" .Values.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: kafka-client
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "kafka.tplValue" (dict "value" .Values.customreadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}

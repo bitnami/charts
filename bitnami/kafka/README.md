@@ -142,6 +142,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `resources.requests`                              | The requested resources for Kafka containers                                                                                      | `{}`                                                    |
 | `livenessProbe`                                   | Liveness probe configuration for Kafka                                                                                            | `Check values.yaml file`                                |
 | `readinessProbe`                                  | Readiness probe configuration for Kafka                                                                                           | `Check values.yaml file`                                |
+| `customLivenessProbe`                                   | Custom Liveness probe configuration for Kafka                                                                                            | `{}`                                |
+| `customReadinessProbe`                                  | Custom Readiness probe configuration for Kafka                                                                                           | `{}`                                |
 | `pdb.create`                                      | Enable/disable a Pod Disruption Budget creation                                                                                   | `false`                                                 |
 | `pdb.minAvailable`                                | Minimum number/percentage of pods that should remain scheduled                                                                    | `nil`                                                   |
 | `pdb.maxUnavailable`                              | Maximum number/percentage of pods that may be made unavailable                                                                    | `1`                                                     |
@@ -566,7 +568,7 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 - `service.nodePorts.kafka` and ``service.nodePorts.ssl` -> deprecated in favor of `service.nodePort`
 - `metrics.kafka.extraFlag` -> new parameter
 - `metrics.kafka.certificatesSecret` -> new parameter
-  
+
 ### To 10.0.0
 
 If you are setting the `config` or `log4j` parameter, backwards compatibility is not guaranteed, because the `KAFKA_MOUNTED_CONFDIR` has moved from `/opt/bitnami/kafka/conf` to `/bitnami/kafka/config`. In order to continue using these parameters, you must also upgrade your image to `docker.io/bitnami/kafka:2.4.1-debian-10-r38` or later.
