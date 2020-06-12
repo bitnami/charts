@@ -68,8 +68,8 @@ spec:
       targetPort: stats
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
-      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodeStatsPort))) }}
-      nodePort: {{ .Values.service.nodeStatsPort }}
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodeManagerPort))) }}
+      nodePort: {{ .Values.service.nodeManagerPort }}
       {{- end }}
   {{- if .Values.metrics.enabled }}
     - name: metrics

@@ -48,7 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following table lists the configurable parameters of the RabbitMQ chart and their default values.
 
 | Parameter                                 | Description                                                                                                                                                | Default                                                                                     |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `global.imageRegistry`                    | Global Docker image registry                                                                                                                               | `nil`                                                                                       |
 | `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                                                                                            | `[]` (does not add image pull secrets to deployed pods)                                     |
 | `global.storageClass`                     | Global storage class for dynamic provisioning                                                                                                              | `nil`                                                                                       |
@@ -68,8 +68,8 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `rabbitmq.erlangCookie`                   | Erlang cookie                                                                                                                                              | _random 32 character long alphanumeric string_                                              |
 | `rabbitmq.existingErlangSecret`           | Existing secret with RabbitMQ Erlang cookie                                                                                                                | `nil`                                                                                       |
 | `rabbitmq.plugins`                        | List of plugins to enable                                                                                                                                  | `rabbitmq_management rabbitmq_peer_discovery_k8s`                                           |
-| `rabbitmq.extraPlugins`                   | Extra plugings to enable                                                                                                                                   | `nil`                                                                                       |
-| `rabbitmq.communityPlugins`               | Community plugins to install and enable                                                                                                                    | []                                                                                          |
+| `rabbitmq.extraPlugins`                   | Extra plugings to enable                                                                                                                                   | `nil`          
+| `rabbitmq.communityPlugins`               | Community plugins to install and enable         | []                                                |
 | `rabbitmq.clustering.address_type`        | Switch clustering mode                                                                                                                                     | `ip` or `hostname`                                                                          |
 | `rabbitmq.clustering.k8s_domain`          | Customize internal k8s cluster domain                                                                                                                      | `cluster.local`                                                                             |
 | `rabbitmq.clustering.rebalance`           | Rebalance master for queues in cluster when new replica is created                                                                                         | `false`                                                                                     |
@@ -104,7 +104,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.nodeTlsPort`                     | Node port override for `amqp-ssl` port, if serviceType NodePort                                                                                            | _random available between 30000-32767_                                                      |
 | `service.nodeDiscoverPort`                | Node port override for `epmd` port, if serviceType NodePort                                                                                                | _random available between 30000-32767_                                                      |
 | `service.nodeDistPort`                    | Node port override for `dist` port, if serviceType NodePort                                                                                                | _random available between 30000-32767_                                                      |
-| `service.nodeStatsPort`                   | Node port override for `stats` port, if serviceType NodePort                                                                                               | _random available between 30000-32767_                                                      |
+| `service.nodeManagerPort`                 | Node port override for `stats` port, if serviceType NodePort                                                                                               | _random available between 30000-32767_                                                      |
 | `service.nodeMetricsPort`                 | Node port override for `metrics` port, if serviceType NodePort                                                                                             | _random available between 30000-32767_                                                      |
 | `service.managerPort`                     | RabbitMQ Manager port                                                                                                                                      | `15672`                                                                                     |
 | `service.extraPorts`                      | Extra ports to expose in the service                                                                                                                       | `nil`                                                                                       |
@@ -214,7 +214,6 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one. In case you want to spread the deployment accross nodes you should configure the affinity parameters.
 
 - Resource needs and limits to apply to the pod:
-
 ```diff
 - resources: {}
 + resources:
@@ -224,14 +223,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```
 
 - Replica count:
-
 ```diff
 - replicas: 1
 + replicas: 3
 ```
 
 - Node labels for pod assignment:
-
 ```diff
 - nodeSelector: {}
 + nodeSelector:
@@ -239,26 +236,22 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```
 
 - Enable ingress with TLS:
-
 ```diff
 - ingress.tls: false
 + ingress.tls: true
 ```
 
 - Enable prometheus metrics:
-
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true
 ```
 
 - Enable init container that changes volume permissions in the data directory:
-
 ```diff
 - volumePermissions.enabled: false
 + volumePermissions.enabled: true
 ```
-
 To horizontally scale this chart once it has been deployed you have two options:
 
 - Use `kubectl scale` command
@@ -274,7 +267,6 @@ rabbitmq.erlangCookie="$RABBITMQ_ERLANG_COOKIE"
 > Note: please note it's mandatory to indicate the password and erlangCookie that was set the first time the chart was installed to upgrade the chart. Otherwise, new pods won't be able to join the cluster.
 
 ### Load Definitions
-
 It is possible to [load a RabbitMQ definitions file to configure RabbitMQ](http://www.rabbitmq.com/management.html#load-definitions). Because definitions may contain RabbitMQ credentials, [store the JSON as a Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-files-from-a-pod). Within the secret's data, choose a key name that corresponds with the desired load definitions filename (i.e. `load_definition.json`) and use the JSON object as the value. For example:
 
 ```yaml
@@ -328,21 +320,21 @@ To enable TLS support you must generate the certificates using RabbitMQ [documen
 You must include in your values.yaml the caCertificate, serverCertificate and serverKey files.
 
 ```yaml
-caCertificate: |-
-  -----BEGIN CERTIFICATE-----
-  MIIDRTCCAi2gAwIBAgIJAJPh+paO6a3cMA0GCSqGSIb3DQEBCwUAMDExIDAeBgNV
-  ...
-  -----END CERTIFICATE-----
-serverCertificate: |-
-  -----BEGIN CERTIFICATE-----
-  MIIDqjCCApKgAwIBAgIBATANBgkqhkiG9w0BAQsFADAxMSAwHgYDVQQDDBdUTFNH
-  ...
-  -----END CERTIFICATE-----
-serverKey: |-
-  -----BEGIN RSA PRIVATE KEY-----
-  MIIEpAIBAAKCAQEA2iX3M4d3LHrRAoVUbeFZN3EaGzKhyBsz7GWwTgETiNj+AL7p
-  ....
-  -----END RSA PRIVATE KEY-----
+  caCertificate: |-
+    -----BEGIN CERTIFICATE-----
+    MIIDRTCCAi2gAwIBAgIJAJPh+paO6a3cMA0GCSqGSIb3DQEBCwUAMDExIDAeBgNV
+    ...
+    -----END CERTIFICATE-----
+  serverCertificate: |-
+    -----BEGIN CERTIFICATE-----
+    MIIDqjCCApKgAwIBAgIBATANBgkqhkiG9w0BAQsFADAxMSAwHgYDVQQDDBdUTFNH
+    ...
+    -----END CERTIFICATE-----
+  serverKey: |-
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAAKCAQEA2iX3M4d3LHrRAoVUbeFZN3EaGzKhyBsz7GWwTgETiNj+AL7p
+    ....
+    -----END RSA PRIVATE KEY-----
 ```
 
 This will be generate a secret with the certs, but is possible specify an existing secret using `existingSecret: name-of-existing-secret-to-rabbitmq`. The secret is of type `kubernetes.io/tls`.
