@@ -538,7 +538,7 @@ Return the appropriate apiVersion for deployment.
 {{/*
 Return the appropriate apiVersion for ingress.
 */}}
-{{- define "prometheus-operator.capabilities.ingress.apiVersion" -}}
+{{- define "prometheus-operator.ingress.apiVersion" -}}
 {{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 {{- print "extensions/v1beta1" -}}
 {{- else -}}
