@@ -712,3 +712,11 @@ podSecurityPolicy:
   ## Specifies whether a PodSecurityPolicy should be created
   ##
   create: false
+
+## Define a disruption budget
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+##
+podDisruptionBudget:
+  enabled: false
+  # minAvailable: 1
+  # maxUnavailable: 1
