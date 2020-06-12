@@ -826,11 +826,16 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrade
 
+> NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
+
 ## 6.0.0
 
 The chart was changed to adapt to the common Bitnami chart standards. Now it includes common elements such as sidecar and init container support, custom commands, custom liveness/readiness probes, extra environment variables support, extra pod annotations and labels, among others. In addition, it adds a new Trivy deployment for image scanning.
 
-No issues are expected between upgrades but please double check the updated parameter list as some of them could have been renamed.
+No issues are expected between upgrades but please double check the updated parameter list as some of them could have been renamed. Please pay special attention to the following changes:
+
+  - `service.type=ingress` is not allowed anymore. Instead, set the value `ingress.enabled=true`.
+  - `secretKey` has been moved to `core.secretKey`.
 
 ## 4.0.0
 
