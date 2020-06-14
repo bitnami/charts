@@ -1,9 +1,32 @@
 {{/* Templates for certificates injection */}}
 
+{{/*
+Return the proper Redmine image name
+*/}}
+{{- define "certificates.image" -}}
+{{- $registryName := default .Values.certificates.image.registry .Values.image.registry -}}
+{{- $repositoryName := .Values.certificates.image.repository -}}
+{{- $tag := .Values.certificates.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "certificates.initContainer" -}}
 {{- if .Values.certificates.customCAs }}
 - name: certificates
-  image: "{{ .Values.certificates.image.repository }}:{{ .Values.certificates.image.tag }}"
+  image: {{ template "certificates.image" . }}
   imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
   imagePullSecrets:
   {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
@@ -13,11 +36,13 @@
   {{- if .Values.certificates.customCertificate.certificateSecret }}
   - sh
   - -c
-  - apk add --no-cache ca-certificates openssl && update-ca-certificates
+  - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+    else apt-get update && apt-get install -y ca-certificates openssl; fi
   {{- else }}
   - sh
   - -c
-  - apk add --no-cache ca-certificates openssl && update-ca-certificates \\
+  - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+    else apt-get update && apt-get install -y ca-certificates openssl; fi
     && openssl req -new -x509 -days 3650 -nodes -sha256
        -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
        -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
