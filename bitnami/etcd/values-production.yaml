@@ -161,6 +161,11 @@ securityContext:
 ##
 clusterDomain: cluster.local
 
+## etcd statefulset variables
+##
+etcd:
+  initialClusterState: new
+
 ## Service parameters
 ##
 service:
