@@ -89,7 +89,19 @@ spec:
               if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
                 cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
               fi
+              {{- if .Values.tls.enabled }}
+              ARGS=("--port" "0")
+              ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
+              ARGS+=("--tls-cert-file" "${REDIS_TLS_CERT_FILE}")
+              ARGS+=("--tls-key-file" "${REDIS_TLS_KEY_FILE}")
+              ARGS+=("--tls-ca-cert-file" "${REDIS_TLS_CA_FILE}")
+              ARGS+=("--tls-auth-clients" "${REDIS_TLS_AUTH_CLIENTS}")
+              {{- if .Values.tls.dhParamsFilename }}
+              ARGS+=("--tls-dh-params-file" "${REDIS_TLS_DH_PARAMS_FILE}")
+              {{- end }}
+              {{- else }}
               ARGS=("--port" "${REDIS_PORT}")
+              {{- end }}
               {{- if .Values.usePassword }}
               ARGS+=("--requirepass" "${REDIS_PASSWORD}")
               ARGS+=("--masterauth" "${REDIS_PASSWORD}")
@@ -126,8 +138,27 @@ spec:
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
             {{- end }}
+            - name: REDIS_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_TLS_PORT
+              value: {{ .Values.redisPort | quote }}
+            - name:  REDIS_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  REDIS_TLS_CERT_FILE
+              value: {{ template "redis.tlsCert" . }}
+            - name:  REDIS_TLS_KEY_FILE
+              value: {{ template "redis.tlsCertKey" . }}
+            - name:  REDIS_TLS_CA_FILE
+              value: {{ template "redis.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  REDIS_TLS_DH_PARAMS_FILE
+              value: {{ template "redis.tlsDHParams" . }}
+            {{- end }}
+            {{- else }}
             - name: REDIS_PORT
               value: {{ .Values.redisPort | quote }}
+            {{- end }}
           ports:
             - name: redis
               containerPort: {{ .Values.redisPort }}
@@ -176,6 +207,11 @@ spec:
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc/
+            {{- if .Values.tls.enabled }}
+            - name: redis-certificates
+              mountPath: /opt/bitnami/redis/certs
+              readOnly: true
+            {{- end }}
         {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
         - name: sentinel
           image: "{{ template "sentinel.image" . }}"
@@ -209,7 +245,19 @@ spec:
               existing_sentinels=$(timeout -s 3 {{ .Values.sentinel.initialCheckTimeout }} redis-cli --raw -h {{ template "redis.fullname" . }} -a "$REDIS_PASSWORD" -p {{ .Values.sentinel.service.sentinelPort }} SENTINEL sentinels {{ .Values.sentinel.masterSet }})
               echo "$existing_sentinels" | awk -f /health/parse_sentinels.awk | tee -a  /opt/bitnami/redis-sentinel/etc/sentinel.conf
 
-              redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel
+              {{- if .Values.tls.enabled }}
+              ARGS=("--port" "0")
+              ARGS+=("--tls-port" "${REDIS_SENTINEL_TLS_PORT_NUMBER}")
+              ARGS+=("--tls-cert-file" "${REDIS_SENTINEL_TLS_CERT_FILE}")
+              ARGS+=("--tls-key-file" "${REDIS_SENTINEL_TLS_KEY_FILE}")
+              ARGS+=("--tls-ca-cert-file" "${REDIS_SENTINEL_TLS_CA_FILE}")
+              ARGS+=("--tls-auth-clients" "${REDIS_SENTINEL_TLS_AUTH_CLIENTS}")
+              {{- if .Values.tls.dhParamsFilename }}
+              ARGS+=("--tls-dh-params-file" "${REDIS_SENTINEL_TLS_DH_PARAMS_FILE}")
+              {{- end }}
+              {{- end }}
+
+              redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
           env:
             {{- if .Values.usePassword }}
             {{- if .Values.usePasswordFile }}
@@ -226,8 +274,27 @@ spec:
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
             {{- end }}
+            - name: REDIS_SENTINEL_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_SENTINEL_TLS_PORT_NUMBER
+              value: {{ .Values.sentinel.port | quote }}
+            - name:  REDIS_SENTINEL_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  REDIS_SENTINEL_TLS_CERT_FILE
+              value: {{ template "redis.tlsCert" . }}
+            - name:  REDIS_SENTINEL_TLS_KEY_FILE
+              value: {{ template "redis.tlsCertKey" . }}
+            - name:  REDIS_SENTINEL_TLS_CA_FILE
+              value: {{ template "redis.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  REDIS_SENTINEL_TLS_DH_PARAMS_FILE
+              value: {{ template "redis.dhParams" . }}
+            {{- end }}
+            {{- else }}
             - name: REDIS_SENTINEL_PORT
               value: {{ .Values.sentinel.port | quote }}
+            {{- end }}
           ports:
             - name: redis-sentinel
               containerPort: {{ .Values.sentinel.port }}
@@ -276,6 +343,11 @@ spec:
               mountPath: /opt/bitnami/redis-sentinel/mounted-etc
             - name: sentinel-tmp-conf
               mountPath: /opt/bitnami/redis-sentinel/etc/
+            {{- if .Values.tls.enabled }}
+            - name: redis-certificates
+              mountPath: /opt/bitnami/redis/certs
+              readOnly: true
+            {{- end }}
         {{- end }}
   {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -299,10 +371,21 @@ spec:
                   name: {{ template "redis.secretName" . }}
                   key: {{ template "redis.secretPasswordKey" . }}
             {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
+              value: {{ template "redis.tlsCertKey" . }}
+            - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
+              value: {{ template "redis.tlsCert" . }}
+            {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
               mountPath: /secrets/
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: redis-certificates
+              mountPath: /opt/bitnami/redis/certs
+              readOnly: true
             {{- end }}
           ports:
             - name: metrics
@@ -377,6 +460,12 @@ spec:
         {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
         - name: sentinel-tmp-conf
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: redis-certificates
+          secret:
+            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
+            defaultMode: 256
         {{- end }}
   {{- if and .Values.master.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:

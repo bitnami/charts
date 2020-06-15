@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 
 ## Installing the Chart
 
@@ -47,7 +47,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the spark chart and their default values.
 
-|                  Parameter                  |                                                                Description                                                                 |                         Default                         |
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                      | Global Docker image registry                                                                                                               | `nil`                                                   |
 | `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                                                                            | `[]` (does not add image pull secrets to deployed pods) |
@@ -66,6 +66,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.securityContext.enabled`            | Enable security context                                                                                                                    | `true`                                                  |
 | `master.securityContext.fsGroup`            | Group ID for the container                                                                                                                 | `1001`                                                  |
 | `master.securityContext.runAsUser`          | User ID for the container                                                                                                                  | `1001`                                                  |
+| `master.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                        | `{}` (The value is evaluated as a template)             |
 | `master.nodeSelector`                       | Node affinity policy                                                                                                                       | `{}` (The value is evaluated as a template)             |
 | `master.tolerations`                        | Tolerations for pod assignment                                                                                                             | `[]` (The value is evaluated as a template)             |
 | `master.affinity`                           | Affinity for pod assignment                                                                                                                | `{}` (The value is evaluated as a template)             |
@@ -101,6 +102,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.securityContext.enabled`            | Enable security context                                                                                                                    | `true`                                                  |
 | `worker.securityContext.fsGroup`            | Group ID for the container                                                                                                                 | `1001`                                                  |
 | `worker.securityContext.runAsUser`          | User ID for the container                                                                                                                  | `1001`                                                  |
+| `worker.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                        | `{}`                                                    |
 | `worker.nodeSelector`                       | Node labels for pod assignment. Used as a template from the values.                                                                        | `{}`                                                    |
 | `worker.tolerations`                        | Toleration labels for pod assignment                                                                                                       | `[]`                                                    |
 | `worker.affinity`                           | Affinity and AntiAffinity rules for pod assignment                                                                                         | `{}`                                                    |

@@ -108,6 +108,10 @@ spec:
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}
             {{- end }}
+            {{- if .Values.snapshotRepoPath }}
+            - name: ELASTICSEARCH_FS_SNAPSHOT_REPO_PATH
+              value: {{ .Values.snapshotRepoPath | quote }}
+            {{- end }}
             - name: ELASTICSEARCH_HEAP_SIZE
               value: {{ .Values.master.heapSize | quote }}
             - name: ELASTICSEARCH_IS_DEDICATED_NODE

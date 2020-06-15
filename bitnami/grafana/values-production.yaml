@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 6.7.3-debian-10-r0
+  tag: 7.0.3-debian-10-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -35,32 +35,9 @@ image:
 ##
 # fullnameOverride:
 
-## Number of grafana Pod replicas
+## Kubernetes Cluster Domain
 ##
-replicaCount: 1
-
-## Set up update strategy for Grafana installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-## Example:
-# updateStrategy:
-#  type: RollingUpdate
-#  rollingUpdate:
-#    maxSurge: 25%
-#    maxUnavailable: 25%
-updateStrategy:
-  type: RollingUpdate
-
-## Use an alternate scheduler, e.g. "stork".
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-##
-# schedulerName:
-
-serviceAccount:
-  # Specifies whether a ServiceAccount should be created
-  create: true
-  # The name of the ServiceAccount to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name:
+clusterDomain: cluster.local
 
 ## Admin credentials configuration
 ##
@@ -167,6 +144,97 @@ dashboardsConfigMaps: []
 datasources:
   secretName:
 
+## Number of grafana Pod replicas
+##
+replicaCount: 1
+
+## Set up update strategy for Grafana installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## Example:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
+
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName:
+
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the fullname template
+  ##
+  # name:
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## SecurityContext configuration
+##
+securityContext:
+  enabled: true
+  runAsUser: 1001
+  fsGroup: 1001
+  runAsNonRoot: true
+
+## Grafana containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 500m
+  #   memory: 1Gi
+  requests: {}
+  #   cpu: 250m
+  #   memory: 256Mi
+
+## Grafana containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -188,23 +256,17 @@ persistence:
   accessMode: ReadWriteOnce
   size: 10Gi
 
-## Grafana containers' liveness and readiness probes
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## Add extra sidecars to the Grafana pod
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
 ##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 120
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
+sidecars: {}
 
 ## Service parameters
 ##
@@ -273,49 +335,6 @@ ingress:
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       tlsSecret: grafana.local-tls
 
-## SecurityContext configuration
-##
-securityContext:
-  enabled: true
-  runAsUser: 1001
-  fsGroup: 1001
-  runAsNonRoot: true
-
-## Grafana containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 500m
-  #   memory: 1Gi
-  requests: {}
-  #   cpu: 250m
-  #   memory: 256Mi
-
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
-
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
 ## Prometheus metrics
 ##
 metrics:
@@ -350,3 +369,80 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+imageRenderer:
+  enabled: true
+  ## Bitnami Grafana Image Renderer image
+  ## ref: https://hub.docker.com/r/bitnami/grafana-image-renderer/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/grafana-image-renderer
+    tag: 1.0.12-debian-10-r15
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Number of Grafana Image Renderer Pod replicas
+  ##
+  replicaCount: 1
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## SecurityContext configuration
+  ##
+  securityContext:
+    enabled: true
+    runAsUser: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  service:
+    ## Grafana Image Renderer metrics port
+    ##
+    port: 8080
+  ## Enable Prometheus metrics endpoint
+  ##
+  metrics:
+    enabled: false
+    ## Prometheus annotations
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8080"
+      prometheus.io/path: "/metrics"
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      enabled: false
+      ## Namespace in which Prometheus is running
+      ##
+      # namespace: monitoring
+      ## Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      # interval: 10s
+      ## Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      # scrapeTimeout: 10s

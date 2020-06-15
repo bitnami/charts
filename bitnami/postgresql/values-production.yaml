@@ -15,7 +15,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.7.0-debian-10-r99
+  tag: 11.8.0-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -426,7 +426,7 @@ resources:
 
 ## Add annotations to all the deployed resources
 ##
-commonAnnotiations: {}
+commonAnnotations: {}
 
 networkPolicy:
   ## Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
@@ -511,7 +511,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.8.0-debian-10-r106
+    tag: 0.8.0-debian-10-r132
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -531,6 +531,14 @@ metrics:
   #       - size_bytes:
   #           usage: "GAUGE"
   #           description: "Size of the database in bytes"
+  ## An array to add extra env vars to configure postgres-exporter
+  ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
+  ## For example:
+  #  extraEnvVars:
+  #  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
+  #    value: "true"
+  extraEnvVars: {}
+
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##

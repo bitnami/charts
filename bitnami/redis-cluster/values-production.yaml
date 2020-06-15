@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 5.0.9-debian-10-r10
+  tag: 6.0.5-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -149,6 +149,17 @@ podSecurityContext:
   # - name: net.core.somaxconn
   #   value: "10000"
 
+## Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
+##
+podDisruptionBudget: {}
+  ## Min number of pods that must still be available after the eviction
+  ##
+  # minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
+
 ## Containers Security Context
 containerSecurityContext:
   enabled: true
@@ -178,8 +189,40 @@ password: ""
 ## Mount secrets as files instead of environment variables
 usePasswordFile: false
 
+# Whether to use AOF Persistence mode or not
+# It is strongly recommended to use this type when dealing with clusters
+#
+# ref: https://redis.io/topics/persistence#append-only-file
+# ref: https://redis.io/topics/cluster-tutorial#creating-and-using-a-redis-cluster
+useAOFPersistence: "yes"
+
 # Redis port
 redisPort: 6379
+
+##
+## TLS configuration
+##
+tls:
+  # Enable TLS traffic
+  enabled: false
+  #
+  # Whether to require clients to authenticate or not.
+  authClients: true
+  #
+  # Name of the Secret that contains the certificates
+  certificatesSecret:
+  #
+  # Certificate filename
+  certFilename:
+  #
+  # Certificate Key filename
+  certKeyFilename:
+  #
+  # CA Certificate filename
+  certCAFilename:
+  #
+  # File containing DH params (in order to support DH based ciphers)
+  # dhParamsFilename:
 
 ##
 ## Redis parameters
@@ -259,6 +302,15 @@ service:
   annotations: {}
   labels: {}
 
+  ## Set the service type.
+  ## Setting this to LoadBalancer may require corresponding service annotations for loadbalancer creation to succeed.
+  ## Currently supported types are ClusterIP (default) and LoadBalancer
+  type: ClusterIP
+
+  ## If service.type is LoadBalancer, request a specific static IP address if supported by the cloud provider.
+  ## otherwise leave blank
+  # loadBalancerIP:
+
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -305,7 +357,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.6.0-debian-10-r0
+    tag: 1.6.1-debian-10-r28
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

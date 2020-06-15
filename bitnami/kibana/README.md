@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -54,7 +54,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the kibana chart and their default values.
 
-|               Parameter                |                                                                        Description                                                                        |                                                 Default                                                 |             |
+| Parameter                              | Description                                                                                                                                               | Default                                                                                                 |             |
 |----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------|
 | `global.imageRegistry`                 | Global Docker image registry                                                                                                                              | `nil`                                                                                                   |             |
 | `global.imagePullSecrets`              | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)                                                 |             |
@@ -126,6 +126,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `tolerations`                          | Tolerations for pod assignment (evaluated as a template)                                                                                                  | `[]`                                                                                                    |             |
 | `affinity`                             | Affinity for pod assignment (evaluated as a template)                                                                                                     | `{}`                                                                                                    |             |
 | `podAnnotations`                       | Pod annotations (evaluated as a template)                                                                                                                 | `{}`                                                                                                    |             |
+| `podLabels`                            | Extra labels to add to Pod                                                                                                                                | `{}`                                                                                                    |             |
 | `sidecars`                             | Attach additional containers to the pod (evaluated as a template)                                                                                         | `nil`                                                                                                   |             |
 | `initContainers`                       | Add additional init containers to the pod (evaluated as a template)                                                                                       | `nil`                                                                                                   |             |
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                                                                                                      | `false`                                                                                                 |             |
@@ -173,6 +174,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+### Change Kibana version
+
+To modify the Kibana version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/kibana/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Using custom configuration
 

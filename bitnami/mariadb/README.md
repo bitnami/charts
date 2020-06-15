@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -48,6 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ## Parameters
 
 The following table lists the configurable parameters of the MariaDB chart and their default values.
+
 | Parameter                                    | Description                                                                                                                                                                                                                                                              | Default                                                           |
 |----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`                       | Global Docker image registry                                                                                                                                                                                                                                             | `nil`                                                             |
@@ -61,6 +62,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `image.debug`                                | Specify if debug logs should be enabled                                                                                                                                                                                                                                  | `false`                                                           |
 | `nameOverride`                               | String to partially override mariadb.fullname template with a string (will prepend the release name)                                                                                                                                                                     | `nil`                                                             |
 | `fullnameOverride`                           | String to fully override mariadb.fullname template with a string                                                                                                                                                                                                         | `nil`                                                             |
+| `podLabels`                          | Additional pod labels                                                                                                                                       | `{}`                                                              |
 | `volumePermissions.enabled`                  | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)                                                                                                                | `false`                                                           |
 | `volumePermissions.image.registry`           | Init container volume-permissions image registry                                                                                                                                                                                                                         | `docker.io`                                                       |
 | `volumePermissions.image.repository`         | Init container volume-permissions image name                                                                                                                                                                                                                             | `bitnami/minideb`                                                 |
@@ -149,7 +151,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `slave.extraInitContainers`                  | Additional init containers as a string to be passed to the `tpl` function (slave)                                                                                                                                                                                        | `nil`                                                             |
 | `slave.extraEnvVars`                         | Array containing extra env vars to configure MariaDB slave replicas                                                                                                                                                                                                      | `nil`                                                             |
 | `slave.extraEnvVarsCM`                       | ConfigMap containing extra env vars to configure MariaDB slave replicas                                                                                                                                                                                                  | `nil`                                                             |
-| `slave.extraEnvVarsSecret`                   | Secret containing extra env vars to configure MariaDB slave replicas                                                                                                                                                                                              | `nil`                                                             |
+| `slave.extraEnvVarsSecret`                   | Secret containing extra env vars to configure MariaDB slave replicas                                                                                                                                                                                                     | `nil`                                                             |
 | `slave.config`                               | Config file for the MariaDB Slave replicas                                                                                                                                                                                                                               | `_default values in the values.yaml file_`                        |
 | `slave.resources`                            | CPU/Memory resource requests/limits for slave node                                                                                                                                                                                                                       | `{}`                                                              |
 | `slave.livenessProbe.enabled`                | Turn on and off liveness probe (slave)                                                                                                                                                                                                                                   | `true`                                                            |
@@ -261,6 +263,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+### Change MariaDB version
+
+To modify the MariaDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mariadb/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Initialize a fresh instance
 

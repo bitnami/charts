@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -59,7 +59,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 The following table lists the configurable parameters of the Redmine chart and their default values.
 
 | Parameter                            | Description                                                                                                                                                                                                                                                                                                                                                                                          | Default                                                 |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registr  y                                                                                                                                                                                                                                                                                                                                                                       | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                                                      | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                                                                                                                                                                                                                                                                        | `nil`                                                   |

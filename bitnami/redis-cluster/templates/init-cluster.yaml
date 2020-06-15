@@ -27,11 +27,35 @@ spec:
               /entrypoint.sh /run.sh
           {{- end }}
           env:
+            - name: REDIS_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name:  REDIS_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  REDIS_TLS_CERT_FILE
+              value: {{ template "redis-cluster.tlsCert" . }}
+            - name:  REDIS_TLS_KEY_FILE
+              value: {{ template "redis-cluster.tlsCertKey" . }}
+            - name:  REDIS_TLS_CA_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  REDIS_TLS_DH_PARAMS_FILE
+              value: {{ template "redis-cluster.tlsDHParams" . }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.cluster.externalAccess.enabled }}
-            - name: REDIS_PORT
-              value: {{ .Values.cluster.externalAccess.service.port | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_TLS_PORT
             {{- else }}
             - name: REDIS_PORT
+            {{- end }}
+              value: {{ .Values.cluster.externalAccess.service.port | quote }}
+            {{- else }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_TLS_PORT
+            {{- else }}
+            - name: REDIS_PORT
+            {{- end }}
               value: {{ .Values.redisPort | quote }}
             - name: REDIS_NODES
               value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "redis-cluster.fullname" $ }}-{{ $i }}.{{ template "redis-cluster.fullname" $ }}-headless {{ end }}"
@@ -47,5 +71,17 @@ spec:
               value: "yes"
             - name: REDIS_CLUSTER_REPLICAS
               value: {{ .Values.cluster.replicas | quote }}
+          {{- if .Values.tls.enabled }}
+          volumeMounts:
+            - name: redis-certificates
+              mountPath: /opt/bitnami/redis/certs
+              readOnly: true
+          {{- end }}
       restartPolicy: OnFailure
+      {{- if .Values.tls.enabled }}
+      volumes:
+        - name: redis-certificates
+          secret:
+            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
+    {{- end }}
 {{- end }}

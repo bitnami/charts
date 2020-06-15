@@ -22,17 +22,23 @@ Return the proper Docker Image Registry Secret Names
 {{- define "common.images.pullSecrets" -}}
 {{- if .global }}
 {{- if .global.imagePullSecrets }}
-imagePullSecrets: {{ .global.imagePullSecrets | toYaml | nindent 2 }}
+imagePullSecrets:
+  {{- range .global.imagePullSecrets }}
+  - name: {{ . }}
+  {{- end }}
 {{- end }}
 {{- else }}
 {{- $pullSecrets := list }}
 {{- range .images }}
   {{- if .pullSecrets }}
-    {{- $pullSecrets = concat $pullSecrets .pullSecrets }}
+    {{- $pullSecrets = append $pullSecrets .pullSecrets }}
   {{- end }}
 {{- end }}
 {{- if $pullSecrets }}
-imagePullSecrets: {{ $pullSecrets | toYaml | nindent 2 }}
+imagePullSecrets:
+  {{- range $pullSecrets }}
+  - name: {{ . }}
+  {{- end }}
 {{- end }}
 {{- end -}}
 {{- end -}}

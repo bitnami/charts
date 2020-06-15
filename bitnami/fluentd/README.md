@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 > Note: Please, note that the forwarder runs the container as root by default setting the `forwarder.securityContext.runAsUser` to `0` (_root_ user)
@@ -97,6 +97,8 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `forwarder.tolerations`                         | Tolerations for pod assignment                                                                                 | `[]`                                                                                                    |
 | `forwarder.affinity`                            | Affinity for pod assignment                                                                                    | `{}`                                                                                                    |
 | `forwarder.podAnnotations`                      | Pod annotations                                                                                                | `{}`                                                                                                    |
+| `forwarder.extraVolumes`                        | Extra volumes                                                                                                  | `nil`                                                                                                   |
+| `forwarder.extraVolumeMounts`                   | Mount extra volume(s),                                                                                         | `nil`                                                                                                   |
 | `aggregator.enabled`                            | Enable Fluentd aggregator                                                                                      | `true`                                                                                                  |
 | `aggregator.replicaCount`                       | Number of aggregator pods to deploy in the Stateful Set                                                        | `2`                                                                                                     |
 | `aggregator.securityContext.enabled`            | Enable security context for aggregator pods                                                                    | `true`                                                                                                  |

@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.2.6-debian-10-r17
+  tag: 4.2.8-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -189,6 +189,16 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName:
+    ## Pod disruption budget
+    ##
+    pdb:
+      enabled: true
+      ## Use 0 to disable
+      ##
+      minAvailable: 0
+      ## Use 0 to disable
+      ##
+      maxUnavailable: 1
 
   ## Properties for arbiter nodes
   ## ref: https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
@@ -417,6 +427,16 @@ configsvr:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
+  ## Pod disruption budget
+  ##
+  pdb:
+    enabled: true
+    ## Use 0 to disable
+    ##
+    minAvailable: 0
+    ## Use 0 to disable
+    ##
+    maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -547,6 +567,16 @@ mongos:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
+  ## Pod disruption budget
+  ##
+  pdb:
+    enabled: true
+    ## Use 0 to disable
+    ##
+    minAvailable: 0
+    ## Use 0 to disable
+    ##
+    maxUnavailable: 1
 
 ## Properties for all of the pods in the cluster (shards, config servers and mongos)
 ##
@@ -737,7 +767,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.0-debian-10-r11
+    tag: 0.11.0-debian-10-r54
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

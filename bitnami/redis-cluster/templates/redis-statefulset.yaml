@@ -121,8 +121,29 @@ spec:
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
             {{- end }}
+            - name: REDIS_AOF_ENABLED
+              value: {{ .Values.useAOFPersistence | quote }}
+            - name: REDIS_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_TLS_PORT
+              value: {{ .Values.redisPort | quote }}
+            - name:  REDIS_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  REDIS_TLS_CERT_FILE
+              value: {{ template "redis-cluster.tlsCert" . }}
+            - name:  REDIS_TLS_KEY_FILE
+              value: {{ template "redis-cluster.tlsCertKey" . }}
+            - name:  REDIS_TLS_CA_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  REDIS_TLS_DH_PARAMS_FILE
+              value: {{ template "redis-cluster.tlsDHParams" . }}
+            {{- end }}
+            {{- else }}
             - name: REDIS_PORT
               value: {{ .Values.redisPort | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 8 }}
             {{- end }}
@@ -187,8 +208,13 @@ spec:
               subPath: redis-default.conf
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc/
+            {{- if .Values.tls.enabled }}
+            - name: redis-certificates
+              mountPath: /opt/bitnami/redis/certs
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 8 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -216,16 +242,30 @@ spec:
             - name: REDIS_PASSWORD_FILE
               value: "/opt/bitnami/redis/secrets/redis-password"
             {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
+              value: {{ template "redis-cluster.tlsCertKey" . }}
+            - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
+              value: {{ template "redis-cluster.tlsCert" . }}
+            {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: redis-certificates
+              mountPath: /opt/bitnami/redis/certs
+              readOnly: true
             {{- end }}
           ports:
             - name: http-metrics
               containerPort: 9121
           resources:
         {{- toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and  .Values.persistence.enabled .Values.containerSecurityContext.enabled) }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
@@ -262,14 +302,8 @@ spec:
             runAsUser: 0
         {{- end }}
         {{- if .Values.extraInitContainers }}
-        {{- range $key, $value := .Values.extraInitContainers }}
-        - name: "{{ $key }}"
-        {{- toYaml $value | nindent 12 }}
+        {{- toYaml .Values.extraInitContainers | nindent 10 }}
         {{- end }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.sidecars }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 6 }}
       {{- end }}
       volumes:
         - name: scripts
@@ -299,7 +333,13 @@ spec:
         - name: redis-tmp-conf
           emptyDir: {}
         {{- if .Values.extraVolumes }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 6 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: redis-certificates
+          secret:
+            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
+            defaultMode: 256
         {{- end }}
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
