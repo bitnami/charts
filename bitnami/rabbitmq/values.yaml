@@ -46,9 +46,6 @@ image:
 ##
 # schedulerName:
 
-## does your cluster have rbac enabled? assume yes by default
-rbacEnabled: true
-
 ## RabbitMQ should be initialized one by one when building cluster for the first time.
 ## Therefore, the default value of podManagementPolicy is 'OrderedReady'
 ## Once the RabbitMQ participates in the cluster, it waits for a response from another
