@@ -54,7 +54,7 @@ spec:
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: stats
+    - name: http-stats
       port: {{ .Values.service.managerPort }}
       targetPort: stats
       {{- if eq .Values.service.type "ClusterIP" }}
@@ -62,7 +62,7 @@ spec:
       {{- end }}
     {{- if .Values.metrics.enabled }}
     - name: metrics
-      port: {{ .Values.metrics.port }}
+      port: {{ .Values.service.metricsPort }}
       targetPort: metrics
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null

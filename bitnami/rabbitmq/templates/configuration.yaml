@@ -5,8 +5,6 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 data:
-  enabled_plugins: |-
-    {{- include "rabbitmq.plugins" . | nindent 4 }}
   rabbitmq.conf: |-
     {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" $) | nindent 4 }}
   {{- if .Values.advancedConfiguration}}

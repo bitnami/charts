@@ -89,6 +89,17 @@ Get the erlang secret.
 {{- end -}}
 
 {{/*
+Get the TLS secret.
+*/}}
+{{- define "rabbitmq.secretTLSName" -}}
+    {{- if .Values.auth.tls.existingSecret -}}
+        {{- printf "%s" .Values.auth.tls.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s-certs" (include "rabbitmq.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper RabbitMQ plugin list
 */}}
 {{- define "rabbitmq.plugins" -}}
@@ -99,7 +110,43 @@ Return the proper RabbitMQ plugin list
 {{- if .Values.metrics.enabled -}}
 {{- $plugins = printf "%s %s" $plugins .Values.metrics.plugins -}}
 {{- end -}}
-{{- printf "[%s]." $plugins | replace " " ", " -}}
+{{- printf "%s" $plugins | replace " " ", " -}}
+{{- end -}}
+
+{{/*
+Return the number of bytes given a value
+following a base 2 o base 10 number system.
+Usage:
+{{ include "rabbitmq.toBytes" .Values.path.to.the.Value }}
+*/}}
+{{- define "rabbitmq.toBytes" -}}
+{{- $value := int (regexReplaceAll "([0-9]+).*" . "${1}") }}
+{{- $unit := regexReplaceAll "[0-9]+(.*)" . "${1}" }}
+{{- if eq $unit "Ki" }}
+    {{- mul $value 1024 }}
+{{- else if eq $unit "Mi" }}
+    {{- mul $value 1024 1024 }}
+{{- else if eq $unit "Gi" }}
+    {{- mul $value 1024 1024 1024 }}
+{{- else if eq $unit "Ti" }}
+    {{- mul $value 1024 1024 1024 1024 }}
+{{- else if eq $unit "Pi" }}
+    {{- mul $value 1024 1024 1024 1024 1024 }}
+{{- else if eq $unit "Ei" }}
+    {{- mul $value 1024 1024 1024 1024 1024 1024 }}
+{{- else if eq $unit "K" }}
+    {{- mul $value 1000 }}
+{{- else if eq $unit "M" }}
+    {{- mul $value 1000 1000 }}
+{{- else if eq $unit "G" }}
+    {{- mul $value 1000 1000 1000 }}
+{{- else if eq $unit "T" }}
+    {{- mul $value 1000 1000 1000 1000 }}
+{{- else if eq $unit "P" }}
+    {{- mul $value 1000 1000 1000 1000 1000 }}
+{{- else if eq $unit "E" }}
+    {{- mul $value 1000 1000 1000 1000 1000 1000 }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -108,6 +155,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "rabbitmq.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "rabbitmq.validateValues.ldap" .) -}}
+{{- $messages := append $messages (include "rabbitmq.validateValues.memoryHighWatermark" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -132,5 +180,33 @@ rabbitmq: LDAP
       --set ldap.port="389" \
       --set user_dn_pattern="cn=${username},dc=example,dc=org"
 {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of rabbitmq - Memory high watermark
+*/}}
+{{- define "rabbitmq.validateValues.memoryHighWatermark" -}}
+{{- if and (not (eq .Values.memoryHighWatermark.type "absolute")) (not (eq .Values.memoryHighWatermark.type "relative")) }}
+rabbitmq: memoryHighWatermark.type
+    Invalid Memory high watermark type. Valid values are "absolute" and
+    "relative". Please set a valid mode (--set memoryHighWatermark.type="xxxx")
+{{- else if and .Values.memoryHighWatermark.enabled (not .Values.resources.limits.memory) (eq .Values.memoryHighWatermark.type "relative") }}
+rabbitmq: memoryHighWatermark
+    You enabled configuring memory high watermark using a relative limit. However,
+    no memory limits were defined at POD level. Define your POD limits as shown below:
+
+    $ helm install {{ .Release.Name }} bitnami/rabbitmq \
+      --set memoryHighWatermark.enabled=true \
+      --set memoryHighWatermark.type="relative" \
+      --set memoryHighWatermark.value="0.4" \
+      --set resources.limits.memory="2Gi"
+
+    Altenatively, user an absolute value for the memory memory high watermark :
+
+    $ helm install {{ .Release.Name }} bitnami/rabbitmq \
+      --set memoryHighWatermark.enabled=true \
+      --set memoryHighWatermark.type="absolute" \
+      --set memoryHighWatermark.value="512MB"
 {{- end -}}
 {{- end -}}

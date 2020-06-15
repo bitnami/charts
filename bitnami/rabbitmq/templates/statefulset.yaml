@@ -25,6 +25,9 @@ spec:
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
+        {{- if and .Values.auth.tls.enabled (not .Values.auth.tls.existingSecret) }}
+        checksum/secret-cert: {{ include (print $.Template.BasePath "/certs.yaml") . | sha256sum }}
+        {{- end }}
         {{- if or .Values.podAnnotations .Values.metrics.enabled }}
         {{- include "rabbitmq.podAnnotations" . | nindent 8 }}
         {{- end }}
@@ -65,7 +68,7 @@ spec:
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | indent 12 }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -96,21 +99,17 @@ spec:
             - name: K8S_SERVICE_NAME
               value: "{{ template "rabbitmq.fullname" . }}-headless"
             - name: K8S_ADDRESS_TYPE
-              value: {{ .Values.clustering.address_type }}
+              value: {{ .Values.clustering.addressType }}
             - name: RABBITMQ_FORCE_BOOT
-              value: {{ ternary "true" "false" .Values.forceBoot | quote }}
-            {{- if (eq "hostname" .Values.clustering.address_type) }}
+              value: {{ ternary "true" "false" .Values.clustering.forceBoot | quote }}
+            {{- if (eq "hostname" .Values.clustering.addressType) }}
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: K8S_HOSTNAME_SUFFIX
               value: ".$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- else }}
             - name: RABBITMQ_NODE_NAME
-              {{- if .Values.rabbitmqClusterNodeName }}
-              value: {{ .Values.rabbitmqClusterNodeName | quote }}
-              {{- else }}
               value: "rabbit@$(MY_POD_NAME)"
-              {{- end }}
             {{- end }}
             {{- if .Values.ldap.enabled }}
             - name: RABBITMQ_LDAP_ENABLE
@@ -144,6 +143,8 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
                   key: rabbitmq-password
+            - name: RABBITMQ_PLUGINS
+              value: {{ include "rabbitmq.plugins" . | quote }}
             {{- range $key, $value := .Values.extraEnvs }}
             - name: {{ $key }}
               value: {{ $value | quote }}
@@ -163,17 +164,19 @@ spec:
               containerPort: {{ .Values.service.managerPort }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
-              containerPort: {{ .Values.metrics.port }}
+              containerPort: 9419
             {{- end }}
-            {{- if .Values.service.extraContainerPorts }}
-            {{- toYaml .Values.service.extraContainerPorts | nindent 12 }}
+            {{- if .Values.extraContainerPorts }}
+            {{- toYaml .Values.extraContainerPorts | nindent 12 }}
             {{- end }}
+          # yamllint disable rule:indentation
           {{- if .Values.livenessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          # yamllint disable rule:indentation
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
@@ -197,7 +200,7 @@ spec:
             - name: data
               mountPath: /bitnami/rabbitmq/mnesia
             {{- if .Values.auth.tls.enabled }}
-            - name: {{ template "rabbitmq.fullname" . }}-certs
+            - name: certs
               mountPath: /opt/bitnami/rabbitmq/certs
             {{- end }}
             {{- if .Values.loadDefinition.enabled }}
@@ -210,9 +213,9 @@ spec:
             {{- end }}
       volumes:
         {{- if .Values.auth.tls.enabled }}
-        - name: {{ template "rabbitmq.fullname" . }}-certs
+        - name: certs
           secret:
-            secretName: {{ if .Values.auth.tls.existingSecret }}{{ .Values.auth.tls.existingSecret }}{{- else }}{{ template "rabbitmq.fullname" . }}-certs{{- end }}
+            secretName: {{ template "rabbitmq.secretTLSName" . }}
             items:
               - key: ca.crt
                 path: ca_certificate.pem
@@ -231,12 +234,10 @@ spec:
               - key: advanced.conf
                 path: advanced.conf
               {{- end }}
-              - key: enabled_plugins
-                path: enabled_plugins
         {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume
           secret:
-            secretName: {{ tpl .Values.loadDefinition.secretName . | quote }}
+            secretName: {{ tpl .Values.loadDefinition.existingSecret . | quote }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
