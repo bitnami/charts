@@ -114,7 +114,9 @@ imagePullSecrets:
 Return true if a secret object should be created
 */}}
 {{- define "external-dns.createSecret" -}}
-{{- if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
+{{- if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret (not .Values.alibabacloud.secretName) }}
+    {{- true -}}
+{{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
     {{- true -}}
 {{- else if and (eq .Values.provider "azure") (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
     {{- true -}}
@@ -132,7 +134,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey -}}
+{{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey (not .Values.pdns.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "transip") .Values.transip.apiKey -}}
     {{- true -}}
@@ -148,7 +150,9 @@ Return true if a secret object should be created
 Return the name of the Secret used to store the passwords
 */}}
 {{- define "external-dns.secretName" -}}
-{{- if and (eq .Values.provider "aws") .Values.aws.credentials.secretName }}
+{{- if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.secretName }}
+{{- .Values.alibabacloud.secretName }}
+{{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretName }}
 {{- .Values.aws.credentials.secretName }}
 {{- else if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) .Values.azure.secretName }}
 {{- .Values.azure.secretName }}
@@ -158,10 +162,26 @@ Return the name of the Secret used to store the passwords
 {{- .Values.digitalocean.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
+{{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
+{{- .Values.pdns.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
 {{- end -}}
+
+{{- define "external-dns.alibabacloud-credentials" -}}
+{
+  {{- if .Values.alibabacloud.regionId }}
+  "regionId": "{{ .Values.alibabacloud.regionId }}",
+  {{- end}}
+  {{- if .Values.alibabacloud.accessKeyId }}
+  "accessKeyId": "{{ .Values.alibabacloud.accessKeyId }}",
+  {{- end}}
+  {{- if .Values.alibabacloud.accessKeySecret }}
+  "accessKeySecret": "{{ .Values.alibabacloud.accessKeySecret }}"
+  {{- end}}
+}
+{{ end }}
 
 {{- define "external-dns.aws-credentials" }}
 [default]
@@ -321,7 +341,7 @@ Validate values of External DNS:
 - must provide the PowerDNS API key when provider is "pdns"
 */}}
 {{- define "external-dns.validateValues.pdns.apiKey" -}}
-{{- if and (eq .Values.provider "pdns") (not .Values.pdns.apiKey) -}}
+{{- if and (eq .Values.provider "pdns") (not .Values.pdns.apiKey) (not .Values.pdns.secretName) -}}
 external-dns: pdns.apiKey
     You must provide the the PowerDNS API key when provider="pdns".
     Please set the apiKey parameter (--set pdns.apiKey="xxxx")
@@ -558,9 +578,9 @@ external-dns: ovh.applicationSecret
 Return the ExternalDNS service account name
 */}}
 {{- define "external-dns.serviceAccountName" -}}
-{{- if .Values.rbac.serviceAccountName -}}
-    {{- printf "%s" (tpl .Values.rbac.serviceAccountName . ) -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "external-dns.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
-    {{- printf "%s" (include "external-dns.fullname" . ) -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}

@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -50,74 +50,74 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the SuiteCRM chart and their default values.
 
-|              Parameter              |                   Description                   |                         Default                         |
-|-------------------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`              | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets`           | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
-| `image.registry`                    | SuiteCRM image registry                         | `docker.io`                                             |
-| `image.repository`                  | SuiteCRM image name                             | `bitnami/suitecrm`                                      |
-| `image.tag`                         | SuiteCRM image tag                              | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                  | Image pull policy                               | `IfNotPresent`                                          |
-| `image.pullSecrets`                 | Specify docker-registry secret names as an array| `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`                      | String to partially override suitecrm.fullname template with a string (will prepend the release name) | `nil` |
-| `fullnameOverride`                  | String to fully override suitecrm.fullname template with a string                                     | `nil` |
-| `suitecrmHost`                      | SuiteCRM host to create application URLs        | `nil`                                                   |
-| `suitecrmUsername`                  | User of the application                         | `user`                                                  |
-| `suitecrmPassword`                  | Application password                            | _random 10 character alphanumeric string_               |
-| `suitecrmEmail`                     | Admin email                                     | `user@example.com`                                      |
-| `suitecrmLastName`                  | Last name                                       | `Last`                                                  |
-| `suitecrmSmtpHost`                  | SMTP host                                       | `nil`                                                   |
-| `suitecrmSmtpPort`                  | SMTP port                                       | `nil`                                                   |
-| `suitecrmSmtpUser`                  | SMTP user                                       | `nil`                                                   |
-| `suitecrmSmtpPassword`              | SMTP password                                   | `nil`                                                   |
-| `suitecrmSmtpProtocol`              | SMTP protocol [`ssl`, `tls`]                    | `nil`                                                   |
-| `suitecrmValidateUserIP`            | Whether to validate the user IP address or not  | `no`                                                    |
-| `allowEmptyPassword`                | Allow DB blank passwords                        | `yes`                                                   |
-| `externalDatabase.host`             | Host of the external database                   | `nil`                                                   |
-| `externalDatabase.port`             | Port of the external database                   | `3306`                                                  |
-| `externalDatabase.user`             | Existing username in the external db            | `bn_suitecrm`                                           |
-| `externalDatabase.password`         | Password for the above username                 | `nil`                                                   |
-| `externalDatabase.database`         | Name of the existing database                   | `bitnami_suitecrm`                                      |
-| `ingress.enabled`                   | Enable ingress controller resource                            | `false`                                                  |
-| `ingress.annotations`               | Ingress annotations                                           | `[]`                                                     |
-| `ingress.certManager`               | Add annotations for cert-manager                              | `false`                                                  |
-| `ingress.hosts[0].name`             | Hostname to your SuiteCRM installation                           | `suitecrm.local`                                            |
-| `ingress.hosts[0].path`             | Path within the url structure                                 | `/`                                                      |
-| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                | `false`                                                  |
-| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                               | `nil`                                                  |
-| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                     | `suitecrm.local-tls-secret`                                 |
-| `ingress.secrets[0].name`           | TLS Secret Name                                               | `nil`                                                    |
-| `ingress.secrets[0].certificate`    | TLS Secret Certificate                                        | `nil`                                                    |
-| `ingress.secrets[0].key`            | TLS Secret Key                                                | `nil`                                                    |
-| `mariadb.enabled`                   | Whether to use the MariaDB chart                | `true`                                                  |
-| `mariadb.db.name`                   | Database name to create                         | `bitnami_suitecrm`                                      |
-| `mariadb.db.user`                   | Database user to create                         | `bn_suitecrm`                                           |
-| `mariadb.db.password`               | Password for the database                       | `nil`                                                   |
-| `mariadb.rootUser.password`         | MariaDB admin password                          | `nil`                                                   |
-| `service.type`                    | Kubernetes Service type                    | `LoadBalancer`                                          |
-| `service.port`                    | Service HTTP port                  | `80`                                          |
-| `service.httpsPort`                    | Service HTTPS port                   | `443`                                          |
-| `service.nodePorts.http`                 | Kubernetes http node port                  | `""`                                                    |
-| `service.nodePorts.https`                | Kubernetes https node port                 | `""`                                                    |
-| `service.externalTrafficPolicy`   | Enable client source IP preservation       | `Cluster`                                               |
-| `service.loadBalancerIP`            | `loadBalancerIP` for the SuiteCRM Service       | `nil`                                                   |
-| `persistence.enabled`               | Enable persistence using PVC                    | `true`                                                  |
-| `persistence.storageClass`          | PVC Storage Class for SuiteCRM volume           | `nil` (uses alpha storage class annotation)             |
-| `persistence.existingClaim`         | An Existing PVC name for SuiteCRM volume        | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`            | PVC Access Mode for SuiteCRM volume             | `ReadWriteOnce`                                         |
-| `persistence.size`                  | PVC Storage Request for SuiteCRM volume         | `8Gi`                                                   |
-| `resources`                         | CPU/Memory resource requests/limits             | Memory: `512Mi`, CPU: `300m`                            |
-| `podAnnotations`                | Pod annotations                                   | `{}`                                                       |
-| `affinity`                          | Map of node/pod affinities                                    | `{}`                                                     |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                           | `false`                                              |
-| `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`                                         |
-| `metrics.image.repository`                 | Apache exporter image name                                                                                      | `bitnami/apache-exporter`                           |
-| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `{TAG_NAME}`                                        |
-| `metrics.image.pullPolicy`                 | Image pull policy                                                                                              | `IfNotPresent`                                       |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                               | `nil`                                                |
-| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}`                                                   |
-| `metrics.resources`                        | Exporter resource requests/limit                                                                               | {}                        |
+| Parameter                        | Description                                                                                           | Default                                                      |
+|----------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `global.imageRegistry`           | Global Docker image registry                                                                          | `nil`                                                        |
+| `global.imagePullSecrets`        | Global Docker registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`            | Global storage class for dynamic provisioning                                                         | `nil`                                                        |
+| `image.registry`                 | SuiteCRM image registry                                                                               | `docker.io`                                                  |
+| `image.repository`               | SuiteCRM image name                                                                                   | `bitnami/suitecrm`                                           |
+| `image.tag`                      | SuiteCRM image tag                                                                                    | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`               | Image pull policy                                                                                     | `IfNotPresent`                                               |
+| `image.pullSecrets`              | Specify docker-registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                   | String to partially override suitecrm.fullname template with a string (will prepend the release name) | `nil`                                                        |
+| `fullnameOverride`               | String to fully override suitecrm.fullname template with a string                                     | `nil`                                                        |
+| `suitecrmHost`                   | SuiteCRM host to create application URLs                                                              | `nil`                                                        |
+| `suitecrmUsername`               | User of the application                                                                               | `user`                                                       |
+| `suitecrmPassword`               | Application password                                                                                  | _random 10 character alphanumeric string_                    |
+| `suitecrmEmail`                  | Admin email                                                                                           | `user@example.com`                                           |
+| `suitecrmLastName`               | Last name                                                                                             | `Last`                                                       |
+| `suitecrmSmtpHost`               | SMTP host                                                                                             | `nil`                                                        |
+| `suitecrmSmtpPort`               | SMTP port                                                                                             | `nil`                                                        |
+| `suitecrmSmtpUser`               | SMTP user                                                                                             | `nil`                                                        |
+| `suitecrmSmtpPassword`           | SMTP password                                                                                         | `nil`                                                        |
+| `suitecrmSmtpProtocol`           | SMTP protocol [`ssl`, `tls`]                                                                          | `nil`                                                        |
+| `suitecrmValidateUserIP`         | Whether to validate the user IP address or not                                                        | `no`                                                         |
+| `allowEmptyPassword`             | Allow DB blank passwords                                                                              | `yes`                                                        |
+| `externalDatabase.host`          | Host of the external database                                                                         | `nil`                                                        |
+| `externalDatabase.port`          | Port of the external database                                                                         | `3306`                                                       |
+| `externalDatabase.user`          | Existing username in the external db                                                                  | `bn_suitecrm`                                                |
+| `externalDatabase.password`      | Password for the above username                                                                       | `nil`                                                        |
+| `externalDatabase.database`      | Name of the existing database                                                                         | `bitnami_suitecrm`                                           |
+| `ingress.enabled`                | Enable ingress controller resource                                                                    | `false`                                                      |
+| `ingress.annotations`            | Ingress annotations                                                                                   | `[]`                                                         |
+| `ingress.certManager`            | Add annotations for cert-manager                                                                      | `false`                                                      |
+| `ingress.hosts[0].name`          | Hostname to your SuiteCRM installation                                                                | `suitecrm.local`                                             |
+| `ingress.hosts[0].path`          | Path within the url structure                                                                         | `/`                                                          |
+| `ingress.hosts[0].tls`           | Utilize TLS backend in ingress                                                                        | `false`                                                      |
+| `ingress.hosts[0].tlsHosts`      | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                  | `nil`                                                        |
+| `ingress.hosts[0].tlsSecret`     | TLS Secret (certificates)                                                                             | `suitecrm.local-tls-secret`                                  |
+| `ingress.secrets[0].name`        | TLS Secret Name                                                                                       | `nil`                                                        |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                                                                | `nil`                                                        |
+| `ingress.secrets[0].key`         | TLS Secret Key                                                                                        | `nil`                                                        |
+| `mariadb.enabled`                | Whether to use the MariaDB chart                                                                      | `true`                                                       |
+| `mariadb.db.name`                | Database name to create                                                                               | `bitnami_suitecrm`                                           |
+| `mariadb.db.user`                | Database user to create                                                                               | `bn_suitecrm`                                                |
+| `mariadb.db.password`            | Password for the database                                                                             | `nil`                                                        |
+| `mariadb.rootUser.password`      | MariaDB admin password                                                                                | `nil`                                                        |
+| `service.type`                   | Kubernetes Service type                                                                               | `LoadBalancer`                                               |
+| `service.port`                   | Service HTTP port                                                                                     | `80`                                                         |
+| `service.httpsPort`              | Service HTTPS port                                                                                    | `443`                                                        |
+| `service.nodePorts.http`         | Kubernetes http node port                                                                             | `""`                                                         |
+| `service.nodePorts.https`        | Kubernetes https node port                                                                            | `""`                                                         |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                                                                  | `Cluster`                                                    |
+| `service.loadBalancerIP`         | `loadBalancerIP` for the SuiteCRM Service                                                             | `nil`                                                        |
+| `persistence.enabled`            | Enable persistence using PVC                                                                          | `true`                                                       |
+| `persistence.storageClass`       | PVC Storage Class for SuiteCRM volume                                                                 | `nil` (uses alpha storage class annotation)                  |
+| `persistence.existingClaim`      | An Existing PVC name for SuiteCRM volume                                                              | `nil` (uses alpha storage class annotation)                  |
+| `persistence.accessMode`         | PVC Access Mode for SuiteCRM volume                                                                   | `ReadWriteOnce`                                              |
+| `persistence.size`               | PVC Storage Request for SuiteCRM volume                                                               | `8Gi`                                                        |
+| `resources`                      | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
+| `podAnnotations`                 | Pod annotations                                                                                       | `{}`                                                         |
+| `affinity`                       | Map of node/pod affinities                                                                            | `{}`                                                         |
+| `metrics.enabled`                | Start a side-car prometheus exporter                                                                  | `false`                                                      |
+| `metrics.image.registry`         | Apache exporter image registry                                                                        | `docker.io`                                                  |
+| `metrics.image.repository`       | Apache exporter image name                                                                            | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`              | Apache exporter image tag                                                                             | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`       | Image pull policy                                                                                     | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array                                                      | `nil`                                                        |
+| `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`              | Exporter resource requests/limit                                                                      | {}                                                           |
 
 The above parameters map to the env variables defined in [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm). For more information please refer to the [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm) image documentation.
 

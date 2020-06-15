@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -76,7 +76,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `image.pullPolicy`                        | WordPress image pull policy                                                           | `IfNotPresent`                                               |
 | `image.pullSecrets`                       | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.debug`                             | Specify if debug logs should be enabled                                               | `false`                                                      |
-| `wordpressSkipInstall`                    | Skip wizard installation                                                              | `false`                                                      |
+| `wordpressSkipInstall`                    | Skip wizard installation when the external db already contains data from a previous WordPress installation [see](https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database) | `false`                                                      |
 | `wordpressUsername`                       | User of the application                                                               | `user`                                                       |
 | `wordpressPassword`                       | Application password                                                                  | _random 10 character long alphanumeric string_               |
 | `wordpressEmail`                          | Admin email                                                                           | `user@example.com`                                           |
@@ -119,6 +119,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `livenessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                            | `6`                                                          |
 | `livenessProbe.successThreshold`          | Minimum consecutive successes for the probe                                           | `1`                                                          |
 | `livenessProbeHeaders`                    | Headers to use for livenessProbe                                                      | `{}`                                                         |
+| `customLivenessProbe`                    | Override default liveness probe (evaluated as a template)                                                     | `{}`                                                         |
 | `readinessProbe.enabled`                  | Enable/disable readinessProbe                                                         | `true`                                                       |
 | `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `30`                                                         |
 | `readinessProbe.periodSeconds`            | How often to perform the probe                                                        | `10`                                                         |
@@ -126,6 +127,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `readinessProbe.failureThreshold`         | Minimum consecutive failures for the probe                                            | `6`                                                          |
 | `readinessProbe.successThreshold`         | Minimum consecutive successes for the probe                                           | `1`                                                          |
 | `readinessProbeHeaders`                   | Headers to use for readinessProbe                                                     | `{}`                                                         |
+| `customReadinessProbe`                    | Override default readiness probe (evaluated as a template)                                                     | `{}`                                                         |
 | `service.annotations`                     | Service annotations                                                                   | `{}` (evaluated as a template)                               |
 | `service.type`                            | Kubernetes Service type                                                               | `LoadBalancer`                                               |
 | `service.port`                            | Service HTTP port                                                                     | `80`                                                         |
@@ -151,6 +153,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `ingress.enabled`                         | Enable ingress controller resource                                                    | `false`                                                      |
 | `ingress.certManager`                     | Add annotations for cert-manager                                                      | `false`                                                      |
 | `ingress.hostname`                        | Default host for the ingress resource                                                 | `wordpress.local`                                            |
+| `ingress.tls`                             | Create TLS Secret                                                                     | `false`                                                      |
 | `ingress.annotations`                     | Ingress annotations                                                                   | `[]` (evaluated as a template)                               |
 | `ingress.extraHosts[0].name`              | Additional hostnames to be covered                                                    | `nil`                                                        |
 | `ingress.extraHosts[0].path`              | Additional hostnames to be covered                                                    | `nil`                                                        |
@@ -322,6 +325,8 @@ externalDatabase.port=3306
 ```
 
 Note also if you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
+
+In case the database already contains data from a previous WordPress installation, you need to set the `wordpressSkipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the WordPress installation wizard. This is necessary in case you use a database that already has WordPress data [+info](https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database).
 
 ### Ingress
 

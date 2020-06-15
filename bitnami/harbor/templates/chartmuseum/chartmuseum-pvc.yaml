@@ -1,24 +1,28 @@
 {{- if .Values.chartmuseum.enabled }}
-{{- $persistence := .Values.persistence -}}
-{{- if $persistence.enabled }}
-{{- $chartmuseum := $persistence.persistentVolumeClaim.chartmuseum -}}
-{{- if and (not $chartmuseum.existingClaim) (eq $persistence.imageChartStorage.type "filesystem") }}
+{{- if .Values.persistence.enabled }}
+{{- if and (not .Values.persistence.persistentVolumeClaim.chartmuseum.existingClaim) (eq .Values.persistence.imageChartStorage.type "filesystem") }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "harbor.chartmuseum" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: chartmuseum
-  {{- if eq $persistence.resourcePolicy "keep" }}
+  {{- if eq .Values.persistence.resourcePolicy "keep" }}
   annotations:
     helm.sh/resource-policy: keep
   {{- end }}
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   accessModes:
-    - {{ $chartmuseum.accessMode }}
+    - {{ .Values.persistence.persistentVolumeClaim.chartmuseum.accessMode }}
   resources:
     requests:
-      storage: {{ $chartmuseum.size }}
+      storage: {{ .Values.persistence.persistentVolumeClaim.chartmuseum.size }}
   {{ include "harbor.chartmuseum.storageClass" . }}
 {{- end }}
 {{- end }}

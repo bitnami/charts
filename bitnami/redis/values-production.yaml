@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.0.1-debian-10-r1
+  tag: 6.0.5-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -60,7 +60,7 @@ sentinel:
     ## Bitnami Redis image tag
     ## ref: https://github.com/bitnami/bitnami-docker-redis-sentinel#supported-tags-and-respective-dockerfile-links
     ##
-    tag: 6.0.1-debian-10-r0
+    tag: 6.0.5-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -221,6 +221,31 @@ persistence:
 redisPort: 6379
 
 ##
+## TLS configuration
+##
+tls:
+  # Enable TLS traffic
+  enabled: false
+  #
+  # Whether to require clients to authenticate or not.
+  authClients: true
+  #
+  # Name of the Secret that contains the certificates
+  certificatesSecret:
+  #
+  # Certificate filename
+  certFilename:
+  #
+  # Certificate Key filename
+  certKeyFilename:
+  #
+  # CA Certificate filename
+  certCAFilename:
+  #
+  # File containing DH params (in order to support DH based ciphers)
+  # dhParamsFilename:
+
+##
 ## Redis Master parameters
 ##
 master:
@@ -236,7 +261,6 @@ master:
   ## Redis additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
-  ##
   ## extraFlags:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
@@ -422,6 +446,14 @@ slave:
   ##
   affinity: {}
 
+  ## Kubernetes Spread Constraints for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ##
+  # - maxSkew: 1
+  #   topologyKey: node
+  #   whenUnsatisfiable: DoNotSchedule
+  spreadConstraints: {}
+
   ## Configure extra options for Redis Slave liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
@@ -527,7 +559,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.6.0-debian-10-r2
+    tag: 1.6.1-debian-10-r28
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

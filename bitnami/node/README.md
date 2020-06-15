@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -54,7 +54,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following table lists the configurable parameters of the Node chart and their default values.
 
 | Parameter                               | Description                                                                 | Default                                                 |
-| --------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------- |
+|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                  | Global Docker image registry                                                | `nil`                                                   |
 | `global.imagePullSecrets`               | Global Docker registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                   | Global storage class for dynamic provisioning                               | `nil`                                                   |
@@ -139,6 +139,10 @@ $ helm install my-release -f values.yaml bitnami/node
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Change Node version
+
+To modify the Node version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/node/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Set up an Ingress controller
 

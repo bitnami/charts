@@ -8,6 +8,9 @@ metadata:
     chart: {{ template "rabbitmq.chart" .  }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+    {{- if .Values.podLabels }}
+    {{- toYaml .Values.podLabels | nindent 4 }}
+    {{- end }}
 spec:
   serviceName: {{ template "rabbitmq.fullname" . }}-headless
   podManagementPolicy: {{ .Values.podManagementPolicy }}
@@ -100,6 +103,9 @@ spec:
                {{- if and .Values.persistence.enabled .Values.forceBoot.enabled }}
                if [ -d "{{ .Values.persistence.path }}/mnesia/${RABBITMQ_NODENAME}" ]; then rabbitmqctl force_boot; fi
                {{- end }}
+               {{- if .Values.rabbitmq.communityPlugins }}
+               . /opt/scripts/install-plugins.sh
+               {{- end }}
                exec rabbitmq-server
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -107,6 +113,10 @@ spec:
           volumeMounts:
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+            {{- if .Values.rabbitmq.communityPlugins }}
+            - name: {{ template "rabbitmq.fullname" . }}-plugins
+              mountPath: /opt/scripts
             {{- end }}
             - name: config-volume
               mountPath: /opt/bitnami/rabbitmq/conf
@@ -280,6 +290,11 @@ spec:
               - key: tls.key
                 path: server_key.pem
         {{- end }}
+        {{- if .Values.rabbitmq.communityPlugins }}
+        - name: {{ template "rabbitmq.fullname" . }}-plugins
+          configMap:
+            name: {{ template "rabbitmq.fullname" . }}-plugins
+        {{- end }}
         - name: config-volume
           configMap:
             name: {{ template "rabbitmq.fullname" . }}-config
@@ -305,7 +320,7 @@ spec:
         {{- if .Values.rabbitmq.loadDefinition.enabled }}
         - name: load-definition-volume
           secret:
-            secretName: {{ .Values.rabbitmq.loadDefinition.secretName | quote }}
+            secretName: {{ tpl .Values.rabbitmq.loadDefinition.secretName . | quote }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}

@@ -1,14 +1,12 @@
-{{- if eq .Values.service.type "Ingress" }}
-{{- $ingress := .Values.service.ingress -}}
-{{- $tls := .Values.service.tls -}}
-{{- if eq .Values.service.ingress.controller "gce" }}
+{{- if .Values.ingress.enabled }}
+{{- if eq .Values.ingress.controller "gce" }}
   {{- $_ := set . "portal_path" "/*" -}}
   {{- $_ := set . "api_path" "/api/*" -}}
   {{- $_ := set . "service_path" "/service/*" -}}
   {{- $_ := set . "v2_path" "/v2/*" -}}
   {{- $_ := set . "chartrepo_path" "/chartrepo/*" -}}
   {{- $_ := set . "controller_path" "/c/*" -}}
-{{- else if eq .Values.service.ingress.controller "ncp" }}
+{{- else if eq .Values.ingress.controller "ncp" }}
   {{- $_ := set . "portal_path" "/" -}}
   {{- $_ := set . "api_path" "/api/.*" -}}
   {{- $_ := set . "service_path" "/service/.*" -}}
@@ -23,41 +21,53 @@
   {{- $_ := set . "chartrepo_path" "/chartrepo/" -}}
   {{- $_ := set . "controller_path" "/c/" -}}
 {{- end }}
+
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "harbor.ingress" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
-  {{- if $ingress.annotations }}
-  annotations: {{- toYaml $ingress.annotations | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+  {{- if .Values.internalTLS.enabled }}
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  {{- end }}
+  {{- if .Values.ingress.annotations }}
+   {{- toYaml .Values.ingress.annotations | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if $tls.enabled }}
+  {{- if .Values.service.tls.enabled }}
   tls:
-    {{- if $tls.secretName }}
-    - secretName: {{ $tls.secretName }}
+    {{- if .Values.service.tls.existingSecret }}
+    - secretName: {{ .Values.service.tls.existingSecret }}
     {{- else }}
     - secretName: {{ include "harbor.ingress" . }}
     {{- end }}
-      {{- if $ingress.hosts.core }}
+      {{- if .Values.ingress.hosts.core }}
       hosts:
-        - {{ $ingress.hosts.core }}
+        - {{ .Values.ingress.hosts.core }}
       {{- end }}
     {{- if .Values.notary.enabled }}
-    {{- if $tls.notarySecretName }}
-    - secretName: "{{ $tls.notarySecretName }}"
-    {{- else if $tls.secretName }}
-    - secretName: "{{ $tls.secretName }}"
+    {{- if .Values.service.tls.notaryExistingSecret }}
+    - secretName: {{ .Values.service.tls.notaryExistingSecret | quote }}
+    {{- else if .Values.service.tls.existingSecret }}
+    - secretName: {{ .Values.service.tls.existingSecret | quote }}
     {{- else }}
-    - secretName: "{{ template "harbor.ingress" . }}"
+    - secretName: {{ include "harbor.ingress" . | quote }}
     {{- end }}
-      {{- if $ingress.hosts.notary }}
+      {{- if .Values.ingress.hosts.notary }}
       hosts:
-        - {{ $ingress.hosts.notary }}
+        - {{ .Values.ingress.hosts.notary }}
       {{- end }}
     {{- end }}
   {{- end }}
-  {{- if eq .Values.service.ingress.controller "ncp" }}
+  {{- if eq .Values.ingress.controller "ncp" }}
   backend:
     serviceName: {{ include "harbor.portal" . }}
     servicePort: http
@@ -89,18 +99,56 @@ spec:
             backend:
               serviceName: {{ include "harbor.core" . }}
               servicePort: http
-      {{- if $ingress.hosts.core }}
-      host: {{ $ingress.hosts.core }}
+      {{- if .Values.ingress.hosts.core }}
+      host: {{ .Values.ingress.hosts.core }}
       {{- end }}
-    {{- if .Values.notary.enabled }}
+
+{{- if .Values.notary.enabled  }}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "harbor.ingress-notary" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+  {{- if .Values.ingress.annotations }}
+   {{- toYaml .Values.ingress.annotations | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.service.tls.enabled }}
+  tls:
+    {{- if .Values.service.tls.notaryExistingSecret }}
+    - secretName: {{ .Values.service.tls.notaryExistingSecret }}
+    {{- else if .Values.service.tls.existingSecret }}
+    - secretName: {{ .Values.service.tls.existingSecret }}
+    {{- else }}
+    - secretName: {{ include "harbor.ingress" . }}
+    {{- end }}
+      {{- if .Values.ingress.hosts.notary }}
+      hosts:
+        - {{ .Values.ingress.hosts.notary }}
+      {{- end }}
+  {{- end }}
+  {{- if eq .Values.ingress.controller "ncp" }}
+  backend:
+    serviceName: {{ template "harbor.notary-server" . }}
+    servicePort: 4443
+  {{- end }}
+  rules:
     - http:
         paths:
           - path: /
             backend:
-              serviceName: {{ include "harbor.notary-server" . }}
-              servicePort: notary-server
-      {{- if $ingress.hosts.notary }}
-      host: {{ $ingress.hosts.notary }}
+              serviceName: {{ template "harbor.notary-server" . }}
+              servicePort: 4443
+      {{- if .Values.ingress.hosts.notary }}
+      host: {{ .Values.ingress.hosts.notary }}
       {{- end }}
-    {{- end }}
+{{- end }}
 {{- end }}

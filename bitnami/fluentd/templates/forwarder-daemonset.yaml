@@ -106,7 +106,13 @@ spec:
             - name: varlibdockercontainers
               mountPath: /var/lib/docker/containers
               readOnly: true
+            {{- if .Values.forwarder.extraVolumeMounts }}
+            {{- toYaml .Values.forwarder.extraVolumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
+        {{- if .Values.forwarder.extraVolumes }}
+            {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}
+        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: certs
           secret:

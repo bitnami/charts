@@ -9,6 +9,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     component: slave
+    {{- include "mariadb.podLabels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
@@ -35,6 +36,7 @@ spec:
         chart: {{ template "mariadb.chart" . }}
         release: {{ .Release.Name }}
         component: slave
+        {{- include "mariadb.podLabels" . | nindent 8 }}
     spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}

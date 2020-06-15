@@ -34,9 +34,7 @@ spec:
       {{- with .Values.tolerations }}
       tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
-      {{- if .Values.rbac.create }}
       serviceAccountName: {{ template "external-dns.serviceAccountName" . }}
-      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
@@ -82,6 +80,9 @@ spec:
             {{- range .Values.domainFilters }}
             - --domain-filter={{ . }}
             {{- end }}
+            {{- range .Values.excludeDomains }}
+            - --exclude-domains={{ . }}
+            {{- end }}
             {{- range .Values.zoneIdFilters }}
             - --zone-id-filter={{ . }}
             {{- end }}
@@ -108,6 +109,15 @@ spec:
             {{- end }}
             {{- range .Values.sources }}
             - --source={{ . }}
+            {{- end }}
+            {{- if eq .Values.provider "alibabacloud" }}
+            # Alibaba Cloud arguments
+            {{- if or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName }}
+            - --alibaba-cloud-config-file=/etc/kubernetes/alibaba-cloud.json
+            {{- end }}
+            {{- if .Values.alibabacloud.zoneType }}
+            - --alibaba-cloud-zone-type={{ .Values.alibabacloud.zoneType }}
+            {{- end }}
             {{- end }}
             {{- if or (eq .Values.provider "aws") (eq .Values.provider "aws-sd") }}
             # AWS arguments
@@ -174,6 +184,7 @@ spec:
             - --rfc2136-host={{ required "rfc2136.host must be supplied for provider 'rfc2136'" .Values.rfc2136.host }}
             - --rfc2136-port={{ .Values.rfc2136.port }}
             - --rfc2136-zone={{ required "rfc2136.zone must be supplied for provider 'rfc2136'" .Values.rfc2136.zone }}
+            - --rfc2136-min-ttl={{ .Values.rfc2136.minTTL }}
               {{- if .Values.rfc2136.tsigKeyname }}
             - --rfc2136-tsig-secret-alg={{ .Values.rfc2136.tsigSecretAlg }}
             - --rfc2136-tsig-keyname={{ .Values.rfc2136.tsigKeyname }}
@@ -239,7 +250,6 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
             # Cloudflare environment variables
-            {{- if .Values.cloudflare.secretName }}
             - name: CF_API_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -252,18 +262,8 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: cloudflare_api_key
                   optional: true
-            {{- else }}
-            {{- if .Values.cloudflare.apiToken }}
-            - name: CF_API_TOKEN
-              value: {{ .Values.cloudflare.apiToken | quote }}
-            {{- end }}
-            {{- if .Values.cloudflare.apiKey  }}
-            - name: CF_API_KEY
-              value: {{ .Values.cloudflare.apiKey | quote }}
-            {{- end }}
             - name: CF_API_EMAIL
               value: {{ .Values.cloudflare.email | quote }}
-            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "coredns" }}
             # CoreDNS environment variables
@@ -356,7 +356,7 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_application_secret
             {{- end }}
-            {{- end }}            
+            {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox environment variables
             {{- if .Values.infoblox.wapiConnectionPoolSize }}
@@ -388,7 +388,7 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: rfc2136_tsig_secret
             {{- end }}
-            {{- if and (eq .Values.provider "pdns") .Values.pdns.apiKey }}
+            {{- if and (eq .Values.provider "pdns") (or .Values.pdns.apiKey .Values.pdns.secretName) }}
             # PowerDNS environment variables
             - name: PDNS_API_KEY
               valueFrom:
@@ -433,6 +433,12 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
+            # Alibaba Cloud mountPath(s)
+            - name: alibabacloud-config-file
+              mountPath: /etc/kubernetes/
+              readOnly: true
+            {{- end }}
             {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) }}
             # AWS mountPath(s)
             - name: aws-credentials
@@ -485,6 +491,12 @@ spec:
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
       volumes:
+        {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
+        # Alibaba Cloud volume(s)
+        - name: alibabacloud-config-file
+          secret:
+            secretName: {{ template "external-dns.secretName" . }}
+        {{- end }}
         {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) }}
         # AWS volume(s)
         - name: aws-credentials
@@ -520,7 +532,7 @@ spec:
             - key: {{ .Values.google.serviceAccountSecretKey | quote }}
               path: credentials.json
             {{- end }}
-        {{- end }}     
+        {{- end }}
         {{- if eq .Values.provider "designate" }}
         # Designate volume(s)
         {{- if .Values.designate.customCA.enabled }}

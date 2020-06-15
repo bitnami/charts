@@ -24,10 +24,14 @@ spec:
             matchLabels: {}
       {{- end }}
     # Internal ports
-    - ports:
+    - ports: &intranodes_ports
         - port: {{ .Values.service.followerPort }}
         - port: {{ .Values.service.electionPort }}
       from:
         - podSelector:
             matchLabels: {{- include "zookeeper.matchLabels" . | nindent 14 }}
+  egress:
+    - ports: *intranodes_ports
+    # Allow outbound connections from zookeeper nodes
+
 {{- end }}
