@@ -717,6 +717,6 @@ podSecurityPolicy:
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ##
 podDisruptionBudget:
-  enabled: false
-  # minAvailable: 1
+  enabled: true
+  minAvailable: 1
   # maxUnavailable: 1
