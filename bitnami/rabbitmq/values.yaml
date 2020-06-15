@@ -19,6 +19,7 @@ image:
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
   ## Specify a imagePullPolicy
@@ -59,6 +60,7 @@ image:
 podManagementPolicy: OrderedReady
 
 ## section of specific values for rabbitmq
+##
 rabbitmq:
   ## RabbitMQ application username
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -102,22 +104,26 @@ rabbitmq:
   # onlineSchedulers: 1
 
   ## Plugins to enable
+  ##
   plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 
-
   ## Community plugins to install and enable
+  ##
   communityPlugins: []
 
   ## Extra plugins to enable
   ## Use this instead of `plugins` to add new plugins
+  ##
   extraPlugins: "rabbitmq_auth_backend_ldap"
 
   ## Clustering settings
+  ##
   clustering:
     address_type: hostname
     k8s_domain: cluster.local
     ## Rebalance master for queues in cluster when new replica is created
     ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
+    ##
     rebalance: false
 
   loadDefinition:
@@ -128,12 +134,15 @@ rabbitmq:
 
   ## environment variables to configure rabbitmq
   ## ref: https://www.rabbitmq.com/configure.html#customise-environment
+  ##
   env: {}
 
   ## Configuration file content: required cluster configuration
   ## Do not override unless you know what you are doing. To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
+  ##
   configuration: |-
     ## Clustering
+    ##
     cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
     cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
     cluster_formation.node_cleanup.interval = 10
@@ -146,6 +155,7 @@ rabbitmq:
 
   ## Configuration file content: extra configuration
   ## Use this instead of `configuration` to add more configuration
+  ##
   extraConfiguration: |-
     #disk_free_limit.absolute = 50MB
     #management.load_definitions = /app/load_definition.json
@@ -194,8 +204,9 @@ serviceAccount:
   ##
   # name:
 
-## does your cluster have rbac enabled? assume yes by default	
-rbacEnabled: true	
+## does your cluster have rbac enabled? assume yes by default
+##
+rbacEnabled: true
 
 ## LDAP configuration
 ##
@@ -209,6 +220,7 @@ ldap:
     enabled: false
 
 ## Kubernetes service type
+##
 service:
   type: ClusterIP
   ## Node port
@@ -290,6 +302,7 @@ securityContext:
 
 persistence:
   ## this enables PVC templates that will create one per pod
+  ##
   enabled: true
 
   ## rabbitmq data Persistent Volume Storage Class
@@ -347,6 +360,7 @@ networkPolicy:
   #        - frontend
 
 ## Replica count, set to 1 to provide a default available cluster
+##
 replicas: 1
 
 ## Pod priority
@@ -355,6 +369,7 @@ replicas: 1
 
 ## updateStrategy for RabbitMQ statefulset
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
 updateStrategy:
   type: RollingUpdate
 
@@ -388,18 +403,22 @@ podAnnotations: {}
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   ## hostName: foo.bar.com
+  ##
   path: /
 
   ## Set this to true in order to enable TLS on the ingress record
   ## A side effect of this will be that the backend wordpress service will be connected at port 443
+  ##
   tls: false
 
   ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+  ##
   tlsSecret: myTlsSecret
 
   ## Ingress annotations done as key:value pairs
@@ -410,11 +429,13 @@ ingress:
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  ##
   annotations: {}
   #  kubernetes.io/ingress.class: nginx
   #  kubernetes.io/tls-acme: true
 
 ## The following settings are to configure the frequency of the lifeness and readiness probes
+##
 livenessProbe:
   enabled: true
   initialDelaySeconds: 120
@@ -449,28 +470,34 @@ metrics:
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
   serviceMonitor:
     ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ##
     enabled: false
     ## Specify the namespace in which the serviceMonitor resource will be created
     # namespace: ""
     ## Specify the interval at which metrics should be scraped
+    ##
     interval: 30s
     ## Specify the timeout after which the scrape is ended
     # scrapeTimeout: 30s
     ## Specify Metric Relabellings to add to the scrape endpoint
     # relabellings:
     ## Specify honorLabels parameter to add the scrape endpoint
+    ##
     honorLabels: false
     ## Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
     # release: ""
     ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
     additionalLabels: {}
 
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
   prometheusRule:
     enabled: false
     additionalLabels: {}
@@ -580,5 +607,6 @@ extraSecrets: {}
 ## extraVolumes:
 ##   - name: extras
 ##     emptyDir: {}
+##
 extraVolumeMounts: []
 extraVolumes: []
