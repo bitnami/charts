@@ -187,6 +187,9 @@ ldap:
     # If you enabled TLS/SSL you can set advaced options using the advancedConfiguration parameter.
     enabled: false
 
+## does your cluster have rbac enabled? assume yes by default	
+rbacEnabled: true	
+
 ## Kubernetes service type
 service:
   type: ClusterIP
