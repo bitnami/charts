@@ -188,15 +188,8 @@ serviceAccount:
   ##
   # name:
 
-## Role Based Access
-## ref: https://kubernetes.io/docs/admin/authorization/rbac/
-##
-rbac:
-  ## Specifies whether RBAC rules should be created
-  ## binding RabbitMQ ServiceAccount to a role
-  ## that allows RabbitMQ pods querying the K8s API
-  ##
-  create: false
+## does your cluster have rbac enabled? assume yes by default	
+rbacEnabled: true	
 
 ## LDAP configuration
 ##
