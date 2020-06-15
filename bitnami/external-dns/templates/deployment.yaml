@@ -159,7 +159,9 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "google" }}
             # Google Arguments
+              {{- if .Values.google.project }}
             - --google-project={{ .Values.google.project }}
+              {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox Arguments
