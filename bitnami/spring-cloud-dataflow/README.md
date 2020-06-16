@@ -95,6 +95,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.podAnnotations`                        | Annotations for Dataflow server pods                                | `{}`                                                    |
 | `server.livenessProbe`                         | Liveness probe configuration for Dataflow server                    | Check `values.yaml` file                                |
 | `server.readinessProbe`                        | Readiness probe configuration for Dataflow server                   | Check `values.yaml` file                                |
+| `server.customLivenessProbe`                   | Override default liveness probe                                     | `nil`                                                   |
+| `server.customReadinessProbe`                  | Override default readiness probe                                    | `nil`                                                   |
 | `server.service.type`                          | Kubernetes service type                                             | `ClusterIP`                                             |
 | `server.service.port`                          | Service HTTP port                                                   | `8080`                                                  |
 | `server.service.nodePort`                      | Service HTTP node port                                              | `nil`                                                   |
@@ -114,7 +116,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.ingress.secrets[0].name`               | TLS Secret Name                                                     | `nil`                                                   |
 | `server.ingress.secrets[0].certificate`        | TLS Secret Certificate                                              | `nil`                                                   |
 | `server.ingress.secrets[0].key`                | TLS Secret Key                                                      | `nil`                                                   |
-| `server.sidecars`                              | Attach additional sidecar containers to the Dataflow server pods    | `{}`                                                    |
+| `server.initContainers`                        | Add additional init containers to the Dataflow server pods          | `{}` (evaluated as a template)                          |
+| `server.sidecars`                              | Add additional sidecar containers to the Dataflow server pods       | `{}` (evaluated as a template)                          |
 | `server.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                     | `false`                                                 |
 | `server.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled      | `1`                                                     |
 | `server.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable      | `nil`                                                   |
@@ -151,6 +154,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.podAnnotations`                   | Annotations for Skipper server pods                                 | `{}`                                                    |
 | `skipper.livenessProbe`                    | Liveness probe configuration for Skipper server                     | Check `values.yaml` file                                |
 | `skipper.readinessProbe`                   | Readiness probe configuration for Skipper server                    | Check `values.yaml` file                                |
+| `skipper.customLivenessProbe`              | Override default liveness probe                                     | `nil`                                                   |
+| `skipper.customReadinessProbe`             | Override default readiness probe                                    | `nil`                                                   |
 | `skipper.service.type`                     | Kubernetes service type                                             | `ClusterIP`                                             |
 | `skipper.service.port`                     | Service HTTP port                                                   | `8080`                                                  |
 | `skipper.service.nodePort`                 | Service HTTP node port                                              | `nil`                                                   |
@@ -159,7 +164,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                    | `nil`                                                   |
 | `skipper.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer               | `[]`                                                    |
 | `skipper.service.annotations`              | Annotations for Skipper server service                              | `{}`                                                    |
-| `skipper.sidecars`                         | Attach additional sidecar containers to the Skipper pods            | `{}`                                                    |
+| `skipper.initContainers`                   | Add additional init containers to the Skipper pods                  | `{}` (evaluated as a template)                          |
+| `skipper.sidecars`                         | Add additional sidecar containers to the Skipper pods               | `{}` (evaluated as a template)                          |
 | `skipper.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                     | `false`                                                 |
 | `skipper.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled      | `1`                                                     |
 | `skipper.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable      | `nil`                                                   |
@@ -379,13 +385,26 @@ This helm chart supports using custom configuration for Skipper server.
 
 You can specify the configuration for Skipper server setting the `skipper.existingConfigmap` parameter to an external ConfigMap with the configuration file.
 
-### Sidecars
+### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as Dataflow or Skipper components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 server:
   sidecars:
+    - name: your-image-name
+      image: your-image
+      imagePullPolicy: Always
+      ports:
+        - name: portname
+          containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `XXX.initContainers` parameter(s).
+
+```yaml
+server:
+  initContainers:
     - name: your-image-name
       image: your-image
       imagePullPolicy: Always

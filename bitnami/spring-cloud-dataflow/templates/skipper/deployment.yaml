@@ -46,8 +46,9 @@ spec:
       {{- if .Values.skipper.podSecurityContext }}
       securityContext: {{- toYaml .Values.skipper.podSecurityContext | nindent 8 }}
       {{- end }}
-      {{- if .Values.waitForBackends.enabled }}
+      {{- if or .Values.skipper.initContainers .Values.waitForBackends.enabled }}
       initContainers:
+        {{- if .Values.waitForBackends.enabled }}
         - name: wait-for-backends
           image: {{ include "scdf.waitForBackends.image" . }}
           imagePullPolicy: {{ .Values.waitForBackends.image.pullPolicy | quote }}
@@ -60,6 +61,10 @@ spec:
             - name: scripts
               mountPath: /scripts/wait-for-backends.sh
               subPath: wait-for-backends.sh
+        {{- end }}
+        {{- if .Values.skipper.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.skipper.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: skipper
@@ -95,11 +100,31 @@ spec:
             - name: http
               containerPort: 7577
               protocol: TCP
-          {{- if .Values.skipper.livenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.skipper.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /management/health
+              port: http
+            initialDelaySeconds: {{ .Values.skipper.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.skipper.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.skipper.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.skipper.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.skipper.livenessProbe.failureThreshold }}
+          {{- else if .Values.skipper.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.skipper.readinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.skipper.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /management/health
+              port: http
+            initialDelaySeconds: {{ .Values.skipper.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.skipper.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.skipper.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.skipper.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.skipper.readinessProbe.failureThreshold }}
+          {{- else if .Values.skipper.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.skipper.resources }}
           resources: {{- toYaml .Values.skipper.resources | nindent 12 }}

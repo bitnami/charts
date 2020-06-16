@@ -145,23 +145,27 @@ server:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /management/health
-      port: http
+    enabled: true
     initialDelaySeconds: 120
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
-    # timeoutSeconds: 1
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
   readinessProbe:
-    httpGet:
-      path: /management/health
-      port: http
+    enabled: true
     initialDelaySeconds: 120
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
-    # timeoutSeconds: 1
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Custom Liveness probes for Dataflow Server pods
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes Dataflow Server pods
+  ##
+  customReadinessProbe: {}
 
   ## Dataflow Server Service paramaters.
   ##
@@ -252,6 +256,18 @@ server:
     ## - name: dataflow.local-tls
     ##   key:
     ##   certificate:
+
+  ## Add init containers to the Dataflow Server pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
 
   ## Add sidecars to the Dataflow Server pods.
   ## Example:
@@ -402,23 +418,27 @@ skipper:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /actuator/health
-      port: http
+    enabled: true
     initialDelaySeconds: 120
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
-    # timeoutSeconds: 1
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
   readinessProbe:
-    httpGet:
-      path: /actuator/health
-      port: http
+    enabled: true
     initialDelaySeconds: 120
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
-    # timeoutSeconds: 1
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Custom Liveness probes for Skipper pods
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes Skipper pods
+  ##
+  customReadinessProbe: {}
 
   ## Skipper Service paramaters.
   ##
@@ -452,6 +472,18 @@ skipper:
     ## Provide any additional annotations which may be required. Evaluated as a template.
     ##
     annotations: {}
+
+  ## Add init containers to the Dataflow Skipper pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
 
   ## Add sidecars to the Skipper pods.
   ## Example:
