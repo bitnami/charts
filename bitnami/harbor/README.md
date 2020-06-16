@@ -832,12 +832,12 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 Due to an issue with Trivy volumeClaimTemplates, the upgrade needs to be done in two steps:
 
-  - Upgrade the chart to 6.0.2 with trivy.enabled=false
+  - Upgrade the chart to 6.0.2 with `trivy.enabled=false`
 
 ```console
 $ helm upgrade bitnami/chart --version 6.0.2 --set trivy.enabled=false <REST OF THE UPGRADE PARAMETERS>
 ```
-  - Execute a new upgrade setting trivy.enabled=true
+  - Execute a new upgrade setting `trivy.enabled=true`
 
 ```console
 $ helm upgrade bitnami/chart --set trivy.enabled=true <REST OF THE UPGRADE PARAMETERS>
