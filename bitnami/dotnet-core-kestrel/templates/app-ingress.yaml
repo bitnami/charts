@@ -1,0 +1,37 @@
+{{- if .Values.appIngress.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "dotnet-core-kestrel.fullname" . }}
+  labels: {{- include "dotnet-core-kestrel.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.appIngress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.appIngress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.appIngress.hostname }}
+    - host: {{ .Values.appIngress.hostname }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: "{{ template "dotnet-core-kestrel.fullname" $ }}"
+              servicePort: http
+    {{- end }}
+    {{- range .Values.appIngress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: "{{ template "dotnet-core-kestrel.fullname" $ }}"
+              servicePort: http
+    {{- end }}
+  {{- if .Values.appIngress.tls }}
+  tls: {{- toYaml .Values.appIngress.tls | nindent 4 }}
+  {{- end }}
+{{- end }}

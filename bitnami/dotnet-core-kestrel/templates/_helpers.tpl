@@ -64,6 +64,29 @@ Usage:
 {{- end -}}
 
 {{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "dotnet-core-kestrel.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "dotnet-core-kestrel.validateValues.extraVolumes" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of dotnet-core-kestrel - Incorrect extra volume settings */}}
+{{- define "dotnet-core-kestrel.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not .Values.extraVolumeMounts) -}}
+dotnet-core-kestrel: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper dotnet-core-kestrel image name
 */}}
 {{- define "dotnet-core-kestrel.image" -}}
