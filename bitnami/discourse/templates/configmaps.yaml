@@ -9,7 +9,7 @@ data:
   DISCOURSE_EMAIL: {{ .Values.discourse.email | quote }}
   DISCOURSE_SITENAME: {{ .Values.discourse.siteName | quote }}
   REDIS_HOST: {{ template "discourse.redisHost" . }}
-  REDIS_PORT_NUMBER:  {{ template "discourse.redisPort" . }}
+  REDIS_PORT_NUMBER: {{ template "discourse.redisPort" . }}
   POSTGRESQL_HOST: {{ template "discourse.databaseHost" . }}
   POSTGRESQL_PORT_NUMBER: {{ template "discourse.databasePort" . }}
   DISCOURSE_POSTGRESQL_NAME: {{ template "discourse.databaseName" . }}
