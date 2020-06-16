@@ -31,5 +31,5 @@ spec:
       {{- end }}
     # Allow prometheus scrapes
     - ports:
-        - port: {{ .Values.metrics.port }}
+        - port: {{ .Values.service.metricsPort }}
 {{- end }}

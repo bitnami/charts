@@ -32,7 +32,7 @@ spec:
         {{- include "rabbitmq.podAnnotations" . | nindent 8 }}
         {{- end }}
     spec:
-      {{- include "rabbitmq.imagePullSecrets" . | indent 6 }}
+      {{- include "rabbitmq.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
@@ -53,8 +53,9 @@ spec:
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: 10
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext }}
+      {{- if or (.Values.initContainers) (and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext) }}
       initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext }}
         - name: volume-permissions
           image: {{ include "rabbitmq.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -73,6 +74,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/rabbitmq/mnesia
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: rabbitmq
@@ -80,6 +85,12 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          {{- end }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -145,23 +156,34 @@ spec:
                   key: rabbitmq-password
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
-            {{- range $key, $value := .Values.extraEnvs }}
+            {{- range $key, $value := .Values.extraEnvVars }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
           ports:
-            - name: epmd
-              containerPort: 4369
             - name: amqp
-              containerPort: {{ .Values.service.port }}
+              containerPort: 5672
             {{- if .Values.auth.tls.enabled }}
             - name: amqp-ssl
-              containerPort: {{ .Values.service.tlsPort }}
+              containerPort: 5671
             {{- end }}
             - name: dist
-              containerPort: {{ .Values.service.distPort }}
+              containerPort: 25672
             - name: stats
-              containerPort: {{ .Values.service.managerPort }}
+              containerPort: 15672
+            - name: epmd
+              containerPort: 4369
             {{- if .Values.metrics.enabled }}
             - name: metrics
               containerPort: 9419
@@ -170,17 +192,21 @@ spec:
             {{- toYaml .Values.extraContainerPorts | nindent 12 }}
             {{- end }}
           # yamllint disable rule:indentation
-          {{- if .Values.livenessProbe }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe }}
+          {{- if .Values.customReadinessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           # yamllint disable rule:indentation
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if and .Values.clustering.rebalance (gt (.Values.replicas | int) 1) }}
+          {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
           lifecycle:
             postStart:
               exec:
@@ -211,6 +237,9 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.auth.tls.enabled }}
         - name: certs
@@ -255,7 +284,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels: {{- include "common.labels.standard" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
       spec:
         accessModes:
           - {{ .Values.persistence.accessMode | quote }}

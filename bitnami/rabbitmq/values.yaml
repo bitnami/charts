@@ -145,13 +145,26 @@ loadDefinition:
   ##
   # existingSecret:
 
+## Command and args for running the container (set to default if not set). Use array form
+##
+# command:
+# args:
+
 ## Additional environment variables to set
 ## E.g:
-## extraEnvs:
+## extraEnvVars:
 ##   - name: FOO
 ##     value: BAR
 ##
-extraEnvs: []
+extraEnvVars: []
+
+## ConfigMap with extra environment variables
+##
+# extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+# extraEnvVarsSecret:
 
 ## Extra ports to be included in container spec, primarily informational
 ## E.g:
@@ -387,6 +400,38 @@ readinessProbe:
   # failureThreshold: 3
   # successThreshold: 1
 
+## Custom Liveness probe
+##
+customLivenessProbe: {}
+
+## Custom Rediness probe
+##
+customReadinessProbe: {}
+
+## Add init containers to the pod
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Add sidecars to the pod.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
+
 ## RabbitMQ pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -493,7 +538,7 @@ service:
 
   ## Node port Tls
   ##
-  # nodeTlsPort: 30671
+  # tlsNodePort: 30671
 
   ## Dist port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -670,14 +715,14 @@ metrics:
     #   - alert: ClusterDown
     #     expr: |
     #       sum(rabbitmq_running{service="{{ template "rabbitmq.fullname" . }}"})
-    #       < {{ .Values.replicas }}
+    #       < {{ .Values.replicaCount }}
     #     for: 5m
     #     labels:
     #       severity: error
     #     annotations:
     #       summary: Cluster down (instance {{ "{{ $labels.instance }}" }})
     #       description: |
-    #           Less than {{ .Values.replicas }} nodes running in RabbitMQ cluster
+    #           Less than {{ .Values.replicaCount }} nodes running in RabbitMQ cluster
     #           VALUE = {{ "{{ $value }}" }}
     #   - alert: ClusterPartition
     #     expr: rabbitmq_partitions{service="{{ template "rabbitmq.fullname" . }}"} > 0

@@ -38,8 +38,8 @@ spec:
       targetPort: amqp-ssl
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
-      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodeTlsPort)) }}
-      nodePort: {{ .Values.service.nodeTlsPort }}
+      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.tlsNodePort)) }}
+      nodePort: {{ .Values.service.tlsNodePort }}
       {{- end }}
     {{- end }}
     - name: epmd

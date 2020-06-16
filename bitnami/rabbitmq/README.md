@@ -97,7 +97,11 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `clustering.forceBoot`                            | Rebalance master for queues in cluster when new replica is created                                      | `false`                                                 |
 | `loadDefinition.enabled`                          | Enable loading a RabbitMQ definitions file to configure RabbitMQ                                        | `false`                                                 |
 | `loadDefinition.existingSecret`                   | Existing secret with the load definitions file                                                          | `nil`                                                   |
-| `extraEnvs`                                       | Extra environment variables to add to RabbitMQ pods                                                     | `[]`                                                    |
+| `command`                                         | Override default container command (useful when using custom images)                                    | `nil`                                                   |
+| `args`                                            | Override default container args (useful when using custom images)                                       | `nil`                                                   |
+| `extraEnvVars`                                    | Extra environment variables to add to RabbitMQ pods                                                     | `[]`                                                    |
+| `extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars                                                    | `nil`                                                   |
+| `extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars (in case of sensitive data)                           | `nil`                                                   |
 | `extraContainerPorts`                             | Extra ports to be included in container spec, primarily informational                                   | `[]`                                                    |
 | `configuration`                                   | RabbitMQ configuration                                                                                  | Check `values.yaml` file                                |
 | `extraConfiguration`                              | Extra configuration to be appended to RabbitMQ configuration                                            | Check `values.yaml` file                                |
@@ -115,7 +119,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `replicaCount`                                    | Number of RabbitMQ nodes                                                                                | `1`                                                     |
 | `schedulerName`                                   | Name of the k8s service (other than default)                                                            | `nil`                                                   |
 | `podManagementPolicy`                             | Pod management policy                                                                                   | `OrderedReady`                                          |
-| `updateStrategy`                                  | Update strategy for the stateful set                                                                    | `RollingUpdate`                                         |
+| `updateStrategyType`                              | Update strategy type for the statefulset                                                                | `RollingUpdate`                                         |
 | `rollingUpdatePartition`                          | Partition update strategy                                                                               | `nil`                                                   |
 | `podLabels`                                       | RabbitMQ pod labels                                                                                     | `{}` (evaluated as a template)                          |
 | `podAnnotations`                                  | RabbitMQ Pod annotations                                                                                | `{}` (evaluated as a template)                          |
@@ -129,10 +133,13 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `resources.requests`                              | The requested resources for RabbitMQ containers                                                         | `{}`                                                    |
 | `livenessProbe`                                   | Liveness probe configuration for RabbitMQ                                                               | Check `values.yaml` file                                |
 | `readinessProbe`                                  | Readiness probe configuration for RabbitMQ                                                              | Check `values.yaml` file                                |
+| `customLivenessProbe`                             | Override default liveness probe                                                                         | `nil`                                                   |
+| `customReadinessProbe`                            | Override default readiness probe                                                                        | `nil`                                                   |
 | `pdb.create`                                      | Enable/disable a Pod Disruption Budget creation                                                         | `false`                                                 |
 | `pdb.minAvailable`                                | Minimum number/percentage of pods that should remain scheduled                                          | `nil`                                                   |
 | `pdb.maxUnavailable`                              | Maximum number/percentage of pods that may be made unavailable                                          | `1`                                                     |
-| `sidecars`                                        | Attach additional sidecar containers to the RabbitMQ pod                                                | `{}`                                                    |
+| `initContainers`                                  | Add additional init containers to the RabbitMQ pod                                                      | `{}` (evaluated as a template)                          |
+| `sidecars`                                        | Add additional sidecar containers to the RabbitMQ pod                                                   | `{}` (evaluated as a template)                          |
 | `extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts .                                              | `{}`                                                    |
 | `extraVolumes`                                    | Optionally specify extra list of additional volumes .                                                   | `{}`                                                    |
 | `extraSecrets`                                    | Optionally specify extra secrets to be created by the chart.                                            | `{}`                                                    |
@@ -145,7 +152,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.port`                                    | Amqp port                                                                                               | `5672`                                                  |
 | `service.tlsPort`                                 | Amqp TLS port                                                                                           | `5671`                                                  |
 | `service.nodePort`                                | Node port override, if serviceType NodePort or LoadBalancer                                             | `nil`                                                   |
-| `service.nodeTlsPort`                             | Node port override, if serviceType NodePort or LoadBalancer                                             | `nil`                                                   |
+| `service.tlsNodePort`                             | Node port override, if serviceType NodePort or LoadBalancer                                             | `nil`                                                   |
 | `service.distPort`                                | Erlang distribution server port                                                                         | `25672`                                                 |
 | `service.managerPort`                             | RabbitMQ Manager port                                                                                   | `15672`                                                 |
 | `service.metricsPort`                             | RabbitMQ Prometheues metrics port                                                                       | `9419`                                                  |
@@ -159,6 +166,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `ingress.certManager`                             | Add annotations for cert-manager                                                                        | `false`                                                 |
 | `ingress.hostname`                                | Default host for the ingress resource                                                                   | `rabbitmq.local`                                        |
 | `ingress.annotations`                             | Ingress annotations                                                                                     | `[]`                                                    |
+| `ingress.tls`                                     | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                       | `false`                                                 |
 | `ingress.extraHosts[0].name`                      | Additional hostnames to be covered                                                                      | `nil`                                                   |
 | `ingress.extraHosts[0].path`                      | Additional hostnames to be covered                                                                      | `nil`                                                   |
 | `ingress.extraTls[0].hosts[0]`                    | TLS configuration for additional hostnames to be covered                                                | `nil`                                                   |
@@ -311,7 +319,7 @@ To horizontally scale this chart once it has been deployed you have two options:
 - Upgrading the chart with the following parameters:
 
 ```console
-replicas=3
+replicaCount=3
 auth.password="$RABBITMQ_PASSWORD"
 auth.erlangCookie="$RABBITMQ_ERLANG_COOKIE"
 ```
@@ -447,6 +455,18 @@ memoryHighWatermark.value="0.4"
 resources.limits.memory="2Gi"
 ```
 
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: LOG_LEVEL
+    value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `.extraEnvVarsCM` or the `extraEnvVarsSecret` properties.
+
 ### Known issues
 
 - Changing the password through RabbitMQ's UI can make the pod fail due to the default liveness probes. If you do so, remember to make the chart aware of the new password. Updating the default secret with the password you set through RabbitMQ's UI will automatically recreate the pods. If you are using your own secret, you may have to manually recreate the pods.
@@ -501,6 +521,7 @@ $ helm upgrade my-release bitnami/rabbitmq --set auth.password=[PASSWORD] --set 
   - `loadDefinition.secretName` is renamed to `loadDefinition.existingSecret`.
   - `metics.port` is remamed to `service.metricsPort`.
   - `service.extraContainerPorts` is renamed to `extraContainerPorts`.
+  - `service.nodeTlsPort` is renamed to `service.tlsNodePort`.
   - `podDisruptionBudget` is deprecated in favor of `pdb.create`, `pdb.minAvailable`, and `pdb.maxUnavailable`.
   - `rbacEnabled` -> deprecated in favor of `rbac.create`.
   - New parameters: `serviceAccount.create`, and `serviceAccount.name`.
