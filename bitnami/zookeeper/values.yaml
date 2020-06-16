@@ -142,6 +142,10 @@ autopurge:
   ##
   purgeInterval: 0
 
+## Maximum session timeout in milliseconds that the server will allow the client to negotiate. Defaults to 20 times the tickTime.
+##
+maxSessionTimeout: 40000
+
 auth:
   ## Use existing secret (ignores previous password)
   ##

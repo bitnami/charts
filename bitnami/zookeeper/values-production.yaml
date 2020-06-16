@@ -123,6 +123,10 @@ syncLimit: 5
 ##
 maxClientCnxns: 60
 
+## Maximum session timeout in milliseconds that the server will allow the client to negotiate. Defaults to 20 times the tickTime.
+##
+maxSessionTimeout: 40000
+
 ## A list of comma separated Four Letter Words commands to use
 ##
 fourlwCommandsWhitelist: srvr, mntr
