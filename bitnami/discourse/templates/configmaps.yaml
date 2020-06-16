@@ -4,24 +4,17 @@ metadata:
   name: {{ template "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
 data:
-  DISCOURSE_HOSTNAME: {{ .Values.discourseHost }}
-  DISCOURSE_USERNAME: {{ .Values.discourseUsername }}
-  DISCOURSE_EMAIL: {{ .Values.discourseEmail }}
-  DISCOURSE_SITENAME: {{ .Values.sitename }}
-  {{- if .Values.postgresql.enabled }}
-  POSTGRESQL_HOST: {{ template "discourse.postgresql.fullname" . }}
+  DISCOURSE_HOSTNAME: {{ .Values.discourse.host | quote }}
+  DISCOURSE_USERNAME: {{ .Values.discourse.username | quote }}
+  DISCOURSE_EMAIL: {{ .Values.discourse.email | quote }}
+  DISCOURSE_SITENAME: {{ .Values.discourse.siteName | quote }}
+  REDIS_HOST: {{ template "discourse.redisHost" . }}
+  REDIS_PORT_NUMBER:  {{ template "discourse.redisPort" . }}
+  POSTGRESQL_HOST: {{ template "discourse.databaseHost" . }}
+  POSTGRESQL_PORT_NUMBER: {{ template "discourse.databasePort" . }}
+  DISCOURSE_POSTGRESQL_NAME: {{ template "discourse.databaseName" . }}
+  DISCOURSE_POSTGRESQL_USERNAME: {{ template "discourse.databaseUser" . }}
   POSTGRESQL_ROOT_USER: "postgres"
-  POSTGRESQL_CLIENT_CREATE_DATABASE_NAME: {{ .Values.postgresql.postgresqlDatabase }}
-  POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME: {{ .Values.postgresql.postgresqlUsername }}
-  DISCOURSE_POSTGRESQL_NAME: {{ .Values.postgresql.postgresqlDatabase }}
-  DISCOURSE_POSTGRESQL_USERNAME: {{ .Values.postgresql.postgresqlUsername }}
-  {{- else }}
-  POSTGRESQL_HOST: {{ .Values.externalDatabase.host | quote }}
-  DISCOURSE_POSTGRESQL_NAME: {{ .Values.externalDatabase.database }}
-  DISCOURSE_POSTGRESQL_USERNAME: {{ .Values.externalDatabase.user }}
-  {{- end }}
-  REDIS_HOST: {{ include "discourse.fullname" . }}-redis-master
-  REDIS_PORT_NUMBER: "6379"
-  {{- if .Release.IsUpgrade }}
+  {{- if .Values.discourse.skipInstall }}
   DISCOURSE_SKIP_INSTALL: "yes"
   {{- end }}

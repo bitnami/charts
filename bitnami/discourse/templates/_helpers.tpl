@@ -1,4 +1,3 @@
-{{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
 */}}
@@ -10,8 +9,16 @@ Expand the name of the chart.
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "discourse.postgresql.fullname" -}}
+{{- define "postgresql.fullname" -}}
 {{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "redis.fullname" -}}
+{{- printf "%s-%s" .Release.Name "redis" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -52,7 +59,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
-Selector labels
+Match labels
 */}}
 {{- define "discourse.matchLabels" -}}
 app.kubernetes.io/name: {{ include "discourse.name" . }}
@@ -129,7 +136,7 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "discourse.host" -}}
-{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- $host := .Values.discourse.host | default "" -}}
 {{- default (include "discourse.serviceIP" .) $host -}}
 {{- end -}}
 
@@ -153,5 +160,128 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- end -}}
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return  the proper Storage Class
+*/}}
+{{- define "discourse.storageClass" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+*/}}
+{{- if .Values.global -}}
+    {{- if .Values.global.storageClass -}}
+        {{- if (eq "-" .Values.global.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if .Values.persistence.storageClass -}}
+              {{- if (eq "-" .Values.persistence.storageClass) -}}
+                  {{- printf "storageClassName: \"\"" -}}
+              {{- else }}
+                  {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+              {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.persistence.storageClass -}}
+        {{- if (eq "-" .Values.persistence.storageClass) -}}
+            {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+            {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PostgreSQL Hostname
+*/}}
+{{- define "discourse.databaseHost" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "%s" (include "postgresql.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PostgreSQL Port
+*/}}
+{{- define "discourse.databasePort" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "5432" | quote -}}
+{{- else -}}
+    {{- printf "%d" (.Values.externalDatabase.port | quote ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PostgreSQL Database Name
+*/}}
+{{- define "discourse.databaseName" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "%s" .Values.postgresql.postgresqlDatabase -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.database -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PostgreSQL User
+*/}}
+{{- define "discourse.databaseUser" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "%s" .Values.postgresql.postgresqlUsername -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.user -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PostgreSQL Secret
+*/}}
+{{- define "discourse.databaseSecretName" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "%s" (include "postgresql.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" (include "discourse.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Redis Hostname
+*/}}
+{{- define "discourse.redisHost" -}}
+{{- if .Values.redis.enabled }}
+    {{- printf "%s-master" (include "redis.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalRedis.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Redis Port
+*/}}
+{{- define "discourse.redisPort" -}}
+{{- if .Values.redis.enabled }}
+    {{- printf "6379" | quote -}}
+{{- else -}}
+    {{- printf "%d" (.Values.externalRedis.port | quote ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Redis Secret
+*/}}
+{{- define "discourse.redisSecretName" -}}
+{{- if .Values.redis.enabled }}
+    {{- printf "%s" (include "redis.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" (include "discourse.fullname" .) -}}
 {{- end -}}
 {{- end -}}

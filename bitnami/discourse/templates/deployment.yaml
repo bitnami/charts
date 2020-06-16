@@ -6,18 +6,19 @@ metadata:
   labels: {{- include "discourse.labels" . | nindent 4 }}
     component: discourse
 spec:
-  replicas: {{ .Values.replicaCount.discourse }}
+  replicas: {{ .Values.replicaCount }}
   selector:
-    matchLabels: {{- include "discourse.selectorLabels" . | nindent 6 }}
+    matchLabels: {{- include "discourse.matchLabels" . | nindent 6 }}
       component: discourse
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap-envs.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secret-envs.yaml") . | sha256sum }}
-      labels: {{- include "discourse.selectorLabels" . | nindent 8 }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmaps.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+      labels: {{- include "discourse.labels" . | nindent 8 }}
         component: discourse
-    spec: {{- include "discourse.imagePullSecrets" . | nindent 6 }}
+    spec:
+    {{- include "discourse.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "discourse.serviceAccountName" . }}
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if .Values.initContainers }}
@@ -25,10 +26,14 @@ spec:
       {{- end }}
       containers:
         - name: discourse
-          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          securityContext: {{- toYaml .Values.discourse.securityContext | nindent 12 }}
           image: {{ template "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           env:
+            {{- if .Values.image.debug }}
+            - name: NAMI_DEBUG
+              value: "--log-level trace"
+            {{- end }}
             - name: DISCOURSE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -37,52 +42,151 @@ spec:
             - name: DISCOURSE_POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.fullname" . }}
-                  key: discourse-postgresql-password
-            {{- if .Values.postgresql.enabled }}
-            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+                  name: {{ include "discourse.databaseSecretName" . }}
+                  key: postgresql-password
+            - name: POSTGRESQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.fullname" . }}
-                  key: postgresql-client-create-database-password
-            {{- end }}
+                  name: {{ include "discourse.databaseSecretName" . }}
+                  key: postgresql-postgres-password
+            {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.fullname" . }}
+                  name: {{ include "discourse.redisSecretName" . }}
                   key: redis-password
+            {{- end }}
+            {{- if .Values.discourse.extraEnvVars }}
+            {{- tpl (toYaml .Values.discourse.extraEnvVars) $ | indent 12 }}
+            {{- end }}
+          envFrom:
             - configMapRef:
                 name: {{ include "discourse.fullname" . }}
-            {{- if .Values.extraEnvVars.discourse }}
-            {{- tpl (toYaml .Values.extraEnvVars.discourse) $ | indent 12 }}
-            {{- end }}
-            {{- if or .Values.extraEnvVarsCM.discourse .Values.extraEnvVarsSecret.discourse }}
-            envFrom:
-            {{- if .Values.extraEnvVarsCM.discourse }}
+            {{- if .Values.discourse.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.extraEnvVarsCM.discourse }}
+                name: {{ .Values.discourse.extraEnvVarsCM }}
             {{- end }}
-            {{- if .Values.extraEnvVarsSecret.discourse }}
+            {{- if .Values.discourse.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.extraEnvVarsSecret.discourse }}
-            {{- end }}
+                name: {{ .Values.discourse.extraEnvVarsSecret }}
             {{- end }}
           ports:
             - name: http
               containerPort: 3000
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          {{- if .Values.discourse.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+                path: /
+                port: http
+            initialDelaySeconds: {{ .Values.discourse.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.discourse.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.discourse.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.discourse.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.discourse.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.discourse.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /
-              port: http
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+                path: /
+                port: http
+            initialDelaySeconds: {{ .Values.discourse.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.discourse.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.discourse.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.discourse.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.discourse.readinessProbe.failureThreshold }}
+          {{- end }}
+          volumeMounts:
+            - name: discourse-data
+              mountPath: /bitnami/discourse
+              subPath: discourse
+          {{- if .Values.discourse.resources }}
+          resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
+          {{- end }}
+        - name: sidekiq
+          securityContext: {{- toYaml .Values.sidekiq.securityContext | nindent 12 }}
+          image: {{ template "discourse.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command: ["/app-entrypoint.sh"]
+          args:
+            - nami
+            - start
+            - --foreground
+            - discourse-sidekiq
+          env:
+            {{- if .Values.image.debug }}
+            - name: NAMI_DEBUG
+              value: "--log-level trace"
+            {{- end }}
+            - name: DISCOURSE_HOST
+              value: "127.0.0.1"
+            - name: DISCOURSE_PORT
+              value: "3000"
+            - name: DISCOURSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.fullname" . }}
+                  key: discourse-password
+            - name: DISCOURSE_POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.databaseSecretName" . }}
+                  key: postgresql-password
+            {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.redisSecretName" . }}
+                  key: redis-password
+            {{- end }}
+            {{- if .Values.sidekiq.extraEnvVars }}
+            {{- tpl (toYaml .Values.sidekiq.extraEnvVars) $ | indent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "discourse.fullname" . }}
+            {{- if .Values.sidekiq.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.sidekiq.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.sidekiq.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.sidekiq.extraEnvVarsSecret }}
+            {{- end }}
+          livenessProbe:
+            exec:
+              command: ["/bin/sh", "-c", "nami status discourse-sidekiq"]
+            initialDelaySeconds: {{ .Values.sidekiq.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sidekiq.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sidekiq.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.sidekiq.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sidekiq.readinessProbe.failureThreshold }}
+          readinessProbe:
+            exec:
+              command: ["/bin/sh", "-c", "nami status discourse-sidekiq"]
+            initialDelaySeconds: {{ .Values.sidekiq.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sidekiq.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sidekiq.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.sidekiq.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sidekiq.readinessProbe.failureThreshold }}
+          volumeMounts:
+            - name: discourse-data
+              mountPath: /bitnami/discourse
+              subPath: discourse
+          {{- if .Values.sidekiq.resources }}
+          resources: {{- toYaml .Values.sidekiq.resources | nindent 12 }}
+          {{- end }}
         {{- if .Values.sidecars }}
         {{- tpl (toYaml .Values.sidecars) $ | indent 8 }}
         {{- end }}
+      volumes:
+        - name: discourse-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "discourse.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{ end }}
       {{- if .Values.affinity }}
       affinity: {{- include "discourse.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- end }}

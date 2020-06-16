@@ -50,9 +50,142 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the Discourse chart and their default values.
 
-| Parameter                          | Description                                           | Default                                                      |
-| ---------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------ |
-**TBD after other patches get merged**
+ Parameter                                  | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `global.imageRegistry`                    | Global Docker image registry                                                          | `nil`                                                        |
+| `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                       | `[]` (does not add image pull secrets to deployed pods)      |
+| `global.storageClass`                     | Global storage class for dynamic provisioning                                         | `nil`                                                        |
+
+### Common parameters
+
+| Parameter                                 | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `replicaCount`                            | Number of Discourse & Sidekiq replicas                                                | `1`                                                          |
+| `image.registry`                          | Discourse image registry                                                              | `docker.io`                                                  |
+| `image.repository`                        | Discourse image name                                                                  | `bitnami/discouse`                                           |
+| `image.tag`                               | Discourse image tag                                                                   | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                        | Discourse image pull policy                                                           | `IfNotPresent`                                               |
+| `imagePullSecrets`                        | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.debug`                             | Specify if debug logs should be enabled                                               | `false`                                                      |
+| `nameOverride`                            | String to partially override discourse.fullname                                       | `nil`                                                        |
+| `fullnameOverride`                        | String to fully override discourse.fullname                                           | `nil`                                                        |
+| `sidecars`                                | Attach additional sidecar containers to the pod                                       | `[]` (evaluated as a template)                               |
+| `initContainers`                          | Additional init containers to add to the pods                                         | `[]` (evaluated as a template)                               |
+| `serviceAccount.create`                   | Whether the service account should be created                                         | `false`                                                      |
+| `serviceAccount.annotations`              | Annotations to add to the service account                                             | `false`                                                      |
+| `serviceAccount.name`                     | Name to be used for the service account                                               | `false`                                                      |
+| `podSecurityContext`                      | Pod security context specification                                                    | `{}`                                                         |
+| `persistence.enabled`                     | Whether to enable persistence based on Persistent Volume Claims                       | `true`                                                       |
+| `persistence.storageClass`                | PVC Storage Class                                                                     | `nil`                                                        |
+| `persistence.existingClaim`               | Name of an existing PVC to reuse                                                      | `nil`                                                        |
+| `persistence.accessMode`                  | PVC Access Mode (RWO, ROX, RWX)                                                       | `ReadWriteOnce`                                              |
+| `persistence.size`                        | Size of the PVC to request                                                            | `10Gi`                                                       |
+| `nodeSelector`                            | Node labels for pod assignment.                                                       | `{}` (evaluated as a template)                               |
+| `tolerations`                             | Tolerations for pod assignment.                                                       | `[]` (evaluated as a template)                               |
+| `affinity`                                | Affinity for pod assignment                                                           | `{}` (evaluated as a template)                               |
+
+### Service parameters
+
+| Parameter                                 | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `service.type`                            | Kubernetes Service type                                                               | `NodePort`                                                   |
+| `service.port`                            | Service HTTP port                                                                     | `80`                                                         |
+| `service.externalTrafficPolicy`           | Enable client source IP preservation                                                  | `Cluster`                                                    |
+| `service.annotations`                     | Service annotations                                                                   | `{}` (evaluated as a template)                               |
+| `service.loadBalancerSourceRanges`        | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)            | `[]`                                                         |
+| `service.extraPorts`                      | Extra ports to expose in the service (normally used with the `sidecar` value)         | `nil`                                                        |
+| `service.nodePorts.http`                  | Kubernetes http node port                                                             | `30000`                                                      |
+
+### Discourse parameters
+
+| Parameter                                 | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `host`                                    | Discourse host to create application URLs (include the port if =/= 80)                | `""`                                                         |
+| `siteName`                                | Discourse site name                                                                   | `My Site!`                                                   |
+| `username`                                | Admin user of the application                                                         | `user`                                                       |
+| `email   `                                | Admin user email of the application                                                   | `user@example.com`                                           |
+| `password`                                | Application password (min length of 10 chars)                                         | _random 10 character long alphanumeric string_               |
+| `securityContext`                         | Container security context specification                                              | `{}`                                                         |
+| `resources`                               | Discourse container's resource requests and limits                                    | `{}`                                                         |
+| `livenessProbe.enabled`                   | Enable/disable livenessProbe                                                          | `true`                                                       |
+| `livenessProbe.initialDelaySeconds`       | Delay before liveness probe is initiated                                              | `500`                                                        |
+| `livenessProbe.periodSeconds`             | How often to perform the probe                                                        | `10`                                                         |
+| `livenessProbe.timeoutSeconds`            | When the probe times out                                                              | `5`                                                          |
+| `livenessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                            | `6`                                                          |
+| `livenessProbe.successThreshold`          | Minimum consecutive successes for the probe                                           | `1`                                                          |
+| `readinessProbe.enabled`                  | Enable/disable readinessProbe                                                         | `true`                                                       |
+| `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `30`                                                         |
+| `readinessProbe.periodSeconds`            | How often to perform the probe                                                        | `10`                                                         |
+| `readinessProbe.timeoutSeconds`           | When the probe times out                                                              | `5`                                                          |
+| `readinessProbe.failureThreshold`         | Minimum consecutive failures for the probe                                            | `6`                                                          |
+| `readinessProbe.successThreshold`         | Minimum consecutive successes for the probe                                           | `1`                                                          |
+| `extraEnvVars`                            | An array to add extra env vars                                                        | `[]`                                                         |
+| `extraEnvVarsCM`                          | Array to add extra configmaps                                                         | `[]`                                                         |
+| `extraEnvVarsSecret`                      | Array to add extra environment from a Secret                                          | `nil`                                                        |
+| `skipInstall`                             | Do not run the Discourse installation wizard                                          | `false`                                                      |
+
+### Sidekiq parameters
+
+| Parameter                                 | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `securityContext`                         | Container security context specification                                              | `{}`                                                         |
+| `resources`                               | Discourse container's resource requests and limits                                    | `{}`                                                         |
+| `livenessProbe.enabled`                   | Enable/disable livenessProbe                                                          | `true`                                                       |
+| `livenessProbe.initialDelaySeconds`       | Delay before liveness probe is initiated                                              | `500`                                                        |
+| `livenessProbe.periodSeconds`             | How often to perform the probe                                                        | `10`                                                         |
+| `livenessProbe.timeoutSeconds`            | When the probe times out                                                              | `5`                                                          |
+| `livenessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                            | `6`                                                          |
+| `livenessProbe.successThreshold`          | Minimum consecutive successes for the probe                                           | `1`                                                          |
+| `readinessProbe.enabled`                  | Enable/disable readinessProbe                                                         | `true`                                                       |
+| `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `30`                                                         |
+| `readinessProbe.periodSeconds`            | How often to perform the probe                                                        | `10`                                                         |
+| `readinessProbe.timeoutSeconds`           | When the probe times out                                                              | `5`                                                          |
+| `readinessProbe.failureThreshold`         | Minimum consecutive failures for the probe                                            | `6`                                                          |
+| `readinessProbe.successThreshold`         | Minimum consecutive successes for the probe                                           | `1`                                                          |
+| `extraEnvVars`                            | An array to add extra env vars                                                        | `[]`                                                         |
+| `extraEnvVarsCM`                          | Array to add extra configmaps                                                         | `[]`                                                         |
+| `extraEnvVarsSecret`                      | Array to add extra environment from a Secret                                          | `nil`                                                        |
+
+### Ingress parameters
+
+| Parameter                                 | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `ingress.enabled`                         | Enable ingress controller resource                                                    | `false`                                                      |
+| `ingress.certManager`                     | Add annotations for cert-manager                                                      | `false`                                                      |
+| `ingress.hostname`                        | Default host for the ingress resource                                                 | `discourse.local`                                            |
+| `ingress.annotations`                     | Ingress annotations                                                                   | `[]` (evaluated as a template)                               |
+| `ingress.extraHosts[0].name`              | Additional hostnames to be covered                                                    | `nil`                                                        |
+| `ingress.extraHosts[0].path`              | Additional hostnames to be covered                                                    | `nil`                                                        |
+
+### Database parameters
+
+| Parameter                                 | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `postgresql.enabled`                      | Deploy PostgreSQL container(s)                                                        | `true`                                                       |
+| `postgresql.postgresqlUsername`           | PostgreSQL user to create (used by Discourse)                                         | `bn_discourse`                                               |
+| `postgresql.postgresqlPassword`           | Password for the Dicourse user                                                        | _random 10 character long alphanumeric string_               |
+| `postgresql.postgresqlPostgresPassword`   | Password for the admin user ("postgres")                                              | `bitnami`                                                    |
+| `postgresql.postgresqlDatabase`           | Name of the database to create                                                        | `bitnami_application`                                        |
+| `postgresql.persistence.enabled`          | Enable database persistence using PVC                                                 | `true`                                                       |
+| `externalDatabase.host`                   | Host of the external database                                                         | `""`                                                         |
+| `externalDatabase.port`                   | Database port number                                                                  | `5432`                                                       |
+| `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_discourse`                                               |
+| `externalDatabase.password`               | Password for the above username                                                       | `nil`                                                        |
+| `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user                                              | `nil`                                                        |
+| `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_application`                                        |
+
+### Redis parameters
+
+| Parameter                                 | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `redis.enabled`                           | Deploy Redis container(s)                                                             | `true`                                                       |
+| `redis.usePassword`                       | Use password authentication                                                           | `false`                                                      |
+| `redis.password`                          | Password for Redis authentication                                                     | `nil`                                                        |
+| `redis.cluster.enabled`                   | Whether to use cluster replication                                                    | `false`                                                      |
+| `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                 | `true`                                                       |
+| `externalRedis.host`                      | Host of the external database                                                         | `""`                                                         |
+| `externalRedis.port`                      | Database port number                                                                  | `6379`                                                       |
+| `externalRedis.password`                  | Password for the above username                                                       | `nil`                                                        |
 
 The above parameters map to the env variables defined in [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse) image documentation.
 
@@ -60,11 +193,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set discourseUsername=admin,discoursePassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set discourse.username=admin,discourse.password=password,postgresql.postgresqlPassword=secretpassword \
     bitnami/discourse
 ```
 
-The above command sets the Discourse administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the Discourse administrator account username and password to `admin` and `password` respectively. Additionally, it sets the Postgresql `bn_discourse` user password to `secretpassword`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -82,16 +215,150 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Local development and binding to port 80
+### Setting up replication
 
-Discourse is pretty insistent on giving access via port 80 or 443.
-This is fine if you're hosting it on a public cluster, but it's not while testing the chart locally.
-The easiest [but horribly insecure] way to do it is to simply allow kubectl to bind to privileged ports and then use a `port-forward`:
+By default, this Chart only deploys a single pod running Discourse. Should you want to increase the number of replicas, you may follow these simple steps to ensure everything works smoothly:
+
+> **Tip**: Running these steps ensures the PostgreSQL instance to be correctly populated. If you already have an initialised DB, you may directly create a release with the desired number of replicas. Remind to set `discourse.skipInstall` to `true`!
+
+1. Create a conventional release, that will be scaled later:
+```console
+$ helm install my-release bitnami/discourse
+...
+export APP_PASSWORD=$(kubectl get secret --namespace default my-release-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+...
+```
+
+2. Wait for the release to complete and Discourse to be running successfully.
+```console
+$ kubectl get pods
+NAME                               READY   STATUS    RESTARTS   AGE
+my-release-discourse-744c48dd97-wx5h9   2/2     Running   0          5m11s
+my-release-postgresql-0                 1/1     Running   0          5m10s
+my-release-redis-master-0               1/1     Running   0          5m11s
+```
+
+3. Perform an upgrade specifying the number of replicas and the credentials used.
+```console
+$ helm upgrade my-release --set replicaCount=2,discourse.password=$APP_PASSWORD,postgresql.postgresqlPassword=$APP_DATABASE_PASSWORD,discourse.skipInstall=true bitnami/discourse
+```
+
+Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
+
+Then you can deploy Discourse chart using the proper parameters:
 
 ```console
-sudo setcap CAP_NET_BIND_SERVICE=+eip $(which kubectl)
-kubectl portforward svc/discourse 80:3000
+persistence.storageClass=nfs
+postgresql.persistence.storageClass=nfs
 ```
+
+### Production configuration
+
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+
+- Use LoadBalancer as default:
+
+```diff
+- service.type: NodePort
++ service.type: LoadBalancer
+```
+
+- Enable client source IP preservation:
+
+```diff
+- service.externalTrafficPolicy: Cluster
++ service.externalTrafficPolicy: Local
+```
+
+- Make Redis use password for auth:
+
+```diff
+- redis.usePassword: false
++ redis.usePassword: true
+```
+
+- PVC Access Mode:
+
+```diff
+- persistence.accessMode: ReadWriteOnce
++ ## To use the portal and to ensure you can scale Discourse you need to provide a
++ ## ReadWriteMany PVC, if you dont have a provisioner for this type of storage
++ ## We recommend that you install the nfs provisioner and map it to a RWO volume
++ ## helm install nfs-server stable/nfs-server-provisioner --set persistence.enabled=true,persistence.size=10Gi
++ ##
++ persistence.accessMode: ReadWriteMany
+```
+Note that [values-production.yaml](values-production.yaml) specifies ReadWriteMany PVCs are specified. This is intended to ease the process of replication (see [Setting up replication](#setting-up-replication)).
+
+### Sidecars
+
+If you have a need for additional containers to run within the same pod as Discourse (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+   containerPort: 1234
+```
+
+If these sidecars export extra ports, you can add extra port definitions using the `service.extraPorts` value:
+
+```yaml
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+### Using an external database
+
+Sometimes you may want to have Discourse connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [`externalDatabase` parameter](#parameters). You should also disable the PostgreSQL installation with the `postgresql.enabled` option. For example with the following parameters:
+
+```console
+postgresql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.postgresqlPostgresPassword=rootpassword
+externalDatabase.database=mydatabase
+externalDatabase.port=5432
+```
+
+Note also if you disable PostgreSQL per above you MUST supply values for the `externalDatabase` connection.
+
+In case the database already contains data from a previous Discourse installation, you need to set the `discourse.skipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Discourse installation wizard.
+
+Similarly, you can specify an external Redis instance rather than installing one inside your cluster. First, you may disable the Redis installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
+
+```console
+redis.enabled=false
+externalRedis.host=myexternalhost
+externalRedis.password=mypassword
+externalRedis.port=5432
+```
+
+### Ingress
+
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to serve your Discourse application.
+
+To enable ingress integration, please set `ingress.enabled` to `true`
+
+### Hosts
+
+Most likely you will only want to have one hostname that maps to this WordPress installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object is can be specified as an array.
+
+## Persistence
+
+The [Bitnami Discourse](https://github.com/bitnami/bitnami-docker-discourse) image stores the Discourse data and configurations at the `/bitnami` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Image
 
