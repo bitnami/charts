@@ -1,0 +1,38 @@
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.appIngress.enabled }}
+
+  You should be able to access your new dotnet core application installation through:
+
+  {{- if .Values.appIngress.hostname }}
+      - http://{{ .Values.appIngress.hostname }}
+  {{- end }}
+  {{- range $host := .Values.appIngress.hosts }}
+    {{- range .paths }}
+      - http://{{ $host.name }}{{ . }}
+    {{- end }}
+  {{- end }}
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- $port:=.Values.service.port | toString }}
+
+  NOTE: It may take a few minutes for the IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "dotnet-core-kestrel.fullname" . }}'
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "dotnet-core-kestrel.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo "NGINX URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.service.type }}
+
+  echo "URL: http://127.0.0.1:8080/"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "dotnet-core-kestrel.fullname" . }} 8080:{{ .Values.service.port }}
+
+{{- else if contains "NodePort" .Values.service.type }}
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "dotnet-core-kestrel.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "Application URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- end }}
+
+{{- include "dotnet-core-kestrel.validateValues" . }}
