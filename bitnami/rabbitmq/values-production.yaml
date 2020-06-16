@@ -371,34 +371,23 @@ resources:
     cpu: 1000m
     memory: 2Gi
 
-## Kafka containers' liveness and readiness probes. Evaluated as a template.
+## RabbitMQ containers' liveness and readiness probes.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
-  exec:
-    command:
-      - /bin/bash
-      - -ec
-      - |
-        /opt/bitnami/scripts/rabbitmq/apicheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
+  enabled: true
   initialDelaySeconds: 120
   timeoutSeconds: 20
   periodSeconds: 30
-  failureThreshold: 6
-  # failureThreshold: 3
-  # successThreshold: 1
+  failureThreshold: 3
+  successThreshold: 1
 readinessProbe:
-  exec:
-    command:
-      - /bin/bash
-      - -ec
-      - |
-        /opt/bitnami/scripts/rabbitmq/healthcheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
+  enabled: true
   initialDelaySeconds: 10
   timeoutSeconds: 20
   periodSeconds: 30
-  # failureThreshold: 3
-  # successThreshold: 1
+  failureThreshold: 3
+  successThreshold: 1
 
 ## Custom Liveness probe
 ##
@@ -449,8 +438,8 @@ serviceAccount:
 ##
 rbac:
   ## Specifies whether RBAC rules should be created
-  ## binding Kafka ServiceAccount to a role
-  ## that allows Kafka pods querying the K8s API
+  ## binding RabbitMQ ServiceAccount to a role
+  ## that allows RabbitMQ pods querying the K8s API
   ##
   create: true
 
