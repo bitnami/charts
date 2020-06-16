@@ -1,0 +1,16 @@
+apiVersion: v1
+name: dotnet-core-kestrel
+version: 0.1.0
+appVersion: 0.1.0
+description: Chart for asp.net core application run in kestrel web server
+keywords:
+  - asp.net
+  - dotnet
+  - kestrel
+home: http://www.nginx.org
+sources:
+  - https://github.com/bitnami/bitnami-docker-nginx
+maintainers:
+  - name: Bitnami
+    email: containers@bitnami.com
+engine: gotpl
