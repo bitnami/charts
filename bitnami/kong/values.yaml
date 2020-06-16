@@ -132,7 +132,7 @@ kong:
 
 ingressController:
   enabled: true
-  installCRDs: false
+  installCRDs: true
   customResourceDeletePolicy: {}
   image:
     registry: docker.io
