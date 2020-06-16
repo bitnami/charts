@@ -81,7 +81,9 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.configuration.trustK8sCerts`           | Trust K8s certificates when querying the Kubernetes API             | `false`                                                 |
 | `server.configuration.containerRegistries`     | Container registries configuration                                  | `{}` (check `values.yaml` for more information)         |
 | `server.existingConfigmap`                     | Name of existing ConfigMap with Dataflow server configuration       | `nil`                                                   |
-| `server.extraEnvs`                             | Extra environment variables to be set on Dataflow server container  | `{}`                                                    |
+| `server.extraEnvVars`                          | Extra environment variables to be set on Dataflow server container  | `{}`                                                    |
+| `server.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                | `nil`                                                   |
+| `server.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                   | `nil`                                                   |
 | `server.replicaCount`                          | Number of Dataflow server replicas to deploy                        | `1`                                                     |
 | `server.strategyType`                          | Deployment Strategy Type                                            | `RollingUpdate`                                         |
 | `server.affinity`                              | Affinity for pod assignment                                         | `{}` (evaluated as a template)                          |
@@ -140,7 +142,9 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.configuration.accountName`        | The name of the account to configure for the Kubernetes platform    | `default`                                               |
 | `skipper.configuration.trustK8sCerts`      | Trust K8s certificates when querying the Kubernetes API             | `false`                                                 |
 | `skipper.existingConfigmap`                | Name of existing ConfigMap with Skipper server configuration        | `nil`                                                   |
-| `skipper.extraEnvs`                        | Extra environment variables to be set on Skipper server container   | `{}`                                                    |
+| `skipper.extraEnvVars`                     | Extra environment variables to be set on Skipper server container   | `{}`                                                    |
+| `skipper.extraEnvVarsCM`                   | Name of existing ConfigMap containing extra env vars                | `nil`                                                   |
+| `skipper.extraEnvVarsSecret`               | Name of existing Secret containing extra env vars                   | `nil`                                                   |
 | `skipper.replicaCount`                     | Number of Skipper server replicas to deploy                         | `1`                                                     |
 | `skipper.strategyType`                     | Deployment Strategy Type                                            | `RollingUpdate`                                         |
 | `skipper.affinity`                         | Affinity for pod assignment                                         | `{}` (evaluated as a template)                          |
@@ -174,6 +178,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.autoscaling.maxReplicas`          | Maximum number of Skipper server replicas                           | `nil`                                                   |
 | `skipper.autoscaling.targetCPU`            | Target CPU utilization percentage                                   | `nil`                                                   |
 | `skipper.autoscaling.targetMemory`         | Target Memory utilization percentage                                | `nil`                                                   |
+| `externalSkipper.host`                     | Host of a external Skipper Server                                   | `localhost`                                             |
+| `externalSkipper.port`                     | External Skipper Server port number                                 | `7577`                                                  |
 
 ### RBAC parameters
 

@@ -104,10 +104,14 @@ spec:
               value: {{ ternary "true" "false" .Values.server.configuration.batchEnabled | quote }}
             {{- if .Values.server.configuration.streamingEnabled }}
             - name: SPRING_CLOUD_SKIPPER_CLIENT_SERVER_URI
+              {{- if .Values.skipper.enabled }}
               {{- if ne $skipperServicePort 80 }}
               value: {{ printf "http://%s-skipper.%s.svc.%s:%d/api" $fullname $releaseNamespace $clusterDomain $skipperServicePort | quote }}
               {{- else }}
               value: {{ printf "http://%s-skipper.%s.svc.%s/api" $fullname $releaseNamespace $clusterDomain | quote }}
+              {{- end }}
+              {{- else }}
+              value: {{ printf "$s:%d/api" .Values.externalSkipper.host (int .Values.externalSkipper.port) | quote }}
               {{- end }}
             {{- end }}
             - name: SPRING_APPLICATION_JSON
@@ -118,10 +122,21 @@ spec:
                   fieldPath: metadata.namespace
             - name: KUBERNETES_TRUST_CERTIFICATES
               value: {{ ternary "true" "false" .Values.server.configuration.trustK8sCerts | quote }}
-            {{- range $key, $value := .Values.skipper.extraEnvs }}
+            {{- range $key, $value := .Values.server.extraEnvVars }}
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
+          {{- if or .Values.server.extraEnvVarsCM .Values.server.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.server.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.server.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.server.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.server.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080

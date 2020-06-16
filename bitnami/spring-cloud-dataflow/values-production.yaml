@@ -20,6 +20,7 @@
 ##
 clusterDomain: cluster.local
 
+##
 ## Spring Cloud Dataflow Server parameters.
 ##
 server:
@@ -75,11 +76,19 @@ server:
 
   ## Additional environment variables to set
   ## E.g:
-  ## extraEnvs:
+  ## extraEnvVars:
   ##   - name: FOO
   ##     value: BAR
   ##
-  extraEnvs: []
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  # extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  # extraEnvVarsSecret:
 
   ## Number of Dataflow Server replicas to deploy.
   ##
@@ -302,6 +311,7 @@ server:
     # targetCPU: 50
     # targetMemory: 50
 
+##
 ## Spring Cloud Skipper parameters.
 ##
 skipper:
@@ -348,11 +358,19 @@ skipper:
 
   ## Additional environment variables to set
   ## E.g:
-  ## extraEnvs:
+  ## extraEnvVars:
   ##   - name: FOO
   ##     value: BAR
   ##
-  extraEnvs: []
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  # extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  # extraEnvVarsSecret:
 
   ## Number of Skipper replicas to deploy.
   ##
@@ -517,6 +535,17 @@ skipper:
     # maxReplicas: 11
     # targetCPU: 50
     # targetMemory: 50
+
+##
+## External Skipper Configuration
+##
+## All of these values are ignored when skipper.enabled is set to true
+##
+externalSkipper:
+  ## External Skipper server host and port
+  ##
+  host: localhost
+  port: 7577
 
 ## Spring Cloud Deployer for Kubernetes parameters.
 ##
@@ -701,7 +730,7 @@ mariadb:
 ##
 ## External Database Configuration
 ##
-## All of these values are ignored when mariadb.enabled is set to false
+## All of these values are ignored when mariadb.enabled is set to true
 ##
 externalDatabase:
   ## Database server host and port

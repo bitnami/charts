@@ -92,10 +92,21 @@ spec:
                   fieldPath: metadata.namespace
             - name: KUBERNETES_TRUST_CERTIFICATES
               value: {{ ternary "true" "false" .Values.skipper.configuration.trustK8sCerts | quote }}
-            {{- range $key, $value := .Values.skipper.extraEnvs }}
+            {{- range $key, $value := .Values.skipper.extraEnvVars }}
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
+          {{- if or .Values.skipper.extraEnvVarsCM .Values.skipper.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.skipper.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.skipper.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.skipper.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.skipper.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 7577
@@ -103,7 +114,7 @@ spec:
           {{- if .Values.skipper.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /management/health
+              path: /actuator/health
               port: http
             initialDelaySeconds: {{ .Values.skipper.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.skipper.livenessProbe.periodSeconds }}
@@ -116,7 +127,7 @@ spec:
           {{- if .Values.skipper.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /management/health
+              path: /actuator/health
               port: http
             initialDelaySeconds: {{ .Values.skipper.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.skipper.readinessProbe.periodSeconds }}
