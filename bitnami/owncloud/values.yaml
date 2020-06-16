@@ -27,6 +27,10 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+# Change the container port that is exposed in the deployment
+# 8080 is needed to support `owncloud/server` image
+containerPort: 80
+
 ## String to partially override owncloud.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -217,6 +221,23 @@ persistence:
 
     accessMode: ReadWriteOnce
     size: 8Gi
+    # extraVolumes:
+    #   - name: shared-data
+    #     persistentVolumeClaim:
+    #       claimName: shared-data-pvc
+
+    # extraVolumeMounts:
+    #   - name: shared-data
+    #     mountPath: /mnt/data/files/admin/files/shared-data
+
+extraEnv: {}
+  # - name: OWNCLOUD_ADMIN_PASSWORD
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: my-admin-password
+  #       key: password
+  # - name: OWNCLOUD_SUB_URL
+  #   value: "/mysubpath/owncloud"
 
 ## Set up update strategy for the ownCloud installation.
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy

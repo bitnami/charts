@@ -86,9 +86,12 @@ spec:
               key: owncloud-password
         - name: OWNCLOUD_EMAIL
           value: {{ default "" .Values.owncloudEmail | quote }}
+        {{- if .Values.extraEnv }}
+        {{- tpl (toYaml .Values.extraEnv) . | nindent 8 }}
+        {{- end }}
         ports:
         - name: http
-          containerPort: 80
+          containerPort: {{ .Values.containerPort }}
         livenessProbe:
           httpGet:
             path: /status.php
@@ -114,6 +117,9 @@ spec:
         volumeMounts:
         - name: owncloud-data
           mountPath: /bitnami/owncloud
+        {{- if .Values.persistence.owncloud.extraVolumeMounts }}
+        {{- .Values.persistence.owncloud.extraVolumeMounts | toYaml | nindent 8 }}
+        {{- end }}
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{ template "owncloud.metrics.image" . }}
@@ -144,6 +150,9 @@ spec:
           claimName: {{ if .Values.persistence.owncloud.existingClaim }}{{ .Values.persistence.owncloud.existingClaim }}{{- else }}{{ template "owncloud.fullname" . }}-owncloud{{- end }}
       {{- else }}
         emptyDir: {}
+      {{- end }}
+      {{- if .Values.persistence.owncloud.extraVolumes }}
+      {{- .Values.persistence.owncloud.extraVolumes | toYaml | nindent 6 }}
       {{- end }}
       {{- with .Values.affinity }}
       affinity:
