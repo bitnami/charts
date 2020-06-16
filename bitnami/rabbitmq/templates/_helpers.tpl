@@ -240,3 +240,14 @@ Return podAnnotations
 {{ include "rabbitmq.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) }}
 {{- end }}
 {{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "rabbitmq.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "rabbitmq.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}

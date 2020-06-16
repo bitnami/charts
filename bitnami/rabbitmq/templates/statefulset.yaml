@@ -45,8 +45,8 @@ spec:
       schedulerName: "{{ .Values.schedulerName }}"
       {{- end }}
 {{- include "rabbitmq.imagePullSecrets" . | indent 6 }}
-      {{- if .Values.rbacEnabled}}
-      serviceAccountName: {{ template "rabbitmq.fullname" . }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ template "rabbitmq.serviceAccountName" . }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "rabbitmq.tplValue" (dict "value" .Values.affinity "context" .) | nindent 8 }}
