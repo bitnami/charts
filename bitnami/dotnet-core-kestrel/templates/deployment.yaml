@@ -9,7 +9,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
-      labels: {{- include "dotnet-core-kestrel.labels" . | nindent 8 }}.
+      labels: {{- include "dotnet-core-kestrel.labels" . | nindent 8 }}
     spec:
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "dotnet-core-kestrel.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
