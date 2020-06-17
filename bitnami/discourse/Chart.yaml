@@ -1,7 +1,6 @@
-apiVersion: v2
+apiVersion: v1
 name: discourse
 description: A Helm chart for deploying Discourse to Kubernetes
-type: application
 version: 0.1.0
 appVersion: 2.4.1
 engine: gotpl
