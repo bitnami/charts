@@ -167,7 +167,7 @@ sidekiq:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 120
+    initialDelaySeconds: 500
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6

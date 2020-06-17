@@ -156,11 +156,11 @@ spec:
           livenessProbe:
             exec:
               command: ["/bin/sh", "-c", "nami status discourse-sidekiq"]
-            initialDelaySeconds: {{ .Values.sidekiq.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.sidekiq.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.sidekiq.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.sidekiq.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.sidekiq.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.sidekiq.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sidekiq.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sidekiq.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.sidekiq.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sidekiq.livenessProbe.failureThreshold }}
           readinessProbe:
             exec:
               command: ["/bin/sh", "-c", "nami status discourse-sidekiq"]
