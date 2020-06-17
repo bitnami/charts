@@ -77,8 +77,8 @@ spec:
           {{- if .Values.discourse.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-                path: /
-                port: http
+              path: /
+              port: http
             initialDelaySeconds: {{ .Values.discourse.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.discourse.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.discourse.livenessProbe.timeoutSeconds }}
@@ -88,8 +88,8 @@ spec:
           {{- if .Values.discourse.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-                path: /
-                port: http
+              path: /
+              port: http
             initialDelaySeconds: {{ .Values.discourse.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.discourse.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.discourse.readinessProbe.timeoutSeconds }}
