@@ -211,7 +211,7 @@ spec:
             - |-
               #!/bin/sh
               {{- if $.Values.usePasswordFile }}
-              export MONGODB_ROOT_PASSWORD="$(< "${MONGODB_ROOT_PASSWORD_FILE}")"
+              export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
               /bin/mongodb_exporter --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
           {{- if $.Values.usePasswordFile }}
