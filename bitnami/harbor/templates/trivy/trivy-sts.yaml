@@ -175,7 +175,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels: {{- include "common.labels.standard" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
       spec:
         accessModes:
           - {{ .Values.persistence.persistentVolumeClaim.trivy.accessMode | quote }}
