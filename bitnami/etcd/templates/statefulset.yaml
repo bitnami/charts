@@ -129,7 +129,7 @@ spec:
             - name: ETCD_INITIAL_CLUSTER_TOKEN
               value: "etcd-cluster-k8s"
             - name: ETCD_INITIAL_CLUSTER_STATE
-              value: "new"
+              value: {{ .Values.etcd.initialClusterState }}
             - name: ETCD_INITIAL_CLUSTER
               value: {{range $i, $e := until $replicaCount }}{{ $etcdFullname }}-{{ $e }}={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }},{{ end }}
             {{- end }}

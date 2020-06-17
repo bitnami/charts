@@ -113,6 +113,9 @@ spec:
             {{- if .Values.collectors.verticalpodautoscalers }}
             - --collectors=verticalpodautoscalers
             {{- end }}
+            {{- if .Values.collectors.validatingwebhookconfigurations }}
+            - --collectors=validatingwebhookconfigurations
+            {{- end }}
             {{- if .Values.collectors.volumeattachments }}
             - --collectors=volumeattachments
             {{- end }}
