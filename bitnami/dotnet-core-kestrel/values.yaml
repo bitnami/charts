@@ -7,7 +7,7 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
-## Specify the dotnet-core-kestrel application image details below. 
+## Specify the dotnet-core-kestrel application image details below.
 ##
 image:
   registry: example.io
