@@ -19,8 +19,8 @@
               "form": true,
               "description": "Defaults to a random 10-character alphanumeric string if not set",
               "hidden": {
-                "condition": true,
-                "value": "existingSecret"
+                "value": true,
+                "path": "existingSecret"
               }
             }
           }
@@ -36,8 +36,8 @@
           "form": true,
           "description": "Defaults to a random 10-character alphanumeric string if not set",
           "hidden": {
-            "condition": true,
-            "value": "existingSecret"
+            "value": true,
+            "path": "existingSecret"
           }
         }
       }
@@ -64,8 +64,8 @@
           "form": true,
           "description": "Defaults to a random 10-character alphanumeric string if not set",
           "hidden": {
-            "condition": true,
-            "value": "existingSecret"
+            "value": true,
+            "path": "existingSecret"
           }
         }
       }
@@ -86,8 +86,8 @@
           "title": "LDAP URL",
           "form": true,
           "hidden": {
-            "condition": false,
-            "value": "ldap/enabled"
+            "value": false,
+            "path": "ldap/enabled"
           }
         },
         "base": {
@@ -95,8 +95,8 @@
           "title": "LDAP base DN",
           "form": true,
           "hidden": {
-            "condition": false,
-            "value": "ldap/enabled"
+            "value": false,
+            "path": "ldap/enabled"
           }
         },
         "binddn": {
@@ -104,8 +104,8 @@
           "title": "LDAP bind DN",
           "form": true,
           "hidden": {
-            "condition": false,
-            "value": "ldap/enabled"
+            "value": false,
+            "path": "ldap/enabled"
           }
         },
         "bindpw": {
@@ -113,8 +113,8 @@
           "title": "LDAP bind password",
           "form": true,
           "hidden": {
-            "condition": false,
-            "value": "ldap/enabled"
+            "value": false,
+            "path": "ldap/enabled"
           }
         }
       }
@@ -144,8 +144,8 @@
           "sliderMax": 100,
           "sliderUnit": "Gi",
           "hidden": {
-            "condition": false,
-            "value": "persistence/enabled"
+            "value": false,
+            "path": "persistence/enabled"
           }
         }
       }
@@ -167,8 +167,8 @@
           "title": "ServiceAcccount name",
           "description": "ServiceAcccount name to use. Auto-generated if not specified",
           "hidden": {
-            "condition": false,
-            "value": "serviceAccount/create"
+            "value": false,
+            "path": "serviceAccount/create"
           }
         }
       }
@@ -206,8 +206,8 @@
               "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
               "form": true,
               "hidden": {
-                "condition": false,
-                "value": "metrics/enabled"
+                "value": false,
+                "path": "metrics/enabled"
               }
             }
           }
