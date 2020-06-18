@@ -200,7 +200,7 @@ Return the MariaDB User
 {{- end -}}
 
 {{/*
-Return the MariaDB User
+Return the MariaDB Secret Name
 */}}
 {{- define "ejbca.databaseSecretName" -}}
 {{- if .Values.mariadb.enabled }}
@@ -208,4 +208,16 @@ Return the MariaDB User
 {{- else -}}
     {{- printf "%s-%s" .Release.Name "externaldb" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the name of the ConfigMap containing external CAs
+to import
+*/}}
+{{- define "ejbca.externalCAsCM" -}}
+{{- if .Values.ejbcaCAimportCM }}
+{{- printf "%s" .Values.ejbcaCAimportCM -}}
+{{- else if .Files.Glob "externalCAs/*" }}
+{{- printf "%s-external-cas" (include "ejbca.fullname" .) -}}
+{{- end }}
 {{- end -}}

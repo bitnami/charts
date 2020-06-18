@@ -60,6 +60,8 @@ ejbcaHttpsServerHostname: "localhost"
 ## An optional ConfigMap containing a set of CA
 ## certificates that will be imported in the truststore
 ##
+## By providing this parameter, files in path "./externalCAs" will
+## be ignored
 # ejbcaCAimportCM:
 
 # FIXME: DETAIL THIS DESCRIPTION

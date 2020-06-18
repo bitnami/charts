@@ -76,7 +76,7 @@ spec:
             - name: EJBCA_HTTPS_SERVER_HOSTNAME
               value: {{ .Values.ejbcaHttpsServerHostname | quote }}
             {{- end }}
-            {{- if .Values.ejbcaCAimportCM }}
+            {{- if or .Values.ejbcaCAimportCM (.Files.Glob "externalCAs/*") }}
             - name: EJBCA_EXTERNAL_CAS_DIR
               value: "/bitnami/externalCAs"
             {{- end }}
@@ -110,14 +110,16 @@ spec:
               subPath: ejbca
             {{- if .Values.ejbcaKeystoreSecret }}
             - name: ejbca-keystore
-              mountPath: /bitnami/ejbca/tls/
+              mountPath: /bitnami/ejbca/tls/keystore.jks
+              subPath: "keystore.jks"
             {{- end }}
             {{- if .Values.ejbcaTruststoreSecret }}
             - name: ejbca-truststore
-              mountPath: /bitnami/ejbca/tls/
+              mountPath: /bitnami/ejbca/tls/truststore.jks
+              subPath: "truststore.jks"
             {{- end }}
-            {{- if .Values.ejbcaCAimportCM }}
-            - name: ejbca-import-cas
+            {{- if or .Values.ejbcaCAimportCM (.Files.Glob "externalCAs/*") }}
+            - name: ejbca-external-cas
               mountPath: /bitnami/externalCAs
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
@@ -130,10 +132,10 @@ spec:
         {{- include "ejbca.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-          {{- if .Values.ejbcaCAimportCM }}
-        - name: ejbca-import-cas
+          {{- if or .Values.ejbcaCAimportCM (.Files.Glob "externalCAs/*") }}
+        - name: ejbca-external-cas
           configMap:
-            name: {{ .Values.ejbcaCAimportCM }}
+            name: {{ template "ejbca.externalCAsCM" . }}
           {{- end }}
           {{- if .Values.ejbcaKeystoreSecret }}
         - name: ejbca-keystore
