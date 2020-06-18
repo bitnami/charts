@@ -3,11 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.kubeops.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.kubeops.replicaCount }}
   selector:
@@ -18,7 +15,9 @@ spec:
     metadata:
       labels:
         app: {{ template "kubeapps.kubeops.fullname" . }}
+        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
         release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ template "kubeapps.kubeops.fullname" . }}
@@ -48,6 +47,14 @@ spec:
           args:
             - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
             - --assetsvc-url=http://{{ template "kubeapps.assetsvc.fullname" . }}:{{ .Values.assetsvc.service.port }}
+            {{- if .Values.featureFlags.additionalClusters }}
+            - --additional-clusters-config-path=/config/additional-clusters.conf
+            {{- end }}
+          {{- if .Values.featureFlags.additionalClusters }}
+          volumeMounts:
+            - name: kubeops-config
+              mountPath: /config
+          {{- end }}
           env:
             - name: POD_NAMESPACE
               valueFrom:
@@ -65,4 +72,11 @@ spec:
           {{- if .Values.kubeops.resources }}
           resources: {{- toYaml .Values.kubeops.resources | nindent 12 }}
           {{- end }}
+      {{- if .Values.featureFlags.additionalClusters }}
+      volumes:
+        - name: kubeops-config
+          configMap:
+            name: {{ template "kubeapps.kubeops-config.fullname" . }}
+      {{- end }}
+
 {{- end }}{{/* matches useHelm3 */}}

@@ -169,6 +169,20 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `mailReceiver.priority`              | Defines a new task priority                                                                                                                                                                                                                                                                                                                                                                          | `""`                                                    |
 | `mailReceiver.assignedTo`            | Defines a new task priority                                                                                                                                                                                                                                                                                                                                                                          | `""`                                                    |
 | `mailReceiver.allowOverride`         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to alllow all attributes                                                                                                                                                                                                                                                       | `""`                                                    |
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                                                                                                                                                                                                                                                     | `""`                                                    |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                                                                                                                                                                                                                                                  | `""`                                                    |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                                                                                                                                                                                                                                                  | `""`                                                    |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                                                                                                                                                                                                                                                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                  |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                                                                                                                                                                                                                                                   | `/etc/ssl/private/ssl-cert-snakeoil.key`                |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                                                                                                                                                                                                                                             | `/etc/ssl/certs/chain.pem`                              |
+| `certificates.customCA`              | Defines a list of secrets to import into the container trust store                                                                                                                                                                                                                                                                                                                                   | `[]`                                                    |
+| `certificates.image.registry`        | Container sidecar registry                                                                                                                                                                                                                                                                                                                                                                           | `docker.io`                                             |
+| `certificates.image.repository`      | Container sidecar image                                                                                                                                                                                                                                                                                                                                                                              | `bitnami/minideb`                                       |
+| `certificates.image.tag`             | Container sidecar image tag                                                                                                                                                                                                                                                                                                                                                                          | `buster`                                                |
+| `certificates.image.pullPolicy`      | Container sidecar image pull policy                                                                                                                                                                                                                                                                                                                                                                  | `IfNotPresent`                                          |
+| `certificates.image.pullSecrets`     | Container sidecar image pull secrets                                                                                                                                                                                                                                                                                                                                                                 | `image.pullSecrets`                                     |
+| `certificates.extraEnvVars`          | Container sidecar extra environment variables (eg proxy)                                                                                                                                                                                                                                                                                                                                             | `[]`                                                    |
+
 
 The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
@@ -221,6 +235,26 @@ The following example includes two PVCs, one for Redmine and another for MariaDB
 
 ```bash
 $ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB bitnami/redmine
+```
+
+## CA Certificates
+
+Custom CA certificates not included in the base docker image can be added with
+the following configuration. The secret must exist in the same namespace as the
+deployment. Will load all certificates files it finds in the secret.
+
+```yaml
+certificates:
+  customCAs:
+  - secret: my-ca-1
+  - secret: my-ca-2
+```
+
+###Secret
+Secret can be created with:
+
+```bash
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ## Upgrading

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "rabbitmq": {
+    "auth": {
       "type": "object",
       "properties": {
         "username": {
@@ -15,17 +15,17 @@
           "title": "RabbitMQ password",
           "form": true,
           "description": "Defaults to a random 10-character alphanumeric string if not set"
-        },
-        "extraConfiguration": {
-          "type": "string",
-          "title": "Extra RabbitMQ Configuration",
-          "form": true,
-          "render": "textArea",
-          "description": "Extra configuration to be appended to RabbitMQ Configuration"
         }
       }
     },
-    "replicas": {
+    "extraConfiguration": {
+      "type": "string",
+      "title": "Extra RabbitMQ Configuration",
+      "form": true,
+      "render": "textArea",
+      "description": "Extra configuration to be appended to RabbitMQ Configuration"
+    },
+    "replicaCount": {
       "type": "integer",
       "form": true,
       "title": "Number of replicas",
@@ -51,8 +51,8 @@
           "sliderMax": 100,
           "sliderUnit": "Gi",
           "hidden": {
-            "condition": false,
-            "value": "persistence.enabled"
+            "value": false,
+            "path": "persistence/enabled"
           }
         }
       }
@@ -88,8 +88,8 @@
               "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
               "form": true,
               "hidden": {
-                "condition": false,
-                "value": "metrics.enabled"
+                "value": false,
+                "path": "metrics/enabled"
               }
             }
           }

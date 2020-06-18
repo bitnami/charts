@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ template "grafana.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "grafana.fullname" . }}
@@ -17,6 +17,12 @@ spec:
     - host: {{ .name | quote }}
       http:
         paths:
+        {{- range .extraPaths }}
+          - path: {{ .path }}
+            backend:
+              serviceName: {{ .backend.serviceName }}
+              servicePort: {{ .backend.servicePort}}
+        {{- end }}
         {{- $paths := default (list "/") .paths }}
         {{- range $paths }}
           - path: {{ . }}

@@ -2,11 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kubeapps.frontend-config.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.frontend-config.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 data:
   k8s-api-proxy.conf: |-
     # Disable buffering for log streaming
