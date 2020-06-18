@@ -20,7 +20,7 @@
           "description": "Set this to true in order to add the corresponding annotations for cert-manager",
           "hidden": {
             "value": false,
-            "path": "ingress.enabled"
+            "path": "ingress/enabled"
           }
         },
         "hostname": {
@@ -29,7 +29,7 @@
           "title": "Hostname",
           "hidden": {
             "value": false,
-            "path": "ingress.enabled"
+            "path": "ingress/enabled"
           }
         }
       }
