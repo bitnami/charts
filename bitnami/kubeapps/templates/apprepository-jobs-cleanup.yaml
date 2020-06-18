@@ -8,13 +8,12 @@ metadata:
     helm.sh/hook-delete-policy: hook-succeeded
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
 spec:
   template:
     metadata:
       labels:
         app: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
-        app.kubernetes.io/name: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
+        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
         release: {{ .Release.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:

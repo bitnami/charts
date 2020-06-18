@@ -5,7 +5,6 @@ metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository.fullname" . }}
 rules:
   - apiGroups:
       - ""
@@ -47,7 +46,6 @@ metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository.fullname" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -99,7 +97,6 @@ metadata:
   name: "kubeapps:{{ .Release.Namespace }}:apprepositories-read"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository.fullname" . }}
 rules:
   - apiGroups:
       - kubeapps.com
@@ -117,7 +114,6 @@ metadata:
   name: "kubeapps:controller:{{ .Release.Namespace }}:apprepositories-read"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository.fullname" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -133,7 +129,6 @@ metadata:
   name: "kubeapps:{{ .Release.Namespace }}:apprepositories-write"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository.fullname" . }}
 rules:
   - apiGroups:
       - kubeapps.com

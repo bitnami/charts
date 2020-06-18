@@ -4,7 +4,6 @@ metadata:
   name: {{ template "kubeapps.frontend-config.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.frontend-config.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.frontend-config.fullname" . }}
 data:
   k8s-api-proxy.conf: |-
     # Disable buffering for log streaming

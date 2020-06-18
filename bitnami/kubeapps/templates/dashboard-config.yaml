@@ -4,7 +4,6 @@ metadata:
   name: {{ template "kubeapps.dashboard-config.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.dashboard-config.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.dashboard-config.fullname" . }}
 data:
   vhost.conf: |-
     server {

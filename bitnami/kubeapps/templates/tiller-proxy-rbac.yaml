@@ -6,7 +6,6 @@ metadata:
   name: {{ template "kubeapps.tiller-proxy.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.tiller-proxy.fullname" . }}
 rules:
   - apiGroups:
       - ""
@@ -29,7 +28,6 @@ metadata:
   name: {{ template "kubeapps.tiller-proxy.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.tiller-proxy.fullname" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -46,7 +44,6 @@ metadata:
   name: "kubeapps:controller:tiller-proxy-ns-discovery-{{ .Release.Namespace }}"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.tiller-proxy.fullname" . }}
 rules:
 - apiGroups:
     - ""
@@ -61,7 +58,6 @@ metadata:
   name: "kubeapps:controller:tiller-proxy-ns-discovery-{{ .Release.Namespace }}"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.tiller-proxy.fullname" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -79,7 +75,6 @@ metadata:
   name: "kubeapps:controller:tiller-proxy-operators-{{ .Release.Namespace }}"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.tiller-proxy.fullname" . }}
 rules:
 - apiGroups:
     - ""
@@ -94,7 +89,6 @@ metadata:
   name: "kubeapps:controller:tiller-proxy-operators-{{ .Release.Namespace }}"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.tiller-proxy.fullname" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

@@ -7,7 +7,6 @@ metadata:
     "helm.sh/hook": post-install
   labels:{{ include "kubeapps.extraAppLabels" $ | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" $ }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository.fullname" $ }}
 spec:
   type: helm
   url: {{ .url }}

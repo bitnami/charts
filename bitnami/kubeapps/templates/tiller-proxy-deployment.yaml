@@ -5,7 +5,6 @@ metadata:
   name: {{ template "kubeapps.tiller-proxy.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.tiller-proxy.fullname" . }}
 spec:
   replicas: {{ .Values.tillerProxy.replicaCount }}
   selector:
@@ -16,7 +15,7 @@ spec:
     metadata:
       labels:
         app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-        app.kubernetes.io/name: {{ template "kubeapps.tiller-proxy.fullname" . }}
+        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
         release: {{ .Release.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:

@@ -66,8 +66,8 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         },
         "tls": {
@@ -75,8 +75,8 @@
           "form": true,
           "title": "Enable TLS configuration",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         },
         "certManager": {
@@ -85,8 +85,8 @@
           "title": "Use cert-manager to auto-generate the TLS certificate",
           "description": "Add the corresponding annotations for cert-manager to auto-generate the TLS certificate",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         }
       }
@@ -107,8 +107,8 @@
           "title": "Identity Provider name",
           "description": "See https://pusher.github.io/oauth2_proxy/auth-configuration to find available providers",
           "hidden": {
-            "condition": false,
-            "value": "authProxy.enabled"
+            "value": false,
+            "path": "authProxy/enabled"
           }
         },
         "clientID": {
@@ -117,8 +117,8 @@
           "title": "Client ID:",
           "description": "Client ID of the Identity Provider",
           "hidden": {
-            "condition": false,
-            "value": "authProxy.enabled"
+            "value": false,
+            "path": "authProxy/enabled"
           }
         },
         "clientSecret": {
@@ -127,8 +127,8 @@
           "title": "Client Secret",
           "description": "Secret used to validate the Client ID",
           "hidden": {
-            "condition": false,
-            "value": "authProxy.enabled"
+            "value": false,
+            "path": "authProxy/enabled"
           }
         },
         "cookieSecret": {
@@ -137,8 +137,8 @@
           "title": "Cookie Secret",
           "description": "Used by OAuth2 Proxy to encrypt any credentials",
           "hidden": {
-            "condition": false,
-            "value": "authProxy.enabled"
+            "value": false,
+            "path": "authProxy/enabled"
           }
         }
       }

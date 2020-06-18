@@ -5,7 +5,6 @@ metadata:
   name: {{ template "kubeapps.tiller-proxy.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.name" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.name" . }}
 spec:
   type: ClusterIP
   ports:

@@ -9,7 +9,6 @@ metadata:
     helm.sh/hook-weight: "-10"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
 rules:
   - apiGroups:
       - kubeapps.com
@@ -36,7 +35,6 @@ metadata:
     helm.sh/hook-weight: "-10"
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

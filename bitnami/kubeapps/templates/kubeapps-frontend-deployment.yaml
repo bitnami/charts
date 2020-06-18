@@ -4,7 +4,6 @@ metadata:
   name: {{ template "kubeapps.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.fullname" . }}
-    app.kubernetes.io/name: {{ template "kubeapps.fullname" . }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
@@ -17,7 +16,7 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/kubeapps-frontend-config.yaml") . | sha256sum }}
       labels:
         app: {{ template "kubeapps.fullname" . }}
-        app.kubernetes.io/name: {{ template "kubeapps.fullname" . }}
+        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
         release: {{ .Release.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
