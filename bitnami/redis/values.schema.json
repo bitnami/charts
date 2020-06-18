@@ -13,8 +13,8 @@
       "form": true,
       "description": "Defaults to a random 10-character alphanumeric string if not set",
       "hidden": {
-        "condition": false,
-        "value": "usePassword"
+        "value": false,
+        "path": "usePassword"
       }
     },
     "cluster": {
@@ -33,8 +33,8 @@
           "title": "Slave Replicas",
           "form": true,
           "hidden": {
-            "condition": false,
-            "value": "cluster.enabled"
+            "value": false,
+            "path": "cluster/enabled"
           }
         }
       }
@@ -64,8 +64,8 @@
               "sliderMax": 100,
               "sliderUnit": "Gi",
               "hidden": {
-                "condition": false,
-                "value": "master.persistence.enabled"
+                "value": false,
+                "path": "master/persistence/enabled"
               }
             },
             "matchLabels": {
@@ -85,8 +85,8 @@
       "title": "Slave replicas settings",
       "form": true,
       "hidden": {
-        "condition": false,
-        "value": "cluster.enabled"
+        "value": false,
+        "path": "cluster/enabled"
       },
       "properties": {
         "persistence": {
@@ -109,8 +109,8 @@
               "sliderMax": 100,
               "sliderUnit": "Gi",
               "hidden": {
-                "condition": false,
-                "value": "slave.persistence.enabled"
+                "value": false,
+                "path": "slave/persistence/enabled"
               }
             },
             "matchLabels": {
@@ -156,8 +156,8 @@
               "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
               "form": true,
               "hidden": {
-                "condition": false,
-                "value": "metrics.enabled"
+                "value": false,
+                "path": "metrics/enabled"
               }
             }
           }
