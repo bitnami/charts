@@ -3,11 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.tiller-proxy.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.tiller-proxy.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.tillerProxy.replicaCount }}
   selector:
@@ -18,7 +15,9 @@ spec:
     metadata:
       labels:
         app: {{ template "kubeapps.tiller-proxy.fullname" . }}
+        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
         release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "kubeapps.tiller-proxy.fullname" . }}
       # Increase termination timeout to let remaining operations to finish before killing the pods

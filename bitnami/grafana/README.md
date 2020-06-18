@@ -141,22 +141,23 @@ The following tables lists the configurable parameters of the grafana chart and 
 
 ### Exposure parameters
 
-| Parameter                           | Description                                                                           | Default             |
-|-------------------------------------|---------------------------------------------------------------------------------------|---------------------|
-| `service.type`                      | Kubernetes Service type                                                               | `ClusterIP`         |
-| `service.port`                      | Grafana service port                                                                  | `3000`              |
-| `service.nodePort`                  | Port to bind to for NodePort service type (client port)                               | `nil`               |
-| `service.annotations`               | Annotations for Grafana service                                                       | `{}`                |
-| `service.loadBalancerIP`            | loadBalancerIP if Grafana service type is `LoadBalancer`                              | `nil`               |
-| `service.loadBalancerSourceRanges`  | loadBalancerSourceRanges if Grafana service type is `LoadBalancer`                    | `nil`               |
-| `ingress.enabled`                   | Enable the use of the ingress controller to access the web UI                         | `false`             |
-| `ingress.certManager`               | Add annotations for cert-manager                                                      | `false`             |
-| `ingress.annotations`               | Annotations for the Grafana Ingress                                                   | `{}`                |
-| `ingress.hosts[0].name`             | Hostname to your Grafana installation                                                 | `grafana.local`     |
-| `ingress.hosts[0].paths`            | Path within the url structure                                                         | `["/"]`             |
-| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                                        | `false`             |
-| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)  | `nil`               |
-| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                                             | `grafana.local-tls` |
+| Parameter                           | Description                                                                                                                                                                                                                           | Default             |
+|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------|
+| `service.type`                      | Kubernetes Service type                                                                                                                                                                                                               | `ClusterIP`         |
+| `service.port`                      | Grafana service port                                                                                                                                                                                                                  | `3000`              |
+| `service.nodePort`                  | Port to bind to for NodePort service type (client port)                                                                                                                                                                               | `nil`               |
+| `service.annotations`               | Annotations for Grafana service                                                                                                                                                                                                       | `{}`                |
+| `service.loadBalancerIP`            | loadBalancerIP if Grafana service type is `LoadBalancer`                                                                                                                                                                              | `nil`               |
+| `service.loadBalancerSourceRanges`  | loadBalancerSourceRanges if Grafana service type is `LoadBalancer`                                                                                                                                                                    | `nil`               |
+| `ingress.enabled`                   | Enable the use of the ingress controller to access the web UI                                                                                                                                                                         | `false`             |
+| `ingress.certManager`               | Add annotations for cert-manager                                                                                                                                                                                                      | `false`             |
+| `ingress.annotations`               | Annotations for the Grafana Ingress                                                                                                                                                                                                   | `{}`                |
+| `ingress.hosts[0].name`             | Hostname to your Grafana installation                                                                                                                                                                                                 | `grafana.local`     |
+| `ingress.hosts[0].paths`            | Path within the url structure                                                                                                                                                                                                         | `["/"]`             |
+| `ingress.hosts[0].extraPaths`       | Ingress extra paths to prepend to every host configuration. Useful when configuring [custom actions with AWS ALB Ingress Controller](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#actions). | `[]`                |
+| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                                                                                                                                                                                        | `false`             |
+| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                                                                                                                                                  | `nil`               |
+| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                                                                                                                                                                                             | `grafana.local-tls` |
 
 ### Metrics parameters
 

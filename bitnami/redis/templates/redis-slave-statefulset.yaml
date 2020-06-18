@@ -478,16 +478,16 @@ spec:
           emptyDir: {}
         - name: redis-tmp-conf
           emptyDir: {}
-    {{- if not .Values.slave.persistence.enabled }}
-        - name: redis-data
-          emptyDir: {}
-    {{- else }}
     {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
             secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
             defaultMode: 256
     {{- end }}
+    {{- if not .Values.slave.persistence.enabled }}
+        - name: redis-data
+          emptyDir: {}
+    {{- else }}
   volumeClaimTemplates:
     - metadata:
         name: redis-data

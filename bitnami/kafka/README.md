@@ -558,14 +558,14 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 - `auth.certificatesPassword` -> renamed to `auth.jksPassword`.
 - `sslEndpointIdentificationAlgorithm` -> renamedo to `auth.tlsEndpointIdentificationAlgorithm`.
 - `auth.brokerUser` -> renamed to `auth.jaas.clientUser`
-- `auth.brokePassword` -> renamed to `auth.jaas.clientPassword`
+- `auth.brokerPassword` -> renamed to `auth.jaas.clientPassword`
 - `auth.interBrokerUser` -> renamed to `auth.jaas.interBrokerUser`
 - `auth.interBrokerPassword` -> renamed to `auth.jaas.interBrokerPassword`
 - `auth.zookeeperUser` -> renamed to `auth.jaas.zookeeperUser`
 - `auth.zookeeperPassword` -> renamed to `auth.jaas.zookeeperPassword`
 - `auth.existingSecret` -> renamed to `auth.jaas.existingSecret`
 - `service.sslPort` -> deprecated in favor of `service.internalPort`
-- `service.nodePorts.kafka` and ``service.nodePorts.ssl` -> deprecated in favor of `service.nodePort`
+- `service.nodePorts.kafka` and `service.nodePorts.ssl` -> deprecated in favor of `service.nodePort`
 - `metrics.kafka.extraFlag` -> new parameter
 - `metrics.kafka.certificatesSecret` -> new parameter
 

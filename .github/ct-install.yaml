@@ -9,4 +9,5 @@ excluded-charts:
   - kibana
   - kong
   - mariadb-galera
+  - discourse
 remote: origin

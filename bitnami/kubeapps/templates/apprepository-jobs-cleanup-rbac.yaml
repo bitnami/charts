@@ -7,11 +7,8 @@ metadata:
     helm.sh/hook: post-delete
     helm.sh/hook-delete-policy: hook-succeeded
     helm.sh/hook-weight: "-10"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 rules:
   - apiGroups:
       - kubeapps.com
@@ -36,11 +33,8 @@ metadata:
     helm.sh/hook: post-delete
     helm.sh/hook-delete-policy: hook-succeeded
     helm.sh/hook-weight: "-10"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository-jobs-cleanup.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
