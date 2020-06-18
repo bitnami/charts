@@ -216,13 +216,17 @@ spec:
 {{- if not .Values.data.persistence.enabled }}
         - name: "data"
           emptyDir: {}
+{{- else if .Values.data.persistence.existingClaim }}
+        - name: "data"
+          persistentVolumeClaim:
+            claimName: {{ .Values.data.persistence.existingClaim }}
 {{- else }}
   volumeClaimTemplates:
     - metadata:
         name: "data"
         {{- if .Values.data.persistence.annotations }}
         annotations: {{- toYaml .Values.data.persistence.annotations | nindent 10 }}
-        {{- end }}
+        {{- end }}        
       spec:
         accessModes: {{- toYaml .Values.data.persistence.accessModes | nindent 10 }}
         {{ $storage := dict "global" .Values.global "local" .Values.data }}
