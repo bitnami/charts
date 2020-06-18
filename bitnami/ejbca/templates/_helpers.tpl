@@ -108,6 +108,17 @@ imagePullSecrets:
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for ingress.
+*/}}
+{{- define "ejbca.ingress.apiVersion" -}}
+{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Renders a value that contains template.
 Usage:
 {{ include "ejbca.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}

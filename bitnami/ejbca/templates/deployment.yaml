@@ -29,8 +29,6 @@ spec:
           image: {{ template "ejbca.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           env:
-            # FIXME: REMOVE COMMENTS
-            # SECRET-RELATED ENV VARS
             - name: EJBCA_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -55,8 +53,6 @@ spec:
                   name: {{ .Values.ejbcaTruststoreSecret }}
                   key: truststore-password
             {{- end }}
-            # FIXME: REMOVE COMMENTS
-            # REGULAR OBLIGATORY ENV VARS
             - name: EJBCA_ADMIN_USERNAME
               value: {{ .Values.ejbcaAdminUsername | quote }}
             - name: EJBCA_DATABASE_HOST
@@ -67,7 +63,6 @@ spec:
               value: {{ template "ejbca.databaseName" . }}
             - name: EJBCA_DATABASE_USERNAME
               value: {{ template "ejbca.databaseUsername" . }}
-            # REGULAR OPTIONAL ENV VARS
             {{- if .Values.ejbcaJavaOpts }}
             - name: EJBCA_JAVA_OPTS
               value: {{ .Values.ejbcaJavaOpts | quote }}
@@ -80,7 +75,6 @@ spec:
             - name: EJBCA_EXTERNAL_CAS_DIR
               value: "/bitnami/externalCAs"
             {{- end }}
-            # FIXME: REVISIT THIS CONDITION FOR FINAL IMPLEMENTATION
             {{- if .Values.ejbcaCA }}
             - name: EJBCA_CA_NAME
               value: {{ .Values.ejbcaCA.name | quote }}
@@ -95,7 +89,6 @@ spec:
             - name: EJBCA_CA_VALIDITY
               value: {{ .Values.ejbcaCA.validity | quote }}
             {{- end }}
-            # EXTRA ENV VARS
             {{- if .Values.extraEnv }}
             {{- include "ejbca.tplValue" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
             {{- end }}
@@ -104,6 +97,28 @@ spec:
               containerPort: 8080
             - name: https
               containerPort: 8443
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            httpGet:
+              path: /publicweb/healthcheck/ejbcahealth
+              port: http
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            httpGet:
+              path: /publicweb/healthcheck/ejbcahealth
+              port: http
+          {{- end }}
           volumeMounts:
             - name: ejbca-data
               mountPath: /bitnami/ejbca
