@@ -46,7 +46,7 @@ imagePullSecrets: []
 # fullnameOverride:
 
 discourse:
-  ## Discourse host to create application URLs. You may also include the port.
+  ## Discourse host to create application URLs. The port will be automatilly included.
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
   ##
   host: ""
@@ -259,7 +259,7 @@ persistence:
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
 ##
 service:
-  type: NodePort
+  type: LoadBalancer
   ## HTTP Port
   ##
   port: 80
@@ -279,7 +279,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   nodePorts:
-    http: "30000"
+    http: ""
 
 ## Ingress paramaters
 ##

@@ -4,7 +4,8 @@ metadata:
   name: {{ template "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
 data:
-  DISCOURSE_HOSTNAME: {{ .Values.discourse.host | quote }}
+  {{- $port:=.Values.service.port | toString }}
+  DISCOURSE_HOSTNAME: "{{ include "discourse.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
   DISCOURSE_USERNAME: {{ .Values.discourse.username | quote }}
   DISCOURSE_EMAIL: {{ .Values.discourse.email | quote }}
   DISCOURSE_SITENAME: {{ .Values.discourse.siteName | quote }}

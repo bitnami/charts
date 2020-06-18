@@ -88,7 +88,7 @@ The following table lists the configurable parameters of the Discourse chart and
 
 | Parameter                                 | Description                                                                           | Default                                                      |
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `service.type`                            | Kubernetes Service type                                                               | `NodePort`                                                   |
+| `service.type`                            | Kubernetes Service type                                                               | `LoadBalancer`                                               |
 | `service.port`                            | Service HTTP port                                                                     | `80`                                                         |
 | `service.externalTrafficPolicy`           | Enable client source IP preservation                                                  | `Cluster`                                                    |
 | `service.annotations`                     | Service annotations                                                                   | `{}` (evaluated as a template)                               |
@@ -262,13 +262,6 @@ postgresql.persistence.storageClass=nfs
 ### Production configuration
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Use LoadBalancer as default:
-
-```diff
-- service.type: NodePort
-+ service.type: LoadBalancer
-```
 
 - Enable client source IP preservation:
 
