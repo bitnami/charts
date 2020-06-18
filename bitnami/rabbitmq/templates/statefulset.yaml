@@ -280,8 +280,8 @@ spec:
               - key: rabbitmq.conf
                 path: rabbitmq.conf
               {{- if .Values.advancedConfiguration}}
-              - key: advanced.conf
-                path: advanced.conf
+              - key: advanced.config
+                path: advanced.config
               {{- end }}
         {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume
