@@ -246,7 +246,7 @@ initDBConfigMap=init-db
 
 The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image stores the cassandra data at the `/bitnami/cassandra` path of the container.
 
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.  Persistent volumes can also be created dynamically with other CNCF software like OpenEBS.  See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. Persistent volumes can also be created dynamically with other CNCF software like OpenEBS. See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Adjust permissions of persistent volume mountpoint
 
