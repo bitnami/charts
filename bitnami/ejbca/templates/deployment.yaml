@@ -1,0 +1,163 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ejbca.fullname" . }}
+  labels: {{- include "ejbca.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {{- include "ejbca.matchLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels: {{- include "ejbca.labels" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- include "ejbca.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+{{- include "ejbca.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- include "ejbca.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: ejbca
+          image: {{ template "ejbca.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            # FIXME: REMOVE COMMENTS
+            # SECRET-RELATED ENV VARS
+            - name: EJBCA_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ejbca.fullname" . }}
+                  key: ejbca-admin-password
+            - name: EJBCA_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ejbca.databaseSecretName" . }}
+                  key: mariadb-password
+            {{- if .Values.ejbcaKeystoreSecret }}
+            - name: EJBCA_KEYSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ejbcaKeystoreSecret }}
+                  key: keystore-password
+            {{- end }}
+            {{- if .Values.ejbcaTruststoreSecret }}
+            - name: EJBCA_TRUSTSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ejbcaTruststoreSecret }}
+                  key: truststore-password
+            {{- end }}
+            # FIXME: REMOVE COMMENTS
+            # REGULAR OBLIGATORY ENV VARS
+            - name: EJBCA_ADMIN_USERNAME
+              value: {{ .Values.ejbcaAdminUsername | quote }}
+            - name: EJBCA_DATABASE_HOST
+              value: {{ template "ejbca.databaseHost" . }}
+            - name: EJBCA_DATABASE_PORT
+              value: {{ template "ejbca.databasePort" . }}
+            - name: EJBCA_DATABASE_NAME
+              value: {{ template "ejbca.databaseName" . }}
+            - name: EJBCA_DATABASE_USERNAME
+              value: {{ template "ejbca.databaseUsername" . }}
+            # REGULAR OPTIONAL ENV VARS
+            {{- if .Values.ejbcaJavaOpts }}
+            - name: EJBCA_JAVA_OPTS
+              value: {{ .Values.ejbcaJavaOpts | quote }}
+            {{- end }}
+            {{- if .Values.ejbcaHttpsServerHostname }}
+            - name: EJBCA_HTTPS_SERVER_HOSTNAME
+              value: {{ .Values.ejbcaHttpsServerHostname | quote }}
+            {{- end }}
+            {{- if .Values.ejbcaCAimportCM }}
+            - name: EJBCA_EXTERNAL_CAS_DIR
+              value: "/bitnami/externalCAs"
+            {{- end }}
+            # FIXME: REVISIT THIS CONDITION FOR FINAL IMPLEMENTATION
+            {{- if .Values.ejbcaCA }}
+            - name: EJBCA_CA_NAME
+              value: {{ .Values.ejbcaCA.name | quote }}
+            - name: EJBCA_CA_DN
+              value: {{ .Values.ejbcaCA.DN | quote }}
+            - name: EJBCA_CA_KEYSPEC
+              value: {{ .Values.ejbcaCA.keyspec | quote }}
+            - name: EJBCA_CA_KEYTYPE
+              value: {{ .Values.ejbcaCA.keytype | quote }}
+            - name: EJBCA_CA_SIGNALG
+              value: {{ .Values.ejbcaCA.signAlg | quote }}
+            - name: EJBCA_CA_VALIDITY
+              value: {{ .Values.ejbcaCA.validity | quote }}
+            {{- end }}
+            # EXTRA ENV VARS
+            {{- if .Values.extraEnv }}
+            {{- include "ejbca.tplValue" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
+          volumeMounts:
+            - name: ejbca-data
+              mountPath: /bitnami/ejbca
+              subPath: ejbca
+            {{- if .Values.ejbcaKeystoreSecret }}
+            - name: ejbca-keystore
+              mountPath: /bitnami/ejbca/tls/
+            {{- end }}
+            {{- if .Values.ejbcaTruststoreSecret }}
+            - name: ejbca-truststore
+              mountPath: /bitnami/ejbca/tls/
+            {{- end }}
+            {{- if .Values.ejbcaCAimportCM }}
+            - name: ejbca-import-cas
+              mountPath: /bitnami/externalCAs
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "ejbca.tplValue" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "ejbca.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+          {{- if .Values.ejbcaCAimportCM }}
+        - name: ejbca-import-cas
+          configMap:
+            name: {{ .Values.ejbcaCAimportCM }}
+          {{- end }}
+          {{- if .Values.ejbcaKeystoreSecret }}
+        - name: ejbca-keystore
+          secret:
+            secretName: {{ .Values.ejbcaKeystoreSecret }}
+            items:
+            - key: "keystore.jks"
+              path: "keystore.jks"
+          {{- end }}
+          {{- if .Values.ejbcaTruststoreSecret }}
+        - name: ejbca-truststore
+          secret:
+            secretName: {{ .Values.ejbcaTruststoreSecret }}
+            items:
+            - key: "truststore.jks"
+              path: "truststore.jks"
+          {{- end }}
+        - name: ejbca-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "ejbca.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{ end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "ejbca.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

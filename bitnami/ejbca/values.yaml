@@ -1,0 +1,394 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Bitnami EJBCA image version
+## ref: https://hub.docker.com/r/bitnami/ejbca/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/ejbca
+  tag: latest
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+  ## Set to true if you would like to see extra information on logs
+  ##
+
+## String to partially override ebjca.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override ebjca.fullname template
+##
+# fullnameOverride:
+
+replicaCount: 1
+
+## Admin of the application
+## ref: https://github.com/bitnami/bitnami-docker-ejbca#environment-variables
+##
+ejbcaAdminUsername: bitnami
+
+## Password for the administrator account
+## If the password is not specified, a random one will be generated
+##
+# ejbcaAdminPassword:
+
+## Options used to launch the WildFly server
+## E.g. ejbcaJavaOpts: "-Xms2048m -Xmx2048m"
+# ejbcaJavaOpts:
+
+## Hostname of the server when using HTTPS
+##
+ejbcaHttpsServerHostname: "localhost"
+
+## An optional ConfigMap containing a set of CA
+## certificates that will be imported in the truststore
+##
+# ejbcaCAimportCM:
+
+# FIXME: DETAIL THIS DESCRIPTION
+## Details regarding the CA that EJBCA will init
+##
+ejbcaCA:
+  ## The name of the CA
+  ##
+  name: "ManagementCA"
+
+  ## The DomainName of the CA
+  ##
+  DN: "CN=ManagementCA,ManagementCA"
+
+  ## Key size to be used
+  ##
+  keyspec: "2048"
+
+  ## Type of key to be used
+  ##
+  keytype: "RSA"
+
+  ## Algorithm to use for signing
+  ##
+  signAlg: "SHA256WithRSA"
+
+  ## Certificate validity (in days)
+  ##
+  validity: "3650"
+
+## Existing Secret name containing the default Keystore object
+## to be used by EBJCA.
+##
+## It should contain at least the following two keys:
+##
+## "keystore.jks" --> The actual keystore object
+## "keystore-password" --> Password used to encrypt keystore.jks
+##
+## ejbcaKeystoreSecret:
+
+## Existing Secret name containing the default Truststore object
+## to be used by EBJCA.
+##
+## It should contain at least the following two keys:
+##
+## "truststore.jks" --> The actual truststore object
+## "truststore-password" --> Password used to encrypt truststore.jks
+##
+## ejbcaTruststoreSecret:
+
+## Additional container environment variables
+## extraEnv:
+##   - name:
+##     value:
+##
+extraEnv: []
+
+## Additional volume mounts
+## Example: Mount CA file
+## extraVolumeMounts
+##   - name: ca-cert
+##     subPath: ca_cert
+##     mountPath: /path/to/ca_cert
+##
+extraVolumeMounts: []
+
+## Additional volumes
+## Example: Add secret volume
+## extraVolumes:
+##  - name: ca-cert
+##    secret:
+##      secretName: ca-cert
+##      items:
+##        - key: ca-cert
+##          path: ca_cert
+##
+extraVolumes: []
+
+## EJBCA containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  limits: {}
+  requests:
+    memory: 512Mi
+    cpu: 300m
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## K8s Security Context for EJBCA pods
+## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+
+## EJBCA pod extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
+##
+service:
+  type: NodePort
+  ## HTTP Port
+  ##
+  port: 80
+  ## HTTPS Port
+  ##
+  httpsPort: 443
+  ## HTTPS Target Port
+  ## defaults to https unless overridden to the specified port.
+  ## if you want the target port to be "http" or "80" you can specify that here.
+  ##
+  httpsTargetPort: https
+  ## Node Ports to expose
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
+  nodePorts:
+    http: ""
+    https: ""
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  annotations: {}
+  ## Limits which cidr blocks can connect to service's load balancer
+  ## Only valid if service.type: LoadBalancer
+  ##
+  loadBalancerSourceRanges: []
+  ## Extra ports to expose (normally used with the `sidecar` value)
+  # extraPorts:
+
+## Configure the ingress resource that allows you to access the
+## EJBCA installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  ##
+  enabled: false
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
+  certManager: false
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: ebjca.local
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
+  annotations: {}
+
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: ebjca.local
+  ##   path: /
+  ##
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - ebjca.local
+  ##   secretName: ebjca.local-tls
+  ##
+
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ##
+  secrets: []
+  ## - name: ebjca.local-tls
+  ##   key:
+  ##   certificate:
+  ##
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  ## EJBCA data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ##
+  ## If you want to reuse an existing claim, you can pass the name of the PVC using
+  ## the existingClaim variable
+  # existingClaim: your-claim
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+##
+## MariaDB chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+##
+mariadb:
+  ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
+  enabled: true
+  ## Disable MariaDB replication
+  ##
+  replication:
+    enabled: false
+
+  ## Create a database and a database user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ##
+  db:
+    name: bitnami_ejbca
+    user: bn_ejbca
+    ## If the password is not specified, mariadb will generates a random password
+    ##
+    # password:
+
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # rootUser:
+  #   password:
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  master:
+    persistence:
+      enabled: true
+      ## mariadb data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      # storageClass: "-"
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
+
+##
+## External Database Configuration
+##
+## All of these values are only used when mariadb.enabled is set to false
+##
+externalDatabase:
+  ## Database host
+  ##
+  host: localhost
+
+  ## non-root Username for EJBCA Database
+  ##
+  user: bn_ejbca
+
+  ## Database password
+  ##
+  password: ""
+
+  ## Database name
+  ##
+  database: bitnami_ejbca
+
+  ## Database port number
+  ##
+  port: 3306
+
+## Add sidecars to the pod.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
+
+## Add init containers to the pod.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## Example:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##
+initContainers: {}
