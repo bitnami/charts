@@ -272,6 +272,11 @@ priorityClassName: ""
 ##
 affinity: {}
 
+## Scheduler name
+## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+#schedulerName: stork
+
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
