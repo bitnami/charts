@@ -1,4 +1,4 @@
-{{- if .Values.envoy.enabled -}}
+{{- if .Values.envoy.enabled }}
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -133,7 +133,7 @@ spec:
         args:
         - bootstrap
         - /config/envoy.json
-        - --xds-address=contour
+        - --xds-address={{ template "contour.fullname" . }}
         - --xds-port=8001
         - --envoy-cafile=/certs/ca.crt
         - --envoy-cert-file=/certs/tls.crt
@@ -162,4 +162,4 @@ spec:
         secret:
           secretName: envoycert
       restartPolicy: Always
-{{- end -}}
+{{- end }}
