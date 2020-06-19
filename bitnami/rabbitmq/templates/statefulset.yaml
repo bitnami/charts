@@ -149,6 +149,8 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
                   key: rabbitmq-erlang-cookie
+            - name: RABBITMQ_USERNAME
+              value: {{ .Values.auth.username | quote }}
             - name: RABBITMQ_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -156,9 +158,8 @@ spec:
                   key: rabbitmq-password
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
-            {{- range $key, $value := .Values.extraEnvVars }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
