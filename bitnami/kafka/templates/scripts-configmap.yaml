@@ -100,9 +100,9 @@ data:
 
     {{- if (include "kafka.tlsEncryption" .) }}
     if [[ -f "/certs/kafka.truststore.jks" ]] && [[ -f "/certs/kafka-${ID}.keystore.jks" ]]; then
-        mkdir -p /bitnami/kafka/config/certs
-        cp "/certs/kafka.truststore.jks" "/bitnami/kafka/config/certs/kafka.truststore.jks"
-        cp "/certs/kafka-${ID}.keystore.jks" "/bitnami/kafka/config/certs/kafka.keystore.jks"
+        mkdir -p /opt/bitnami/kafka/config/certs
+        cp "/certs/kafka.truststore.jks" "/opt/bitnami/kafka/config/certs/kafka.truststore.jks"
+        cp "/certs/kafka-${ID}.keystore.jks" "/opt/bitnami/kafka/config/certs/kafka.keystore.jks"
         ls /bitnami/kafka/config/certs/
     else
         echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
