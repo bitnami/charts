@@ -1,4 +1,4 @@
-{{- if .Values.contour.enabled -}}
+{{- if .Values.contour.enabled }}
 ---
 apiVersion: v1
 kind: Service
@@ -15,8 +15,8 @@ spec:
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: contour
   type: ClusterIP
-{{- end -}}
-{{- if .Values.envoy.enabled -}}
+{{- end }}
+{{- if .Values.envoy.enabled }}
 ---
 apiVersion: v1
 kind: Service
@@ -27,7 +27,7 @@ metadata:
     {{- if .Values.envoy.service.labels }}
     {{- include "contour.tplValue" (dict "value" .Values.envoy.service.labels "context" $) | nindent 4 }}
     {{- end }}
-  annotations: 
+  annotations:
     # This annotation puts the AWS ELB into "TCP" mode so that it does not
     # do HTTP negotiation for HTTPS connections at the ELB edge.
     # The downside of this is the remote IP address of all connections will
@@ -76,4 +76,4 @@ spec:
   selector: {{- include "contour.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy
   type: {{ .Values.envoy.service.type }}
-{{- end -}}
+{{- end }}

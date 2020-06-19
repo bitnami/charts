@@ -1,4 +1,4 @@
-{{- if .Values.contour.enabled -}}
+{{- if .Values.contour.enabled }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -58,4 +58,4 @@ spec:
   parallelism: 1
   completions: 1
   backoffLimit: 1
-{{- end -}}
+{{- end }}
