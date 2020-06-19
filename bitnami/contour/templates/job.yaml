@@ -1,0 +1,61 @@
+{{- if .Values.contour.enabled }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "contour.fullname" . }}-contour-certgen
+  labels: {{- include "contour.labels" . | nindent 4 }}
+    app.kubernetes.io/component: contour-certgen
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    metadata:
+      labels: {{- include "contour.labels" . | nindent 8 }}
+        app.kubernetes.io/component: contour-certgen
+    spec:
+{{- include "contour.imagePullSecrets" . | nindent 6 }}
+    {{- with .Values.contour.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.contour.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.contour.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      containers:
+      - name: contour
+        image: {{ include "contour.image" . }}
+        imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+        command:
+        - contour
+        args:
+        - certgen
+        - --kube
+        - --incluster
+        - --overwrite
+        - --secrets-format=compact
+        - --namespace=$(CONTOUR_NAMESPACE)
+        env:
+        - name: CONTOUR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+{{ toYaml .Values.contour.resources | indent 10 }}
+      restartPolicy: Never
+      serviceAccountName: {{ include "contour.contourCertGenServiceAccountName" . }}
+      {{- if .Values.contour.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.contour.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.contour.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
+      {{- end }}
+  parallelism: 1
+  completions: 1
+  backoffLimit: 1
+{{- end }}
