@@ -49,11 +49,22 @@ spec:
         resources:
           requests:
             storage: {{ .Values.alertmanager.persistence.size | quote }}
-        {{- include "prometheus-operator.alertmanager.storageClass" . }}
+        {{- include "prometheus-operator.alertmanager.storageClass" . | nindent 8 }}
   {{- end }}
   {{- end }}
-  {{- if .Values.alertmanager.podMetadata }}
-  podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podMetadata "context" $) | nindent 4 }}
+  {{- if or .Values.alertmanager.podMetadata.labels .Values.alertmanager.podMetadata.annotations (eq .Values.alertmanager.podAntiAffinity "soft") (eq .Values.alertmanager.podAntiAffinity "hard") }}
+  podMetadata:
+    labels:
+    {{- if .Values.alertmanager.podMetadata.labels }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podMetadata.labels "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if or (eq .Values.alertmanager.podAntiAffinity "soft") (eq .Values.alertmanager.podAntiAffinity "hard") }}
+    {{- include "prometheus-operator.alertmanager.matchLabels" . | nindent 6 }}
+    {{- end }}
+    {{- if .Values.alertmanager.podMetadata.annotations }}
+    annotations:
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.podMetadata.annotations "context" $) | nindent 6 }}
+    {{- end }}
   {{- end }}
   {{- if .Values.alertmanager.nodeSelector }}
   nodeSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.alertmanager.nodeSelector "context" $) | nindent 4 }}

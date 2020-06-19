@@ -15,7 +15,15 @@ data:
       timeout -s 9 $1 \
       redis-cli \
         -h localhost \
+{{- if .Values.tls.enabled }}
+        -p $REDIS_TLS_PORT \
+        --tls \
+        --cert {{ template "redis-cluster.tlsCert" . }} \
+        --key {{ template "redis-cluster.tlsCertKey" . }} \
+        --cacert {{ template "redis-cluster.tlsCACert" . }} \
+{{- else }}
         -p $REDIS_PORT \
+{{- end }}
         ping
     )
     if [ "$response" != "PONG" ]; then
@@ -33,7 +41,15 @@ data:
       timeout -s 9 $1 \
       redis-cli \
         -h localhost \
+{{- if .Values.tls.enabled }}
+        -p $REDIS_TLS_PORT \
+        --tls \
+        --cert {{ template "redis-cluster.tlsCert" . }} \
+        --key {{ template "redis-cluster.tlsCertKey" . }} \
+        --cacert {{ template "redis-cluster.tlsCACert" . }} \
+{{- else }}
         -p $REDIS_PORT \
+{{- end }}
         ping
     )
     if [ "$response" != "PONG" ] && [ "$response" != "LOADING Redis is loading the dataset in memory" ]; then

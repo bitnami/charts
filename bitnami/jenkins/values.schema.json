@@ -33,8 +33,8 @@
           "sliderMax": 100,
           "sliderUnit": "Gi",
           "hidden": {
-            "condition": false,
-            "value": "persistence.enabled"
+            "value": false,
+            "path": "persistence/enabled"
           }
         }
       }
@@ -85,8 +85,8 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         }
       }

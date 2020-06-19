@@ -72,8 +72,8 @@
           "title": "Slave Replicas",
           "form": true,
           "hidden": {
-            "condition": false,
-            "value": "replication.enabled"
+            "value": false,
+            "path": "replication/enabled"
           }
         }
       }

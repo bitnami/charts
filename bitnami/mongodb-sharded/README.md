@@ -337,6 +337,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+### Change MongoDB version
+
+To modify the MongoDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mongodb-sharded/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
 ### Sharding
 
 This chart deploys a sharded cluster by default. Some characteristics of this chart are:

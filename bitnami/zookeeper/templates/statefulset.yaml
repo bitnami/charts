@@ -33,6 +33,9 @@ spec:
       annotations: {{- include "zookeeper.podAnnotations" . | nindent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ template "zookeeper.serviceAccountName" . }}
@@ -112,6 +115,8 @@ spec:
               value: {{ .Values.autopurge.purgeInterval | quote }}
             - name: ZOO_AUTOPURGE_RETAIN_COUNT
               value: {{ .Values.autopurge.snapRetainCount | quote }}
+            - name: ZOO_MAX_SESSION_TIMEOUT
+              value: {{ .Values.maxSessionTimeout | quote }}
             - name: ZOO_SERVERS
               {{- $replicaCount := int .Values.replicaCount }}
               {{- $followerPort := int .Values.service.followerPort }}

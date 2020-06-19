@@ -80,6 +80,9 @@ spec:
             {{- range .Values.domainFilters }}
             - --domain-filter={{ . }}
             {{- end }}
+            {{- range .Values.excludeDomains }}
+            - --exclude-domains={{ . }}
+            {{- end }}
             {{- range .Values.zoneIdFilters }}
             - --zone-id-filter={{ . }}
             {{- end }}
@@ -156,7 +159,9 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "google" }}
             # Google Arguments
+            {{- if .Values.google.project }}
             - --google-project={{ .Values.google.project }}
+            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox Arguments
@@ -247,7 +252,6 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
             # Cloudflare environment variables
-            {{- if .Values.cloudflare.secretName }}
             - name: CF_API_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -260,16 +264,6 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: cloudflare_api_key
                   optional: true
-            {{- else }}
-            {{- if .Values.cloudflare.apiToken }}
-            - name: CF_API_TOKEN
-              value: {{ .Values.cloudflare.apiToken | quote }}
-            {{- end }}
-            {{- if .Values.cloudflare.apiKey  }}
-            - name: CF_API_KEY
-              value: {{ .Values.cloudflare.apiKey | quote }}
-            {{- end }}
-            {{- end }}
             - name: CF_API_EMAIL
               value: {{ .Values.cloudflare.email | quote }}
             {{- end }}

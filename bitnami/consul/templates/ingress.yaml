@@ -3,6 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "consul.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "consul.labels" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}

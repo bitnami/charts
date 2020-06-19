@@ -50,12 +50,14 @@ spec:
               --{{ $key }}{{ if $value }}={{ $value }}{{ end }} \
               {{- end }}
               --web.listen-address=:9308
+          {{- if (include "kafka.client.saslAuthentication" .) }}
           env:
             - name: SASL_USER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: client-password
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9308
@@ -71,6 +73,6 @@ spec:
         - name: kafka-exporter-certificates
           secret:
             secretName: {{ .Values.metrics.kafka.certificatesSecret }}
-            defaultMode: 256
+            defaultMode: 0440
       {{- end }}
 {{- end }}

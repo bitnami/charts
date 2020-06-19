@@ -7,7 +7,7 @@
     "hostname": "{{ template "harbor.notary-signer" . }}",
     "port": "7899",
 {{- if not .Values.notary.secretName }}
-    "tls_ca_file": "./notary-signer-ca.crt",
+    "tls_ca_file": "/etc/notary/notary-signer-ca.crt",
 {{- else }}
     "tls_ca_file": "/etc/ssl/notary/cert/notary-signer-ca.crt",
 {{- end }}

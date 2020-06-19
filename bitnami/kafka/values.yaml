@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.5.0-debian-10-r59
+  tag: 2.5.0-debian-10-r71
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -329,6 +329,7 @@ updateStrategy: RollingUpdate
 
 ## Pod labels. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
 podLabels: {}
 
 ## Pod annotations. Evaluated as a template
@@ -338,6 +339,7 @@ podAnnotations: {}
 
 ## Name of the priority class to be used by kafka pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
 priorityClassName: ""
 
 ## Affinity for pod assignment. Evaluated as a template
@@ -391,21 +393,24 @@ resources:
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
-  tcpSocket:
-    port: kafka-client
+  enabled: true
   initialDelaySeconds: 10
   timeoutSeconds: 5
   # failureThreshold: 3
   # periodSeconds: 10
   # successThreshold: 1
 readinessProbe:
-  tcpSocket:
-    port: kafka-client
+  enabled: true
   initialDelaySeconds: 5
   failureThreshold: 6
   timeoutSeconds: 5
   # periodSeconds: 10
   # successThreshold: 1
+
+## Custom liveness/readiness probes that will override the default ones
+##
+customLivenessProbe: {}
+customReadinessProbe: {}
 
 ## Pod Disruption Budget configuration
 ## The PDB will only be created if replicaCount is greater than 1
@@ -484,7 +489,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.4-debian-10-r85
+      tag: 1.17.4-debian-10-r95
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -654,7 +659,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r134
+      tag: 1.2.0-debian-10-r144
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -742,7 +747,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.13.0-debian-10-r23
+      tag: 0.13.0-debian-10-r33
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
