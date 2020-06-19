@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: prometheus-proxy
 spec:
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: prometheus-proxy
   endpoints:
     - port: http
