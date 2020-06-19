@@ -2,11 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.dashboard.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.dashboard.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.dashboard.replicaCount }}
   selector:
@@ -19,7 +16,11 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/dashboard-config.yaml") . | sha256sum }}
       labels:
         app: {{ template "kubeapps.dashboard.fullname" . }}
+        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
         release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        chart: {{ template "kubeapps.chart" . }}
+        helm.sh/chart: {{ template "kubeapps.chart" . }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.dashboard.affinity }}
