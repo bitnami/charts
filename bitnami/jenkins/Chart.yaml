@@ -1,7 +1,7 @@
 apiVersion: v1
 name: jenkins
-version: 5.0.12
-appVersion: 2.222.3
+version: 5.0.13
+appVersion: 2.222.4
 description: The leading open source automation server
 keywords:
   - jenkins

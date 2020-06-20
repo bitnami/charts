@@ -2,11 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.apprepository.replicaCount }}
   selector:
@@ -18,6 +15,8 @@ spec:
       labels:
         app: {{ template "kubeapps.apprepository.fullname" . }}
         release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
     spec:
       serviceAccountName: {{ template "kubeapps.apprepository.fullname" . }}
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
@@ -65,9 +64,7 @@ spec:
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}
-            {{- if .Values.featureFlags.reposPerNamespace }}
             - --repos-per-namespace
-            {{- end }}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
           {{- end }}
