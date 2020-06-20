@@ -534,6 +534,10 @@ service:
   ##
   distPort: 25672
 
+  ## Node port (Manager)
+  ##
+  # distNodePort: 30676
+
   ## RabbitMQ Manager port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -541,19 +545,19 @@ service:
 
   ## Node port (Manager)
   ##
-  # nodeManagerPort: 30673
+  # managerNodePort: 30673
 
   ## RabbitMQ Prometheues metrics port
   ##
   metricsPort: 9419
 
-  ## Node port (Metrics)
+  ## Node port for metrics
   ##
-  # nodeMetricsPort: 30674
+  # metricsNodePort: 30674
 
-  ## Node port (EPMD Discovery)
+  ## Node port for EPMD Discovery
   ##
-  # nodeDiscoverPort: 30675
+  # epmdNodePort: 30675
 
   ## Extra ports to expose
   ## E.g.:
