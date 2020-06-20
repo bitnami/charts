@@ -1,0 +1,12 @@
+{{- if .Values.configInline }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "contour.fullname" . }}
+  labels: {{- include "contour.labels" . | nindent 4}}
+    app.kubernetes.io/component: contour
+data:
+  contour.yaml: |
+{{ include "contour.tplValue" ( dict "value" .Values.configInline "context" $) | indent 4 }}
+{{- end }}

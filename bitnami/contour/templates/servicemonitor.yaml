@@ -1,0 +1,91 @@
+{{- if .Values.prometheus.serviceMonitor.enabled }}
+{{- if .Values.contour.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "contour.fullname" . }}-contour-metrics
+  labels: {{- include "contour.labels" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+spec:
+  type: ClusterIP
+  selector: {{- include "contour.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+  ports:
+  - name: metrics
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "contour.fullname" . }}-contour
+  labels: {{- include "contour.labels" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+spec:
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: contour
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+  - port: metrics
+    {{- if .Values.prometheus.serviceMonitor.interval }}
+    interval: {{ .Values.prometheus.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
+    metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.relabelings }}
+    relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 4 }}
+    {{- end }}
+{{- end }}
+{{- if .Values.envoy.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "contour.fullname" . }}-envoy-metrics
+  labels: {{- include "contour.labels" . | nindent 4 }}
+    app.kubernetes.io/component: envoy
+spec:
+  type: ClusterIP
+  selector: {{- include "contour.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: envoy
+  ports:
+  - name: metrics
+    port: 8002
+    protocol: TCP
+    targetPort: 8002
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "contour.fullname" . }}-envoy
+  labels: {{- include "contour.labels" . | nindent 4}}
+    app.kubernetes.io/component: envoy
+spec:
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: envoy
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+  - port: metrics
+    path: /stats/prometheus
+    {{- if .Values.prometheus.serviceMonitor.interval }}
+    interval: {{ .Values.prometheus.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
+    metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.relabelings }}
+    relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 4 }}
+    {{- end }}
+{{- end }}
+{{- end }}
