@@ -36,7 +36,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ template "wordpress.fullname" . }}
+              serviceName: {{ template "discourse.fullname" . }}
               servicePort: http
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
@@ -45,7 +45,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ template "wordpress.fullname" $ }}
+              serviceName: {{ template "discourse.fullname" $ }}
               servicePort: http
     {{- end }}
 {{- end }}

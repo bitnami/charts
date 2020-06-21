@@ -90,11 +90,12 @@ The following table lists the configurable parameters of the Discourse chart and
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `service.type`                            | Kubernetes Service type                                                               | `LoadBalancer`                                               |
 | `service.port`                            | Service HTTP port                                                                     | `80`                                                         |
+| `service.loadBalancerIP`                  | LoadBalancer service IP address                                                       | `nil`                                                        |
 | `service.externalTrafficPolicy`           | Enable client source IP preservation                                                  | `Cluster`                                                    |
 | `service.annotations`                     | Service annotations                                                                   | `{}` (evaluated as a template)                               |
 | `service.loadBalancerSourceRanges`        | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)            | `[]`                                                         |
 | `service.extraPorts`                      | Extra ports to expose in the service (normally used with the `sidecar` value)         | `nil`                                                        |
-| `service.nodePorts.http`                  | Kubernetes http node port                                                             | `30000`                                                      |
+| `service.nodePorts.http`                  | Kubernetes http node port                                                             | `""`                                                         |
 
 ### Discourse parameters
 

@@ -73,7 +73,7 @@ discourse:
   ##
   email: user@example.com
 
-  securityContext: {}
+  containerSecurityContext: {}
   ## capabilities:
   ##   drop:
   ##   - ALL
@@ -140,7 +140,7 @@ discourse:
 
 sidekiq:
 
-  securityContext: {}
+  containerSecurityContext: {}
   ## capabilities:
   ##   drop:
   ##   - ALL
@@ -265,6 +265,8 @@ service:
   port: 80
   ## Node Ports to expose
   # nodePort:
+  ## Use loadBalancerIP to request a specific static IP,
+  # loadBalancerIP:
   ## Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##

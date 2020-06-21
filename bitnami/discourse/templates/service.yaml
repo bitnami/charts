@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: {{ include "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
+  {{- if .Values.service.annotations }}
+  annotations: {{- include "discourse.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
