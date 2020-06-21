@@ -195,6 +195,10 @@ mariadb:
   replication:
     enabled: false
 
+  ## Use existing secret (ignores root, db and replication passwords)
+  ##
+  # existingSecret:
+
   ## Create a database and a database user
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
   ##
