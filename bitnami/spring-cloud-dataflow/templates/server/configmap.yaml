@@ -38,8 +38,10 @@ data:
                   export:
                     prometheus:
                       enabled: true
-                      host: {{ $fullname }}-prometheus-proxy
-                      port: {{ $rsocketPort }}
+                      rsocket:
+                        enabled: true
+                        host: {{ $fullname }}-prometheus-proxy
+                        port: {{ $rsocketPort }}
             {{- end }}
             {{- if .Values.server.configuration.batchEnabled }}
             task:
@@ -48,8 +50,10 @@ data:
                   export:
                     prometheus:
                       enabled: true
-                      host: {{ $fullname }}-prometheus-proxy
-                      port: {{ $rsocketPort }}
+                      rsocket:
+                        enabled: true
+                        host: {{ $fullname }}-prometheus-proxy
+                        port: {{ $rsocketPort }}
             {{- end }}
           {{- end }}
       jpa:
