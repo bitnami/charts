@@ -602,6 +602,10 @@ ingress:
   ##
   enabled: false
 
+  ## Path for the default host
+  ##
+  path: /
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
