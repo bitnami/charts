@@ -149,7 +149,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `service.annotations`                           | annotations for redis service                                  | {}                |
 | `service.labels`                                | Additional labels for redis service                            | {}                |
 | `service.type`                                  | Service type for default redis service                         | `ClusterIP`       |
-| `service.loadBalancerIP                         | loadBalancerIP if service.type is `LoadBalancer`               | `nil`             |
+| `service.loadBalancerIP`                        | loadBalancerIP if service.type is `LoadBalancer`               | `nil`             |
 | `resources`                                     | Redis CPU/Memory resource requests/limits                      | Memory: `256Mi`, CPU: `100m` |
 | `livenessProbe.enabled`                         | Turn on and off liveness probe.                                | `true`            |
 | `livenessProbe.initialDelaySeconds`             | Delay before liveness probe is initiated.                      | `30`              |
@@ -185,6 +185,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | Parameter                                       | Description                                                    | Default           |
 |-------------------------------------------------|----------------------------------------------------------------|-------------------|
 | `cluster.init`                                  | Enable the creation of a job that initializes the Redis Cluster | `true`            |
+| `cluster.helmHooks`                             | Customize the values for the `helm.sh/hook` annotation. Leave empty to run the cluster creation Job without using Helm hooks. | `post-install,post-upgrade`            |
 | `cluster.activeDeadlineSeconds`                 | Number of seconds that the job to create the cluster will be waiting for the nodes to be ready | `600`             |
 | `cluster.nodes`                                 | Number of nodes in the Redis cluster                           | `6`               |
 | `cluster.replicas`                              | Number of replicas for every master in the cluster             | `1`               |
