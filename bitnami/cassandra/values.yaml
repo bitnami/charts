@@ -205,6 +205,11 @@ dbUser:
 ##
 # initDBConfigMap:
 
+## Secret with cql script (with sensitive data). Useful for creating a keyspace
+## and pre-populating data
+##
+# initDBSecret:
+
 ## Cassandra container's liveness and readiness probes
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
