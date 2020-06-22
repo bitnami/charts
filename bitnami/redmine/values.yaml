@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 4.1.1-debian-10-r66
+  tag: 4.1.1-debian-10-r70
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -194,6 +194,10 @@ mariadb:
   ## Disable MariaDB replication
   replication:
     enabled: false
+
+  ## Use existing secret (ignores root, db and replication passwords)
+  ##
+  # existingSecret:
 
   ## Create a database and a database user
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
@@ -388,7 +392,7 @@ mailReceiver:
   image:
     registry: docker.io
     repository: bitnami/redmine
-    tag: 4.1.1-debian-10-r65
+    tag: 4.1.1-debian-10-r69
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

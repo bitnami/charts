@@ -52,7 +52,11 @@ spec:
             - name: REDMINE_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.mariadb.existingSecret }}
+                  name: {{ .Values.mariadb.existingSecret }}
+                  {{- else }}
                   name: {{ template "redmine.mariadb.fullname" . }}
+                  {{- end }}
                   key: mariadb-password
             {{- else }}
               value: {{ .Values.externalDatabase.host | quote }}
