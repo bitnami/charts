@@ -3,11 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "phabricator.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "phabricator.name" . }}
-    helm.sh/chart: {{ include "phabricator.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "phabricator.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}

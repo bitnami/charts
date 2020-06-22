@@ -5,12 +5,8 @@ metadata:
   name: {{ .name }}
   annotations:
     "helm.sh/hook": post-install
-    "helm.sh/hook-weight": "10"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" $ | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" $ }}
-    chart: {{ template "kubeapps.chart" $ }}
-    release: {{ $.Release.Name }}
-    heritage: {{ $.Release.Service }}
 spec:
   type: helm
   url: {{ .url }}

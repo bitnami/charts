@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 2.4.5-debian-10-r72
+  tag: 2.4.6-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -72,6 +72,11 @@ master:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## Annotations to add to the statefulset
+  ##
+  ##
+  podAnnotations: {}
 
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -176,6 +181,11 @@ worker:
     fsGroup: 1001
     runAsUser: 1001
 
+  ## Annotations to add to the statefulset
+  ##
+  ##
+  podAnnotations: {}
+
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -223,7 +233,7 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-    
+
   ## Array to add extra volumes
   ##
   ## extraVolumes:

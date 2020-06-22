@@ -14,12 +14,12 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 {{- with .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml . | indent 4 }}
+{{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
 {{- with .Values.metrics.prometheusRule.rules }}
   groups:
     - name: {{ template "redis.name" $ }}
-      rules: {{ tpl (toYaml .) $ | nindent 8 }}
+      rules: {{- tpl (toYaml .) $ | nindent 8 }}
 {{- end }}
 {{- end }}

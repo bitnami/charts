@@ -7,47 +7,6 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
-Return the proper Grafana image name
-*/}}
-{{- define "grafana.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "grafana.labels" -}}
-app.kubernetes.io/name: {{ include "grafana.name" . }}
-helm.sh/chart: {{ include "grafana.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "grafana.matchLabels" -}}
-app.kubernetes.io/name: {{ include "grafana.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -73,6 +32,70 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "grafana.labels" -}}
+app.kubernetes.io/name: {{ include "grafana.name" . }}
+helm.sh/chart: {{ include "grafana.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "grafana.matchLabels" -}}
+app.kubernetes.io/name: {{ include "grafana.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
+Return the proper Grafana image name
+*/}}
+{{- define "grafana.image" -}}
+{{- $registryName := .Values.image.registry -}}
+{{- $repositoryName := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Image Renderer image name
+*/}}
+{{- define "grafana.imageRenderer.image" -}}
+{{- $registryName := .Values.imageRenderer.image.registry -}}
+{{- $repositoryName := .Values.imageRenderer.image.repository -}}
+{{- $tag := .Values.imageRenderer.image.tag | toString -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
+Also, we can't use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana.imagePullSecrets" -}}
@@ -87,19 +110,25 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if .Values.image.pullSecrets }}
+{{- else if or .Values.image.pullSecrets .Values.imageRenderer.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- end -}}
-{{- else if .Values.image.pullSecrets }}
+{{- range .Values.imageRenderer.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end }}
+{{- else if or .Values.image.pullSecrets .Values.imageRenderer.image.pullSecrets }}
 imagePullSecrets:
 {{- range .Values.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- end -}}
-{{- end -}}
+{{- range .Values.imageRenderer.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end }}
+{{- end }}
 
 {{/*
 Return  the proper Storage Class
@@ -212,6 +241,20 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
+Check if there are rolling tags in the images
+*/}}
+{{- define "grafana.checkRollingTags" -}}
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- if and (contains "bitnami/" .Values.imageRenderer.image.repository) (not (.Values.imageRenderer.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+WARNING: Rolling tag detected ({{ .Values.imageRenderer.image.repository }}:{{ .Values.imageRenderer.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- end }}
+{{- end -}}
+
+{{/*
 Validate values for Grafana.
 */}}
 {{- define "grafana.validateValues" -}}
@@ -281,3 +324,15 @@ is true or default otherwise.
         {{ default "default" .Values.serviceAccount.name }}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Return the appropriate apiVersion for deployment.
+*/}}
+{{- define "grafana.ingress.apiVersion" -}}
+{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+

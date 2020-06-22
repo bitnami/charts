@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.4.7-debian-10-r0
+  tag: 3.4.9-debian-10-r24
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -161,6 +161,11 @@ securityContext:
 ##
 clusterDomain: cluster.local
 
+## etcd statefulset variables
+##
+etcd:
+  initialClusterState: new
+
 ## Service parameters
 ##
 service:
@@ -214,6 +219,14 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
+
+## Define a disruption budget
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+##
+pdb:
+  enabled: false
+  # minAvailable: 1
+  # maxUnavailable: 1
 
 ## Etcd containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

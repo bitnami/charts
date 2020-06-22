@@ -2,11 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "kubeapps.fullname" . }}
-  labels:
-    app: {{ template "kubeapps.name" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  labels:{{ include "kubeapps.labels" . | nindent 4 }}
   {{- if .Values.frontend.service.annotations }}
   annotations: {{- include "kubeapps.tplValue" (dict "value" .Values.frontend.service.annotations "context" $) | nindent 4 }}
   {{- end }}
@@ -21,6 +17,9 @@ spec:
       targetPort: proxy
       {{- else }}
       targetPort: http
+      {{- end }}
+      {{- if and (eq .Values.frontend.service.type "NodePort") (not (empty .Values.frontend.service.nodePort)) }}
+      nodePort: {{ .Values.frontend.service.nodePort }}
       {{- end }}
       protocol: TCP
       name: http

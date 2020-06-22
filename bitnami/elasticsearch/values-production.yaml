@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.6.2-debian-10-r3
+  tag: 7.8.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -103,15 +103,15 @@ clusterDomain: cluster.local
 ##
 name: elastic
 
-## Elasticsearch discovery node parameters
-##
-discovery:
-  name: discovery
-
 ## Comma, semi-colon or space separated list of plugins to install at initialization
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
 # plugins:
+
+## File System snapshot repository path
+## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+##
+# snapshotRepoPath:
 
 ## Customize elasticsearch configuration
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
@@ -129,6 +129,40 @@ discovery:
 #   - name: es-certs
 #     mountPath: /certs
 #     readOnly: true
+
+## initdb scripts
+## Specify dictionary of scripts to be run at first boot
+## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+## For example:
+## initScripts:
+##   my_init_script.sh: |
+##      #!/bin/sh
+##      echo "Do something."
+initScripts:
+
+## ConfigMap with scripts to be run at first boot
+## Note: This will override initScripts
+initScriptsCM:
+
+## Secret with init scripts to execute (for sensitive data)
+##
+initScriptsSecret:
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: MY_ENV_VAR
+##    value: env_var_value
+##
+extraEnvVars: []
+
+## Name of a ConfigMap containing extra env vars
+##
+extraEnvVarsConfigMap:
+
+## Name of a Secret containing extra env vars
+##
+extraEnvVarsSecret:
 
 ## Elasticsearch master-eligible node parameters
 ##
@@ -148,6 +182,10 @@ master:
   ## Provide annotations for master-eligible pods.
   ##
   podAnnotations: {}
+
+  ## Extra labels to add to Pod
+  podLabels: {}
+
   ## Pod Security Context for master-eligible pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -272,6 +310,10 @@ coordinating:
   ## Provide annotations for the coordinating-only pods.
   ##
   podAnnotations: {}
+
+  ## Extra labels to add to Pod
+  podLabels: {}
+
   ## Pod Security Context for coordinating-only pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -371,6 +413,10 @@ data:
   ## Provide annotations for the data pods.
   ##
   podAnnotations: {}
+
+  ## Extra labels to add to Pod
+  podLabels: {}
+
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -468,6 +514,10 @@ ingest:
   ## Provide annotations for the ingest pods.
   ##
   podAnnotations: {}
+
+  ## Extra labels to add to Pod
+  podLabels: {}
+
   ## Pod Security Context for ingest pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -548,7 +598,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.1-debian-10-r65
+    tag: 5.8.1-debian-10-r142
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -567,6 +617,9 @@ curator:
     jobRestartPolicy: Never
 
   podAnnotations: {}
+
+  ## Extra labels to add to Pod
+  podLabels: {}
 
   rbac:
     # Specifies whether RBAC should be enabled
@@ -713,7 +766,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r64
+    tag: 1.1.0-debian-10-r141
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -752,6 +805,9 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
+
+  ## Extra labels to add to Pod
+  podLabels: {}
 
   ## Prometheus Operator ServiceMonitor configuration
   ##

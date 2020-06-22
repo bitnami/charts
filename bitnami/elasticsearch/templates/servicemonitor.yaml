@@ -7,16 +7,16 @@ metadata:
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
   labels: {{- include "elasticsearch.labels" . | nindent 4 }}
-    role: metrics
+    app.kubernetes.io/component: metrics
     {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   selector:
     matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
-      role: metrics
+      app.kubernetes.io/component: metrics
   endpoints:
-    - port: metrics
+    - port: http-metrics
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}

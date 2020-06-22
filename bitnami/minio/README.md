@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -50,7 +50,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following table lists the configurable parameters of the MinIO chart and their default values.
 
 | Parameter                            | Description                                                                                                                                               | Default                                                 |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
@@ -84,6 +84,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `deployment.updateStrategy`          | Deployment update strategy policy                                                                                                                         | `Recreate`                                              |
 | `existingSecret`                     | Existing secret with MinIO credentials                                                                                                                    | `nil`                                                   |
 | `useCredentialsFile`                 | Have the secret mounted as a file instead of env vars                                                                                                     | `false`                                                 |
+| `forceNewKeys`                       | Force admin credentials (access and secret key) to be reconfigured every time they change in the secrets                                                  | `false`                                                 |
 | `accessKey.password`                 | MinIO Access Key. Ignored if existing secret is provided.                                                                                                 | _random 10 character alphanumeric string_               |
 | `accessKey.forcePassword`            | Force users to specify an Access Key                                                                                                                      | `false`                                                 |
 | `secretKey.password`                 | MinIO Secret Key. Ignored if existing secret is provided.                                                                                                 | _random 40 character alphanumeric string_               |
@@ -123,7 +124,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `service.nodePort`                   | Port to bind to for NodePort service type                                                                                                                 | `nil`                                                   |
 | `service.loadBalancerIP`             | Static IP Address to use for LoadBalancer service type                                                                                                    | `nil`                                                   |
 | `service.annotations`                | Kubernetes service annotations                                                                                                                            | `{}`                                                    |
-| `ingress.enabled`                    | Enable/disable ingress                                                                                                                                   | `false`                                                 |
+| `ingress.enabled`                    | Enable/disable ingress                                                                                                                                    | `false`                                                 |
 | `ingress.certManager`                | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
 | `ingress.annotations`                | Ingress annotations                                                                                                                                       | `[]`                                                    |
 | `ingress.hosts[0].name`              | Hostname to your MinIO installation                                                                                                                       | `minio.local`                                           |
@@ -136,6 +137,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `ingress.secrets[0].key`             | TLS Secret Key                                                                                                                                            | `nil`                                                   |
 | `networkPolicy.enabled`              | Enable NetworkPolicy                                                                                                                                      | `false`                                                 |
 | `networkPolicy.allowExternal`        | Don't require client label for connections                                                                                                                | `true`                                                  |
+| `prometheusAuthType`                 | Authentication mode for Prometheus (`jwt` or `public`)                                                                                                    | `public`                                                |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -208,6 +210,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - networkPolicy.allowExternal: true
 + networkPolicy.allowExternal: false
+```
+
+- Change Prometheus authentication:
+```diff
+- prometheusAuthType: public
++ prometheusAuthType: jwt
 ```
 
 ### Distributed mode

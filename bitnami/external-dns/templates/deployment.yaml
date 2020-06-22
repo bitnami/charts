@@ -34,9 +34,7 @@ spec:
       {{- with .Values.tolerations }}
       tolerations: {{ tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
-      {{- if .Values.rbac.create }}
       serviceAccountName: {{ template "external-dns.serviceAccountName" . }}
-      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
@@ -82,6 +80,9 @@ spec:
             {{- range .Values.domainFilters }}
             - --domain-filter={{ . }}
             {{- end }}
+            {{- range .Values.excludeDomains }}
+            - --exclude-domains={{ . }}
+            {{- end }}
             {{- range .Values.zoneIdFilters }}
             - --zone-id-filter={{ . }}
             {{- end }}
@@ -106,11 +107,17 @@ spec:
             {{- if .Values.crd.kind }}
             - --crd-source-kind={{ .Values.crd.kind }}
             {{- end }}
-            {{- range .Values.istioIngressGateways }}
-            - --istio-ingress-gateway={{ . }}
-            {{- end }}
             {{- range .Values.sources }}
             - --source={{ . }}
+            {{- end }}
+            {{- if eq .Values.provider "alibabacloud" }}
+            # Alibaba Cloud arguments
+            {{- if or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName }}
+            - --alibaba-cloud-config-file=/etc/kubernetes/alibaba-cloud.json
+            {{- end }}
+            {{- if .Values.alibabacloud.zoneType }}
+            - --alibaba-cloud-zone-type={{ .Values.alibabacloud.zoneType }}
+            {{- end }}
             {{- end }}
             {{- if or (eq .Values.provider "aws") (eq .Values.provider "aws-sd") }}
             # AWS arguments
@@ -133,11 +140,13 @@ spec:
             {{- if and (kindIs "bool" .Values.aws.evaluateTargetHealth) (not .Values.aws.evaluateTargetHealth) }}
             - --no-aws-evaluate-target-health
             {{- end }}
-            {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
+            {{- if or (and (eq .Values.provider "azure") (not .Values.azure.secretName)) (eq .Values.provider "azure-private-dns") }}
             # Azure Arguments
             {{- if .Values.azure.resourceGroup }}
             - --azure-resource-group={{ .Values.azure.resourceGroup }}
             {{- end }}
+            {{- end }}
+            {{- if eq .Values.provider "azure-private-dns" }}
             {{- if .Values.azure.subscriptionId }}
             - --azure-subscription-id={{ .Values.azure.subscriptionId }}
             {{- end }}
@@ -150,7 +159,9 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "google" }}
             # Google Arguments
+            {{- if .Values.google.project }}
             - --google-project={{ .Values.google.project }}
+            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox Arguments
@@ -175,6 +186,7 @@ spec:
             - --rfc2136-host={{ required "rfc2136.host must be supplied for provider 'rfc2136'" .Values.rfc2136.host }}
             - --rfc2136-port={{ .Values.rfc2136.port }}
             - --rfc2136-zone={{ required "rfc2136.zone must be supplied for provider 'rfc2136'" .Values.rfc2136.zone }}
+            - --rfc2136-min-ttl={{ .Values.rfc2136.minTTL }}
               {{- if .Values.rfc2136.tsigKeyname }}
             - --rfc2136-tsig-secret-alg={{ .Values.rfc2136.tsigSecretAlg }}
             - --rfc2136-tsig-keyname={{ .Values.rfc2136.tsigKeyname }}
@@ -225,32 +237,35 @@ spec:
             - name: AZURE_TENANT_ID
               value: {{ .Values.azure.tenantId }}
             {{- end }}
-            {{- if .Values.azure.aadClientId }}
-            - name: AZURE_CLIENT_ID
-              value: {{ .Values.azure.aadClientId }}
-            {{- end }}
-            {{- if .Values.azure.aadClientSecret }}
+            {{- if or .Values.azure.aadClientId .Values.azure.aadClientSecret .Values.azure.secretName }}
             - name: AZURE_CLIENT_SECRET
-              value: {{ .Values.azure.aadClientSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: azure_aad_client_secret
+            - name: AZURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: azure_aad_client_id
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
             # Cloudflare environment variables
-            {{- if or .Values.cloudflare.apiToken .Values.cloudflare.secretName }}
             - name: CF_API_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: cloudflare_api_token
-            {{- else if or .Values.cloudflare.apiKey .Values.cloudflare.secretName }}
+                  optional: true
             - name: CF_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: cloudflare_api_key
+                  optional: true
             - name: CF_API_EMAIL
-              value: {{ required "cloudflare.email is required if cloudflare.apiToken is not provided" .Values.cloudflare.email | quote }}
-            {{- end }}
+              value: {{ .Values.cloudflare.email | quote }}
             {{- end }}
             {{- if eq .Values.provider "coredns" }}
             # CoreDNS environment variables
@@ -320,6 +335,30 @@ spec:
               value: /etc/secrets/service-account/credentials.json
             {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "ovh" }}
+            # OVH environment variables
+            {{- if .Values.ovh.consumerKey }}
+            - name: OVH_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: ovh_consumer_key
+            {{- end }}
+            {{- if .Values.ovh.applicationKey }}
+            - name: OVH_APPLICATION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: ovh_application_key
+            {{- end }}
+            {{- if .Values.ovh.applicationSecret }}
+            - name: OVH_APPLICATION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: ovh_application_secret
+            {{- end }}
+            {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox environment variables
             {{- if .Values.infoblox.wapiConnectionPoolSize }}
@@ -351,13 +390,34 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: rfc2136_tsig_secret
             {{- end }}
-            {{- if and (eq .Values.provider "pdns") .Values.pdns.apiKey }}
+            {{- if and (eq .Values.provider "pdns") (or .Values.pdns.apiKey .Values.pdns.secretName) }}
             # PowerDNS environment variables
             - name: PDNS_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: pdns_api_key
+            {{- end }}
+            {{- if eq .Values.provider "vinyldns" }}
+            # VinylDNS environment variables
+            {{- if .Values.vinyldns.host }}
+            - name: VINYLDNS_HOST
+              value: {{ .Values.vinyldns.host }}
+            {{- end }}
+            {{- if .Values.vinyldns.accessKey }}
+            - name: VINYLDNS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: vinyldns-access-key
+            {{- end }}
+            {{- if .Values.vinyldns.secretKey }}
+            - name: VINYLDNS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: vinyldns-secret-key
+            {{- end }}
             {{- end }}
             {{- if .Values.extraEnv }}
             # Extra environment variables
@@ -375,6 +435,12 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
+            # Alibaba Cloud mountPath(s)
+            - name: alibabacloud-config-file
+              mountPath: /etc/kubernetes/
+              readOnly: true
+            {{- end }}
             {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) }}
             # AWS mountPath(s)
             - name: aws-credentials
@@ -427,6 +493,12 @@ spec:
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
       volumes:
+        {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
+        # Alibaba Cloud volume(s)
+        - name: alibabacloud-config-file
+          secret:
+            secretName: {{ template "external-dns.secretName" . }}
+        {{- end }}
         {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) }}
         # AWS volume(s)
         - name: aws-credentials
@@ -462,7 +534,7 @@ spec:
             - key: {{ .Values.google.serviceAccountSecretKey | quote }}
               path: credentials.json
             {{- end }}
-        {{- end }}     
+        {{- end }}
         {{- if eq .Values.provider "designate" }}
         # Designate volume(s)
         {{- if .Values.designate.customCA.enabled }}
@@ -486,5 +558,5 @@ spec:
         {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)
-        {{- toYaml .Values.extraVolumes | indent 8 }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}

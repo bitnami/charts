@@ -26,6 +26,7 @@ spec:
     matchLabels:
       app: {{ template "redis.name" . }}
       release: {{ .Release.Name }}
+      app.kubernetes.io/component: "metrics"
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

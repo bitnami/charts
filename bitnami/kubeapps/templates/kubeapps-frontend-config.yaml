@@ -2,12 +2,31 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kubeapps.frontend-config.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.frontend-config.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 data:
+  k8s-api-proxy.conf: |-
+    # Disable buffering for log streaming
+    proxy_buffering off;
+    # Hide Www-Authenticate to prevent it triggering a basic auth prompt in
+    # the browser with some clusters
+    proxy_hide_header Www-Authenticate;
+
+    # Keep the connection open with the API server even if idle (the default is 60 seconds)
+    # Setting it to 1 hour which should be enough for our current use case of deploying/upgrading apps
+    # If we enable other use-cases in the future we might need to bump this value
+    # More info here https://github.com/kubeapps/kubeapps/issues/766
+    proxy_read_timeout 1h;
+
+    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+    # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
+    proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+    {{- end }}
+  {{- range .Values.featureFlags.additionalClusters }}
+  {{- if .certificateAuthorityData }}
+  {{ .name }}-ca.pem: {{ .certificateAuthorityData }}
+   {{- end }}
+  {{- end}}
   vhost.conf: |-
     # Retain the default nginx handling of requests without a "Connection" header
     map $http_upgrade $connection_upgrade {
@@ -29,28 +48,38 @@ data:
         return 200 "healthy\n";
       }
 
+      # The default cluster running on the same cluster as Kubeapps.
+      location ~* /api/clusters/default {
+        rewrite /api/clusters/default/(.*) /$1 break;
+        rewrite /api/clusters/default / break;
+        proxy_pass https://kubernetes.default;
+        include "./server_blocks/k8s-api-proxy.conf";
+      }
+
+      # Ensure each additional cluster can be reached (should only be
+      # used with an auth-proxy where k8s credentials never leave
+      # the cluster). See additionalClusters option.
+      {{- range .Values.featureFlags.additionalClusters }}
+      location ~* /api/clusters/{{ .name }} {
+        rewrite /api/clusters/{{ .name }}/(.*) /$1 break;
+        rewrite /api/clusters/{{ .name }} / break;
+        proxy_pass {{ .apiServiceURL }};
+        {{- if .certificateAuthorityData }}
+        proxy_ssl_trusted_certificate "./server_blocks/{{ .name }}-ca.pem";
+        {{- end }}
+        include "./server_blocks/k8s-api-proxy.conf";
+      }
+      {{- end }}
+
+      # TODO: The following location is left for backwards compat but will no longer
+      # be needed once clients are sending the cluster name.
       # Using regexp match instead of prefix one because the application can be
       # deployed under a specific path i.e /kubeapps
       location ~* /api/kube {
         rewrite /api/kube/(.*) /$1 break;
         rewrite /api/kube / break;
         proxy_pass https://kubernetes.default;
-        # Disable buffering for log streaming
-        proxy_buffering off;
-        # Hide Www-Authenticate to prevent it triggering a basic auth prompt in
-        # the browser with some clusters
-        proxy_hide_header Www-Authenticate;
-
-        # Keep the connection open with the API server even if idle (the default is 60 seconds)
-        # Setting it to 1 hour which should be enough for our current use case of deploying/upgrading apps
-        # If we enable other use-cases in the future we might need to bump this value
-        # More info here https://github.com/kubeapps/kubeapps/issues/766
-        proxy_read_timeout 1h;
-
-        {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
-        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
-        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-        {{- end }}
+        include "./server_blocks/k8s-api-proxy.conf";
       }
 
       location ~* /api/assetsvc {

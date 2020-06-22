@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/prestashop
-  tag: 1.7.6-4-debian-10-r20
+  tag: 1.7.6-5-debian-10-r56
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -126,7 +126,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.1.44-debian-10-r54
+    tag: 10.1.45-debian-10-r40
   ## Disable MariaDB replication
   replication:
     enabled: false
@@ -273,6 +273,7 @@ resources:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
   enabled: true
+  path: /login
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -280,6 +281,7 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
+  path: /login
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3
@@ -303,7 +305,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.7.0-debian-10-r59
+    tag: 0.8.0-debian-10-r77
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
