@@ -247,6 +247,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "mongodb-sharded.validateValues" -}}
   {{- $messages := list -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.mongodbCustomDatabase" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.externalCfgServer" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicas" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.config" .) -}}
   {{- $messages := without $messages "" -}}
@@ -273,7 +274,7 @@ mongodb: mongodbUsername, mongodbDatabase
 {{/*
 Validate values of MongoDB - If using an external config server, then both the host and the replicaset name should be set.
 */}}
-{{- define "mongodb-sharded.validateValues.replicas" -}}
+{{- define "mongodb-sharded.validateValues.externalCfgServer" -}}
 {{- if and .Values.configsvr.external.replicasetName (not .Values.configsvr.external.host) -}}
 mongodb: invalidExternalConfigServer
     You specified a replica set name for the external config server but not a host. Set both configsvr.external.replicasetName and configsvr.external.host
