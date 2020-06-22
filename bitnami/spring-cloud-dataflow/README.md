@@ -243,8 +243,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | Parameter                                       | Description                                                             | Default                                                 |
 |-------------------------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------|
 | `rabbitmq.enabled`                              | Enable/disable RabbitMQ chart installation                              | `true`                                                  |
-| `rabbitmq.rabbitmq.user`                        | RabbitMQ username                                                       | `user`                                                  |
-| `rabbitmq.rabbitmq.password`                    | RabbitMQ password                                                       | _random 40 character alphanumeric string_               |
+| `rabbitmq.auth.user`                            | RabbitMQ username                                                       | `user`                                                  |
+| `rabbitmq.auth.password`                        | RabbitMQ password                                                       | _random 40 character alphanumeric string_               |
 
 ### Kafka chart parameters
 
