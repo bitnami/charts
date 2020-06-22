@@ -1,4 +1,4 @@
-{{- if .Values.shardsvr.arbiter.config }}
+{{- if and .Values.shards .Values.shardsvr.arbiter.replicas .Values.shardsvr.arbiter.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

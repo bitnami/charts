@@ -48,18 +48,21 @@ fullnameOverride:
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
 ##
 ## mongodbRootPassword: password
+##
 mongodbRootPassword:
 
 ## Create a non-root MongoDB user
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
 ##
 ## mongodbUsername: user
+##
 mongodbUsername:
 
 ## non-root MongoDB user password
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
 ##
 ## mongodbPassword: password
+##
 mongodbPassword:
 
 ## Create database on first run
@@ -72,12 +75,14 @@ mongodbDatabase:
 ## ref:
 ##
 ## replicaSetKey: testkey123
+##
 replicaSetKey:
 
 ## Name of a secret containing all the credentials above
 ## ref:
 ##
 ## existingSecret: name-of-existing-secret
+##
 existingSecret:
 
 ## Mount credentials as files instead of using environment variables
@@ -162,6 +167,7 @@ shardsvr:
     ##     ports:
     ##       - name: portname
     ##         containerPort: 1234
+    ##
     sidecars:
     ## Add init containers to the pod
     ## For example:
@@ -270,6 +276,7 @@ shardsvr:
     ##     ports:
     ##       - name: portname
     ##         containerPort: 1234
+    ##
     sidecars:
     ## Add init containers to the pod
     ## For example:
@@ -400,6 +407,7 @@ configsvr:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
+  ##
   sidecars:
   ## Add init containers to the pod
   ## For example:
@@ -469,6 +477,16 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+
+  ## Use a external config server instead of deploying one
+  ##
+  external:
+    ## Host name of the config server primary node
+    ##
+    host:
+    ## Name of the replica set
+    ##
+    replicasetName:
 
 ## Mongos properties
 ## ref: https://docs.mongodb.com/manual/reference/program/mongos/#bin.mongos
@@ -540,6 +558,7 @@ mongos:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
+  ##
   sidecars:
   ## Add init containers to the pod
   ## For example:
@@ -631,6 +650,7 @@ common:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
+  ##
   sidecars:
   ## Add init containers to the pod
   ## For example:
@@ -720,6 +740,7 @@ service:
 
   ## Specify the externalIP value ClusterIP service type.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+  ##
   externalIPs: []
 
   ## Specify the loadBalancerIP value for LoadBalancer service types.
@@ -778,6 +799,7 @@ metrics:
 
   ## String with extra arguments to the metrics exporter
   ## ref: https://github.com/dcu/mongodb_exporter/blob/master/mongodb_exporter.go
+  ##
   extraArgs: ""
 
   ## Metrics exporter resource requests and limits
@@ -787,6 +809,7 @@ metrics:
 
   ## Metrics exporter liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
   livenessProbe:
     enabled: false
     initialDelaySeconds: 15
@@ -803,6 +826,7 @@ metrics:
     successThreshold: 1
 
   ## Metrics exporter pod Annotation
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9216"
@@ -816,5 +840,6 @@ metrics:
     ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+    ##
     selector:
       prometheus: kube-prometheus
