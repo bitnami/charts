@@ -47,18 +47,24 @@ spec:
       targetPort: epmd
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.epmdNodePort))) }}
+      nodePort: {{ .Values.service.epmdNodePort }}
       {{- end }}
     - name: dist
       port: {{ .Values.service.distPort }}
       targetPort: dist
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.distNodePort))) }}
+      nodePort: {{ .Values.service.distNodePort }}
       {{- end }}
     - name: http-stats
       port: {{ .Values.service.managerPort }}
       targetPort: stats
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.managerNodePort))) }}
+      nodePort: {{ .Values.service.managerNodePort }}
       {{- end }}
     {{- if .Values.metrics.enabled }}
     - name: metrics
@@ -66,6 +72,8 @@ spec:
       targetPort: metrics
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.metricsNodePort))) }}
+      nodePort: {{ .Values.service.metricsNodePort }}
       {{- end }}
     {{- end }}
     {{- if .Values.service.extraPorts }}
