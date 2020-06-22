@@ -242,6 +242,8 @@ The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) ima
 initDBConfigMap=init-db
 ```
 
+If the scripts contain sensitive information, you can use the `initDBSecret` parameter as well (both can be used at the same time).
+
 ## Persistence
 
 The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image stores the cassandra data at the `/bitnami/cassandra` path of the container.
