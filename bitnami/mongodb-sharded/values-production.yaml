@@ -484,9 +484,15 @@ configsvr:
     ## Host name of the config server primary node
     ##
     host:
+    ## Root password of the config server primary node
+    ##
+    rootPassword:
     ## Name of the replica set
     ##
     replicasetName:
+    ## Replica set key
+    ##
+    replicasetKey:
 
 ## Mongos properties
 ## ref: https://docs.mongodb.com/manual/reference/program/mongos/#bin.mongos
