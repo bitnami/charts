@@ -2,16 +2,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "redis-cluster.fullname" . }}-cluster-create
-  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
-  annotations:
   {{- if .Values.cluster.helmHooks }}
-    "helm.sh/hook": {{ .Values.cluster.helmHooks | quote }}
+  name: {{ template "redis-cluster.fullname" . }}-cluster-create
   {{- else }}
-  {{- /* When no hooks are specified, we need to have an annotation
-  that will change for each release revision so that the Job (which
+  {{- /* When no hooks are specified, we need to change the
+  Job name for each release revision so that the Job (which
   is an immutable object) is ran each time */}}
-    "release/revision": {{ .Release.Revision | quote }}
+  name: {{ template "redis-cluster.fullname" . }}-cluster-create-{{ .Release.Revision }}
+  {{- end }}
+  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  {{- if .Values.cluster.helmHooks }}
+  annotations:
+    "helm.sh/hook": {{ .Values.cluster.helmHooks | quote }}
   {{- end }}
 spec:
   activeDeadlineSeconds: {{ .Values.cluster.activeDeadlineSeconds }}
