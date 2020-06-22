@@ -3,8 +3,14 @@ kind: Service
 metadata:
   name: {{ include "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
+  {{- if or .Values.service.annotations .Values.commonAnnotations}}
+  annotations:
   {{- if .Values.service.annotations }}
-  annotations: {{- include "discourse.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- include "discourse.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  {{- include "discourse.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
@@ -13,9 +19,7 @@ spec:
   {{- end }}
   {{- if (and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges) }}
   loadBalancerSourceRanges:
-  {{- with .Values.service.loadBalancerSourceRanges }}
-    {{ toYaml . | indent 4 }}
-  {{- end }}
+  {{ toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
     - name: http

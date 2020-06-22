@@ -46,7 +46,7 @@ imagePullSecrets: []
 # fullnameOverride:
 
 discourse:
-  ## Discourse host to create application URLs. You may also include the port.
+  ## Discourse host to create application URLs. The port will be automatilly included.
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
   ##
   host: ""
@@ -72,6 +72,13 @@ discourse:
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   email: user@example.com
+
+  ## Custom command to override image cmd
+  ##
+  # command: []
+
+  ## Custom args for the custom commad:
+  # args: []
 
   containerSecurityContext: {}
   ## capabilities:
@@ -116,6 +123,11 @@ discourse:
     failureThreshold: 6
     successThreshold: 1
 
+  ## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
+  ##
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+
   ## An array to add extra env vars
   ## For example:
   ## extraEnvVars:
@@ -134,6 +146,15 @@ discourse:
   ##
   # extraEnvVarsSecret: ""
 
+  ## Additional volume mounts
+  ## Example: Mount CA file
+  ## extraVolumeMounts
+  ##   - name: ca-cert
+  ##     subPath: ca_cert
+  ##     mountPath: /path/to/ca_cert
+  ##
+  extraVolumeMounts: []
+
   ## Do not run the Discourse installation wizard.
   ## Use only in case you are importing an existing database.
   skipInstall: false
@@ -147,6 +168,14 @@ sidekiq:
   ## readOnlyRootFilesystem: true
   ## runAsNonRoot: true
   ## runAsUser: 1000
+
+  ## Custom command to override image cmd
+  ##
+  command: ["/app-entrypoint.sh"]
+
+  ## Custom args for the custom commad:
+  args: ["nami", "start", "--foreground", "discourse-sidekiq"]
+
 
   ## Sidekiq resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -181,6 +210,11 @@ sidekiq:
     failureThreshold: 6
     successThreshold: 1
 
+  ## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
+  ##
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+
   ## An array to add extra env vars
   ## For example:
   ## extraEnvVars:
@@ -198,6 +232,26 @@ sidekiq:
   ##
   # extraEnvVarsSecret:
 
+  ## Additional volume mounts
+  ## Example: Mount CA file
+  ## extraVolumeMounts
+  ##   - name: ca-cert
+  ##     subPath: ca_cert
+  ##     mountPath: /path/to/ca_cert
+  ##
+  extraVolumeMounts: []
+
+## Additional volumes
+## Example: Add secret volume
+## extraVolumes:
+##  - name: ca-cert
+##    secret:
+##      secretName: ca-cert
+##      items:
+##        - key: ca-cert
+##          path: ca_cert
+##
+extraVolumes: []
 
 ## Add sidecars to the pod.
 ## Example:
@@ -340,6 +394,24 @@ ingress:
   ##   key:
   ##   certificate:
   ##
+
+## Additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/

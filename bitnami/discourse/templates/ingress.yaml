@@ -8,10 +8,13 @@ kind: Ingress
 metadata:
   name: {{ template "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
-  {{- if or .Values.ingress.annotations .Values.ingress.certManager }}
+  {{- if or .Values.ingress.annotations .Values.ingress.certManager .Values.commonAnnotations }}
   annotations:
-  {{- with .Values.ingress.annotations }}
-    {{- toYaml . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  {{- include "discourse.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.ingress.annotations }}
+  {{- toYaml .Values.ingress.annotations | nindent 4 }}
   {{- end }}
   {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"

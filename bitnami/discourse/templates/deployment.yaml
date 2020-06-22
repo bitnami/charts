@@ -5,6 +5,9 @@ metadata:
   name: {{ template "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
     component: discourse
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "discourse.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -17,18 +20,30 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
       labels: {{- include "discourse.labels" . | nindent 8 }}
         component: discourse
+        {{- if .Values.podLabels }}
+        {{- include "discourse.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "discourse.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
-    {{- include "discourse.imagePullSecrets" . | indent 6 }}
+    {{- include "discourse.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "discourse.serviceAccountName" . }}
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if .Values.initContainers }}
-      initContainers: {{- tpl (toYaml .Values.initContainers) $ | nindent 8 }}
+      initContainers: {{- include "discourse.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: discourse
           securityContext: {{- toYaml .Values.discourse.containerSecurityContext | nindent 12 }}
           image: {{ template "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.discourse.command }}
+          command: {{- include "discourse.tplValue" (dict "value" .Values.discourse.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.discourse.args }}
+          args: {{- include "discourse.tplValue" (dict "value" .Values.discourse.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.image.debug }}
             - name: NAMI_DEBUG
@@ -57,7 +72,7 @@ spec:
                   key: redis-password
             {{- end }}
             {{- if .Values.discourse.extraEnvVars }}
-            {{- tpl (toYaml .Values.discourse.extraEnvVars) $ | indent 12 }}
+            {{- include "discourse.tplValue" (dict "value" .Values.discourse.extraEnvVars "context" $) | indent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
@@ -84,6 +99,8 @@ spec:
             timeoutSeconds: {{ .Values.discourse.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.discourse.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.discourse.livenessProbe.failureThreshold }}
+          {{- else if .Values.discourse.customLivenessProbe }}
+          livenessProbe: {{- include "discourse.tplValue" (dict "value" .Values.discourse.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.discourse.readinessProbe.enabled }}
           readinessProbe:
@@ -95,11 +112,16 @@ spec:
             timeoutSeconds: {{ .Values.discourse.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.discourse.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.discourse.readinessProbe.failureThreshold }}
+          {{- else if .Values.discourse.customReadinessProbe }}
+          readinessProbe: {{- include "discourse.tplValue" (dict "value" .Values.discourse.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: discourse-data
               mountPath: /bitnami/discourse
               subPath: discourse
+            {{- if .Values.discourse.extraVolumeMounts }}
+            {{- include "discourse.tplValue" (dict "value" .Values.discourse.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.discourse.resources }}
           resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
           {{- end }}
@@ -107,12 +129,8 @@ spec:
           securityContext: {{- toYaml .Values.sidekiq.containerSecurityContext | nindent 12 }}
           image: {{ template "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          command: ["/app-entrypoint.sh"]
-          args:
-            - nami
-            - start
-            - --foreground
-            - discourse-sidekiq
+          command: {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.command "context" $) | nindent 12 }}
+          args: {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.args "context" $) | nindent 12 }}
           env:
             {{- if .Values.image.debug }}
             - name: NAMI_DEBUG
@@ -140,7 +158,7 @@ spec:
                   key: redis-password
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
-            {{- tpl (toYaml .Values.sidekiq.extraEnvVars) $ | indent 12 }}
+            {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | indent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
@@ -162,6 +180,8 @@ spec:
             timeoutSeconds: {{ .Values.sidekiq.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.sidekiq.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.sidekiq.livenessProbe.failureThreshold }}
+          {{- else if .Values.sidekiq.customLivenessProbe }}
+          livenessProbe: {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.sidekiq.readinessProbe.enabled }}
           readinessProbe:
@@ -172,16 +192,21 @@ spec:
             timeoutSeconds: {{ .Values.sidekiq.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.sidekiq.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.sidekiq.readinessProbe.failureThreshold }}
+          {{- else if .Values.sidekiq.customReadinessProbe }}
+          readinessProbe: {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: discourse-data
               mountPath: /bitnami/discourse
               subPath: discourse
+            {{- if .Values.sidekiq.extraVolumeMounts }}
+            {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.sidekiq.resources }}
           resources: {{- toYaml .Values.sidekiq.resources | nindent 12 }}
           {{- end }}
         {{- if .Values.sidecars }}
-        {{- tpl (toYaml .Values.sidecars) $ | indent 8 }}
+        {{- include "discourse.tplValue" (dict "value" .Values.sidecars "context" $) | indent 8 }}
         {{- end }}
       volumes:
         - name: discourse-data
@@ -191,6 +216,9 @@ spec:
           {{- else }}
           emptyDir: {}
           {{ end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "discourse.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "discourse.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- end }}
