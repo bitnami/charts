@@ -4,9 +4,14 @@ kind: Job
 metadata:
   name: {{ template "redis-cluster.fullname" . }}-cluster-create
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
-  {{- if .Values.cluster.helmHooks }}
   annotations:
+  {{- if .Values.cluster.helmHooks }}
     "helm.sh/hook": {{ .Values.cluster.helmHooks | quote }}
+  {{- else }}
+  {{- /* When no hooks are specified, we need to have an annotation
+  that will change for each release revision so that the Job (which
+  is an immutable object) is ran each time */}}
+    "release/revision": {{ .Release.Revision | quote }}
   {{- end }}
 spec:
   activeDeadlineSeconds: {{ .Values.cluster.activeDeadlineSeconds }}
