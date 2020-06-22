@@ -4,8 +4,10 @@ kind: Job
 metadata:
   name: {{ template "redis-cluster.fullname" . }}-cluster-create
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  {{- if .Values.cluster.helmHooks }}
   annotations:
-    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook": {{ .Values.cluster.helmHooks | quote }}
+  {{- end }}
 spec:
   activeDeadlineSeconds: {{ .Values.cluster.activeDeadlineSeconds }}
   template:

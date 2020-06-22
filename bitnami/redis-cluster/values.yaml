@@ -45,6 +45,10 @@ cluster:
   ## Enable the creation of a Job that will execute the proper command to create the Redis Cluster.
   ##
   init: true
+  ## Helm hooks for the "helm.sh/hook" annotation.
+  ## Leave empty to run the cluster creation Job without using Helm hooks.
+  ##
+  helmHooks: post-install,post-upgrade
   ## Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
   ##
   activeDeadlineSeconds: 600
