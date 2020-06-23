@@ -87,6 +87,7 @@ discourse:
   ## readOnlyRootFilesystem: true
   ## runAsNonRoot: true
   ## runAsUser: 1000
+  ##
 
   ## Discourse container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -107,6 +108,7 @@ discourse:
   ## WARNING: Discourse installation process may take up some time and
   ## setting inappropriate values here may lead to pods failure.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
     enabled: true
     initialDelaySeconds: 500
@@ -157,6 +159,7 @@ discourse:
 
   ## Do not run the Discourse installation wizard.
   ## Use only in case you are importing an existing database.
+  ##
   skipInstall: false
 
 sidekiq:
@@ -168,12 +171,14 @@ sidekiq:
   ## readOnlyRootFilesystem: true
   ## runAsNonRoot: true
   ## runAsUser: 1000
+  ##
 
   ## Custom command to override image cmd
   ##
   command: ["/app-entrypoint.sh"]
 
   ## Custom args for the custom commad:
+  ##
   args: ["nami", "start", "--foreground", "discourse-sidekiq"]
 
   ## Sidekiq resource requests and limits
@@ -193,6 +198,7 @@ sidekiq:
 
   ## Sidekiq extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
     enabled: true
     initialDelaySeconds: 500
@@ -274,19 +280,24 @@ sidecars: []
 ##     ports:
 ##       - name: portname
 ##       containerPort: 1234
+##
 initContainers: []
 
 serviceAccount:
   ## Specifies whether a service account should be created
+  ##
   create: false
   ## Annotations to add to the service account
+  ##
   annotations: {}
   ## The name of the service account to use.
   ## If not set and create is true, a name is generated using the fullname template
+  ##
   name:
 
 podSecurityContext: {}
 ##  fsGroup: 2000
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -327,12 +338,14 @@ service:
   annotations: {}
   ## Limits which cidr blocks can connect to service's load balancer
   ## Only valid if service.type: LoadBalancer
+  ##
   loadBalancerSourceRanges: []
   ## Extra ports to expose (normally used with the `sidecar` value)
   # extraPorts:
 
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
 
@@ -433,6 +446,7 @@ postgresql:
   enabled: true
   ## PostgreSQL user (has superuser privileges if username is `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
   postgresqlUsername: bn_discourse
 
   ## PostgreSQL password
@@ -440,9 +454,11 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   ## postgresqlPassword:
+  ##
 
   ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
+  ##
   postgresqlPostgresPassword: "bitnami"
 
   ## Create a database
@@ -451,6 +467,7 @@ postgresql:
   postgresqlDatabase: bitnami_application
 
   ## PostgreSQL data Persistent Volume Storage Class
+  ##
   persistence:
     enabled: true
 
@@ -459,16 +476,22 @@ postgresql:
 ##
 externalDatabase:
   ## Database host
+  ##
   host: ""
   ## Database port
+  ##
   port: 5432
   ## non-root Username for Discourse Database
+  ##
   user: bn_discourse
   ## Database password
+  ##
   password:
   ## Root "postgres" password (used in the installation stage)
+  ##
   postgresqlPostgresPassword:
   ## Database name
+  ##
   database: bitnami_application
 
 ## Redis chart configuration
@@ -477,8 +500,10 @@ externalDatabase:
 ##
 redis:
   ## Whether to deploy a redis server to satisfy the applications requirements. To use an external redis instance set this to false and configure the externalRedis parameters
+  ##
   enabled: true
   ## Use password authentication
+  ##
   usePassword: false
   ## Redis password (both master and slave)
   ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
@@ -487,6 +512,7 @@ redis:
   # password:
 
   ## Cluster settings
+  ##
   cluster:
     enabled: false
 
@@ -502,8 +528,11 @@ redis:
 ##
 externalRedis:
   ## Redis host
+  ##
   host: ""
   ## Redis port
+  ##
   port: 6379
   ## Redis password for authentication
+  ##
   password: ""
