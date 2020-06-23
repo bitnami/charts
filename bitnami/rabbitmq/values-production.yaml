@@ -116,6 +116,11 @@ memoryHighWatermark:
 ##
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 
+## Community plugins to download during container initialization.
+## Combine it with extraPlugins to also enable them.
+##
+# communityPlugins:
+
 ## Extra plugins to enable
 ## Use this instead of `plugins` to add new plugins
 ##
