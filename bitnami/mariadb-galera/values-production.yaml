@@ -595,3 +595,26 @@ metrics:
     ##
     selector:
       prometheus: kube-prometheus
+
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRules:
+    enabled: false
+
+    ## Additional labels to add to the PrometheusRule so it is picked up by the operator.
+    ## If using the [Helm Chart](https://github.com/helm/charts/tree/master/stable/prometheus-operator) this is the name of the Helm release and 'app: prometheus-operator'
+    selector:
+      app: prometheus-operator
+      release: prometheus
+
+    ## Rules as a map.
+    rules: {}
+    #  - alert: MariaDB-Down
+    #    annotations:
+    #      message: 'MariaDB instance {{ $labels.instance }} is down'
+    #      summary: MariaDB instance is down
+    #    expr: absent(up{job="mariadb-galera"} == 1)
+    #    labels:
+    #      severity: warning
+    #      service: mariadb-galera
+    #    for: 5m
