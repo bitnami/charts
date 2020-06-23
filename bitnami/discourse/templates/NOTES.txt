@@ -147,3 +147,9 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 +info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
 
 {{- end }}
+
+{{ if and .Values.postgresql.enabled (eq .Values.postgresql.postgresqlPostgresPassword "bitnami") -}}
+#####################################################################################
+### WARNING: You did not change the default password for the PostgreSQL root user ###
+#####################################################################################
+{{- end }}
