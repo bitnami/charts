@@ -226,7 +226,7 @@ spec:
         name: "data"
         {{- if .Values.data.persistence.annotations }}
         annotations: {{- toYaml .Values.data.persistence.annotations | nindent 10 }}
-        {{- end }}        
+        {{- end }}
       spec:
         accessModes: {{- toYaml .Values.data.persistence.accessModes | nindent 10 }}
         {{ $storage := dict "global" .Values.global "local" .Values.data }}
