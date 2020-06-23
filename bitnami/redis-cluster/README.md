@@ -185,7 +185,6 @@ The following table lists the configurable parameters of the Redis chart and the
 | Parameter                                       | Description                                                    | Default           |
 |-------------------------------------------------|----------------------------------------------------------------|-------------------|
 | `cluster.init`                                  | Enable the creation of a job that initializes the Redis Cluster | `true`            |
-| `cluster.helmHooks`                             | Customize the values for the `helm.sh/hook` annotation. Leave empty to run the cluster creation Job without using Helm hooks. | `post-install,post-upgrade`            |
 | `cluster.activeDeadlineSeconds`                 | Number of seconds that the job to create the cluster will be waiting for the nodes to be ready | `600`             |
 | `cluster.nodes`                                 | Number of nodes in the Redis cluster                           | `6`               |
 | `cluster.replicas`                              | Number of replicas for every master in the cluster             | `1`               |

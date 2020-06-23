@@ -2,19 +2,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  {{- if .Values.cluster.helmHooks }}
   name: {{ template "redis-cluster.fullname" . }}-cluster-create
-  {{- else }}
-  {{- /* When no hooks are specified, we need to change the
-  Job name for each release revision so that the Job (which
-  is an immutable object) is ran each time */}}
-  name: {{ template "redis-cluster.fullname" . }}-cluster-create-{{ .Release.Revision }}
-  {{- end }}
   labels: {{- include "redis-cluster.labels" . | nindent 4 }}
-  {{- if .Values.cluster.helmHooks }}
   annotations:
-    "helm.sh/hook": {{ .Values.cluster.helmHooks | quote }}
-  {{- end }}
+    "helm.sh/hook": post-install,post-upgrade
 spec:
   activeDeadlineSeconds: {{ .Values.cluster.activeDeadlineSeconds }}
   template:
