@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: {{ include "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "discourse.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if or .Values.service.annotations .Values.commonAnnotations}}
   annotations:
   {{- if .Values.service.annotations }}

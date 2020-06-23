@@ -8,6 +8,9 @@ kind: Ingress
 metadata:
   name: {{ template "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "discourse.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if or .Values.ingress.annotations .Values.ingress.certManager .Values.commonAnnotations }}
   annotations:
   {{- if .Values.commonAnnotations }}

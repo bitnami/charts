@@ -5,6 +5,9 @@ metadata:
   name: {{ template "discourse.fullname" . }}
   labels: {{- include "discourse.labels" . | nindent 4 }}
     component: discourse
+    {{- if .Values.commonLabels }}
+    {{- include "discourse.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "discourse.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}

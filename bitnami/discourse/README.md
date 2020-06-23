@@ -13,9 +13,9 @@ $ helm install my-release bitnami/discourse
 
 This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as a database for the Discourse application.
+It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -65,21 +65,26 @@ The following table lists the configurable parameters of the Discourse chart and
 | `image.repository`                        | Discourse image name                                                                  | `bitnami/discouse`                                           |
 | `image.tag`                               | Discourse image tag                                                                   | `{TAG_NAME}`                                                 |
 | `image.pullPolicy`                        | Discourse image pull policy                                                           | `IfNotPresent`                                               |
-| `imagePullSecrets`                        | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.debug`                             | Specify if debug logs should be enabled                                               | `false`                                                      |
+| `imagePullSecrets`                        | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
 | `nameOverride`                            | String to partially override discourse.fullname                                       | `nil`                                                        |
 | `fullnameOverride`                        | String to fully override discourse.fullname                                           | `nil`                                                        |
+| `extraVolumes`                            | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`   | `[]` (evaluated as a template)                               |
 | `sidecars`                                | Attach additional sidecar containers to the pod                                       | `[]` (evaluated as a template)                               |
 | `initContainers`                          | Additional init containers to add to the pods                                         | `[]` (evaluated as a template)                               |
 | `serviceAccount.create`                   | Whether the service account should be created                                         | `false`                                                      |
-| `serviceAccount.annotations`              | Annotations to add to the service account                                             | `false`                                                      |
-| `serviceAccount.name`                     | Name to be used for the service account                                               | `false`                                                      |
+| `serviceAccount.annotations`              | Annotations to add to the service account                                             | `{}`                                                         |
+| `serviceAccount.name`                     | Name to be used for the service account                                               | `""`                                                         |
 | `podSecurityContext`                      | Pod security context specification                                                    | `{}`                                                         |
 | `persistence.enabled`                     | Whether to enable persistence based on Persistent Volume Claims                       | `true`                                                       |
 | `persistence.storageClass`                | PVC Storage Class                                                                     | `nil`                                                        |
 | `persistence.existingClaim`               | Name of an existing PVC to reuse                                                      | `nil`                                                        |
 | `persistence.accessMode`                  | PVC Access Mode (RWO, ROX, RWX)                                                       | `ReadWriteOnce`                                              |
 | `persistence.size`                        | Size of the PVC to request                                                            | `10Gi`                                                       |
+| `podAnnotations`                          | Additional pod annotations                                                            | `{}`                                                         |
+| `podLabels`                               | Additional pod labels                                                                 | `{}` (evaluated as a template)                               |
+| `commonLabels`                            | Labels to be added to all deployed resources                                          | `{}` (evaluated as a template)                               |
+| `commonAnnotations`                       | Annotations to be added to all deployed resources                                     | `{}` (evaluated as a template)                               |
 | `nodeSelector`                            | Node labels for pod assignment.                                                       | `{}` (evaluated as a template)                               |
 | `tolerations`                             | Tolerations for pod assignment.                                                       | `[]` (evaluated as a template)                               |
 | `affinity`                                | Affinity for pod assignment                                                           | `{}` (evaluated as a template)                               |
@@ -90,6 +95,7 @@ The following table lists the configurable parameters of the Discourse chart and
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `service.type`                            | Kubernetes Service type                                                               | `LoadBalancer`                                               |
 | `service.port`                            | Service HTTP port                                                                     | `80`                                                         |
+| `service.nodePort`                        | NodePort service IP address                                                           | `nil`                                                        |
 | `service.loadBalancerIP`                  | LoadBalancer service IP address                                                       | `nil`                                                        |
 | `service.externalTrafficPolicy`           | Enable client source IP preservation                                                  | `Cluster`                                                    |
 | `service.annotations`                     | Service annotations                                                                   | `{}` (evaluated as a template)                               |
@@ -101,51 +107,61 @@ The following table lists the configurable parameters of the Discourse chart and
 
 | Parameter                                 | Description                                                                           | Default                                                      |
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `host`                                    | Discourse host to create application URLs (include the port if =/= 80)                | `""`                                                         |
-| `siteName`                                | Discourse site name                                                                   | `My Site!`                                                   |
-| `username`                                | Admin user of the application                                                         | `user`                                                       |
-| `email   `                                | Admin user email of the application                                                   | `user@example.com`                                           |
-| `password`                                | Application password (min length of 10 chars)                                         | _random 10 character long alphanumeric string_               |
-| `securityContext`                         | Container security context specification                                              | `{}`                                                         |
-| `resources`                               | Discourse container's resource requests and limits                                    | `{}`                                                         |
-| `livenessProbe.enabled`                   | Enable/disable livenessProbe                                                          | `true`                                                       |
-| `livenessProbe.initialDelaySeconds`       | Delay before liveness probe is initiated                                              | `500`                                                        |
-| `livenessProbe.periodSeconds`             | How often to perform the probe                                                        | `10`                                                         |
-| `livenessProbe.timeoutSeconds`            | When the probe times out                                                              | `5`                                                          |
-| `livenessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                            | `6`                                                          |
-| `livenessProbe.successThreshold`          | Minimum consecutive successes for the probe                                           | `1`                                                          |
-| `readinessProbe.enabled`                  | Enable/disable readinessProbe                                                         | `true`                                                       |
-| `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `30`                                                         |
-| `readinessProbe.periodSeconds`            | How often to perform the probe                                                        | `10`                                                         |
-| `readinessProbe.timeoutSeconds`           | When the probe times out                                                              | `5`                                                          |
-| `readinessProbe.failureThreshold`         | Minimum consecutive failures for the probe                                            | `6`                                                          |
-| `readinessProbe.successThreshold`         | Minimum consecutive successes for the probe                                           | `1`                                                          |
-| `extraEnvVars`                            | An array to add extra env vars                                                        | `[]`                                                         |
-| `extraEnvVarsCM`                          | Array to add extra configmaps                                                         | `[]`                                                         |
-| `extraEnvVarsSecret`                      | Array to add extra environment from a Secret                                          | `nil`                                                        |
-| `skipInstall`                             | Do not run the Discourse installation wizard                                          | `false`                                                      |
+| `discourse.host`                          | Discourse host to create application URLs (include the port if =/= 80)                | `""`                                                         |
+| `discourse.siteName`                      | Discourse site name                                                                   | `My Site!`                                                   |
+| `discourse.username`                      | Admin user of the application                                                         | `user`                                                       |
+| `discourse.password`                      | Application password (min length of 10 chars)                                         | _random 10 character long alphanumeric string_               |
+| `discourse.email`                         | Admin user email of the application                                                   | `user@example.com`                                           |
+| `discourse.command`                       | Custom command to override image cmd                                                  | `nil` (evaluated as a template)                              |
+| `discourse.args`                          | Custom args for the custom commad                                                     | `nil` (evaluated as a template)                              |
+| `discourse.containerSecurityContext`      | Container security context specification                                              | `{}`                                                         |
+| `discourse.resources`                     | Discourse container's resource requests and limits                                    | `{}`                                                         |
+| `discourse.livenessProbe.enabled`         | Enable/disable livenessProbe                                                          | `true`                                                       |
+| `discourse.livenessProbe.initialDelaySeconds`| Delay before liveness probe is initiated                                           | `500`                                                        |
+| `discourse.livenessProbe.periodSeconds`   | How often to perform the probe                                                        | `10`                                                         |
+| `discourse.livenessProbe.timeoutSeconds`  | When the probe times out                                                              | `5`                                                          |
+| `discourse.livenessProbe.failureThreshold`| Minimum consecutive failures for the probe                                            | `6`                                                          |
+| `discourse.livenessProbe.successThreshold`| Minimum consecutive successes for the probe                                           | `1`                                                          |
+| `discourse.readinessProbe.enabled`        | Enable/disable readinessProbe                                                         | `true`                                                       |
+| `discourse.readinessProbe.initialDelaySeconds`| Delay before readiness probe is initiated                                         | `30`                                                         |
+| `discourse.readinessProbe.periodSeconds`  | How often to perform the probe                                                        | `10`                                                         |
+| `discourse.readinessProbe.timeoutSeconds` | When the probe times out                                                              | `5`                                                          |
+| `discourse.readinessProbe.failureThreshold`| Minimum consecutive failures for the probe                                           | `6`                                                          |
+| `discourse.readinessProbe.successThreshold`| Minimum consecutive successes for the probe                                          | `1`                                                          |
+| `discourse.customLivenessProbe`           | Custom liveness probe to execute (when the main one is disabled)                      | `{}` (evaluated as a template)                               |
+| `discourse.customReadinessProbe`          | Custom readiness probe to execute (when the main one is disabled)                     | `{}` (evaluated as a template)                               |
+| `discourse.extraEnvVars`                  | An array to add extra env vars                                                        | `[]` (evaluated as a template)                               |
+| `discourse.extraEnvVarsCM`                | Array to add extra configmaps                                                         | `[]`                                                         |
+| `discourse.extraEnvVarsSecret`            | Array to add extra environment from a Secret                                          | `nil`                                                        |
+| `discourse.extraVolumeMounts`             | Additional volume mounts (used along with `extraVolumes`)                             | `[]` (evaluated as a template)                               |
+| `discourse.skipInstall`                   | Do not run the Discourse installation wizard                                          | `false`                                                      |
 
 ### Sidekiq parameters
 
 | Parameter                                 | Description                                                                           | Default                                                      |
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `securityContext`                         | Container security context specification                                              | `{}`                                                         |
-| `resources`                               | Discourse container's resource requests and limits                                    | `{}`                                                         |
-| `livenessProbe.enabled`                   | Enable/disable livenessProbe                                                          | `true`                                                       |
-| `livenessProbe.initialDelaySeconds`       | Delay before liveness probe is initiated                                              | `500`                                                        |
-| `livenessProbe.periodSeconds`             | How often to perform the probe                                                        | `10`                                                         |
-| `livenessProbe.timeoutSeconds`            | When the probe times out                                                              | `5`                                                          |
-| `livenessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                            | `6`                                                          |
-| `livenessProbe.successThreshold`          | Minimum consecutive successes for the probe                                           | `1`                                                          |
-| `readinessProbe.enabled`                  | Enable/disable readinessProbe                                                         | `true`                                                       |
-| `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `30`                                                         |
-| `readinessProbe.periodSeconds`            | How often to perform the probe                                                        | `10`                                                         |
-| `readinessProbe.timeoutSeconds`           | When the probe times out                                                              | `5`                                                          |
-| `readinessProbe.failureThreshold`         | Minimum consecutive failures for the probe                                            | `6`                                                          |
-| `readinessProbe.successThreshold`         | Minimum consecutive successes for the probe                                           | `1`                                                          |
-| `extraEnvVars`                            | An array to add extra env vars                                                        | `[]`                                                         |
-| `extraEnvVarsCM`                          | Array to add extra configmaps                                                         | `[]`                                                         |
-| `extraEnvVarsSecret`                      | Array to add extra environment from a Secret                                          | `nil`                                                        |
+| `sidekiq.containerSecurityContext`        | Container security context specification                                              | `{}`                                                         |
+| `sidekiq.command`                         | Custom command to override image cmd (evaluated as a template)                        | `["/app-entrypoint.sh"]`                                     |
+| `sidekiq.args`                            | Custom args for the custom commad (evaluated as a template)                           | `["nami", "start", "--foreground", "discourse-sidekiq"`      |
+| `sidekiq.resources`                       | Sidekiq container's resource requests and limits                                      | `{}`                                                         |
+| `sidekiq.livenessProbe.enabled`           | Enable/disable livenessProbe                                                          | `true`                                                       |
+| `sidekiq.livenessProbe.initialDelaySeconds`| Delay before liveness probe is initiated                                             | `500`                                                        |
+| `sidekiq.livenessProbe.periodSeconds`     | How often to perform the probe                                                        | `10`                                                         |
+| `sidekiq.livenessProbe.timeoutSeconds`    | When the probe times out                                                              | `5`                                                          |
+| `sidekiq.livenessProbe.failureThreshold`  | Minimum consecutive failures for the probe                                            | `6`                                                          |
+| `sidekiq.livenessProbe.successThreshold`  | Minimum consecutive successes for the probe                                           | `1`                                                          |
+| `sidekiq.readinessProbe.enabled`          | Enable/disable readinessProbe                                                         | `true`                                                       |
+| `sidekiq.readinessProbe.initialDelaySeconds`| Delay before readiness probe is initiated                                           | `30`                                                         |
+| `sidekiq.readinessProbe.periodSeconds`    | How often to perform the probe                                                        | `10`                                                         |
+| `sidekiq.readinessProbe.timeoutSeconds`   | When the probe times out                                                              | `5`                                                          |
+| `sidekiq.readinessProbe.failureThreshold` | Minimum consecutive failures for the probe                                            | `6`                                                          |
+| `sidekiq.readinessProbe.successThreshold` | Minimum consecutive successes for the probe                                           | `1`                                                          |
+| `sidekiq.customLivenessProbe`             | Custom liveness probe to execute (when the main one is disabled)                      | `{}` (evaluated as a template)                               |
+| `sidekiq.customReadinessProbe`            | Custom readiness probe to execute (when the main one is disabled)                     | `{}` (evaluated as a template)                               |
+| `sidekiq.extraEnvVars`                    | An array to add extra env vars                                                        | `[]` (evaluated as a template)                               |
+| `sidekiq.extraEnvVarsCM`                  | Array to add extra configmaps                                                         | `[]`                                                         |
+| `sidekiq.extraEnvVarsSecret`              | Array to add extra environment from a Secret                                          | `nil`                                                        |
+| `discourse.extraVolumeMounts`             | Additional volume mounts (used along with `extraVolumes`)                             | `[]` (evaluated as a template)                               |
 
 ### Ingress parameters
 
@@ -155,7 +171,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `ingress.certManager`                     | Add annotations for cert-manager                                                      | `false`                                                      |
 | `ingress.hostname`                        | Default host for the ingress resource                                                 | `discourse.local`                                            |
 | `ingress.tls`                             | Create TLS Secret                                                                     | `false`                                                      |
-| `ingress.annotations`                     | Ingress annotations                                                                   | `[]` (evaluated as a template)                               |
+| `ingress.annotations`                     | Ingress annotations                                                                   | `{}` (evaluated as a template)                               |
 | `ingress.extraHosts[0].name`              | Additional hostnames to be covered                                                    | `nil`                                                        |
 | `ingress.extraHosts[0].path`              | Additional hostnames to be covered                                                    | `nil`                                                        |
 | `ingress.extraTls[0].hosts[0]`            | TLS configuration for additional hostnames to be covered                              | `nil`                                                        |
@@ -178,7 +194,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `externalDatabase.port`                   | Database port number                                                                  | `5432`                                                       |
 | `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_discourse`                                               |
 | `externalDatabase.password`               | Password for the above username                                                       | `nil`                                                        |
-| `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user                                              | `nil`                                                        |
+| `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user (used in the installation stage)             | `nil`                                                        |
 | `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_application`                                        |
 
 ### Redis parameters
@@ -226,7 +242,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 By default, this Chart only deploys a single pod running Discourse. Should you want to increase the number of replicas, you may follow these simple steps to ensure everything works smoothly:
 
-> **Tip**: Running these steps ensures the PostgreSQL instance to be correctly populated. If you already have an initialised DB, you may directly create a release with the desired number of replicas. Remind to set `discourse.skipInstall` to `true`!
+> **Tip**: Running these steps ensures the PostgreSQL instance is correctly populated. If you already have an initialised DB, you may directly create a release with the desired number of replicas. Remind to set `discourse.skipInstall` to `true`!
 
 1. Create a conventional release, that will be scaled later:
 ```console
@@ -293,7 +309,7 @@ Note that [values-production.yaml](values-production.yaml) specifies ReadWriteMa
 
 ### Sidecars
 
-If you have a need for additional containers to run within the same pod as Discourse (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as Discourse (e.g. metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -330,7 +346,7 @@ externalDatabase.database=mydatabase
 externalDatabase.port=5432
 ```
 
-Note also if you disable PostgreSQL per above you MUST supply values for the `externalDatabase` connection.
+Note also that if you disable PostgreSQL per above you MUST supply values for the `externalDatabase` connection.
 
 In case the database already contains data from a previous Discourse installation, you need to set the `discourse.skipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Discourse installation wizard.
 
@@ -351,7 +367,7 @@ To enable ingress integration, please set `ingress.enabled` to `true`
 
 ### Hosts
 
-Most likely you will only want to have one hostname that maps to this Discourse installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object is can be specified as an array.
+Most likely you will only want to have one hostname that maps to this Discourse installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object can be specified as an array.
 
 For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
