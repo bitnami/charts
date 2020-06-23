@@ -84,12 +84,12 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-  
+
   ## Headless service properties
   ##
   headless:
-    ## Additional annotations for headless service. 
-    ## Can be useful in case peer-finder is used in a sidecar, 
+    ## Additional annotations for headless service.
+    ## Can be useful in case peer-finder is used in a sidecar,
     ## e.g.: service.alpha.kubernetes.io/tolerate-unready-endpoints="true"
     ##
     annotations: {}
