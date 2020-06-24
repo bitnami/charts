@@ -31,7 +31,7 @@ When submitting a PR make sure that it:
 2. Changes are manually reviewed by Bitnami team members.
 3. Once the changes are accepted, the PR is tested (if needed) into the Bitnami CI pipeline, the chart is installed and tested (verification and functional tests) on top of different k8s platforms.
 4. When the PR passes all tests, the PR is merged by the reviewer(s) in the GitHub `master` branch.
-5. Then our CI/CD system is going to push the chart to the Helm registry including the recently merged changes and also the latest images and dependencies used by the chart. The changes in the images will be also committed by the CI/CD to the GitHub repository, increasing the `chartVersion` again.
+5. Then our CI/CD system is going to push the chart to the Helm registry including the recently merged changes and also the latest images and dependencies used by the chart. The changes in the images will be also committed by the CI/CD to the GitHub repository, bumping the chart version again.
 
 ***NOTE***: Please note that, in terms of time, may be a slight difference between the appearance of the code in GitHub and the chart in the registry.
 
