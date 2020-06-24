@@ -39,19 +39,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "ejbca.databaseSecretName" . }}
                   key: mariadb-password
-            {{- if .Values.ejbcaKeystoreSecret }}
-            - name: EJBCA_KEYSTORE_PASSWORD
+            {{- if .Values.ejbcaKeystoreExistingSecret }}
+            - name: EJBCA_SERVER_CERT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.ejbcaKeystoreSecret }}
+                  name: {{ .Values.ejbcaKeystoreExistingSecret }}
                   key: keystore-password
-            {{- end }}
-            {{- if .Values.ejbcaTruststoreSecret }}
-            - name: EJBCA_TRUSTSTORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.ejbcaTruststoreSecret }}
-                  key: truststore-password
             {{- end }}
             - name: EJBCA_ADMIN_USERNAME
               value: {{ .Values.ejbcaAdminUsername | quote }}
@@ -63,6 +56,10 @@ spec:
               value: {{ template "ejbca.databaseName" . }}
             - name: EJBCA_DATABASE_USERNAME
               value: {{ template "ejbca.databaseUsername" . }}
+            {{- if .Values.ejbcaKeystoreExistingSecret }}
+            - name: EJBCA_SERVER_CERT_FILE
+              value: /bitnami/tls/keystore.jks
+            {{- end }}
             {{- if .Values.ejbcaJavaOpts }}
             - name: EJBCA_JAVA_OPTS
               value: {{ .Values.ejbcaJavaOpts | quote }}
@@ -71,23 +68,15 @@ spec:
             - name: EJBCA_HTTPS_SERVER_HOSTNAME
               value: {{ .Values.ejbcaHttpsServerHostname | quote }}
             {{- end }}
-            {{- if or .Values.ejbcaCAimportCM (.Files.Glob "externalCAs/*") }}
-            - name: EJBCA_EXTERNAL_CAS_DIR
-              value: "/bitnami/externalCAs"
-            {{- end }}
             {{- if .Values.ejbcaCA }}
+            {{- if .Values.ejbcaCA.name }}
             - name: EJBCA_CA_NAME
               value: {{ .Values.ejbcaCA.name | quote }}
-            - name: EJBCA_CA_DN
-              value: {{ .Values.ejbcaCA.DN | quote }}
-            - name: EJBCA_CA_KEYSPEC
-              value: {{ .Values.ejbcaCA.keyspec | quote }}
-            - name: EJBCA_CA_KEYTYPE
-              value: {{ .Values.ejbcaCA.keytype | quote }}
-            - name: EJBCA_CA_SIGNALG
-              value: {{ .Values.ejbcaCA.signAlg | quote }}
-            - name: EJBCA_CA_VALIDITY
-              value: {{ .Values.ejbcaCA.validity | quote }}
+            {{- end }}
+            {{- if .Values.ejbcaCA.baseDN }}
+            - name: EJBCA_BASE_DN
+              value: {{ .Values.ejbcaCA.baseDN | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.extraEnv }}
             {{- include "ejbca.tplValue" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
@@ -123,19 +112,10 @@ spec:
             - name: ejbca-data
               mountPath: /bitnami/ejbca
               subPath: ejbca
-            {{- if .Values.ejbcaKeystoreSecret }}
+            {{- if .Values.ejbcaKeystoreExistingSecret }}
             - name: ejbca-keystore
-              mountPath: /bitnami/ejbca/tls/keystore.jks
+              mountPath: /bitnami/tls/keystore.jks
               subPath: "keystore.jks"
-            {{- end }}
-            {{- if .Values.ejbcaTruststoreSecret }}
-            - name: ejbca-truststore
-              mountPath: /bitnami/ejbca/tls/truststore.jks
-              subPath: "truststore.jks"
-            {{- end }}
-            {{- if or .Values.ejbcaCAimportCM (.Files.Glob "externalCAs/*") }}
-            - name: ejbca-external-cas
-              mountPath: /bitnami/externalCAs
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "ejbca.tplValue" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -147,26 +127,13 @@ spec:
         {{- include "ejbca.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-          {{- if or .Values.ejbcaCAimportCM (.Files.Glob "externalCAs/*") }}
-        - name: ejbca-external-cas
-          configMap:
-            name: {{ template "ejbca.externalCAsCM" . }}
-          {{- end }}
-          {{- if .Values.ejbcaKeystoreSecret }}
+          {{- if .Values.ejbcaKeystoreExistingSecret }}
         - name: ejbca-keystore
           secret:
-            secretName: {{ .Values.ejbcaKeystoreSecret }}
+            secretName: {{ .Values.ejbcaKeystoreExistingSecret }}
             items:
             - key: "keystore.jks"
               path: "keystore.jks"
-          {{- end }}
-          {{- if .Values.ejbcaTruststoreSecret }}
-        - name: ejbca-truststore
-          secret:
-            secretName: {{ .Values.ejbcaTruststoreSecret }}
-            items:
-            - key: "truststore.jks"
-              path: "truststore.jks"
           {{- end }}
         - name: ejbca-data
           {{- if .Values.persistence.enabled }}

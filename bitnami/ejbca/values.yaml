@@ -57,60 +57,27 @@ ejbcaAdminUsername: bitnami
 ##
 ejbcaHttpsServerHostname: "localhost"
 
-## An optional ConfigMap containing a set of CA
-## certificates that will be imported in the truststore
-##
-## By providing this parameter, files in path "./externalCAs" will
-## be ignored
-# ejbcaCAimportCM:
-
-# FIXME: DETAIL THIS DESCRIPTION
-## Details regarding the CA that EJBCA will init
+## Details regarding the CA that EJBCA will instantiate
 ##
 ejbcaCA:
   ## The name of the CA
   ##
   name: "ManagementCA"
 
-  ## The DomainName of the CA
+  ## The base DomainName of the CA
   ##
-  DN: "CN=ManagementCA,ManagementCA"
+  ## e.g. baseDN: "O=Example CA,C=SE,UID=c-5ca04c9328c8208704310f7c2ed16414"
+  baseDN:
 
-  ## Key size to be used
-  ##
-  keyspec: "2048"
-
-  ## Type of key to be used
-  ##
-  keytype: "RSA"
-
-  ## Algorithm to use for signing
-  ##
-  signAlg: "SHA256WithRSA"
-
-  ## Certificate validity (in days)
-  ##
-  validity: "3650"
-
-## Existing Secret name containing the default Keystore object
-## to be used by EBJCA.
+## Name of an existing Secret containing a Keystore object
+## to be imported by EBJCA.
 ##
-## It should contain at least the following two keys:
+## It should contain at the following two keys:
 ##
 ## "keystore.jks" --> The actual keystore object
 ## "keystore-password" --> Password used to encrypt keystore.jks
 ##
-## ejbcaKeystoreSecret:
-
-## Existing Secret name containing the default Truststore object
-## to be used by EBJCA.
-##
-## It should contain at least the following two keys:
-##
-## "truststore.jks" --> The actual truststore object
-## "truststore-password" --> Password used to encrypt truststore.jks
-##
-## ejbcaTruststoreSecret:
+## ejbcaKeystoreExistingSecret:
 
 ## Additional container environment variables
 ## extraEnv:

@@ -1,9 +1,0 @@
-{{- if .Files.Glob "externalCAs/*" }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "ejbca.fullname" . }}-external-cas
-  labels: {{- include "ejbca.labels" . | nindent 4 }}
-data:
-{{ (.Files.Glob "externalCAs/*").AsConfig | indent 2 }}
-{{ end }}
