@@ -1,4 +1,4 @@
-{{- if .Values.shardsvr.dataNode.config }}
+{{- if and .Values.shards .Values.shardsvr.dataNode.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

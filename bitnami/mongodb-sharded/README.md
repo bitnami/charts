@@ -157,6 +157,10 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `configsvr.persistence.accessModes`           | Use volume as ReadOnly or ReadWrite                                                                                                                       | `[ReadWriteOnce]`                                        |
 | `configsvr.persistence.size`                  | Size of data volume                                                                                                                                       | `8Gi`                                                    |
 | `configsvr.persistence.annotations`           | Persistent Volume annotations                                                                                                                             | `{}`                                                     |
+| `configsvr.external.host`           | Primary node of an external config server replicaset                                                                                                                              | `nil`                                                     |
+| `configsvr.external.rootPassword`           | Root passworrd of the external config server replicaset                                                                                                                              | `nil`                                                     |
+| `configsvr.external.replicasetName`           | Replicaset name of an external config server                                                                                                                              | `nil`                                                     |
+| `configsvr.external.replicasetKey`           | Replicaset key of an external config server                                                                                                                              | `nil`                                                     |
 
 ### Mongos configuration
 
@@ -391,6 +395,10 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Using an external config server
+
+It is possible to not deploy any shards or a config server. For example, it is possible to simply deploy `mongos` instances that point to an external MongoDB sharded database. If that is the case, set the `configsvr.external.host` and `configsvr.external.replicasetName` for the mongos instances to connect. For authentication, set the `configsvr.external.rootPassword` and `configsvr.external.replicasetKey` values.
 
 ## Persistence
 
