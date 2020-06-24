@@ -1,0 +1,49 @@
+{{- if (include "scdf.skipper.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "scdf.fullname" . }}-skipper
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: skipper
+data:
+  application.yaml: |-
+    spring:
+      cloud:
+        skipper:
+          server:
+            platform:
+              kubernetes:
+                accounts:
+                  {{ .Values.skipper.configuration.accountName }}:
+                    {{- if .Values.rabbitmq.enabled }}
+                    {{- $rabbitmqHost := include "scdf.rabbitmq.fullname" . }}
+                    {{- $rabbitmqPort := int .Values.rabbitmq.service.port }}
+                    {{- $rabbitmqUser := .Values.rabbitmq.auth.username }}
+                    environmentVariables: 'SPRING_RABBITMQ_HOST={{ $rabbitmqHost }},SPRING_RABBITMQ_PORT={{ $rabbitmqPort }},SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }},SPRING_RABBITMQ_PASSWORD=${rabbitmq-password}'
+                    {{- else if .Values.kafka.enabled }}
+                    environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ template "scdf.envrelease" . }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envrelease" . }}_KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ template "scdf.envrelease" . }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envrelease" . }}_ZOOKEEPER_SERVICE_PORT}'
+                    {{- end }}
+                    {{- if .Values.deployer.resources.limits }}
+                    limits: {{- toYaml .Values.deployer.resources.limits | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.resources.requests }}
+                    requests: {{- toYaml .Values.deployer.resources.requests | nindent 22 }}
+                    {{- end }}
+                    readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    livenessProbeDelay: {{ .Values.deployer.livenessProbe.initialDelaySeconds }}
+      jpa:
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.MariaDB102Dialect
+      datasource:
+        {{- $databaseScheme := include "scdf.database.scheme" .  }}
+        {{- $databaseHost := include "scdf.database.host" .  }}
+        {{- $databasePort := include "scdf.database.port" .  }}
+        {{- $databaseName := include "scdf.database.skipper.name" .  }}
+        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}?useMysqlMetadata=true'
+        driverClassName: {{ include "scdf.database.driver" . }}
+        username: {{ include "scdf.database.skipper.user" . }}
+        password: ${mariadb-password}
+        testOnBorrow: true
+        validationQuery: "SELECT 1"
+{{ end }}

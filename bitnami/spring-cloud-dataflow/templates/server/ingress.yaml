@@ -1,0 +1,46 @@
+{{- if .Values.server.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "scdf.fullname" . }}-server
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+  annotations:
+    {{- if .Values.server.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.server.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.server.ingress.hostname }}
+    - host: {{ .Values.server.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ include "scdf.fullname" . }}-server
+              servicePort: http
+    {{- end }}
+    {{- range .Values.server.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ include "scdf.fullname" . }}-server
+              servicePort: http
+    {{- end }}
+  {{- if or .Values.server.ingress.tls .Values.server.ingress.extraTls .Values.server.ingress.hosts }}
+  tls:
+    {{- if .Values.server.ingress.tls }}
+    - hosts:
+        - {{ .Values.server.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.server.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.server.ingress.extraTls }}
+    {{- toYaml .Values.server.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

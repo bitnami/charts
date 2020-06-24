@@ -187,7 +187,7 @@ elasticsearch:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch
-    tag: 6.8.9-debian-10-r20
+    tag: 6.8.10-debian-10-r16
   ## Enable to perform the sysctl operation
   sysctlImage:
     enabled: true
@@ -351,7 +351,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r62
+    tag: 0.8.0-debian-10-r80
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
