@@ -30,8 +30,10 @@ When submitting a PR make sure that it:
 1. Changes are automatically linted and tested using the [`ct` tool](https://github.com/helm/chart-testing) as a [GitHub action](https://github.com/helm/chart-testing-action). Those tests are based on `helm install`, `helm lint` and `helm test` commands and provide quick feedback about the changes in the PR. For those tests, the chart is installed on top of [kind](https://github.com/kubernetes-sigs/kind) and this step is not blocking (as opposed to 3rd step).
 2. Changes are manually reviewed by Bitnami team members.
 3. Once the changes are accepted, the PR is tested (if needed) into the Bitnami CI pipeline, the chart is installed and tested (verification and functional tests) on top of different k8s platforms.
-5. When the PR passes all tests it is merged in the GitHub `master` branch.
-6. Then our CI/CD system is going to push to the Helm registry a new patch version including the recently merged changes and the latest images and dependencies used by the chart. Please note that, in terms of time, may be a slight difference between the appearance of the code in GitHub and the chart in the registry.
+4. When the PR passes all tests, the PR is merged by the reviewer(s) in the GitHub `master` branch.
+5. Then our CI/CD system is going to push the chart to the Helm registry including the recently merged changes and also the latest images and dependencies used by the chart. The changes in the images will be also committed by the CI/CD to the GitHub repository, increasing the `chartVersion` again.
+
+***NOTE***: Please note that, in terms of time, may be a slight difference between the appearance of the code in GitHub and the chart in the registry.
 
 ### Adding a new chart to the repository
 
