@@ -411,7 +411,7 @@ It is possible to inject externally managed scrape configurations via a Secret b
 
 The secret name which you create **must** be created using the format: `{prometheus-operator.prometheus.fullname}-scrape-config`. The file which the secret contains **must** be named: `additional-scrape-configs.yaml`.
 
-For example, if you deploy the chart with the name: `prometheus-operator`, the name of the secret should be: `prometheus-operator-prometheus-scrape-config`.
+For example, if you deploy the chart with the name: `prometheus-operator`, the name of the secret will be: `prometheus-operator-prometheus-scrape-config`.
 
 For more information, see [CoreOS Prometheus Operator - Additional scrape configuration documentation](https://github.com/coreos/prometheus-operator/blob/master/Documentation/additional-scrape-config.md#additional-scrape-configuration).
 
