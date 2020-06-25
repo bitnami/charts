@@ -216,7 +216,7 @@ redis:
 initJob:
   ## Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
   ##
-  activeDeadlineSeconds 600
+  activeDeadlineSeconds: 600
   ## Container command (using container default if not set)
   ##
   command:
@@ -298,7 +298,7 @@ initJob:
 updateJob:
   ## Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
   ##
-  activeDeadlineSeconds 600
+  activeDeadlineSeconds: 600
   ## Container command (using container default if not set)
   ##
   command:
