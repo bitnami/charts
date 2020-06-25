@@ -388,7 +388,7 @@ spec:
         {{- if (include "kafka.tlsEncryption" .) }}
         - name: kafka-certificates
           secret:
-            secretName: {{ required "A secret containing the Kafka JKS files is required when TLS encryption in enabled" .Values.auth.jksSecret }}
+            secretName: {{ include "kafka.jksSecretName" . }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}
