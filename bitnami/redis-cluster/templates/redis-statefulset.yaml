@@ -232,6 +232,8 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "redis-cluster.fullname" . }}
+            - name: REDIS_ADDR
+              value: {{ printf "127.0.0.1:%g" .Values.redisPort | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
