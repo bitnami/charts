@@ -240,6 +240,7 @@ auth:
   ## 3) Rename your keystores to `kafka-X.keystore.jks` where X is the ID of each Kafka broker.
   ## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:
   ##       kubectl create secret generic SECRET_NAME --from-file=./kafka.truststore.jks --from-file=./kafka-0.keystore.jks --from-file=./kafka-1.keystore.jks ...
+  ## Alternatively, you can put your JKS files under the files/jks directory
   ##
   # jksSecret:
 
