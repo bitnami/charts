@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "mariadb.fullname" . }}-tests
+  namespace: {{ .Release.Namespace }}
 data:
   run.sh: |-
     @test "Testing MariaDB is accessible" {
