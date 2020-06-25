@@ -1,4 +1,4 @@
-{{- if $.Values.shardsvr.arbiter.replicas }}
+{{- if and $.Values.shards $.Values.shardsvr.arbiter.replicas }}
 {{- $replicas := $.Values.shards | int }}
 {{- range $i, $e := until $replicas }}
 apiVersion: apps/v1

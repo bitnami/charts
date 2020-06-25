@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "slave.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: "{{ template "mariadb.name" . }}"
     chart: "{{ template "mariadb.chart" . }}"

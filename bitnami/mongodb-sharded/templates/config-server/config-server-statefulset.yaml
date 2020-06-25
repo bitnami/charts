@@ -1,3 +1,4 @@
+{{- if not .Values.configsvr.external.host }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -330,3 +331,4 @@ spec:
         - name: datadir
           emptyDir: {}
   {{- end }}
+{{- end }}

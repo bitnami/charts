@@ -91,7 +91,8 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `memoryHighWatermark.type`                | Memory high watermark type. Either `absolute` or `relative`                                                          | `relative`                                                   |
 | `memoryHighWatermark.value`               | Memory high watermark value                                                                                          | `0.4`                                                        |
 | `plugins`                                 | List of plugins to enable                                                                                            | `rabbitmq_management rabbitmq_peer_discovery_k8s`            |
-| `extraPlugins`                            | Extra plugings to enable                                                                                             | `nil`                                                        |
+| `communityPlugins`                        | List of custom plugins (URLs) to be downloaded during container initialization                                       | `nil`                                                        |
+| `extraPlugins`                            | Extra plugins to enable                                                                                              | `nil`                                                        |
 | `clustering.addressType`                  | Switch clustering mode. Either `ip` or `hostname`                                                                    | `hostname`                                                   |
 | `clustering.rebalance`                    | Rebalance master for queues in cluster when new replica is created                                                   | `false`                                                      |
 | `clustering.forceBoot`                    | Rebalance master for queues in cluster when new replica is created                                                   | `false`                                                      |
@@ -167,6 +168,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.labels`                                  | Service labels                                                                                          | `{}` (evaluated as a template)                          |
 | `service.annotations`                             | Service annotations                                                                                     | `{}` (evaluated as a template)                          |
 | `ingress.enabled`                                 | Enable ingress resource for Management console                                                          | `false`                                                 |
+| `ingress.path`                                    | Path for the default host                                                                               | `/`                                                     |
 | `ingress.certManager`                             | Add annotations for cert-manager                                                                        | `false`                                                 |
 | `ingress.hostname`                                | Default host for the ingress resource                                                                   | `rabbitmq.local`                                        |
 | `ingress.annotations`                             | Ingress annotations                                                                                     | `[]`                                                    |
@@ -470,6 +472,23 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `.extraEnvVarsCM` or the `extraEnvVarsSecret` properties.
+
+### Plugins
+
+The Bitnami Docker RabbitMQ image ships a set of plugins by default. You can use the command below to obtain the whole list.
+
+```bash
+$ docker run --rm -it bitnami/rabbitmq -- ls /opt/bitnami/rabbitmq/plugins/
+```
+
+By default, this chart enables `rabbitmq_management` and `rabbitmq_peer_discovery_k8s` since they are required for RabbitMQ to work on K8s. To enable extra plugins, set the `extraPlugins` parameter with the list of plugins you want to enable.
+
+In addition to this, you can also use the `customPlugins` parameter to indicate a list of URLs where to download you custom plugins for RabbitMQ. For instance, use the parameters below to download a custom plugin during the container initialization and enable it:
+
+```console
+customPlugins="http://some-public-url/my-custom-plugin-X.Y.Z.ez"
+extraPlugins="my-custom-plugin"
+```
 
 ### Known issues
 

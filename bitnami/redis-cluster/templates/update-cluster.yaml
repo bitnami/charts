@@ -9,6 +9,7 @@ metadata:
     {{- end }}
   annotations:
     "helm.sh/hook": post-upgrade
+<<<<<<< HEAD
     {{- if .Values.updateJob.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.updateJob.annotations "context" $ ) | nindent 4 }}
     {{- end }}
@@ -16,7 +17,11 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   spec:
-  activeDeadlineSeconds: {{ .Values.updateJob.timeout }}
+  activeDeadlineSeconds: {{ .Values.updateJob.activeDeadlineSeconds }}
+=======
+spec:
+  activeDeadlineSeconds: {{ .Values.cluster.activeDeadlineSeconds }}
+>>>>>>> master
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}

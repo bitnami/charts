@@ -187,7 +187,7 @@ The following table lists the configurable parameters of the Redis chart and the
 #### Cluster initialization job parameters
 | Parameter                                       | Description                                                    | Default           |
 |-------------------------------------------------|----------------------------------------------------------------|-------------------|
-| `initJob.timeout`                                      | Maximum time (in seconds) to wait for the cluster initialization job to succeed | `600`             |
+| `initJob.activeDeadlineSeconds`                                      | Maximum time (in seconds) to wait for the cluster initialization job to succeed | `600`             |
 | `initJob.command`                                       | Entrypoint string.  | `nil`             |
 | `initJob.args`                                          | Arguments for the provided command if needed                   | `nil`             |
 | `initJob.annotations`                                          | Job annotations                   | `nil`             |
@@ -207,7 +207,7 @@ The following table lists the configurable parameters of the Redis chart and the
 #### Cluster update job parameters
 | Parameter                                       | Description                                                    | Default           |
 |-------------------------------------------------|----------------------------------------------------------------|-------------------|
-| `updateJob.timeout`                                      | Maximum time (in seconds) to wait for the cluster initialization job to succeed | `600`             |
+| `updateJob.activeDeadlineSeconds`                                      | Maximum time (in seconds) to wait for the cluster initialization job to succeed | `600`             |
 | `updateJob.command`                                       | Entrypoint string.  | `nil`             |
 | `updateJob.args`                                          | Arguments for the provided command if needed                   | `nil`             |
 | `updateJob.annotations`                                          | Job annotations                   | `nil`             |
