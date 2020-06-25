@@ -11,7 +11,7 @@ To get your password run:
 To connect to your Redis server from outside the cluster check the following information:
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "redis-cluster.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
     You will have a different external IP for each Redis node. Get the external ip from `-external` suffixed services: `kubectl get svc`.
     Redis port: {{ .Values.cluster.externalAccess.service.port }}
@@ -28,7 +28,7 @@ To connect to your Redis server from outside the cluster check the following inf
 
     To connect to your database from outside the cluster execute the following commands:
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "redis-cluster.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     redis-cli -c -h $SERVICE_IP -p {{ .Values.service.port }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
     {{- end }}
 
@@ -45,33 +45,33 @@ To connect to your Redis cluster:
 1. Run a Redis pod that you can use as a client:
 
 {{- if .Values.tls.enabled }}
-   kubectl run --namespace {{ .Release.Namespace }} {{ template "redis-cluster.fullname" . }}-client --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image {{ template "redis-cluster.image" . }} --command -- sleep infinity
+   kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image {{ template "redis-cluster.image" . }} --command -- sleep infinity
 
    Copy your TLS certificates to the pod:
 
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.cert {{ template "redis-cluster.fullname" . }}-client:/tmp/client.cert
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.key {{ template "redis-cluster.fullname" . }}-client:/tmp/client.key
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/CA.cert {{ template "redis-cluster.fullname" . }}-client:/tmp/CA.cert
+   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.cert {{ template "common.names.fullname" . }}-client:/tmp/client.cert
+   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.key {{ template "common.names.fullname" . }}-client:/tmp/client.key
+   kubectl cp --namespace {{ .Release.Namespace }} /path/to/CA.cert {{ template "common.names.fullname" . }}-client:/tmp/CA.cert
 
    Use the following command to attach to the pod:
 
-   kubectl exec --tty -i {{ template "redis-cluster.fullname" . }}-client \
-   {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "redis-cluster.fullname" . }}-client=true" \{{- end }}
+   kubectl exec --tty -i {{ template "common.names.fullname" . }}-client \
+   {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
    --namespace {{ .Release.Namespace }} -- bash
 {{- else }}
-kubectl run --namespace {{ .Release.Namespace }} {{ template "redis-cluster.fullname" . }}-client --rm --tty -i --restart='Never' \
+kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
 {{ if .Values.usePassword }} --env REDIS_PASSWORD=$REDIS_PASSWORD \{{ end }}
-{{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "redis-cluster.fullname" . }}-client=true" \{{- end }}
+{{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
 --image {{ template "redis-cluster.image" . }} -- bash
 {{- end }}
 
 2. Connect using the Redis CLI:
 
-redis-cli -c -h {{ template "redis-cluster.fullname" . }}{{ if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+redis-cli -c -h {{ template "common.names.fullname" . }}{{ if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 Note: Since NetworkPolicy is enabled, only pods with label
-{{ template "redis-cluster.fullname" . }}-client=true"
+{{ template "common.names.fullname" . }}-client=true"
 will be able to connect to redis.
 {{- end -}}
 {{- end -}}

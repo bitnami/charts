@@ -2,23 +2,70 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "redis-cluster.fullname" . }}-cluster-update
-  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}-cluster-update
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
     "helm.sh/hook": post-upgrade
-spec:
-  activeDeadlineSeconds: {{ .Values.cluster.initTimeout }}
+    {{- if .Values.updateJob.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.updateJob.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  spec:
+  activeDeadlineSeconds: {{ .Values.updateJob.timeout }}
   template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.updateJob.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.updateJob.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
+      {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.updateJob.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.updateJob.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.updateJob.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.updateJob.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: trigger
-          image: "{{ template "redis-cluster.image" . }}"
+          image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
             runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.updateJob.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.command "context" $) | nindent 12 }}
+          {{- else }}
           command: ['/bin/bash', '-c']
+          {{- end }}
+          {{- if .Values.updateJob.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - |
               . /opt/bitnami/scripts/libnet.sh
@@ -42,7 +89,7 @@ spec:
               {{- else }}
               for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
                 new_node_index="$(($node - 1))"
-                new_node_ip=$(wait_for_dns_lookup {{ template "redis-cluster.fullname" . }}-"$new_node_index".{{ template "redis-cluster.fullname" . }}-headless 120 5)
+                new_node_ip=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-"$new_node_index".{{ template "common.names.fullname" . }}-headless 120 5)
                 {{- if .Values.tls.enabled }}
                 while [[ $(redis-cli -h "$new_node_ip" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
                 {{- else }}
@@ -51,7 +98,7 @@ spec:
                   echo "Node $new_node_ip not ready, waiting for all the nodes to be ready..."
                   sleep 5
                 done
-                firstNodeIp=$(wait_for_dns_lookup {{ template "redis-cluster.fullname" . }}-0.{{ template "redis-cluster.fullname" . }}-headless 120 5)
+                firstNodeIp=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
                 {{- if .Values.tls.enabled }}
                 redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${new_node_ip}:${REDIS_TLS_PORT}" "${firstNodeIp}:${REDIS_TLS_PORT}"
                 {{- else }}
@@ -59,6 +106,7 @@ spec:
                 {{- end }}
               done
               {{- end }}
+          {{- end }}
           env:
             {{- if .Values.cluster.externalAccess.enabled }}
             {{- if .Values.tls.enabled }}
@@ -73,7 +121,7 @@ spec:
             {{- else }}
             - name: REDIS_PORT
             {{- end }}
-              value: {{ .Values.redisPort | quote }}
+              value: {{ .Values.redis.port | quote }}
             {{- end }}
             {{- if .Values.usePassword }}
             - name: REDISCLI_AUTH
@@ -82,15 +130,36 @@ spec:
                   name: {{ template "redis-cluster.secretName" . }}
                   key: {{ template "redis-cluster.secretPasswordKey" . }}
             {{- end }}
+            {{- if .Values.updateJob.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.updateJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.updateJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.updateJob.resources }}
+          resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- if .Values.updateJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       restartPolicy: OnFailure
-      {{- if .Values.tls.enabled }}
       volumes:
+      {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
-            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
-    {{- end }}
+            secretName: {{ include "common.tplvalues.render" (dict "value" .Values.tls.certificatesSecret "context" $) }}
+      {{- end }}
+      {{- if .Values.updateJob.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
 {{- end }}
