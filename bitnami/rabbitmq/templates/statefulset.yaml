@@ -158,6 +158,10 @@ spec:
                   key: rabbitmq-password
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
+            {{- if .Values.communityPlugins }}
+            - name: RABBITMQ_COMMUNITY_PLUGINS
+              value: {{ .Values.communityPlugins | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

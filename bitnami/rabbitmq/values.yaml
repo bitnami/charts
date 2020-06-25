@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.5-debian-10-r9
+  tag: 3.8.5-debian-10-r17
 
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
@@ -116,6 +116,11 @@ memoryHighWatermark:
 ##
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 
+## Community plugins to download during container initialization.
+## Combine it with extraPlugins to also enable them.
+##
+# communityPlugins:
+
 ## Extra plugins to enable
 ## Use this instead of `plugins` to add new plugins
 ##
@@ -184,7 +189,7 @@ configuration: |-
   default_pass = CHANGEME
   ## Clustering
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
-  cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+  cluster_formation.k8s.host = kubernetes.default.svc.{{ .Values.clusterDomain }}
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = autoheal
@@ -534,14 +539,30 @@ service:
   ##
   distPort: 25672
 
+  ## Node port (Manager)
+  ##
+  # distNodePort: 30676
+
   ## RabbitMQ Manager port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
   managerPort: 15672
 
+  ## Node port (Manager)
+  ##
+  # managerNodePort: 30673
+
   ## RabbitMQ Prometheues metrics port
   ##
   metricsPort: 9419
+
+  ## Node port for metrics
+  ##
+  # metricsNodePort: 30674
+
+  ## Node port for EPMD Discovery
+  ##
+  # epmdNodePort: 30675
 
   ## Extra ports to expose
   ## E.g.:
@@ -585,6 +606,10 @@ ingress:
   ## Set to true to enable ingress record generation
   ##
   enabled: false
+
+  ## Path for the default host
+  ##
+  path: /
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##

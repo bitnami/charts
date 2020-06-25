@@ -107,6 +107,7 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `dbUser.password`                                                                                                                                                                                          | Password for `dbUser.user`. Randomly generated if empty                                                                          | (Random generated)                                           |
 | `dbUser.existingSecret`                                                                                                                                                                                    | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                                         | `nil`                                                        |
 | `initDBConfigMap`                                                                                                                                                                                          | Configmap for initialization CQL commands (done in the first node). Useful for creating keyspaces at startup, for instance       | `nil` (evaluated as a template)                              |
+| `initDBSecret`                                                                                                                                                                                          | Secret for initialization CQL commands (done in the first node) that contain sensitive data. Useful for creating keyspaces at startup, for instance       | `nil` (evaluated as a template)                              |
 | `livenessProbe.enabled`                                                                                                                                                                                    | Turn on and off liveness probe                                                                                                   | `true`                                                       |
 | `livenessProbe.initialDelaySeconds`                                                                                                                                                                        | Delay before liveness probe is initiated                                                                                         | `30`                                                         |
 | `livenessProbe.periodSeconds`                                                                                                                                                                              | How often to perform the probe                                                                                                   | `30`                                                         |
@@ -138,7 +139,6 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `metrics.image.pullSecrets`                                                                                                                                                                                | Specify docker-registry secret names as an array                                                                                 | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                                                                                                                                                                                   | Additional annotations for Metrics exporter                                                                                      | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}` |
 | `metrics.resources`                                                                                                                                                                                        | Exporter resource requests/limit                                                                                                 | `{}`                                                         |
-
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
 
@@ -241,6 +241,8 @@ The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) ima
 ```console
 initDBConfigMap=init-db
 ```
+
+If the scripts contain sensitive information, you can use the `initDBSecret` parameter as well (both can be used at the same time).
 
 ## Persistence
 

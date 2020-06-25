@@ -1,0 +1,155 @@
+{{- if or .Values.postgresql.enabled .Values.externalDatabase.host -}}
+
+{{- if empty (include "discourse.host" .) -}}
+###############################################################################
+### ERROR: You did not provide an external host in your 'helm install' call ###
+###############################################################################
+
+This deployment will be incomplete until you configure Discourse with a resolvable host. To configure Discourse with the URL of your service:
+
+1. Get the discourse URL by running:
+
+  {{- if contains "NodePort" .Values.service.type }}
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}"):$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+  {{- else if contains "LoadBalancer" .Values.service.type }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "discourse.fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  {{- end }}
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  {{- end }}
+2. Complete your Discourse deployment by running:
+
+{{- if .Values.postgresql.enabled }}
+
+  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set discourse.host=$APP_HOST \
+    --set discourse.password=$APP_PASSWORD \
+    {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
+    --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
+    {{- end }}{{- end }}
+    {{- if (and .Values.redis.enabled .Values.redis.usePassword) }}
+    --set redis.password=$APP_REDIS_PASSWORD \
+    {{- else if and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password)) }}
+    --set redis.externalRedis=$APP_REDIS_PASSWORD \
+    --set redis.enabled=false \
+    {{- end }}
+    --set postgresql.postgresqlPassword=$APP_DATABASE_PASSWORD
+
+{{- else }}
+
+  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set discourse.host=$APP_HOST \
+    --set discourse.password=$APP_PASSWORD \
+    --set service.type={{ .Values.service.type }} \
+    --set externalDatabase.host={{ .Values.externalDatabase.host }} \
+    --set externalDatabase.port={{ .Values.externalDatabase.port }} \
+    --set externalDatabase.user={{ .Values.externalDatabase.user }} \
+    --set externalDatabase.password=$APP_DATABASE_PASSWORD \
+    --set externalDatabase.database={{ .Values.externalDatabase.database }} \
+    {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
+    --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
+    {{- end }}{{- end }}
+    {{- if (and .Values.redis.enabled .Values.redis.usePassword) }}
+    --set redis.password=$APP_REDIS_PASSWORD \
+    {{- else if and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password)) }}
+    --set redis.externalRedis=$APP_REDIS_PASSWORD \
+    --set redis.enabled=false \
+    {{- end }}
+    --set postgresql.enabled=false
+{{- end }}
+
+{{- else -}}
+
+1. Get the Discourse URL by running:
+
+  Discourse URL : http://{{ include "discourse.host" . }}/
+
+{{- if eq .Values.service.type "ClusterIP" }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "discourse.fullname" . }} 80:{{ .Values.service.port }}
+{{- end }}
+
+2. Get your Discourse login credentials by running:
+
+  Username: {{ .Values.discourse.username }}
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  {{- end }}
+{{- end }}
+
+{{- else -}}
+
+########################################################################################
+### ERROR: You did not provide an external database host in your 'helm install' call ###
+########################################################################################
+
+This deployment will be incomplete until you configure Discourse with a resolvable database host. To configure Discourse to use and external database host:
+
+1. Complete your Discourse deployment by running:
+
+{{- if contains "NodePort" .Values.service.type }}
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}"):$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "discourse.fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+{{- else }}
+
+  export APP_HOST=127.0.0.1
+{{- end }}
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  {{- end }}
+
+  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set discourse.host=$APP_HOST \
+    --set discourse.password=$APP_PASSWORD \
+    --set postgresql.enabled=false \
+    {{- if not (empty .Values.externalDatabase.user) }}
+    --set externalDatabase.user={{ .Values.externalDatabase.user }} \
+    {{- end }}
+    {{- if not (empty .Values.externalDatabase.password) }}
+    --set externalDatabase.password=$APP_DATABASE_PASSWORD \
+    {{- end }}
+    {{- if not (empty .Values.externalDatabase.database) }}
+    --set externalDatabase.database={{ .Values.externalDatabase.database }}
+    {{- end }}
+    --set externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST \
+    {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
+    --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
+    {{- end }}{{- end }}
+    {{- if (and .Values.redis.enabled .Values.redis.usePassword) }}
+    --set redis.password=$APP_REDIS_PASSWORD \
+    {{- else if and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password)) }}
+    --set redis.externalRedis=$APP_REDIS_PASSWORD \
+    --set redis.enabled=false \
+    {{- end }}
+    --set service.type={{ .Values.service.type }}
+{{- end }}
+
+{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | regexFind "-r\\d+$")) }}
+
+WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+
+{{- end }}
+
+{{ if and .Values.postgresql.enabled (eq .Values.postgresql.postgresqlPostgresPassword "bitnami") -}}
+#####################################################################################
+### WARNING: You did not change the default password for the PostgreSQL root user ###
+#####################################################################################
+{{- end }}

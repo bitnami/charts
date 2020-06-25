@@ -3,6 +3,7 @@ apiVersion: {{ template "mariadb.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "slave.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "mariadb.name" . }}
     chart: {{ template "mariadb.chart" . }}

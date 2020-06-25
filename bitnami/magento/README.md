@@ -211,6 +211,10 @@ The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image s
 
 ## Notable changes
 
+### 14.0.0
+
+This version updates the docker image to `2.3.5-debian-10-r57` version. That version persists the full `htdocs` folder. From now on, to upgrade the Magento version it is needed to follow the [offical steps](https://devdocs.magento.com/guides/v2.3/comp-mgr/cli/cli-upgrade.html) manually.
+
 ### 13.0.0
 
 Several changes were introduced that can break backwards compatibilty:

@@ -426,7 +426,9 @@ kubectl create secret generic kafka-jks --from-file=./kafka.truststore.jks --fro
 
 > **Note**: the command above assumes you already created the trustore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
 
-You can create the secret and deploy the chart with authentication using the following parameters:
+As an alternative to manually create the secret before installing the chart, you can put your JKS files inside the chart folder `files/jks`, an a secret including them will be generated. Please note this alternative requires to have the chart downloaded locally, so you will have to clone this repository or fetch the chart before installing it.
+
+You can deploy the chart with authentication using the following parameters:
 
 ```console
 replicaCount=2

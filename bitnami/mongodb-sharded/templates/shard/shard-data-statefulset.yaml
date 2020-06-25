@@ -1,3 +1,4 @@
+{{- if .Values.shards }}
 {{- $replicas := .Values.shards | int }}
 {{- range $i, $e := until $replicas }}
 apiVersion: apps/v1
@@ -312,5 +313,6 @@ spec:
   {{- end }}
 {{- if lt $i (sub $replicas 1) }}
 ---
+{{- end }}
 {{- end }}
 {{- end }}

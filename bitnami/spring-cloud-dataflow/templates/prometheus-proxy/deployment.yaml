@@ -1,0 +1,35 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "scdf.fullname" . }}-prometheus-proxy
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: prometheus-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: prometheus-proxy
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: prometheus-proxy
+    spec:
+      {{- include "scdf.imagePullSecrets" . | indent 6 }}
+      serviceAccountName: {{ include "scdf.serviceAccountName" . }}
+      containers:
+        - name: prometheus-proxy
+          image: {{ include "scdf.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: rsocket
+              containerPort: 7001
+              protocol: TCP
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
+{{- end }}
+

@@ -1,4 +1,4 @@
-{{- if .Values.shardsvr.dataNode.pdb.enabled -}}
+{{- if and .Values.shards .Values.shardsvr.dataNode.pdb.enabled -}}
 {{- $replicas := .Values.shards | int -}}
 {{- range $i, $e := until $replicas -}}
 kind: PodDisruptionBudget

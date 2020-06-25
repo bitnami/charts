@@ -12,7 +12,7 @@ sources:
   - https://github.com/projectcontour/contour
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/bitnami-docker-contour
-version: 0.3.0
+version: 1.0.0
 maintainers:
   - name: cellebyte
     url: https://github.com/Cellebyte
