@@ -251,6 +251,11 @@ master:
     ##   GKE, AWS & OpenStack)
     ##
     # storageClass: "-"
+    ## If persistence is enable, and this value is defined,
+    ## then accept the value as an existing Persistent Volume Claim to which
+    ## the container should be bound
+    ##
+    # existingClaim: my-persistent-volume-claim
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -481,6 +486,11 @@ data:
     ##   GKE, AWS & OpenStack)
     ##
     # storageClass: "-"
+    ## If persistence is enable, and this value is defined,
+    ## then accept the value as an existing Persistent Volume Claim to which
+    ## the container should be bound
+    ##
+    # existingClaim: my-persistent-volume-claim
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
