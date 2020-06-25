@@ -407,7 +407,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Additional scrape configurations
 
-It is possible to inject externally managed scrape configurations in a ConfigMap by enabling `prometheus.additionalScrapeConfigsExternal`. The ConfigMap must exist in the same namespace when Prometheus is starting. Its name is generated using the `prometheus-operator.prometheus.fullname` template with a `-scrape-config` suffix. The file it contains has to be named `additional-scrape-configs.yaml`.
+It is possible to inject externally managed scrape configurations via a Secret by enabling `prometheus.additionalScrapeConfigsExternal`. The secret must exist in the same namespace which the Prometheus Operator will be deployed into. 
+
+The secret name which you create **must** be created using the format: `{prometheus-operator.prometheus.fullname}-scrape-config`. The file which the secret contains **must** be named: `additional-scrape-configs.yaml`.
+
+For example, if you deploy the chart with the name: `prometheus-operator`, the name of the secret should be: `prometheus-operator-prometheus-scrape-config`.
+
+For more information, see [CoreOS Prometheus Operator - Additional scrape configuration documentation](https://github.com/coreos/prometheus-operator/blob/master/Documentation/additional-scrape-config.md#additional-scrape-configuration).
 
 ## Upgrading
 
