@@ -4,6 +4,6 @@ dependencies:
   version: 0.2.14
 - name: kube-state-metrics
   repository: https://charts.bitnami.com/bitnami
-  version: 0.4.0
-digest: sha256:ab8eb745cb2c70715345bfaa79fe91713adb9967605825ceca6373864a20dca4
-generated: "2020-06-16T15:03:11.602390735Z"
+  version: 0.4.1
+digest: sha256:cbfe0350583c370968687543d6718b0692c72e12c34f07b6f23e47b33070114a
+generated: "2020-06-26T14:10:29.865717406Z"
