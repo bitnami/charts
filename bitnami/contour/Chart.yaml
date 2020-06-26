@@ -1,7 +1,7 @@
 apiVersion: v1
 name: contour
 description: Contour Ingress controller for Kubernetes
-appVersion: 1.5.1
+appVersion: 1.6.0
 keywords:
   - ingress
   - envoy
@@ -12,7 +12,7 @@ sources:
   - https://github.com/projectcontour/contour
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/bitnami-docker-contour
-version: 1.0.0
+version: 1.0.1
 maintainers:
   - name: cellebyte
     url: https://github.com/Cellebyte
