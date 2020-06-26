@@ -425,6 +425,7 @@ rbac:
 ## Redis pod Security Context
 ##
 podSecurityContext:
+  enabled: true
   fsGroup: 1001
   runAsUser: 1001
   ## sysctl settings
@@ -449,6 +450,7 @@ podDisruptionBudget: {}
 ## Containers Security Context
 ##
 containerSecurityContext:
+  enabled: true
   runAsUser: 1001
   ## sysctl settings
   ##
