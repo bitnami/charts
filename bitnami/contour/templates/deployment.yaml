@@ -105,13 +105,12 @@ spec:
               fieldPath: metadata.name
       dnsPolicy: ClusterFirst
       serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
-      {{- if .Values.contour.securityContext.enabled }}
+{{- with .Values.contour.securityContext }}
+{{- if or (not (hasKey . "enabled")) .enabled }}
       securityContext:
-        runAsUser: {{ .Values.contour.securityContext.runAsUser }}
-        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
-        fsGroup: {{ .Values.contour.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
-      {{- end }}
+{{ toYaml (omit . "enabled") | indent 8 }}
+{{- end }}
+{{- end }}
       volumes:
       - name: contourcert
         secret:

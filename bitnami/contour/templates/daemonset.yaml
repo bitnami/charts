@@ -32,6 +32,12 @@ spec:
       tolerations: {{- include "contour.tplValue" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}
+      hostNetwork: {{ .Values.envoy.hostNetwork }}
+      dnsPolicy: {{ .Values.envoy.dnsPolicy }}
+{{- with .Values.envoy.podSecurityContext }}
+      securityContext:
+{{ toYaml . | indent 8 }}
+{{- end }}
       containers:
       - command:
         - contour
@@ -69,6 +75,10 @@ spec:
         image: {{ include "envoy.image" . }}
         imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
         name: envoy
+{{- with .Values.envoy.containerSecurityContext }}
+        securityContext:
+{{ toYaml . | indent 10 }}
+{{- end }}
         env:
         - name: CONTOUR_NAMESPACE
           valueFrom:
@@ -92,6 +102,7 @@ spec:
         - containerPort: 8002
           name: metrics
           protocol: TCP
+
         {{- if .Values.envoy.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
