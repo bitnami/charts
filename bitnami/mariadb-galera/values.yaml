@@ -85,6 +85,15 @@ service:
   ##
   annotations: {}
 
+  ## Headless service properties
+  ##
+  headless:
+    ## Additional annotations for headless service.
+    ## Can be useful in case peer-finder is used in a sidecar,
+    ## e.g.: service.alpha.kubernetes.io/tolerate-unready-endpoints="true"
+    ##
+    annotations: {}
+
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -586,3 +595,44 @@ metrics:
     ##
     selector:
       prometheus: kube-prometheus
+
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    relabelings: []
+
+    ## MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    metricRelabelings: []
+    #  - sourceLabels:
+    #      - "__name__"
+    #    targetLabel: "__name__"
+    #    action: replace
+    #    regex: '(.*)'
+    #    replacement: 'example_prefix_$1'
+
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRules:
+    enabled: false
+
+    ## Additional labels to add to the PrometheusRule so it is picked up by the operator.
+    ## If using the [Helm Chart](https://github.com/helm/charts/tree/master/stable/prometheus-operator) this is the name of the Helm release and 'app: prometheus-operator'
+    selector:
+      app: prometheus-operator
+      release: prometheus
+
+    ## Rules as a map.
+    rules: {}
+    #  - alert: MariaDB-Down
+    #    annotations:
+    #      message: 'MariaDB instance {{ $labels.instance }} is down'
+    #      summary: MariaDB instance is down
+    #    expr: absent(up{job="mariadb-galera"} == 1)
+    #    labels:
+    #      severity: warning
+    #      service: mariadb-galera
+    #    for: 5m
