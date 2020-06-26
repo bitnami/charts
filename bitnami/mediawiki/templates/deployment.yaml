@@ -119,21 +119,21 @@ spec:
                   name: {{ template "mediawiki.fullname" . }}
                   key: smtp-password
             {{- end }}
-            ports:
+          ports:
             - name: http
               containerPort: 80
-            {{- if .Values.service.httpsPort }}
+          {{- if .Values.service.httpsPort }}
             - name: https
               containerPort: 443
-            {{ end }}
+          {{ end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /api.php
               port: http
               httpHeaders:
-              - name: Host
-                value: {{ include "mediawiki.host" . | quote }}
+                - name: Host
+                  value: {{ include "mediawiki.host" . | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -146,21 +146,20 @@ spec:
               path: /api.php
               port: http
               httpHeaders:
-              - name: Host
-                value: {{ include "mediawiki.host" . | quote }}
+                - name: Host
+                  value: {{ include "mediawiki.host" . | quote }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- end }}
-          resources:
-  {{ toYaml .Values.resources | indent 10 }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /bitnami/mediawiki
               name: mediawiki-data
               subPath: mediawiki
-  {{- if .Values.metrics.enabled }}
+        {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "mediawiki.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
@@ -180,17 +179,16 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
-          resources:
-  {{ toYaml .Values.metrics.resources | indent 10 }}
-{{- end }}
+          resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
       volumes:
         - name: mediawiki-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "mediawiki.fullname" . }}-mediawiki{{- end }}
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "mediawiki.fullname" . }}-mediawiki{{- end }}
+          {{- else }}
+            emptyDir: {}
+          {{- end }}
       {{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
