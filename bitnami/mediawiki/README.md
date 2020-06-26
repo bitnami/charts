@@ -173,7 +173,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### To 10.0.0
 
-The [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `root`.
+The [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 
 Consequences:
 
