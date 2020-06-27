@@ -757,7 +757,7 @@ externalDatabase:
     user: skipper
   ## Hibernate Dialect
   ##
-  #hibernateDialect: org.hibernate.dialect.MariaDB102Dialect
+  # hibernateDialect: org.hibernate.dialect.MariaDB102Dialect
 
 ##
 ## RabbitMQ chart configuration
