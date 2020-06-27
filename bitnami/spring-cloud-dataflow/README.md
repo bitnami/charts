@@ -128,6 +128,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.autoscaling.maxReplicas`               | Maximum number of Dataflow server replicas                          | `nil`                                                   |
 | `server.autoscaling.targetCPU`                 | Target CPU utilization percentage                                   | `nil`                                                   |
 | `server.autoscaling.targetMemory`              | Target Memory utilization percentage                                | `nil`                                                   |
+| `server.jdwp.enabled`                          | Enable Java Debug Wire Protocol (JDWP)                              | `false`                                                 |
+| `server.jdwp.port`                             | JDWP TCP port                                                       | `5005`                                                  |
 
 ### Dataflow Skipper parameters
 
@@ -178,6 +180,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.autoscaling.maxReplicas`          | Maximum number of Skipper server replicas                           | `nil`                                                   |
 | `skipper.autoscaling.targetCPU`            | Target CPU utilization percentage                                   | `nil`                                                   |
 | `skipper.autoscaling.targetMemory`         | Target Memory utilization percentage                                | `nil`                                                   |
+| `skipper.jdwp.enabled`                     | Enable Java Debug Wire Protocol (JDWP)                              | `false`                                                 |
+| `skipper.jdwp.port`                        | JDWP TCP port                                                       | `5005`                                                  |
 | `externalSkipper.host`                     | Host of a external Skipper Server                                   | `localhost`                                             |
 | `externalSkipper.port`                     | External Skipper Server port number                                 | `7577`                                                  |
 
@@ -237,6 +241,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `externalDatabase.dataflow.database`            | Name of the existing database to be used by Dataflow server             | `dataflow`                          |
 | `externalDatabase.skipper.user`                 | Existing username in the external db to be used by Skipper server       | `skipper`                           |
 | `externalDatabase.skipper.database`             | Name of the existing database to be used by Skipper server              | `skipper`                           |
+| `externalDatabase.hibernateDialect`             | Hibernate Dialect used by Dataflow/Skipper servers                      | `""`                                |
 
 ### RabbitMQ chart parameters
 
