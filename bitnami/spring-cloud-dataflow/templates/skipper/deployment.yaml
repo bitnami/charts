@@ -80,18 +80,22 @@ spec:
               value: "7577"
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
+              value: "false"
             - name: SPRING_CLOUD_KUBERNETES_SECRETS_ENABLE_API
-              value: "true"
+              value: "false"
             - name: SPRING_CLOUD_KUBERNETES_SECRETS_PATHS
               value: "/etc/secrets"
-            - name: SPRING_CLOUD_KUBERNETES_CONFIG_NAME
-              value: {{ (include "scdf.skipper.configmapName" .) | quote }}
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: KUBERNETES_TRUST_CERTIFICATES
               value: {{ ternary "true" "false" .Values.skipper.configuration.trustK8sCerts | quote }}
+            {{- if .Values.skipper.jdwp.enabled }}
+            - name: JAVA_TOOL_OPTIONS
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.skipper.jdwp.port }}"
+            {{- end }}
             {{- range $key, $value := .Values.skipper.extraEnvVars }}
             - name: {{ $key }}
               value: "{{ $value }}"
@@ -111,6 +115,11 @@ spec:
             - name: http
               containerPort: 7577
               protocol: TCP
+            {{- if .Values.skipper.jdwp.enabled }}
+            - name: jdwp
+              containerPort: {{ .Values.skipper.jdwp.port }}
+              protocol: TCP
+            {{- end }}
           {{- if .Values.skipper.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -144,6 +153,9 @@ spec:
             - name: database
               mountPath: /etc/secrets/database
               readOnly: true
+            - name: config
+              mountPath: /config
+              readOnly: true
             {{- if .Values.rabbitmq.enabled }}
             - name: rabbitmq
               mountPath: /etc/secrets/rabbitmq
@@ -156,6 +168,12 @@ spec:
         - name: database
           secret:
             secretName: {{ include "scdf.database.secretName" . }}
+        - name: config
+          configMap:
+            name: {{ include "scdf.skipper.configmapName" . }}
+            items:
+              - key: application.yaml
+                path: application.yaml
         {{- if .Values.rabbitmq.enabled }}
         - name: rabbitmq
           secret:

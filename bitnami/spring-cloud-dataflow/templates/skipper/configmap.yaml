@@ -31,19 +31,23 @@ data:
                     {{- end }}
                     readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
                     livenessProbeDelay: {{ .Values.deployer.livenessProbe.initialDelaySeconds }}
+      {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
+      {{- if $hibernateDialect }}
       jpa:
         properties:
           hibernate:
-            dialect: org.hibernate.dialect.MariaDB102Dialect
+            dialect: {{ $hibernateDialect }}
+      {{- end }}
       datasource:
         {{- $databaseScheme := include "scdf.database.scheme" .  }}
         {{- $databaseHost := include "scdf.database.host" .  }}
         {{- $databasePort := include "scdf.database.port" .  }}
         {{- $databaseName := include "scdf.database.skipper.name" .  }}
-        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}?useMysqlMetadata=true'
+        {{- $jdbcParameters := include "scdf.database.jdbc.parameters" .  }}
+        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.skipper.user" . }}
-        password: ${mariadb-password}
+        password: ${database-password}
         testOnBorrow: true
         validationQuery: "SELECT 1"
 {{ end }}
