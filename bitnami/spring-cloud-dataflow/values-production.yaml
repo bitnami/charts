@@ -311,6 +311,16 @@ server:
     # targetCPU: 50
     # targetMemory: 50
 
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
 ##
 ## Spring Cloud Skipper parameters.
 ##
@@ -536,6 +546,16 @@ skipper:
     # targetCPU: 50
     # targetMemory: 50
 
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
 ##
 ## External Skipper Configuration
 ##
@@ -752,6 +772,10 @@ externalDatabase:
   skipper:
     database: skipper
     user: skipper
+  ## Hibernate Dialect
+  ##
+  #hibernateDialect: org.hibernate.dialect.MariaDB102Dialect
+
 ##
 ## RabbitMQ chart configuration
 ##
