@@ -15,19 +15,26 @@ spec:
         {{- include "ejbca.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
-{{- include "ejbca.imagePullSecrets" . | indent 6 }}
-      {{- if .Values.securityContext.enabled }}
+{{- include "ejbca.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.podSecurityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.podSecurityContext.runAsUser }}
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
       {{- end }}
       {{- if .Values.initContainers }}
       initContainers: {{- include "ejbca.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: ejbca
+          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
           image: {{ template "ejbca.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.command }}
+          command: {{- include "ejbca.tplValue" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "ejbca.tplValue" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: EJBCA_ADMIN_PASSWORD
               valueFrom:
@@ -96,6 +103,8 @@ spec:
             httpGet:
               path: /ejbca
               port: http
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "ejbca.tplValue" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
@@ -107,6 +116,8 @@ spec:
             httpGet:
               path: /ejbca
               port: http
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "ejbca.tplValue" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: ejbca-data
