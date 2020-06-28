@@ -3,8 +3,17 @@ kind: Service
 metadata:
   name: {{ template "ejbca.fullname" . }}
   labels: {{- include "ejbca.labels" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "ejbca.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if or .Values.service.annotations .Values.commonAnnotations}}
+  annotations:
   {{- if .Values.service.annotations }}
-  annotations: {{- include "ejbca.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- include "ejbca.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  {{- include "ejbca.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}

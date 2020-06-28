@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   name: {{ template "ejbca.fullname" . }}
   labels: {{- include "ejbca.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "ejbca.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "ejbca.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels: {{- include "ejbca.matchLabels" . | nindent 6 }}
@@ -10,8 +16,12 @@ spec:
   template:
     metadata:
       labels: {{- include "ejbca.labels" . | nindent 8 }}
-      {{- if .Values.podAnnotations }}
+        {{- if .Values.podLabels }}
+        {{- include "ejbca.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+      {{- if .Values.podAnnotations }}
         {{- include "ejbca.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
@@ -156,3 +166,12 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "ejbca.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "ejbca.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "ejbca.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "ejbca.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
