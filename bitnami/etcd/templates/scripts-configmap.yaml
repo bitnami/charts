@@ -152,7 +152,7 @@ data:
                 echo "==> Restoring etcd cluster from snapshot..." 1>&3 2>&4
 
                 rm -rf $ETCD_DATA_DIR 1>&3 2>&4
-                etcdctl snapshot restore "/snapshots/${latest_snapshot_file}" \
+                etcdctl snapshot restore "${latest_snapshot_file}" \
                   --name $ETCD_NAME \
                   --data-dir $ETCD_DATA_DIR \
                   --initial-cluster $ETCD_INITIAL_CLUSTER \
