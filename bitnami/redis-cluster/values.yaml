@@ -207,6 +207,11 @@ redis:
   ## Redis pod/node affinity/anti-affinity
   ##
   affinity: {}
+  ## Pod topology spread constraints
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
   ##
   busPort: 16379
