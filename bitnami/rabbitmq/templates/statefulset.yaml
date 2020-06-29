@@ -203,7 +203,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  /opt/bitnami/scripts/rabbitmq/apicheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
+                  /opt/bitnami/scripts/rabbitmq/apicheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:15672/api/healthchecks/node" '{"status":"ok"}'
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -219,7 +219,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  /opt/bitnami/scripts/rabbitmq/healthcheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
+                  /opt/bitnami/scripts/rabbitmq/healthcheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:15672/api/healthchecks/node" '{"status":"ok"}'
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

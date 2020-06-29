@@ -2,22 +2,28 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "redis-cluster.fullname" . }}
-  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   replicas: {{ .Values.cluster.nodes }}
-  serviceName: {{ include "redis-cluster.fullname" . }}-headless
+  serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: "Parallel"
   template:
     metadata:
-      labels: {{- include "redis-cluster.labels" . | nindent 8 }}
-      {{- if .Values.podLabels }}
-      {{- toYaml .Values.podLabels | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      {{- if .Values.redis.podLabels }}
+      {{- toYaml .Values.redis.podLabels | nindent 8 }}
       {{- end }}
       {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
       {{- toYaml .Values.metrics.podLabels | nindent 8 }}
@@ -27,7 +33,7 @@ spec:
         {{- if not .Values.existingSecret }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- end }}
-      {{- if .Values.podAnnotations }}
+      {{- if .Values.redis.podAnnotations }}
       {{- toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
       {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
@@ -44,42 +50,35 @@ spec:
           {{- toYaml .Values.podSecurityContext.sysctls | nindent 8 }}
         {{- end }}
       {{- end }}
-      serviceAccountName: "{{ template "redis-cluster.serviceAccountName" . }}"
-      {{- if .Values.priorityClassName }}
-      priorityClassName: "{{ .Values.priorityClassName }}"
+      serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
+      {{- if .Values.redis.priorityClassName }}
+      priorityClassName: {{ .Values.redis.priorityClassName }}
       {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-      {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.affinity "context" $ ) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.nodeSelector "context" $ ) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.tolerations "context" $ ) | nindent 8 }}
+      {{- if .Values.redis.schedulerName }}
+      schedulerName: {{ .Values.redis.schedulerName | quote }}
       {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-      {{- toYaml .Values.nodeSelector | nindent 8 }}
-      {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations:
-      {{- toYaml .Values.tolerations | nindent 8 }}
-      {{- end }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- if .Values.redis.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.topologySpreadConstraints "context" $ ) | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ include "redis-cluster.fullname" . }}
-          image: "{{ include "redis-cluster.image" . }}"
+        - name: {{ include "common.names.fullname" . }}
+          image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
             runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
-          {{- if .Values.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if and (not .Values.command) (not .Values.args) }}
-          {{- if .Values.cluster.externalAccess.enabled }}
+          {{- if .Values.redis.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.redis.command "context" $) | nindent 12 }}
+          {{- else if .Values.cluster.externalAccess.enabled }}
           command: ['/bin/bash', '-c']
+          {{- end }}
+          {{- if .Values.redis.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.redis.args "context" $) | nindent 12 }}
+          {{- else if .Values.cluster.externalAccess.enabled }}
           args:
             - |
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
@@ -89,6 +88,8 @@ spec:
               export REDIS_NODES="${ips[@]}"
               /entrypoint.sh /run.sh
           {{- end }}
+          {{- if .Values.redis.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.cluster.externalAccess.enabled }}
@@ -100,7 +101,7 @@ spec:
                   fieldPath: metadata.name
             {{- else }}
             - name: REDIS_NODES
-              value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "redis-cluster.fullname" $ }}-{{ $i }}.{{ template "redis-cluster.fullname" $ }}-headless {{ end }}"
+              value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "common.names.fullname" $ }}-{{ $i }}.{{ template "common.names.fullname" $ }}-headless {{ end }}"
             {{- end }}
             {{- if .Values.usePassword }}
             - name: REDISCLI_AUTH
@@ -123,12 +124,12 @@ spec:
               value: "yes"
             {{- end }}
             - name: REDIS_AOF_ENABLED
-              value: {{ .Values.useAOFPersistence | quote }}
+              value: {{ .Values.redis.useAOFPersistence | quote }}
             - name: REDIS_TLS_ENABLED
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_TLS_PORT
-              value: {{ .Values.redisPort | quote }}
+              value: {{ .Values.redis.port | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
             - name:  REDIS_TLS_CERT_FILE
@@ -143,56 +144,58 @@ spec:
             {{- end }}
             {{- else }}
             - name: REDIS_PORT
-              value: {{ .Values.redisPort | quote }}
+              value: {{ .Values.redis.port | quote }}
             {{- end }}
-            {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 8 }}
+            {{- if .Values.redis.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 8 }}
             {{- end }}
-            {{- if or .Values.extraEnvVarsConfigMap .Values.extraEnvVarsSecret }}
-            envFrom:
-              {{- if .Values.extraEnvVarsConfigMap }}
-              - configMapRef:
-                  name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsConfigMap "context" $ ) }}
-              {{- end }}
-              {{- if .Values.extraEnvVarsSecret }}
-              - secretRef:
-                  name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
-              {{- end }}
-              {{- end }}
+          envFrom:
+            {{- if .Values.redis.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.redis.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
           ports:
             - name: tcp-redis
-              containerPort: {{ .Values.redisPort }}
+              containerPort: {{ .Values.redis.port }}
             - name: tcp-redis-bus
-              containerPort: {{ .Values.cluster.busPort }}
-          {{- if .Values.livenessProbe.enabled }}
+              containerPort: {{ .Values.redis.busPort }}
+          {{- if .Values.redis.livenessProbe.enabled }}
           livenessProbe:
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.redis.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.redis.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.redis.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.redis.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.redis.livenessProbe.failureThreshold }}
             exec:
               command:
                 - sh
                 - -c
-                - /scripts/ping_liveness_local.sh {{ .Values.livenessProbe.timeoutSeconds }}
+                - /scripts/ping_liveness_local.sh {{ .Values.redis.livenessProbe.timeoutSeconds }}
+          {{- else if .Values.redis.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+          {{- if .Values.redis.readinessProbe.enabled }}
           readinessProbe:
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.redis.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.redis.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.redis.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.redis.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.redis.readinessProbe.failureThreshold }}
             exec:
               command:
                 - sh
                 - -c
-                - /scripts/ping_readiness_local.sh {{ .Values.livenessProbe.timeoutSeconds }}
+                - /scripts/ping_readiness_local.sh {{ .Values.redis.readinessProbe.timeoutSeconds }}
+          {{- else if .Values.redis.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.resources }}
+          {{- if .Values.redis.resources }}
           resources:
-          {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.redis.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -214,8 +217,8 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
-            {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- if .Values.redis.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -231,7 +234,7 @@ spec:
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           env:
             - name: REDIS_ALIAS
-              value: {{ template "redis-cluster.fullname" . }}
+              value: {{ template "common.names.fullname" . }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -265,15 +268,15 @@ spec:
           resources:
         {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
-        {{- if .Values.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 8 }}
+        {{- if .Values.redis.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.redis.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and  .Values.persistence.enabled .Values.containerSecurityContext.enabled) }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
       initContainers:
         {{- if $needsVolumePermissions }}
         - name: volume-permissions
-          image: "{{ template "redis-cluster.volumePermissions.image" . }}"
+          image: {{ include "redis-cluster.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.containerSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
           securityContext:
@@ -302,14 +305,14 @@ spec:
             privileged: true
             runAsUser: 0
         {{- end }}
-        {{- if .Values.extraInitContainers }}
-        {{- toYaml .Values.extraInitContainers | nindent 10 }}
+        {{- if .Values.redis.initContainers }}
+        {{- toYaml .Values.redis.initContainers | nindent 10 }}
         {{- end }}
       {{- end }}
       volumes:
         - name: scripts
           configMap:
-            name: {{ include "redis-cluster.fullname" . }}-scripts
+            name: {{ include "common.names.fullname" . }}-scripts
             defaultMode: 0755
         {{- if .Values.usePasswordFile }}
         - name: redis-password
@@ -321,7 +324,7 @@ spec:
         {{- end }}
         - name: default-config
           configMap:
-            name: {{ include "redis-cluster.fullname" . }}-default
+            name: {{ include "common.names.fullname" . }}-default
         {{- if not .Values.persistence.enabled }}
         - name: "redis-data"
           emptyDir: {}
@@ -333,13 +336,13 @@ spec:
         {{- end }}
         - name: redis-tmp-conf
           emptyDir: {}
-        {{- if .Values.extraVolumes }}
+        {{- if .Values.redis.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
-            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
+            secretName: {{ include "common.tplvalues.render" (dict "value" .Values.tls.certificatesSecret "context" $) }}
             defaultMode: 256
         {{- end }}
   {{- if .Values.persistence.enabled }}

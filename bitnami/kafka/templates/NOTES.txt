@@ -77,14 +77,17 @@ You need to configure your Kafka client to access using SASL authentication. To 
 
     - client.properties:
 
+        security.protocol={{ $clientProtocol }}
+        sasl.mechanism=PLAIN
         {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
         ssl.truststore.location=/tmp/kafka.truststore.jks
         {{- if .Values.auth.jksPassword }}
         ssl.truststore.password={{ .Values.auth.jksPassword }}
         {{- end }}
         {{- end }}
-        security.protocol={{ $clientProtocol }}
-        sasl.mechanism=PLAIN
+        {{- if eq .Values.auth.tlsEndpointIdentificationAlgorithm "" }}
+        ssl.endpoint.identification.algorithm=
+        {{- end }}
 
 {{- end }}
 

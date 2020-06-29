@@ -344,6 +344,26 @@ Return true if a JAAS credentials secret object should be created
 {{- end -}}
 
 {{/*
+Return the Kafka JKS credentials secret
+*/}}
+{{- define "kafka.jksSecretName" -}}
+{{- if .Values.auth.jksSecret -}}
+    {{- printf "%s" (tpl .Values.auth.jksSecret $) -}}
+{{- else -}}
+    {{- printf "%s-jks" (include "kafka.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a JAAS credentials secret object should be created
+*/}}
+{{- define "kafka.createJksSecret" -}}
+{{- if and (.Files.Glob "files/jks/*.jks") (not .Values.auth.jksSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka configuration configmap
 */}}
 {{- define "kafka.configmapName" -}}
@@ -447,6 +467,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.jksSecret" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -490,5 +511,13 @@ kafka: rbac.create
     an initContainer will be used to autodetect the external IPs/ports by querying the
     K8s API. Please note this initContainer requires specific RBAC resources. You can create them
     by specifying "--set rbac.create=true".
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - A secret containing JKS files must be provided when TLS authentication is enabled */}}
+{{- define "kafka.validateValues.jksSecret" -}}
+{{- if and (include "kafka.tlsEncryption" .) (not .Values.auth.jksSecret) (not (.Files.Glob "files/jks/*.jks")) }}
+kafka: auth.jksSecret
+    A secret containing the Kafka JKS files is required when TLS encryption in enabled
 {{- end -}}
 {{- end -}}

@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.40.0-debian-10-r0
+    tag: 0.40.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -216,7 +216,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.3.0-debian-10-r143
+      tag: 0.3.0-debian-10-r151
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -247,7 +247,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.19.0-debian-10-r8
+    tag: 2.19.1-debian-10-r7
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -641,7 +641,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.12.2-scratch-r15
+      tag: 0.13.0-scratch-r0
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -699,7 +699,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r1
+    tag: 0.21.0-debian-10-r8
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1010,6 +1010,49 @@ kubeApiServer:
   enabled: true
 
   serviceMonitor:
+    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+
+    ## Metric relabeling
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    metricRelabelings: []
+
+    ## Relabel configs
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    ##
+    relabelings: []
+
+## Component scraping the kube-proxy
+kubeProxy:
+  ## Create a ServiceMonitor to scrape kube-proxy service
+  enabled: true
+
+  ## If your kube-proxy is not deployed as a pod, specify IPs it can be found on
+  endpoints: []
+  # - 10.141.4.22
+  # - 10.141.4.23
+  # - 10.141.4.24
+
+  ## Namespace where kube-proxy service is deployed
+  namespace: kube-system
+
+  ## Service ports and selector information
+  service:
+    enabled: true
+    port: 10249
+    targetPort: 10249
+    # selector:
+    #   k8s-app: kube-proxy
+
+  serviceMonitor:
+    ## Enable scraping kube-proxy over https.
+    ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
+    ##
+    https: false
+
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
