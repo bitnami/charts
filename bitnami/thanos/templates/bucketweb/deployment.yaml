@@ -49,6 +49,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           args:
+            - tools
             - bucket
             - web
             - --http-address=0.0.0.0:8080

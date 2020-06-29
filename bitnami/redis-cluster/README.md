@@ -177,6 +177,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `redis.extraVolumes`                                  | Array of extra volumes to be added to all pods (evaluated as a template). Requires setting `extraVolumeMounts` | `[]`              |
 | `redis.extraVolumeMounts`                             | Array of extra volume mounts to be added to all pods (evaluated as a template). Normally used with `extraVolumes` | `[]`              |
 | `redis.affinity`                                      | Affinity settings for Redis pod assignment                     | {}                |
+| `redis.topologySpreadConstraints`                     | Pod topology spread constraints for Redis pod                     | `[]`                |
 | `redis.extraEnvVars`                                  | Array containing extra env vars to be added to all pods (evaluated as a template) | `[]`              |
 | `redis.extraEnvVarsCM`                         | ConfigMap containing extra env vars to be added to all pods (evaluated as a template) | `nil`             |
 | `redis.extraEnvVarsSecret`                            | Secret containing extra env vars to be added to all pods (evaluated as a template) | `nil`             |

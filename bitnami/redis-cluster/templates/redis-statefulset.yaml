@@ -60,6 +60,9 @@ spec:
       {{- if .Values.redis.schedulerName }}
       schedulerName: {{ .Values.redis.schedulerName | quote }}
       {{- end }}
+      {{- if .Values.redis.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.topologySpreadConstraints "context" $ ) | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ include "common.names.fullname" . }}
           image: {{ include "redis-cluster.image" . }}

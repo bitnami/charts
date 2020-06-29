@@ -312,23 +312,34 @@ The following table lists the configurable parameters of the Prometheus Operator
 
 ### Exporters
 
-| Parameter                                             | Description                                                                                                                    | Default                                                                                                                                                                                                                                             |
-|-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `exporters.enabled`                                   | Deploy exporters                                                                                                               | `true`                                                                                                                                                                                                                                              |
-| `exporters.node-exporter.enabled`                     | Deploy `node-exporter`                                                                                                         | `true`                                                                                                                                                                                                                                              |
-| `exporters.kube-state-metrics.enabled`                | Deploy `kube-state-metrics`                                                                                                    | `true`                                                                                                                                                                                                                                              |
-| `kubelet.namespace`                                   | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace`                         | `kube-system`                                                                                                                                                                                                                                       |
-| `kubelet.enabled`                                     | Create a ServiceMonitor to scrape kubelet service                                                                              | `true`                                                                                                                                                                                                                                              |
-| `kubelet.serviceMonitor.https`                        | Enable scraping of the kubelet over HTTPS                                                                                      | `true`                                                                                                                                                                                                                                              |
-| `kubelet.serviceMonitor.interval`                     | Scrape interval (use by default, falling back to Prometheus' default)                                                          | `nil`                                                                                                                                                                                                                                               |
-| `kubelet.serviceMonitor.metricRelabelings`            | Metric relabeling                                                                                                              | `[]`                                                                                                                                                                                                                                                |
-| `kubelet.serviceMonitor.relabelings`                  | Relabel configs                                                                                                                | `[]`                                                                                                                                                                                                                                                |
-| `kubelet.serviceMonitor.cAdvisorMetricRelabelings`    | Metric relabeling for scraping cAdvisor                                                                                        | `[]`                                                                                                                                                                                                                                                |
-| `kubelet.serviceMonitor.cAdvisorRelabelings`          | Relabel configs for scraping cAdvisor                                                                                          | `[]`                                                                                                                                                                                                                                                |
-| `kubeApiServer.enabled`                               | Create a ServiceMonitor to scrape kube-apiserver service                                                                       | `true`                                                                                                                                                                                                                                              |
-| `kubeApiServer.serviceMonitor.interval`               | Scrape interval (use by default, falling back to Prometheus' default)                                                          | `nil`                                                                                                                                                                                                                                               |
-| `kubeApiServer.serviceMonitor.metricRelabelings`      | Metric relabeling                                                                                                              | `[]`                                                                                                                                                                                                                                                |
-| `kubeApiServer.serviceMonitor.relabelings`            | Relabel configs                                                                                                                | `[]`                                                                                                                                                                                                                                                |
+| Parameter                                          | Description                                                  | Default       |
+| -------------------------------------------------- | ------------------------------------------------------------ | ------------- |
+| `exporters.enabled`                                | Deploy exporters                                             | `true`        |
+| `exporters.node-exporter.enabled`                  | Deploy `node-exporter`                                       | `true`        |
+| `exporters.kube-state-metrics.enabled`             | Deploy `kube-state-metrics`                                  | `true`        |
+| `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system` |
+| `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service            | `true`        |
+| `kubelet.serviceMonitor.https`                     | Enable scraping of the kubelet over HTTPS                    | `true`        |
+| `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default) | `nil`         |
+| `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                            | `[]`          |
+| `kubelet.serviceMonitor.relabelings`               | Relabel configs                                              | `[]`          |
+| `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                      | `[]`          |
+| `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                        | `[]`          |
+| `kubeApiServer.enabled`                            | Create a ServiceMonitor to scrape kube-apiserver service     | `true`        |
+| `kubeApiServer.serviceMonitor.interval`            | Scrape interval (use by default, falling back to Prometheus' default) | `nil`         |
+| `kubeApiServer.serviceMonitor.metricRelabelings`   | Metric relabeling                                            | `[]`          |
+| `kubeApiServer.serviceMonitor.relabelings`         | Relabel configs                                              | `[]`          |
+| `kubeProxy.enabled`                                | Create a ServiceMonitor to scrape the kube-proxy Service     | `true`        |
+| `kubeProxy.endpoints`                              | If your kube-proxy is not deployed as a pod, specify IPs it can be found on | `[]`          |
+| `kubeProxy.namespace`                              | Namespace where cube-proxy service is deployed.              | `kube-system` |
+| `kubeProxy.service.enabled`                        | Whether or not to create a Service object for kube-proxy     | `true`        |
+| `kubeProxy.service.port`                           | Listening port of the kube-proxy Service object              | `10249`       |
+| `kubeProxy.service.targetPort`                     | Port to target on the kube-proxy Pods. This should be the port that kube-proxy is listening on | `10249`       |
+| `kubeProxy.service.selector`                       | Service label selector to discover the kube-proxy Pods       | `{}`          |
+| `kubeProxy.serviceMonitor.enabled`                 | Create a ServiceMonitor object                               | `true`        |
+| `kubeProxy.serviceMonitor.interval`                | Scrape interval (use by default, falling back to Prometheus' default) | `""`          |
+| `kubeProxy.serviceMonitor.metricRelabelings`       | Metric relabeling                                            | `[]`          |
+| `kubeProxy.serviceMonitor.relabelings`             | Relabel configs                                              | `[]`          |
 
 The above parameters map to the env variables defined in [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator). For more information please refer to the [bitnami/prometheus-operator](http://github.com/bitnami/bitnami-docker-prometheus-operator) image documentation.
 
@@ -407,7 +418,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Additional scrape configurations
 
-It is possible to inject externally managed scrape configurations in a ConfigMap by enabling `prometheus.additionalScrapeConfigsExternal`. The ConfigMap must exist in the same namespace when Prometheus is starting. Its name is generated using the `prometheus-operator.prometheus.fullname` template with a `-scrape-config` suffix. The file it contains has to be named `additional-scrape-configs.yaml`.
+It is possible to inject externally managed scrape configurations via a Secret by enabling `prometheus.additionalScrapeConfigsExternal`. The secret must exist in the same namespace which the Prometheus Operator will be deployed into. 
+
+The secret name which you create **must** be created using the format: `{prometheus-operator.prometheus.fullname}-scrape-config`. The file which the secret contains **must** be named: `additional-scrape-configs.yaml`.
+
+For example, if you deploy the chart with the name: `prometheus-operator`, the name of the secret will be: `prometheus-operator-prometheus-scrape-config`.
+
+For more information, see [CoreOS Prometheus Operator - Additional scrape configuration documentation](https://github.com/coreos/prometheus-operator/blob/master/Documentation/additional-scrape-config.md#additional-scrape-configuration).
 
 ## Upgrading
 
