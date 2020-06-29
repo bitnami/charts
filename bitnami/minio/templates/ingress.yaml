@@ -21,7 +21,7 @@ spec:
           - path: {{ default "/" .path }}
             backend:
               serviceName: {{ include "minio.fullname" $ }}
-              servicePort: minio
+              servicePort: http-minio
     {{- end }}
   tls:
     {{- range .Values.ingress.hosts }}
