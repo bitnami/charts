@@ -235,6 +235,8 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
+            - name: REDIS_ADDR
+              value: {{ printf "127.0.0.1:%g" .Values.redis.port | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:

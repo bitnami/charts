@@ -35,6 +35,17 @@ image:
 ##
 # fullnameOverride:
 
+## Update strategy for Deployments. Set to recreate if persistent volume cannot be mounted to move than one pod.
+## Example:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
 ##
