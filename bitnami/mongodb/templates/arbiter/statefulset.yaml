@@ -51,8 +51,13 @@ spec:
       {{- if .Values.arbiter.priorityClassName }}
       priorityClassName: {{ .Values.arbiter.priorityClassName }}
       {{- end }}
-      {{- if .Values.arbiter.podSecurityContext }}
-      securityContext: {{- toYaml .Values.arbiter.podSecurityContext | nindent 8 }}
+      {{- if .Values.arbiter.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.arbiter.podSecurityContext.fsGroup }}
+        {{- if .Values.arbiter.podSecurityContext.sysctls }}
+        sysctls:
+          {{- toYaml .Values.arbiter.podSecurityContext.sysctls | nindent 10 }}
+        {{- end }}
       {{- end }}
       {{- if .Values.arbiter.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
@@ -61,8 +66,9 @@ spec:
         - name: mongodb-arbiter
           image: {{ include "mongodb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.arbiter.containerSecurityContext }}
-          securityContext: {{- toYaml .Values.arbiter.containerSecurityContext | nindent 12 }}
+          {{- if .Values.arbiter.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.arbiter.containerSecurityContext.runAsUser }}
           {{- end }}
           {{- if .Values.arbiter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.command "context" $) | nindent 12 }}
