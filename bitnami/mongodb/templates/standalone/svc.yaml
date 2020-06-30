@@ -1,17 +1,14 @@
-{{- if not .Values.replicaSet.enabled }}
+{{- if not (eq .Values.architecture "replicaset") }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "mongodb.serviceName" . }}
-  namespace: {{ template "mongodb.namespace" . }}
-  labels:
-    app: {{ template "mongodb.name" . }}
-    chart: {{ template "mongodb.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-{{- with .Values.service.annotations }}
-  annotations: {{ tpl (toYaml .) $ | nindent 4 }}
-{{- end }}
+  name: {{ include "mongodb.fullname" . }}
+  namespace: {{ include "mongodb.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: mongodb
+  {{- if .Values.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if and (eq .Values.service.type "ClusterIP") .Values.service.clusterIP }}
@@ -27,18 +24,14 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - name: mongodb
+    - name: tcp-mongodb
       port: {{ .Values.service.port }}
       targetPort: mongodb
-{{- if .Values.service.nodePort }}
+      {{- if and (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) .Values.service.nodePort }}
       nodePort: {{ .Values.service.nodePort }}
-{{- end }}
-{{- if .Values.metrics.enabled }}
-    - name: metrics
-      port: 9216
-      targetPort: metrics
-{{- end }}
-  selector:
-    app: {{ template "mongodb.name" . }}
-    release: "{{ .Release.Name }}"
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: mongodb
 {{- end }}
