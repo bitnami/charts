@@ -251,12 +251,14 @@ resources:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
 podSecurityContext:
+  enabled: true
   fsGroup: 1001
 
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ##
 containerSecurityContext:
+  enabled: true
   runAsUser: 1001
 
 ## Configure extra options for liveness and readiness probes
