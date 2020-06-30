@@ -281,8 +281,8 @@ certificates:
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem
-  customCAs:
-    - secret: certificates-tls-secret
+  customCA: []
+  # - secret: custom-CA
   # - secret: more-custom-CAs
   image:
     registry: docker.io
