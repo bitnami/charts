@@ -60,6 +60,9 @@ spec:
       {{- if .Values.redis.schedulerName }}
       schedulerName: {{ .Values.redis.schedulerName | quote }}
       {{- end }}
+      {{- if .Values.redis.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.topologySpreadConstraints "context" $ ) | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ include "common.names.fullname" . }}
           image: {{ include "redis-cluster.image" . }}
@@ -232,6 +235,8 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
+            - name: REDIS_ADDR
+              value: {{ printf "127.0.0.1:%g" .Values.redis.port | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:

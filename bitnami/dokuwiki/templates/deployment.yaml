@@ -45,6 +45,8 @@ spec:
       - ip: "127.0.0.1"
         hostnames:
         - "status.localhost"
+      initContainers:
+      {{- include "certificates.initContainer" . | indent 8 }}
       containers:
       - name: {{ template "dokuwiki.fullname" . }}
         image: {{ template "dokuwiki.image" . }}
@@ -93,6 +95,7 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
+        {{- include "certificates.volumeMount" . | indent 8 }}
         - name: dokuwiki-data
           mountPath: /bitnami/dokuwiki
 {{- if .Values.metrics.enabled }}
@@ -119,6 +122,7 @@ spec:
   {{ toYaml .Values.metrics.resources | indent 10 }}
 {{- end }}
       volumes:
+      {{- include "certificates.volumes" . | indent 6 }}
       - name: dokuwiki-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:

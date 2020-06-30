@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.0.5-debian-10-r16
+  tag: 6.0.5-debian-10-r25
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -207,6 +207,11 @@ redis:
   ## Redis pod/node affinity/anti-affinity
   ##
   affinity: {}
+  ## Pod topology spread constraints
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
   ##
   busPort: 16379
@@ -425,6 +430,7 @@ rbac:
 ## Redis pod Security Context
 ##
 podSecurityContext:
+  enabled: true
   fsGroup: 1001
   runAsUser: 1001
   ## sysctl settings
@@ -449,6 +455,7 @@ podDisruptionBudget: {}
 ## Containers Security Context
 ##
 containerSecurityContext:
+  enabled: true
   runAsUser: 1001
   ## sysctl settings
   ##
@@ -580,7 +587,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.8.0-debian-10-r5
+    tag: 1.8.0-debian-10-r11
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
