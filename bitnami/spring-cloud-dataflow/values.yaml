@@ -766,9 +766,8 @@ externalDatabase:
 ##
 rabbitmq:
   enabled: true
-  rabbitmq:
+  auth:
     username: user
-    password: ""
 
 ##
 ## External RabbitMQ Configuration

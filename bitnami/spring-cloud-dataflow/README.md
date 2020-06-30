@@ -248,8 +248,13 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | Parameter                                       | Description                                                             | Default                                                 |
 |-------------------------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------|
 | `rabbitmq.enabled`                              | Enable/disable RabbitMQ chart installation                              | `true`                                                  |
-| `rabbitmq.auth.user`                            | RabbitMQ username                                                       | `user`                                                  |
+| `rabbitmq.auth.username`                        | RabbitMQ username                                                       | `user`                                                  |
 | `rabbitmq.auth.password`                        | RabbitMQ password                                                       | _random 40 character alphanumeric string_               |
+| `externalRabbitmq.enabled`                      | Enable/disable external RabbitMQ                                        | `false`                                                 |
+| `externalRabbitmq.host`                         | Host of the external RabbitMQ                                           | `localhost`                                             |
+| `externalRabbitmq.port`                         | External RabbitMQ port number                                           | `5672`                                                  |
+| `externalRabbitmq.username`                     | External RabbitMQ username                                              | `guest`                                                 |
+| `externalRabbitmq.password`                     | External RabbitMQ password                                              | `guest`                                                 |
 
 ### Kafka chart parameters
 
