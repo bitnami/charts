@@ -606,7 +606,7 @@ metrics:
     namespace: ""
     ## Redis prometheus rules
     ## These are just examples rules, please adapt them to your needs.
-    ## Make sure to constraint the rules to the current postgresql service.
+    ## Make sure to constraint the rules to the current redis service.
     # rules:
     #   - alert: RedisDown
     #     expr: redis_up{service="{{ template "redis.fullname" . }}-metrics"} == 0
