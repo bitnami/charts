@@ -15,10 +15,10 @@ data:
               kubernetes:
                 accounts:
                   {{ .Values.skipper.configuration.accountName }}:
-                    {{- if .Values.rabbitmq.enabled }}
-                    {{- $rabbitmqHost := include "scdf.rabbitmq.fullname" . }}
-                    {{- $rabbitmqPort := int .Values.rabbitmq.service.port }}
-                    {{- $rabbitmqUser := .Values.rabbitmq.auth.username }}
+                    {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
+                    {{- $rabbitmqHost := include "scdf.rabbitmq.host" . }}
+                    {{- $rabbitmqPort := include "scdf.rabbitmq.port" . }}
+                    {{- $rabbitmqUser := include "scdf.rabbitmq.user" . }}
                     environmentVariables: 'SPRING_RABBITMQ_HOST={{ $rabbitmqHost }},SPRING_RABBITMQ_PORT={{ $rabbitmqPort }},SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }},SPRING_RABBITMQ_PASSWORD=${rabbitmq-password}'
                     {{- else if .Values.kafka.enabled }}
                     environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ template "scdf.envrelease" . }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envrelease" . }}_KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ template "scdf.envrelease" . }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envrelease" . }}_ZOOKEEPER_SERVICE_PORT}'

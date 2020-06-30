@@ -249,13 +249,57 @@ Return the Skipper Database User
 {{- end -}}
 
 {{/*
-Return the secret name
+Return the Database secret name
 */}}
 {{- define "scdf.database.secretName" -}}
 {{- if .Values.mariadb.enabled }}
     {{- printf "%s" (include "scdf.mariadb.fullname" .) -}}
 {{- else -}}
     {{- printf "%s-%s" (include "scdf.fullname" .) "externaldb" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ host
+*/}}
+{{- define "scdf.rabbitmq.host" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "%s" (include "scdf.rabbitmq.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalRabbitmq.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ Port
+*/}}
+{{- define "scdf.rabbitmq.port" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "%d" (.Values.rabbitmq.service.port | int ) -}}
+{{- else -}}
+    {{- printf "%d" (.Values.externalRabbitmq.port | int ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ username
+*/}}
+{{- define "scdf.rabbitmq.user" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "%s" .Values.rabbitmq.auth.username -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalRabbitmq.username -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ secret name
+*/}}
+{{- define "scdf.rabbitmq.secretName" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "%s" (include "scdf.rabbitmq.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s-%s" (include "scdf.fullname" .) "externalrabbitmq" -}}
 {{- end -}}
 {{- end -}}
 

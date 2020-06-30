@@ -156,7 +156,7 @@ spec:
             - name: config
               mountPath: /config
               readOnly: true
-            {{- if .Values.rabbitmq.enabled }}
+            {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
             - name: rabbitmq
               mountPath: /etc/secrets/rabbitmq
               readOnly: true
@@ -174,10 +174,10 @@ spec:
             items:
               - key: application.yaml
                 path: application.yaml
-        {{- if .Values.rabbitmq.enabled }}
+        {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
         - name: rabbitmq
           secret:
-            secretName: {{ include "scdf.rabbitmq.fullname" . }}
+            secretName: {{ include "scdf.rabbitmq.secretName" . }}
         {{- end }}
         {{- if .Values.waitForBackends.enabled }}
         - name: scripts
