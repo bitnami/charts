@@ -444,7 +444,7 @@ pgpool:
 
   ## Use Pgpool Load-Balancing
   ##
-  useLoadBalancing: true
+  useLoadBalancing: false
 
 ## LDAP parameters
 ##
