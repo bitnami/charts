@@ -154,7 +154,7 @@ spec:
               mountPath: /etc/secrets/database
               readOnly: true
             - name: config
-              mountPath: /config
+              mountPath: /opt/bitnami/spring-cloud-skipper/conf
               readOnly: true
             {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
             - name: rabbitmq
@@ -173,7 +173,7 @@ spec:
             name: {{ include "scdf.skipper.configmapName" . }}
             items:
               - key: application.yaml
-                path: application.yaml
+                path: application.yml
         {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
         - name: rabbitmq
           secret:

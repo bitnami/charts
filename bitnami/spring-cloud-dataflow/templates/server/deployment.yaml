@@ -184,7 +184,7 @@ spec:
               mountPath: /etc/secrets/database
               readOnly: true
             - name: config
-              mountPath: /config
+              mountPath: /opt/bitnami/spring-cloud-dataflow/conf
               readOnly: true
         {{- if .Values.server.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
@@ -198,11 +198,10 @@ spec:
             name: {{ include "scdf.server.configmapName" . }}
             items:
               - key: application.yaml
-                path: application.yaml
+                path: application.yml
         {{- if .Values.waitForBackends.enabled }}
         - name: scripts
           configMap:
             name: {{ include "scdf.fullname" . }}-scripts
             defaultMode: 0755
         {{- end }}
-
