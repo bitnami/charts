@@ -2,7 +2,7 @@
 
 This Helm chart has been developed based on [bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart but including some changes to guarantee high availability such as:
 
-- A new deployment, service and ingress have been added to deploy [Pgpool-II](Pgpool-II) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
+- A new deployment, service have been added to deploy [Pgpool-II](Pgpool-II) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
 - Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
 
 ## TL;DR;
@@ -202,16 +202,6 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `service.loadBalancerIP`                       | loadBalancerIP if service type is `LoadBalancer`                                                                                                                     | `nil`                                                        |
 | `service.loadBalancerSourceRanges`             | Address that are allowed when service is LoadBalancer                                                                                                                | `[]`                                                         |
 | `service.clusterIP`                            | Static clusterIP or None for headless services                                                                                                                       | `nil`                                                        |
-| `ingress.enabled`                              | Enable ingress controller resource                                                                                                                                   | `false`                                                      |
-| `ingress.certManager`                          | Add annotations for cert-manager                                                                                                                                     | `false`                                                      |
-| `ingress.annotations`                          | Ingress annotations                                                                                                                                                  | `[]`                                                         |
-| `ingress.hosts[0].name`                        | Hostname for PostgreSQL service                                                                                                                                      | `postgresql.local`                                           |
-| `ingress.hosts[0].path`                        | Path within the url structure                                                                                                                                        | `/`                                                          |
-| `ingress.tls[0].hosts[0]`                      | TLS hosts                                                                                                                                                            | `postgresql.local`                                           |
-| `ingress.tls[0].secretName`                    | TLS Secret (certificates)                                                                                                                                            | `postgresql.local-tls`                                       |
-| `ingress.secrets[0].name`                      | TLS Secret Name                                                                                                                                                      | `nil`                                                        |
-| `ingress.secrets[0].certificate`               | TLS Secret Certificate                                                                                                                                               | `nil`                                                        |
-| `ingress.secrets[0].key`                       | TLS Secret Key                                                                                                                                                       | `nil`                                                        |
 | `networkPolicy.enabled`                        | Enable NetworkPolicy                                                                                                                                                 | `false`                                                      |
 | `networkPolicy.allowExternal`                  | Don't require client label for connections                                                                                                                           | `true`                                                       |
 
@@ -269,7 +259,6 @@ To modify the PostgreSQL version used in this chart you can specify a [valid ima
 
 ### Configure the way how to expose PostgreSQL
 
-- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose PostgreSQL through Ingress.
 - **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `service.type=ClusterIP` to choose this service type.
 - **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `service.type=NodePort` to choose this service type.
 - **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this service type.
