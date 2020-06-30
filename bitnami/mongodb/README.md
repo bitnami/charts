@@ -212,7 +212,6 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `persistence.storageClass`                | PVC Storage Class for MongoDB data volume                                                                  | `nil`                                                   |
 | `persistence.accessMode`                  | PVC Access Mode for MongoDB data volume                                                                    | `ReadWriteOnce`                                         |
 | `persistence.size`                        | PVC Storage Request for MongoDB data volume                                                                | `8Gi`                                                   |
-| `persistence.selector`                    | Selector to match an existing Persistent Volume                                                            | `{}`(evaluated as a template)                           |
 | `persistence.mountPath`                   | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                      |
 | `persistence.subPath`                     | Subdirectory of the volume to mount at                                                                     | `""`                                                    |
 
@@ -249,7 +248,6 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `arbiter.extraEnvVars`                    | Extra environment variables to add to Arbiter pods                                                         | `[]`                                                         |
 | `arbiter.extraEnvVarsCM`                  | Name of existing ConfigMap containing extra env vars                                                       | `nil`                                                        |
 | `arbiter.extraEnvVarsSecret`              | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                        |
-| `arbiter.replicaCount`                    | Number of Arbiter nodes                                                                                    | `1`                                                          |
 | `arbiter.labels`                          | Annotations to be added to the Arbiter statefulset                                                         | `{}` (evaluated as a template)                               |
 | `arbiter.annotations`                     | Additional labels to be added to the Arbiter statefulset                                                   | `{}` (evaluated as a template)                               |
 | `arbiter.podLabels`                       | Arbiter pod labels                                                                                         | `{}` (evaluated as a template)                               |

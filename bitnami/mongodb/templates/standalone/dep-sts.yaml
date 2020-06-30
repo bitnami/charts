@@ -220,13 +220,13 @@ spec:
             - -ec
           args:
             - |
-              {{- if .Values.usePassword }}
+              {{- if .Values.auth.enabled }}
               /bin/mongodb_exporter --mongodb.uri mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin {{ .Values.metrics.extraFlags }}
               {{- else }}
               /bin/mongodb_exporter --mongodb.uri mongodb://root@localhost:27017/admin {{ .Values.metrics.extraFlags }}
               {{- end }}
           env:
-          {{- if .Values.usePassword }}
+          {{- if .Values.auth.enabled }}
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
