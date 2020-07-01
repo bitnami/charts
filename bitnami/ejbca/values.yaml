@@ -275,7 +275,7 @@ mariadb:
     user: bn_ejbca
     ## If the password is not specified, mariadb will generates a random password
     ##
-    password: "FXAGD9PGie"
+    # password:
 
   ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
