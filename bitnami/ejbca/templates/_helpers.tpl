@@ -156,6 +156,17 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 
 {{/*
+Return the correct EJBCA secret.
+*/}}
+{{- define "ejbca.secretName" -}}
+{{- if .Values.existingSecret -}}
+    {{- printf "%s" .Values.existingSecret -}}
+{{- else -}}
+    {{- printf "%s" (include "ejbca.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the MariaDB Hostname
 */}}
 {{- define "ejbca.databaseHost" -}}
@@ -203,9 +214,15 @@ Return the MariaDB User
 Return the MariaDB Secret Name
 */}}
 {{- define "ejbca.databaseSecretName" -}}
-{{- if .Values.mariadb.enabled }}
+{{- if and (.Values.mariadb.enabled) (not .Values.mariadb.existingSecret) -}}
     {{- printf "%s" (include "mariadb.fullname" .) -}}
-{{- else -}}
-    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+{{- else if and (.Values.mariadb.enabled) (.Values.mariadb.existingSecret) -}}
+    {{- printf "%s" .Values.mariadb.existingSecret -}}
+{{- else }}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}

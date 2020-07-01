@@ -49,7 +49,7 @@ spec:
             - name: EJBCA_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "ejbca.fullname" . }}
+                  name: {{ include "ejbca.secretName" . }}
                   key: ejbca-admin-password
             - name: EJBCA_DATABASE_PASSWORD
               valueFrom:

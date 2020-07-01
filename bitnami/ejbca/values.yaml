@@ -49,6 +49,12 @@ ejbcaAdminUsername: bitnami
 ##
 # ejbcaAdminPassword:
 
+## Alternatively, you can provide the name of an existing secret containing
+## a key named "ejbca-admin-password"
+## NOTE: This will override the password defined at ejbcaAdminPassword
+##
+# existingSecret:
+
 ## Options used to launch the WildFly server
 ## E.g. ejbcaJavaOpts: "-Xms2048m -Xmx2048m"
 # ejbcaJavaOpts:
@@ -283,6 +289,10 @@ mariadb:
   # rootUser:
   #   password:
 
+  ## Use existing secret (ignores root, db and replication passwords)
+  ##
+  # existingSecret:
+
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -310,15 +320,15 @@ externalDatabase:
   ## Database host
   ##
   host: localhost
-
   ## non-root Username for EJBCA Database
   ##
   user: bn_ejbca
-
   ## Database password
   ##
   password: ""
-
+  ## Name of an existing secret resource containing the DB password in a 'mariadb-password' key
+  ##
+  existingSecret: ""
   ## Database name
   ##
   database: bitnami_ejbca
