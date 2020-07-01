@@ -75,15 +75,11 @@ spec:
               value: {{ template "ejbca.databaseUsername" . }}
             {{- if .Values.ejbcaKeystoreExistingSecret }}
             - name: EJBCA_SERVER_CERT_FILE
-              value: /bitnami/tls/keystore.jks
+              value: /opt/bitnami/ejbca/mounted-jks/keystore.jks
             {{- end }}
             {{- if .Values.ejbcaJavaOpts }}
-            - name: EJBCA_JAVA_OPTS
+            - name: JAVA_OPTS
               value: {{ .Values.ejbcaJavaOpts | quote }}
-            {{- end }}
-            {{- if .Values.ejbcaHttpsServerHostname }}
-            - name: EJBCA_HTTPS_SERVER_HOSTNAME
-              value: {{ .Values.ejbcaHttpsServerHostname | quote }}
             {{- end }}
             {{- if .Values.ejbcaCA }}
             {{- if .Values.ejbcaCA.name }}
@@ -135,7 +131,7 @@ spec:
               subPath: ejbca
             {{- if .Values.ejbcaKeystoreExistingSecret }}
             - name: ejbca-keystore
-              mountPath: /bitnami/tls/keystore.jks
+              mountPath: /opt/bitnami/ejbca/mounted-jks/keystore.jks
               subPath: "keystore.jks"
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
