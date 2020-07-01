@@ -81,7 +81,7 @@ spec:
     {{- else if eq .Values.alertmanager.podAntiAffinity "hard" }}
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
-        - topologyKey: "kubernetes.io/hostname"
+        - topologyKey: {{ .Values.alertmanager.podAntiAffinityTopologyKey | quote }}
           labelSelector:
             matchLabels: {{- include "prometheus-operator.alertmanager.matchLabels" . | nindent 14 }}
     {{- else if eq .Values.alertmanager.podAntiAffinity "soft" }}
@@ -89,7 +89,7 @@ spec:
       preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 100
           podAffinityTerm:
-            topologyKey: "kubernetes.io/hostname"
+            topologyKey: {{ .Values.alertmanager.podAntiAffinityTopologyKey | quote }}
             labelSelector:
               matchLabels: {{- include "prometheus-operator.alertmanager.matchLabels" . | nindent 16 }}
     {{- end }}
