@@ -151,6 +151,12 @@ persistence:
     accessMode: ReadWriteOnce
     size: 8Gi
 
+## SecurityContext configuration
+##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##

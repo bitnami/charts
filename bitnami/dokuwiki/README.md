@@ -82,6 +82,9 @@ The following table lists the configurable parameters of the DokuWiki chart and 
 | `ingress.secrets[0].name`            | TLS Secret Name                                                                                       | `nil`                                                        |
 | `ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                                | `nil`                                                        |
 | `ingress.secrets[0].key`             | TLS Secret Key                                                                                        | `nil`                                                        |
+| `securityContext.enabled`            | Enable securityContext on for Kibana deployment                                                       | `true`                                                       |
+| `securityContext.runAsUser`          | User for the security context                                                                         | `1001`                                                       |
+| `securityContext.fsGroup`            | Group to configure permissions for volumes                                                            | `1001`                                                       |
 | `persistence.enabled`                | Enable persistence using PVC                                                                          | `true`                                                       |
 | `persistence.dokuwiki.storageClass`  | PVC Storage Class for DokuWiki volume                                                                 | `nil` (uses alpha storage class annotation)                  |
 | `persistence.dokuwiki.accessMode`    | PVC Access Mode for DokuWiki volume                                                                   | `ReadWriteOnce`                                              |

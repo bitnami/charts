@@ -28,6 +28,10 @@ spec:
   {{- end }}
 {{- end }}
     spec:
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity:
 {{ toYaml .Values.affinity | indent 8 }}
@@ -67,9 +71,9 @@ spec:
           value: {{ .Values.dokuwikiWikiName | quote }}
         ports:
         - name: http
-          containerPort: 80
+          containerPort: 8080
         - name: https
-          containerPort: 443
+          containerPort: 8443
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
