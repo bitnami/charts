@@ -216,7 +216,7 @@ Return the PostgreSQL Port
 {{- if .Values.postgresql.enabled }}
     {{- printf "5432" | quote -}}
 {{- else -}}
-    {{- printf "%d" (.Values.externalDatabase.port | quote ) -}}
+    {{- .Values.externalDatabase.port | quote -}}
 {{- end -}}
 {{- end -}}
 
