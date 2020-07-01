@@ -81,7 +81,7 @@ spec:
               value: "shardsvr"
             - name: MONGODB_REPLICA_SET_MODE
               value: "arbiter"
-            - name: MONGODB_PRIMARY_HOST
+            - name: MONGODB_INITIAL_PPRIMARY_HOST
               value: {{ printf "%s-shard%d-data-0.%s-headless.%s.svc.%s" (include "mongodb-sharded.fullname" $ ) $i (include "mongodb-sharded.fullname" $ ) $.Release.Namespace $.Values.clusterDomain }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ printf "%s-shard-%d" ( include "mongodb-sharded.fullname" $ ) $i }}
@@ -102,12 +102,12 @@ spec:
               value: "no"
             {{- end }}
             {{- if $.Values.usePasswordFile }}
-            - name: MONGODB_PRIMARY_ROOT_PASSWORD_FILE
+            - name: MONGODB_INITIAL_PPRIMARY_ROOT_PASSWORD_FILE
               value: "/bitnami/mongodb/secrets/mongodb-root-password"
             - name: MONGODB_REPLICA_SET_KEY_FILE
               value: "/bitnami/mongodb/secrets/mongodb-replica-set-key"
             {{- else }}
-            - name: MONGODB_PRIMARY_ROOT_PASSWORD
+            - name: MONGODB_INITIAL_PPRIMARY_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb-sharded.secret" $ }}

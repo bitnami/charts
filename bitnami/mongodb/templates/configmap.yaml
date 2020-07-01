@@ -1,15 +1,12 @@
-{{- if .Values.configmap }}
+{{- if (include "mongodb.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  labels:
-    app: {{ template "mongodb.name" . }}
-    chart: {{ template "mongodb.chart" . }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: {{ template "mongodb.fullname" . }}
-  namespace: {{ template "mongodb.namespace" . }}
+  name: {{ include "mongodb.fullname" . }}
+  namespace: {{ include "mongodb.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: mongodb
 data:
   mongodb.conf: |-
-{{ toYaml .Values.configmap | indent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" $) | nindent 4 }}
 {{- end }}

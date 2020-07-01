@@ -1,0 +1,16 @@
+{{- if and .Values.serviceAccount.create .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "mongodb.fullname" . }}
+  namespace: {{ include "mongodb.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+roleRef:
+  kind: Role
+  name: {{ include "mongodb.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "mongodb.serviceAccountName" . }}
+    namespace: {{ include "mongodb.namespace" . }}
+{{- end }}
