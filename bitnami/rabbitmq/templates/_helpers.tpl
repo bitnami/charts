@@ -93,6 +93,17 @@ Get the TLS secret.
 {{- end -}}
 
 {{/*
+Get the Ingress TLS secret.
+*/}}
+{{- define "rabbitmq.ingressSecretTLSName" -}}
+    {{- if .Values.ingress.tls.existingSecret -}}
+        {{- printf "%s" .Values.ingress.tls.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s-tls" .Values.ingress.hostname -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper RabbitMQ plugin list
 */}}
 {{- define "rabbitmq.plugins" -}}
