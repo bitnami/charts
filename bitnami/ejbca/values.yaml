@@ -151,18 +151,12 @@ commonAnnotations: {}
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 
 ## K8s Security Context for EJBCA container
 ##
-containerSecurityContext: {}
-## capabilities:
-##   drop:
-##   - ALL
-## readOnlyRootFilesystem: true
-## runAsNonRoot: true
-## runAsUser: 1000
-##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
 
 ## Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/

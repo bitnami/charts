@@ -28,7 +28,6 @@ spec:
 {{- include "ejbca.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.podSecurityContext.runAsUser }}
         fsGroup: {{ .Values.podSecurityContext.fsGroup }}
       {{- end }}
       {{- if .Values.initContainers }}
@@ -36,7 +35,10 @@ spec:
       {{- end }}
       containers:
         - name: ejbca
-          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          {{- end }}
           image: {{ template "ejbca.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.command }}
