@@ -94,7 +94,7 @@ spec:
                   fieldPath: metadata.name
             - name: MONGODB_MONGOS_HOST
               value: {{ include "mongodb-sharded.fullname" $ }}
-            - name: MONGODB_PRIMARY_HOST
+            - name: MONGODB_INITIAL_PPRIMARY_HOST
               value: {{ printf "%s-shard%d-data-0.%s-headless.%s.svc.%s" (include "mongodb-sharded.fullname" $ ) $i (include "mongodb-sharded.fullname" $ ) $.Release.Namespace $.Values.clusterDomain }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ printf "%s-shard-%d" ( include "mongodb-sharded.fullname" $ ) $i }}
