@@ -95,9 +95,11 @@ data:
 {{- if .Values.tls.enabled }}
         -p $REDIS_SENTINEL_TLS_PORT_NUMBER \
         --tls \
-        --cert {{ template "redis.tlsCert" . }} \
-        --key {{ template "redis.tlsCertKey" . }} \
         --cacert {{ template "redis.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
+          --cert {{ template "redis.tlsCert" . }} \
+          --key {{ template "redis.tlsCertKey" . }} \
+        {{- end }}
 {{- else }}
         -p $REDIS_SENTINEL_PORT \
 {{- end }}
@@ -142,9 +144,11 @@ data:
         -p $REDIS_MASTER_PORT_NUMBER \
 {{- if .Values.tls.enabled }}
         --tls \
-        --cert {{ template "redis.tlsCert" . }} \
-        --key {{ template "redis.tlsCertKey" . }} \
         --cacert {{ template "redis.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
+          --cert {{ template "redis.tlsCert" . }} \
+          --key {{ template "redis.tlsCertKey" . }} \
+        {{- end }}
 {{- end }}
         ping
     )
@@ -171,9 +175,11 @@ data:
         -p $REDIS_MASTER_PORT_NUMBER \
 {{- if .Values.tls.enabled }}
         --tls \
-        --cert {{ template "redis.tlsCert" . }} \
-        --key {{ template "redis.tlsCertKey" . }} \
         --cacert {{ template "redis.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
+          --cert {{ template "redis.tlsCert" . }} \
+          --key {{ template "redis.tlsCertKey" . }} \
+        {{- end }}
 {{- end }}
         ping
     )
