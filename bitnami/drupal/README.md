@@ -99,6 +99,10 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `persistence.drupal.existingClaim` | An Existing PVC name                                  | `nil`                                                        |
 | `persistence.drupal.hostPath`      | Host mount path for Drupal volume                     | `nil` (will not mount to a host path)                        |
 | `persistence.drupal.size`          | PVC Storage Request for Drupal volume                 | `8Gi`                                                        |
+| `podSecurityContext.enabled`         | Enable Drupal pods' Security Context                  | `true`                                                       |
+| `podSecurityContext.fsGroup`         | Drupal pods' group ID                                 | `1001`                                                       |
+| `containerSecurityContext.enabled`   | Enable Drupal containers' Security Context            | `true`                                                       |
+| `containerSecurityContext.runAsUser` | Drupal containers' Security Context                   | `1001`                                                       |
 | `resources`                        | CPU/Memory resource requests/limits                   | Memory: `512Mi`, CPU: `300m`                                 |
 | `volumeMounts.drupal.mountPath`    | Drupal data volume mount path                         | `/bitnami/drupal`                                            |
 | `podAnnotations`                   | Pod annotations                                       | `{}`                                                         |
@@ -195,6 +199,17 @@ $ helm install my-release --set persistence.drupal.existingClaim=PVC_NAME bitnam
 1. Because the container cannot control the host machine’s directory permissions, you must set the Drupal file directory permissions yourself and disable or clear Drupal cache. See Drupal Core’s [INSTALL.txt](http://cgit.drupalcode.org/drupal/tree/core/INSTALL.txt?h=8.3.x#n152) for setting file permissions, and see [Drupal handbook page](https://www.drupal.org/node/2598914) to disable the cache, or [Drush handbook](https://drushcommands.com/drush-8x/cache/cache-rebuild/) to clear cache.
 
 ## Upgrading
+
+### To 8.0.0
+
+The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `8.0.0`, backup Drupal data and the previous MariaDB databases, install a new Drupal chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
 
 ### To 6.0.0
 

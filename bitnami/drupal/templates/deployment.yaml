@@ -30,6 +30,10 @@ spec:
 {{- end }}
     spec:
 {{- include "drupal.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+      {{- end }}
       hostAliases:
       - ip: "127.0.0.1"
         hostnames:
@@ -38,6 +42,10 @@ spec:
       - name: drupal
         image: {{ template "drupal.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        {{- if .Values.containerSecurityContext.enabled }}
+        securityContext:
+          runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+        {{- end }}
         env:
         - name: ALLOW_EMPTY_PASSWORD
         {{- if .Values.allowEmptyPassword }}
@@ -96,9 +104,9 @@ spec:
 {{- end }}
         ports:
         - name: http
-          containerPort: 80
+          containerPort: 8080
         - name: https
-          containerPort: 443
+          containerPort: 8443
         livenessProbe:
 {{ toYaml .Values.livenessProbe | indent 10 }}
         readinessProbe:
