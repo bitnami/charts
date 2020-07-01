@@ -53,10 +53,6 @@ ejbcaAdminUsername: bitnami
 ## E.g. ejbcaJavaOpts: "-Xms2048m -Xmx2048m"
 # ejbcaJavaOpts:
 
-## Hostname of the server when using HTTPS
-##
-ejbcaHttpsServerHostname: "localhost"
-
 ## Details regarding the CA that EJBCA will instantiate
 ##
 ejbcaCA:
@@ -179,7 +175,7 @@ affinity: {}
 ##
 livenessProbe:
   enabled: true
-  initialDelaySeconds: 120
+  initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -187,7 +183,7 @@ livenessProbe:
 
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 30
+  initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -276,7 +272,7 @@ mariadb:
     user: bn_ejbca
     ## If the password is not specified, mariadb will generates a random password
     ##
-    # password:
+    password: "FXAGD9PGie"
 
   ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
