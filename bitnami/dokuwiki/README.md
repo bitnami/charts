@@ -215,6 +215,17 @@ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 
 ## Upgrading
 
+### To 7.0.0
+
+The [Bitnami Dokuwiki](https://github.com/bitnami/bitnami-docker-dokuwiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `7.0.0`, backup Drupal data and the previous MariaDB databases, install a new Drupal chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
+
 ### To 6.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
