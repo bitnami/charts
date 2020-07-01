@@ -63,6 +63,7 @@ ejbcaCA:
   ## The base DomainName of the CA
   ##
   ## e.g. baseDN: "O=Example CA,C=SE,UID=c-5ca04c9328c8208704310f7c2ed16414"
+  ##
   baseDN:
 
 ## Name of an existing Secret containing a Keystore object
@@ -74,6 +75,7 @@ ejbcaCA:
 ## "keystore-password" --> Password used to encrypt keystore.jks
 ##
 ## ejbcaKeystoreExistingSecret:
+##
 
 ## Additional container environment variables
 ## extraEnv:
@@ -146,6 +148,7 @@ podSecurityContext:
   runAsUser: 1001
 
 ## K8s Security Context for EJBCA container
+##
 containerSecurityContext: {}
 ## capabilities:
 ##   drop:
