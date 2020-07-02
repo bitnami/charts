@@ -89,6 +89,10 @@ The following table lists the configurable parameters of the Moodle chart and th
 | `ingress.secrets[0].key`                   | TLS Secret Key                                                                                      | `nil`                                                        |
 | `affinity`                                 | Set affinity for the moodle pods                                                                    | `nil`                                                        |
 | `resources`                                | CPU/Memory resource requests/limits                                                                 | Memory: `512Mi`, CPU: `300m`                                 |
+| `podSecurityContext.enabled`               | Enable MediaWiki pods' Security Context                                                             | `true`                                                       |
+| `podSecurityContext.fsGroup`               | MediaWiki pods' group ID                                                                            | `1001`                                                       |
+| `containerSecurityContext.enabled`         | Enable MediaWiki containers' Security Context                                                       | `true`                                                       |
+| `containerSecurityContext.runAsUser`       | MediaWiki containers' Security Context                                                              | `1001`                                                       |
 | `persistence.enabled`                      | Enable persistence using PVC                                                                        | `true`                                                       |
 | `persistence.storageClass`                 | PVC Storage Class for Moodle volume                                                                 | `nil` (uses alpha storage class annotation)                  |
 | `persistence.accessMode`                   | PVC Access Mode for Moodle volume                                                                   | `ReadWriteOnce`                                              |
@@ -219,6 +223,17 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/administer-cluster/change-pv-reclaim-policy/) and update as required. By default, it's set to delete, and when Moodle is uninstalled, data is also removed.
 
 ## Upgrading
+
+### To 8.0.0
+
+The [Bitnami Moodle](https://github.com/bitnami/bitnami-docker-moodle) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `10.0.0`, backup MediaWiki data and the previous MariaDB databases, install a new MediaWiki chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
 
 ### To 7.0.0
 
