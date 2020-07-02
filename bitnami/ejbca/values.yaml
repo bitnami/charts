@@ -37,6 +37,8 @@ image:
 ##
 # fullnameOverride:
 
+## Number of EJBCA replicas to deploy.
+##
 replicaCount: 1
 
 ## Admin of the application

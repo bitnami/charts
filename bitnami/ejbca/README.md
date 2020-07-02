@@ -84,7 +84,6 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `persistence.accessMode`                  | PVC Access Mode (RWO, ROX, RWX)                                                       | `ReadWriteOnce`                                              |
 | `persistence.size`                        | Size of the PVC to request                                                            | `2Gi`                                                        |
 
-
 ### Service parameters
 
 | Parameter                                 | Description                                                                           | Default                                                      |
@@ -120,13 +119,13 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `podSecurityContext.enabled`              | Enable security context for EJBCA container                                           | `true`                                                       |
 | `podSecurityContext.runAsUser`            | User ID for the EJBCA container                                                       | `1001`                                                       |
 | `livenessProbe.enabled`                   | Enable/disable livenessProbe                                                          | `true`                                                       |
-| `livenessProbe.initialDelaySeconds`       | Delay before liveness probe is initiated                                              | `120`                                                        |
+| `livenessProbe.initialDelaySeconds`       | Delay before liveness probe is initiated                                              | `500`                                                        |
 | `livenessProbe.periodSeconds`             | How often to perform the probe                                                        | `10`                                                         |
 | `livenessProbe.timeoutSeconds`            | When the probe times out                                                              | `5`                                                          |
 | `livenessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                            | `6`                                                          |
 | `livenessProbe.successThreshold`          | Minimum consecutive successes for the probe                                           | `1`                                                          |
 | `readinessProbe.enabled`                  | Enable/disable readinessProbe                                                         | `true`                                                       |
-| `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `30`                                                         |
+| `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `500`                                                        |
 | `readinessProbe.periodSeconds`            | How often to perform the probe                                                        | `10`                                                         |
 | `readinessProbe.timeoutSeconds`           | When the probe times out                                                              | `5`                                                          |
 | `readinessProbe.failureThreshold`         | Minimum consecutive failures for the probe                                            | `6`                                                          |
@@ -189,29 +188,13 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 By default, this Chart only deploys a single pod running EJBCA. Should you want to increase the number of replicas, you may follow these simple steps to ensure everything works smoothly:
 
-1. Create a conventional release, that will be scaled later:
-```console
-$ helm install my-release bitnami/ejbca
-...
-export EJBCA_ADMIN_USERNAME=bitnami
-export EJBCA_ADMIN_PASSWORD=$(kubectl get secret --namespace default my-release-ejbca -o jsonpath="{.data.ejbca-admin-password}" | base64 --decode)
-...
-export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default my-release-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
-...
-```
+1. Create a conventional release with only one replica, that will be scaled later.
+2. Wait for the release to complete and EJBCA to be running successfully. You may verify you have access to the main page in order to do this.
+3. Perform an upgrade specifying the number of replicas and the credentials that were previously used. Set the parameters `replicaCount`, `ejbcaAdminPassword` and `mariadb.db.password` accordingly.
 
-2. Wait for the release to complete and EJBCA to be running successfully.
-```console
-$ kubectl get pods
-NAME                               READY   STATUS    RESTARTS   AGE
-my-release-ejbca-cd46fd8d5-clnd6   1/1     Running   0          4m44s
-my-release-mariadb-0               1/1     Running   0          4m44s
-```
+For example, for a release using `secretPassword` and `dbPassword` to scale up to a total of `2` replicas, the aforementioned parameters should hold these values `replicaCount=2`, `ejbcaAdminPassword=secretPassword`, `mariadb.db.password=dbPassword`.
 
-3. Perform an upgrade specifying the number of replicas and the credentials used.
-```console
-$ helm upgrade my-release --set replicaCount=2,ejbcaAdminPassword=$EJBCA_ADMIN_PASSWORD,mariadb.db.password=$APP_DATABASE_PASSWORD bitnami/ejbca
-```
+> **Tip**: You can modify the file [values.yaml](values.yaml)
 
 ### Sidecars
 
