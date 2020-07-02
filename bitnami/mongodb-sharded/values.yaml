@@ -608,6 +608,12 @@ common:
   ## Maximum peer node waiting timeout (in seconds)
   ##
   mongodbMaxWaitTimeout: 120
+  ## Configmap with init scripts to execute
+  ##
+  initScriptsCM:
+  ## Secret with init scripts to execute (for sensitive data)
+  ##
+  initScriptsSecret:
   ## An array to add extra env vars
   ## For example:
   ## extraEnvVars:
@@ -654,13 +660,6 @@ common:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
-
-## Configmap with init scripts to execute
-##
-initScriptsCM:
-## Secret with init scripts to execute (for sensitive data)
-##
-initScriptsSecret:
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
