@@ -28,9 +28,9 @@ spec:
   {{- end }}
 {{- end }}
     spec:
-      {{- if .Values.securityContext.enabled }}
+      {{- if .Values.podSecurityContext.enabled }}
       securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity:
@@ -55,6 +55,10 @@ spec:
       - name: {{ template "dokuwiki.fullname" . }}
         image: {{ template "dokuwiki.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        {{- if .Values.containerSecurityContext.enabled }}
+        securityContext:
+          runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+        {{- end }}
         env:
         - name: DOKUWIKI_USERNAME
           value: {{ .Values.dokuwikiUsername | quote }}
