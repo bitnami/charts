@@ -70,7 +70,6 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `extraVolumes`                            | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`   | `[]` (evaluated as a template)                               |
 | `podAnnotations`                          | Additional pod annotations                                                            | `{}`                                                         |
 | `podLabels`                               | Additional pod labels                                                                 | `{}` (evaluated as a template)                               |
-| `commonLabels`                            | Labels to be added to all deployed resources                                          | `{}` (evaluated as a template)                               |
 | `commonAnnotations`                       | Annotations to be added to all deployed resources                                     | `{}` (evaluated as a template)                               |
 | `podSecurityContext.enabled`              | Enable security context for EJBCA pods                                                | `true`                                                       |
 | `podSecurityContext.fsGroup`              | Group ID for the volumes of the pod                                                   | `1001`                                                       |
