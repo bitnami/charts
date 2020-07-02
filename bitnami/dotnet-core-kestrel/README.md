@@ -74,7 +74,7 @@ The following tables lists the configurable parameters of the dotnet-core-kestre
 | `appIngress.certManager`                   | Add annotations for cert-manager                                                             | `false`                                                      |
 | `appIngress.selectors`                     | Ingress selectors for labelSelector option                                                   | `[]`                                                         |
 | `appIngress.annotations`                   | Ingress annotations                                                                          | `[]`                                                         |
-| `appIngress.hosts[0].name`                 | Hostname to your NGINX installation                                                          | `nginx.local`                                                |
+| `appIngress.hosts[0].name`                 | Hostname to your installation                                                                | `example.local`                                              |
 | `appIngress.hosts[0].path`                 | Path within the url structure                                                                | `/`                                                          |
 | `appIngress.tls[0].hosts[0]`               | TLS hosts                                                                                    | `nginx.local`                                                |
 | `appIngress.tls[0].secretName`             | TLS Secret (certificates)                                                                    | `nginx.local-tls`                                            |
@@ -85,7 +85,7 @@ The following tables lists the configurable parameters of the dotnet-core-kestre
 | `healthIngress.certManager`                | Add annotations for cert-manager                                                             | `false`                                                      |
 | `healthIngress.selectors`                  | Health Ingress selectors for labelSelector option                                            | `[]`                                                         |
 | `healthIngress.annotations`                | Health Ingress annotations                                                                   | `[]`                                                         |
-| `healthIngress.hosts[0].name`              | Hostname to your NGINX installation                                                          | `nginx.local`                                                |
+| `healthIngress.hosts[0].name`              | Hostname to your installation                                                                | `example.local`                                              |
 | `healthIngress.hosts[0].path`              | Path within the url structure                                                                | `/`                                                          |
 | `healthIngress.tls[0].hosts[0]`            | TLS hosts                                                                                    | `nginx.local`                                                |
 | `healthIngress.tls[0].secretName`          | TLS Secret (certificates)                                                                    | `nginx.local-tls`                                            |
@@ -94,6 +94,11 @@ The following tables lists the configurable parameters of the dotnet-core-kestre
 | `healthIngress.secrets[0].key`             | TLS Secret Key                                                                               | `nil`                                                        |
 | `extraVolumes`                             | Array to add extra volumes (evaluated as a template)                                         | `[]`                                                         |
 | `extraVolumeMounts`                        | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)         | `[]`                                                         |
+| `autoscaling.enabled`                      | Enable autoscaling for deployment                                                            | `false`                                                      |
+| `autoscaling.minReplicas`                  | Minimum number of replicas to scale back                                                     | `nil`                                                        |
+| `autoscaling.maxReplicas`                  | Maximum number of replicas to scale out                                                      | `nil`                                                        |
+| `autoscaling.targetCPU`                    | Target CPU utilization percentage                                                            | `nil`                                                        |
+| `autoscaling.targetMemory`                 | Target Memory utilization percentage                                                         | `nil`                                                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

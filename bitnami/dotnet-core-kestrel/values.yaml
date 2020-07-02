@@ -169,3 +169,12 @@ healthIngress:
     - hosts:
         - example.local
       secretName: example.local-tls
+
+## Autoscaling parameters
+##
+autoscaling:
+  enabled: false
+  # minReplicas: 1
+  # maxReplicas: 10
+  # targetCPU: 50
+  # targetMemory: 50
