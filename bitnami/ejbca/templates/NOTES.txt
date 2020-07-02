@@ -38,6 +38,10 @@ To access your EJBCA site from outside the cluster follow the steps below:
 2. Open a browser and access EJBCA using the obtained URL.
 
 3. In order to be able to log in to the Admin Portal, you first need to enrol and import the generated certificate in your Browser:
+  export EJBCA_ADMIN_USERNAME={{ .Values.ejbcaAdminUsername }}
+  export EJBCA_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ejbca.secretName" . }} -o jsonpath="{.data.ejbca-admin-password}" | base64 --decode)
+  echo Username: $EJBCA_ADMIN_USERNAME
+  echo Password: $EJBCA_ADMIN_PASSWORD
 
-  echo Username: {{ .Values.ejbcaAdminUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ejbca.secretName" . }} -o jsonpath="{.data.ejbca-admin-password}" | base64 --decode)
+4. You can access the DB using the following password:
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default {{ include "ejbca.databaseSecretName" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)

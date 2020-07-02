@@ -73,8 +73,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `commonLabels`                            | Labels to be added to all deployed resources                                          | `{}` (evaluated as a template)                               |
 | `commonAnnotations`                       | Annotations to be added to all deployed resources                                     | `{}` (evaluated as a template)                               |
 | `podSecurityContext.enabled`              | Enable security context for EJBCA pods                                                | `true`                                                       |
-| `podSecurityContext.fsGroup`              | Group ID for the EJBCA filesystem                                                     | `1001`                                                       |
-| `podSecurityContext.runAsUser`            | User ID for the EJBCA container                                                       | `1001`                                                       |
+| `podSecurityContext.fsGroup`              | Group ID for the volumes of the pod                                                   | `1001`                                                       |
 | `nodeSelector`                            | Node labels for pod assignment.                                                       | `{}` (evaluated as a template)                               |
 | `tolerations`                             | Tolerations for pod assignment.                                                       | `[]` (evaluated as a template)                               |
 | `affinity`                                | Affinity for pod assignment                                                           | `{}` (evaluated as a template)                               |
@@ -108,6 +107,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `ejbcaAdminUsername`                      | EJBCA administrator username                                                          | `bitnami`                                                    |
 | `ejbcaAdminPassword`                      | EJBCA administrator password                                                          | _random 10 character long alphanumeric string_               |
+| `existingSecret`                          | Name of an existing secret containing EJBCA admin password ('ejbca-admin-password' key) | `nil`                                                      |
 | `ejbcaJavaOpts`                           | Options used to launch the WildFly server                                             | `nil`                                                        |
 | `ejbcaHttpsServerHostname`                | Hostname of the server when using HTTPS                                               | `hostname`                                                   |
 | `ejbcaCA.name`                            | Name of the CA EJBCA will instantiate by default                                      | `ManagementCA`                                               |
@@ -118,7 +118,8 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `args`                                    | Custom args for the custom commad                                                     | `nil` (evaluated as a template)                              |
 | `extraVolumeMounts`                       | Additional volume mounts (used along with `extraVolumes`)                             | `[]` (evaluated as a template)                               |
 | `resources`                               | EJBCA container's resource requests and limits                                        | `{}`                                                         |
-| `containerSecurityContext`                | Container security context specification                                              | `{}`                                                         |
+| `podSecurityContext.enabled`              | Enable security context for EJBCA container                                           | `true`                                                       |
+| `podSecurityContext.runAsUser`            | User ID for the EJBCA container                                                       | `1001`                                                       |
 | `livenessProbe.enabled`                   | Enable/disable livenessProbe                                                          | `true`                                                       |
 | `livenessProbe.initialDelaySeconds`       | Delay before liveness probe is initiated                                              | `120`                                                        |
 | `livenessProbe.periodSeconds`             | How often to perform the probe                                                        | `10`                                                         |
@@ -145,6 +146,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `mariadb.db.name`                         | Database name to create                                                               | `bitnami_ejbca`                                              |
 | `mariadb.db.user`                         | Database user to create                                                               | `bn_ejbca`                                                   |
 | `mariadb.db.password`                     | Password for the database                                                             | _random 10 character long alphanumeric string_               |
+| `mariadb.existingSecret`                  | Use existing secret for password details (`rootUser.password`, `db.password`, `replication.password` will be ignored and picked up from this secret) See [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb)                                                                                         | `nil`                                                        |
 | `mariadb.replication.enabled`             | MariaDB replication enabled                                                           | `false`                                                      |
 | `mariadb.master.persistence.enabled`      | Enable database persistence using PVC                                                 | `true`                                                       |
 | `mariadb.master.persistence.accessModes`  | Database Persistent Volume Access Modes                                               | `[ReadWriteOnce]`                                            |
@@ -152,6 +154,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `externalDatabase.host`                   | Host of the external database                                                         | `localhost`                                                  |
 | `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_ejbca`                                                   |
 | `externalDatabase.password`               | Password for the above username                                                       | `nil`                                                        |
+| `externalDatabase.existingSecret`         | Name of an existing secret resource containing the DB password in a 'mariadb-password' key | `nil`                                                   |
 | `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_ejbca`                                              |
 | `externalDatabase.port`                   | Database port number                                                                  | `3306`                                                       |
 
@@ -185,7 +188,31 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Setting up replication
 
-FIXME: TO BE DONE
+By default, this Chart only deploys a single pod running EJBCA. Should you want to increase the number of replicas, you may follow these simple steps to ensure everything works smoothly:
+
+1. Create a conventional release, that will be scaled later:
+```console
+$ helm install my-release bitnami/ejbca
+...
+export EJBCA_ADMIN_USERNAME=bitnami
+export EJBCA_ADMIN_PASSWORD=$(kubectl get secret --namespace default my-release-ejbca -o jsonpath="{.data.ejbca-admin-password}" | base64 --decode)
+...
+export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default my-release-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+...
+```
+
+2. Wait for the release to complete and EJBCA to be running successfully.
+```console
+$ kubectl get pods
+NAME                               READY   STATUS    RESTARTS   AGE
+my-release-ejbca-cd46fd8d5-clnd6   1/1     Running   0          4m44s
+my-release-mariadb-0               1/1     Running   0          4m44s
+```
+
+3. Perform an upgrade specifying the number of replicas and the credentials used.
+```console
+$ helm upgrade my-release --set replicaCount=2,ejbcaAdminPassword=$EJBCA_ADMIN_PASSWORD,mariadb.db.password=$APP_DATABASE_PASSWORD bitnami/ejbca
+```
 
 ### Sidecars
 
