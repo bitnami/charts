@@ -202,8 +202,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - |
-                  /opt/bitnami/scripts/rabbitmq/apicheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:15672/api/healthchecks/node" '{"status":"ok"}'
+                - rabbitmq-diagnostics -q check_running
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -218,8 +217,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - |
-                  /opt/bitnami/scripts/rabbitmq/healthcheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:15672/api/healthchecks/node" '{"status":"ok"}'
+                - rabbitmq-diagnostics -q check_running
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
