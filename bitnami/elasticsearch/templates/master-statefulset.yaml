@@ -240,6 +240,6 @@ spec:
           {{- if .Values.master.persistence.existingVolume }}
           selector:
             matchLabels:
-              volume: {{ .Values.master.persistence.existingVoume }}
+              volume: {{ .Values.master.persistence.existingVolume }}
           {{- end }}
 {{- end }}
