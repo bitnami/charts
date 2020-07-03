@@ -394,6 +394,7 @@ prometheus:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   podAntiAffinity: soft
+  podAntiAffinityTopologyKey: "kubernetes.io/hostname"
 
   ## Pod Affinity. The value is evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -848,6 +849,7 @@ alertmanager:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   podAntiAffinity: soft
+  podAntiAffinityTopologyKey: "kubernetes.io/hostname"
 
   ## Pod Affinity. The value is evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
