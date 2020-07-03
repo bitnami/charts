@@ -220,6 +220,12 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ## Upgrading
 
+### To 11.0.0
+
+Backwards compatibility is not guaranteed since breaking changes were included in MongoDB subchart. More information in the link below:
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
+
 ### To 10.0.0
 
 Backwards compatibility is not guaranteed. The following notables changes were included:
