@@ -30,6 +30,10 @@ data:
       webhook:
 {{ toYaml .Values.webhook | indent 8 }}
 {{- end }}
+{{- if .Values.smtp.enabled }}
+      smtp:
+{{ toYaml .Values.smtp | indent 8 }}
+{{- end }}
     resource:
 {{ toYaml .Values.resourcesToWatch | indent 6 }}
     namespace: {{ .Values.namespaceToWatch | quote }}

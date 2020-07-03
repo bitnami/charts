@@ -31,6 +31,19 @@ flock:
 webhook:
   enabled: false
   # url: ""
+smtp:
+  enabled: false
+  # to: ""
+  # from: ""
+  # hello: ""
+  # smarthost: ""
+  # subject: ""
+  # auth:
+  #   username: ""
+  #   password: ""
+  #   secret: ""
+  #   identity: ""
+  # requireTLS: false
 
 # namespace to watch, leave it empty for watching all.
 namespaceToWatch: ""
