@@ -9,7 +9,7 @@ data:
   application.yaml: |-
     spring:
       cloud:
-        dataflow:    
+        dataflow:
           {{- if .Values.server.configuration.batchEnabled }}
           task:
             platform:
