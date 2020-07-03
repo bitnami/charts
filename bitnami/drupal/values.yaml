@@ -173,13 +173,13 @@ mariadb:
     user: bn_drupal
     ## If the password is not specified, mariadb will generate a random password
     ##
-    password:
+    password: ""
 
   ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   rootUser:
-    password:
+    password: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
