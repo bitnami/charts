@@ -23,48 +23,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
-{{- define "certificates.initContainer" -}}
-{{- if .Values.certificates.customCAs }}
-- name: certificates
-  image: {{ template "certificates.image" . }}
-  imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
-  imagePullSecrets:
-  {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
-    - name: {{ . }}
-  {{- end }}
-  command:
-  {{- if .Values.certificates.customCertificate.certificateSecret }}
-  - sh
-  - -c
-  - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-    else apt-get update && apt-get install -y ca-certificates openssl; fi
-  {{- else }}
-  - sh
-  - -c
-  - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-    else apt-get update && apt-get install -y ca-certificates openssl; fi
-    && openssl req -new -x509 -days 3650 -nodes -sha256
-       -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
-       -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
-       -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
-  {{- end }}
-  {{- if .Values.certificates.extraEnvVars }}
-  env:
-  {{- tpl (toYaml .Values.certificates.extraEnvVars) $ | nindent 2 }}
-  {{- end }}
-  volumeMounts:
-    - name: etc-ssl-certs
-      mountPath: /etc/ssl/certs
-      readOnly: false
-    - name: etc-ssl-private
-      mountPath: /etc/ssl/private
-      readOnly: false
-    - name: custom-ca-certificates
-      mountPath: /usr/local/share/ca-certificates
-      readOnly: true
-{{- end }}
-{{- end }}
-
 {{- define "certificates.volumes" -}}
 {{- if .Values.certificates.customCAs }}
 - name: etc-ssl-certs
