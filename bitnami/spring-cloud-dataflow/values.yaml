@@ -311,6 +311,16 @@ server:
     # targetCPU: 50
     # targetMemory: 50
 
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
 ##
 ## Spring Cloud Skipper parameters.
 ##
@@ -536,6 +546,16 @@ skipper:
     # targetCPU: 50
     # targetMemory: 50
 
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
 ##
 ## External Skipper Configuration
 ##
@@ -735,6 +755,10 @@ externalDatabase:
   skipper:
     database: skipper
     user: skipper
+  ## Hibernate Dialect
+  ##
+  # hibernateDialect: org.hibernate.dialect.MariaDB102Dialect
+
 ##
 ## RabbitMQ chart configuration
 ##
@@ -742,9 +766,26 @@ externalDatabase:
 ##
 rabbitmq:
   enabled: true
-  rabbitmq:
+  auth:
     username: user
-    password: ""
+
+##
+## External RabbitMQ Configuration
+##
+## All of these values are ignored when rabbitmq.enabled is set to true
+##
+externalRabbitmq:
+  ## Enables or disables external RabbitMQ, can be disabled when Kafka is using
+  ##
+  enabled: false
+  ## RabbitMQ host and port
+  ##
+  host: localhost
+  port: 5672
+  ## RabbitMQ username and password, password will be saved in a kubernetes secret
+  ##
+  username: guest
+  password: guest
 
 ##
 ## Kafka chart configuration

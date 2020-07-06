@@ -150,7 +150,7 @@ Return true if a configmap object should be created for Spring Cloud Skipper
 {{- end -}}
 
 {{/*
-Return the MariaDB database Hostname
+Return the database Hostname
 */}}
 {{- define "scdf.database.host" -}}
 {{- if .Values.mariadb.enabled }}
@@ -161,7 +161,7 @@ Return the MariaDB database Hostname
 {{- end -}}
 
 {{/*
-Return the MariaDB database Port
+Return the database Port
 */}}
 {{- define "scdf.database.port" -}}
 {{- if .Values.mariadb.enabled }}
@@ -172,24 +172,35 @@ Return the MariaDB database Port
 {{- end -}}
 
 {{/*
-Return the MariaDB database driver
+Return the database driver
 */}}
 {{- define "scdf.database.driver" -}}
   {{- if .Values.mariadb.enabled -}}
     {{- printf "org.mariadb.jdbc.Driver" -}}
   {{- else -}}
-    {{- .Values.database.driver -}}
+    {{- .Values.externalDatabase.driver -}}
   {{- end -}}
 {{- end -}}
 
 {{/*
-Return the MariaDB database scheme
+Return the database scheme
 */}}
 {{- define "scdf.database.scheme" -}}
   {{- if .Values.mariadb.enabled -}}
     {{- printf "mariadb" -}}
   {{- else -}}
-    {{- .Values.database.scheme -}}
+    {{- .Values.externalDatabase.scheme -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return the JDBC URL parameters
+*/}}
+{{- define "scdf.database.jdbc.parameters" -}}
+  {{- if .Values.mariadb.enabled -}}
+    {{- printf "?useMysqlMetadata=true" -}}
+  {{- else -}}
+    {{- printf "" -}}
   {{- end -}}
 {{- end -}}
 
@@ -200,7 +211,7 @@ Return the Data Flow Database Name
 {{- if .Values.mariadb.enabled }}
     {{- printf "dataflow" -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.server.database -}}
+    {{- printf "%s" .Values.externalDatabase.dataflow.database -}}
 {{- end -}}
 {{- end -}}
 
@@ -211,7 +222,7 @@ Return the Data Flow Database User
 {{- if .Values.mariadb.enabled }}
     {{- printf "dataflow" -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.server.user -}}
+    {{- printf "%s" .Values.externalDatabase.dataflow.user -}}
 {{- end -}}
 {{- end -}}
 
@@ -238,7 +249,7 @@ Return the Skipper Database User
 {{- end -}}
 
 {{/*
-Return the MariaDB secret name
+Return the Database secret name
 */}}
 {{- define "scdf.database.secretName" -}}
 {{- if .Values.mariadb.enabled }}
@@ -246,6 +257,61 @@ Return the MariaDB secret name
 {{- else -}}
     {{- printf "%s-%s" (include "scdf.fullname" .) "externaldb" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ host
+*/}}
+{{- define "scdf.rabbitmq.host" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "%s" (include "scdf.rabbitmq.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalRabbitmq.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ Port
+*/}}
+{{- define "scdf.rabbitmq.port" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "%d" (.Values.rabbitmq.service.port | int ) -}}
+{{- else -}}
+    {{- printf "%d" (.Values.externalRabbitmq.port | int ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ username
+*/}}
+{{- define "scdf.rabbitmq.user" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "%s" .Values.rabbitmq.auth.username -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalRabbitmq.username -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ secret name
+*/}}
+{{- define "scdf.rabbitmq.secretName" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "%s" (include "scdf.rabbitmq.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s-%s" (include "scdf.fullname" .) "externalrabbitmq" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Hibernate dialect
+*/}}
+{{- define "scdf.database.hibernate.dialect" -}}
+  {{- if .Values.mariadb.enabled -}}
+    {{- printf "org.hibernate.dialect.MariaDB102Dialect" -}}
+  {{- else -}}
+    {{- .Values.externalDatabase.hibernateDialect -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*
