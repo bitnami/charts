@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "grafana.fullname" . }}-envvars
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
 data:
   GF_SECURITY_ADMIN_USER: {{ .Values.admin.user | quote }}
   {{- if .Values.imageRenderer.enabled }}

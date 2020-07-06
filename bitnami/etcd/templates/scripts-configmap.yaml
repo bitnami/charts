@@ -50,7 +50,7 @@ data:
     ## Store member id for later member replacement
     store_member_id() {
         while ! etcdctl $AUTH_OPTIONS member list; do sleep 1; done
-        etcdctl $AUTH_OPTIONS member list | grep "$HOSTNAME" | awk '{ print $1}' | awk -F "," '{ print $1}' > "$ETCD_DATA_DIR/member_id"
+        etcdctl $AUTH_OPTIONS member list | grep -w "$HOSTNAME" | awk '{ print $1}' | awk -F "," '{ print $1}' > "$ETCD_DATA_DIR/member_id"
         echo "==> Stored member id: $(cat ${ETCD_DATA_DIR}/member_id)" 1>&3 2>&4
         exit 0
     }
