@@ -84,14 +84,14 @@ spec:
             - name: DATABASE_PORT
               value: "27017"
             - name: DATABASE_USER
-              value: {{ .Values.mongodb.mongodbUsername | quote }}
+              value: {{ .Values.mongodb.auth.username | quote }}
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.mongodb.fullname" . }}
                   key: mongodb-password
             - name: DATABASE_NAME
-              value: {{ .Values.mongodb.mongodbDatabase | quote }}
+              value: {{ .Values.mongodb.auth.database | quote }}
             - name: DATABASE_CONNECTION_OPTIONS
               value: ""
             {{- else }}
