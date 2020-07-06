@@ -239,9 +239,10 @@ mongodb:
   ## MongoDB custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
   ##
-  auth.username: user
-  auth.database: test_db
-  auth.password: secret_password
+  auth:
+    username: user
+    database: test_db
+    password: secret_password
 
 ## Provision an external database (Only if mongodb.install is false)
 ## You can:
