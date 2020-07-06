@@ -81,7 +81,11 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
+            {{- if .Values.configuration.server.basePath }}
+              path: {{ .Values.configuration.server.basePath }}/app/kibana
+            {{ else }}
               path: /app/kibana
+            {{- end }}
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -92,7 +96,11 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
+            {{- if .Values.configuration.server.basePath }}
+              path: {{ .Values.configuration.server.basePath }}/app/kibana
+            {{ else }}
               path: /app/kibana
+            {{- end }}
               port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
