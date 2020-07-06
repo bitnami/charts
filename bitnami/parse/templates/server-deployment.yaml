@@ -66,7 +66,7 @@ spec:
               value: {{ include "parse.mongodb.fullname" . }}
             - name: MONGODB_PORT
               value: "27017"
-            {{- if .Values.mongodb.usePassword }}
+            {{- if .Values.mongodb.auth.enabled }}
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
