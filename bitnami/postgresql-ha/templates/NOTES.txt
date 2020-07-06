@@ -28,15 +28,7 @@ Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgres
 
 To connect to your database from outside the cluster execute the following commands:
 
-{{- if .Values.ingress.enabled }}
-
-    You should be able to access your new PostgreSQL server through:
-
-    {{- range .Values.ingress.hosts }}
-    {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}
-    {{- end }}
-
-{{- else if contains "NodePort" .Values.service.type }}
+{{- if contains "NodePort" .Values.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "postgresql-ha.pgpool" . }}

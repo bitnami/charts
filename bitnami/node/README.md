@@ -259,13 +259,17 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Notable changes
+## Upgrading
 
-### 7.0.0
+### To 12.0.0
+
+Backwards compatibility is not guaranteed since breaking changes were included in MongoDB subchart. More information in the link below:
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
+
+### To 7.0.0
 
 This release includes security contexts, so the containers in the chart are run as non-root. More information in [this link](https://github.com/bitnami/bitnami-docker-node#484-r1-6112-r1-7101-r1-and-830-r1).
-
-## Upgrading
 
 ### To 6.0.0
 
