@@ -7,9 +7,9 @@ dependencies:
   version: 7.6.1
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
-  version: 7.4.3
+  version: 7.4.5
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
   version: 11.3.2
-digest: sha256:c1d031b136b3afeb4a169698cbc3a5901e854edee9facc45f3d3a44c2f6afe77
-generated: "2020-07-03T09:09:29.679293936Z"
+digest: sha256:178b38af3c91af150c9879f4ba19749c2f903472b0ff942ac1faa7d6362ac81c
+generated: "2020-07-06T13:21:12.611754137Z"
