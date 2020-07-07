@@ -397,6 +397,15 @@ pgpool:
     minAvailable: 1
     # maxUnavailable: 1
 
+  ## strategy used to replace old Pods by new ones
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  strategy: {}
+
+  ## minReadySeconds to avoid killing pods before we are ready
+  ##
+  #minReadySeconds: 0
+
   ## Pgpool configuration parameters
   ##
   adminUsername: admin
