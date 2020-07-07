@@ -67,6 +67,7 @@ The following table lists the configurable parameters of the Moodle chart and th
 | `image.tag`         | Moodle Image tag                                                             | `{TAG_NAME}`                                            |
 | `image.pullPolicy`  | Moodle image pull policy                                                     | `IfNotPresent`                                          |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
 | `nameOverride`      | String to partially override moodle.fullname template                        | `nil`                                                   |
 | `fullnameOverride`  | String to fully override moodle.fullname template                            | `nil`                                                   |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
