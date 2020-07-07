@@ -84,12 +84,12 @@ spec:
               value: "8080"
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
+              value: "false"
             - name: SPRING_CLOUD_KUBERNETES_SECRETS_ENABLE_API
-              value: "true"
+              value: "false"
             - name: SPRING_CLOUD_KUBERNETES_SECRETS_PATHS
               value: "/etc/secrets"
-            - name: SPRING_CLOUD_KUBERNETES_CONFIG_NAME
-              value: {{ (include "scdf.server.configmapName" .) | quote }}
             - name: SPRING_CLOUD_DATAFLOW_SERVER_URI
               {{- if ne $serverServicePort 80 }}
               value: {{ printf "http://%s-server.%s.svc.%s:%d" $fullname $releaseNamespace $clusterDomain $serverServicePort | quote }}
@@ -122,6 +122,10 @@ spec:
                   fieldPath: metadata.namespace
             - name: KUBERNETES_TRUST_CERTIFICATES
               value: {{ ternary "true" "false" .Values.server.configuration.trustK8sCerts | quote }}
+            {{- if .Values.server.jdwp.enabled }}
+            - name: JAVA_TOOL_OPTIONS
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.server.jdwp.port }}"
+            {{- end }}
             {{- range $key, $value := .Values.server.extraEnvVars }}
             - name: {{ $key }}
               value: "{{ $value }}"
@@ -141,6 +145,11 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            {{- if .Values.server.jdwp.enabled }}
+            - name: jdwp
+              containerPort: {{ .Values.server.jdwp.port }}
+              protocol: TCP
+            {{- end }}
           {{- if .Values.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -174,6 +183,9 @@ spec:
             - name: database
               mountPath: /etc/secrets/database
               readOnly: true
+            - name: config
+              mountPath: /opt/bitnami/spring-cloud-dataflow/conf
+              readOnly: true
         {{- if .Values.server.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -181,10 +193,15 @@ spec:
         - name: database
           secret:
             secretName: {{ include "scdf.database.secretName" . }}
+        - name: config
+          configMap:
+            name: {{ include "scdf.server.configmapName" . }}
+            items:
+              - key: application.yaml
+                path: application.yml
         {{- if .Values.waitForBackends.enabled }}
         - name: scripts
           configMap:
             name: {{ include "scdf.fullname" . }}-scripts
             defaultMode: 0755
         {{- end }}
-
