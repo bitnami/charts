@@ -404,7 +404,7 @@ pgpool:
 
   ## minReadySeconds to avoid killing pods before we are ready
   ##
-  #minReadySeconds: 0
+  # minReadySeconds: 0
 
   ## Pgpool configuration parameters
   ##
