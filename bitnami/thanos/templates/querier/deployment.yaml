@@ -73,17 +73,17 @@ spec:
             {{- range .Values.querier.stores }}
             - --store={{ . }}
             {{- end }}
-            {{- if .Values.querier.grpcTLS.server.cert }}
-            --grpc-server-tls-cert=/tls/server/cert.pem
-            --grpc-server-tls-key=/tls/server/key.pem
-            --grpc-server-tls-client-ca=/tls/server/clientca.pem
+            {{- if .Values.querier.grpcTLS.server.secure }}
+            - --grpc-server-tls-cert=/tls/server/cert.pem
+            - --grpc-server-tls-key=/tls/server/key.pem
+            - --grpc-server-tls-client-ca=/tls/server/ca.pem
             {{- end }}
             {{- if .Values.querier.grpcTLS.client.secure }}
-            --grpc-client-tls-secure
-            --grpc-client-tls-cert=/tls/client/cert.pem
-            --grpc-client-tls-key=/tls/client/key.pem
-            --grpc-client-tls-ca=/tls/client/ca.pem
-            --grpc-client-server-name={{.Values.grpcTLS.client.servername}}
+            - --grpc-client-tls-secure
+            - --grpc-client-tls-cert=/tls/client/cert.pem
+            - --grpc-client-tls-key=/tls/client/key.pem
+            - --grpc-client-tls-ca=/tls/client/ca.pem
+            - --grpc-client-server-name={{.Values.querier.grpcTLS.client.servername}}
             {{- end }}
             {{- range $key, $value := .Values.querier.extraFlags }}
             - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
@@ -110,7 +110,7 @@ spec:
               mountPath: /conf/servicediscovery.yml
               subPath: servicediscovery.yml
       {{- end }}
-      {{- if .Values.querier.grpcTLS.server.cert }}
+      {{- if .Values.querier.grpcTLS.server.secure }}
             - name: tls-server
               mountPath: /tls/server
       {{- end }}
@@ -124,7 +124,7 @@ spec:
           configMap:
             name: {{ include "thanos.querier.SDConfigmapName" . }}
       {{- end }}
-      {{- if .Values.querier.grpcTLS.server.cert }}
+      {{- if .Values.querier.grpcTLS.server.secure }}
         - name: tls-server
           secret:
             secretName: {{ include "thanos.fullname" . }}-querier-tls-server
