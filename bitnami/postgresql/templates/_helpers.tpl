@@ -334,7 +334,6 @@ Get the readiness probe command
 {{- define "postgresql.readinessProbeCommand" -}}
 - |
 {{- if (include "postgresql.database" .) }}
-{{- if and .Values.tls.enabled .Values.tls.certCAFilename }}{{- end }}
   exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ template "postgresql.port" . }}
 {{- else }}
   exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
