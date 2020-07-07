@@ -4,12 +4,12 @@ dependencies:
   version: 0.3.1
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 7.5.2
+  version: 7.6.1
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
-  version: 7.2.1
+  version: 7.4.5
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
-  version: 11.2.4
-digest: sha256:eb719afdc8f498924c972e31dfd7aafa7f31a77aae515f6dfd738a8fc1d301bd
-generated: "2020-06-25T06:51:40.583073725Z"
+  version: 11.3.2
+digest: sha256:178b38af3c91af150c9879f4ba19749c2f903472b0ff942ac1faa7d6362ac81c
+generated: "2020-07-06T13:21:12.611754137Z"

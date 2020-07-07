@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 2.0.4-debian-10-r46
+  tag: 2.0.5-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -137,7 +137,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 0.9.1-debian-10-r7
+    tag: 0.9.1-debian-10-r26
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

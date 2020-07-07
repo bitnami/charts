@@ -23,7 +23,9 @@ data:
         echo "Rollout exit code: '${return_code}'"
         return $return_code
     }
+    {{- if .Values.mariadb.enabled }}
     k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $mariadbFullname }}
+    {{- end }}
     {{- if or .Values.skipper.enabled .Values.server.configuration.streamingEnabled }}
     {{- if .Values.rabbitmq.enabled }}
     k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $rabbitmqFullname }} 
