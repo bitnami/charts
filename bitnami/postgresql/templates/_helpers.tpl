@@ -334,9 +334,10 @@ Get the readiness probe command
 {{- define "postgresql.readinessProbeCommand" -}}
 - |
 {{- if (include "postgresql.database" .) }}
-  exec pg_isready -U {{ include "postgresql.username" . | quote }} -d {{ (include "postgresql.database" .) | quote }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+{{- if and .Values.tls.enabled .Values.tls.certCAFilename }}{{- end }}
+  exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ template "postgresql.port" . }}
 {{- else }}
-  exec pg_isready -U {{ include "postgresql.username" . | quote }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+  exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
 {{- end }}
 {{- if contains "bitnami/" .Values.image.repository }}
   [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
@@ -409,6 +410,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "postgresql.validateValues.ldapConfigurationMethod" .) -}}
 {{- $messages := append $messages (include "postgresql.validateValues.psp" .) -}}
+{{- $messages := append $messages (include "postgresql.validateValues.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -448,5 +450,58 @@ Return the appropriate apiVersion for podsecuritypolicy.
 {{- print "extensions/v1beta1" -}}
 {{- else -}}
 {{- print "policy/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Postgresql TLS - Either certificatesSecret or certificates under
+"files/certs" directory should exist
+*/}}
+{{- define "postgresql.validateValues.tls" -}}
+{{- if and .Values.tls.enabled (not .Values.tls.certificatesSecret) (not (.Files.Glob "files/certs/*.{crt,key}"))}}
+postgresql: tls.certificatesSecret, ./files/certs/
+    When TLS is enabled, you must either provide a secretName containing the certificates or
+    place your {.crt, .key} files in ./files/certs/ folder.
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "postgresql.tlsCert" -}}
+{{- required "Certificate filename is required when TLS in enabled" .Values.tls.certFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "postgresql.tlsCertKey" -}}
+{{- required "Certificate Key filename is required when TLS in enabled" .Values.tls.certKeyFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "postgresql.tlsCACert" -}}
+{{- printf "/opt/bitnami/postgresql/certs/%s" .Values.tls.certCAFilename -}}
+{{- end -}}
+
+{{/*
+Return the path to the CRL file.
+*/}}
+{{- define "postgresql.tlsCRL" -}}
+{{- if .Values.tls.crlFilename -}}
+{{- printf "/opt/bitnami/postgresql/certs/%s" .Values.tls.crlFilename -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper TLS Secret name
+*/}}
+{{- define "postgresql.tlsSecretName" -}}
+{{- if .Values.tls.certificatesSecret }}
+    {{- printf "%s" .Values.tls.certificatesSecret -}}
+{{- else -}}
+    {{- printf "%s-tls" (include "postgresql.fullname" .) -}}
 {{- end -}}
 {{- end -}}
