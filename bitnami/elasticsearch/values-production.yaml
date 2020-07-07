@@ -256,6 +256,11 @@ master:
     ## the container should be bound
     ##
     # existingClaim: my-persistent-volume-claim
+    ## If persistence is enable, and this value is defined, then
+    ## accept the value as an existing Persistent Volume to which
+    ## should be added as match label selector to the volumeClaimTemplate
+    ##
+    # existingVolume: my-persistent-volume
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -491,6 +496,11 @@ data:
     ## the container should be bound
     ##
     # existingClaim: my-persistent-volume-claim
+    ## If persistence is enable, and this value is defined, then
+    ## accept the value as an existing Persistent Volume to which
+    ## should be added as match label selector to the volumeClaimTemplate
+    ##
+    # existingVolume: my-persistent-volume
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
