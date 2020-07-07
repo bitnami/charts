@@ -356,11 +356,14 @@ kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --f
 Then, use the following parameters:
 
 ```console
-tls.enabled="true"
+volumePermissions.enabled=true
+tls.enabled=true
 tls.certificatesSecret="certificates-tls-secret"
 tls.certFilename="cert.crt"
 tls.certKeyFilename="cert.key"
 ```
+
+> Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `securityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
 
 ### Sidecars
 
