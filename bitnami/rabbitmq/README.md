@@ -333,6 +333,13 @@ auth.erlangCookie="$RABBITMQ_ERLANG_COOKIE"
 
 > Note: please note it's mandatory to indicate the password and erlangCookie that was set the first time the chart was installed to upgrade the chart. Otherwise, new pods won't be able to join the cluster.
 
+When scaling down the solution unnecessary RabbitMQ nodes are automatically stopped, but they are not removed from the cluster. You need to manually remove them running the `rabbitmqctl forget_cluster_node` command. For instance, if you initially installed RabbitMQ with 3 replicas and then you scaled it down to 2 replicas, run the commands below (assuming that the release name is `rabbitmq` and you're using `hostname` as clustering type):
+
+```console
+$ kubectl exec rabbitmq-0 --container rabbitmq -- rabbitmqctl forget_cluster_node rabbit@rabbitmq-2.rabbitmq-headless.default.svc.cluster.local
+$ kubectl delete pvc data-rabbitmq-2
+```
+
 ### Enabling TLS support
 
 To enable TLS support you must generate the certificates using RabbitMQ [documentation](https://www.rabbitmq.com/ssl.html#automated-certificate-generation). Once you have your certificate, you have two alternatives:

@@ -196,6 +196,13 @@ spec:
             {{- if .Values.extraContainerPorts }}
             {{- toYaml .Values.extraContainerPorts | nindent 12 }}
             {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - bash
+                  - -ec
+                  - rabbitmqctl stop_app
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
