@@ -224,6 +224,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+- Enable PodDisruptionBudget:
+```diff
+- pdb.create: false
++ pdb.create: true
+```
+
 To horizontally scale this chart, you can use the `--replicas` flag to modify the number of nodes in your NATS replica set.
 
 ### Sidecars
