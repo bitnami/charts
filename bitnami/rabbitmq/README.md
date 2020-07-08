@@ -108,9 +108,9 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `extraConfiguration`                      | Extra configuration to be appended to RabbitMQ configuration                                                         | Check `values.yaml` file                                     |
 | `advancedConfiguration`                   | Extra configuration (in classic format)                                                                              | Check `values.yaml` file                                     |
 | `ldap.enabled`                            | Enable LDAP support                                                                                                  | `false`                                                      |
-| `ldap.server`                             | LDAP server                                                                                                          | `""`                                                         |
-| `ldap.port`                               | LDAP port                                                                                                            | `389`                                                        |
-| `ldap.user_dn_pattern`                    | DN used to bind to LDAP                                                                                              | `cn=${username},dc=example,dc=org`                           |
+| `ldap.servers`                            | List of LDAP servers hostnames                                                                                       | `[]`                                                         |
+| `ldap.port`                               | LDAP servers port                                                                                                    | `389`                                                        |
+| `ldap.user_dn_pattern`                    | Pattern used to translate the provided username into a value to be used for the LDAP bind                            | `cn=${username},dc=example,dc=org`                           |
 | `ldap.tls.enabled`                        | Enable TLS for LDAP connections (check advancedConfiguration parameter in values.yml)                                | `false`                                                      |
 
 ### Statefulset parameters
@@ -432,16 +432,16 @@ extraConfiguration: |
 LDAP support can be enabled in the chart by specifying the `ldap.` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
 
 - `ldap.enabled`: Enable LDAP support. Defaults to `false`.
-- `ldap.server`: LDAP server host. No defaults.
-- `ldap.port`: LDAP server port. `389`.
-- `ldap.user_dn_pattern`: DN used to bind to LDAP. `cn=${username},dc=example,dc=org`.
+- `ldap.servers`: List of LDAP servers hostnames. No defaults.
+- `ldap.port`: LDAP servers port. `389`.
+- `ldap.user_dn_pattern`: Pattern used to translate the provided username into a value to be used for the LDAP bind. Defaults to `cn=${username},dc=example,dc=org`.
 - `ldap.tls.enabled`: Enable TLS for LDAP connections. Defaults to `false`.
 
 For example:
 
 ```console
-ldap.enabled="true"
-ldap.server="my-ldap-server"
+ldap.enabled=true
+ldap.serverss[0]="my-ldap-server"
 ldap.port="389"
 ldap.user_dn_pattern="cn=${username},dc=example,dc=org"
 ```
