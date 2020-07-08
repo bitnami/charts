@@ -122,14 +122,14 @@ spec:
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME)"
             {{- end }}
-            {{- if .Values.ldap.enabled }}
             - name: RABBITMQ_LDAP_ENABLE
-              value: "yes"
+              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
+            {{- if .Values.ldap.enabled }}
             - name: RABBITMQ_LDAP_TLS
               value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
-            - name: RABBITMQ_LDAP_SERVER
-              value: {{ .Values.ldap.server }}
-            - name: RABBITMQ_LDAP_SERVER_PORT
+            - name: RABBITMQ_LDAP_SERVERS
+              value: {{ .Values.ldap.servers | join "," | quote }}
+            - name: RABBITMQ_LDAP_SERVERS_PORT
               value: {{ .Values.ldap.port | quote }}
             - name: RABBITMQ_LDAP_USER_DN_PATTERN
               value: {{ .Values.ldap.user_dn_pattern }}

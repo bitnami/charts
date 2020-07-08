@@ -209,7 +209,9 @@ configuration: |-
   {{- if .Values.ldap.enabled }}
   auth_backends.1 = rabbit_auth_backend_ldap
   auth_backends.2 = internal
-  auth_ldap.servers.1  = {{ .Values.ldap.server }}
+  {{- range $index, $server := .Values.ldap.servers }}
+  auth_ldap.servers.{{ add $index 1 }} = {{ $server }}
+  {{- end }}
   auth_ldap.port = {{ .Values.ldap.port }}
   auth_ldap.user_dn_pattern = {{ .Values.ldap.user_dn_pattern  }}
   {{- if .Values.ldap.tls.enabled }}
@@ -257,11 +259,19 @@ advancedConfiguration: |-
 ##
 ldap:
   enabled: false
-  server: ""
+  ## List of LDAP servers hostnames
+  ##
+  servers: []
+  ## LDAP servers port
+  ##
   port: "389"
+  ## Pattern used to translate the provided username into a value to be used for the LDAP bind
+  ## ref: https://www.rabbitmq.com/ldap.html#usernames-and-dns
+  ##
   user_dn_pattern: cn=${username},dc=example,dc=org
   tls:
-    # If you enabled TLS/SSL you can set advaced options using the advancedConfiguration parameter.
+    ## If you enabled TLS/SSL you can set advaced options using the advancedConfiguration parameter.
+    ##
     enabled: false
 
 ## extraVolumes and extraVolumeMounts allows you to mount other volumes
