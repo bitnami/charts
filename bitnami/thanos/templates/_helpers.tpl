@@ -159,7 +159,7 @@ Return true if a secret object should be created
 */}}
 {{- define "thanos.createObjstoreSecret" -}}
 {{- if and .Values.objstoreConfig (not .Values.existingObjstoreSecret) }}
-    {- true -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -180,7 +180,7 @@ Return true if a configmap object should be created
 */}}
 {{- define "thanos.querier.createSDConfigmap" -}}
 {{- if and .Values.querier.sdConfig (not .Values.querier.existingSDConfigmap) }}
-    {- true -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -201,7 +201,7 @@ Return true if a configmap object should be created
 */}}
 {{- define "thanos.ruler.createConfigmap" -}}
 {{- if and .Values.ruler.config (not .Values.ruler.existingConfigmap) }}
-    {- true -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -391,5 +391,36 @@ thanos: ruler configuration
       1) Provide it using the 'ruler.config' parameter
       2) Provide it using an existing Configmap and using the 'ruler.existingConfigmap' parameter
       3) Put your ruler.yml under the 'files/conf/' directory
+{{- end -}}
+{{- end -}}
+
+{{/* Service account name
+Usage:
+{{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
+*/}}
+{{- define "thanos.serviceaccount.name" -}}
+{{- $name := printf "%s-%s" (include "thanos.fullname" .context) .component -}}
+
+{{- if .context.Values.existingServiceAccount -}}
+    {{- $name = .context.Values.existingServiceAccount -}}
+{{- end -}}
+
+{{- $component := index .context.Values .component -}}
+{{- if $component.serviceAccount.existingServiceAccount -}}
+    {{- $name = $component.serviceAccount.existingServiceAccount -}}
+{{- end -}}
+
+{{- printf "%s" $name -}}
+{{- end -}}
+
+{{/* Service account use existing
+{{- include "thanos.serviceaccount.use-existing" (dict "component" "bucketweb" "context" $) -}}
+*/}}
+{{- define "thanos.serviceaccount.use-existing" -}}
+{{- $component := index .context.Values .component -}}
+{{- if .context.Values.existingServiceAccount -}}
+    {{- true -}}
+{{- else if $component.serviceAccount.existingServiceAccount -}}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

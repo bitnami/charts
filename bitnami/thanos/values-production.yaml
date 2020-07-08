@@ -49,6 +49,10 @@ clusterDomain: cluster.local
 ##  optional item list for specifying a custom Secret key. If so, path should be objstore.yml
 # existingObjstoreSecretItems: []
 
+## Provide a common service account to be shared with all components
+##
+# existingServiceAccount: my-service-account
+
 ## Thanos Querier parameters
 ##
 querier:
@@ -64,6 +68,9 @@ querier:
   ##
   serviceAccount:
     annotations: {}
+    ## Provide an existing service account for querier
+    ##
+    # existingServiceAccount: querier-service-account
 
   ## Labels to treat as a replica indicator along which data is deduplicated
   ##
@@ -335,6 +342,9 @@ bucketweb:
   ##
   serviceAccount:
     annotations: {}
+    ## Provide an existing service account for bucketweb
+    ##
+    # existingServiceAccount: bucketweb-service-account
 
   ## Refresh interval to download metadata from remote storage
   ##
@@ -534,6 +544,9 @@ compactor:
   ##
   serviceAccount:
     annotations: {}
+    ## Provide an existing service account for compactor
+    ##
+    # existingServiceAccount: compactor-service-account
 
   ## Resolution and Retention flags
   ##
@@ -693,6 +706,9 @@ storegateway:
   ##
   serviceAccount:
     annotations: {}
+    ## Provide an existing service account for storegateway
+    ##
+    # existingServiceAccount: storegateway-service-account
 
   ## Extra Flags to passed to Thanos Store Gateway
   ##
@@ -877,6 +893,9 @@ ruler:
   ##
   serviceAccount:
     annotations: {}
+    ## Provide an existing service account for ruler
+    ##
+    # existingServiceAccount: ruler-service-account
 
   ## Dinamically configure Querier APIs using DNS discovery
   ##
@@ -1119,10 +1138,10 @@ minio:
   ## MinIO credentials
   ##
   accessKey:
-    password: ""
+    password: ''
   secretKey:
-    password: ""
+    password: ''
 
   ## Default MinIO buckets
   ##
-  defaultBuckets: "thanos"
+  defaultBuckets: 'thanos'

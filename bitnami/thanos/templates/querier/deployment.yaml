@@ -30,7 +30,7 @@ spec:
       {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.fullname" . }}-querier
+      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "querier" "context" $) }}
       {{- if .Values.querier.affinity }}
       affinity: {{- include "thanos.tplValue" (dict "value" .Values.querier.affinity "context" $) | nindent 8 }}
       {{- end }}
