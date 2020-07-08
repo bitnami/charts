@@ -392,7 +392,7 @@ pgpool:
   ## strategy used to replace old Pods by new ones
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
-  strategy: {}
+  updateStrategy: {}
 
   ## minReadySeconds to avoid killing pods before we are ready
   ##

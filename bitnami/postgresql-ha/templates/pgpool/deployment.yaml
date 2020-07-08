@@ -12,8 +12,8 @@ spec:
   selector:
     matchLabels: {{ include "postgresql-ha.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: pgpool
-  {{- if .Values.pgpool.strategy }}
-  strategy: {{- toYaml .Values.pgpool.strategy | nindent 4 }}
+  {{- if .Values.pgpool.updateStrategy }}
+  strategy: {{- toYaml .Values.pgpool.updateStrategy | nindent 4 }}
   {{- end }}
   {{- if .Values.pgpool.minReadySeconds }}
   minReadySeconds: {{ .Values.pgpool.minReadySeconds }}
