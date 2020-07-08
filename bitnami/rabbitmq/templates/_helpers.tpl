@@ -96,8 +96,8 @@ Get the TLS secret.
 Get the Ingress TLS secret.
 */}}
 {{- define "rabbitmq.ingressSecretTLSName" -}}
-    {{- if .Values.ingress.tls.existingSecret -}}
-        {{- printf "%s" .Values.ingress.tls.existingSecret -}}
+    {{- if .Values.ingress.existingSecret -}}
+        {{- printf "%s" .Values.ingress.existingSecret -}}
     {{- else -}}
         {{- printf "%s-tls" .Values.ingress.hostname -}}
     {{- end -}}
