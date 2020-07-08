@@ -94,11 +94,6 @@ clusterDomain: cluster.local
 ##
 # existingLog4jConfigMap:
 
-## Kafka broker ID.
-## If unset, a unique broker id will be generated.
-##
-brokerId: -1
-
 ## Kafka's Java Heap size
 ##
 heapOpts: -Xmx1024m -Xms1024m
