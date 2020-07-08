@@ -13,7 +13,7 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: tcp-mongodb
+    - name: mongodb
       port: {{ .Values.service.port }}
       targetPort: mongodb
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
