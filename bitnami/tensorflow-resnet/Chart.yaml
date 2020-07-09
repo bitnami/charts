@@ -19,3 +19,5 @@ maintainers:
   - email: containers@bitnami.com
     name: Bitnami
 engine: gotpl
+annotations:
+  category: MachineLearning
