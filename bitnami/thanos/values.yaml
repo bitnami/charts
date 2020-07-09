@@ -184,6 +184,33 @@ querier:
     # successThreshold: 1
     # failureThreshold: 6
 
+  ## Thanos Querier GRPC TLS parameters
+  ## to configure --grpc-server-tls-cert, --grpc-server-tls-key, --grpc-server-tls-client-ca, --grpc-client-tls-secure, --grpc-client-tls-cert, --grpc-client-tls-key, --grpc-client-tls-ca, --grpc-client-server-name
+  ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/query.md#flags
+  grpcTLS:
+    # TLS server side
+    server:
+      # enable TLS for GRPC server
+      secure: false
+      # TLS Certificate for gRPC server, leave blank to disable TLS
+      cert:
+      # TLS Key for the gRPC server, leave blank to disable TLS
+      key:
+      # TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
+      ca:
+    # TLS client side
+    client:
+      # Use TLS when talking to the gRPC server
+      secure: false
+      # TLS Certificates to use to identify this client to the server
+      cert:
+      # TLS Key for the client's certificate
+      key:
+      # TLS CA Certificates to use to verify gRPC servers
+      ca:
+      # Server name to verify the hostname on the returned gRPC certificates. See https://tools.ietf.org/html/rfc4366#section-3.1
+      servername:
+
   ## Service paramaters
   ##
   service:
