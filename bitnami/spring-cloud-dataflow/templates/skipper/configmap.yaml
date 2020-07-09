@@ -24,10 +24,10 @@ data:
                     environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ template "scdf.envrelease" . }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envrelease" . }}_KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ template "scdf.envrelease" . }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envrelease" . }}_ZOOKEEPER_SERVICE_PORT}'
                     {{- end }}
                     {{- if .Values.deployer.resources.limits }}
-                    limits: {{- toYaml .Values.deployer.resources.limits | nindent 22 }}
+                    limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.requests }}
-                    requests: {{- toYaml .Values.deployer.resources.requests | nindent 22 }}
+                    requests: {{- toYaml .Values.deployer.resources.requests | trim | nindent 22 }}
                     {{- end }}
                     readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
                     livenessProbeDelay: {{ .Values.deployer.livenessProbe.initialDelaySeconds }}

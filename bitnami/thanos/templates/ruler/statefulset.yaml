@@ -29,7 +29,7 @@ spec:
         {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.fullname" . }}-ruler
+      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "ruler" "context" $) }}
       {{- if .Values.ruler.affinity }}
       affinity: {{- include "thanos.tplValue" (dict "value" .Values.ruler.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -93,7 +93,7 @@ spec:
             {{- end }}
             {{- range $key, $value := .Values.ruler.extraFlags }}
             - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
-            {{- end }}          
+            {{- end }}
           env:
             - name: POD_NAME
               valueFrom:

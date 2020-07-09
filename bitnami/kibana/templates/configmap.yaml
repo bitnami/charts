@@ -10,6 +10,8 @@ data:
     server.host: "::"
     server.port: 5601
     elasticsearch.hosts: [{{ include "kibana.elasticsearch.url" . }}]
+    server.basePath: {{ .Values.configuration.server.basePath }}
+    server.rewriteBasePath: {{ .Values.configuration.server.rewriteBasePath }}
     {{- if .Values.extraConfiguration }}
     {{- tpl (toYaml .Values.extraConfiguration) $ | nindent 4 }}
     {{- end }}

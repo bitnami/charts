@@ -28,7 +28,7 @@ spec:
         {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.fullname" . }}-storegateway
+      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "storegateway" "context" $) }}
       {{- if .Values.storegateway.affinity }}
       affinity: {{- include "thanos.tplValue" (dict "value" .Values.storegateway.affinity "context" $) | nindent 8 }}
       {{- end }}

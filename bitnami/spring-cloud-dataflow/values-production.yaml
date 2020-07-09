@@ -30,7 +30,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.5.2-debian-10-r12
+    tag: 2.5.2-debian-10-r14
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -336,7 +336,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.4.2-debian-10-r11
+    tag: 2.4.2-debian-10-r13
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -593,7 +593,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.5-debian-10-r9
+    tag: 1.18.5-debian-10-r11
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -653,7 +653,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.0.0-debian-10-r17
+    tag: 1.0.0-debian-10-r18
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -673,9 +673,9 @@ metrics:
     ## Annotations for the Prometheus Rsocket Proxy service
     ##
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.httpPort }}"
-      prometheus.io/path: "/metrics/proxy"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '{{ .Values.metrics.service.httpPort }}'
+      prometheus.io/path: '/metrics/proxy'
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -683,12 +683,10 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -761,7 +759,7 @@ externalDatabase:
   ##
   # driver:
   # scheme:
-  password: ""
+  password: ''
   ## Data Flow user and database
   ##
   dataflow:
@@ -773,8 +771,9 @@ externalDatabase:
     database: skipper
     user: skipper
   ## Hibernate Dialect
+  ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
-  # hibernateDialect: org.hibernate.dialect.MariaDB102Dialect
+  hibernateDialect: ''
 
 ##
 ## RabbitMQ chart configuration
@@ -785,7 +784,7 @@ rabbitmq:
   enabled: true
   rabbitmq:
     username: user
-    password: ""
+    password: ''
 
 ##
 ## Kafka chart configuration

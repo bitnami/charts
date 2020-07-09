@@ -26,7 +26,7 @@ spec:
         {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.fullname" . }}-compactor
+      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "compactor" "context" $) }}
       {{- if .Values.compactor.affinity }}
       affinity: {{- include "thanos.tplValue" (dict "value" .Values.compactor.affinity "context" $) | nindent 8 }}
       {{- end }}

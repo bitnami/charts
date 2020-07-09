@@ -17,15 +17,15 @@ data:
                 accounts:
                   {{ .Values.server.configuration.accountName }}:
                     {{- if .Values.deployer.resources.limits }}
-                    limits: {{- toYaml .Values.deployer.resources.limits | nindent 22 }}
+                    limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.requests }}
-                    requests: {{- toYaml .Values.deployer.resources.requests | nindent 22 }}
+                    requests: {{- toYaml .Values.deployer.resources.requests | trim | nindent 22 }}
                     {{- end }}
+          {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:
             registry-configurations: {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration.containerRegistries "context" $) | nindent 14 }}
-          {{- end }}
           {{- end }}
           {{- if .Values.metrics.enabled }}
           {{- $fullname := include "scdf.fullname" . }}
