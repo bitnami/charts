@@ -30,5 +30,4 @@ spec:
       {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.https)))}}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- end }}
-  selector:
-    app: {{ template "dokuwiki.name" . }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

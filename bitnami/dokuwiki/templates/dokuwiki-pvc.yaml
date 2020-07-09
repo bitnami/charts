@@ -12,9 +12,9 @@ metadata:
   {{- end }}
 spec:
   accessModes:
-    - {{ .Values.persistence.dokuwiki.accessMode | quote }}
+    - {{ .Values.persistence.accessMode | quote }}
   resources:
     requests:
-      storage: {{ .Values.persistence.dokuwiki.size | quote }}
+      storage: {{ .Values.persistence.size | quote }}
   {{ include "dokuwiki.storageClass" . }}
 {{- end -}}

@@ -14,7 +14,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
         {{- end }}
@@ -44,9 +44,9 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       hostAliases:
-      - ip: "127.0.0.1"
-        hostnames:
-        - "status.localhost"
+        - ip: "127.0.0.1"
+          hostnames:
+            - "status.localhost"
       initContainers:
         {{- if .Values.certificates.customCAs }}
         - name: certificates
@@ -114,7 +114,7 @@ spec:
             - name: DOKUWIKI_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "dokuwiki.fullname" . }}
+                  name: {{ include "dokuwiki.secretName" . }}
                   key: dokuwiki-password
             - name: DOKUWIKI_EMAIL
               value: {{ .Values.dokuwikiEmail | quote }}
@@ -123,15 +123,15 @@ spec:
               {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
               {{- end }}
-            envFrom:
-              {{- if .Values.extraEnvVarsCM }}
-              - configMapRef:
-                  name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
-              {{- end }}
-              {{- if .Values.extraEnvVarsSecret }}
-              - secretRef:
-                  name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
-              {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
@@ -163,7 +163,7 @@ spec:
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          resources: {{- toYaml .Values.resources | nindent 10 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
@@ -198,8 +198,8 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-          - name: dokuwiki-data
-            mountPath: /bitnami/dokuwiki
+            - name: dokuwiki-data
+              mountPath: /bitnami/dokuwiki
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "dokuwiki.metrics.image" . }}
@@ -258,4 +258,7 @@ spec:
             claimName: {{ template "dokuwiki.fullname" . }}
         {{- else }}
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
