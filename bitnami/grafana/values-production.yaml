@@ -268,6 +268,20 @@ persistence:
 ##
 sidecars: {}
 
+## Add extra volumes to the Grafana pod
+## Example:
+## extraVolumes:
+##   - name: my-volume
+##     emptyDir: {}
+extraVolumes: []
+
+## Add extra volume mounts to the grafana pod
+## Example:
+## extraVolumeMounts:
+##   - name: my-volume
+##     mountPath: /opt/bitnami/grafana/my-stuff
+extraVolumeMounts: []
+
 ## Service parameters
 ##
 service:
