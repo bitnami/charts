@@ -15,3 +15,5 @@ name: logstash
 sources:
   - https://github.com/bitnami/bitnami-docker-logstash
 version: 0.4.3
+annotations:
+  category: LogManagement
