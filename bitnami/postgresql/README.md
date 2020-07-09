@@ -347,23 +347,23 @@ TLS support can be enabled in the chart by specifying the `tls.` parameters whil
 
 For example:
 
-First, create the secret with the cetificates files:
+* First, create the secret with the cetificates files:
 
-```console
-kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
-```
+    ```console
+    kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
 
-Then, use the following parameters:
+* Then, use the following parameters:
 
-```console
-volumePermissions.enabled=true
-tls.enabled=true
-tls.certificatesSecret="certificates-tls-secret"
-tls.certFilename="cert.crt"
-tls.certKeyFilename="cert.key"
-```
+    ```console
+    volumePermissions.enabled=true
+    tls.enabled=true
+    tls.certificatesSecret="certificates-tls-secret"
+    tls.certFilename="cert.crt"
+    tls.certKeyFilename="cert.key"
+    ```
 
-> Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `securityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
+    > Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `securityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
 
 ### Sidecars
 
