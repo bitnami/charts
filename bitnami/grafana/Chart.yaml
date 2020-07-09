@@ -16,3 +16,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
+annotations:
+  category: Analytics
