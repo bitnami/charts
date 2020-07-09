@@ -16,4 +16,3 @@ name: thanos
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
 version: 1.2.1
-
