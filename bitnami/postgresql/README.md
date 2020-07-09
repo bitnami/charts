@@ -341,7 +341,7 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
 
 - `tls.enabled`: Enable TLS support. Defaults to `false`
-- `tls.certificatesSecret`: Name of an existing secret that contains the certificates. Alternatively, you can place your `*.crt`, `*.key` and `*.crl` files under the `files/certs` path to create a new secret out of them. No defaults.
+- `tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
 - `tls.certFilename`: Certificate filename. No defaults.
 - `tls.certKeyFilename`: Certificate key filename. No defaults.
 

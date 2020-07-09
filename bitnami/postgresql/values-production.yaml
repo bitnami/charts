@@ -480,8 +480,8 @@ tls:
   #
   # Whether to use the server's TLS cipher preferences rather than the client's.
   preferServerCiphers: true
+  #
   # Name of the Secret that contains the certificates
-  # Alternatively, you can put your *.crt, *.key and *.crl files under the files/certs
   # certificatesSecret: certificates-tls-secret
   #
   # Certificate filename

@@ -302,7 +302,7 @@ spec:
         {{- if  .Values.tls.enabled }}
         - name: raw-certificates
           secret:
-            secretName: {{ template "postgresql.tlsSecretName" . }}
+            secretName: {{ .Values.tls.certificatesSecret }}
         - name: postgresql-certificates
           emptyDir: {}
         {{- end }}
