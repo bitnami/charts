@@ -122,14 +122,14 @@ spec:
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME)"
             {{- end }}
-            {{- if .Values.ldap.enabled }}
             - name: RABBITMQ_LDAP_ENABLE
-              value: "yes"
+              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
+            {{- if .Values.ldap.enabled }}
             - name: RABBITMQ_LDAP_TLS
               value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
-            - name: RABBITMQ_LDAP_SERVER
-              value: {{ .Values.ldap.server }}
-            - name: RABBITMQ_LDAP_SERVER_PORT
+            - name: RABBITMQ_LDAP_SERVERS
+              value: {{ .Values.ldap.servers | join "," | quote }}
+            - name: RABBITMQ_LDAP_SERVERS_PORT
               value: {{ .Values.ldap.port | quote }}
             - name: RABBITMQ_LDAP_USER_DN_PATTERN
               value: {{ .Values.ldap.user_dn_pattern }}
@@ -196,14 +196,20 @@ spec:
             {{- if .Values.extraContainerPorts }}
             {{- toYaml .Values.extraContainerPorts | nindent 12 }}
             {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - bash
+                  - -ec
+                  - rabbitmqctl stop_app
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
               command:
                 - /bin/bash
                 - -ec
-                - |
-                  /opt/bitnami/scripts/rabbitmq/apicheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:15672/api/healthchecks/node" '{"status":"ok"}'
+                - rabbitmq-diagnostics -q check_running
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -218,8 +224,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - |
-                  /opt/bitnami/scripts/rabbitmq/healthcheck.sh "http://{{ .Values.auth.username }}:$RABBITMQ_PASSWORD@127.0.0.1:15672/api/healthchecks/node" '{"status":"ok"}'
+                - rabbitmq-diagnostics -q check_running
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

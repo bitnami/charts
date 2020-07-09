@@ -1,6 +1,6 @@
 apiVersion: v1
 name: spring-cloud-dataflow
-version: 0.1.2
+version: 0.2.5
 appVersion: 2.5.2
 description: Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
 keywords:
@@ -9,7 +9,7 @@ keywords:
   - skipper
   - spring
 home: https://dataflow.spring.io/
-icon: https://bitnami.com/assets/stacks/thanos/img/spring-cloud-dataflow-stack-220x234.png
+icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

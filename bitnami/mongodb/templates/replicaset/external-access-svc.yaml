@@ -35,13 +35,7 @@ spec:
       {{- else }}
       nodePort: null
       {{- end }}
-      {{- if or (eq $root.Values.externalAccess.service.type "LoadBalancer") }}
       targetPort: mongodb
-      {{- else if $root.Values.externalAccess.autoDiscovery.enabled }}
-      targetPort: null
-      {{- else }}
-      targetPort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
