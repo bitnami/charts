@@ -409,6 +409,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "postgresql.validateValues.ldapConfigurationMethod" .) -}}
 {{- $messages := append $messages (include "postgresql.validateValues.psp" .) -}}
+{{- $messages := append $messages (include "postgresql.validateValues.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -448,6 +449,17 @@ Return the appropriate apiVersion for podsecuritypolicy.
 {{- print "extensions/v1beta1" -}}
 {{- else -}}
 {{- print "policy/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Postgresql TLS - When TLS is enabled, so must be VolumePermissions
+*/}}
+{{- define "postgresql.validateValues.tls" -}}
+{{- if and .Values.tls.enabled (not .Values.volumePermissions.enabled) }}
+postgresql: tls.enabled, volumePermissions.enabled
+    When TLS is enabled you must enable volumePermissions as well to ensure certificates files have
+    the right permissions.
 {{- end -}}
 {{- end -}}
 

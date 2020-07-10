@@ -482,7 +482,7 @@ tls:
   preferServerCiphers: true
   #
   # Name of the Secret that contains the certificates
-  # certificatesSecret: certificates-tls-secret
+  certificatesSecret: ""
   #
   # Certificate filename
   certFilename: ""
