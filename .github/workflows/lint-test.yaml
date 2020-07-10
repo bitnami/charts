@@ -37,6 +37,8 @@ jobs:
   check-categories:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Check categories
         uses: bitnami/chart-categories-action@master
