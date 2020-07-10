@@ -78,6 +78,8 @@ The following table lists the configurable parameters of the phpMyAdmin chart an
 | `ingress.hosts[0].tls`       | Utilize TLS backend in ingress                                                                          | `false`                                                      |
 | `ingress.hosts[0].tlsHosts`  | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                    | `nil`                                                        |
 | `ingress.hosts[0].tlsSecret` | TLS Secret (certificates)                                                                               | `phpmyadmin.local-tls-secret`                                |
+| `extraEnv`                   | Any extra environment variables to be passed to the pod (evaluated as a template)                       | `{}`                                                         |
+| `extraEnvVarsCM`             | Name of a Config Map containing extra environment variables to be passed to the pod (evaluated as a template) | `nil`                                                  |
 | `podSecurityContext`         | phpMyAdmin pods' Security Context                                                                       | `{ fsGroup: "1001" }`                                        |
 | `containerSecurityContext`   | phpMyAdmin containers' Security Context                                                                 | `{ runAsUser: "1001" }`                                      |
 | `resources.limits`           | The resources limits for the PhpMyAdmin container                                                       | `{}`                                                         |
