@@ -62,7 +62,6 @@ moodleUsername: user
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
-##
 moodleEmail: user@example.com
 
 ## Set to `yes` to allow the container to be started with blank passwords
@@ -238,7 +237,6 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
-  ##
   nodePorts:
     http: ""
     https: ""
@@ -247,13 +245,13 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
+
 ## Configure the ingress resource that allows you to access the
 ## Moodle installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
-  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
@@ -283,7 +281,6 @@ ingress:
   hosts:
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ##
 
   ## tls:
   ## - hosts:
@@ -327,6 +324,7 @@ persistence:
   ##
   # existingClaim:
 
+
   ## If defined, the drupal-data volume will mount to the specified hostPath.
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
@@ -368,7 +366,6 @@ containerSecurityContext:
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-##
 livenessProbe:
   enabled: true
   initialDelaySeconds: 600
@@ -422,7 +419,6 @@ metrics:
   ##
   # resources: {}
   ## Metrics exporter pod Annotation and Labels
-  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
