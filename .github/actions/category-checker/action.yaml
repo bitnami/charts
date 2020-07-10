@@ -1,0 +1,16 @@
+name: 'Check categories'
+description: 'Check the Helm Charts categories'
+inputs:
+  command:
+    description: 'Parameters for the chart-testing tool'
+    required: true
+    default: 'check-categories'
+outputs:
+  categories-are-correct:
+    description: 'Wheter or not the categories are correct'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.command }}
+
