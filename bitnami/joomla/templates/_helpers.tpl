@@ -15,7 +15,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return the proper Moodle image name
+Return the proper Joomla! image name
 */}}
 {{- define "joomla.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.image "global" .Values.global ) -}}
@@ -42,7 +42,7 @@ Return  the proper Storage Class
 {{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global ) -}}
 {{- end -}}
 
-{{/* Moodle credential secret name */}}
+{{/* Joomla! credential secret name */}}
 {{- define "joomla.secretName" -}}
 {{- coalesce .Values.existingSecret (include "joomla.fullname" .) -}}
 {{- end -}}
