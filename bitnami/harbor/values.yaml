@@ -375,13 +375,12 @@ service:
     ## ref: https://github.com/goharbor/harbor/issues/5291
     ##
     enabled: true
-    ## Fill the name of secret if you want to use your own TLS certificate.
+    ## Existing secret name containing your own TLS certificates.
     ## The secret contains keys named:
     ## "tls.crt" - the certificate (required)
     ## "tls.key" - the private key (required)
-    ## "ca.crt" - the certificate of CA (optional), this enables the download
-    ## link on portal to download the certificate of CA
-    ## These files will be generated automatically if the "secretName" is not set
+    ## "ca.crt" - the certificate of CA (optional)
+    ## Self-signed TLS certificates will be used otherwise.
     ##
     existingSecret: ""
     ## By default, the Notary service will use the same certificate described above.
