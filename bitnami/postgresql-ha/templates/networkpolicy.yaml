@@ -19,7 +19,6 @@ spec:
               {{ template "postgresql-ha.fullname" . }}-client: "true"
         - podSelector:
             matchLabels: {{- include "postgresql-ha.matchLabels" . | nindent 14 }}
-              app.kubernetes.io/component: pgpool
       {{- end }}
     # Allow prometheus scrapes
     - ports:
