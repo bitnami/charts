@@ -34,3 +34,14 @@ jobs:
         with:
           config: .github/ct-install.yaml
           command: install
+  check-categories:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Fetch history
+        run: git fetch --prune --unshallow
+
+      - name: Check categories
+        uses: bitnami/chart-categories-action@master

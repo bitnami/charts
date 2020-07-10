@@ -15,3 +15,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/moodle/img/moodle-stack-110x117.png
+annotations:
+  category: E-Learning

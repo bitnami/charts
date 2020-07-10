@@ -16,3 +16,5 @@ name: influxdb
 sources:
   - https://github.com/bitnami/bitnami-docker-influxdb
 version: 0.5.3
+annotations:
+  category: Database

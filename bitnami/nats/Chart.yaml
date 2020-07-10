@@ -16,3 +16,5 @@ maintainers:
   email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/nats/img/nats-stack-110x117.png
+annotations:
+  category: Infrastructure

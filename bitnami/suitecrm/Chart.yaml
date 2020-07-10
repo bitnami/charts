@@ -14,3 +14,5 @@ maintainers:
   email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/osclass/img/osclass-stack-110x117.png
+annotations:
+  category: CRM

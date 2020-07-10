@@ -18,3 +18,5 @@ maintainers:
     url: https://github.com/Cellebyte
   - name: Bitnami
     email: containers@bitnami.com
+annotations:
+  category: Infrastructure

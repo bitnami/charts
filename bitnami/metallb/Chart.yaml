@@ -21,3 +21,5 @@ maintainers:
     email: cellebyte@gmail.com
   - name: Bitnami
     email: containers@bitnami.com
+annotations:
+  category: Infrastructure

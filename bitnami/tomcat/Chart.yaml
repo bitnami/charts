@@ -18,3 +18,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/tomcat/img/tomcat-stack-110x117.png
+annotations:
+  category: ApplicationServer
