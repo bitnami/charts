@@ -34,3 +34,9 @@ jobs:
         with:
           config: .github/ct-install.yaml
           command: install
+  check-categories:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Check categories
+        uses: bitnami/chart-categories-action@master
