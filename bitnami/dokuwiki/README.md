@@ -69,6 +69,7 @@ The following table lists the configurable parameters of the DokuWiki chart and 
 | `image.registry`    | DokuWiki image registry                                                                               | `docker.io`                                             |
 | `image.repository`  | DokuWiki image name                                                                                   | `bitnami/dokuwiki`                                      |
 | `image.tag`         | DokuWiki image tag                                                                                    | `{TAG_NAME}`                                            |
+| `image.debug`       | Enable image debugging                                                                                | `false`                                                 |
 | `nameOverride`      | String to partially override dokuwiki.fullname template with a string (will prepend the release name) | `nil`                                                   |
 
 ### Dokuwiki parameters

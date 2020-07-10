@@ -107,6 +107,10 @@ spec:
             runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
           env:
+            {{- if .Values.image.debug }}
+            - name: BITNAMI_DEBUG
+              value: "true"
+            {{- end }}
             - name: DOKUWIKI_USERNAME
               value: {{ .Values.dokuwikiUsername | quote }}
             - name: DOKUWIKI_FULL_NAME
