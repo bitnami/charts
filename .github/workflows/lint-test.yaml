@@ -40,5 +40,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Fetch history
+        run: git fetch --prune --unshallow
+
       - name: Check categories
         uses: bitnami/chart-categories-action@master
