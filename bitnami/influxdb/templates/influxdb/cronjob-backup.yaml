@@ -17,7 +17,7 @@ spec:
           labels:
             {{- include "influxdb.matchLabels" . | nindent 12 }}
           annotations:
-            {{- toYaml .Values.backup.cronjob.Podannotations | nindent 12 }}
+            {{- toYaml .Values.backup.cronjob.podAnnotations | nindent 12 }}
         spec:
           {{- if .Values.backup.cronjob.securityContext.enabled }}
           securityContext:
