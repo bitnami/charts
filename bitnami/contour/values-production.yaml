@@ -260,12 +260,14 @@ envoy:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
-  podSecurityContext: {}
+  podSecurityContext:
+    enabled: false
 
   ## Envoy container security context - envoy needs to run as root to bind to 80, 443
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ##
   containerSecurityContext:
+    enabled: true
     runAsUser: 0
 
   ## Pod host network access
