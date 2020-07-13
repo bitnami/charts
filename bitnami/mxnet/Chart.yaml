@@ -16,3 +16,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/mxnet/img/mxnet-stack-110x117.png
+annotations:
+  category: MachineLearning
