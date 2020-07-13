@@ -189,6 +189,8 @@ spec:
                   key: client-password
             {{- end }}
             {{- if .Values.auth.jaas.zookeeperUser }}
+            - name: KAFKA_ZOOKEEPER_PROTOCOL
+              value: "SASL"
             - name: KAFKA_ZOOKEEPER_USER
               value: {{ .Values.auth.jaas.zookeeperUser | quote }}
             - name: KAFKA_ZOOKEEPER_PASSWORD

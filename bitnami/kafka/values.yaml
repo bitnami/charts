@@ -209,6 +209,10 @@ extraEnvVars: []
 extraVolumes: []
 extraVolumeMounts: []
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-kafka#security
 ##
