@@ -17,3 +17,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/fluentd/img/fluentd-stack-110x117.png
+annotations:
+  category: Analytics

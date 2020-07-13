@@ -13,3 +13,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-110x117.png
+annotations:
+  category: Analytics
