@@ -83,7 +83,9 @@ spec:
             - --grpc-client-tls-cert=/tls/client/cert.pem
             - --grpc-client-tls-key=/tls/client/key.pem
             - --grpc-client-tls-ca=/tls/client/ca.pem
+            {{- if .Values.querier.grpcTLS.client.servername }}
             - --grpc-client-server-name={{.Values.querier.grpcTLS.client.servername}}
+            {{- end }}
             {{- end }}
             {{- range $key, $value := .Values.querier.extraFlags }}
             - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}

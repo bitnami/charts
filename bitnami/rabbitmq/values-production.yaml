@@ -174,8 +174,8 @@ extraEnvVars: []
 ## Extra ports to be included in container spec, primarily informational
 ## E.g:
 ## extraContainerPorts:
-## - name: new_port_ma,e
-##   port: 1234
+## - name: new_port_name
+##   containerPort: 1234
 ##
 extraContainerPorts: []
 

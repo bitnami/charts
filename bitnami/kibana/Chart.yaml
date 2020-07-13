@@ -17,3 +17,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/kibana/img/kibana-stack-220x234.png
+annotations:
+  category: Analytics
