@@ -130,6 +130,10 @@ extraEnvVars: {}
 ##
 extraEnvVarsCM:
 
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
 ## phpMyAdmin pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
