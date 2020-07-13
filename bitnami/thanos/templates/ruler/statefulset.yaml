@@ -86,6 +86,7 @@ spec:
             {{- end }}
             - --label=replica="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
+            - --alert.label-drop="replica"
             - --objstore.config-file=/conf/objstore.yml
             - --rule-file=/conf/ruler.yml
             {{- range .Values.ruler.queries }}
