@@ -113,6 +113,7 @@ spec:
             - secretRef:
                 name: {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVarsSecret "context" $) | nindent 18 }}
           {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
