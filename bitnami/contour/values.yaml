@@ -252,6 +252,29 @@ envoy:
   ##
   podAnnotations: {}
 
+  ## Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    enabled: false
+
+  ## Envoy container security context - envoy needs to run as root to bind to 80, 443
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 0
+
+  ## Pod host network access
+  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
+  ##
+  hostNetwork: false
+
+  ## Pod's DNS Policy
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  ##
+  dnsPolicy: ClusterFirst
+
   serviceAccount:
     # Specifies whether a ServiceAccount should be created
     create: true
@@ -286,6 +309,10 @@ envoy:
     ##
     type: LoadBalancer
     externalTrafficPolicy: Local
+
+    ## Service annotations
+    ##
+    annotations: {}
 
     ports:
       ## HTTP Port
