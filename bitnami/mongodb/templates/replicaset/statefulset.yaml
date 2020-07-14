@@ -37,7 +37,7 @@ spec:
       {{- if or (include "mongodb.createConfigmap" .) .Values.podAnnotations }}
       annotations:
         {{- if (include "mongodb.createConfigmap" .) }}
-        checksum/configuration: {{ include (print $.Template.BasePath "/mongodb/configmap.yaml") . | sha256sum }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
