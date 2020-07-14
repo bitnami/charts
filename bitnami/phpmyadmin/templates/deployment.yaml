@@ -103,7 +103,6 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
           {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -112,7 +111,6 @@ spec:
           {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
                 name: {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVarsSecret "context" $) | nindent 18 }}
-          {{- end }}
           {{- end }}
           ports:
             - name: http
