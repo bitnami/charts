@@ -2,42 +2,39 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "joomla.fullname" . }}
-  labels:
-    app: {{ template "joomla.fullname" . }}
-    chart: {{ template "joomla.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ include "joomla.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
-    {{- if .tls }}
-    ingress.kubernetes.io/secure-backends: "true"
+    {{- if .Values.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.ingress.certManager }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .certManager }}
     kubernetes.io/tls-acme: "true"
-    {{- end }}
-    {{- range $key, $value := .Values.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   rules:
-  {{- if .Values.ingress.hostname }}
   - host: {{ .Values.ingress.hostname }}
     http:
       paths:
-      - path: /
-        backend:
-          serviceName: "{{ template "joomla.fullname" . }}"
-          servicePort: http
-  {{- end }}
-  {{- range .Values.ingress.hosts }}
-  - host: {{ .name }}
-    http:
-      paths:
-      - path: {{ default "/" .path }}
-        backend:
-          serviceName: "{{ template "joomla.fullname" $ }}"
-          servicePort: http
-  {{- end }}
+        - path: {{ default "/" .path }}
+          backend:
+            serviceName: {{ include "joomla.fullname" $ }}
+            servicePort: 80
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+        - path: {{ default "/" .path }}
+          backend:
+            serviceName: {{ include "joomla.fullname" $ }}
+            servicePort: http
+    {{- end }}
   {{- if .Values.ingress.tls }}
   tls: {{- toYaml .Values.ingress.tls | nindent 4 }}
   {{- end }}
