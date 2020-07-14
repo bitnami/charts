@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.1-debian-10-r65
+  tag: 3.6.1-debian-10-r77
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -167,6 +167,10 @@ heapSize: 1024
 ##
 logLevel: ERROR
 
+## Data log directory. Specifying this option will direct zookeeper to write the transaction log to the dataLogDir rather than the dataDir.
+## This allows a dedicated log device to be used, and helps avoid competition between logging and snaphots.
+dataLogDir: /bitnami/zookeeper/dataLog
+
 ## Default JVMFLAGS for the ZooKeeper process
 ##
 # jvmFlags:
@@ -241,6 +245,13 @@ persistence:
     - ReadWriteOnce
   size: 8Gi
   annotations: {}
+  dataLogDir:
+    size: 8Gi
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    # existingClaim:
 
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/

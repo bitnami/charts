@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/drupal
-  tag: 9.0.1-debian-10-r2
+  tag: 9.0.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -24,16 +24,24 @@ image:
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
-  # pullSecrets:
+  pullSecrets:
   #   - myRegistryKeySecretName
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH debugging in minideb
+  ##
+  debug: false
 
 ## String to partially override drupal.fullname template (will maintain the release name)
 ##
-# nameOverride:
+nameOverride:
 
 ## String to fully override drupal.fullname template
 ##
-# fullnameOverride:
+fullnameOverride:
+
+## Number of replicas (requires ReadWriteMany PVC support)
+##
+replicaCount: 1
 
 ## Installation Profile
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
@@ -49,7 +57,7 @@ drupalUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
 ##
-# drupalPassword:
+drupalPassword: ""
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#configuration
@@ -58,24 +66,93 @@ drupalEmail: user@example.com
 
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-drupal#environment-variables
+##
 allowEmptyPassword: "yes"
+
+## Container command (using container default if not set)
+##
+command:
+## Container args (using container default if ot set)
+##
+args:
+
+## Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
+
+## Extra sidecar containers to add to the deployment
+##
+sidecars: []
+
+## Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Use existing secret for the application password
+##
+existingSecret:
 
 ## External database configuration
 ##
 externalDatabase:
   ## Database host
+  ##
   host: localhost
 
   ## Database host
+  ##
   port: 3306
 
   ## Database user
+  ##
   user: bn_drupal
 
   ## Database password
+  ##
   password: ""
 
   ## Database name
+  ##
   database: bitnami_drupal
 
 ##
@@ -85,8 +162,10 @@ externalDatabase:
 ##
 mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
   enabled: true
   ## Disable MariaDB replication
+  ##
   replication:
     enabled: false
 
@@ -96,15 +175,15 @@ mariadb:
   db:
     name: bitnami_drupal
     user: bn_drupal
-    ## If the password is not specified, mariadb will generates a random password
+    ## If the password is not specified, mariadb will generate a random password
     ##
-    # password:
+    password: ""
 
   ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  # rootUser:
-  #   password:
+  rootUser:
+    password: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -119,9 +198,15 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      # storageClass: "-"
+      storageClass:
       accessMode: ReadWriteOnce
       size: 8Gi
+      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ##
+      hostPath:
+      ## Use an existing PVC
+      ##
+      existingClaim:
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -137,6 +222,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -177,14 +263,16 @@ ingress:
   ## hosts:
   ## - name: drupal.local
   ##   path: /
-
+  ##
+  hosts:
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## tls:
   ## - hosts:
   ##     - drupal.local
   ##   secretName: drupal.local-tls
-
+  ##
+  tls:
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -204,30 +292,29 @@ ingress:
 ##
 persistence:
   enabled: true
-  drupal:
-    ## drupal data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    accessMode: ReadWriteOnce
-    size: 8Gi
+  ## drupal data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass:
+  accessMode: ReadWriteOnce
+  size: 8Gi
 
-    ## A manually managed Persistent Volume Claim
-    ## Requires persistence.enabled: true
-    ## If defined, PVC must be created manually before volume will be bound
-    ##
-    # existingClaim:
+  ## A manually managed Persistent Volume Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  existingClaim:
 
-    ## If defined, the drupal-data volume will mount to the specified hostPath.
-    ## Requires persistence.enabled: true
-    ## Requires persistence.existingClaim: nil|false
-    ## Default: nil.
-    ##
-    # hostPath:
+  ## If defined, the drupal-data volume will mount to the specified hostPath.
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
+  hostPath:
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -237,20 +324,19 @@ resources:
     memory: 512Mi
     cpu: 300m
 
-## Configure volume mounts. This is useful for images whose data mount paths are
-## different than the default.
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
-volumeMounts:
-  drupal:
-    mountPath: /bitnami/drupal
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
 
-## Pass extra environment variables to the Drupal container.
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ##
-# extraVars:
-# - name: EXTRA_VAR_1
-#   value: extra-var-value-1
-# - name: EXTRA_VAR_2
-#   value: extra-var-value-2
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
 
 ## Configure liveness and readiness probes.
 ## Drupal core exposes /user/login to unauthenticated requests, making it a good
@@ -260,25 +346,47 @@ volumeMounts:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
 #
 livenessProbe:
-  httpGet:
-    path: /user/login
-    port: http
+  enabled: true
   initialDelaySeconds: 120
+  periodSeconds: 5
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
 readinessProbe:
-  httpGet:
-    path: /user/login
-    port: http
+  enabled: true
   initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 5
+
+customLivenessProbe: {}
+
+customReadinessProbe: {}
+
+## lifecycleHooks for the container to automate configuration before or after startup.
+##
+lifecycleHooks:
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
 
 ## Prometheus Exporter / Metrics
 ##
@@ -287,19 +395,24 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r75
+    tag: 0.8.0-debian-10-r97
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    # pullSecrets:
+    pullSecrets:
     #   - myRegistryKeySecretName
-     ## Metrics exporter pod Annotation and Labels
+  ## Metrics exporter pod Annotation and Labels
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  # resources: {}
+  resources: {}
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

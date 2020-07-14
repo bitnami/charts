@@ -304,6 +304,12 @@ initContainers:
 # - name: portname
 #   containerPort: 1234
 
+## Kibana configuration
+##
+configuration:
+  server:
+    rewriteBasePath: false
+
 ## Prometheus metrics (requires the kibana-prometheus-exporter plugin)
 ##
 metrics:

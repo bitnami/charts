@@ -122,6 +122,8 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `resources.limits`             | The resources limits for Grafana containers              | `{}`                           |
 | `resources.requests`           | The requested resources for Grafana containers           | `{}`                           |
 | `sidecars`                     | Attach additional sidecar containers to the Grafana pod  | `{}`                           |
+| `extraVolumes`                 | Additional volumes for the Grafana pod                   | `[]`                           |
+| `extraVolumeMounts`            | Additional volume mounts for the Grafana container       | `[]`                           |
 
 ### Persistence parameters
 

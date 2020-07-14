@@ -752,7 +752,7 @@ Compile all warnings into a single message, and call fail.
 {{- $nodeHostname := printf "%s-00.%s.%s.svc.%s:1234" $postgresqlFullname $postgresqlHeadlessServiceName $releaseNamespace $clusterDomain }}
 {{- if gt (len $nodeHostname) 128 -}}
 postgresql-ha: Nodes hostnames
-    PostgreSQL nodes hostnames exceeds the characters limit for Pgpool: 128.
+    PostgreSQL nodes hostnames ({{ $nodeHostname }}) exceeds the characters limit for Pgpool: 128.
     Consider using a shorter release name or namespace.
 {{- end -}}
 {{- end -}}

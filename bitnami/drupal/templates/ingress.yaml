@@ -2,18 +2,20 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "drupal.fullname" . }}
-  labels:
-    app: {{ template "drupal.fullname" . }}
-    chart: {{ template "drupal.chart" . }}
-    release: {{ $.Release.Name }}
-    heritage: {{ $.Release.Service }}
+  name: {{ include "drupal.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
+    {{- if .Values.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
-    {{- end }}
-    {{- range $key, $value := .Values.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   rules:
@@ -23,7 +25,7 @@ spec:
         paths:
         - path: /
           backend:
-            serviceName: {{ template "drupal.fullname" $ }}
+            serviceName: {{ include "drupal.fullname" $ }}
             servicePort: http
     {{- end }}
     {{- range .Values.ingress.hosts }}
@@ -32,7 +34,7 @@ spec:
         paths:
         - path: {{ default "/" .path }}
           backend:
-            serviceName: "{{ template "drupal.fullname" $ }}"
+            serviceName: {{ include "drupal.fullname" $ }}
             servicePort: http
     {{- end }}
   {{- if .Values.ingress.tls }}
