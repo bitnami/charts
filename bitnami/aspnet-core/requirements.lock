@@ -1,0 +1,6 @@
+dependencies:
+- name: common
+  repository: https://charts.trials.tac.bitnami.com/dell-emc
+  version: 0.3.1
+digest: sha256:84520355656b63ff12259cb6bb6cfdf07118e0ae47c6f6d15515cbf113f0bcb4
+generated: "2020-07-14T11:40:10.600651+02:00"

@@ -2,13 +2,13 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "dotnet-core-kestrel.fullname" . }}
-  labels: {{- include "dotnet-core-kestrel.labels" . | nindent 4 }}
+  name: {{ include "aspnet-core.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: {{ template "dotnet-core-kestrel.fullname" . }}
+    name: {{ include "aspnet-core.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
