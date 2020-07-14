@@ -1,21 +1,23 @@
 apiVersion: v1
 name: drupal
-version: 7.0.2
-appVersion: 9.0.1
+version: 8.0.1
+appVersion: 9.0.2
 description: One of the most versatile open source content management systems.
 keywords:
-- drupal
-- cms
-- blog
-- http
-- web
-- application
-- php
+  - drupal
+  - cms
+  - blog
+  - http
+  - web
+  - application
+  - php
 home: http://www.drupal.org/
 icon: https://bitnami.com/assets/stacks/drupal/img/drupal-stack-220x234.png
 sources:
-- https://github.com/bitnami/bitnami-docker-drupal
+  - https://github.com/bitnami/bitnami-docker-drupal
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+  - name: Bitnami
+    email: containers@bitnami.com
 engine: gotpl
+annotations:
+  category: CMS

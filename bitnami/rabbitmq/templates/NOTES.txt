@@ -4,8 +4,8 @@
 Credentials:
 
     echo "Username      : {{ .Values.auth.username }}"
-    echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
-    echo "ErLang Cookie : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
+    echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretPasswordName" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
+    echo "ErLang Cookie : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretErlangName" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
 
 RabbitMQ can be accessed within the cluster on port {{ .Values.service.nodePort }} at {{ include "rabbitmq.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clustering.k8s_domain }}
 

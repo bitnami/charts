@@ -63,6 +63,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `nameOverride`                                    | String to partially override kafka.fullname                                                                                       | `nil`                                                   |
 | `fullnameOverride`                                | String to fully override kafka.fullname                                                                                           | `nil`                                                   |
 | `clusterDomain`                                   | Default Kubernetes cluster domain                                                                                                 | `cluster.local`                                         |
+| `extraDeploy`                                     | Array of extra objects to deploy with the release                                                                                 | `nil` (evaluated as a template)                         |
 
 ### Kafka parameters
 
@@ -78,7 +79,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `existingConfigmap`                               | Name of existing ConfigMap with Kafka configuration                                                                               | `nil`                                                   |
 | `log4j`                                           | An optional log4j.properties file to overwrite the default of the Kafka brokers.                                                  | `nil`                                                   |
 | `existingLog4jConfigMap`                          | The name of an existing ConfigMap containing a log4j.properties file.                                                             | `nil`                                                   |
-| `brokerId`                                        | ID of the Kafka node                                                                                                              | `nil`                                                   |
 | `heapOpts`                                        | Kafka's Java Heap size                                                                                                            | `-Xmx1024m -Xms1024m`                                   |
 | `deleteTopicEnable`                               | Switch to enable topic deletion or not                                                                                            | `false`                                                 |
 | `autoCreateTopicsEnable`                          | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments | `false`                                                 |
@@ -529,6 +529,83 @@ sidecars:
     ports:
       - name: portname
        containerPort: 1234
+```
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connnect Kafka with MongoDB:
+
+```yaml
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: |-
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: {{ include "kafka.fullname" . }}-connect
+      labels: {{- include "kafka.labels" . | nindent 6 }}
+        app.kubernetes.io/component: connector
+    spec:
+      replicas: 1
+      selector:
+        matchLabels: {{- include "kafka.matchLabels" . | nindent 8 }}
+          app.kubernetes.io/component: connector
+      template:
+        metadata:
+          labels: {{- include "kafka.labels" . | nindent 10 }}
+            app.kubernetes.io/component: connector
+        spec:
+          containers:
+            - name: connect
+              image: KAFKA-CONNECT-IMAGE
+              imagePullPolicy: IfNotPresent
+              ports:
+                - name: connector
+                  containerPort: 8083
+              volumeMounts:
+                - name: configuration
+                  mountPath: /opt/bitnami/kafka/config
+            volumes:
+              - name: configuration
+                configMap:
+                  name: {{ include "kafka.fullname" . }}-connect
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ include "kafka.fullname" . }}-connect
+      labels: {{- include "kafka.labels" . | nindent 6 }}
+        app.kubernetes.io/component: connector
+    data:
+      connect-standalone.properties: |-
+        bootstrap.servers = {{ include "kafka.fullname" . }}-0.{{ include "kafka.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
+        ...
+      mongodb.properties: |-
+        connection.uri=mongodb://root:password@mongodb-hostname:27017
+        ...
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{ include "kafka.fullname" . }}-connect
+      labels: {{- include "kafka.labels" . | nindent 6 }}
+        app.kubernetes.io/component: connector
+    spec:
+      ports:
+        - protocol: TCP
+          port: 8083
+          targetPort: connector
+      selector: {{- include "kafka.matchLabels" . | nindent 6 }}
+        app.kubernetes.io/component: connector
+```
+
+You can create the Kafka Connect image using the Dockerfile below:
+
+```Dockerfile
+FROM bitnami/kafka:latest
+# Download MongoDB Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
+RUN mkdir -p /opt/bitnami/kafka/plugins && \
+    cd /opt/bitnami/kafka/plugins && \
+    curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar
+CMD /opt/bitnami/kafka/bin/connect-standalone.sh /opt/bitnami/kafka/config/connect-standalone.properties /opt/bitnami/kafka/config/mongo.properties
 ```
 
 ## Persistence

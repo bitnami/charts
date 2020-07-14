@@ -4,6 +4,7 @@ kind: Ingress
 metadata:
   name: {{ include "grafana.fullname" . }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
