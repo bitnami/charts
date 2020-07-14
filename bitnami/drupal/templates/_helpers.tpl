@@ -63,16 +63,3 @@ Return the appropriate apiVersion for deployment.
 {{- include "common.warnings.rollingTag" .Values.image -}}
 {{- include "common.warnings.rollingTag" .Values.metrics.image -}}
 {{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "drupal.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "drupal.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
-{{- end -}}
