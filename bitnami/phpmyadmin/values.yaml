@@ -119,6 +119,21 @@ ingress:
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       tlsSecret: phpmyadmin.local-tls
 
+## An array to add extra env vars to configure phpMyAdmin
+## For example:
+# extraEnvVars:
+# - name: PHP_UPLOAD_MAX_FILESIZE
+#   value: "80M"
+extraEnvVars: {}
+
+## Name of a ConfigMap containing extra env vars
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
 ## phpMyAdmin pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
