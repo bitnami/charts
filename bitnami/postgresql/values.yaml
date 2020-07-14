@@ -477,6 +477,33 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
+##
+## TLS configuration
+##
+tls:
+  # Enable TLS traffic
+  enabled: false
+  #
+  # Whether to use the server's TLS cipher preferences rather than the client's.
+  preferServerCiphers: true
+  #
+  # Name of the Secret that contains the certificates
+  certificatesSecret: ""
+  #
+  # Certificate filename
+  certFilename: ""
+  #
+  # Certificate Key filename
+  certKeyFilename: ""
+  #
+  # CA Certificate filename
+  # If provided, PostgreSQL will authenticate TLS/SSL clients by requesting them a certificate
+  # ref: https://www.postgresql.org/docs/9.6/auth-methods.html
+  certCAFilename:
+  #
+  # File containing a Certificate Revocation List
+  crlFilename:
+
 ## Configure metrics exporter
 ##
 metrics:
