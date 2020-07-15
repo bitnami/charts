@@ -199,6 +199,12 @@ readinessProbe:
 customLivenessProbe: {}
 customReadinessProbe: {}
 
+## EJBCA Container ports to open
+##
+containerPorts:
+  http: 8080
+  https: 8443
+
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
 ##
