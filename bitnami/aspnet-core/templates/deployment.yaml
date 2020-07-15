@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   name: {{ include "aspnet-core.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -19,7 +25,7 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
     spec:
-      {{- include "aspnet-core.imagePullSecrets" . | indent 6 }}
+      {{- include "aspnet-core.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "aspnet-core.serviceAccountName" . }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -46,7 +52,7 @@ spec:
         {{- if .Values.appFromExternalRepo.enabled }}
         - name: clone-repository
           image: {{ include "aspnet-core.git.image" . }}
-          imagePullPolicy: {{ .Values.appFromExternalRepo.clone.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.appFromExternalRepo.clone.image.pullPolicy | quote }}
           command:
             - /bin/bash
             - -ec
@@ -57,7 +63,7 @@ spec:
               mountPath: /repo
         - name: dotnet-publish
           image: {{ include "aspnet-core.sdk.image" . }}
-          imagePullPolicy: {{ .Values.appFromExternalRepo.publish.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.appFromExternalRepo.publish.image.pullPolicy | quote }}
           workingDir: /repo
           command:
             - /bin/bash
@@ -82,6 +88,9 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
             runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           workingDir: /app
           command:

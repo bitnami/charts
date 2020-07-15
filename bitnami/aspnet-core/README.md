@@ -63,6 +63,9 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `nameOverride`                          | String to partially override aspnet-core.fullname          | `nil`                                                   |
 | `fullnameOverride`                      | String to fully override aspnet-core.fullname              | `nil`                                                   |
 | `clusterDomain`                         | Default Kubernetes cluster domain                          | `cluster.local`                                         |
+| `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
+| `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
+| `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
 
 ### ASP.NET Core parameters
 
@@ -73,7 +76,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `image.tag`                             | ASP.NET Core image tag                                                                   | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                      | ASP.NET Core image pull policy                                                           | `IfNotPresent`                                          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                         | `[]` (does not add image pull secrets to deployed pods) |
-| `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |
+| `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |a
 | `args`                                  | Override default container args (useful when using custom images)                        | `nil`                                                   |
 | `bindURLs`                              | URLs to bind                                                                             | `http://+:8080`                                         |
 | `extraEnvVars`                          | Extra environment variables to be set on ASP.NET Core container                          | `{}`                                                    |
@@ -96,6 +99,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `resources.limits`                      | The resources limits for the ASP.NET Core container                                      | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the ASP.NET Core container                                   | `{}`                                                    |
 | `podAnnotations`                        | Annotations for ASP.NET Core pods                                                        | `{}`                                                    |
+| `lifecycleHooks`                        | LifecycleHooks to set additional configuration at startup.                               | `{}` (evaluated as a template)                          |
 | `livenessProbe`                         | Liveness probe configuration for ASP.NET Core                                            | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for ASP.NET Core                                           | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
@@ -132,37 +136,40 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `appFromExternalRepo.publish.image.pullSecrets`   | Specify docker-registry secret names as an array                               | `[]` (does not add image pull secrets to deployed pods)            |
 | `appFromExternalRepo.publish.subFolder`           | Sub folder under the Git repository containin the ASP.NET Core app             | `spnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
 | `appFromExternalRepo.publish.extraFlags`          | Extra flags to be appended to "dotnet publish" command                         | `[]`                                                               |
+| `appFromExternalRepo.startCommand`                | Command used to start ASP.NET Core app                                         | `["dotnet", "KestrelSample.dll"]`                                  |
 
 ### Exposure parameters
 
-| Parameter                               | Description                                                         | Default                                                 |
-|-----------------------------------------|---------------------------------------------------------------------|---------------------------------------------------------|
-| `service.type`                          | Kubernetes service type                                             | `ClusterIP`                                             |
-| `service.port`                          | Service HTTP port                                                   | `8081`                                                  |
-| `service.nodePort`                      | Service HTTP node port                                              | `nil`                                                   |
-| `service.clusterIP`                     | ASP.NET Core service clusterIP IP                                   | `None`                                                  |
-| `service.externalTrafficPolicy`         | Enable client source IP preservation                                | `Cluster`                                               |
-| `service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                    | `nil`                                                   |
-| `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer               | `[]`                                                    |
-| `service.annotations`                   | Annotations for ASP.NET Core service                                | `{}`                                                    |
-| `ingress.enabled`                       | Enable ingress controller resource                                  | `false`                                                 |
-| `ingress.certManager`                   | Add annotations for cert-manager                                    | `false`                                                 |
-| `ingress.hostname`                      | Default host for the ingress resource                               | `aspnet-core.local`                                     |
-| `ingress.annotations`                   | Ingress annotations                                                 | `[]`                                                    |
-| `ingress.extraHosts[0].name`            | Additional hostnames to be covered                                  | `nil`                                                   |
-| `ingress.extraHosts[0].path`            | Additional hostnames to be covered                                  | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered            | `nil`                                                   |
-| `ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered            | `nil`                                                   |
-| `ingress.secrets[0].name`               | TLS Secret Name                                                     | `nil`                                                   |
-| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                              | `nil`                                                   |
-| `ingress.secrets[0].key`                | TLS Secret Key                                                      | `nil`                                                   |
+| Parameter                               | Description                                                                              | Default                                                 |
+|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `service.type`                          | Kubernetes service type                                                                  | `ClusterIP`                                             |
+| `service.port`                          | Service HTTP port                                                                        | `8081`                                                  |
+| `service.nodePort`                      | Service HTTP node port                                                                   | `nil`                                                   |
+| `service.clusterIP`                     | ASP.NET Core service clusterIP IP                                                        | `None`                                                  |
+| `service.externalTrafficPolicy`         | Enable client source IP preservation                                                     | `Cluster`                                               |
+| `service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                         | `nil`                                                   |
+| `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                    | `[]`                                                    |
+| `service.annotations`                   | Annotations for ASP.NET Core service                                                     | `{}`                                                    |
+| `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
+| `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
+| `ingress.hostname`                      | Default host for the ingress resource                                                    | `aspnet-core.local`                                     |
+| `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |
+| `ingress.annotations`                   | Ingress annotations                                                                      | `[]`                                                    |
+| `ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                       | `nil`                                                   |
+| `ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                       | `nil`                                                   |
+| `ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
+| `ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
+| `ingress.secrets[0].name`               | TLS Secret Name                                                                          | `nil`                                                   |
+| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                   | `nil`                                                   |
+| `ingress.secrets[0].key`                | TLS Secret Key                                                                           | `nil`                                                   |
 
 ### RBAC parameters
 
 | Parameter                               | Description                                                         | Default                                                 |
 |-----------------------------------------|---------------------------------------------------------------------|---------------------------------------------------------|
 | `serviceAccount.create`                 | Enable the creation of a ServiceAccount for ASP.NET Core pods       | `true`                                                  |
-| `serviceAccount.name`                   | Name of the created serviceAccount                                  | Generated using the `aspnet-core.fullname` template     |
+| `serviceAccount.name`                   | Name of the created ServiceAccount                                  | Generated using the `aspnet-core.fullname` template     |
+| `serviceAccount.annotations`            | Annotations for ASP.NET Core ServiceAccount                         | `{}`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -280,6 +287,38 @@ initContainers:
     ports:
       - name: portname
         containerPort: 1234
+```
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a ConfigMap including some app's configuration, and it will mount it in the ASP.NET Core app's container:
+
+```yaml
+extraDeploy: |-
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: aspnet-core-configuration
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
+        {{- end }}
+      {{- if .Values.commonAnnotations }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+      {{- end }}
+    data:
+      appsettings.json: |-
+        {
+          "AllowedHosts": "*"
+        }
+extraVolumeMounts:
+  - name: configuration
+    mountPath: /app/config/
+    readOnly: true
+extraVolumes:
+  - name: configuration
+    configMap:
+      name: aspnet-core-configuration
 ```
 
 ### Ingress

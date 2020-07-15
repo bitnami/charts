@@ -38,6 +38,14 @@ image:
 ##
 clusterDomain: cluster.local
 
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
 ## Enable to download/build ASP.NET Core app from external git repository.
 ## Disable it if your docker image already includes your application
 ##
@@ -150,6 +158,15 @@ tolerations: []
 ##
 podAnnotations: {}
 
+## ASP.NET Core pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
+## lifecycleHooks for the ASP.NET Core container to automate configuration before or after startup.
+##
+lifecycleHooks: {}
+
 ## ASP.NET Core pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
@@ -252,6 +269,10 @@ initContainers: {}
 ##
 sidecars: {}
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## ASP.NET Core Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
@@ -268,8 +289,8 @@ pdb:
 ##
 autoscaling:
   enabled: false
-  # minReplicas: 1
-  # maxReplicas: 11
+  minReplicas: 1
+  maxReplicas: 11
   # targetCPU: 50
   # targetMemory: 50
 
