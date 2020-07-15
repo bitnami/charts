@@ -75,6 +75,10 @@ spec:
               value: {{ template "ejbca.databaseName" . }}
             - name: EJBCA_DATABASE_USERNAME
               value: {{ template "ejbca.databaseUsername" . }}
+            - name: EJBCA_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
+            - name: EJBCA_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
             {{- if .Values.ejbcaKeystoreExistingSecret }}
             - name: EJBCA_SERVER_CERT_FILE
               value: /opt/bitnami/ejbca/mounted-jks/keystore.jks
@@ -98,9 +102,9 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.containerPorts.http }}
             - name: https
-              containerPort: 8443
+              containerPort: {{ .Values.containerPorts.https }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
