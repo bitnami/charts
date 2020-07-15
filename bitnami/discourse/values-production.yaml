@@ -49,12 +49,12 @@ discourse:
   ## Discourse host to create application URLs. The port will be automatilly included.
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
   ##
-  host: ""
+  host: ''
 
   ## Discourse site name
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
-  siteName: "My Site!"
+  siteName: 'My Site!'
 
   ## User of the application
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
@@ -163,7 +163,6 @@ discourse:
   skipInstall: false
 
 sidekiq:
-
   containerSecurityContext: {}
   ## capabilities:
   ##   drop:
@@ -175,11 +174,11 @@ sidekiq:
 
   ## Custom command to override image cmd
   ##
-  command: ["/app-entrypoint.sh"]
+  command: ['/app-entrypoint.sh']
 
   ## Custom args for the custom commad:
   ##
-  args: ["nami", "start", "--foreground", "discourse-sidekiq"]
+  args: ['nami', 'start', '--foreground', 'discourse-sidekiq']
 
   ## Sidekiq resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -352,7 +351,7 @@ service:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##
   nodePorts:
-    http: ""
+    http: ''
 
 ## Ingress paramaters
 ##
@@ -464,7 +463,7 @@ postgresql:
   ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   ##
-  postgresqlPostgresPassword: "bitnami"
+  postgresqlPostgresPassword: 'bitnami'
 
   ## Create a database
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
@@ -482,7 +481,7 @@ postgresql:
 externalDatabase:
   ## Database host
   ##
-  host: ""
+  host: ''
   ## Database port
   ##
   port: 5432
@@ -491,10 +490,10 @@ externalDatabase:
   user: bn_discourse
   ## Database password
   ##
-  password:
+  password: ''
   ## Root "postgres" password (used in the installation stage)
   ##
-  postgresqlPostgresPassword:
+  postgresqlPostgresPassword: ''
   ## Database name
   ##
   database: bitnami_application
@@ -534,10 +533,10 @@ redis:
 externalRedis:
   ## Redis host
   ##
-  host: ""
+  host: ''
   ## Redis port
   ##
   port: 6379
   ## Redis password for authentication
   ##
-  password: ""
+  password: ''
