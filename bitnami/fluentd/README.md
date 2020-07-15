@@ -48,7 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the kibana chart and their default values.
+The following tables lists the configurable parameters of the fluentd chart and their default values.
 
 | Parameter                                       | Description                                                                                                    | Default                                                                                                 |
 |-------------------------------------------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
