@@ -247,7 +247,7 @@ data:
     exec 3>&1
     exec 4>&2
 
-    if [[ "${BITNAMI_SNAPSHOT_DEBUG}" = true ]] | [[ "${BITNAMI_DEBUG}" = true ]]; then
+    if [[ "${BITNAMI_SNAPSHOT_DEBUG}" = true ]] || [[ "${BITNAMI_DEBUG}" = true ]]; then
       echo "==> Bash debug is on"
       set -x
     else
