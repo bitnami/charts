@@ -308,6 +308,7 @@ initContainers:
 ##
 configuration:
   server:
+    basePath: ""
     rewriteBasePath: false
 
 ## Prometheus metrics (requires the kibana-prometheus-exporter plugin)
