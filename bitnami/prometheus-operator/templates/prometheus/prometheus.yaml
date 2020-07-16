@@ -212,6 +212,9 @@ spec:
       volumeMounts:
         - mountPath: /prometheus
           name: prometheus-{{ template "prometheus-operator.prometheus.fullname" . }}-db
+          {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default true) }}
+          subPath: prometheus-db
+          {{- end }}
     {{- end }}
     {{- if .Values.prometheus.containers }}
     {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}
