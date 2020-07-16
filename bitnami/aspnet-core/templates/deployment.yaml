@@ -152,9 +152,9 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if or .Values.appFromExternalRepo.enabled .Values.extraVolumeMounts }}
+          {{- if or .Values.appFromExternalRepo.enabled .Values.appFromExistingPVC.enabled .Values.extraVolumeMounts }}
           volumeMounts:
-            {{- if .Values.appFromExternalRepo.enabled }}
+            {{- if or .Values.appFromExternalRepo.enabled .Values.appFromExistingPVC.enabled }}
             - name: app
               mountPath: /app
             {{- end }}
@@ -165,15 +165,20 @@ spec:
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.appFromExternalRepo.enabled .Values.extraVolumes }}
+      {{- if or .Values.appFromExternalRepo.enabled .Values.appFromExistingPVC.enabled .Values.extraVolumes }}
       volumes:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.appFromExternalRepo.enabled }}
+        {{- if or .Values.appFromExternalRepo.enabled .Values.appFromExistingPVC.enabled }}
         - name: app
+        {{- if .Values.appFromExistingPVC.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ printf "%s" (tpl (default "" .Values.appFromExistingPVC.existingClaim) .) }}
+        {{- else }}
           emptyDir: {}
         - name: repo
           emptyDir: {}
-        {{- end }}        
+        {{- end }}
+        {{- end }}
       {{- end }}

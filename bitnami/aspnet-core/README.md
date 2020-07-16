@@ -117,7 +117,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                        | `nil`                                                   |
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                     | `nil`                                                   |
 
-### External ASP.NET Core application parameters
+### Custom ASP.NET Core application parameters
 
 | Parameter                                         | Description                                                                    | Default                                                            |
 |---------------------------------------------------|--------------------------------------------------------------------------------|--------------------------------------------------------------------|
@@ -137,6 +137,8 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `appFromExternalRepo.publish.subFolder`           | Sub folder under the Git repository containin the ASP.NET Core app             | `spnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
 | `appFromExternalRepo.publish.extraFlags`          | Extra flags to be appended to "dotnet publish" command                         | `[]`                                                               |
 | `appFromExternalRepo.startCommand`                | Command used to start ASP.NET Core app                                         | `["dotnet", "KestrelSample.dll"]`                                  |
+| `appFromExistingPVC.enabled`                      | Enable mounting your ASP.NET Core app from an existing PVC                     | `false`                                                            |
+| `appFromExistingPVC.existingClaim`                | A existing Persistent Volume Claim containing your ASP.NET Core app            | `nil`                                                              |
 
 ### Exposure parameters
 
@@ -215,7 +217,32 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Deploying your custom ASP.NET Core application
 
-The ASP.NET Core chart allows you to deploy a custom application cloning it from a GIT repository. This is done using two different init containers:
+The ASP.NET Core chart allows you to deploy a custom application using one of the following methods:
+
+- Using a Docker image containing your ASP.NET Core application ready to be executed.
+- Cloning your ASP.NET Core application code from a GIT repository.
+- Mounting your ASP.NET Core application from an existing PVC
+
+#### Using a Docker image containing your ASP.NET Core application ready to be executed
+
+You can build your own Docker image containing your ASP.NET Core application ready to be executed. To do so, overwrite the default image setting the `image.*` parameters, and set your custom command and arguments setting the `command` and `args` parameters:
+
+```console
+appFromExternalRepo.enabled=false
+image.registry=docker.io
+image.repository=your-image
+image.tag=your-tag
+command=[command]
+args=[arguments]
+```
+
+Find more information about the process to create your own image in the guide below:
+
+- [Develop and Publish an ASP.NET Web Application using Bitnami Containers](https://docs.bitnami.com/tutorials/develop-aspnet-application-bitnami-containers).
+
+#### Cloning your ASP.NET Core application code from a GIT repository
+
+This is done using two different init containers:
 
 - `clone-repository`: uses the [Bitnami GIT Image](https://github.com/bitnami/bitnami-docker-git) to download the repository.
 - `dotnet-publish`: uses the [Bitnami .Net SDK Image](https://github.com/bitnami/bitnami-docker-dotnet-sdk) to build/publish the ASP.NET Core application.
@@ -235,20 +262,16 @@ appFromExternalRepo.startCommand[0]=dotnet
 appFromExternalRepo.startCommand[1]=KestrelSample.dll
 ```
 
-As an alternative, you can build your own Docker image containing your ASP.NET Core application ready to be executed. To do so, overwrite the default image setting the `image.*` parameters, and set your custom command and arguments setting the `command` and `args` parameters:
+#### Mounting your ASP.NET Core application from an existing PVC
+
+If you previously created a PVC with your application code ready to be executed, you can mount it in the ASP.NET Core container setting the `appFromExistingPVC.enabled` parameter to `true`. Then, specify the name of yur existing PVC setting the `appFromExistingPVC.existingClaim` parameter.
+
+For example, if you created a PVC named `my-custom-apsnet-core-app` containing your applicaiton, use the parameters below:
 
 ```console
-appFromExternalRepo.enabled=false
-image.registry=docker.io
-image.repository=your-image
-image.tag=your-tag
-command=[command]
-args=[arguments]
+appFromExistingPVC.enabled=true
+appFromExistingPVC.existingClaim=my-custom-apsnet-core-app
 ```
-
-Find more information about the process to create your own image in the guide below:
-
-- [Develop and Publish an ASP.NET Web Application using Bitnami Containers](https://docs.bitnami.com/tutorials/develop-aspnet-application-bitnami-containers).
 
 ### Adding extra environment variables
 
