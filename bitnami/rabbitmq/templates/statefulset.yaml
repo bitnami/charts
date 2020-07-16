@@ -112,7 +112,7 @@ spec:
             - name: K8S_ADDRESS_TYPE
               value: {{ .Values.clustering.addressType }}
             - name: RABBITMQ_FORCE_BOOT
-              value: {{ ternary "true" "false" .Values.clustering.forceBoot | quote }}
+              value: {{ ternary "yes" "no" .Values.clustering.forceBoot | quote }}
             {{- if (eq "hostname" .Values.clustering.addressType) }}
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
@@ -122,6 +122,8 @@ spec:
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME)"
             {{- end }}
+            - name: RABBITMQ_MNESIA_DIR
+              value: "/bitnami/rabbitmq/mnesia/$(RABBITMQ_NODE_NAME)"
             - name: RABBITMQ_LDAP_ENABLE
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
