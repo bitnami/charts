@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/component: influxdb
 spec:
   serviceName: {{ include "influxdb.fullname" . }}-headless
+  podManagementPolicy: {{ .Values.influxdb.podManangementPolicy }}
   replicas: {{ .Values.influxdb.replicaCount }}
   updateStrategy:
     type: {{ .Values.influxdb.updateStrategy }}

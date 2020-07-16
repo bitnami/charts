@@ -145,6 +145,11 @@ influxdb:
   ##
   updateStrategy: RollingUpdate
 
+  ## Pod Management Policy can be OrderedReady ot Parallel
+  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#parallel-pod-management
+  ##
+  podManagementPolicy: OrderedReady
+
   ## Pod AntiAffinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
