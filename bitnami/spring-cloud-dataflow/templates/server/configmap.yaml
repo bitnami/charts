@@ -9,7 +9,7 @@ data:
   application.yaml: |-
     spring:
       cloud:
-        dataflow:    
+        dataflow:
           {{- if .Values.server.configuration.batchEnabled }}
           task:
             platform:
@@ -17,15 +17,15 @@ data:
                 accounts:
                   {{ .Values.server.configuration.accountName }}:
                     {{- if .Values.deployer.resources.limits }}
-                    limits: {{- toYaml .Values.deployer.resources.limits | nindent 22 }}
+                    limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.requests }}
-                    requests: {{- toYaml .Values.deployer.resources.requests | nindent 22 }}
+                    requests: {{- toYaml .Values.deployer.resources.requests | trim | nindent 22 }}
                     {{- end }}
+          {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:
             registry-configurations: {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration.containerRegistries "context" $) | nindent 14 }}
-          {{- end }}
           {{- end }}
           {{- if .Values.metrics.enabled }}
           {{- $fullname := include "scdf.fullname" . }}
@@ -56,16 +56,20 @@ data:
                         port: {{ $rsocketPort }}
             {{- end }}
           {{- end }}
+      {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
+      {{- if $hibernateDialect }}
       jpa:
         properties:
           hibernate:
-            dialect: org.hibernate.dialect.MariaDB102Dialect
+            dialect: {{ $hibernateDialect }}
+      {{- end }}
       datasource:
         {{- $databaseScheme := include "scdf.database.scheme" .  }}
         {{- $databaseHost := include "scdf.database.host" .  }}
         {{- $databasePort := include "scdf.database.port" .  }}
         {{- $databaseName := include "scdf.database.server.name" .  }}
-        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}?useMysqlMetadata=true'
+        {{- $jdbcParameters := include "scdf.database.jdbc.parameters" .  }}
+        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
         password: ${mariadb-password}

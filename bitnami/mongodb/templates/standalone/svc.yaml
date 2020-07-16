@@ -24,7 +24,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - name: tcp-mongodb
+    - name: {{ .Values.service.portName }}
       port: {{ .Values.service.port }}
       targetPort: mongodb
       {{- if and (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) .Values.service.nodePort }}

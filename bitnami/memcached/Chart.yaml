@@ -1,6 +1,6 @@
 apiVersion: v1
 name: memcached
-version: 4.2.19
+version: 4.2.20
 appVersion: 1.6.6
 description: Chart for Memcached
 keywords:
@@ -14,3 +14,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/memcached/img/memcached-stack-110x117.png
+annotations:
+  category: Infrastructure

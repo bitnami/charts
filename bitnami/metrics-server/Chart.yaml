@@ -15,3 +15,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/metrics-server/img/metrics-server-stack-110x117.png
+annotations:
+  category: Analytics

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 7.0.5-debian-10-r0
+  tag: 7.0.6-debian-10-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -268,6 +268,20 @@ persistence:
 ##
 sidecars: {}
 
+## Add extra volumes to the Grafana pod
+## Example:
+## extraVolumes:
+##   - name: my-volume
+##     emptyDir: {}
+extraVolumes: []
+
+## Add extra volume mounts to the grafana pod
+## Example:
+## extraVolumeMounts:
+##   - name: my-volume
+##     mountPath: /opt/bitnami/grafana/my-stuff
+extraVolumeMounts: []
+
 ## Service parameters
 ##
 service:
@@ -385,7 +399,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 2.0.0-debian-10-r10
+    tag: 2.0.0-debian-10-r29
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

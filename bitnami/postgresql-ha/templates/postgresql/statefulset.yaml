@@ -220,10 +220,8 @@ spec:
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
-            {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            {{- end }}
             - name: hooks-scripts
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh

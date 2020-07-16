@@ -224,7 +224,7 @@ Validate values of MongoDB - number of replicas must be the same than LoadBalanc
 {{- define "mongodb.validateValues.loadBalancerIPsListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $loadBalancerListLength := len .Values.externalAccess.service.loadBalancerIPs }}
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled ) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerListLength ))  -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled ) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerListLength )) -}}
 mongodb: .Values.externalAccess.service.loadBalancerIPs
     Number of replicas and loadBalancerIPs array length must be the same.
 {{- end -}}
@@ -236,7 +236,7 @@ Validate values of MongoDB - number of replicas must be the same than NodePort l
 {{- define "mongodb.validateValues.nodePortListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "NodePort") (not (eq $replicaCount $nodePortListLength ))  -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "NodePort") (not (eq $replicaCount $nodePortListLength )) -}}
 mongodb: .Values.externalAccess.service.nodePorts
     Number of replicas and nodePorts array length must be the same.
 {{- end -}}

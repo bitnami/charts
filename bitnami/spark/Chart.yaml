@@ -13,3 +13,5 @@ maintainers:
 keywords:
   - apache
   - spark
+annotations:
+  category: Infrastructure

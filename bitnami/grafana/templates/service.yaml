@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: {{ include "grafana.fullname" . }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
   {{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
   annotations:
   {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}
@@ -31,3 +32,4 @@ spec:
       nodePort: null
       {{- end }}
   selector: {{- include "grafana.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana

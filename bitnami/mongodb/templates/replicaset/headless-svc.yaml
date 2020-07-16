@@ -14,7 +14,7 @@ spec:
   clusterIP: None
   publishNotReadyAddresses: true
   ports:
-    - name: tcp-mongodb
+    - name: {{ .Values.service.portName }}
       port: {{ .Values.service.port }}
       targetPort: mongodb
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
