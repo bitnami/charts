@@ -187,6 +187,12 @@ socketSendBufferBytes: 102400
 ##
 zookeeperConnectionTimeoutMs: 6000
 
+## Command and args for running the container. Use array form
+##
+command:
+  - /scripts/setup.sh
+args:
+
 ## All the parameters from the configuration file can be overwritten by using environment variables with this format: KAFKA_CFG_{KEY}
 ## ref: https://github.com/bitnami/bitnami-docker-kafka#configuration
 ## Example:

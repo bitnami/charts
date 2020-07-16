@@ -147,6 +147,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `pdb.create`                                      | Enable/disable a Pod Disruption Budget creation                                                                                   | `false`                                                 |
 | `pdb.minAvailable`                                | Minimum number/percentage of pods that should remain scheduled                                                                    | `nil`                                                   |
 | `pdb.maxUnavailable`                              | Maximum number/percentage of pods that may be made unavailable                                                                    | `1`                                                     |
+| `command`                                        | Override kafka container command                                                                         | `['/scripts/setup.sh']`  (evaluated as a template) |
+| `args`                                        | Override kafka container arguments                                                                             | `[]` (evaluated as a template) |
 | `sidecars`                                        | Attach additional sidecar containers to the Kafka pod                                                                             | `{}`                                                    |
 
 ### Exposure parameters

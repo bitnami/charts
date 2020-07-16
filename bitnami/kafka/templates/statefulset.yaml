@@ -124,8 +124,10 @@ spec:
         - name: kafka
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          command:
-            - /scripts/setup.sh
+          command: {{- include "kafka.tplValue" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- if .Values.args }}
+          args: {{- include "kafka.tplValue" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
