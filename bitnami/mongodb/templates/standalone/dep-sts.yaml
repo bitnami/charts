@@ -218,10 +218,10 @@ spec:
         - name: metrics
           image: {{ template "mongodb.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
+          {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
             runAsNonRoot: true
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
           command:
             - /bin/bash
@@ -231,7 +231,7 @@ spec:
               {{- if .Values.auth.enabled }}
               /bin/mongodb_exporter --mongodb.uri mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin {{ .Values.metrics.extraFlags }}
               {{- else }}
-              /bin/mongodb_exporter --mongodb.uri mongodb://root@localhost:27017/admin {{ .Values.metrics.extraFlags }}
+              /bin/mongodb_exporter --mongodb.uri mongodb://localhost:27017/admin {{ .Values.metrics.extraFlags }}
               {{- end }}
           env:
           {{- if .Values.auth.enabled }}
