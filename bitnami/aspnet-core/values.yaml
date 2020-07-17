@@ -47,7 +47,7 @@ commonLabels: {}
 commonAnnotations: {}
 
 ## Enable to download/build ASP.NET Core app from external git repository.
-## Do not enabled it if your docker image already includes your application
+## Do not enable it if your docker image already includes your application
 ##
 appFromExternalRepo:
   enabled: true
@@ -106,7 +106,7 @@ appFromExternalRepo:
   startCommand: ["dotnet", "KestrelSample.dll"]
 
 ## Enable mounting your ASP.NET Core app from an existing PVC
-## Do not enabled it if your docker image already includes your application
+## Do not enable it if your docker image already includes your application
 ##
 appFromExistingPVC:
   enabled: false
