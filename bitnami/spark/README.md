@@ -43,13 +43,7 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
 
-## Global parameters
-
-| Parameter                                 | Description                                                                                                | Default                                                      |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.namespaceOverride`                | Global string to override the release namespace                                                            | `nil`                                                        |
-
-## Common Parameters
+## Parameters
 
 The following tables lists the configurable parameters of the spark chart and their default values.
 
@@ -57,6 +51,7 @@ The following tables lists the configurable parameters of the spark chart and th
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                      | Global Docker image registry                                                                                                               | `nil`                                                   |
 | `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                                                                            | `[]` (does not add image pull secrets to deployed pods) |
+| `global.namespaceOverride`                | Global string to override the release namespace                                                            | `nil`                                                        |
 | `image.registry`                            | spark image registry                                                                                                                       | `docker.io`                                             |
 | `image.repository`                          | spark Image name                                                                                                                           | `bitnami/spark`                                         |
 | `image.tag`                                 | spark Image tag                                                                                                                            | `{TAG_NAME}`                                            |
