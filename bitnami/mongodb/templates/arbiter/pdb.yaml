@@ -1,3 +1,4 @@
+{{- if .Values.arbiter.enabled }}
 {{- if and (eq .Values.architecture "replicaset") .Values.arbiter.pdb.create }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
@@ -16,4 +17,5 @@ spec:
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: arbiter
+{{- end }}
 {{- end }}

@@ -241,6 +241,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 | Parameter                                 | Description                                                                                                | Default                                                      |
 |-------------------------------------------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `arbiter.enabled`                         | Enable deploying the arbiter                                                                               | `true`                                                       |
 | `arbiter.configuration`                   | Arbiter configuration file to be used                                                                      | `{}`                                                         |
 | `arbiter.existingConfigmap`               | Name of existing ConfigMap with Arbiter configuration                                                      | `nil`                                                        |
 | `arbiter.command`                         | Override default container command (useful when using custom images)                                       | `nil`                                                        |
