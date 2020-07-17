@@ -81,6 +81,10 @@ spec:
           {{- else if .Values.cluster.externalAccess.enabled }}
           args:
             - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/conf/redis.conf ]]; then
+                  cp  /opt/bitnami/redis/conf/redis-default.conf /opt/bitnami/redis/conf/redis.conf
+              fi
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
               pod_index="${pod_index[-1]}"
               ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
