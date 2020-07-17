@@ -43,7 +43,13 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
 
-## Parameters
+## Global parameters
+
+| Parameter                                 | Description                                                                                                | Default                                                      |
+|-------------------------------------------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `global.namespaceOverride`                | Global string to override the release namespace                                                            | `nil`                                                        |
+
+## Common Parameters
 
 The following tables lists the configurable parameters of the spark chart and their default values.
 

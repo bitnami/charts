@@ -5,6 +5,7 @@ metadata:
   labels: {{- include "spark.labels" . | nindent 4 }}
     app.kubernetes.io/component: worker-autoscaler
   name: {{ include "spark.fullname" . }}-autoscaler
+  namespace: {{ include "spark.namespace" . }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

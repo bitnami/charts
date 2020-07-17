@@ -3,6 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "spark.fullname" . }}-ingress
+  namespace: {{ include "spark.namespace" . }}
   labels: {{- include "spark.labels" . | nindent 4 }}
     app.kubernetes.io/component: ingress
   annotations:

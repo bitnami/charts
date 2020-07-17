@@ -6,6 +6,8 @@
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
+## Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
+#   namespaceOverride: my-global-namespace
 
 ## Bitnami Spark image version
 ## ref: https://hub.docker.com/r/bitnami/spark/tags/

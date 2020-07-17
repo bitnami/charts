@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "spark.fullname" . }}-master
+  namespace: {{ include "spark.namespace" . }}
   labels: {{- include "spark.labels" . | nindent 4 }}
     app.kubernetes.io/component: master
 spec:
