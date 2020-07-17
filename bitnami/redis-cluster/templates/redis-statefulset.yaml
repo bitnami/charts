@@ -82,8 +82,8 @@ spec:
           args:
             - |
               # Backwards compatibility change
-              if ! [[ -f /opt/bitnami/redis/conf/redis.conf ]]; then
-                  cp  /opt/bitnami/redis/conf/redis-default.conf /opt/bitnami/redis/conf/redis.conf
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp  /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
               fi
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
               pod_index="${pod_index[-1]}"
