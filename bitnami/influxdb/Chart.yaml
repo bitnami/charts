@@ -15,6 +15,6 @@ maintainers:
 name: influxdb
 sources:
   - https://github.com/bitnami/bitnami-docker-influxdb
-version: 0.6.1
+version: 0.6.2
 annotations:
   category: Database
