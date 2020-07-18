@@ -73,6 +73,10 @@ spec:
           {{- else if .Values.cluster.externalAccess.enabled }}
           args:
             - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp  /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
               ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
               export REDIS_NODES="${ips[@]}"
               /entrypoint.sh /run.sh
