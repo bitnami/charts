@@ -7,10 +7,7 @@ metadata:
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
   labels:
-    app: {{ template "postgresql.name" . }}
-    chart: {{ template "postgresql.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
     {{- toYaml .Values.metrics.serviceMonitor.additionalLabels | nindent 4 }}
     {{- end }}
@@ -32,6 +29,5 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      app: {{ template "postgresql.name" . }}
-      release: {{ .Release.Name }}
+    {{- include "common.labels.matchLabels" . | nindent 6 }}
 {{- end }}

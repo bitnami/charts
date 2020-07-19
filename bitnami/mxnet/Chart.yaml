@@ -1,6 +1,6 @@
 apiVersion: v1
 name: mxnet
-version: 1.4.20
+version: 1.4.22
 appVersion: 1.6.0
 description: A flexible and efficient library for deep learning
 keywords:
@@ -16,3 +16,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/mxnet/img/mxnet-stack-110x117.png
+annotations:
+  category: MachineLearning

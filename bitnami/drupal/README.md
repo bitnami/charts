@@ -48,69 +48,131 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the Drupal chart and their default values.
+The following table lists the configurable parameters of the Drupal chart and their default values per section/component:
 
-| Parameter                          | Description                                           | Default                                                      |
-|------------------------------------|-------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`             | Global Docker image registry                          | `nil`                                                        |
-| `global.imagePullSecrets`          | Global Docker registry secret names as an array       | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`              | Global storage class for dynamic provisioning         | `nil`                                                        |
-| `image.registry`                   | Drupal image registry                                 | `docker.io`                                                  |
-| `image.repository`                 | Drupal Image name                                     | `bitnami/drupal`                                             |
-| `image.tag`                        | Drupal Image tag                                      | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                 | Drupal image pull policy                              | `IfNotPresent`                                               |
-| `image.pullSecrets`                | Specify docker-registry secret names as an array      | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                     | String to partially override drupal.fullname template | `nil`                                                        |
-| `fullnameOverride`                 | String to fully override drupal.fullname template     | `nil`                                                        |
-| `drupalProfile`                    | Drupal installation profile                           | `standard`                                                   |
-| `drupalUsername`                   | User of the application                               | `user`                                                       |
-| `drupalPassword`                   | Application password                                  | _random 10 character long alphanumeric string_               |
-| `drupalEmail`                      | Admin email                                           | `user@example.com`                                           |
-| `allowEmptyPassword`               | Allow DB blank passwords                              | `yes`                                                        |
-| `extraVars`                        | Extra environment variables                           | `nil`                                                        |
-| `ingress.enabled`                  | Enable ingress controller resource                    | `false`                                                      |
-| `ingress.certManager`              | Add annotations for cert-manager                      | `false`                                                      |
-| `ingress.hostname`                 | Default host for the ingress resource                 | `drupal.local`                                               |
-| `ingress.annotations`              | Ingress annotations                                   | `{}`                                                         |
-| `ingress.hosts[0].name`            | Hostname to your Drupal installation                  | `nil`                                                        |
-| `ingress.hosts[0].path`            | Path within the url structure                         | `nil`                                                        |
-| `ingress.tls[0].hosts[0]`          | TLS hosts                                             | `nil`                                                        |
-| `ingress.tls[0].secretName`        | TLS Secret (certificates)                             | `nil`                                                        |
-| `ingress.secrets[0].name`          | TLS Secret Name                                       | `nil`                                                        |
-| `ingress.secrets[0].certificate`   | TLS Secret Certificate                                | `nil`                                                        |
-| `ingress.secrets[0].key`           | TLS Secret Key                                        | `nil`                                                        |
-| `externalDatabase.user`            | Existing username in the external db                  | `bn_drupal`                                                  |
-| `externalDatabase.password`        | Password for the above username                       | `nil`                                                        |
-| `externalDatabase.database`        | Name of the existing database                         | `bitnami_drupal`                                             |
-| `mariadb.enabled`                  | Whether to use the MariaDB chart                      | `true`                                                       |
-| `mariadb.rootUser.password`        | MariaDB admin password                                | `nil`                                                        |
-| `mariadb.db.name`                  | Database name to create                               | `bitnami_drupal`                                             |
-| `mariadb.db.user`                  | Database user to create                               | `bn_drupal`                                                  |
-| `mariadb.db.password`              | Password for the database                             | _random 10 character long alphanumeric string_               |
-| `service.type`                     | Kubernetes Service type                               | `LoadBalancer`                                               |
-| `service.port`                     | Service HTTP port                                     | `80`                                                         |
-| `service.httpsPort`                | Service HTTPS port                                    | `443`                                                        |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                  | `Cluster`                                                    |
-| `service.nodePorts.http`           | Kubernetes http node port                             | `""`                                                         |
-| `service.nodePorts.https`          | Kubernetes https node port                            | `""`                                                         |
-| `persistence.enabled`              | Enable persistence using PVC                          | `true`                                                       |
-| `persistence.drupal.storageClass`  | PVC Storage Class for Drupal volume                   | `nil` (uses alpha storage class annotation)                  |
-| `persistence.drupal.accessMode`    | PVC Access Mode for Drupal volume                     | `ReadWriteOnce`                                              |
-| `persistence.drupal.existingClaim` | An Existing PVC name                                  | `nil`                                                        |
-| `persistence.drupal.hostPath`      | Host mount path for Drupal volume                     | `nil` (will not mount to a host path)                        |
-| `persistence.drupal.size`          | PVC Storage Request for Drupal volume                 | `8Gi`                                                        |
-| `resources`                        | CPU/Memory resource requests/limits                   | Memory: `512Mi`, CPU: `300m`                                 |
-| `volumeMounts.drupal.mountPath`    | Drupal data volume mount path                         | `/bitnami/drupal`                                            |
-| `podAnnotations`                   | Pod annotations                                       | `{}`                                                         |
-| `affinity`                         | Map of node/pod affinities                            | `{}`                                                         |
-| `metrics.enabled`                  | Start a side-car prometheus exporter                  | `false`                                                      |
-| `metrics.image.registry`           | Apache exporter image registry                        | `docker.io`                                                  |
-| `metrics.image.repository`         | Apache exporter image name                            | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`                | Apache exporter image tag                             | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`         | Image pull policy                                     | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`        | Specify docker-registry secret names as an array      | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`           | Additional annotations for Metrics exporter pod       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`                | Exporter resource requests/limit                      | {}                                                           |
+### Global parameters
+
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+
+### Common parameters
+
+| Parameter           | Description                                                                  | Default                                                 |
+|---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`    | Drupal image registry                                                        | `docker.io`                                             |
+| `image.repository`  | Drupal Image name                                                            | `bitnami/drupal`                                        |
+| `image.tag`         | Drupal Image tag                                                             | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | Drupal image pull policy                                                     | `IfNotPresent`                                          |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
+| `nameOverride`      | String to partially override drupal.fullname template                        | `nil`                                                   |
+| `fullnameOverride`  | String to fully override drupal.fullname template                            | `nil`                                                   |
+| `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
+| `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+
+### Drupal parameters
+
+| Parameter                            | Description                                                                                                           | Default                                        |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                           |
+| `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
+| `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
+| `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
+| `containerSecurityContext.enabled`   | Enable Drupal containers' Security Context                                                                            | `true`                                         |
+| `containerSecurityContext.runAsUser` | Drupal containers' Security Context                                                                                   | `1001`                                         |
+| `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
+| `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                          |
+| `drupalEmail`                        | Admin email                                                                                                           | `user@example.com`                             |
+| `drupalPassword`                     | Application password                                                                                                  | _random 10 character long alphanumeric string_ |
+| `drupalProfile`                      | Drupal installation profile                                                                                           | `standard`                                     |
+| `drupalUsername`                     | User of the application                                                                                               | `user`                                         |
+| `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                          |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                          |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                          |
+| `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                          |
+| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                          |
+| `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                          |
+| `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                          |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                             |
+| `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                       |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
+| `persistence.accessMode`             | PVC Access Mode for Drupal volume                                                                                     | `ReadWriteOnce`                                |
+| `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                         |
+| `persistence.existingClaim`          | An Existing PVC name                                                                                                  | `nil`                                          |
+| `persistence.hostPath`               | Host mount path for Drupal volume                                                                                     | `nil` (will not mount to a host path)          |
+| `persistence.size`                   | PVC Storage Request for Drupal volume                                                                                 | `8Gi`                                          |
+| `persistence.storageClass`           | PVC Storage Class for Drupal volume                                                                                   | `nil` (uses alpha storage class annotation)    |
+| `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
+| `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
+| `podSecurityContext.enabled`         | Enable Drupal pods' Security Context                                                                                  | `true`                                         |
+| `podSecurityContext.fsGroup`         | Drupal pods' group ID                                                                                                 | `1001`                                         |
+| `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                       |
+| `replicaCount`                       | Number of Drupal Pods to run                                                                                          | `1`                                            |
+| `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                   |
+| `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                          |
+| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
+| `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
+
+### Traffic Exposure Parameters
+
+| Parameter                        | Description                           | Default        |
+|----------------------------------|---------------------------------------|----------------|
+| `service.type`                   | Kubernetes Service type               | `LoadBalancer` |
+| `service.port`                   | Service HTTP port                     | `80`           |
+| `service.httpsPort`              | Service HTTPS port                    | `443`          |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`      |
+| `service.nodePorts.http`         | Kubernetes http node port             | `""`           |
+| `service.nodePorts.https`        | Kubernetes https node port            | `""`           |
+| `ingress.enabled`                | Enable ingress controller resource    | `false`        |
+| `ingress.certManager`            | Add annotations for cert-manager      | `false`        |
+| `ingress.hostname`               | Default host for the ingress resource | `drupal.local` |
+| `ingress.annotations`            | Ingress annotations                   | `{}`           |
+| `ingress.hosts[0].name`          | Hostname to your Drupal installation  | `nil`          |
+| `ingress.hosts[0].path`          | Path within the url structure         | `nil`          |
+| `ingress.tls[0].hosts[0]`        | TLS hosts                             | `nil`          |
+| `ingress.tls[0].secretName`      | TLS Secret (certificates)             | `nil`          |
+| `ingress.secrets[0].name`        | TLS Secret Name                       | `nil`          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                | `nil`          |
+| `ingress.secrets[0].key`         | TLS Secret Key                        | `nil`          |
+
+### Database parameters
+
+| Parameter                                  | Description                              | Default                                        |
+|--------------------------------------------|------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
+| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
+| `mariadb.db.name`                          | Database name to create                  | `bitnami_drupal`                               |
+| `mariadb.db.user`                          | Database user to create                  | `bn_drupal`                                    |
+| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
+| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
+| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
+| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
+| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
+| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
+| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
+| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                    | Existing username in the external db     | `bn_drupal`                                    |
+| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
+| `externalDatabase.database`                | Name of the existing database            | `bitnami_drupal`                               |
+| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
+| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+
+### Metrics parameters
+
+| Parameter                   | Description                                      | Default                                                      |
+|-----------------------------|--------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`           | Start a side-car prometheus exporter             | `false`                                                      |
+| `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`                                                  |
+| `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`         | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`         | Exporter resource requests/limit                 | {}                                                           |
 
 The above parameters map to the env variables defined in [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal) image documentation.
 
@@ -160,7 +222,7 @@ imagePullSecrets:
 
 ## Persistence
 
-The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image stores the Drupal data at the `/bitnami/drupal` path of the container. If you wish to override the `image` value, and your image stores this data in different path, you may specify these paths with `volumeMounts.drupal.mountPath`.
+The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image stores the Drupal data at the `/bitnami/drupal` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -172,7 +234,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
 ```bash
-$ helm install my-release --set persistence.drupal.existingClaim=PVC_NAME bitnami/drupal
+$ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/drupal
 ```
 
 ### Host path
@@ -188,13 +250,26 @@ $ helm install my-release --set persistence.drupal.existingClaim=PVC_NAME bitnam
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.drupal.hostPath=/PATH/TO/HOST/MOUNT bitnami/drupal
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/drupal
     ```
 
     This will mount the `drupal-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
 1. Because the container cannot control the host machine’s directory permissions, you must set the Drupal file directory permissions yourself and disable or clear Drupal cache. See Drupal Core’s [INSTALL.txt](http://cgit.drupalcode.org/drupal/tree/core/INSTALL.txt?h=8.3.x#n152) for setting file permissions, and see [Drupal handbook page](https://www.drupal.org/node/2598914) to disable the cache, or [Drush handbook](https://drushcommands.com/drush-8x/cache/cache-rebuild/) to clear cache.
 
 ## Upgrading
+
+### To 8.0.0
+
+The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `8.0.0`, backup Drupal data and the previous MariaDB databases, install a new Drupal chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
+
+This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 
 ### To 6.0.0
 

@@ -193,8 +193,8 @@ The following table lists the configurable parameters of the Discourse chart and
 | `externalDatabase.host`                   | Host of the external database                                                         | `""`                                                         |
 | `externalDatabase.port`                   | Database port number                                                                  | `5432`                                                       |
 | `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_discourse`                                               |
-| `externalDatabase.password`               | Password for the above username                                                       | `nil`                                                        |
-| `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user (used in the installation stage)             | `nil`                                                        |
+| `externalDatabase.password`               | Password for the above username                                                       | `""`                                                         |
+| `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user (used in the installation stage)             | `""`                                                         |
 | `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_application`                                        |
 
 ### Redis parameters

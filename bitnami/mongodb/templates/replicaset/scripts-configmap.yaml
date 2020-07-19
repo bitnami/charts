@@ -54,6 +54,7 @@ data:
   setup.sh: |-
     #!/bin/bash
 
+    {{- if .Values.externalAccess.enabled }}
     {{- if eq .Values.externalAccess.service.type "LoadBalancer" }}
     {{- if .Values.externalAccess.autoDiscovery.enabled }}
     export MONGODB_ADVERTISED_HOSTNAME="$(<${SHARED_FILE})"
@@ -66,6 +67,7 @@ data:
     export MONGODB_ADVERTISED_HOSTNAME={{ .Values.externalAccess.service.domain }}
     {{- else }}
     export MONGODB_ADVERTISED_HOSTNAME=$(curl -s https://ipinfo.io/ip)
+    {{- end }}
     {{- end }}
     {{- end }}
 

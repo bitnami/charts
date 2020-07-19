@@ -19,3 +19,5 @@ maintainers:
 sources:
 - https://github.com/bitnami/bitnami-docker-kubewatch
 engine: gotpl
+annotations:
+  category: Infrastructure

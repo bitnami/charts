@@ -132,6 +132,8 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `readinessProbe.successThreshold`         | Minimum consecutive successes for the probe                                           | `1`                                                          |
 | `customLivenessProbe`                     | Custom liveness probe to execute (when the main one is disabled)                      | `{}` (evaluated as a template)                               |
 | `customReadinessProbe`                    | Custom readiness probe to execute (when the main one is disabled)                     | `{}` (evaluated as a template)                               |
+| `containerPorts.http`                     | Port to open for HTTP traffic in EJBCA                                                | `8080`                                                       |
+| `containerPorts.https`                    | Port to open for HTTPS traffic in EJBCA                                               | `8443`                                                       |
 | `extraEnvVarsCM`                          | Array to add extra configmaps                                                         | `[]`                                                         |
 | `extraEnvVarsSecret`                      | Array to add extra environment from a Secret                                          | `nil`                                                        |
 
