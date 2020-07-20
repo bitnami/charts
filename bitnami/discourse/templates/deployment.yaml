@@ -55,7 +55,7 @@ spec:
             - name: DISCOURSE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.fullname" . }}
+                  name: {{ include "discourse.discourseSecretName" . }}
                   key: discourse-password
             - name: DISCOURSE_POSTGRESQL_PASSWORD
               valueFrom:
@@ -146,7 +146,7 @@ spec:
             - name: DISCOURSE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.fullname" . }}
+                  name: {{ include "discourse.discourseSecretName" . }}
                   key: discourse-password
             - name: DISCOURSE_POSTGRESQL_PASSWORD
               valueFrom:

@@ -50,24 +50,23 @@ discourse:
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
   ##
   host: ''
-
   ## Discourse site name
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   siteName: 'My Site!'
-
   ## User of the application
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   username: user
-
   ## Application password
   ## WARNING: Minimum length of 10 characters
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   # password:
-
+  ## Name of an existing secret containing the password (ignores previous password)
+  ##
+  # existingSecret: my-secret
   ## Admin email
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
@@ -447,24 +446,25 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   postgresqlUsername: bn_discourse
-
   ## PostgreSQL password
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  ## postgresqlPassword:
-  ##
-
+  # postgresqlPassword:
   ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   ##
   postgresqlPostgresPassword: 'bitnami'
-
+  ## Name of existing secret object
+  ## The secret should contain the following keys:
+  ## postgresql-postgres-password (for the unprivileged user)
+  ## postgresql-password (for root user)
+  ##
+  # existingSecret: my-secret
   ## Create a database
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
   postgresqlDatabase: bitnami_application
-
   ## PostgreSQL data Persistent Volume Storage Class
   ##
   persistence:
@@ -489,6 +489,12 @@ externalDatabase:
   ## Root "postgres" password (used in the installation stage)
   ##
   postgresqlPostgresPassword: ''
+  ## Name of existing secret object
+  ## The secret should contain the following keys:
+  ## postgresql-postgres-password (for the unprivileged user)
+  ## postgresql-password (for root user)
+  ##
+  # existingSecret: my-secret
   ## Database name
   ##
   database: bitnami_application
@@ -505,11 +511,15 @@ redis:
   ##
   usePassword: false
   ## Redis password (both master and slave)
-  ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
-  ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
-  ##
+  ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true.
+  ## It should always be set using the password value or in the existingSecret to avoid issues
+  ## with Discourse.
+  ## The password value is ignored if existingSecret is set
   # password:
-
+  ## Name of existing secret object
+  ## The secret should contain the key redis-password
+  ##
+  # existingSecret: my-secret
   ## Cluster settings
   ##
   cluster:
@@ -533,5 +543,10 @@ externalRedis:
   ##
   port: 6379
   ## Redis password for authentication
+  ## Ignored if existingSecret is set
   ##
   password: ''
+  ## Name of existing secret object
+  ## The secret should contain the key redis-password
+  ##
+  # existingSecret: my-secret

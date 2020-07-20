@@ -110,7 +110,8 @@ The following table lists the configurable parameters of the Discourse chart and
 | `discourse.host`                          | Discourse host to create application URLs (include the port if =/= 80)                | `""`                                                         |
 | `discourse.siteName`                      | Discourse site name                                                                   | `My Site!`                                                   |
 | `discourse.username`                      | Admin user of the application                                                         | `user`                                                       |
-| `discourse.password`                      | Application password (min length of 10 chars)                                         | _random 10 character long alphanumeric string_               |
+| `discourse.password`                      | Application password (min length of 10 chars) - ignored if existingSecret is provided                                        | _random 10 character long alphanumeric string_               |
+| `discourse.existingSecret`                      | Name of an existing Kubernetes secret                                         | nil               |
 | `discourse.email`                         | Admin user email of the application                                                   | `user@example.com`                                           |
 | `discourse.command`                       | Custom command to override image cmd                                                  | `nil` (evaluated as a template)                              |
 | `discourse.args`                          | Custom args for the custom commad                                                     | `nil` (evaluated as a template)                              |
@@ -186,8 +187,9 @@ The following table lists the configurable parameters of the Discourse chart and
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `postgresql.enabled`                      | Deploy PostgreSQL container(s)                                                        | `true`                                                       |
 | `postgresql.postgresqlUsername`           | PostgreSQL user to create (used by Discourse)                                         | `bn_discourse`                                               |
-| `postgresql.postgresqlPassword`           | Password for the Dicourse user                                                        | _random 10 character long alphanumeric string_               |
-| `postgresql.postgresqlPostgresPassword`   | Password for the admin user ("postgres")                                              | `bitnami`                                                    |
+| `postgresql.postgresqlPassword`           | Password for the Dicourse user - ignored if existingSecret is set to true                                                       | _random 10 character long alphanumeric string_               |
+| `postgresql.postgresqlPostgresPassword`   | Password for the admin user ("postgres")  - ignored if existingSecret is set to true                                             | `bitnami`                                                    |
+| `postgresql.existingSecret`   | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password`, `postgresql-replication-password`                                              | `nil`                                                    |
 | `postgresql.postgresqlDatabase`           | Name of the database to create                                                        | `bitnami_application`                                        |
 | `postgresql.persistence.enabled`          | Enable database persistence using PVC                                                 | `true`                                                       |
 | `externalDatabase.host`                   | Host of the external database                                                         | `""`                                                         |
@@ -203,7 +205,9 @@ The following table lists the configurable parameters of the Discourse chart and
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `redis.enabled`                           | Deploy Redis container(s)                                                             | `true`                                                       |
 | `redis.usePassword`                       | Use password authentication                                                           | `false`                                                      |
-| `redis.password`                          | Password for Redis authentication                                                     | `nil`                                                        |
+| `redis.password`                          | Password for Redis authentication  - ignored if existingSecret is set to true                                                    | `my-password`                                                        |
+| `redis.existingSecret`   | Name of an existing Kubernetes secret. The secret must have the `redis-password` key configured                                              | `nil`                                                           |
+| `redis.existingSecretPasswordKey`   | Name of the key pointing to the password in your Kubernetes secret                                              | `redis-password`                                                          |
 | `redis.cluster.enabled`                   | Whether to use cluster replication                                                    | `false`                                                      |
 | `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                 | `true`                                                       |
 | `externalRedis.host`                      | Host of the external database                                                         | `""`                                                         |
