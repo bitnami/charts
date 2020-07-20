@@ -169,7 +169,7 @@ redis:
   ## Redis resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources:
+  resources: {}
   #   requests:
   #     memory: 256Mi
   #     cpu: 100m
