@@ -72,7 +72,7 @@ data:
         url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
-        password: ${mariadb-password}
+        password: ${datasource-password}
         testOnBorrow: true
         validationQuery: "SELECT 1"
 {{ end }}

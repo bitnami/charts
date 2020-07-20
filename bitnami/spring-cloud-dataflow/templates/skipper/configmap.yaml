@@ -19,7 +19,8 @@ data:
                     {{- $rabbitmqHost := include "scdf.rabbitmq.host" . }}
                     {{- $rabbitmqPort := include "scdf.rabbitmq.port" . }}
                     {{- $rabbitmqUser := include "scdf.rabbitmq.user" . }}
-                    environmentVariables: 'SPRING_RABBITMQ_HOST={{ $rabbitmqHost }},SPRING_RABBITMQ_PORT={{ $rabbitmqPort }},SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }},SPRING_RABBITMQ_PASSWORD=${rabbitmq-password}'
+                    {{- $rabbitmqVhost := include "scdf.rabbitmq.vhost" . }}
+                    environmentVariables: 'SPRING_RABBITMQ_HOST={{ $rabbitmqHost }},SPRING_RABBITMQ_PORT={{ $rabbitmqPort }},SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }},SPRING_RABBITMQ_PASSWORD=${rabbitmq-password},SPRING_RABBITMQ_VIRTUAL_HOST={{ $rabbitmqVhost }}'
                     {{- else if .Values.kafka.enabled }}
                     environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_PORT}'
                     {{- end }}
@@ -31,6 +32,8 @@ data:
                     {{- end }}
                     readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
                     livenessProbeDelay: {{ .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    nodeSelector: {{ .Values.deployer.nodeSelector }}
+                    tolerations: {{- toYaml .Values.deployer.tolerations | nindent 22 }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
@@ -47,7 +50,7 @@ data:
         url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.skipper.user" . }}
-        password: ${mariadb-password}
+        password: ${datasource-password}
         testOnBorrow: true
         validationQuery: "SELECT 1"
 {{ end }}
