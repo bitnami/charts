@@ -65,7 +65,7 @@ spec:
           {{- end }}
           {{- if .Values.initJob.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.command "context" $) | nindent 12 }}
-          {{- else if .Values.cluster.externalAccess.enabled }}
+          {{- else }}
           command: ['/bin/bash', '-c']
           {{- end }}
           {{- if .Values.initJob.args }}
@@ -75,11 +75,19 @@ spec:
             - |
               # Backwards compatibility change
               if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
-                  cp  /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+                  cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
               fi
               ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
               export REDIS_NODES="${ips[@]}"
-              /entrypoint.sh /run.sh
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
+          {{- else }}
+          args:
+            - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
           {{- end }}
           env:
             - name: REDIS_TLS_ENABLED
