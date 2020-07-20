@@ -65,6 +65,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `deployer.resources.requests`                   | Streaming applications resource requests                   | `{}`                                                    |
 | `deployer.resources.readinessProbe`             | Streaming applications readiness probes requests           | Check `values.yaml` file                                |
 | `deployer.resources.livenessProbe`              | Streaming applications liveness probes  requests           | Check `values.yaml` file                                |
+| `deployer.nodeSelector`                         | Streaming applications nodeSelector                        | `""`                                                    |
+| `deployer.tolerations`                          | Streaming applications tolerations                         | `{}`                                                    |
 
 ### Dataflow Server parameters
 
@@ -237,6 +239,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `externalDatabase.host`                         | Host of the external database                                           | `localhost`                         |
 | `externalDatabase.port`                         | External database port number                                           | `3306`                              |
 | `externalDatabase.password`                     | Password for the above username                                         | `""`                                |
+| `externalDatabase.existingPasswordSecret`       | Existing secret with database password                                  | `""`                                |
 | `externalDatabase.dataflow.user`                | Existing username in the external db to be used by Dataflow server      | `dataflow`                          |
 | `externalDatabase.dataflow.database`            | Name of the existing database to be used by Dataflow server             | `dataflow`                          |
 | `externalDatabase.skipper.user`                 | Existing username in the external db to be used by Skipper server       | `skipper`                           |
@@ -255,6 +258,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `externalRabbitmq.port`                         | External RabbitMQ port number                                           | `5672`                                                  |
 | `externalRabbitmq.username`                     | External RabbitMQ username                                              | `guest`                                                 |
 | `externalRabbitmq.password`                     | External RabbitMQ password                                              | `guest`                                                 |
+| `externalRabbitmq.vhost`                        | External RabbitMQ virtual host                                          | `/`                                                     |
+| `externalRabbitmq.existingPasswordSecret`       | Existing secret with RabbitMQ password                                  | `""`                                                    |
 
 ### Kafka chart parameters
 
