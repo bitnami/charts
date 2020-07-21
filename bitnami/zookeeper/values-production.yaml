@@ -39,6 +39,18 @@ image:
 ## String to fully override zookeeper.fullname template
 # fullnameOverride:
 
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -94,9 +106,6 @@ podDisruptionBudget:
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
 ##
 # rollingUpdatePartition:
-
-# Cluster domain
-clusterDomain: cluster.local
 
 ## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
@@ -167,9 +176,10 @@ heapSize: 1024
 ##
 logLevel: ERROR
 
-## Data log directory. Specifying this option will direct zookeeper to write the transaction log to the dataLogDir rather than the dataDir.
-## This allows a dedicated log device to be used, and helps avoid competition between logging and snaphots.
-dataLogDir: /bitnami/zookeeper/dataLog
+## Example:
+## dataLogDir: /bitnami/zookeeper/dataLog
+##
+dataLogDir: ""
 
 ## Default JVMFLAGS for the ZooKeeper process
 ##

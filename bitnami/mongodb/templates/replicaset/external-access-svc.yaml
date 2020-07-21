@@ -28,7 +28,7 @@ spec:
   {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: {{ .Values.service.portName }}
+    - name: {{ $root.Values.service.portName }}
       port: {{ $root.Values.externalAccess.service.port }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}

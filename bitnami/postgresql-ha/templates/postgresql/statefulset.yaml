@@ -36,7 +36,9 @@ spec:
       {{- if .Values.postgresql.nodeSelector }}
       nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.postgresql.priorityClassName }}
       priorityClassName: {{ .Values.postgresql.priorityClassName }}
+      {{- end }}
       {{- if .Values.postgresql.tolerations }}
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -165,7 +167,7 @@ spec:
               value: {{ (include "postgresql-ha.repmgrDatabase" .) | quote }}
             {{- end }}
             - name: POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS
-              value: {{ .Values.postgresql.replicaCount | quote }}
+              value: {{ sub (int .Values.postgresql.replicaCount) 1 | quote }}
           ports:
             - name: postgresql
               containerPort: 5432
