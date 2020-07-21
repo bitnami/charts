@@ -10,4 +10,5 @@ excluded-charts:
   - kong
   - mariadb-galera
   - discourse
+  - ejbca
 remote: origin

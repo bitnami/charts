@@ -12,6 +12,12 @@ spec:
   selector:
     matchLabels: {{ include "postgresql-ha.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: pgpool
+  {{- if .Values.pgpool.updateStrategy }}
+  strategy: {{- toYaml .Values.pgpool.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- if .Values.pgpool.minReadySeconds }}
+  minReadySeconds: {{ .Values.pgpool.minReadySeconds }}
+  {{- end }}
   template:
     metadata:
       labels: {{ include "postgresql-ha.labels" . | nindent 8 }}
@@ -30,7 +36,9 @@ spec:
       {{- if .Values.pgpool.nodeSelector }}
       nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.pgpool.priorityClassName }}
       priorityClassName: {{ .Values.pgpool.priorityClassName }}
+      {{- end }}
       {{- if .Values.pgpool.tolerations }}
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.tolerations "context" $) | nindent 8 }}
       {{- end }}

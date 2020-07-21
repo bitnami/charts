@@ -30,7 +30,7 @@ spec:
       {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.fullname" . }}-querier
+      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "querier" "context" $) }}
       {{- if .Values.querier.affinity }}
       affinity: {{- include "thanos.tplValue" (dict "value" .Values.querier.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -73,6 +73,20 @@ spec:
             {{- range .Values.querier.stores }}
             - --store={{ . }}
             {{- end }}
+            {{- if .Values.querier.grpcTLS.server.secure }}
+            - --grpc-server-tls-cert=/tls/server/cert.pem
+            - --grpc-server-tls-key=/tls/server/key.pem
+            - --grpc-server-tls-client-ca=/tls/server/ca.pem
+            {{- end }}
+            {{- if .Values.querier.grpcTLS.client.secure }}
+            - --grpc-client-tls-secure
+            - --grpc-client-tls-cert=/tls/client/cert.pem
+            - --grpc-client-tls-key=/tls/client/key.pem
+            - --grpc-client-tls-ca=/tls/client/ca.pem
+            {{- if .Values.querier.grpcTLS.client.servername }}
+            - --grpc-client-server-name={{.Values.querier.grpcTLS.client.servername}}
+            {{- end }}
+            {{- end }}
             {{- range $key, $value := .Values.querier.extraFlags }}
             - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
             {{- end }}
@@ -92,14 +106,34 @@ spec:
           {{- if .Values.querier.resources }}
           resources: {{- toYaml .Values.querier.resources | nindent 12 }}
           {{- end }}
-      {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
           volumeMounts:
+      {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
             - name: sd-config
               mountPath: /conf/servicediscovery.yml
               subPath: servicediscovery.yml
+      {{- end }}
+      {{- if .Values.querier.grpcTLS.server.secure }}
+            - name: tls-server
+              mountPath: /tls/server
+      {{- end }}
+      {{- if .Values.querier.grpcTLS.client.secure }}
+            - name: tls-client
+              mountPath: /tls/client
+      {{- end }}
       volumes:
+      {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
         - name: sd-config
           configMap:
             name: {{ include "thanos.querier.SDConfigmapName" . }}
+      {{- end }}
+      {{- if .Values.querier.grpcTLS.server.secure }}
+        - name: tls-server
+          secret:
+            secretName: {{ include "thanos.fullname" . }}-querier-tls-server
+      {{- end }}
+      {{- if .Values.querier.grpcTLS.client.secure }}
+        - name: tls-client
+          secret:
+            secretName: {{ include "thanos.fullname" . }}-querier-tls-client
       {{- end }}
 {{- end }}

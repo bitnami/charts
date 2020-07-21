@@ -100,6 +100,18 @@ spec:
             - name: DATABASE_SSL_VERIFY
               value: {{ ternary "yes" "no" .Values.db.ssl.verify | quote }}
             {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+          {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVarsCM "context" $) | nindent 18 }}
+          {{- end }}
+          {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVarsSecret "context" $) | nindent 18 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080

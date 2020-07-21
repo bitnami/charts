@@ -1,7 +1,7 @@
 apiVersion: v1
 name: opencart
-version: 7.0.17
-appVersion: 3.0.3-3
+version: 7.0.19
+appVersion: 3.0.3-6
 description: A free and open source e-commerce platform for online merchants. It provides a professional and reliable foundation for a successful online store.
 keywords:
 - opencart
@@ -17,3 +17,5 @@ maintainers:
   email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/opencart/img/opencart-stack-110x117.png
+annotations:
+  category: E-Commerce

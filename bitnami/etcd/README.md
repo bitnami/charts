@@ -274,7 +274,7 @@ auth.client.existingSecret=etcd-client-certs
 You can enable auto disaster recovery by periodically snapshotting the keyspace. If the cluster permanently loses more than (N-1)/2 members, it tries to recover the cluster from a previous snapshot. You can enable it using the following parameters:
 
 ```console
-persistence.enable=true
+persistence.enabled=true
 disasterRecovery.enabled=true
 disasterRecovery.pvc.size=2Gi
 disasterRecovery.pvc.storageClassName=nfs
@@ -320,7 +320,7 @@ You can use the command below to upgrade your chart by starting a new cluster us
 ```console
 $ helm install new-release bitnami/etcd \
   --set statefulset.replicaCount=3 \
-  --set persistence.enable=true \
+  --set persistence.enabled=true \
   --set persistence.size=8Gi \
   --set startFromSnapshot.enabled=true \
   --set startFromSnapshot.existingClaim=my-claim \

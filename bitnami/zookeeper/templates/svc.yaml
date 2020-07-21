@@ -5,11 +5,17 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
-  {{- with .Values.service.annotations }}
+    {{- if .Values.commonLabels }}
+    {{- include "zookeeper.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.service.annotations }}
   annotations:
-  {{- range $key, $value := . }}
-    {{ $key }}: {{ $value }}
-  {{- end }}
+    {{- if .Values.service.annotations }}
+    {{- include "zookeeper.tplValue" ( dict "value" .Values.service.annotations "context" $ ) | nindent 4 }}\
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "zookeeper.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}

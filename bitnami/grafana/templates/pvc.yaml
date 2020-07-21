@@ -4,6 +4,7 @@ apiVersion: v1
 metadata:
   name: {{ template "grafana.fullname" . }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}

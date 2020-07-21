@@ -36,7 +36,7 @@ spec:
       {{- if or (include "mongodb.createConfigmap" .) .Values.podAnnotations }}
       annotations:
         {{- if (include "mongodb.createConfigmap" .) }}
-        checksum/configuration: {{ include (print $.Template.BasePath "/mongodb/configmap.yaml") . | sha256sum }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
@@ -218,10 +218,10 @@ spec:
         - name: metrics
           image: {{ template "mongodb.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
+          {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
             runAsNonRoot: true
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
           command:
             - /bin/bash
@@ -231,7 +231,7 @@ spec:
               {{- if .Values.auth.enabled }}
               /bin/mongodb_exporter --mongodb.uri mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin {{ .Values.metrics.extraFlags }}
               {{- else }}
-              /bin/mongodb_exporter --mongodb.uri mongodb://root@localhost:27017/admin {{ .Values.metrics.extraFlags }}
+              /bin/mongodb_exporter --mongodb.uri mongodb://localhost:27017/admin {{ .Values.metrics.extraFlags }}
               {{- end }}
           env:
           {{- if .Values.auth.enabled }}

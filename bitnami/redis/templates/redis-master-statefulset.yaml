@@ -252,6 +252,7 @@ spec:
               ARGS+=("--tls-key-file" "${REDIS_SENTINEL_TLS_KEY_FILE}")
               ARGS+=("--tls-ca-cert-file" "${REDIS_SENTINEL_TLS_CA_FILE}")
               ARGS+=("--tls-auth-clients" "${REDIS_SENTINEL_TLS_AUTH_CLIENTS}")
+              ARGS+=("--tls-replication" "yes")
               {{- if .Values.tls.dhParamsFilename }}
               ARGS+=("--tls-dh-params-file" "${REDIS_SENTINEL_TLS_DH_PARAMS_FILE}")
               {{- end }}

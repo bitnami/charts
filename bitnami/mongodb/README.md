@@ -182,6 +182,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 |---------------------------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `service.type`                                    | Kubernetes Service type                                                                            | `ClusterIP`                                             |
 | `service.port`                                    | MongoDB service port                                                                               | `27017`                                                 |
+| `service.portName`                                | MongoDB service port name                                                                          | `mongodb`                                               |
 | `service.nodePort`                                | Port to bind to for NodePort and LoadBalancer service types                                        | `""`                                                    |
 | `service.clusterIP`                               | MongoDB service cluster IP                                                                         | `nil`                                                   |
 | `service.loadBalancerIP`                          | loadBalancerIP for MongoDB Service                                                                 | `nil`                                                   |
