@@ -36,7 +36,9 @@ spec:
       {{- if .Values.pgpool.nodeSelector }}
       nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.pgpool.priorityClassName }}
       priorityClassName: {{ .Values.pgpool.priorityClassName }}
+      {{- end }}
       {{- if .Values.pgpool.tolerations }}
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.tolerations "context" $) | nindent 8 }}
       {{- end }}
