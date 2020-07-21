@@ -95,7 +95,7 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `logLevel`                                        | Log level of ZooKeeper server                                                                                                     | `ERROR`                                                 |
 | `jvmFlags`                                        | Default JVMFLAGS for the ZooKeeper process                                                                                        | `nil`                                                   |
 | `config`                                          | Configure ZooKeeper with a custom zoo.conf file                                                                                   | `nil`                                                   |
-| `dataLogDir`                                      | Data log directory                                                                                                                | `/bitnami/zookeeper/dataLog`                            |
+| `dataLogDir`                                      | Data log directory                                                                                                                | `""`                                                   |
 
 ### Statefulset parameters
 
