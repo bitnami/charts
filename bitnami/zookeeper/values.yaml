@@ -185,7 +185,10 @@ logLevel: ERROR
 
 ## Data log directory. Specifying this option will direct zookeeper to write the transaction log to the dataLogDir rather than the dataDir.
 ## This allows a dedicated log device to be used, and helps avoid competition between logging and snaphots.
-dataLogDir: /bitnami/zookeeper/dataLog
+## Example:
+## dataLogDir: /bitnami/zookeeper/dataLog
+##
+dataLogDir: ""
 
 ## Default JVMFLAGS for the ZooKeeper process
 ##
