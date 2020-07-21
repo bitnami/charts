@@ -146,6 +146,16 @@ Get the initialization scripts ConfigMap name.
 {{- end -}}
 
 {{/*
+Return true if the Arbiter should be deployed
+*/}}
+{{- define "mongodb.arbiter.enabled" -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.enabled }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the configmap with the MongoDB configuration for the Arbiter
 */}}
 {{- define "mongodb.arbiter.configmapName" -}}
