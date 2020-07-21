@@ -270,13 +270,13 @@ spec:
         {{- if $.Values.common.initScriptsCM }}
         - name: custom-init-scripts-configmap
           configMap:
-            name: {{ include "mongodb-sharded.initScriptsCM" . }}
+            name: {{ include "mongodb-sharded.initScriptsCM" $ }}
             defaultMode: 0755
         {{- end }}
         {{- if $.Values.common.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            name: {{ include "mongodb-sharded.initScriptsSecret" . }}
+            name: {{ include "mongodb-sharded.initScriptsSecret" $ }}
             defaultMode: 0755
         {{- end }}
         {{- if or $.Values.shardsvr.dataNode.config $.Values.shardsvr.dataNode.configCM }}
