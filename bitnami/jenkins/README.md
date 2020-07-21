@@ -171,7 +171,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set jenkinsUsername=admin,jenkinsPassword=password \
+  --set jenkinsUser=admin,jenkinsPassword=password \
     bitnami/jenkins
 ```
 

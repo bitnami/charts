@@ -1,7 +1,7 @@
 apiVersion: v1
 name: odoo
-version: 14.0.8
-appVersion: 13.0.20200610
+version: 14.0.10
+appVersion: 13.0.20200710
 description: A suite of web based open source business apps.
 home: https://www.odoo.com/
 icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-110x117.png
@@ -17,3 +17,5 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
+annotations:
+  category: CRM

@@ -237,4 +237,9 @@ spec:
         resources:
           requests:
             storage: {{ .Values.master.persistence.size | quote }}
+          {{- if .Values.master.persistence.existingVolume }}
+          selector:
+            matchLabels:
+              volume: {{ .Values.master.persistence.existingVolume }}
+          {{- end }}
 {{- end }}

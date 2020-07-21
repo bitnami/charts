@@ -95,10 +95,14 @@ The following tables lists the configurable parameters of the contour chart and 
 | `envoy.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
 | `envoy.resources.limits`                           | Specify resource limits which the container is not allowed to succeed.                                 | `{}` (does not add resource limits to deployed pods)    |
 | `envoy.resources.requests`                         | Specify resource requests which the container needs to spawn.                                          | `{}` (does not add resource limits to deployed pods)    |
-| `envoy.nodeSelector`                               | Node labels for envoy pod assignment                                                                   | `{}`                                                    | 
-| `envoy.tolerations`                                | Tolerations for envoy pod assignment                                                                   | `[]`                                                    | 
-| `envoy.affinity`                                   | Affinity for envoy pod assignment                                                                      | `{}`                                                    | 
-| `envoy.podAnnotations`                             | Envoy Pod annotations                                                                                  | `{}`                                                    | 
+| `envoy.nodeSelector`                               | Node labels for envoy pod assignment                                                                   | `{}`                                                    |
+| `envoy.tolerations`                                | Tolerations for envoy pod assignment                                                                   | `[]`                                                    |
+| `envoy.affinity`                                   | Affinity for envoy pod assignment                                                                      | `{}`                                                    |
+| `envoy.podAnnotations`                             | Envoy Pod annotations                                                                                  | `{}`                                                    |
+| `envoy.podSecurityContext`                         | Envoy Pod securityContext                                                                                  | `{}`                                                    |
+| `envoy.containerSecurityContext`                   | Envoy Container securityContext                                                                                  | `{}`                                                    |
+| `envoy.dnsPolicy`                                  | Envoy Pod Dns Policy                                                                                   | `ClusterFirst`                                                    |
+| `envoy.hostNetwork`                                | Envoy Pod host network access                                                                                   | `false`                                                    |
 | `envoy.readynessProbe.enabled`                     | Enable/disable the Readyness probe                                                                     | `true`                                                  |
 | `envoy.readynessProbe.initialDelaySeconds`         | Delay before readyness probe is initiated                                                              | `10`                                                    |
 | `envoy.readynessProbe.periodSeconds`               | How often to perform the probe                                                                         | `3`                                                     |
@@ -193,4 +197,17 @@ configInline:
   #   - "upstream_service_time"
   #   - "user_agent"
   #   - "x_forwarded_for"
+```
+
+### Deploying Contour with an AWS NLB
+
+By default, Contour is launched with a AWS Classic ELB. To launch contour backed by a NLB, please set [these settings](https://github.com/projectcontour/contour/tree/master/examples/contour#deploying-with-host-networking-enabled-for-envoy):
+
+```yaml
+envoy:
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
 ```

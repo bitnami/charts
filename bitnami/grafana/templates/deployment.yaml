@@ -3,16 +3,19 @@ kind: Deployment
 metadata:
   name: {{ include "grafana.fullname" . }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "grafana.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: grafana
   {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
       labels: {{- include "grafana.labels" . | nindent 8 }}
+        app.kubernetes.io/component: grafana
       annotations:
         {{- if (include "grafana.createAdminSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
@@ -111,6 +114,9 @@ spec:
               subPath: {{ .subPath | default "" }}
               readOnly: {{ .readOnly }}
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
           ports:
             - name: dashboard
               containerPort: 3000
@@ -197,4 +203,7 @@ spec:
         - name: {{ .name }}
           configMap:
             name: {{ .name }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}

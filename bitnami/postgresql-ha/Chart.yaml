@@ -21,3 +21,5 @@ maintainers:
   - name: Bitnami
     email: containers@bitnami.com
 engine: gotpl
+annotations:
+  category: Database

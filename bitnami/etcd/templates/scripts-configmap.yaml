@@ -11,6 +11,10 @@
 {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
 {{- $initSnapshotFilename := .Values.startFromSnapshot.snapshotFilename }}
 {{- $snapshotHistoryLimit := .Values.disasterRecovery.cronjob.snapshotHistoryLimit }}
+{{- $endpoints := list }}
+{{- range $e, $i := until $replicaCount }}
+{{- $endpoints = append $endpoints (printf "%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $peerPort) }}
+{{- end }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -38,10 +42,8 @@ data:
 
     # Constants
     HOSTNAME="$(hostname -s)"
-    AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
-    # Remove the last comma "," introduced in the string
-    export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
+    AUTH_OPTIONS={{ $etcdAuthOptions | quote }}
+    export ETCDCTL_ENDPOINTS={{ join "," $endpoints | quote }}
     export ROOT_PASSWORD="${ETCD_ROOT_PASSWORD:-}"
     if [[ -n "${ETCD_ROOT_PASSWORD:-}" ]]; then
       unset ETCD_ROOT_PASSWORD
@@ -50,7 +52,7 @@ data:
     ## Store member id for later member replacement
     store_member_id() {
         while ! etcdctl $AUTH_OPTIONS member list; do sleep 1; done
-        etcdctl $AUTH_OPTIONS member list | grep "$HOSTNAME" | awk '{ print $1}' | awk -F "," '{ print $1}' > "$ETCD_DATA_DIR/member_id"
+        etcdctl $AUTH_OPTIONS member list | grep -w "$HOSTNAME" | awk '{ print $1}' | awk -F "," '{ print $1}' > "$ETCD_DATA_DIR/member_id"
         echo "==> Stored member id: $(cat ${ETCD_DATA_DIR}/member_id)" 1>&3 2>&4
         exit 0
     }
@@ -147,11 +149,12 @@ data:
         elif is_disastrous_failure; then
             echo "==> Cluster not responding!!" 1>&3 2>&4
 {{- if .Values.disasterRecovery.enabled }}
-            if [[ -f "/snapshots/db" ]]; then
+            latest_snapshot_file="$(find /snapshots/ -maxdepth 1 -type f -name 'db-*' | sort | tail -n 1)"
+            if [[ "${latest_snapshot_file}" != "" ]]; then
                 echo "==> Restoring etcd cluster from snapshot..." 1>&3 2>&4
 
                 rm -rf $ETCD_DATA_DIR 1>&3 2>&4
-                etcdctl snapshot restore /snapshots/db \
+                etcdctl snapshot restore "${latest_snapshot_file}" \
                   --name $ETCD_NAME \
                   --data-dir $ETCD_DATA_DIR \
                   --initial-cluster $ETCD_INITIAL_CLUSTER \
@@ -203,10 +206,8 @@ data:
     fi
 
     # Constants
-    AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
-    # Remove the last comma "," introduced in the string
-    export ETCDCTL_ENDPOINTS="$(sed 's/,/ /g' <<< $ETCDCTL_ENDPOINTS | awk '{$1=$1};1' | sed 's/ /,/g')"
+    AUTH_OPTIONS={{ $etcdAuthOptions | quote }}
+    export ETCDCTL_ENDPOINTS={{ join "," $endpoints | quote }}
 
     etcdctl $AUTH_OPTIONS member remove --debug=true "$(cat "$ETCD_DATA_DIR/member_id")" > "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 2>&1
   probes.sh: |-
@@ -229,7 +230,7 @@ data:
     fi
 
     # Constants
-    AUTH_OPTIONS="{{ $etcdAuthOptions }}"
+    AUTH_OPTIONS={{ $etcdAuthOptions | quote }}
 
     echo "==> [DEBUG] Probing etcd cluster"
     echo "==> [DEBUG] Probe command: \"etcdctl $AUTH_OPTIONS endpoint health\""
@@ -246,7 +247,7 @@ data:
     exec 3>&1
     exec 4>&2
 
-    if [ "${BITNAMI_SNAPSHOT_DEBUG}" = true -o "${BITNAMI_DEBUG}" = true ]; then
+    if [[ "${BITNAMI_SNAPSHOT_DEBUG}" = true ]] || [[ "${BITNAMI_DEBUG}" = true ]]; then
       echo "==> Bash debug is on"
       set -x
     else
@@ -256,30 +257,28 @@ data:
     fi
 
     # Constants
-    AUTH_OPTIONS="{{ $etcdAuthOptions }}"
-    ETCDCTL_ENDPOINTS="{{range $i, $e := until $replicaCount }}{{ $etcdClientProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},{{ end }}"
-    # Remove the last comma "," introduced in the string
-    export ETCDCTL_ENDPOINTS="${ETCDCTL_ENDPOINTS%%,}"
+    AUTH_OPTIONS={{ $etcdAuthOptions | quote }}
+    export ETCDCTL_ENDPOINTS={{ join "," $endpoints | quote }}
 
     mkdir -p "/snapshots" 1>&3 2>&4
 
-    # walk over each node in the list, check if node healthy make snapshot and exit, otherwise try another node
-    while read -d, ETCDCTL_ENDPOINTS; do
-        echo "Using endpoint ${ETCDCTL_ENDPOINTS}" 1>&3 2>&4
-        if etcdctl $AUTH_OPTIONS endpoint health; then
+    read -r -a endpoints <<< "$(tr ',;' ' ' <<< "$ETCDCTL_ENDPOINTS")"
+    for endp in "${endpoints[@]}"; do
+        echo "Using endpoint $endp" 1>&3 2>&4
+        if (unset -v ETCDCTL_ENDPOINTS; etcdctl $AUTH_OPTIONS endpoint health --endpoints=${endp}); then
             echo "Snapshotting the keyspace..." 1>&3 2>&4
-            etcdctl $AUTH_OPTIONS snapshot save "/snapshots/db" 1>&3 2>&4
-            ln /snapshots/db /snapshots/db-$(date -u "+%Y-%m-%d_%H-%M") 1>&3 2>&4
-            find /snapshots/ -maxdepth 1 -type f -name 'db-*' \
-                    | sort -r \
-                    | tail -n+$((1 + {{ $snapshotHistoryLimit }})) \
-                    | xargs rm -f 1>&3 2>&4
+            current_time="$(date -u "+%Y-%m-%d_%H-%M")"
+            unset -v ETCDCTL_ENDPOINTS; etcdctl $AUTH_OPTIONS snapshot save "/snapshots/db-${current_time}" --endpoints=${endp} 1>&3 2>&4
+            find /snapshots/ -maxdepth 1 -type f -name 'db-*' \! -name "db-${current_time}" \
+                | sort -r \
+                | tail -n+$((1 + {{ $snapshotHistoryLimit }})) \
+                | xargs rm -f 1>&3 2>&4
             exit 0
         else
             echo "Warning - etcd endpoint ${ETCDCTL_ENDPOINTS} not healthy" 1>&3 2>&4
             echo "Trying another endpoint." 1>&3 2>&4
         fi
-    done <<< "$ETCDCTL_ENDPOINTS"
+    done
 
     # exit with error if all endpoints are bad
     echo "Error - all etcd endpoints are unhealthy!" 1>&3 2>&4

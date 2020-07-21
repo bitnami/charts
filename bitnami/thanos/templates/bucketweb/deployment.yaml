@@ -26,7 +26,7 @@ spec:
         {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.fullname" . }}-bucketweb
+      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
       {{- if .Values.bucketweb.affinity }}
       affinity: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -49,6 +49,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           args:
+            - tools
             - bucket
             - web
             - --http-address=0.0.0.0:8080

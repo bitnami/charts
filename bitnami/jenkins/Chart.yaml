@@ -1,7 +1,7 @@
 apiVersion: v1
 name: jenkins
-version: 5.0.15
-appVersion: 2.235.1
+version: 5.0.19
+appVersion: 2.235.2
 description: The leading open source automation server
 keywords:
   - jenkins
@@ -18,3 +18,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/jenkins/img/jenkins-stack-110x117.png
+annotations:
+  category: Infrastructure

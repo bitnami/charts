@@ -104,6 +104,10 @@ The following table lists the configurable parameters of the MediaWiki chart and
 | `persistence.existingClaim`          | An Existing PVC name for MediaWiki volume                                                              | `nil` (uses alpha storage class annotation)                  |
 | `persistence.accessMode`             | PVC Access Mode for MediaWiki volume                                                                   | `ReadWriteOnce`                                              |
 | `persistence.size`                   | PVC Storage Request for MediaWiki volume                                                               | `8Gi`                                                        |
+| `podSecurityContext.enabled`         | Enable MediaWiki pods' Security Context                                                                | `true`                                                       |
+| `podSecurityContext.fsGroup`         | MediaWiki pods' group ID                                                                               | `1001`                                                       |
+| `containerSecurityContext.enabled`   | Enable MediaWiki containers' Security Context                                                          | `true`                                                       |
+| `containerSecurityContext.runAsUser` | MediaWiki containers' Security Context                                                                 | `1001`                                                       |
 | `resources`                          | CPU/Memory resource requests/limits                                                                    | Memory: `512Mi`, CPU: `300m`                                 |
 | `livenessProbe.enabled`              | Enable/disable the liveness probe (ingest nodes pod)                                                   | `true`                                                       |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (ingest nodes pod)                                            | 120                                                          |
@@ -168,6 +172,17 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Upgrading
+
+### To 10.0.0
+
+The [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `10.0.0`, backup MediaWiki data and the previous MariaDB databases, install a new MediaWiki chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
 
 ### To 9.0.0
 

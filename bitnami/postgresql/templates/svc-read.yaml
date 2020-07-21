@@ -10,10 +10,7 @@ kind: Service
 metadata:
   name: {{ template "postgresql.fullname" . }}-read
   labels:
-    app: {{ template "postgresql.name" . }}
-    chart: {{ template "postgresql.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -40,7 +37,6 @@ spec:
       nodePort: {{ $serviceNodePort }}
       {{- end }}
   selector:
-    app: {{ template "postgresql.name" . }}
-    release: {{ .Release.Name | quote }}
+  {{- include "common.labels.matchLabels" . | nindent 4 }}
     role: slave
 {{- end }}
