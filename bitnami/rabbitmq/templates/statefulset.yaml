@@ -198,13 +198,6 @@ spec:
             {{- if .Values.extraContainerPorts }}
             {{- toYaml .Values.extraContainerPorts | nindent 12 }}
             {{- end }}
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - bash
-                  - -ec
-                  - rabbitmqctl stop_app
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -238,8 +231,8 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
           lifecycle:
+          {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
             postStart:
               exec:
                 command:
@@ -252,6 +245,12 @@ spec:
                     done
                     rabbitmq-queues rebalance "all"
           {{- end }}
+            preStop:
+              exec:
+                command:
+                  - bash
+                  - -ec
+                  - rabbitmqctl stop_app
           volumeMounts:
             - name: configuration
               mountPath: /bitnami/rabbitmq/conf
