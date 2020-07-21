@@ -63,6 +63,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `nameOverride`                                    | String to partially override kafka.fullname                                                                                       | `nil`                                                   |
 | `fullnameOverride`                                | String to fully override kafka.fullname                                                                                           | `nil`                                                   |
 | `clusterDomain`                                   | Default Kubernetes cluster domain                                                                                                 | `cluster.local`                                         |
+| `commonLabels`                                    | Labels to add to all deployed objects                                                                                             | `{}`                                                    |
+| `commonAnnotations`                               | Annotations to add to all deployed objects                                                                                        | `{}`                                                    |
 | `extraDeploy`                                     | Array of extra objects to deploy with the release                                                                                 | `nil` (evaluated as a template)                         |
 
 ### Kafka parameters
