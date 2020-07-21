@@ -792,6 +792,26 @@ rabbitmq:
     password: ''
 
 ##
+## External RabbitMQ Configuration
+##
+## All of these values are ignored when rabbitmq.enabled is set to true
+##
+externalRabbitmq:
+  ## Enables or disables external RabbitMQ, can be disabled when Kafka is using
+  ##
+  enabled: false
+  ## RabbitMQ host and port
+  ##
+  host: localhost
+  port: 5672
+  ## RabbitMQ username and password, password will be saved in a kubernetes secret
+  ##
+  username: guest
+  password: guest
+  # vhost: /
+  # existingPasswordSecret: name-of-existing-secret
+
+##
 ## Kafka chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
