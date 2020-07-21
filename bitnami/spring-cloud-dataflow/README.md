@@ -67,6 +67,9 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `deployer.resources.livenessProbe`              | Streaming applications liveness probes  requests           | Check `values.yaml` file                                |
 | `deployer.nodeSelector`                         | Streaming applications nodeSelector                        | `""`                                                    |
 | `deployer.tolerations`                          | Streaming applications tolerations                         | `{}`                                                    |
+| `deployer.volumeMounts`                         | Streaming applications extra volume mounts                 | `{}`                                                    |
+| `deployer.volumes`                              | Streaming applications extra volumes                       | `{}`                                                    |
+| `deployer.environmentVariables`                 | Streaming applications environment variables               | `""`                                                    |
 
 ### Dataflow Server parameters
 
