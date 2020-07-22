@@ -238,7 +238,7 @@ postgresql:
   pgHbaTrustAll: false
 
   ## Synchronous replication
-  ## 
+  ##
   syncReplication: false
 
   ## Repmgr configuration parameters
