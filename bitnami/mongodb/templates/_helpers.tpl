@@ -170,7 +170,7 @@ Return the configmap with the MongoDB configuration for the Arbiter
 Return true if a configmap object should be created for MongoDB Arbiter
 */}}
 {{- define "mongodb.arbiter.createConfigmap" -}}
-{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.configuration (not .Values.arbiter.existingConfigmap) }}
+{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.enabled .Values.arbiter.configuration (not .Values.arbiter.existingConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}

@@ -1,5 +1,4 @@
 {{- if (include "mongodb.arbiter.enabled" .) }}
-{{- if eq .Values.architecture "replicaset" }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,5 +18,4 @@ spec:
       targetPort: mongodb
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: arbiter
-{{- end }}
 {{- end }}

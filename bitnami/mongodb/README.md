@@ -73,27 +73,6 @@ The chart supports the replicaset architecture with and without a [MongoDB Arbit
 * When the MongoDB Arbiter is enabled, the chart installs two statefulsets: A statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes), and a statefulset with one MongoDB arbiter node (it cannot be scaled).
 
     ```
-        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
-        │   MongoDB 0    │ │   MongoDB 1    │ │   MongoDB N    │
-        |  external svc  │ |  external svc  │ |  external svc  │
-        └───────┬────────┘ └───────┬────────┘ └───────┬────────┘
-                │                  │                  │
-                ▼                  ▼                  ▼
-          ┌───────────┐      ┌───────────┐      ┌───────────┐
-          │ MongoDB 0 │      │ MongoDB 1 │      │ MongoDB N │
-          │  Server   │      │  Server   │ .... │  Server   │
-          │   Pod     │      │   Pod     │      │   Pod     │
-          └───────────┘      └───────────┘      └───────────┘
-            primary           secondary          secondary
-    ```
-
-    The PSA model is useful when the third Availability Zone cannot hold a full MongoDB instance. The MongoDB Arbiter as decision maker is lightweight and can run alongside other workloads.
-
-    _Note:_ An update takes your MongoDB replicaset offline if the Arbiter is enabled and the number of MongoDB replicas is two. Helm applies updates to the statefulsets for the MongoDB instance _and_ the Arbiter at the same time so you loose two out of three quorum votes.
-
-* Without the Arbiter, the chart deploys a single statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes)
-
-    ```
         ┌────────────────┐ ┌────────────────┐ ┌────────────────┐    ┌─────────────┐
         │   MongoDB 0    │ │   MongoDB 1    │ │   MongoDB N    │    │   Arbiter   │
         |  external svc  │ |  external svc  │ |  external svc  │    |     svc     │
@@ -105,13 +84,33 @@ The chart supports the replicaset architecture with and without a [MongoDB Arbit
           │  Server   │      │  Server   │ .... │  Server   │        │  Arbiter  │
           │   Pod     │      │   Pod     │      │   Pod     │        │   Pod     │
           └───────────┘      └───────────┘      └───────────┘        └───────────┘
-            primary           secondary          secondary
+             primary           secondary          secondary
+    ```
+
+    The PSA model is useful when the third Availability Zone cannot hold a full MongoDB instance. The MongoDB Arbiter as decision maker is lightweight and can run alongside other workloads.
+
+    _Note:_ An update takes your MongoDB replicaset offline if the Arbiter is enabled and the number of MongoDB replicas is two. Helm applies updates to the statefulsets for the MongoDB instance _and_ the Arbiter at the same time so you loose two out of three quorum votes.
+
+* Without the Arbiter, the chart deploys a single statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes)
+
+    ```
+        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+        │   MongoDB 0    │ │   MongoDB 1    │ │   MongoDB N    │
+        |  external svc  │ |  external svc  │ |  external svc  │
+        └───────┬────────┘ └───────┬────────┘ └───────┬────────┘
+                │                  │                  │
+                ▼                  ▼                  ▼
+          ┌───────────┐      ┌───────────┐      ┌───────────┐
+          │ MongoDB 0 │      │ MongoDB 1 │      │ MongoDB N │
+          │  Server   │      │  Server   │ .... │  Server   │
+          │   Pod     │      │   Pod     │      │   Pod     │
+          └───────────┘      └───────────┘      └───────────┘
+             primary           secondary          secondary
     ```
 
 There are no services load balancing requests between MongoDB nodes, instead each node has an associated service to access them individually.
 
 > Note: although the 1st replica is initially assigned the "primary" role, any of the "secondary" nodes can become the "primary" if it is down, or during upgrades. Do not make any assumption about what replica has the "primary" role, instead configure your Mongo client with the list of MongoDB hostnames so it can dynamically choose the node to send requests.
-
 
 ## Parameters
 

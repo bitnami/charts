@@ -1,5 +1,4 @@
-{{- if (include "mongodb.arbiter.enabled" .) }}
-{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.pdb.create }}
+{{- if and (include "mongodb.arbiter.enabled" .) .Values.arbiter.pdb.create }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -17,5 +16,4 @@ spec:
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: arbiter
-{{- end }}
 {{- end }}
