@@ -569,10 +569,10 @@ extraDeploy: |-
               volumeMounts:
                 - name: configuration
                   mountPath: /opt/bitnami/kafka/config
-            volumes:
-              - name: configuration
-                configMap:
-                  name: {{ include "kafka.fullname" . }}-connect
+          volumes:
+            - name: configuration
+              configMap:
+                name: {{ include "kafka.fullname" . }}-connect
   - apiVersion: v1
     kind: ConfigMap
     metadata:
