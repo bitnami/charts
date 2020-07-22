@@ -595,7 +595,8 @@ deployer:
   ## Extra volumes.
   ##
   volumes: {}
-  ## List of environment variables to set for any deployed app container. Multiple values are comma separated.
+  ## List of extra environment variables to set for any deployed app container. These environments will not override
+  ## RabbitMQ/Kafka envs. Multiple values are comma separated.
   ##
   environmentVariables: ""
 
