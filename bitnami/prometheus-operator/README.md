@@ -437,6 +437,16 @@ prometheus.additionalScrapeConfigsExternal.key=additional-scrape-configs.yaml
 
 For more information, see [CoreOS Prometheus Operator - Additional scrape configuration documentation](https://github.com/coreos/prometheus-operator/blob/master/Documentation/additional-scrape-config.md#additional-scrape-configuration).
 
+### Additional alert relabel configurations
+
+It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace which the Prometheus Operator will be deployed into. Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containining the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`. For instance, if you created a secret named `prometheus-operator-prometheus-alert-relabel-config` and it contains a file named `additional-alert-relabel-configs.yaml`, use the parameters below:
+
+```console
+prometheus.additionalAlertRelabelConfigsExternal.enabled=true
+prometheus.additionalAlertRelabelConfigsExternal.name=prometheus-operator-prometheus-alert-relabel-config
+prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
+```
+
 ## Upgrading
 
 ```bash
