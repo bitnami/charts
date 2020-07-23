@@ -175,6 +175,11 @@ spec:
     name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
     key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
   {{- end }}
+  {{ - if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
+  additionalAlertRelabelConfigs:
+    name: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.name }}
+    key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
+  {{- end }}
 {{- include "prometheus-operator.prometheus.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create }}
   containers:
