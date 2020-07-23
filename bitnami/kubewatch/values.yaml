@@ -28,6 +28,9 @@ mattermost:
 flock:
   enabled: false
   # url: ""
+msteams:
+  enabled: false
+  # webhookurl: ""
 webhook:
   enabled: false
   # url: ""
