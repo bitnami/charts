@@ -173,6 +173,8 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the fullname template
   ##
   # name:
+  ## Annotations to add to the ServiceAccount Metadata
+  annotations: {}
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/

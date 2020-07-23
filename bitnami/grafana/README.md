@@ -136,11 +136,11 @@ The following tables lists the configurable parameters of the grafana chart and 
 
 ### RBAC parameters
 
-| Parameter               | Description                                        | Default                                         |
-|-------------------------|----------------------------------------------------|-------------------------------------------------|
-| `serviceAccount.create` | Enable creation of ServiceAccount for Grafana pods | `true`                                          |
-| `serviceAccount.name`   | Name of the created serviceAccount                 | Generated using the `grafana.fullname` template |
-
+| Parameter                    | Description                                        | Default                                         |
+|------------------------------|----------------------------------------------------|-------------------------------------------------|
+| `serviceAccount.create`      | Enable creation of ServiceAccount for Grafana pods | `true`                                          |
+| `serviceAccount.name`        | Name of the created serviceAccount                 | Generated using the `grafana.fullname` template |
+| `serviceAccount.annotations` | ServiceAccount Annotations                         | `{}`                                            |
 ### Exposure parameters
 
 | Parameter                           | Description                                                                                                                                                                                                                           | Default             |
