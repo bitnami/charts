@@ -96,6 +96,8 @@ data:
     {{- end }}
     {{- end }}
 
+    # Configure internal, client and external listeners
+    export KAFKA_CFG_LISTENERS="INTERNAL://:{{ $interBrokerPort }},CLIENT://:{{ $clientPort }},EXTERNAL://:${EXTERNAL_ACCESS_PORT}"
     # Configure Kafka advertised listeners
     {{- if .Values.advertisedListeners }}
     export KAFKA_CFG_ADVERTISED_LISTENERS={{ .Values.advertisedListeners }}

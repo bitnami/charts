@@ -164,10 +164,8 @@ spec:
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
               value: {{ .Values.listeners }}
-              {{- else if .Values.externalAccess.enabled }}
-              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092,EXTERNAL://:9094"
               {{- else }}
-              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092"
+              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:{{ $clientPort }}"
               {{- end }}
             {{- if .Values.externalAccess.enabled }}
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
