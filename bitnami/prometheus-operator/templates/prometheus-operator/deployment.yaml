@@ -58,7 +58,7 @@ spec:
         podAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.operator.podAffinity "context" $) | nindent 10 }}
         {{- end }}
       containers:
-        - name: {{ template "prometheus-operator.name" . }}
+        - name: {{ template "prometheus-operator.operator.name" . }}
           image: {{ template "prometheus-operator.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           args:
