@@ -644,7 +644,7 @@ prometheus:
 
   ## Enable additional Prometheus alert relabel configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
-  ## ^^ Maybe??
+  ##
   additionalAlertRelabelConfigsExternal:
     enabled: false
     ## Name of the secret that Prometheus should use for the additional alert relabel configuration.
