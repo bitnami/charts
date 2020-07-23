@@ -20,7 +20,9 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmaps.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        checksum/secrets-discourse: {{ include (print $.Template.BasePath "/secrets-discourse.yaml") . | sha256sum }}
+        checksum/secrets-database: {{ include (print $.Template.BasePath "/secrets-database.yaml") . | sha256sum }}
+        checksum/secrets-redis: {{ include (print $.Template.BasePath "/secrets-redis.yaml") . | sha256sum }}
       labels: {{- include "discourse.labels" . | nindent 8 }}
         component: discourse
         {{- if .Values.podLabels }}

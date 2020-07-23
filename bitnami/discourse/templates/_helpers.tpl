@@ -123,18 +123,18 @@ imagePullSecrets:
 Return the Discourse secret name
 */}}
 {{- define "discourse.discourseSecretName" -}}
-{{- if not (empty .Values.discourse.existingSecret) }}
-    {{- .Values.discourse.existingSecret }}
+{{- if .Values.discourse.existingSecret }}
+    {{- printf "%s" .Values.discourse.existingSecret -}}
 {{- else -}}
-    {{- printf "%s" (include "discourse.fullname" .) -}}
+    {{- printf "%s-discourse" (include "discourse.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return true if a secret object should be created
+Return true if a secret object for Discourse should be created
 */}}
-{{- define "discourse.createSecret" -}}
-{{- if and .Values.discourse.existingSecret (or (and .Values.postgresql.enabled .Values.postgresql.existingSecret) (and (not .Values.postgresql.enabled) .Values.externalDatabase.existingSecret)) (or (and .Values.redis.enabled .Values.redis.existingSecret) (and (not .Values.redis.enabled) .Values.externalRedis.existingSecret)) }}
+{{- define "discourse.discourseCreateSecret" -}}
+{{- if .Values.discourse.existingSecret }}
     {{- false -}}
 {{- else -}}
     {{- true -}}
@@ -265,6 +265,17 @@ Return the Postgresql user
 {{- end -}}
 
 {{/*
+Return true if a secret object for Postgres should be created
+*/}}
+{{- define "discourse.databaseCreateSecret" -}}
+{{- if or (and .Values.postgresql.enabled .Values.postgresql.existingSecret) (and (not .Values.postgresql.enabled) .Values.externalDatabase.existingSecret) }}
+    {{- false -}}
+{{- else -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Postgresql secret name
 */}}
 {{- define "discourse.databaseSecretName" -}}
@@ -277,7 +288,7 @@ Return the Postgresql secret name
 {{- else if .Values.externalDatabase.existingSecret }}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s" (include "discourse.fullname" .) -}}
+    {{- printf "%s-database" (include "discourse.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -304,6 +315,17 @@ Return the Redis port
 {{- end -}}
 
 {{/*
+Return true if a secret object for Redis should be created
+*/}}
+{{- define "discourse.redisCreateSecret" -}}
+{{- if or (and .Values.redis.enabled .Values.redis.existingSecret) (and (not .Values.redis.enabled) .Values.externalRedis.existingSecret) }}
+    {{- false -}}
+{{- else -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Redis secret name
 */}}
 {{- define "discourse.redisSecretName" -}}
@@ -316,6 +338,6 @@ Return the Redis secret name
 {{- else if .Values.externalRedis.existingSecret }}
     {{- printf "%s" .Values.externalRedis.existingSecret -}}
 {{- else -}}
-    {{- printf "%s" (include "discourse.fullname" .) -}}
+    {{- printf "%s-redis" (include "discourse.fullname" .) -}}
 {{- end -}}
 {{- end -}}
