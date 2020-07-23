@@ -3,6 +3,12 @@ kind: ConfigMap
 metadata:
   name: {{ template "kafka.fullname" . }}-scripts
   labels: {{- include "kafka.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "kafka.tplvalue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "kafka.tplvalue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   {{- $fullname := include "kafka.fullname" . }}
   {{- $releaseNamespace := .Release.Namespace }}
