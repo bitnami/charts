@@ -175,7 +175,7 @@ spec:
     name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
     key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
   {{- end }}
-  {{ - if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
+  {{- if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
   additionalAlertRelabelConfigs:
     name: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.name }}
     key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
