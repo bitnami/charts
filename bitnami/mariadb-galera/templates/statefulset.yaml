@@ -54,6 +54,7 @@ spec:
             - bash
             - -ec
             - |
+                {{- if (not (empty (.Values.galera.bootstrap.bootstrapFromNode | quote)))}}
                 {{- $fullname := include "mariadb-galera.fullname" . }}
                 {{- $bootstrapFromNode := int .Values.galera.bootstrap.bootstrapFromNode }}
                 # Bootstrap from the indicated node
@@ -62,6 +63,7 @@ spec:
                     export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
                     export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
                 fi
+                {{- end }}
                 exec /opt/bitnami/scripts/mariadb-galera/entrypoint.sh /opt/bitnami/scripts/mariadb-galera/run.sh
           env:
             - name: MY_POD_NAME
