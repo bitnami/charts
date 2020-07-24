@@ -83,11 +83,6 @@ spec:
               mountPath: /opt/bitnami/grafana/conf/grafana.ini
               subPath: grafana.ini
             {{- end }}
-            {{- if .Values.config.useCustomIniFile }}
-            - name: custom-ini
-              mountPath: /opt/bitnami/grafana/conf/custom.ini
-              subPath: custom.ini
-            {{- end }}
             - name: data
               mountPath: /opt/bitnami/grafana/data
             {{- if .Values.dashboardsProvider.enabled }}
@@ -187,16 +182,6 @@ spec:
           {{- else if .Values.config.grafanaIniSecret }}
           secret:
             secretName: {{ .Values.config.grafanaIniSecret }}
-          {{- end }}
-        {{- end }}
-        {{- if .Values.config.useCustomIniFile }}
-        - name: custom-ini
-          {{- if .Values.config.customIniConfigMap }}
-          configMap:
-            name: {{ .Values.config.customIniConfigMap }}
-          {{- else if .Values.config.customIniSecret }}
-          secret:
-            secretName: {{ .Values.config.customIniSecret }}
           {{- end }}
         {{- end }}
         {{- range .Values.extraConfigmaps }}
