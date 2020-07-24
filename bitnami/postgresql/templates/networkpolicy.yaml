@@ -33,7 +33,7 @@ spec:
             matchLabels:
               app: {{ template "postgresql.name" . }}
               release: {{ .Release.Name | quote }}
-              role: slave
+              role: read
       {{- end }}
     # Allow prometheus scrapes
     - ports:

@@ -26,11 +26,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "postgresql.master.fullname" -}}
+{{- define "postgresql.primary.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- $fullname := default (printf "%s-%s" .Release.Name $name) .Values.fullnameOverride -}}
 {{- if .Values.replication.enabled -}}
-{{- printf "%s-%s" $fullname "master" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" $fullname "primary" | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s" $fullname | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

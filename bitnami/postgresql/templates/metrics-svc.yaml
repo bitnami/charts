@@ -25,5 +25,5 @@ spec:
   selector:
     app: {{ template "postgresql.name" . }}
     release: {{ .Release.Name }}
-    role: master
+    role: primary
 {{- end }}
