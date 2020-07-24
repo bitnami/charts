@@ -182,11 +182,12 @@ galera:
   name: galera
 
   ## Bootstraping options
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
   bootstrap:
     ## Node to bootstrap from, you will need to change this parameter incase you want to bootstrap from other node
     ##
-    bootstrapFromNode: 0
-    ## Force bootstrap
+    bootstrapFromNode:
+    ## Force safe_to_bootstrap in grastate.date file.
     ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
     forceSafeToBootstrap: false
 
