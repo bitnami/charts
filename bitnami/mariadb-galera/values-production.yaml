@@ -189,7 +189,7 @@ galera:
     bootstrapFromNode:
     ## Force safe_to_bootstrap in grastate.date file.
     ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
-    # forceSafeToBootstrap: false
+    forceSafeToBootstrap: false
 
   ## Credentials to perform backups
   ##
