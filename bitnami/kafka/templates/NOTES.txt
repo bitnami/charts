@@ -61,9 +61,10 @@ Each Kafka broker can be accessed by producers via port {{ $servicePort }} on th
 
 {{- $brokerList := list }}
 {{- range $e, $i := until $replicaCount }}
-{{- $brokerList = append $brokerList (printf "%s-%d.%s-headless.%s.svc.%s" $fullname $i $fullname $releaseNamespace $clusterDomain) }}
+{{- $brokerList = append $brokerList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $servicePort) }}
 {{- end }}
 {{ join "\n" $brokerList | nindent 4 }}
+
 
 {{- if (include "kafka.client.saslAuthentication" .) }}
 
