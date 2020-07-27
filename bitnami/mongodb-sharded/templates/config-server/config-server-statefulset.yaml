@@ -56,6 +56,12 @@ spec:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
         {{- end }}
+        {{- with $.Values.configsvr.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       containers:
         - name: mongodb
           image: {{ include "mongodb-sharded.image" . }}
@@ -293,7 +299,7 @@ spec:
             name: {{ include "mongodb-sharded.configsvr.configCM" . }}
         {{- end }}
         {{- if .Values.common.initScriptsCM }}
-        - name: custom-init-scripts-configmap
+        - name: custom-init-scripts-cm
           configMap:
             name: {{ include "mongodb-sharded.initScriptsCM" . }}
             defaultMode: 0755

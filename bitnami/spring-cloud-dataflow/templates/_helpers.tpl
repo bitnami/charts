@@ -363,3 +363,14 @@ scdf: Messaging System
     Please enable only RabbitMQ or Kafka as messaging system.
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return Deployer Environment Variables. Empty string or variables started with comma prefix.
+*/}}
+{{- define "scdf.deployer.environmentVariables" -}}
+  {{- if .Values.deployer.environmentVariables -}}
+    {{- printf ",%s" .Values.deployer.environmentVariables | trim -}}
+  {{- else -}}
+    {{- printf "" -}}
+  {{- end -}}
+{{- end -}}
