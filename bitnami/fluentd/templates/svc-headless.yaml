@@ -6,6 +6,9 @@ metadata:
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
     app: aggregator
+  {{- if .Values.aggregator.service.annotations }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.aggregator.service.type }}
   {{- if and .Values.aggregator.service.loadBalancerIP (eq .Values.aggregator.service.type "LoadBalancer") }}
