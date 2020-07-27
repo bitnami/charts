@@ -129,7 +129,7 @@ maxSessionTimeout: 40000
 
 ## A list of comma separated Four Letter Words commands to use
 ##
-fourlwCommandsWhitelist: srvr, mntr
+fourlwCommandsWhitelist: srvr, mntr, ruok
 
 ## Allow zookeeper to listen for peers on all IPs
 ##
@@ -303,6 +303,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+  probeCommandTimeout: 2
 
 readinessProbe:
   enabled: true
@@ -311,6 +312,7 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+  probeCommandTimeout: 2
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
