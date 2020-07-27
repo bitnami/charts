@@ -17,10 +17,10 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
   export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   {{- end }}
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.discourseSecretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.secretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
   {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (or (.Values.externalRedis.existingSecret) (not (empty .Values.externalRedis.password)))) }}
-  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
   {{- end }}
 2. Complete your Discourse deployment by running:
 
@@ -34,14 +34,14 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     {{- end }}{{- end }}
     {{- if (and .Values.redis.enabled .Values.redis.usePassword) }}
     {{- if .Values.redis.existingSecret }}
-    --set redis.existingSecret={{ include "discourse.redisSecretName" . }} \
+    --set redis.existingSecret={{ include "discourse.redis.secretName" . }} \
     {{- else if not (empty .Values.redis.password) }}
     --set redis.password=$APP_REDIS_PASSWORD \
     {{- end }}
     {{- else if (not .Values.redis.enabled) }}
     --set redis.enabled=false \
     {{- if .Values.externalRedis.existingSecret }}
-    --set externalRedis.existingSecret={{ include "discourse.redisSecretName" . }} \
+    --set externalRedis.existingSecret={{ include "discourse.redis.secretName" . }} \
     {{- else if (not (empty .Values.externalRedis.password)) }}
     --set externalRedis.password=$APP_REDIS_PASSWORD \
     {{- end }}
@@ -66,14 +66,14 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     {{- end }}{{- end }}
     {{- if and .Values.redis.enabled .Values.redis.usePassword }}
     {{- if .Values.redis.existingSecret }}
-    --set redis.existingSecret={{ include "discourse.redisSecretName" . }} \
+    --set redis.existingSecret={{ include "discourse.redis.secretName" . }} \
     {{- else if not (empty .Values.redis.password) }}
     --set redis.password=$APP_REDIS_PASSWORD \
     {{- end }}
     {{- else if (not .Values.redis.enabled) }}
     --set redis.enabled=false \
     {{- if .Values.externalRedis.existingSecret }}
-    --set externalRedis.existingSecret={{ include "discourse.redisSecretName" . }} \
+    --set externalRedis.existingSecret={{ include "discourse.redis.secretName" . }} \
     {{- else if (not (empty .Values.externalRedis.password)) }}
     --set externalRedis.password=$APP_REDIS_PASSWORD \
     {{- end }}{{- end }}
@@ -93,10 +93,10 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 2. Get your Discourse login credentials by running:
 
   Username: {{ .Values.discourse.username }}
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.discourseSecretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.secretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
   {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (or (.Values.externalRedis.existingSecret) (not (empty .Values.externalRedis.password)))) }}
-  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
   {{- end }}
 {{- end }}
 
@@ -122,10 +122,10 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
   export APP_HOST=127.0.0.1
 {{- end }}
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.discourseSecretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.secretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
   {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (or (.Values.externalRedis.existingSecret) (not (empty .Values.externalRedis.password)))) }}
-  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
   {{- end }}
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
@@ -138,7 +138,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     --set externalDatabase.user={{ .Values.externalDatabase.user }} \
     {{- end }}
     {{- if not (empty .Values.externalDatabase.existingSecret)}}
-    --set externalDatabase.existingSecret={{ include "discourse.redisSecretName" . }} \
+    --set externalDatabase.existingSecret={{ include "discourse.redis.secretName" . }} \
     {{- else if not (empty .Values.externalDatabase.password) }}
     --set externalDatabase.password=$APP_DATABASE_PASSWORD \
     {{- end }}
@@ -151,14 +151,14 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     {{- end }}{{- end }}
     {{- if (and .Values.redis.enabled .Values.redis.usePassword) }}
     {{- if .Values.redis.existingSecret }}
-    --set redis.existingSecret={{ include "discourse.redisSecretName" . }} \
+    --set redis.existingSecret={{ include "discourse.redis.secretName" . }} \
     {{- else if not (empty .Values.redis.password) }}
     --set redis.password=$APP_REDIS_PASSWORD \
     {{- end }}
     {{- else if (not .Values.redis.enabled) }}
     --set redis.enabled=false \
     {{- if .Values.externalRedis.existingSecret }}
-    --set externalRedis.existingSecret={{ include "discourse.redisSecretName" . }} \
+    --set externalRedis.existingSecret={{ include "discourse.redis.secretName" . }} \
     {{- else if (not (empty .Values.externalRedis.password)) }}
     --set externalRedis.password=$APP_REDIS_PASSWORD \
     {{- end }}

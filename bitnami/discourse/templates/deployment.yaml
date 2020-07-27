@@ -57,23 +57,23 @@ spec:
             - name: DISCOURSE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.discourseSecretName" . }}
+                  name: {{ include "discourse.secretName" . }}
                   key: discourse-password
             - name: DISCOURSE_POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.databaseSecretName" . }}
+                  name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
             - name: POSTGRESQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.databaseSecretName" . }}
+                  name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-postgres-password
             {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.redisSecretName" . }}
+                  name: {{ include "discourse.redis.secretName" . }}
                   key: redis-password
             {{- end }}
             {{- if .Values.discourse.extraEnvVars }}
@@ -148,18 +148,18 @@ spec:
             - name: DISCOURSE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.discourseSecretName" . }}
+                  name: {{ include "discourse.secretName" . }}
                   key: discourse-password
             - name: DISCOURSE_POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.databaseSecretName" . }}
+                  name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
             {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.redisSecretName" . }}
+                  name: {{ include "discourse.redis.secretName" . }}
                   key: redis-password
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
