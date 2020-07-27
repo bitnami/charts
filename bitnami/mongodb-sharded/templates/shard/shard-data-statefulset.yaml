@@ -59,6 +59,12 @@ spec:
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
         {{- end }}
+        {{- with $.Values.shardsvr.dataNode.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       containers:
         - name: mongodb
           image: {{ include "mongodb-sharded.image" $ }}
