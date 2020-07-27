@@ -293,7 +293,7 @@ spec:
             name: {{ include "mongodb-sharded.configsvr.configCM" . }}
         {{- end }}
         {{- if .Values.common.initScriptsCM }}
-        - name: custom-init-scripts-configmap
+        - name: custom-init-scripts-cm
           configMap:
             name: {{ include "mongodb-sharded.initScriptsCM" . }}
             defaultMode: 0755
