@@ -407,18 +407,6 @@ external-dns: azure.useManagedIdentityExtension
 
 {{/*
 Validate values of Azure DNS:
-- must provide the Azure AAD Client Secret when provider is "azure-private-dns" and useManagedIdentityExtension is "true"
-*/}}
-{{- define "external-dns.validateValues.azurePrivateDns.useManagedIdentityExtensionAadClientSecret" -}}
-{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) .Values.azure.aadClientSecret .Values.azure.useManagedIdentityExtension -}}
-external-dns: azure.useManagedIdentityExtension
-    You must not provide the Azure AAD Client Secret when provider="azure-private-dns" and useManagedIdentityExtension is "true".
-    Please unset the aadClientSecret parameter (--set azure.aadClientSecret="")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of Azure DNS:
 - must not provide the Azure AAD Client secret when provider is "azure", secretName is not set and MSI is enabled
 */}}
 {{- define "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientSecret" -}}
@@ -450,6 +438,18 @@ Validate values of Azure DNS:
 external-dns: azure.useManagedIdentityExtension
     You must provide the Azure AAD Client Secret when provider="azure" and useManagedIdentityExtension is not set.
     Please set the aadClientSecret parameter (--set azure.aadClientSecret="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Azure Private DNS:
+- must provide the Azure AAD Client Secret when provider is "azure-private-dns", secretName is not set and useManagedIdentityExtension is "true"
+*/}}
+{{- define "external-dns.validateValues.azurePrivateDns.useManagedIdentityExtensionAadClientSecret" -}}
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) .Values.azure.aadClientSecret .Values.azure.useManagedIdentityExtension -}}
+external-dns: azure.useManagedIdentityExtension
+    You must not provide the Azure AAD Client Secret when provider="azure-private-dns", secretName is not set, and useManagedIdentityExtension is "true".
+    Please unset the aadClientSecret parameter (--set azure.aadClientSecret="")
 {{- end -}}
 {{- end -}}
 
