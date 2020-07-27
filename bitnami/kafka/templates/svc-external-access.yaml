@@ -43,13 +43,7 @@ spec:
       {{- else }}
       nodePort: null
       {{- end }}
-      {{- if or (eq $root.Values.externalAccess.service.type "LoadBalancer") }}
       targetPort: kafka-external
-      {{- else if $root.Values.externalAccess.autoDiscovery.enabled }}
-      targetPort: null
-      {{- else }}
-      targetPort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- end }}
   selector: {{- include "kafka.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: kafka
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
