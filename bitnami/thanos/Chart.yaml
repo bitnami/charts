@@ -15,6 +15,6 @@ maintainers:
 name: thanos
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
-version: 1.4.0
+version: 1.4.1
 annotations:
   category: Analytics

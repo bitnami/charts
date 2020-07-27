@@ -122,14 +122,14 @@ Create chart name and version as used by the chart label.
 Get the initialization scripts Secret name.
 */}}
 {{- define "mongodb-sharded.initScriptsSecret" -}}
-  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.initScriptsSecret "context" $)) -}}
+  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.common.initScriptsSecret "context" $)) -}}
 {{- end -}}
 
 {{/*
 Get the initialization scripts configmap name.
 */}}
 {{- define "mongodb-sharded.initScriptsCM" -}}
-  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.initScriptsCM "context" $)) -}}
+  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.common.initScriptsCM "context" $)) -}}
 {{- end -}}
 
 {{/*

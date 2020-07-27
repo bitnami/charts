@@ -252,7 +252,9 @@ Return the Skipper Database User
 Return the Database secret name
 */}}
 {{- define "scdf.database.secretName" -}}
-{{- if .Values.mariadb.enabled }}
+{{- if .Values.externalDatabase.existingPasswordSecret -}}
+    {{- printf "%s" .Values.externalDatabase.existingPasswordSecret -}}
+{{- else if .Values.mariadb.enabled }}
     {{- printf "%s" (include "scdf.mariadb.fullname" .) -}}
 {{- else -}}
     {{- printf "%s-%s" (include "scdf.fullname" .) "externaldb" -}}
@@ -296,10 +298,23 @@ Return the RabbitMQ username
 Return the RabbitMQ secret name
 */}}
 {{- define "scdf.rabbitmq.secretName" -}}
-{{- if .Values.rabbitmq.enabled }}
+{{- if .Values.externalRabbitmq.existingPasswordSecret -}}
+    {{- printf "%s" .Values.externalRabbitmq.existingPasswordSecret -}}
+{{- else if .Values.rabbitmq.enabled }}
     {{- printf "%s" (include "scdf.rabbitmq.fullname" .) -}}
 {{- else -}}
     {{- printf "%s-%s" (include "scdf.fullname" .) "externalrabbitmq" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the RabbitMQ host
+*/}}
+{{- define "scdf.rabbitmq.vhost" -}}
+{{- if .Values.rabbitmq.enabled }}
+    {{- printf "/" -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalRabbitmq.vhost -}}
 {{- end -}}
 {{- end -}}
 
@@ -347,4 +362,15 @@ scdf: Messaging System
     You can only use one messaging system.
     Please enable only RabbitMQ or Kafka as messaging system.
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return Deployer Environment Variables. Empty string or variables started with comma prefix.
+*/}}
+{{- define "scdf.deployer.environmentVariables" -}}
+  {{- if .Values.deployer.environmentVariables -}}
+    {{- printf ",%s" .Values.deployer.environmentVariables | trim -}}
+  {{- else -}}
+    {{- printf "" -}}
+  {{- end -}}
 {{- end -}}
