@@ -105,16 +105,13 @@ extraEnvVars: {}
 ##
 extraConfigmaps: {}
 
-## Parameters to override the default grafana.ini and custom.ini files.
-## It is needed to create a configmap or a secret containing the grafana.ini and custom.ini files.
+## Parameters to override the default grafana.ini file.
+## It is needed to create a configmap or a secret containing the grafana.ini file.
 ##
 config:
   useGrafanaIniFile: false
   grafanaIniConfigMap:
   grafanaIniSecret:
-  useCustomIniFile: false
-  customIniConfigMap:
-  customIniSecret:
 
 ## Create dasboard provider to load dashboards, a default one is created to load
 ## dashboards from "/opt/bitnami/grafana/dashboards"
