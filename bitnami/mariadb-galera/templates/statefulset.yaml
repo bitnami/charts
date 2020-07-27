@@ -324,4 +324,7 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{ include "mariadb-galera.storageClass" . }}
+        {{- if .Values.persistence.selector }}
+        selector: {{- include "mariadb-galera.tplValue" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}
