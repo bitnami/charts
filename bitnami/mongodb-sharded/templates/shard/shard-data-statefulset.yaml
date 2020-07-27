@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels: {{- include "mongodb-sharded.matchLabels" $ | nindent 6 }}
       app.kubernetes.io/component: shardsvr
-  podManagementPolicy: {{ .Values.shardsvr.dataNode.podManagementPolicy }}
+  podManagementPolicy: {{ $.Values.shardsvr.dataNode.podManagementPolicy }}
   updateStrategy: {{- toYaml $.Values.shardsvr.dataNode.updateStrategy | nindent 4 }}
   serviceName: {{ include "mongodb-sharded.fullname" $ }}-headless
   replicas: {{ $.Values.shardsvr.dataNode.replicas }}
