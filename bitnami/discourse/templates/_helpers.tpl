@@ -122,7 +122,7 @@ imagePullSecrets:
 {{/*
 Return the Discourse secret name
 */}}
-{{- define "discourse.SecretName" -}}
+{{- define "discourse.secretName" -}}
 {{- if .Values.discourse.existingSecret }}
     {{- printf "%s" .Values.discourse.existingSecret -}}
 {{- else -}}
@@ -306,7 +306,7 @@ Return the Redis port
 {{/*
 Return true if a secret object for Redis should be created
 */}}
-{{- define "discourse.createSecret" -}}
+{{- define "discourse.redis.createSecret" -}}
 {{- if and (not .Values.redis.enabled) (not .Values.externalRedis.existingSecret) }}
     {{- false -}}
 {{- else -}}
