@@ -7,8 +7,19 @@ metadata:
     app.kubernetes.io/component: aggregator
     app: aggregator
 spec:
-  type: ClusterIP
+  type: {{ .Values.aggregator.service.type }}
+  {{- if and .Values.aggregator.service.loadBalancerIP (eq .Values.aggregator.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.aggregator.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and .Values.aggregator.service.loadBalancerSourceRanges (eq .Values.aggregator.service.type "LoadBalancer") }}
+  loadBalancerSourceRanges:
+  {{- with .Values.aggregator.service.loadBalancerSourceRanges }}
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if eq .Values.aggregator.service.type "ClusterIP" }}
   clusterIP: None
+  {{- end }}
   ports:
   {{- range $key, $value := .Values.aggregator.service.ports }}
     - name: {{ $key }}
