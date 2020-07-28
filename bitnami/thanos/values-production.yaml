@@ -104,7 +104,7 @@ querier:
 
   ## Extra Flags to passed to Thanos Querier
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## Number of Thanos Querier replicas to deploy
   ##
@@ -383,7 +383,7 @@ bucketweb:
 
   ## Extra Flags to passed to Bucket Web
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## Number of Thanos Querier replicas to deploy
   ##
@@ -588,7 +588,7 @@ compactor:
 
   ## Extra Flags to passed to Thanos Compactor
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## StrategyType, can be set to RollingUpdate or Recreate by default.
   ##
@@ -739,7 +739,7 @@ storegateway:
 
   ## Extra Flags to passed to Thanos Store Gateway
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## Number of Thanos Store Gateway replicas to deploy
   ##
@@ -943,7 +943,7 @@ ruler:
 
   ## Extra Flags to passed to Thanos Ruler
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## Ruler Configuration
   ## Specify content for ruler.yml

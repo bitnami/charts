@@ -92,8 +92,8 @@ spec:
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
             {{- end }}
-            {{- range $key, $value := .Values.ruler.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- range .Values.ruler.extraFlags }}
+            - {{ . }}
             {{- end }}
           env:
             - name: POD_NAME
