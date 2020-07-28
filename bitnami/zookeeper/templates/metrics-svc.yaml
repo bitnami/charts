@@ -9,14 +9,20 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.metrics.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.metrics.service.annotations }}
+    {{ include "zookeeper.tplValue" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.metrics.service.type }}
   ports:
     - name: tcp-metrics
-      port: {{ .Values.metrics.port }}
+      port: {{ .Values.metrics.service.port }}
       targetPort: metrics
   selector: {{- include "zookeeper.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper

@@ -178,8 +178,10 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | Parameter                                 | Description                                                                                                                               | Default                                                      |
 |-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `metrics.enabled`                         | Enable prometheus to access zookeeper metrics endpoint                                                                                    | `false`                                                      |
-| `metrics.port`                            | Port where a Jetty server will expose Prometheus metrics                                                                                  | `9141`                                                       |
-| `metrics.podAnnotations`                  | Annotations for enabling prometheus to access the metrics endpoint                                                                        | `{prometheus.io/scrape: "true", prometheus.io/port: "9141"}` |
+| `metrics.containerPort`                   | Port where a Jetty server will expose Prometheus metrics                                                                                  | `9141`                                                       |
+| `metrics.service.type`                    | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Jetty server exposing Prometheus metrics                          | `ClusterIP`                                                  |
+| `metrics.service.port`                    | Prometheus metrics service port                                                                                                           | `9141`                                                       |
+| `metrics.service.annotations`             | Service annotations for Prometheus to auto-discover the metrics endpoint                                                                  | `{prometheus.io/scrape: "true", prometheus.io/port: "9141"}` |
 | `metrics.serviceMonitor.enabled`          | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`                                                      |
 | `metrics.serviceMonitor.namespace`        | Namespace for the ServiceMonitor Resource                                                                                                 | The Release Namespace                                        |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped.                                                                                              | `nil` (Prometheus Operator default value)                    |
@@ -261,6 +263,13 @@ You can use a dedicated device for logs (instead of using the data directory) to
 When using a dedicated device for logs, you can use a PVC to persist the logs. To do so, set `persistence.enabled` to `true`. See the [Persistence Parameters](#persistence-parameters) section for more information.
 
 ## Upgrading
+
+### To 5.21.0
+
+A couple of parameters related to Zookeeper metrics were renamed or dissapeared in favor of new ones:
+
+- `metrics.port` is renamed to `metrics.containerPort`.
+- `metrics.annotations` is deprecated in favor of `metrics.service.annotations`.
 
 ### To 3.0.0
 

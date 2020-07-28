@@ -210,15 +210,3 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
     {{- end -}}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Return podAnnotations
-*/}}
-{{- define "zookeeper.podAnnotations" -}}
-{{- if .Values.podAnnotations }}
-{{- toYaml .Values.podAnnotations | nindent 0 }}
-{{- end }}
-{{- if .Values.metrics.podAnnotations }}
-{{- include "zookeeper.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 0 }}
-{{- end }}
-{{- end -}}
