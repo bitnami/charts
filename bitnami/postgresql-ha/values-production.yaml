@@ -315,10 +315,10 @@ pgpool:
   ## will be appended to the "pgpool_passwd" file
   ##
   customUsers: {}
-  ##  List of comma or semicolon separeted list of postgres usernames
+  ##  Comma or semicolon separeted list of postgres usernames
   #   usernames: 'user01;user02'
 
-  ##  List of comma or semicolon separated list of the associated passwords for the
+  ##  Comma or semicolon separated list of the associated passwords for the
   ##  users above
   #   passwords: 'pass01;pass02'
 
