@@ -264,6 +264,13 @@ When using a dedicated device for logs, you can use a PVC to persist the logs. T
 
 ## Upgrading
 
+### To 5.21.0
+
+A couple of parameters related to Zookeeper metrics were renamed or dissapeared in favor of new ones:
+
+- `metrics.port` is renamed to `metrics.containerPort`.
+- `metrics.annotations` is deprecated in favor of `metrics.service.annotations`.
+
 ### To 3.0.0
 
 This new version of the chart includes the new ZooKeeper major version 3.5.5. Note that to perform an automatic upgrade
