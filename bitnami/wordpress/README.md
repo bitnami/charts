@@ -292,7 +292,7 @@ mariadb.master.persistence.storageClass=nfs
 
 #### Known limitations
 
-When performing admin operations that require activating the maintenance mode (such as updating a plugin or theme), it's activated in only one replica (this is related to some limitation that doesn't allow us to change the maintenance file path to include it in the NFS volume, find more information on [this ticket](https://core.trac.wordpress.org/ticket/50797)). This implies that WP could be attending requests on other replicas while performing admin operations, with unpredictable consequences.
+When performing admin operations that require activating the maintenance mode (such as updating a plugin or theme), it's activated in only one replica (see: [bug report](https://core.trac.wordpress.org/ticket/50797)). This implies that WP could be attending requests on other replicas while performing admin operations, with unpredictable consequences.
 
 To avoid that, you can manually activate/deactivate the maintenance mode on every replica using the WP CLI. For instance, if you installed WP with replicas you can run the commands below to activate the maintenance mode (the following example assumes that the release name is `wordpress`):
 
