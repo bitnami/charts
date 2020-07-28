@@ -803,3 +803,15 @@ PGPASSWORD=$(< $POSTGRES_PASSWORD_FILE)
 PGPASSWORD=$POSTGRES_PASSWORD
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the Pgpool secret containing custom users to be added to
+pool_passwd file.
+*/}}
+{{- define "postgresql-ha.pgpoolCustomUsersSecretName" -}}
+{{- if .Values.pgpool.customUsersSecret -}}
+{{- printf "%s" (tpl .Values.pgpool.customUsersSecret $) -}}
+{{- else -}}
+{{- printf "%s-custom-users" (include "postgresql-ha.pgpool" .) -}}
+{{- end -}}
+{{- end -}}
