@@ -101,7 +101,7 @@ To create a pod that you can use as a Kafka client run the following commands:
     kubectl cp --namespace {{ $releaseNamespace }} /path/to/client.properties {{ $fullname }}-client:/tmp/client.properties
     kubectl cp --namespace {{ $releaseNamespace }} /path/to/kafka_jaas.conf {{ $fullname }}-client:/tmp/kafka_jaas.conf
     {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
-    kubectl cp --namespace {{ $releaseNamespace }} ./kafka.truststore.jks kafka-client:/tmp/kafka.truststore.jks
+    kubectl cp --namespace {{ $releaseNamespace }} ./kafka.truststore.jks {{ $fullname }}-client:/tmp/kafka.truststore.jks
     {{- end }}
     {{- end }}
     kubectl exec --tty -i {{ $fullname }}-client --namespace {{ $releaseNamespace }} -- bash
