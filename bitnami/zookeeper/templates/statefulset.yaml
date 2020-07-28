@@ -231,12 +231,12 @@ spec:
             {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              {{ if not .Values.service.tls.disable_base_client_port }}
-              port: client
-              {{ else }}
-              port: client-tls
-              {{ end }}
+            exec:
+              {{- if not .Values.service.tls.disable_base_client_port }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | nc -w {{ .Values.livenessProbe.probeCommandTimeout }} -q {{ .Values.livenessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              {{- else }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tls.client_port }} | grep imok']
+              {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -245,12 +245,12 @@ spec:
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
-            tcpSocket:
-              {{ if not .Values.service.tls.disable_base_client_port }}
-              port: client
-              {{ else }}
-              port: client-tls
-              {{ end }}
+            exec:
+              {{- if not .Values.service.tls.disable_base_client_port }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | nc -w {{ .Values.readinessProbe.probeCommandTimeout }} -q {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              {{- else }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tls.client_port }} | grep imok']
+              {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

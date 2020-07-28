@@ -112,6 +112,10 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
+    ## podManagementPolicy for the statefulset, allows parallel startup of pods
+    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+    ##
+    podManagementPolicy: OrderedReady
     ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
@@ -221,6 +225,10 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
+    ## podManagementPolicy for the statefulset, allows parallel startup of pods
+    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+    ##
+    podManagementPolicy: OrderedReady
     ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
@@ -352,6 +360,10 @@ configsvr:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## podManagementPolicy for the statefulset, allows parallel startup of pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
   ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##

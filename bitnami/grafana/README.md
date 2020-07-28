@@ -93,9 +93,6 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `config.useGrafanaIniFile`             | Allows to load a `grafana.ini` file                                         | `false`                                                 |
 | `config.grafanaIniConfigMap`           | Name of the ConfigMap containing the `grafana.ini` file                     | `nil`                                                   |
 | `config.grafanaIniSecret`              | Name of the Secret containing the `grafana.ini` file                        | `nil`                                                   |
-| `config.useCustomIniFile`              | Allows to load a `custom.ini` file                                          | `false`                                                 |
-| `config.customIniConfigMap`            | Name of the ConfigMap containing the `custom.ini` file                      | `nil`                                                   |
-| `config.customIniSecret`               | Name of the Secret containing the `custom.ini` file                         | `nil`                                                   |
 | `dashboardsProvider.enabled`           | Enable the use of a Grafana dashboard provider                              | `false`                                                 |
 | `dashboardsProvider.configMapName`     | Name of a ConfigMap containing a custom dashboard provider                  | `nil` (evaluated as a template)                         |
 | `dashboardsConfigMaps`                 | Array with the names of a series of ConfigMaps containing dashboards files  | `nil`                                                   |
