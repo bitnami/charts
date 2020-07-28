@@ -349,17 +349,30 @@ networkPolicy:
   ##
   # allowExternal: true
 
-## Prometheus Metrics
+## Zookeeper Prometheus Exporter configuration
 ##
 metrics:
   enabled: false
-  port: 9141
-  ## Prometheus pod annotations
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+
+  ## Zookeeper Prometheus Exporter container port
   ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.metrics.port }}"
+  containerPort: 9141
+
+  ## Service configuration
+  ##
+  service:
+    ## Zookeeper Prometheus Exporter service type
+    ##
+    type: ClusterIP
+    ## Zookeeper Prometheus Exporter service port
+    ##
+    port: 9141
+    ## Annotations for the Zookeeper Prometheus Exporter metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/path: "/metrics"
 
   ## Prometheus Operator ServiceMonitor configuration
   ##
