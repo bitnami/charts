@@ -747,7 +747,7 @@ metrics:
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.kafka.port }}"
+        prometheus.io/port: "{{ .Values.metrics.kafka.service.port }}"
         prometheus.io/path: "/metrics"
 
   ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
@@ -822,7 +822,7 @@ metrics:
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.jmx.exporterPort }}"
+        prometheus.io/port: "{{ .Values.metrics.jmx.service.port }}"
         prometheus.io/path: "/"
 
     ## JMX Whitelist Objects, can be set to control which JMX metrics are exposed. Only whitelisted
