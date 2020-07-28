@@ -197,6 +197,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_discourse`                                               |
 | `externalDatabase.password`               | Password for the above username                                                       | `""`                                                         |
 | `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user (used in the installation stage)             | `""`                                                         |
+| `externalDatabase.existingSecret`               | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password`, `postgresql-replication-password`                                                       | `nil`                                                         |
 | `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_application`                                        |
 
 ### Redis parameters
@@ -213,6 +214,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `externalRedis.host`                      | Host of the external database                                                         | `""`                                                         |
 | `externalRedis.port`                      | Database port number                                                                  | `6379`                                                       |
 | `externalRedis.password`                  | Password for the above username                                                       | `nil`                                                        |
+| `externalRedis.existingSecret`               | Name of an existing Kubernetes secret. The secret must have the `redis-password` key configured                                                       | `nil`                                                         |
 
 The above parameters map to the env variables defined in [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse) image documentation.
 

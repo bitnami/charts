@@ -258,9 +258,9 @@ Return true if a secret object for Postgres should be created
 */}}
 {{- define "discourse.postgresql.createSecret" -}}
 {{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.existingSecret) }}
-    {{- false -}}
-{{- else -}}
     {{- true -}}
+{{- else -}}
+    {{- false -}}
 {{- end -}}
 {{- end -}}
 
@@ -307,10 +307,10 @@ Return the Redis port
 Return true if a secret object for Redis should be created
 */}}
 {{- define "discourse.redis.createSecret" -}}
-{{- if and (not .Values.redis.enabled) (not .Values.externalRedis.existingSecret) }}
-    {{- false -}}
-{{- else -}}
+{{- if and (not .Values.redis.enabled) (not .Values.externalRedis.existingSecret) .Values.externalRedis.password }}
     {{- true -}}
+{{- else -}}
+    {{- false -}}
 {{- end -}}
 {{- end -}}
 
