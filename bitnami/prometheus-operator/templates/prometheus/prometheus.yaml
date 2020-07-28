@@ -170,10 +170,15 @@ spec:
   {{- if .Values.prometheus.volumeMounts }}
   volumeMounts: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.additionalScrapeConfigsExternal }}
+  {{- if .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
   additionalScrapeConfigs:
-    name: {{ template "prometheus-operator.prometheus.fullname" . }}-scrape-config
-    key: additional-scrape-configs.yaml
+    name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
+    key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
+  {{- end }}
+  {{- if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
+  additionalAlertRelabelConfigs:
+    name: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.name }}
+    key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
   {{- end }}
 {{- include "prometheus-operator.prometheus.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create }}

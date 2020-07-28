@@ -16,17 +16,17 @@ This deployment will be incomplete until you configure the array of load balance
 IPs for Kafka brokers. To complete your deployment follow the steps below:
 
 1. Wait for the load balancer IPs (it may take a few minutes for them to be available):
-.
+
     kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w
-.
+
 2. Obtain the load balancer IPs and upgrade your chart:
-.
+
     {{- range $i, $e := until $replicaCount }}
     LOAD_BALANCER_IP_{{ add $i 1 }}="$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }}-{{ $i }}-external -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
     {{- end }}
-.
+
 3. Upgrade you chart:
-.
+
     helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
       --set replicaCount={{ $replicaCount }} \
       --set externalAccess.enabled=true \
@@ -34,7 +34,7 @@ IPs for Kafka brokers. To complete your deployment follow the steps below:
       --set externalAccess.service.loadBalancerIPs[{{ $i }}]=$LOAD_BALANCER_IP_{{ add $i 1 }} \
       {{- end }}
       --set externalAccess.service.type=LoadBalancer
-.
+
 {{- else }}
 
 {{- if and (or (eq .Values.service.type "LoadBalancer") .Values.externalAccess.enabled) (eq .Values.auth.clientProtocol "plaintext") }}
@@ -59,9 +59,12 @@ Kafka can be accessed by consumers via port {{ $servicePort }} on the following 
 
 Each Kafka broker can be accessed by producers via port {{ $servicePort }} on the following DNS name(s) from within your cluster:
 
-    {{- range $i, $e := until $replicaCount }}
-    {{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}
-    {{- end }}
+{{- $brokerList := list }}
+{{- range $e, $i := until $replicaCount }}
+{{- $brokerList = append $brokerList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $servicePort) }}
+{{- end }}
+{{ join "\n" $brokerList | nindent 4 }}
+
 
 {{- if (include "kafka.client.saslAuthentication" .) }}
 
@@ -109,7 +112,7 @@ To create a pod that you can use as a Kafka client run the following commands:
     PRODUCER:
         kafka-console-producer.sh \
             {{ if (include "kafka.client.saslAuthentication" .) }}--producer.config /tmp/client.properties \{{ end }}
-            --broker-list {{ range $i, $e := until $replicaCount }}{{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }},{{ end }} \
+            --broker-list {{ join "," $brokerList }} \
             --topic test
 
     CONSUMER:

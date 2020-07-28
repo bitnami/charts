@@ -285,17 +285,8 @@ WARNING: Using more than one replica requires using an external database to shar
 Function to validate grafana confirmaps and secrets
 */}}
 {{- define "grafana.validateValues.configmapsOrSecrets" -}}
-{{- if and .Values.config.grafanaIniSecret .Values.config.grafanaIniConfigMap -}}
-CONFLICT: You specified both config.grafanaIniSecret and config.grafanaIniConfigMap. Please set only one of them.
-{{- end -}}
-{{- if and .Values.config.customIniSecret .Values.config.customIniConfigMap -}}
-CONFLICT: You specified both config.customIniSecret and config.customIniConfigMap. Please set only one of them.
-{{- end -}}
 {{- if and .Values.config.useGrafanaIniFile (not .Values.config.grafanaIniSecret) (not .Values.config.grafanaIniConfigMap) -}}
 WARNING: You enabled config.useGrafanaIniFile but did not specify config.grafanaIniSecret nor config.grafanaIniConfigMap
-{{- end -}}
-{{- if and .Values.config.useCustomIniFile (not .Values.config.customIniSecret) (not .Values.config.customIniConfigMap) -}}
-WARNING: You enabled config.useCustomIniFile but did not specify config.customIniSecret nor config.customIniConfigMap
 {{- end -}}
 {{- end -}}
 

@@ -44,6 +44,14 @@ image:
 ##
 clusterDomain: cluster.local
 
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
 ## Kafka Configuration
 ## Specify content for server.properties
 ## The server.properties is auto-generated based on other parameters when this paremeter is not specified

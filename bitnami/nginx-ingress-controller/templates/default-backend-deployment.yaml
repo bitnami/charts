@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "nginx-ingress.defaultBackend.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
     component: {{ .Values.defaultBackend.name }}
 spec:

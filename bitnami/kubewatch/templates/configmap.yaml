@@ -34,6 +34,10 @@ data:
       smtp:
 {{ toYaml .Values.smtp | indent 8 }}
 {{- end }}
+{{- if .Values.msteams.enabled }}
+      msteams:
+{{ toYaml .Values.msteams | indent 8 }}
+{{- end }}
     resource:
 {{ toYaml .Values.resourcesToWatch | indent 6 }}
     namespace: {{ .Values.namespaceToWatch | quote }}

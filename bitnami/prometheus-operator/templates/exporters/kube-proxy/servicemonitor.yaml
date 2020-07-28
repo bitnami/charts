@@ -15,22 +15,20 @@ spec:
     matchNames:
       - {{ .Values.kubeProxy.namespace }}
   endpoints:
-  - port: http-metrics
-    {{- if .Values.kubeProxy.serviceMonitor.interval }}
-    interval: {{ .Values.kubeProxy.serviceMonitor.interval }}
-    {{- end }}
-    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-    {{- if .Values.kubeProxy.serviceMonitor.https }}
-    scheme: https
-    tlsConfig:
-      caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    {{- end}}
-{{- if .Values.kubeProxy.serviceMonitor.metricRelabelings }}
-    metricRelabelings:
-{{ toYaml .Values.kubeProxy.serviceMonitor.metricRelabelings | indent 4 }}
-{{- end }}
-{{- if .Values.kubeProxy.serviceMonitor.relabelings }}
-    relabelings:
-{{ toYaml .Values.kubeProxy.serviceMonitor.relabelings | indent 4 }}
-{{- end }}
+    - port: http-metrics
+      {{- if .Values.kubeProxy.serviceMonitor.interval }}
+      interval: {{ .Values.kubeProxy.serviceMonitor.interval }}
+      {{- end }}
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      {{- if .Values.kubeProxy.serviceMonitor.https }}
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      {{- end}}
+      {{- if .Values.kubeProxy.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- toYaml .Values.kubeProxy.serviceMonitor.metricRelabelings | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubeProxy.serviceMonitor.relabelings }}
+      relabelings: {{- toYaml .Values.kubeProxy.serviceMonitor.relabelings | nindent 8 }}
+      {{- end }}
 {{- end }}
