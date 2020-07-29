@@ -521,10 +521,13 @@ redis:
   ## with Discourse.
   ## The password value is ignored if existingSecret is set
   # password:
-  ## Name of existing secret object
-  ## The secret should contain the key redis-password
   ##
-  # existingSecret: my-secret
+  ## Name of existing secret object containing the password
+  existingSecret:
+  ##
+  ## Password key to be retrieved from Redis secret
+  existingSecretPasswordKey: redis-password
+  ##
   ## Cluster settings
   ##
   cluster:
@@ -547,9 +550,12 @@ externalRedis:
   ##
   port: 6379
   ## Redis password for authentication
+  ## Ignored if existingSecret is set
   ##
   password: ''
-  ## Name of existing secret object
-  ## The secret should contain the key redis-password
   ##
-  # existingSecret: my-secret
+  ## Name of existing secret object containing the password
+  existingSecret:
+  ##
+  ## Password key to be retrieved from Redis secret
+  existingSecretPasswordKey: redis-password

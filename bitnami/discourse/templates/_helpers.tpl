@@ -259,8 +259,6 @@ Return true if a secret object for Postgres should be created
 {{- define "discourse.postgresql.createSecret" -}}
 {{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.existingSecret) }}
     {{- true -}}
-{{- else -}}
-    {{- false -}}
 {{- end -}}
 {{- end -}}
 
@@ -299,7 +297,7 @@ Return the Redis port
 {{- if .Values.redis.enabled }}
     {{- printf "6379" | quote -}}
 {{- else -}}
-    {{- printf "%d" (.Values.externalRedis.port | quote ) -}}
+    {{- .Values.externalRedis.port | quote -}}
 {{- end -}}
 {{- end -}}
 
@@ -309,8 +307,6 @@ Return true if a secret object for Redis should be created
 {{- define "discourse.redis.createSecret" -}}
 {{- if and (not .Values.redis.enabled) (not .Values.externalRedis.existingSecret) .Values.externalRedis.password }}
     {{- true -}}
-{{- else -}}
-    {{- false -}}
 {{- end -}}
 {{- end -}}
 
@@ -328,5 +324,27 @@ Return the Redis secret name
     {{- printf "%s" .Values.externalRedis.existingSecret -}}
 {{- else -}}
     {{- printf "%s-redis" (include "discourse.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Redis secret key
+*/}}
+{{- define "discourse.redis.secretPasswordKey" -}}
+{{- if and .Values.redis.enabled .Values.redis.existingSecret }}
+    {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.redis.existingSecretPasswordKey | printf "%s" }}
+{{- else if and (not .Values.redis.enabled) .Values.externalRedis.existingSecret }}
+    {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.externalRedis.existingSecretPasswordKey | printf "%s" }}
+{{- else -}}
+    {{- printf "redis-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return whether Redis uses password authentication or not
+*/}}
+{{- define "discourse.redis.usePassword" -}}
+{{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

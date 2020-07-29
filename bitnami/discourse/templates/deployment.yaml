@@ -69,12 +69,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-postgres-password
-            {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
+            {{- if (include "discourse.redis.usePassword" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "discourse.redis.secretName" . }}
-                  key: redis-password
+                  key: {{ include "discourse.redis.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.discourse.extraEnvVars }}
             {{- include "discourse.tplValue" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
@@ -155,12 +155,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
-            {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
+            {{- if (include "discourse.redis.usePassword" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "discourse.redis.secretName" . }}
-                  key: redis-password
+                  key: {{ include "discourse.redis.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
             {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | nindent 12 }}
