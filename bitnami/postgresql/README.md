@@ -193,6 +193,13 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `readinessProbe.timeoutSeconds`               | When the probe times out                                                                                                                                                  | 5                                                             |
 | `readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                                | 6                                                             |
 | `readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed                                                                               | 1                                                             |
+| `tls.enabled`                                 | Enable TLS traffic support                                                                                                                                                | `false`                                                       |
+| `tls.preferServerCiphers`                     | Whether to use the server's TLS cipher preferences rather than the client's                                                                                               | `true`                                                        |
+| `tls.certificatesSecret`                      | Name of an existing secret that contains the certificates                                                                                                                 | `nil`                                                         |
+| `tls.certFilename`                            | Certificate filename                                                                                                                                                      | `""`                                                          |
+| `tls.certKeyFilename`                         | Certificate key filename                                                                                                                                                  | `""`                                                          |
+| `tls.certCAFilename`                          | CA Certificate filename. If provided, PostgreSQL will authenticate TLS/SSL clients by requesting them a certificate.                                                      |`nil`                                                          |
+| `tls.crlFilename`                             | File containing a Certificate Revocation List                                                                                                                             |`nil`                                                          |
 | `metrics.enabled`                             | Start a prometheus exporter                                                                                                                                               | `false`                                                       |
 | `metrics.service.type`                        | Kubernetes Service type                                                                                                                                                   | `ClusterIP`                                                   |
 | `service.clusterIP`                           | Static clusterIP or None for headless services                                                                                                                            | `nil`                                                         |
@@ -328,6 +335,35 @@ Alternatively, you can specify custom scripts using the `initdbScripts` paramete
 In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsConfigMap` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
+
+### Securing traffic using TLS
+
+TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+
+- `tls.enabled`: Enable TLS support. Defaults to `false`
+- `tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+- `tls.certFilename`: Certificate filename. No defaults.
+- `tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+* First, create the secret with the cetificates files:
+
+    ```console
+    kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+* Then, use the following parameters:
+
+    ```console
+    volumePermissions.enabled=true
+    tls.enabled=true
+    tls.certificatesSecret="certificates-tls-secret"
+    tls.certFilename="cert.crt"
+    tls.certKeyFilename="cert.key"
+    ```
+
+    > Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `securityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
 
 ### Sidecars
 

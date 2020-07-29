@@ -1,21 +1,23 @@
-{{- if and .Values.persistence.enabled (not .Values.persistence.drupal.existingClaim) -}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "drupal.fullname" . }}-drupal
-  labels:
-    app: {{ template "drupal.fullname" . }}
-    chart: {{ template "drupal.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  {{- if .Values.persistence.drupal.hostPath }}
+  {{- if .Values.persistence.hostPath }}
   storageClassName: ""
   {{- end }}
   accessModes:
-    - {{ .Values.persistence.drupal.accessMode | quote }}
+    - {{ .Values.persistence.accessMode | quote }}
   resources:
     requests:
-      storage: {{ .Values.persistence.drupal.size | quote }}
-  {{ include "drupal.storageClass" . }}
+      storage: {{ .Values.persistence.size | quote }}
+  {{- include "drupal.storageClass" . | nindent 2 }}
 {{- end -}}

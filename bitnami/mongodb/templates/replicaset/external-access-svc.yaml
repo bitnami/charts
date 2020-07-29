@@ -23,12 +23,12 @@ spec:
   loadBalancerIP: {{ index $root.Values.externalAccess.service.loadBalancerIPs $i }}
   {{- end }}
   {{- if $root.Values.externalAccess.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml $root.Values.service.loadBalancerSourceRanges | nindent 4 }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: tcp-mongodb
+    - name: {{ .Values.service.portName }}
       port: {{ $root.Values.externalAccess.service.port }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}

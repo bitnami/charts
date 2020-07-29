@@ -1,13 +1,20 @@
-{{- if and .Values.persistence.enabled .Values.persistence.drupal.hostPath (not .Values.persistence.drupal.existingClaim) -}}
+{{- if and .Values.persistence.enabled .Values.persistence.hostPath (not .Values.persistence.existingClaim) -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ template "drupal.fullname" . }}-drupal
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   accessModes:
-    - {{ .Values.persistence.drupal.accessMode | quote }}
+    - {{ .Values.persistence.accessMode | quote }}
   capacity:
-    storage: {{ .Values.persistence.drupal.size | quote }}
+    storage: {{ .Values.persistence.size | quote }}
   hostPath:
-    path: {{ .Values.persistence.drupal.hostPath | quote }}
+    path: {{ .Values.persistence.hostPath | quote }}
 {{- end -}}

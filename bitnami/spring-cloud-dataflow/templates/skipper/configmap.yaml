@@ -21,7 +21,7 @@ data:
                     {{- $rabbitmqUser := include "scdf.rabbitmq.user" . }}
                     environmentVariables: 'SPRING_RABBITMQ_HOST={{ $rabbitmqHost }},SPRING_RABBITMQ_PORT={{ $rabbitmqPort }},SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }},SPRING_RABBITMQ_PASSWORD=${rabbitmq-password}'
                     {{- else if .Values.kafka.enabled }}
-                    environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ template "scdf.envrelease" . }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envrelease" . }}_KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ template "scdf.envrelease" . }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envrelease" . }}_ZOOKEEPER_SERVICE_PORT}'
+                    environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_PORT}'
                     {{- end }}
                     {{- if .Values.deployer.resources.limits }}
                     limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}

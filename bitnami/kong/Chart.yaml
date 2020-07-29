@@ -20,3 +20,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
+annotations:
+  category: Infrastructure
