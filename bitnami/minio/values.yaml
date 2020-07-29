@@ -45,6 +45,11 @@ image:
 ##
 # fullnameOverride:
 
+## Scheduler name
+## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName: stork
+
 serviceAccount:
   # Specifies whether a ServiceAccount should be created
   create: true
