@@ -25,7 +25,7 @@
 2. Get the admin credentials:
 
     echo "User: {{ .Values.admin.user }}"
-    echo "Password: $(kubectl get secret {{ include "grafana.fullname" . }}-admin --namespace {{ .Release.Namespace }} -o jsonpath="{.data.{{ include "grafana.adminSecretPasswordKey" . }}}" | base64 --decode)"
+    echo "Password: $(kubectl get secret {{ include "grafana.adminSecretName" . }}-admin --namespace {{ .Release.Namespace }} -o jsonpath="{.data.{{ include "grafana.adminSecretPasswordKey" . }}}" | base64 --decode)"
 
 {{ include "grafana.checkRollingTags" . }}
 {{ include "grafana.validateValues" . }}
