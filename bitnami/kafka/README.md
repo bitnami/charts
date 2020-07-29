@@ -109,6 +109,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `extraVolumeMounts`                               | Extra volumeMount(s) to add to Kafka containers                                                                                   | `[]`                                                    |
 | `auth.clientProtocol`                             | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`     | `plaintext`                                             |
 | `auth.interBrokerProtocol`                        | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`     | `plaintext`                                             |
+| `auth.saslMechanisms`                             | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `nil`                                |
+| `auth.saslInterBrokerMechanism`                   | SASL mechanism to use as inter broker protocol, it must be included at `auth.saslMechanisms`                                      | `nil`                                                   |
 | `auth.jksSecret`                                  | Name of the existing secret containing the truststore and one keystore per Kafka broker you have in the cluster                   | `nil`                                                   |
 | `auth.jksPassword`                                | Password to access the JKS files when they are password-protected                                                                 | `nil`                                                   |
 | `auth.tlsEndpointIdentificationAlgorithm`         | The endpoint identification algorithm to validate server hostname using server certificate                                        | `https`                                                 |
@@ -144,8 +146,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `resources.requests`                              | The requested resources for Kafka containers                                                                                      | `{}`                                                    |
 | `livenessProbe`                                   | Liveness probe configuration for Kafka                                                                                            | `Check values.yaml file`                                |
 | `readinessProbe`                                  | Readiness probe configuration for Kafka                                                                                           | `Check values.yaml file`                                |
-| `customLivenessProbe`                                   | Custom Liveness probe configuration for Kafka                                                                                            | `{}`                                |
-| `customReadinessProbe`                                  | Custom Readiness probe configuration for Kafka                                                                                           | `{}`                                |
+| `customLivenessProbe`                             | Custom Liveness probe configuration for Kafka                                                                                            | `{}`                                |
+| `customReadinessProbe`                            | Custom Readiness probe configuration for Kafka                                                                                           | `{}`                                |
 | `pdb.create`                                      | Enable/disable a Pod Disruption Budget creation                                                                                   | `false`                                                 |
 | `pdb.minAvailable`                                | Minimum number/percentage of pods that should remain scheduled                                                                    | `nil`                                                   |
 | `pdb.maxUnavailable`                              | Maximum number/percentage of pods that may be made unavailable                                                                    | `1`                                                     |
@@ -417,6 +419,10 @@ If you enabled SASL authentication on any listener, you can set the SASL credent
 - `auth.jaas.clientUser`/`auth.jaas.clientPassword`: when enabling SASL authentication for communications with clients.
 - `auth.jaas.interBrokerUser`/`auth.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
 - `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
+
+If you are using SASL_SCRAM you can provide additional users to be created into the Zookeeper database by providing the following:
+
+- `auth.jaas.additionalUsers`/`auth.jaas.additionalPasswords`. Both should be comma separated strings.
 
 In order to configure TLS authentication/encryption, you **must** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
 

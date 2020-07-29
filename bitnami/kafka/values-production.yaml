@@ -244,6 +244,13 @@ auth:
   clientProtocol: sasl
   interBrokerProtocol: sasl
 
+  ## Allowed SASL mechanisms when clientProtocol or interBrokerProtocol are using either sasl or sasl_tls
+  ##
+  saslMechanisms: ""
+  ## SASL mechanism for inter broker communication
+  ##
+  saslInterBrokerMechanism: ""
+
   ## Name of the existing secret containing the truststore and
   ## one keystore per Kafka broker you have in the Kafka cluster.
   ## MANDATORY when 'tls', 'mtls', or 'sasl_tls' authentication protocols are used.
@@ -275,9 +282,17 @@ auth:
     ##
     clientUser: user
 
+    ## Kafka additional users when using SASL_SCRAM, separated by commas
+    ##
+    additionalUsers: ""
+
     ## Kafka client password
     ##
     clientPassword: ""
+
+    ## Passwords for the additional users, separated by commas
+    ##
+    additionalUsersPasswords: ""
 
     ## Kafka inter broker communication user
     ##
