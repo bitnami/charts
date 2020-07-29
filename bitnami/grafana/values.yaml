@@ -337,10 +337,10 @@ ingress:
 
       ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
       extraPaths: []
-        # - path: /*
-        #   backend:
-        #     serviceName: ssl-redirect
-        #     servicePort: use-annotation
+      # - path: /*
+      #   backend:
+      #     serviceName: ssl-redirect
+      #     servicePort: use-annotation
 
       ## Set this to true in order to enable TLS on the ingress record
       tls: false
