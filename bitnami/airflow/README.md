@@ -2,7 +2,7 @@
 
 [Apache Airflow]() is a platform to programmatically author, schedule and monitor workflows.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm install my-release bitnami/airflow

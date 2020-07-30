@@ -2,7 +2,7 @@
 
 [Discourse](https://www.discourse.org/) is an open source discussion platform. It can be used as a mailing list, discussion forum, long-form chat room, and more.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

@@ -12,7 +12,7 @@ For example, the following changes have been introduced:
   - published for debian-10 and ol-7
 - This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
-## TL;DR;
+## TL;DR
 
 ```
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
