@@ -91,6 +91,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.persistence.enabled`                      | Enable persistence using a `PersistentVolumeClaim`                                                                                                        | `true`                                                                                  |
 | `master.persistence.annotations`                  | Persistent Volume Claim annotations                                                                                                                       | `{}`                                                                                    |
 | `master.persistence.storageClass`                 | Persistent Volume Storage Class                                                                                                                           | ``                                                                                      |
+| `master.persistence.existingClaim`                | Existing Persistent Volume Claim                                                                                                                          | `nil`                                                                                   |
+| `master.persistence.existingVolume`               | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`                                                            | `nil`                                                                                   |
 | `master.persistence.accessModes`                  | Persistent Volume Access Modes                                                                                                                            | `[ReadWriteOnce]`                                                                       |
 | `master.persistence.size`                         | Persistent Volume Size                                                                                                                                    | `8Gi`                                                                                   |
 | `master.securityContext.enabled`                  | Enable security context for master-eligible pods                                                                                                          | `true`                                                                                  |
@@ -146,6 +148,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `data.resources`                                  | CPU/Memory resource requests/limits for data nodes                                                                                                        | `requests: { cpu: "25m", memory: "2048Mi" }`                                            |
 | `data.persistence.enabled`                        | Enable persistence using a `PersistentVolumeClaim`                                                                                                        | `true`                                                                                  |
 | `data.persistence.annotations`                    | Persistent Volume Claim annotations                                                                                                                       | `{}`                                                                                    |
+| `data.persistence.existingClaim`                  | Existing Persistent Volume Claim                                                                                                                          | `nil`                                                                                   |
+| `data.persistence.existingVolume`                 | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`                                                            | `nil`                                                                                   |
 | `data.persistence.storageClass`                   | Persistent Volume Storage Class                                                                                                                           | ``                                                                                      |
 | `data.persistence.accessModes`                    | Persistent Volume Access Modes                                                                                                                            | `[ReadWriteOnce]`                                                                       |
 | `data.persistence.size`                           | Persistent Volume Size                                                                                                                                    | `8Gi`                                                                                   |
@@ -452,6 +456,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - global.kibanaEnabled: false
 + global.kibanaEnabled: true
 ```
+
+### Change ElasticSearch version
+
+To modify the ElasticSearch version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/elasticsearch/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Default kernel settings
 

@@ -1,7 +1,7 @@
 apiVersion: v1
 name: wildfly
-version: 3.5.17
-appVersion: 19.1.0
+version: 4.0.1
+appVersion: 20.0.1
 description: Chart for Wildfly
 keywords:
   - wildfly
@@ -18,3 +18,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-110x117.png
+annotations:
+  category: ApplicationServer

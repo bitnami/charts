@@ -8,6 +8,9 @@ metadata:
   {{- end }}
   labels: {{- include "thanos.labels" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
+{{- if .Values.metrics.serviceMonitor.labels }}
+{{- toYaml .Values.metrics.serviceMonitor.labels | nindent 4 }}
+{{- end }}
 spec:
   selector:
     matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}

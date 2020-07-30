@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.0.2-debian-10-r75
+  tag: 5.0.2-debian-10-r110
   ## Specify a imagePullPolicy
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -119,6 +119,21 @@ ingress:
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       tlsSecret: phpmyadmin.local-tls
 
+## An array to add extra env vars to configure phpMyAdmin
+## For example:
+# extraEnvVars:
+# - name: PHP_UPLOAD_MAX_FILESIZE
+#   value: "80M"
+extraEnvVars: {}
+
+## Name of a ConfigMap containing extra env vars
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
 ## phpMyAdmin pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
@@ -196,7 +211,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r63
+    tag: 0.8.0-debian-10-r100
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

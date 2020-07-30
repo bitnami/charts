@@ -9,12 +9,12 @@
 #   storageClass: myStorageClass
 
 ## Bitnami Joomla! image version
-## ref: https://hub.docker.com/r/bitnami/dokuwiki/tags/
+## ref: https://hub.docker.com/r/bitnami/joomla/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/joomla
-  tag: 3.9.19-debian-10-r0
+  tag: 3.9.20-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -24,64 +24,145 @@ image:
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
-  # pullSecrets:
+  pullSecrets:
   #   - myRegistryKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
+  debug: false
 
 ## String to partially override joomla.fullname template (will maintain the release name)
 ##
-# nameOverride:
+nameOverride:
 
 ## String to fully override joomla.fullname template
 ##
-# fullnameOverride:
+fullnameOverride:
+
+## Number of replicas (requires ReadWriteMany PVC support)
+##
+replicaCount: 1
+
+## Skip Joomla! installation wizard. Useful for migrations and restoring from SQL dump
+## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
+##
+joomlaSkipInstall: "no"
 
 ## User of the application
-## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
 joomlaUsername: user
 
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
 # joomlaPassword:
 
 ## Admin email
-## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
 joomlaEmail: user@example.com
 
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
-allowEmptyPassword: "yes"
+##
+allowEmptyPassword: "no"
+
+## Container command (using container default if not set)
+##
+command:
+## Container args (using container default if ot set)
+##
+args:
+
+## Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
+
+## Extra sidecar containers to add to the deployment
+##
+sidecars: []
+
+## Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Use existing secret for the application password
+##
+existingSecret:
 
 ##
 ## External database configuration
 ##
 externalDatabase:
   ## Database host
-  host: localhost
+  ##
+  host: ""
 
   ## Database host
+  ##
   port: 3306
 
   ## Database user
+  ##
   user: bn_joomla
 
   ## Database password
+  ##
   password: ""
 
   ## Database name
+  ##
   database: bitnami_joomla
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-joomla/#smtp-configuration
-##
 # smtpHost:
 # smtpPort:
 # smtpUser:
 # smtpPassword:
-# smtpUsername:
 # smtpProtocol:
 
 ##
@@ -91,14 +172,10 @@ externalDatabase:
 ##
 mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
   enabled: true
-  ## Tag for the Bitnami MariaDB image to use
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb
-  image:
-    registry: docker.io
-    repository: bitnami/mariadb
-    tag: 10.1.45-debian-10-r23
   ## Disable MariaDB replication
+  ##
   replication:
     enabled: false
 
@@ -110,13 +187,13 @@ mariadb:
     user: bn_joomla
     ## If the password is not specified, mariadb will generates a random password
     ##
-    # password:
+    password: ""
 
   ## MariaDB admin password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  # rootUser:
-  #   password:
+  rootUser:
+    password: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -131,43 +208,33 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      # storageClass: "-"
-      accessMode: ReadWriteOnce
+      storageClass:
+      accessModes:
+        - ReadWriteOnce
       size: 8Gi
+      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ##
+      hostPath:
+      ## Use an existing PVC
+      ##
+      existingClaim:
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 120
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
+## Container ports
+##
+containerPorts:
+  http: 8080
+  https: 8443
 
-## Kubernetes svc configuration
+## Kubernetes configuration
+## For minikube, set this to NodePort, for ingress ClusterIP, elsewhere use LoadBalancer
 ##
 service:
-  ## Kubernetes svc type
-  ## For minikube, set this to NodePort, elsewhere use LoadBalancer
-  ##
   type: LoadBalancer
-  ## Use serviceLoadBalancerIP to request a specific static IP,
-  ## otherwise leave blank
-  ##
   # HTTP Port
   port: 80
   # HTTPS Port
   httpsPort: 443
-  # loadBalancerIP:
-  ## Use nodePorts to requets some specific ports when usin NodePort
+  ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
@@ -195,7 +262,7 @@ ingress:
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
-  hostname: joomla.local
+  hostname: drupal.local
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -212,14 +279,18 @@ ingress:
   ## hosts:
   ## - name: joomla.local
   ##   path: /
-
+  ##
+  hosts:
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ##
+
   ## tls:
   ## - hosts:
   ##     - joomla.local
   ##   secretName: joomla.local-tls
-
+  ##
+  tls:
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -239,17 +310,39 @@ ingress:
 ##
 persistence:
   enabled: true
-  joomla:
-    ## Joomla data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    accessMode: ReadWriteOnce
-    size: 8Gi
+  ## database data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+  ## A manually managed Persistent Volume Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  # existingClaim:
+
+  ## If defined, the drupal-data volume will mount to the specified hostPath.
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
+  hostPath:
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -259,47 +352,81 @@ resources:
     memory: 512Mi
     cpu: 300m
 
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
-nodeSelector: {}
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
 
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ##
-tolerations: []
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
 
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
-affinity: {}
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+
+customLivenessProbe: {}
+
+customReadinessProbe: {}
+
+## lifecycleHooks for the container to automate configuration before or after startup.
+##
+lifecycleHooks:
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
   enabled: false
-
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r63
+    tag: 0.8.0-debian-10-r100
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    # pullSecrets:
+    pullSecrets:
     #   - myRegistryKeySecretName
-
-    ## Metrics exporter pod Annotation and Labels
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   # resources: {}
+  ## Metrics exporter pod Annotation and Labels
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9117"
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

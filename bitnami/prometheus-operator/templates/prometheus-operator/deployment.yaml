@@ -32,6 +32,9 @@ spec:
       {{- if .Values.operator.tolerations }}
       tolerations: {{- include "prometheus-operator.tplValue" (dict "value" .Values.operator.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.operator.priorityClassName }}
+      priorityClassName: {{ .Values.operator.priorityClassName }}
+      {{- end }}
       affinity:
         {{- if .Values.operator.nodeAffinity }}
         nodeAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.operator.nodeAffinity "context" $) | nindent 10 }}

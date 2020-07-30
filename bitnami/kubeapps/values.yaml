@@ -193,7 +193,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.10.1-scratch-r0
+    tag: 1.10.3-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -205,7 +205,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 1.10.1-scratch-r0
+    tag: 1.10.3-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -240,6 +240,8 @@ apprepository:
   #   # It should start with -----BEGIN CERTIFICATE----- or
   #   # -----BEGIN RSA PRIVATE KEY-----
   #   caCert:
+  #   # Create this apprepository in a custom namespace
+  #   namespace:
   # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
   ## AppRepository Controller containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -303,7 +305,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 1.10.1-scratch-r0
+    tag: 1.10.3-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -350,7 +352,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.10.1-scratch-r0
+    tag: 1.10.3-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -428,7 +430,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 1.10.1-scratch-r0
+    tag: 1.10.3-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -493,7 +495,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.10.1-debian-10-r2
+    tag: 1.10.3-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -691,7 +693,6 @@ authProxy:
 ## Feature flags
 ## These are used to switch on in development features or new features which are ready to be released.
 featureFlags:
-  reposPerNamespace: true
   invalidateCache: true
   operators: false
   # additionalClusters is a WIP feature for multi-cluster support.
@@ -700,3 +701,5 @@ featureFlags:
   # - name: second-cluster
   #   apiServiceURL: https://second-cluster:6443
   #   certificateAuthorityData: LS0tLS1CRUdJ...
+  # ui is a WIP feature for the migration to Clarity design system.
+  ui: hex

@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.7.1-debian-10-r0
+  tag: 7.8.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -251,6 +251,16 @@ master:
     ##   GKE, AWS & OpenStack)
     ##
     # storageClass: "-"
+    ## If persistence is enable, and this value is defined,
+    ## then accept the value as an existing Persistent Volume Claim to which
+    ## the container should be bound
+    ##
+    # existingClaim: my-persistent-volume-claim
+    ## If persistence is enable, and this value is defined, then
+    ## accept the value as an existing Persistent Volume to which
+    ## should be added as match label selector to the volumeClaimTemplate
+    ##
+    # existingVolume: my-persistent-volume
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -481,6 +491,16 @@ data:
     ##   GKE, AWS & OpenStack)
     ##
     # storageClass: "-"
+    ## If persistence is enable, and this value is defined,
+    ## then accept the value as an existing Persistent Volume Claim to which
+    ## the container should be bound
+    ##
+    # existingClaim: my-persistent-volume-claim
+    ## If persistence is enable, and this value is defined, then
+    ## accept the value as an existing Persistent Volume to which
+    ## should be added as match label selector to the volumeClaimTemplate
+    ##
+    # existingVolume: my-persistent-volume
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -598,7 +618,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.1-debian-10-r129
+    tag: 5.8.1-debian-10-r181
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -766,7 +786,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r130
+    tag: 1.1.0-debian-10-r177
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

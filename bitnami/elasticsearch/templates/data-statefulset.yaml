@@ -216,6 +216,10 @@ spec:
 {{- if not .Values.data.persistence.enabled }}
         - name: "data"
           emptyDir: {}
+{{- else if .Values.data.persistence.existingClaim }}
+        - name: "data"
+          persistentVolumeClaim:
+            claimName: {{ .Values.data.persistence.existingClaim }}
 {{- else }}
   volumeClaimTemplates:
     - metadata:
@@ -230,4 +234,9 @@ spec:
         resources:
           requests:
             storage: {{ .Values.data.persistence.size | quote }}
+          {{- if .Values.data.persistence.existingVolume }}
+          selector:
+            matchLabels:
+              volume: {{ .Values.data.persistence.existingVolume }}
+          {{- end }}
 {{- end }}

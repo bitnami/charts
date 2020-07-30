@@ -63,7 +63,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 4.2.0-debian-10-r49
+    tag: 4.3.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -186,7 +186,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 2.1.0-debian-10-r37
+    tag: 2.1.0-debian-10-r94
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -380,11 +380,17 @@ persistence:
 ## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
-  ## MongoDB Password authentication
-  usePassword: true
-  ## If the password is not specified, MongoDB will generate a random password
+  ## MongoDB Authentication parameters
   ##
-  # mongodbRootPassword:
+  auth:
+    ## Enable authentication
+    ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
+    ##
+    enabled: true
+    ## MongoDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+    ##
+    rootPassword: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##

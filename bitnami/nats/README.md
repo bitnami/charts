@@ -82,6 +82,9 @@ The following table lists the configurable parameters of the NATS chart and thei
 | `podLabels`                                | Additional labels to be added to pods                                                                  | {}                                                            |
 | `priorityClassName`                        | Name of pod priority class                                                                             | `nil`                                                         |
 | `podAnnotations`                           | Annotations to be added to pods                                                                        | {}                                                            |
+| `pdb.create`                               | If true, create a pod disruption budget for NATS pods                                                  | `false`                                                       |
+| `pdb.minAvailable`                         | Minimum number / percentage of pods that should remain scheduled                                       | `1`                                                           |
+| `pdb.maxUnavailable`                       | Maximum number / percentage of pods that may be made unavailable                                       | `""`                                                          |
 | `nodeSelector`                             | Node labels for pod assignment                                                                         | `nil`                                                         |
 | `schedulerName`                            | Name of an alternate                                                                                   | `nil`                                                         |
 | `antiAffinity`                             | Anti-affinity for pod assignment                                                                       | `soft`                                                        |
@@ -219,6 +222,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true
+```
+
+- Enable PodDisruptionBudget:
+```diff
+- pdb.create: false
++ pdb.create: true
 ```
 
 To horizontally scale this chart, you can use the `--replicas` flag to modify the number of nodes in your NATS replica set.

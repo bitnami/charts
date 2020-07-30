@@ -1,0 +1,79 @@
+{{- if (include "scdf.skipper.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "scdf.fullname" . }}-skipper
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: skipper
+data:
+  application.yaml: |-
+    spring:
+      cloud:
+        skipper:
+          server:
+            platform:
+              kubernetes:
+                accounts:
+                  {{ .Values.skipper.configuration.accountName }}:
+                    {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
+                    {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
+                    {{- $rabbitmqHost := include "scdf.rabbitmq.host" . }}
+                    {{- $rabbitmqPort := include "scdf.rabbitmq.port" . }}
+                    {{- $rabbitmqUser := include "scdf.rabbitmq.user" . }}
+                    {{- $rabbitmqVhost := include "scdf.rabbitmq.vhost" . }}
+                    environmentVariables: 'SPRING_RABBITMQ_HOST={{ $rabbitmqHost }},SPRING_RABBITMQ_PORT={{ $rabbitmqPort }},SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }},SPRING_RABBITMQ_PASSWORD=${rabbitmq-password},SPRING_RABBITMQ_VIRTUAL_HOST={{ $rabbitmqVhost }}{{ $environmentVariables }}'
+                    {{- else if .Values.kafka.enabled }}
+                    environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_PORT}{{ $environmentVariables }}'
+                    {{- else }}
+                    {{- if .Values.deployer.environmentVariables }}
+                    environmentVariables: '{{ .Values.deployer.environmentVariables | trim }}'
+                    {{- end }}
+                    {{- end }}
+                    {{- if .Values.deployer.resources.limits }}
+                    limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.resources.requests }}
+                    requests: {{- toYaml .Values.deployer.resources.requests | trim | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    {{- end }}
+                    {{- if .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    livenessProbeDelay: {{ .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    {{- end }}
+                    {{- if .Values.deployer.nodeSelector }}
+                    nodeSelector: {{ .Values.deployer.nodeSelector }}
+                    {{- end }}
+                    {{- if .Values.deployer.tolerations }}
+                    tolerations: {{- toYaml .Values.deployer.tolerations | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.volumeMounts }}
+                    volumeMounts: {{- toYaml .Values.deployer.volumeMounts | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.volumes }}
+                    volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
+                    {{- end }}
+      {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
+      {{- if $hibernateDialect }}
+      jpa:
+        properties:
+          hibernate:
+            dialect: {{ $hibernateDialect }}
+      {{- end }}
+      datasource:
+        {{- $databaseScheme := include "scdf.database.scheme" .  }}
+        {{- $databaseHost := include "scdf.database.host" .  }}
+        {{- $databasePort := include "scdf.database.port" .  }}
+        {{- $databaseName := include "scdf.database.skipper.name" .  }}
+        {{- $jdbcParameters := include "scdf.database.jdbc.parameters" .  }}
+        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
+        driverClassName: {{ include "scdf.database.driver" . }}
+        username: {{ include "scdf.database.skipper.user" . }}
+        {{ if .Values.externalDatabase.existingPasswordSecret }}
+        password: ${datasource-password}
+        {{- else -}}
+        password: ${mariadb-password}
+        {{- end }}
+        testOnBorrow: true
+        validationQuery: "SELECT 1"
+{{ end }}

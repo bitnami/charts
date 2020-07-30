@@ -117,8 +117,19 @@ spec:
             storage: {{ .Values.prometheus.persistence.size | quote }}
         {{- include "prometheus-operator.prometheus.storageClass" . | nindent 8 }}
   {{- end }}
-  {{- if .Values.prometheus.podMetadata }}
-  podMetadata: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata "context" $) | nindent 4 }}
+  {{- if or .Values.prometheus.podMetadata.labels .Values.prometheus.podMetadata.annotations (eq .Values.prometheus.podAntiAffinity "soft") (eq .Values.prometheus.podAntiAffinity "hard") }}
+  podMetadata:
+    labels:
+    {{- if .Values.prometheus.podMetadata.labels }}
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata.labels "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if or (eq .Values.prometheus.podAntiAffinity "soft") (eq .Values.prometheus.podAntiAffinity "hard") }}
+    {{- include "prometheus-operator.prometheus.matchLabels" . | nindent 6 }}
+    {{- end }}
+    {{- if .Values.prometheus.podMetadata.annotations }}
+    annotations:
+    {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMetadata.annotations "context" $) | nindent 6 }}
+    {{- end }}
   {{- end }}
   {{- if .Values.prometheus.querySpec }}
   query: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.querySpec "context" $) | nindent 4 }}
@@ -138,7 +149,7 @@ spec:
     {{- else if eq .Values.prometheus.podAntiAffinity "hard" }}
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
-        - topologyKey: "kubernetes.io/hostname"
+        - topologyKey: {{ .Values.prometheus.podAntiAffinityTopologyKey | quote }}
           labelSelector:
             matchLabels: {{- include "prometheus-operator.prometheus.matchLabels" . | nindent 14 }}
     {{- else if eq .Values.prometheus.podAntiAffinity "soft" }}
@@ -146,7 +157,7 @@ spec:
       preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 100
           podAffinityTerm:
-            topologyKey: "kubernetes.io/hostname"
+            topologyKey: {{ .Values.prometheus.podAntiAffinityTopologyKey | quote }}
             labelSelector:
               matchLabels: {{- include "prometheus-operator.prometheus.matchLabels" . | nindent 16 }}
     {{- end }}
@@ -159,10 +170,15 @@ spec:
   {{- if .Values.prometheus.volumeMounts }}
   volumeMounts: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.additionalScrapeConfigsExternal }}
+  {{- if .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
   additionalScrapeConfigs:
-    name: {{ template "prometheus-operator.prometheus.fullname" . }}-scrape-config
-    key: additional-scrape-configs.yaml
+    name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
+    key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
+  {{- end }}
+  {{- if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
+  additionalAlertRelabelConfigs:
+    name: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.name }}
+    key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
   {{- end }}
 {{- include "prometheus-operator.prometheus.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create }}
@@ -191,6 +207,9 @@ spec:
               name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
               key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
       {{- end }}
+      {{- if .Values.prometheus.thanos.resources }}
+      resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
+      {{- end }}
       ports:
         - name: grpc
           containerPort: 10901
@@ -201,7 +220,9 @@ spec:
       volumeMounts:
         - mountPath: /prometheus
           name: prometheus-{{ template "prometheus-operator.prometheus.fullname" . }}-db
+          {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default true) }}
           subPath: prometheus-db
+          {{- end }}
     {{- end }}
     {{- if .Values.prometheus.containers }}
     {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}

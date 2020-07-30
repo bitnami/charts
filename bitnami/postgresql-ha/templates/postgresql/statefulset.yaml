@@ -36,7 +36,9 @@ spec:
       {{- if .Values.postgresql.nodeSelector }}
       nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.postgresql.priorityClassName }}
       priorityClassName: {{ .Values.postgresql.priorityClassName }}
+      {{- end }}
       {{- if .Values.postgresql.tolerations }}
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -164,6 +166,10 @@ spec:
             - name: REPMGR_DATABASE
               value: {{ (include "postgresql-ha.repmgrDatabase" .) | quote }}
             {{- end }}
+            {{- if .Values.postgresql.syncReplication }}
+            - name: POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS
+              value: {{ sub (int .Values.postgresql.replicaCount) 1 | quote }}
+            {{- end }}
           ports:
             - name: postgresql
               containerPort: 5432
@@ -218,10 +224,8 @@ spec:
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
-            {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            {{- end }}
             - name: hooks-scripts
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh

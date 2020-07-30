@@ -80,6 +80,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `service.loadBalancerIP`             | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                          | `nil`                                                             |
 | `service.loadBalancerSourceRanges`   | Address that are allowed when svc is `LoadBalancer`                                                                                                         | `[]`                                                              |
 | `service.annotations`                | Additional annotations for MariaDB Galera service                                                                                                           | `{}`                                                              |
+| `service.headless.annotations`       | Annotations for the headless service. May be useful for setting `service.alpha.kubernetes.io/tolerate-unready-endpoints="true"` when using peer-finder.     | `{}`                                                              |
 | `clusterDomain`                      | Kubernetes DNS Domain name to use                                                                                                                           | `cluster.local`                                                   |
 | `serviceAccount.create`              | Specify whether a ServiceAccount should be created                                                                                                          | `false`                                                           |
 | `serviceAccount.name`                | The name of the ServiceAccount to create                                                                                                                    | Generated using the mariadb-galera.fullname template              |
@@ -95,7 +96,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `db.name`                            | Name for new database to create                                                                                                                             | `my_database`                                                     |
 | `db.forcePassword`                   | Force users to specify a password                                                                                                                           | `false`                                                           |
 | `galera.name`                        | Galera cluster name                                                                                                                                         | `galera`                                                          |
-| `galera.bootstrap.bootstrapFromNode`    | Node number to bootstrap first                                                                                                                           | `0`                                                               |
+| `galera.bootstrap.bootstrapFromNode`    | Node number to bootstrap first                                                                                                                           | nil                                                               |
 | `galera.bootstrap.forceSafeToBootstrap` | Force `safe_to_bootstrap: 1` in `grastate.dat`                                                                                                           | `false`                                                           |
 | `galera.mariabackup.user`            | Galera mariabackup user                                                                                                                                     | `mariabackup`                                                     |
 | `galera.mariabackup.password`        | Galera mariabackup password                                                                                                                                 | _random 10 character alphanumeric string_                         |
@@ -137,6 +138,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `persistence.storageClass`           | Persistent Volume Storage Class                                                                                                                             | `nil`                                                             |
 | `persistence.accessModes`            | Persistent Volume Access Modes                                                                                                                              | `[ReadWriteOnce]`                                                 |
 | `persistence.size`                   | Persistent Volume Size                                                                                                                                      | `8Gi`                                                             |
+| `persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                                                     | `{}`                                                              |
 | `podLabels`                          | Additional pod labels                                                                                                                                       | `{}`                                                              |
 | `priorityClassName`                  | Priority Class Name for Statefulset                                                                                                                         | ``                                                                |
 | `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `[]`                                                              |
@@ -170,6 +172,11 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `metrics.serviceMonitor.namespace`   | Optional namespace which Prometheus is running in                                                                                                           | `nil`                                                             |
 | `metrics.serviceMonitor.interval`    | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                      | `nil`                                                             |
 | `metrics.serviceMonitor.selector`    | Default to kube-prometheus install (CoreOS recommended), but should be set according to Prometheus install                                                  | `{prometheus: "kube-prometheus"}`                                 |
+| `metrics.serviceMonitor.relabelings` | ServiceMonitor relabelings. Value is evaluated as a template                                                                                                | `[]`                                                              |
+| `metrics.serviceMonitor.metricRelabelings` | ServiceMonitor metricRelabelings. Value is evaluated as a template                                                                                    | `[]`                                                              |
+| `metrics.prometheusRules.enabled`    | if `true`, creates a Prometheus Operator PremetheusRule (also requires `metrics.enabled` to be `true`, and makes little sense without ServiceMonitor)       | `false`                                                           |
+| `metrics.prometheusRules.selector`   | Additional labels to the PrometheusRule, should be set according to Prometheus install                                                                      | `{app: "prometheus-operator", release: "prometheus"}`             |
+| `metrics.prometheusRules.rules`      | PrometheusRule rules to configure                                                                                                                           | `{}`                                                              |
 
 The above parameters map to the env variables defined in [bitnami/mariadb-galera](http://github.com/bitnami/bitnami-docker-mariadb-galera). For more information please refer to the [bitnami/mariadb-galera](http://github.com/bitnami/bitnami-docker-mariadb-galera) image documentation.
 
@@ -233,6 +240,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+### Change MariaDB version
+
+To modify the MariaDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mariadb-galera/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### LDAP
 

@@ -70,6 +70,7 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                                                                                                                                                                                                                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `nameOverride`                       | String to partially override redmine.fullname template                                                                                                                                                                                                                                                                                                                                               | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override redmine.fullname template                                                                                                                                                                                                                                                                                                                                                   | `nil`                                                   |
+| `updateStrategy.type`                | Update strategy to use for the deployment                                                                                                                                                                                                                                                                                                                                                            | `RollingUpdate`                                         |
 | `redmineUsername`                    | User of the application                                                                                                                                                                                                                                                                                                                                                                              | `user`                                                  |
 | `redminePassword`                    | Application password                                                                                                                                                                                                                                                                                                                                                                                 | _random 10 character long alphanumeric string_          |
 | `redmineEmail`                       | Admin email                                                                                                                                                                                                                                                                                                                                                                                          | `user@example.com`                                      |
@@ -83,6 +84,7 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `existingSecret`                     | Use existing secret for password details (`redminePassword`, `smtpPassword` and `externalDatabase.password` will be ignored and picked up from this secret). It must contain the keys `redmine-password` and `smtp-password` when `postgresql.enabled=true` or `mariadb.enabled=true`. In case `postgresql.enabled=false` and `mariadb.enabled=false` it must contain the key `external-db-password` | `nil`                                                   |
 | `databaseType`                       | Select database type                                                                                                                                                                                                                                                                                                                                                                                 | `mariadb` (allowed values: "mariadb" and "postgresql")  |
 | `mariadb.enabled`                    | Whether to deploy a MariaDB server to satisfy the database requirements                                                                                                                                                                                                                                                                                                                              | `true`                                                  |
+| `mariadb.existingSecret`             | Optional secret storing the MariaDB passwords                                                                                                                                                                                                                                                                                                                                                        | `nil`                                                   |
 | `mariadb.rootUser.password`          | MariaDB admin password                                                                                                                                                                                                                                                                                                                                                                               | `nil`                                                   |
 | `postgresql.enabled`                 | Whether to deploy a PostgreSQL server to satisfy the database requirements                                                                                                                                                                                                                                                                                                                           | `false`                                                 |
 | `postgresql.postgresqlDatabase`      | PostgreSQL database                                                                                                                                                                                                                                                                                                                                                                                  | `bitnami_redmine`                                       |
@@ -169,6 +171,20 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `mailReceiver.priority`              | Defines a new task priority                                                                                                                                                                                                                                                                                                                                                                          | `""`                                                    |
 | `mailReceiver.assignedTo`            | Defines a new task priority                                                                                                                                                                                                                                                                                                                                                                          | `""`                                                    |
 | `mailReceiver.allowOverride`         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to alllow all attributes                                                                                                                                                                                                                                                       | `""`                                                    |
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                                                                                                                                                                                                                                                     | `""`                                                    |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                                                                                                                                                                                                                                                  | `""`                                                    |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                                                                                                                                                                                                                                                  | `""`                                                    |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                                                                                                                                                                                                                                                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                  |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                                                                                                                                                                                                                                                   | `/etc/ssl/private/ssl-cert-snakeoil.key`                |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                                                                                                                                                                                                                                             | `/etc/ssl/certs/chain.pem`                              |
+| `certificates.customCA`              | Defines a list of secrets to import into the container trust store                                                                                                                                                                                                                                                                                                                                   | `[]`                                                    |
+| `certificates.image.registry`        | Container sidecar registry                                                                                                                                                                                                                                                                                                                                                                           | `docker.io`                                             |
+| `certificates.image.repository`      | Container sidecar image                                                                                                                                                                                                                                                                                                                                                                              | `bitnami/minideb`                                       |
+| `certificates.image.tag`             | Container sidecar image tag                                                                                                                                                                                                                                                                                                                                                                          | `buster`                                                |
+| `certificates.image.pullPolicy`      | Container sidecar image pull policy                                                                                                                                                                                                                                                                                                                                                                  | `IfNotPresent`                                          |
+| `certificates.image.pullSecrets`     | Container sidecar image pull secrets                                                                                                                                                                                                                                                                                                                                                                 | `image.pullSecrets`                                     |
+| `certificates.extraEnvVars`          | Container sidecar extra environment variables (eg proxy)                                                                                                                                                                                                                                                                                                                                             | `[]`                                                    |
+
 
 The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
@@ -221,6 +237,60 @@ The following example includes two PVCs, one for Redmine and another for MariaDB
 
 ```bash
 $ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB bitnami/redmine
+```
+
+## Certificates
+
+### CA Certificates
+
+Custom CA certificates not included in the base docker image can be added with
+the following configuration. The secret must exist in the same namespace as the
+deployment. Will load all certificates files it finds in the secret.
+
+```yaml
+certificates:
+  customCAs:
+  - secret: my-ca-1
+  - secret: my-ca-2
+```
+
+#### Secret
+
+Secret can be created with:
+
+```bash
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```
+
+### TLS Certificate
+
+A web server TLS Certificate can be injected into the container with the
+following configuration. The certificate will be stored at the location
+specified in the certificateLocation value.
+
+```yaml
+certificates:
+  customCertificate:
+    certificateSecret: my-secret
+    certificateLocation: /ssl/server.pem
+    keyLocation: /ssl/key.pem
+    chainSecret:
+      name: my-cert-chain
+      key: chain.pem
+```
+
+#### Secret
+
+The certificate tls secret can be created with:
+
+```bash
+kubectl create secret tls my-secret --cert tls.crt --key tls.key
+```
+
+The certificate chain is created with:
+
+```bash
+kubectl create secret generic my-cert-chain --from-file chain.pem
 ```
 
 ## Upgrading

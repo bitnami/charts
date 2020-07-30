@@ -138,6 +138,8 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                       | `nil`                                                                                                   |             |
 | `elasticsearch.hosts`                  | Array containing the hostnames for the already existing Elasticsearch instances                                                                           | `nil`                                                                                                   |             |
 | `elasticsearch.port`                   | Port for the accessing external Elasticsearch instances                                                                                                   | `nil`                                                                                                   |             |
+| `configuration.server.basePath`                   | Enables you to specify a path to mount Kibana at if you are running behind a proxy. Use the `configuration.server.rewriteBasePath` setting to tell Kibana if it should remove the basePath from requests it receives, and to prevent a deprecation warning at startup. This setting cannot end in a slash (/).  | `""`                                                                                                   |             |
+| `configuration.server.rewriteBasePath`                   |  Specifies whether Kibana should rewrite requests that are prefixed with server.basePath or require that they are rewritten by your reverse proxy. This setting was effectively always false before Kibana 6.3 and will default to true starting in Kibana 7.0.   | `false`                                                                                                   |             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -174,6 +176,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+### Change Kibana version
+
+To modify the Kibana version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/kibana/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Using custom configuration
 

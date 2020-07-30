@@ -10,6 +10,12 @@ metadata:
   name: {{ template "kafka.fullname" . }}-exporter
   labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: metrics
+    {{- if .Values.commonLabels }}
+    {{- include "kafka.tplvalue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "kafka.tplvalue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: 1
   selector:
@@ -73,6 +79,6 @@ spec:
         - name: kafka-exporter-certificates
           secret:
             secretName: {{ .Values.metrics.kafka.certificatesSecret }}
-            defaultMode: 256
+            defaultMode: 0440
       {{- end }}
 {{- end }}

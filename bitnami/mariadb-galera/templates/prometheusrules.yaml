@@ -1,0 +1,15 @@
+{{- if and .Values.metrics.enabled .Values.metrics.prometheusRules.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "mariadb-galera.fullname" . }}
+  labels:
+    {{- include "mariadb-galera.labels" . | nindent 4 }}
+    {{- toYaml .Values.metrics.prometheusRules.selector | nindent 4 }}
+spec:
+  groups:
+  - name: {{ include "mariadb-galera.fullname" . }}
+    rules:
+      {{- toYaml .Values.metrics.prometheusRules.rules | nindent 6 }}
+{{- end }}
+

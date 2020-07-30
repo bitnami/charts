@@ -1,7 +1,7 @@
 apiVersion: v1
 name: tomcat
-version: 6.3.8
-appVersion: 9.0.35
+version: 6.3.12
+appVersion: 9.0.37
 description: Chart for Apache Tomcat
 keywords:
   - tomcat
@@ -18,3 +18,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/tomcat/img/tomcat-stack-110x117.png
+annotations:
+  category: ApplicationServer

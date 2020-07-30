@@ -315,5 +315,5 @@ spec:
             name: {{ .Values.airflow.configurationConfigMap }}
       {{- end }}
       {{- if .Values.airflow.scheduler.extraVolumes }}
-      {{- include "airflow.tplValue" (dict "value" .Values.airflow.scheduler.extraVolumes "context" $) | nindent 6 }}
+      {{- include "airflow.tplValue" (dict "value" .Values.airflow.scheduler.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

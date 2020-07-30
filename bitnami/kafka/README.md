@@ -63,6 +63,9 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `nameOverride`                                    | String to partially override kafka.fullname                                                                                       | `nil`                                                   |
 | `fullnameOverride`                                | String to fully override kafka.fullname                                                                                           | `nil`                                                   |
 | `clusterDomain`                                   | Default Kubernetes cluster domain                                                                                                 | `cluster.local`                                         |
+| `commonLabels`                                    | Labels to add to all deployed objects                                                                                             | `{}`                                                    |
+| `commonAnnotations`                               | Annotations to add to all deployed objects                                                                                        | `{}`                                                    |
+| `extraDeploy`                                     | Array of extra objects to deploy with the release                                                                                 | `nil` (evaluated as a template)                         |
 
 ### Kafka parameters
 
@@ -78,7 +81,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `existingConfigmap`                               | Name of existing ConfigMap with Kafka configuration                                                                               | `nil`                                                   |
 | `log4j`                                           | An optional log4j.properties file to overwrite the default of the Kafka brokers.                                                  | `nil`                                                   |
 | `existingLog4jConfigMap`                          | The name of an existing ConfigMap containing a log4j.properties file.                                                             | `nil`                                                   |
-| `brokerId`                                        | ID of the Kafka node                                                                                                              | `nil`                                                   |
 | `heapOpts`                                        | Kafka's Java Heap size                                                                                                            | `-Xmx1024m -Xms1024m`                                   |
 | `deleteTopicEnable`                               | Switch to enable topic deletion or not                                                                                            | `false`                                                 |
 | `autoCreateTopicsEnable`                          | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments | `false`                                                 |
@@ -142,9 +144,13 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `resources.requests`                              | The requested resources for Kafka containers                                                                                      | `{}`                                                    |
 | `livenessProbe`                                   | Liveness probe configuration for Kafka                                                                                            | `Check values.yaml file`                                |
 | `readinessProbe`                                  | Readiness probe configuration for Kafka                                                                                           | `Check values.yaml file`                                |
+| `customLivenessProbe`                                   | Custom Liveness probe configuration for Kafka                                                                                            | `{}`                                |
+| `customReadinessProbe`                                  | Custom Readiness probe configuration for Kafka                                                                                           | `{}`                                |
 | `pdb.create`                                      | Enable/disable a Pod Disruption Budget creation                                                                                   | `false`                                                 |
 | `pdb.minAvailable`                                | Minimum number/percentage of pods that should remain scheduled                                                                    | `nil`                                                   |
 | `pdb.maxUnavailable`                              | Maximum number/percentage of pods that may be made unavailable                                                                    | `1`                                                     |
+| `command`                                        | Override kafka container command                                                                         | `['/scripts/setup.sh']`  (evaluated as a template) |
+| `args`                                        | Override kafka container arguments                                                                             | `[]` (evaluated as a template) |
 | `sidecars`                                        | Attach additional sidecar containers to the Kafka pod                                                                             | `{}`                                                    |
 
 ### Exposure parameters
@@ -424,7 +430,9 @@ kubectl create secret generic kafka-jks --from-file=./kafka.truststore.jks --fro
 
 > **Note**: the command above assumes you already created the trustore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
 
-You can create the secret and deploy the chart with authentication using the following parameters:
+As an alternative to manually create the secret before installing the chart, you can put your JKS files inside the chart folder `files/jks`, an a secret including them will be generated. Please note this alternative requires to have the chart downloaded locally, so you will have to clone this repository or fetch the chart before installing it.
+
+You can deploy the chart with authentication using the following parameters:
 
 ```console
 replicaCount=2
@@ -527,6 +535,83 @@ sidecars:
        containerPort: 1234
 ```
 
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connnect Kafka with MongoDB:
+
+```yaml
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: |-
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: {{ include "kafka.fullname" . }}-connect
+      labels: {{- include "kafka.labels" . | nindent 6 }}
+        app.kubernetes.io/component: connector
+    spec:
+      replicas: 1
+      selector:
+        matchLabels: {{- include "kafka.matchLabels" . | nindent 8 }}
+          app.kubernetes.io/component: connector
+      template:
+        metadata:
+          labels: {{- include "kafka.labels" . | nindent 10 }}
+            app.kubernetes.io/component: connector
+        spec:
+          containers:
+            - name: connect
+              image: KAFKA-CONNECT-IMAGE
+              imagePullPolicy: IfNotPresent
+              ports:
+                - name: connector
+                  containerPort: 8083
+              volumeMounts:
+                - name: configuration
+                  mountPath: /opt/bitnami/kafka/config
+          volumes:
+            - name: configuration
+              configMap:
+                name: {{ include "kafka.fullname" . }}-connect
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ include "kafka.fullname" . }}-connect
+      labels: {{- include "kafka.labels" . | nindent 6 }}
+        app.kubernetes.io/component: connector
+    data:
+      connect-standalone.properties: |-
+        bootstrap.servers = {{ include "kafka.fullname" . }}-0.{{ include "kafka.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
+        ...
+      mongodb.properties: |-
+        connection.uri=mongodb://root:password@mongodb-hostname:27017
+        ...
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{ include "kafka.fullname" . }}-connect
+      labels: {{- include "kafka.labels" . | nindent 6 }}
+        app.kubernetes.io/component: connector
+    spec:
+      ports:
+        - protocol: TCP
+          port: 8083
+          targetPort: connector
+      selector: {{- include "kafka.matchLabels" . | nindent 6 }}
+        app.kubernetes.io/component: connector
+```
+
+You can create the Kafka Connect image using the Dockerfile below:
+
+```Dockerfile
+FROM bitnami/kafka:latest
+# Download MongoDB Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
+RUN mkdir -p /opt/bitnami/kafka/plugins && \
+    cd /opt/bitnami/kafka/plugins && \
+    curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar
+CMD /opt/bitnami/kafka/bin/connect-standalone.sh /opt/bitnami/kafka/config/connect-standalone.properties /opt/bitnami/kafka/config/mongo.properties
+```
+
 ## Persistence
 
 The [Bitnami Kafka](https://github.com/bitnami/bitnami-docker-kafka) image stores the Kafka data at the `/bitnami/kafka` path of the container.
@@ -556,17 +641,17 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 - `auth.certificatesPassword` -> renamed to `auth.jksPassword`.
 - `sslEndpointIdentificationAlgorithm` -> renamedo to `auth.tlsEndpointIdentificationAlgorithm`.
 - `auth.brokerUser` -> renamed to `auth.jaas.clientUser`
-- `auth.brokePassword` -> renamed to `auth.jaas.clientPassword`
+- `auth.brokerPassword` -> renamed to `auth.jaas.clientPassword`
 - `auth.interBrokerUser` -> renamed to `auth.jaas.interBrokerUser`
 - `auth.interBrokerPassword` -> renamed to `auth.jaas.interBrokerPassword`
 - `auth.zookeeperUser` -> renamed to `auth.jaas.zookeeperUser`
 - `auth.zookeeperPassword` -> renamed to `auth.jaas.zookeeperPassword`
 - `auth.existingSecret` -> renamed to `auth.jaas.existingSecret`
 - `service.sslPort` -> deprecated in favor of `service.internalPort`
-- `service.nodePorts.kafka` and ``service.nodePorts.ssl` -> deprecated in favor of `service.nodePort`
+- `service.nodePorts.kafka` and `service.nodePorts.ssl` -> deprecated in favor of `service.nodePort`
 - `metrics.kafka.extraFlag` -> new parameter
 - `metrics.kafka.certificatesSecret` -> new parameter
-  
+
 ### To 10.0.0
 
 If you are setting the `config` or `log4j` parameter, backwards compatibility is not guaranteed, because the `KAFKA_MOUNTED_CONFDIR` has moved from `/opt/bitnami/kafka/conf` to `/bitnami/kafka/config`. In order to continue using these parameters, you must also upgrade your image to `docker.io/bitnami/kafka:2.4.1-debian-10-r38` or later.

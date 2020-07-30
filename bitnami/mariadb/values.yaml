@@ -19,7 +19,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.3.23-debian-10-r25
+  tag: 10.3.23-debian-10-r65
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -48,7 +48,7 @@ image:
 ## Additional pod labels
 ##
 # podLabels:
-  # extraLabel: extraValue
+# extraLabel: extraValue
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -480,7 +480,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r130
+    tag: 0.12.1-debian-10-r170
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -568,16 +568,3 @@ metrics:
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     selector:
       prometheus: kube-prometheus
-
-## Bats Framework (= Bash Automated Testing System) is needed to test if MariaDB is accessible
-## See test-runner.yaml and tests.yaml for details.
-## To run the tests after the deployment, enter "helm test <release-name>".
-tests:
-  enabled: true
-  resources: {}
-  testFramework:
-    image:
-      registry: docker.io
-      repository: dduportal/bats
-      tag: 0.4.0
-    resources: {}

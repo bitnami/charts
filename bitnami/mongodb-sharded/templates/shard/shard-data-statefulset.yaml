@@ -1,3 +1,4 @@
+{{- if .Values.shards }}
 {{- $replicas := .Values.shards | int }}
 {{- range $i, $e := until $replicas }}
 apiVersion: apps/v1
@@ -10,6 +11,7 @@ spec:
   selector:
     matchLabels: {{- include "mongodb-sharded.matchLabels" $ | nindent 6 }}
       app.kubernetes.io/component: shardsvr
+  podManagementPolicy: {{ $.Values.shardsvr.dataNode.podManagementPolicy }}
   updateStrategy: {{- toYaml $.Values.shardsvr.dataNode.updateStrategy | nindent 4 }}
   serviceName: {{ include "mongodb-sharded.fullname" $ }}-headless
   replicas: {{ $.Values.shardsvr.dataNode.replicas }}
@@ -58,6 +60,12 @@ spec:
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
         {{- end }}
+        {{- with $.Values.shardsvr.dataNode.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       containers:
         - name: mongodb
           image: {{ include "mongodb-sharded.image" $ }}
@@ -93,7 +101,7 @@ spec:
                   fieldPath: metadata.name
             - name: MONGODB_MONGOS_HOST
               value: {{ include "mongodb-sharded.fullname" $ }}
-            - name: MONGODB_PRIMARY_HOST
+            - name: MONGODB_INITIAL_PRIMARY_HOST
               value: {{ printf "%s-shard%d-data-0.%s-headless.%s.svc.%s" (include "mongodb-sharded.fullname" $ ) $i (include "mongodb-sharded.fullname" $ ) $.Release.Namespace $.Values.clusterDomain }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ printf "%s-shard-%d" ( include "mongodb-sharded.fullname" $ ) $i }}
@@ -216,7 +224,7 @@ spec:
             - |-
               #!/bin/sh
               {{- if $.Values.usePasswordFile }}
-              export MONGODB_ROOT_PASSWORD="$(< "${MONGODB_ROOT_PASSWORD_FILE}")"
+              export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
               /bin/mongodb_exporter --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
           {{- if $.Values.usePasswordFile }}
@@ -267,15 +275,15 @@ spec:
             secretName: {{ include "mongodb-sharded.secret" $ }}
         {{- end }}
         {{- if $.Values.common.initScriptsCM }}
-        - name: custom-init-scripts-configmap
+        - name: custom-init-scripts-cm
           configMap:
-            name: {{ include "mongodb-sharded.initScriptsCM" . }}
+            name: {{ include "mongodb-sharded.initScriptsCM" $ }}
             defaultMode: 0755
         {{- end }}
         {{- if $.Values.common.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            name: {{ include "mongodb-sharded.initScriptsSecret" . }}
+            name: {{ include "mongodb-sharded.initScriptsSecret" $ }}
             defaultMode: 0755
         {{- end }}
         {{- if or $.Values.shardsvr.dataNode.config $.Values.shardsvr.dataNode.configCM }}
@@ -312,5 +320,6 @@ spec:
   {{- end }}
 {{- if lt $i (sub $replicas 1) }}
 ---
+{{- end }}
 {{- end }}
 {{- end }}

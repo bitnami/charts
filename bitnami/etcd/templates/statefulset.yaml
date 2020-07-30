@@ -129,9 +129,19 @@ spec:
             - name: ETCD_INITIAL_CLUSTER_TOKEN
               value: "etcd-cluster-k8s"
             - name: ETCD_INITIAL_CLUSTER_STATE
+            {{- if not (empty .Values.etcd.initialClusterState) }}
+              value: {{ .Values.etcd.initialClusterState | quote }}
+            {{- else if .Release.IsInstall }}
               value: "new"
+            {{- else }}
+              value: "existing"
+            {{- end }}
+            {{- $initialCluster := list }}
+            {{- range $e, $i := until $replicaCount }}
+            {{- $initialCluster = append $initialCluster (printf "%s-%d=%s://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdPeerProtocol $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $peerPort) }}
+            {{- end }}
             - name: ETCD_INITIAL_CLUSTER
-              value: {{range $i, $e := until $replicaCount }}{{ $etcdFullname }}-{{ $e }}={{ $etcdPeerProtocol }}://{{ $etcdFullname }}-{{ $e }}.{{ $etcdHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }},{{ end }}
+              value: {{ join "," $initialCluster | quote }}
             {{- end }}
             - name: ALLOW_NONE_AUTHENTICATION
               value: {{ ternary "yes" "no" (or .Values.auth.rbac.enabled .Values.allowNoneAuthentication) | quote }}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/owncloud
-  tag: 10.4.1-debian-10-r24
+  tag: 10.4.1-debian-10-r60
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -254,7 +254,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r52
+    tag: 0.8.0-debian-10-r89
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -270,3 +270,32 @@ metrics:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   # resources: {}
+
+# Add custom certificates and certificate authorities to owncloud container
+certificates:
+  customCertificate:
+    certificateSecret: ""
+    chainSecret: {}
+    # name: secret-name
+    # key: secret-key
+    certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
+    keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
+    chainLocation: /etc/ssl/certs/mychain.pem
+  customCA: []
+  # - secret: custom-CA
+  # - secret: more-custom-CAs
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    # pullPolicy:
+    # pullSecrets
+    #   - myRegistryKeySecretName
+  extraEnvVars: []
+  # - name: myvar
+  #   value: myval

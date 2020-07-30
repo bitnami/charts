@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mediawiki
-  tag: 1.34.1-debian-10-r56
+  tag: 1.34.2-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -182,26 +182,26 @@ ingress:
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
-  - name: mediawiki.local
+    - name: mediawiki.local
 
-    ## Set this to true in order to enable TLS on the ingress record
-    ## A side effect of this will be that the backend mediawiki service will be connected at port 443
-    tls: false
+      ## Set this to true in order to enable TLS on the ingress record
+      ## A side effect of this will be that the backend mediawiki service will be connected at port 443
+      tls: false
 
-    ## Set this to true in order to add the corresponding annotations for cert-manager
-    certManager: false
+      ## Set this to true in order to add the corresponding annotations for cert-manager
+      certManager: false
 
-    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-    tlsSecret: mediawiki.local-tls
+      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+      tlsSecret: mediawiki.local-tls
 
-    ## Ingress annotations done as key:value pairs
-    ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-    ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-    annotations:
-    #  kubernetes.io/ingress.class: nginx
+      ## Ingress annotations done as key:value pairs
+      ## For a full list of possible ingress annotations, please see
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ##
+      ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+      ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+      annotations:
+      #  kubernetes.io/ingress.class: nginx
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -247,6 +247,20 @@ resources:
     memory: 512Mi
     cpu: 300m
 
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
@@ -280,7 +294,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r51
+    tag: 0.8.0-debian-10-r108
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -288,11 +302,11 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-     ## Metrics exporter pod Annotation and Labels
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   # resources: {}
+  ## Metrics exporter pod Annotation and Labels
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9117"
