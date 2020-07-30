@@ -51,6 +51,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/wildfly
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "wildfly.tplValue" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       {{- end }}
       containers:
         - name: wildfly
@@ -97,3 +100,6 @@ spec:
           {{- else }}
           emptyDir: {}
         {{- end -}}
+        {{- if .Values.extraVolumes }}
+        {{- include "wildfly.tplValue" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
