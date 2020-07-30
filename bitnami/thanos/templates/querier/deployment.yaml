@@ -87,8 +87,8 @@ spec:
             - --grpc-client-server-name={{.Values.querier.grpcTLS.client.servername}}
             {{- end }}
             {{- end }}
-            {{- range $key, $value := .Values.querier.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- range .Values.querier.extraFlags }}
+            - {{ . }}
             {{- end }}
           ports:
             - name: http

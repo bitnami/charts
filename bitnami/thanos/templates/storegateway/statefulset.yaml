@@ -77,8 +77,8 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
-            {{- range $key, $value := .Values.storegateway.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- range .Values.storegateway.extraFlags }}
+            - {{ . }}
             {{- end }}
           ports:
             - name: http
