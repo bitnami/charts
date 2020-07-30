@@ -278,21 +278,25 @@ auth:
   ## MANDATORY when method is 'sasl', or 'sasl_tls'
   ##
   jaas:
-    ## Kafka client user
+    ## Kafka client user. If specified clientUsers takes precedence.
     ##
-    clientUser: user
+    clientUser: "user"
 
-    ## Kafka additional users when using SASL_SCRAM, separated by commas
+    ## Kafka client user list
     ##
-    additionalUsers: ""
+    ## clientUsers: user1,user2
+    ##
+    clientUsers: ""
 
-    ## Kafka client password
+    ## Kafka client password. If specified clientPasswords takes precedence
     ##
     clientPassword: ""
 
-    ## Passwords for the additional users, separated by commas
+    ## Kafka client passwords. This is mandatory if more than one user is specified in clientUsers.
     ##
-    additionalUsersPasswords: ""
+    ## clientPasswords: "password1,password2"
+    ##
+    clientPasswords: ""
 
     ## Kafka inter broker communication user
     ##

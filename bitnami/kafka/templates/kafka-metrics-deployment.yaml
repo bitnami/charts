@@ -41,7 +41,7 @@ spec:
               {{- end }}
               {{- if (include "kafka.client.saslAuthentication" .) }}
               --sasl.enabled \
-              --sasl.username={{ .Values.auth.jaas.clientUser | quote }} \
+              --sasl.username="$SASL_USERNAME" \
               --sasl.password="$SASL_USER_PASSWORD" \
               {{- end }}
               {{- if (include "kafka.tlsEncryption" .) }}
@@ -58,11 +58,22 @@ spec:
               --web.listen-address=:9308
           {{- if (include "kafka.client.saslAuthentication" .) }}
           env:
+            {{- if and .Values.auth.jaas.clientUsers .Values.auth.jaas.clientPasswords }}
+            {{- $ulist := split "," .Values.auth.jaas.clientUsers }}
+            {{- $plist := split "," .Values.auth.jaas.clientPasswords }}
+            - name: SASL_USERNAME
+              value: {{ $ulist._0 | quote }}
+            - name: SASL_USER_PASSWORD
+              value: {{ $plist._0 | quote }}
+            {{- else }}
             - name: SASL_USER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: client-password
+            - name: SASL_USERNAME
+              value: {{ .Values.auth.jaas.clientUser | quote }}
+            {{- end }}
           {{- end }}
           ports:
             - name: metrics

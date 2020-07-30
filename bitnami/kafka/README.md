@@ -121,6 +121,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `auth.jaas.zookeeperUser`                         | Kafka Zookeeper user for SASL authentication                                                                                      | `nil`                                                   |
 | `auth.jaas.zookeeperPassword`                     | Kafka Zookeeper password for SASL authentication                                                                                  | `nil`                                                   |
 | `auth.jaas.existingSecret`                        | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                              | `nil`                                                   |
+| `auth.jaas.clientUsers`                           | List of Kafka client users to be created, separated by commas. This values will override `auth.jaas.clientUser`                   | `nil`                                                   |
+| `auth.jaas.clientPasswords`                       | List of passwords for `auth.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.jaas.clientUsers`        | `nil`                                                   |
 | `listeners`                                       | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                          | `[]`                                                    |
 | `advertisedListeners`                             | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array  | `[]`                                                    |
 | `listenerSecurityProtocolMap`                     | The protocol->listener mapping. Auto-calculated it's set to nil                                                                   | `nil`                                                   |
@@ -419,10 +421,6 @@ If you enabled SASL authentication on any listener, you can set the SASL credent
 - `auth.jaas.clientUser`/`auth.jaas.clientPassword`: when enabling SASL authentication for communications with clients.
 - `auth.jaas.interBrokerUser`/`auth.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
 - `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
-
-If you are using SASL_SCRAM you can provide additional users to be created into the Zookeeper database by providing the following:
-
-- `auth.jaas.additionalUsers`/`auth.jaas.additionalPasswords`. Both should be comma separated strings.
 
 In order to configure TLS authentication/encryption, you **must** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
 

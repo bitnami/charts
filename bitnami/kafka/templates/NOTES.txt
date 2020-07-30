@@ -78,7 +78,12 @@ You need to configure your Kafka client to access using SASL authentication. To 
             {{- else }}
             org.apache.kafka.common.security.plain.PlainLoginModule required
             {{- end }}
+            {{- if not .Values.auth.jaas.clientUsers }}
             username="{{ .Values.auth.jaas.clientUser }}"
+            {{- else }}
+            {{- $list := split "," .Values.auth.jaas.clientUsers }}
+            username="{{ $list._0 }}"
+            {{- end }}
             password="$(kubectl get secret {{ $fullname }}-jaas -n {{ $releaseNamespace }} -o jsonpath='{.data.client-password}' | base64 --decode)";
         };
 
