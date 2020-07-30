@@ -2,7 +2,7 @@
 
 [Thanos](https://thanos.io/) is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami

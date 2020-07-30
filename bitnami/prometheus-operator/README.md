@@ -2,7 +2,7 @@
 
 [Prometheus Operator](https://github.com/coreos/prometheus-operator/) provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
