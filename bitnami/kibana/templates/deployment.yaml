@@ -81,9 +81,9 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-            {{- if .Values.configuration.server.basePath }}
+            {{- if .Values.configuration.server.rewriteBasePath }}
               path: {{ .Values.configuration.server.basePath }}/app/kibana
-            {{ else }}
+            {{- else }}
               path: /app/kibana
             {{- end }}
               port: http
@@ -96,9 +96,9 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-            {{- if .Values.configuration.server.basePath }}
+            {{- if .Values.configuration.server.rewriteBasePath }}
               path: {{ .Values.configuration.server.basePath }}/app/kibana
-            {{ else }}
+            {{- else }}
               path: /app/kibana
             {{- end }}
               port: http

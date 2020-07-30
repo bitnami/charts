@@ -75,7 +75,7 @@ spec:
                   key: redis-password
             {{- end }}
             {{- if .Values.discourse.extraEnvVars }}
-            {{- include "discourse.tplValue" (dict "value" .Values.discourse.extraEnvVars "context" $) | indent 12 }}
+            {{- include "discourse.tplValue" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
@@ -161,7 +161,7 @@ spec:
                   key: redis-password
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
-            {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | indent 12 }}
+            {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:

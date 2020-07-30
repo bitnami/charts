@@ -63,6 +63,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `nameOverride`                                    | String to partially override kafka.fullname                                                                                       | `nil`                                                   |
 | `fullnameOverride`                                | String to fully override kafka.fullname                                                                                           | `nil`                                                   |
 | `clusterDomain`                                   | Default Kubernetes cluster domain                                                                                                 | `cluster.local`                                         |
+| `commonLabels`                                    | Labels to add to all deployed objects                                                                                             | `{}`                                                    |
+| `commonAnnotations`                               | Annotations to add to all deployed objects                                                                                        | `{}`                                                    |
 | `extraDeploy`                                     | Array of extra objects to deploy with the release                                                                                 | `nil` (evaluated as a template)                         |
 
 ### Kafka parameters
@@ -147,6 +149,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `pdb.create`                                      | Enable/disable a Pod Disruption Budget creation                                                                                   | `false`                                                 |
 | `pdb.minAvailable`                                | Minimum number/percentage of pods that should remain scheduled                                                                    | `nil`                                                   |
 | `pdb.maxUnavailable`                              | Maximum number/percentage of pods that may be made unavailable                                                                    | `1`                                                     |
+| `command`                                        | Override kafka container command                                                                         | `['/scripts/setup.sh']`  (evaluated as a template) |
+| `args`                                        | Override kafka container arguments                                                                             | `[]` (evaluated as a template) |
 | `sidecars`                                        | Attach additional sidecar containers to the Kafka pod                                                                             | `{}`                                                    |
 
 ### Exposure parameters
@@ -565,10 +569,10 @@ extraDeploy: |-
               volumeMounts:
                 - name: configuration
                   mountPath: /opt/bitnami/kafka/config
-            volumes:
-              - name: configuration
-                configMap:
-                  name: {{ include "kafka.fullname" . }}-connect
+          volumes:
+            - name: configuration
+              configMap:
+                name: {{ include "kafka.fullname" . }}-connect
   - apiVersion: v1
     kind: ConfigMap
     metadata:

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.4.2-debian-10-r30
+  tag: 5.4.2-debian-10-r36
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -37,6 +37,18 @@ image:
 ## String to fully override wordpress.fullname template
 ##
 # fullnameOverride:
+
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
@@ -84,18 +96,6 @@ wordpressScheme: http
 ##
 wordpressSkipInstall: false
 
-## Set up update strategy for wordpress installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-## Example:
-## updateStrategy:
-##  type: RollingUpdate
-##  rollingUpdate:
-##    maxSurge: 25%
-##    maxUnavailable: 25%
-##
-updateStrategy:
-  type: RollingUpdate
-
 ## Set to `false` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
@@ -115,6 +115,23 @@ htaccessPersistenceEnabled: false
 ## ConfigMap with custom wordpress-htaccess.conf file (requires allowOverrideNone to true)
 ##
 customHTAccessCM:
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
+
+## Set up update strategy for wordpress installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## Example:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
 
 ## Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -167,6 +184,8 @@ extraVolumes: []
 ##
 resources:
   limits: {}
+  #   cpu: 500m
+  #   memory: 1Gi
   requests:
     memory: 512Mi
     cpu: 300m
@@ -199,10 +218,6 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
-## Allow health checks to be pointed at the https port
-##
-healthcheckHttps: false
-
 ## WordPress pod extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
@@ -220,6 +235,10 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+
+## Allow health checks to be pointed at the https port
+##
+healthcheckHttps: false
 
 ## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
 ##
@@ -444,7 +463,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r100
+    tag: 0.8.0-debian-10-r106
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

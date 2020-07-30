@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.5.0-debian-10-r91
+  tag: 2.5.0-debian-10-r107
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -43,6 +43,14 @@ image:
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## Kafka Configuration
 ## Specify content for server.properties
@@ -186,6 +194,12 @@ socketSendBufferBytes: 102400
 ## Timeout in ms for connecting to zookeeper.
 ##
 zookeeperConnectionTimeoutMs: 6000
+
+## Command and args for running the container. Use array form
+##
+command:
+  - /scripts/setup.sh
+args:
 
 ## All the parameters from the configuration file can be overwritten by using environment variables with this format: KAFKA_CFG_{KEY}
 ## ref: https://github.com/bitnami/bitnami-docker-kafka#configuration
@@ -484,7 +498,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.4-debian-10-r114
+      tag: 1.17.4-debian-10-r130
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -654,7 +668,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r163
+      tag: 1.2.0-debian-10-r179
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -728,7 +742,7 @@ metrics:
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.kafka.port }}"
+        prometheus.io/port: "{{ .Values.metrics.kafka.service.port }}"
         prometheus.io/path: "/metrics"
 
   ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
@@ -742,7 +756,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.13.0-debian-10-r52
+      tag: 0.13.0-debian-10-r68
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -803,7 +817,7 @@ metrics:
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.jmx.exporterPort }}"
+        prometheus.io/port: "{{ .Values.metrics.jmx.service.port }}"
         prometheus.io/path: "/"
 
     ## JMX Whitelist Objects, can be set to control which JMX metrics are exposed. Only whitelisted

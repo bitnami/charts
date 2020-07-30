@@ -36,7 +36,9 @@ spec:
       {{- if .Values.pgpool.nodeSelector }}
       nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.pgpool.priorityClassName }}
       priorityClassName: {{ .Values.pgpool.priorityClassName }}
+      {{- end }}
       {{- if .Values.pgpool.tolerations }}
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -61,6 +63,18 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.pgpoolImage.debug | quote }}
+            {{- if or .Values.pgpool.customUsersSecret .Values.pgpool.customUsers }}
+            - name: PGPOOL_POSTGRES_CUSTOM_USERS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.pgpoolCustomUsersSecretName" . }}
+                  key: usernames
+            - name: PGPOOL_POSTGRES_CUSTOM_PASSWORDS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.pgpoolCustomUsersSecretName" . }}
+                  key: passwords
+            {{- end }}
             - name: PGPOOL_BACKEND_NODES
               value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
             - name: PGPOOL_SR_CHECK_USER

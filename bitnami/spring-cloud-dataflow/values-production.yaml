@@ -30,7 +30,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.5.3-debian-10-r1
+    tag: 2.5.3-debian-10-r4
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -336,7 +336,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.4.3-debian-10-r1
+    tag: 2.4.3-debian-10-r5
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -584,6 +584,20 @@ deployer:
     initialDelaySeconds: 120
   livenessProbe:
     initialDelaySeconds: 90
+  ## The node selectors to apply to the streaming applications deployments in "key:value" format.
+  ## Multiple node selectors are comma separated.
+  ##
+  nodeSelector: ""
+  tolerations: {}
+  ## Extra volume mounts.
+  ##
+  volumeMounts: {}
+  ## Extra volumes.
+  ##
+  volumes: {}
+  ## List of environment variables to set for any deployed app container. Multiple values are comma separated.
+  ##
+  environmentVariables: ""
 
 ## Init containers parameters:
 ## wait-for-backends: Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
@@ -593,7 +607,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.5-debian-10-r12
+    tag: 1.18.6-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -610,10 +624,10 @@ waitForBackends:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
     #   cpu: 100m
     #   memory: 128Mi
@@ -653,7 +667,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.0.0-debian-10-r19
+    tag: 1.0.0-debian-10-r21
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -760,6 +774,7 @@ externalDatabase:
   # driver:
   # scheme:
   password: ''
+  # existingPasswordSecret: name-of-existing-secret
   ## Data Flow user and database
   ##
   dataflow:
@@ -785,6 +800,26 @@ rabbitmq:
   rabbitmq:
     username: user
     password: ''
+
+##
+## External RabbitMQ Configuration
+##
+## All of these values are ignored when rabbitmq.enabled is set to true
+##
+externalRabbitmq:
+  ## Enables or disables external RabbitMQ, can be disabled when Kafka is using
+  ##
+  enabled: false
+  ## RabbitMQ host and port
+  ##
+  host: localhost
+  port: 5672
+  ## RabbitMQ username and password, password will be saved in a kubernetes secret
+  ##
+  username: guest
+  password: guest
+  # vhost: /
+  # existingPasswordSecret: name-of-existing-secret
 
 ##
 ## Kafka chart configuration

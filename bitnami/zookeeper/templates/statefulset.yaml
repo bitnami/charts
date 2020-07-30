@@ -6,6 +6,12 @@ metadata:
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     role: zookeeper
+    {{- if .Values.commonLabels }}
+    {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
@@ -29,8 +35,8 @@ spec:
         {{- if .Values.podLabels }}
         {{- include "zookeeper.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
-      annotations: {{- include "zookeeper.podAnnotations" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "zookeeper.tplvalue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- if .Values.schedulerName }}
@@ -172,7 +178,7 @@ spec:
             - name: ZOO_ENABLE_PROMETHEUS_METRICS
               value: "yes"
             - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
-              value: {{ .Values.metrics.port | quote }}
+              value: {{ .Values.metrics.containerPort | quote }}
             {{- end }}
             {{- if .Values.service.tls.client_enable }}
             - name: ZOO_TLS_CLIENT_ENABLE
@@ -221,16 +227,16 @@ spec:
               containerPort: {{ .Values.service.electionPort }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
-              containerPort: {{ .Values.metrics.port }}
+              containerPort: {{ .Values.metrics.containerPort }}
             {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              {{ if not .Values.service.tls.disable_base_client_port }}
-              port: client
-              {{ else }}
-              port: client-tls
-              {{ end }}
+            exec:
+              {{- if not .Values.service.tls.disable_base_client_port }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.livenessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              {{- else }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tls.client_port }} | grep imok']
+              {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -239,12 +245,12 @@ spec:
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
-            tcpSocket:
-              {{ if not .Values.service.tls.disable_base_client_port }}
-              port: client
-              {{ else }}
-              port: client-tls
-              {{ end }}
+            exec:
+              {{- if not .Values.service.tls.disable_base_client_port }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              {{- else }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tls.client_port }} | grep imok']
+              {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

@@ -14,6 +14,12 @@ metadata:
   name: {{ include "kafka.fullname" . }}
   labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: kafka
+    {{- if .Values.commonLabels }}
+    {{- include "kafka.tplvalue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "kafka.tplvalue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   podManagementPolicy: Parallel
   replicas: {{ .Values.replicaCount }}
@@ -124,8 +130,10 @@ spec:
         - name: kafka
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          command:
-            - /scripts/setup.sh
+          command: {{- include "kafka.tplValue" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- if .Values.args }}
+          args: {{- include "kafka.tplValue" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}

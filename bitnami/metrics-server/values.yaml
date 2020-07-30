@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.3.7-debian-10-r65
+  tag: 0.3.7-debian-10-r89
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -64,6 +64,13 @@ apiService:
 ## Specify the secure port where metrics-server will be running
 ##
 securePort: 8443
+
+# Specifies if metrics-server should be started in hostNetwork mode.
+#
+# You would require this enabled if you use alternate overlay networking for pods and
+# API server unable to communicate with metrics-server. As an example, this is required
+# if you use Weave network on EKS
+hostNetwork: false
 
 ## Extra arguments to pass to the metrics-server
 ## ref: https://github.com/kubernetes-incubator/metrics-server/blob/master/README.md#flags
