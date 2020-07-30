@@ -246,10 +246,10 @@ auth:
 
   ## Allowed SASL mechanisms when clientProtocol or interBrokerProtocol are using either sasl or sasl_tls
   ##
-  saslMechanisms: ""
+  saslMechanisms: plain,scram-sha-256,scram-sha-512
   ## SASL mechanism for inter broker communication
   ##
-  saslInterBrokerMechanism: ""
+  saslInterBrokerMechanism: plain
 
   ## Name of the existing secret containing the truststore and
   ## one keystore per Kafka broker you have in the Kafka cluster.
@@ -280,13 +280,15 @@ auth:
   jaas:
     ## Kafka client user. If specified clientUsers takes precedence.
     ##
-    clientUser: "user"
+    clientUser: user
 
     ## Kafka client user list
     ##
-    ## clientUsers: user1,user2
+    ## clientUsers:
+    ##   - user1
+    ##   - user2
     ##
-    clientUsers: ""
+    clientUsers: []
 
     ## Kafka client password. If specified clientPasswords takes precedence
     ##
@@ -294,9 +296,11 @@ auth:
 
     ## Kafka client passwords. This is mandatory if more than one user is specified in clientUsers.
     ##
-    ## clientPasswords: "password1,password2"
+    ## clientPasswords:
+    ##   - password1
+    ##   - password2"
     ##
-    clientPasswords: ""
+    clientPasswords: []
 
     ## Kafka inter broker communication user
     ##

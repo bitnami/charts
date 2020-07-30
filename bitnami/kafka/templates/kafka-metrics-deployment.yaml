@@ -59,12 +59,10 @@ spec:
           {{- if (include "kafka.client.saslAuthentication" .) }}
           env:
             {{- if and .Values.auth.jaas.clientUsers .Values.auth.jaas.clientPasswords }}
-            {{- $ulist := split "," .Values.auth.jaas.clientUsers }}
-            {{- $plist := split "," .Values.auth.jaas.clientPasswords }}
             - name: SASL_USERNAME
-              value: {{ $ulist._0 | quote }}
+              value: {{ index .Values.auth.jaas.clientUsers 0 | quote }}
             - name: SASL_USER_PASSWORD
-              value: {{ $plist._0 | quote }}
+              value: {{ index .Values.auth.jaas.clientPasswords 0 | quote }}
             {{- else }}
             - name: SASL_USER_PASSWORD
               valueFrom:

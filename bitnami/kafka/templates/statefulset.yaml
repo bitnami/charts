@@ -196,9 +196,9 @@ spec:
             {{- if (include "kafka.client.saslAuthentication" .) }}
             {{- if and .Values.auth.jaas.clientUsers .Values.auth.jaas.clientPasswords }}
             - name: KAFKA_CLIENT_USERS
-              value: {{ .Values.auth.jaas.clientUsers | quote }}
+              value: {{ join "," .Values.auth.jaas.clientUsers | quote }}
             - name: KAFKA_CLIENT_PASSWORDS
-              value: {{ .Values.auth.jaas.clientPasswords | quote }}
+              value: {{ join "," .Values.auth.jaas.clientPasswords | quote }}
             {{- else }}
             - name: KAFKA_CLIENT_USER
               value: {{ .Values.auth.jaas.clientUser | quote }}
