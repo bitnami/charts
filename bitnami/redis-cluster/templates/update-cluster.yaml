@@ -75,6 +75,10 @@ spec:
             - |
               . /opt/bitnami/scripts/libnet.sh
               . /opt/bitnami/scripts/libos.sh
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
               {{- if .Values.cluster.externalAccess.enabled }}
               for nodeIp in $(echo "{{ .Values.cluster.update.newExternalIPs }}" | cut -d [ -f2 | cut -d ] -f 1 ); do
                 {{- if .Values.tls.enabled }}

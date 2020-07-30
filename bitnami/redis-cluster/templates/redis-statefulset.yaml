@@ -73,7 +73,7 @@ spec:
           {{- end }}
           {{- if .Values.redis.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.redis.command "context" $) | nindent 12 }}
-          {{- else if .Values.cluster.externalAccess.enabled }}
+          {{- else }}
           command: ['/bin/bash', '-c']
           {{- end }}
           {{- if .Values.redis.args }}
@@ -81,12 +81,25 @@ spec:
           {{- else if .Values.cluster.externalAccess.enabled }}
           args:
             - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
               pod_index="${pod_index[-1]}"
               ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
               export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
               export REDIS_NODES="${ips[@]}"
-              /entrypoint.sh /run.sh
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
+          {{- else }}
+          args:
+            - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  echo COPYING FILE
+                  cp  /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
           {{- end }}
           {{- if .Values.redis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
